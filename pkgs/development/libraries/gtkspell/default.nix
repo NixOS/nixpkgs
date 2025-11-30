@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, autoreconfHook
-, docbook_xsl
-, gtk-doc
-, intltool
-, pkg-config
-, aspell
-, enchant
-, gtk2
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  docbook_xsl,
+  gtk-doc,
+  intltool,
+  pkg-config,
+  aspell,
+  enchant,
+  gtk2,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,6 +23,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Fix build with gettext 0.25
+    ./gettext-0.25.patch
     # Build with enchant 2
     # https://github.com/archlinux/svntogit-packages/tree/packages/gtkspell/trunk
     (fetchpatch {
@@ -33,6 +36,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     docbook_xsl
+    gtk2 # GLIB_GNU_GETTEXT
     gtk-doc
     intltool
     pkg-config

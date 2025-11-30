@@ -1,42 +1,43 @@
-{ lib
-, python3
-, fetchFromGitHub
-, nixosTests
+{
+  fetchFromGitHub,
+  lib,
+  nixosTests,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "radicale";
-  version = "3.2.0";
+  version = "3.5.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "Radicale";
-    rev = "v${version}";
-    hash = "sha256-RxC8VOfdTXJZiAroDHTKjJqGWu65Z5uyb4WK1LOqubQ=";
+    tag = "v${version}";
+    hash = "sha256-7LH0Y36JI3S3HpxX+fhKf58rOoewbCR3bwO38yN2dg4=";
   };
 
-  postPatch = ''
-    sed -i '/addopts/d' setup.cfg
-  '';
-
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    defusedxml
-    passlib
-    vobject
-    pika
-    python-dateutil
-    pytz # https://github.com/Kozea/Radicale/issues/816
-  ] ++ passlib.optional-dependencies.bcrypt;
+  dependencies =
+    with python3.pkgs;
+    [
+      defusedxml
+      passlib
+      vobject
+      pika
+      requests
+      pytz # https://github.com/Kozea/Radicale/issues/816
+      ldap3
+    ]
+    ++ passlib.optional-dependencies.bcrypt;
 
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = with python3.pkgs; [
-    pytest7CheckHook
+    pytestCheckHook
     waitress
   ];
 
@@ -44,11 +45,14 @@ python3.pkgs.buildPythonApplication rec {
     inherit (nixosTests) radicale;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://radicale.org/v3.html";
-    changelog = "https://github.com/Kozea/Radicale/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/Kozea/Radicale/blob/${src.tag}/CHANGELOG.md";
     description = "CalDAV and CardDAV server";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda erictapen ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      dotlambda
+      erictapen
+    ];
   };
 }

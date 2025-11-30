@@ -1,28 +1,33 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, glib
-, gtk-layer-shell
-, gtk3
-, libxml2
-, libgtop
-, libcanberra-gtk3
-, inkscape
-, udisks2
-, mate-desktop
-, mate-panel
-, hicolor-icon-theme
-, wayland
-, wrapGAppsHook3
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  glib,
+  gtk-layer-shell,
+  gtk3,
+  libxml2,
+  libgtop,
+  libcanberra-gtk3,
+  inkscape,
+  udisks,
+  mate-desktop,
+  mate-panel,
+  hicolor-icon-theme,
+  wayland,
+  wrapGAppsHook3,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-utils";
   version = "1.28.0";
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -43,7 +48,7 @@ stdenv.mkDerivation rec {
     libgtop
     libcanberra-gtk3
     libxml2
-    udisks2
+    udisks
     mate-desktop
     mate-panel
     hicolor-icon-theme
@@ -69,8 +74,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Utilities for the MATE desktop";
     homepage = "https://mate-desktop.org";
-    license = with licenses; [ gpl2Plus lgpl2Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl2Plus
+    ];
     platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

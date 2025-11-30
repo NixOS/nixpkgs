@@ -1,52 +1,86 @@
-{ lib
-, stdenv
-, python3
-, fetchFromGitHub
-, wrapQtAppsHook
-, qtbase
-, qtwayland
+{
+  lib,
+  stdenv,
+  buildPythonApplication,
+  fetchFromGitHub,
+  poetry-core,
+  fido2,
+  nitrokey,
+  pyside6,
+  usb-monitor,
+  qt6,
 }:
 
-python3.pkgs.buildPythonApplication rec {
-  pname = "nitrokey-app2";
-  version = "2.3.0";
-  pyproject = true;
+let
+  inherit (qt6)
+    wrapQtAppsHook
+    qtbase
+    qtwayland
+    qtsvg
+    ;
+in
 
-  disabled = python3.pythonOlder "3.9";
+buildPythonApplication rec {
+  pname = "nitrokey-app2";
+  version = "2.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-app2";
-    rev = "v${version}";
-    hash = "sha256-BSq3ezNt6btQUO1hMVw9bN3VCyUOUhfRFJcHDGkIm6Q=";
+    tag = "v${version}";
+    hash = "sha256-nzhhtnKKOHA+Cw1y+BpYsyQklzkDnmFRKGIfaJ/dmaQ=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
+  nativeBuildInputs = [
     wrapQtAppsHook
   ];
 
-  buildInputs = [ qtbase ] ++ lib.optionals stdenv.isLinux [
+  buildInputs = [
+    qtbase
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
+    qtsvg
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    pynitrokey
-    pyudev
-    pyside6
-    qt-material
+  build-system = [
+    poetry-core
   ];
+
+  dependencies = [
+    fido2
+    nitrokey
+    pyside6
+    usb-monitor
+  ];
+
+  pythonRelaxDeps = [ "nitrokey" ];
 
   pythonImportsCheck = [
     "nitrokeyapp"
   ];
 
+  postInstall = ''
+    install -Dm755 meta/com.nitrokey.nitrokey-app2.desktop $out/share/applications/com.nitrokey.nitrokey-app2.desktop
+    install -Dm755 meta/nk-app2.png $out/share/icons/hicolor/128x128/apps/com.nitrokey.nitrokey-app2.png
+  '';
+
+  # wrapQtApps only wrapps binary files and normally skips python programs.
+  # Manually pass the qtWrapperArgs from wrapQtAppsHook to wrap python programs.
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "This application allows to manage Nitrokey 3 devices";
     homepage = "https://github.com/Nitrokey/nitrokey-app2";
-    changelog = "https://github.com/Nitrokey/nitrokey-app2/releases/tag/v${version}";
+    changelog = "https://github.com/Nitrokey/nitrokey-app2/releases/tag/${src.tag}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ _999eagle panicgh ];
+    maintainers = with maintainers; [
+      _999eagle
+      panicgh
+    ];
     mainProgram = "nitrokeyapp";
   };
 }

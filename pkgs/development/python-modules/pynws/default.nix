@@ -7,7 +7,7 @@
   metar,
   pytest-aiohttp,
   pytest-asyncio,
-  pytest-cov,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pynws";
-  version = "1.8.1";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MatthewFlamm";
     repo = "pynws";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-gC5IOW5sejXigBKfxLst8MwU/IkqSQrMZhmd4eza++s=";
+    tag = "v${version}";
+    hash = "sha256-OKq3IdBr/YDWsmyJLHNoffVp2Q0RV+rZU5rm1Ba0FoY=";
   };
 
   build-system = [
@@ -45,9 +45,10 @@ buildPythonPackage rec {
     freezegun
     pytest-aiohttp
     pytest-asyncio
-    pytest-cov
+    pytest-cov-stub
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "pynws" ];
 

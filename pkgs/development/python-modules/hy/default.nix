@@ -14,16 +14,14 @@
 
 buildPythonPackage rec {
   pname = "hy";
-  version = "0.29.0";
+  version = "1.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hylang";
     repo = "hy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-8b2V78mwzSThmVl1SfMGBw8VSpE5rCuucnIyD0nq5To=";
+    tag = version;
+    hash = "sha256-zaTe9sRmW+lzpbNVrnj5ccp1xIbN10FD1Jst/hM78Lw=";
   };
 
   # https://github.com/hylang/hy/blob/1.0a4/get_version.py#L9-L10
@@ -31,7 +29,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ funcparserlib ] ++ lib.optionals (pythonOlder "3.9") [ astor ];
+  dependencies = [ funcparserlib ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -54,19 +52,18 @@ buildPythonPackage rec {
       python-packages:
       (python.withPackages (ps: (python-packages ps) ++ [ ps.hy ])).overrideAttrs (old: {
         name = "${hy.name}-env";
-        meta = lib.mergeAttrs (builtins.removeAttrs hy.meta [ "license" ]) { mainProgram = "hy"; };
+        meta = lib.mergeAttrs (removeAttrs hy.meta [ "license" ]) { mainProgram = "hy"; };
       });
   };
 
   meta = with lib; {
-    description = "A LISP dialect embedded in Python";
+    description = "LISP dialect embedded in Python";
     homepage = "https://hylang.org/";
-    changelog = "https://github.com/hylang/hy/releases/tag/${version}";
+    changelog = "https://github.com/hylang/hy/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [
       mazurel
       nixy
-      thiagokokada
     ];
   };
 }

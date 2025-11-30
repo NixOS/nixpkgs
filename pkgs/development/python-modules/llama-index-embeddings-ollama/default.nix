@@ -2,29 +2,32 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  google-generativeai,
+  hatchling,
   llama-index-core,
-  poetry-core,
-  pytestCheckHook,
-  pythonOlder,
+  ollama,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-embeddings-ollama";
-  version = "0.1.2";
+  version = "0.8.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "llama_index_embeddings_ollama";
     inherit version;
-    hash = "sha256-qeCAm93S5K2IjySVGe3H49M5x05OA/xaQMMGDcQdR6k=";
+    hash = "sha256-bahglDEI13W04ZFFCND2Vnht0BcKakU+CX7iuMKf6yA=";
   };
 
-  build-system = [ poetry-core ];
+  pythonRelaxDeps = [ "ollama" ];
 
-  dependencies = [ llama-index-core ];
+  build-system = [ hatchling ];
+
+  dependencies = [
+    llama-index-core
+    ollama
+    pytest-asyncio
+  ];
 
   # Tests are only available in the mono repo
   doCheck = false;

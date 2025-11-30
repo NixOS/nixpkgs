@@ -8,32 +8,32 @@
   pdoc-pyo3-sample-library,
   pygments,
   markupsafe,
-  astunparse,
   pytestCheckHook,
   hypothesis,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "pdoc";
-  version = "14.5.0";
-  disabled = pythonOlder "3.8";
+  version = "15.0.4";
+  disabled = pythonOlder "3.9";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "pdoc";
-    rev = "v${version}";
-    hash = "sha256-lie+lPUVWVgbSGC09gMmy4Z2BdC2CHFYQ60isExvhSk=";
+    tag = "v${version}";
+    hash = "sha256-l0aaQbjxAMcTZZwDN6g8A7bjSsl6yP2FoAnwTYkKYH8=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   dependencies = [
     jinja2
     pygments
     markupsafe
-  ] ++ lib.optional (pythonOlder "3.9") astunparse;
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -46,13 +46,15 @@ buildPythonPackage rec {
     "test/test_snapshot.py"
   ];
 
-  pytestFlagsArray = [
-    ''-m "not slow"'' # skip slow tests
+  disabledTestMarks = [
+    "slow" # skip slow tests
   ];
 
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "pdoc" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     changelog = "https://github.com/mitmproxy/pdoc/blob/${src.rev}/CHANGELOG.md";

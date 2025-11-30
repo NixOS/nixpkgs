@@ -10,6 +10,7 @@
   pyusb,
   pytestCheckHook,
   pythonOlder,
+  udevCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "atlas0fd00m";
     repo = "rfcat";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-hdRsVbDXRC1EOhBoFJ9T5ZE6hwOgDWSdN5sIpxJ0x3E=";
   };
 
@@ -32,6 +33,10 @@ buildPythonPackage rec {
     numpy
     pyserial
     pyusb
+  ];
+
+  nativeBuildInputs = [
+    udevCheckHook
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''

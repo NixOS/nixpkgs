@@ -3,6 +3,7 @@
   botocore,
   buildPythonPackage,
   fetchPypi,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
@@ -12,21 +13,16 @@
 
 buildPythonPackage rec {
   pname = "aws-secretsmanager-caching";
-  version = "1.1.2";
-  pyprject = true;
+  version = "1.1.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "aws_secretsmanager_caching";
     inherit version;
-    hash = "sha256-hhdo+I1yA/pLA+YFDFi8Ekrv27xQLpxiqXh1+4XqteA=";
+    hash = "sha256-9tbsnUPg2+T21d6982tMtpHRWpZ7NYsldfXZGXSmwP8=";
   };
-
-  patches = [
-    # Remove coverage tests from the pytest invocation in setup.cfg.
-    ./remove-coverage-tests.patch
-  ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -40,7 +36,10 @@ buildPythonPackage rec {
     setuptools # Needs pkg_resources at runtime.
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   disabledTestPaths = [
     # Integration tests require networking.

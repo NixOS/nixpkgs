@@ -5,14 +5,13 @@
   setuptools,
   click,
   cython,
-  pytestCheckHook,
   pythonOlder,
   tabulate,
 }:
 
 buildPythonPackage rec {
   pname = "youtokentome";
-  version = "1.0.6";
+  version = "1.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "VKCOM";
     repo = "YouTokenToMe";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-IFZS4jSi4yMzI7VbOPHI3KFZu5tjPjfQDPY7e1qbKAM=";
+    tag = "v${version}";
+    hash = "sha256-+GI752Ih7Ou1wyChR2y80BJmeTYdHWLPX6A1lvMyLGU=";
   };
 
   nativeBuildInputs = [

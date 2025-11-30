@@ -1,35 +1,38 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, autoconf
-, automake
-, libtool
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jnv";
-  version = "0.2.2";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "ynqa";
     repo = "jnv";
-    rev = "v${version}";
-    hash = "sha256-IvpbVcTGGD7cn59SPlcqMuu9YXB3ur3AFaoWDVADoqI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VjT0S+eEaO8FOPb1grIpheeP9v1dCpV7FRHn+nJXOEM=";
   };
 
-  cargoHash = "sha256-dqWQi0DYl2P1qPzmtYOcarnfu2bfSnLk/SVQq5d+Z8Y=";
+  cargoHash = "sha256-dR9cb3TBxrRGP3BFYro/nGe5XVEfJuTZbQLo+FUfFNs=";
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-    libtool
-    rustPlatform.bindgenHook
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Interactive JSON filter using jq";
     mainProgram = "jnv";
     homepage = "https://github.com/ynqa/jnv";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ nealfennimore nshalman ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [
+      nealfennimore
+      nshalman
+    ];
   };
-}
+})

@@ -19,13 +19,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mpmath";
     repo = "mpmath";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-9BGcaC3TyolGeO65/H42T/WQY6z5vc1h+MA+8MGFChU=";
   };
 
   nativeBuildInputs = [ setuptools ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     gmpy = lib.optionals (!isPyPy) [ gmpy2 ];
   };
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://mpmath.org/";
-    description = "A pure-Python library for multiprecision floating arithmetic";
+    description = "Pure-Python library for multiprecision floating arithmetic";
     license = licenses.bsd3;
     maintainers = with maintainers; [ lovek323 ];
     platforms = platforms.unix;

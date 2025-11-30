@@ -1,25 +1,26 @@
 # Bamf
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
 {
-  meta = with lib; {
-    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+{
+  meta = {
+    maintainers = [ ];
   };
 
   ###### interface
 
   options = {
     services.bamf = {
-      enable = mkEnableOption "bamf";
+      enable = lib.mkEnableOption "bamf";
     };
   };
 
   ###### implementation
 
-  config = mkIf config.services.bamf.enable {
+  config = lib.mkIf config.services.bamf.enable {
     services.dbus.packages = [ pkgs.bamf ];
 
     systemd.packages = [ pkgs.bamf ];

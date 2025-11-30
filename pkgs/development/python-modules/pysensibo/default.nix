@@ -3,22 +3,25 @@
   aiohttp,
   buildPythonPackage,
   fetchPypi,
+  poetry-core,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysensibo";
-  version = "1.0.36";
-  format = "setuptools";
+  version = "1.2.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lsHKwFzfkGWuUiZGkt9zwjNDDU7i6gcqcEsi5SQqsSQ=";
+    hash = "sha256-Otk5W3VTbOAeZOVnXvW8VSxU1nHa8zUvmvduRTdlwVs=";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  build-system = [ poetry-core ];
+
+  dependencies = [ aiohttp ];
 
   # No tests implemented
   doCheck = false;

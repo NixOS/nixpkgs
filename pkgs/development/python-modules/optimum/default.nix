@@ -2,75 +2,78 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  coloredlogs,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   datasets,
-  evaluate,
-  h5py,
   huggingface-hub,
   numpy,
+  packaging,
+  torch,
+  transformers,
+
+  # optional-dependencies
+  diffusers,
+  h5py,
   onnx,
   onnxruntime,
-  packaging,
   protobuf,
-  sympy,
   tensorflow,
   tf2onnx,
   timm,
-  torch,
-  transformers,
 }:
 
 buildPythonPackage rec {
   pname = "optimum";
-  version = "1.19.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "optimum";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-GYgLh6vlOoVvTvhNPfBT4YEqRhB7gZMqlOuab6maVGU=";
+    tag = "v${version}";
+    hash = "sha256-aeGWjzktpxY6Xym1licGCZf+Vzia9BdUnXE80Ja28jg=";
   };
 
-  propagatedBuildInputs = [
-    coloredlogs
-    datasets
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [ "transformers" ];
+
+  dependencies = [
     huggingface-hub
     numpy
     packaging
-    sympy
     torch
     transformers
-  ] ++ transformers.optional-dependencies.sentencepiece;
+  ]
+  ++ transformers.optional-dependencies.sentencepiece;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     onnxruntime = [
       onnx
-      onnxruntime
       datasets
-      evaluate
       protobuf
+      onnxruntime
     ];
     exporters = [
       onnx
-      onnxruntime
       timm
+      onnxruntime
+      protobuf
     ];
     exporters-tf = [
-      tensorflow
-      tf2onnx
       onnx
-      onnxruntime
       timm
       h5py
+      tf2onnx
+      onnxruntime
       numpy
+      datasets
+      tensorflow
     ];
-    diffusers = [
-      # diffusers
-    ];
+    diffusers = [ diffusers ];
     intel = [
       # optimum-intel
     ];
@@ -106,12 +109,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "optimum" ];
 
-  meta = with lib; {
-    description = "Accelerate training and inference of 🤗 Transformers and 🤗 Diffusers with easy to use hardware optimization tools";
+  meta = {
+    description = "Accelerate training and inference of Transformers and Diffusers with easy to use hardware optimization tools";
     mainProgram = "optimum-cli";
     homepage = "https://github.com/huggingface/optimum";
-    changelog = "https://github.com/huggingface/optimum/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ natsukium ];
+    changelog = "https://github.com/huggingface/optimum/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

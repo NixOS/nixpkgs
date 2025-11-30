@@ -2,27 +2,28 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  hatchling,
   llama-index-core,
-  poetry-core,
-  pythonOlder,
+  ollama,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-llms-ollama";
-  version = "0.1.5";
+  version = "0.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_llms_ollama";
     inherit version;
-    hash = "sha256-dWl9lshg2H6AzOkMnqQly9I2kYRY4P6q7gNZcGi6mEQ=";
+    hash = "sha256-zfoWf36oB0+/1Qs+gBU9bQX6O05y5TCxjcVPd1GFA9E=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
-  dependencies = [ llama-index-core ];
+  dependencies = [
+    llama-index-core
+    ollama
+  ];
 
   # Tests are only available in the mono repo
   doCheck = false;

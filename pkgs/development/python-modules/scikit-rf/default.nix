@@ -8,9 +8,6 @@
   scipy,
   pandas,
   matplotlib,
-  tox,
-  coverage,
-  flake8,
   nbval,
   pyvisa,
   networkx,
@@ -22,38 +19,35 @@
   sphinx,
   nbsphinx,
   openpyxl,
-  qtpy,
-  pyqtgraph,
-  pyqt5,
   setuptools,
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-mock,
 }:
 
 buildPythonPackage rec {
   pname = "scikit-rf";
-  version = "1.0.0";
+  version = "1.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scikit-rf";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TtRj9pqm5153y78MzhlVpL1EvNiNJyjUH1aOlAWU0WE=";
+    repo = "scikit-rf";
+    tag = "v${version}";
+    hash = "sha256-wQOphwG5/4Bfa+re3S0d7lS4CJlKRjrRqnFZKaTG70M=";
   };
 
-  buildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
     pandas
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     plot = [ matplotlib ];
     xlsx = [ openpyxl ];
     netw = [ networkx ];
@@ -67,41 +61,35 @@ buildPythonPackage rec {
       sphinx
       nbsphinx
       openpyxl
-    ];
-    qtapps = [
-      qtpy
-      pyqtgraph
-      pyqt5
+      nbval
     ];
   };
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { MPLBACKEND = "Agg"; };
+
   nativeCheckInputs = [
-    tox
-    coverage
-    flake8
-    pytest-cov
     pytest-mock
-    nbval
     matplotlib
     pyvisa
     openpyxl
     networkx
+    pytestCheckHook
+    pytest-cov-stub
   ];
 
-  checkInputs = [ pytestCheckHook ];
-
   # test_calibration.py generates a divide by zero error on darwin
+  # and fails on Linux after updates of dependenceis
   # https://github.com/scikit-rf/scikit-rf/issues/972
-  disabledTestPaths = lib.optional (
-    stdenv.isAarch64 && stdenv.isDarwin
-  ) "skrf/calibration/tests/test_calibration.py";
+  disabledTestPaths = [
+    "skrf/calibration/tests/test_calibration.py"
+  ];
 
   pythonImportsCheck = [ "skrf" ];
 
   meta = with lib; {
-    description = "A Python library for RF/Microwave engineering";
+    description = "Python library for RF/Microwave engineering";
     homepage = "https://scikit-rf.org/";
-    changelog = "https://github.com/scikit-rf/scikit-rf/releases/tag/v${version}";
+    changelog = "https://github.com/scikit-rf/scikit-rf/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ lugarun ];
   };

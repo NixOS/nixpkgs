@@ -9,10 +9,8 @@
   lxml,
   packageurl-python,
   py-serializable,
-  pythonRelaxDepsHook,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   requirements-parser,
   sortedcontainers,
   setuptools,
@@ -24,21 +22,19 @@
 
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
-  version = "7.4.0";
+  version = "11.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-python-lib";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cR/E0xVPl2iBgjhX9xv8nftmmTDWjDUqRgvNqcAWzRo=";
+    tag = "v${version}";
+    hash = "sha256-AN3PjJ1HAERDXlmE9K8k2OGLAh5vs1286EhJShH0xE4=";
   };
 
-  build-system = [ poetry-core ];
+  pythonRelaxDeps = [ "py-serializable" ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     importlib-metadata
@@ -53,23 +49,33 @@ buildPythonPackage rec {
     types-toml
   ];
 
+  optional-dependencies = {
+    validation = [
+      jsonschema
+      lxml
+    ];
+    json-validation = [
+      jsonschema
+    ];
+    xml-validation = [
+      lxml
+    ];
+  };
+
   nativeCheckInputs = [
     ddt
-    jsonschema
-    lxml
     pytestCheckHook
     xmldiff
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "cyclonedx" ];
-
-  pythonRelaxDeps = [ "py-serializable" ];
 
   preCheck = ''
     export PYTHONPATH=tests''${PYTHONPATH+:$PYTHONPATH}
   '';
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   disabledTests = [
     # These tests require network access
@@ -87,7 +93,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for generating CycloneDX SBOMs";
     homepage = "https://github.com/CycloneDX/cyclonedx-python-lib";
-    changelog = "https://github.com/CycloneDX/cyclonedx-python-lib/releases/tag/v${version}";
+    changelog = "https://github.com/CycloneDX/cyclonedx-python-lib/releases/tag/${src.tag}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

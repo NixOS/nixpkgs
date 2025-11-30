@@ -3,25 +3,26 @@
   autograd,
   buildPythonPackage,
   fetchFromGitHub,
-  cupy,
   cvxopt,
   cython,
-  oldest-supported-numpy,
+  jax,
+  jaxlib,
   matplotlib,
   numpy,
-  tensorflow,
   pymanopt,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
   scikit-learn,
   scipy,
-  enableDimensionalityReduction ? false,
-  enableGPU ? false,
+  setuptools,
+  tensorflow,
+  torch,
 }:
 
 buildPythonPackage rec {
   pname = "pot";
-  version = "0.9.3";
+  version = "0.9.5";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -29,38 +30,63 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PythonOT";
     repo = "POT";
-    rev = "refs/tags/${version}";
-    hash = "sha256-fdqDM0V6zTFe1lcqi53ZZNHAfmuR2I7fdX4SN9qeNn8=";
+    tag = version;
+    hash = "sha256-sEK3uhZtjVJGEN1Gs8N0AMtiEOo9Kpn/zOSWUfGc/qE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     cython
-    oldest-supported-numpy
+    numpy
   ];
 
-  propagatedBuildInputs =
-    [
-      numpy
-      scipy
-    ]
-    ++ lib.optionals enableGPU [ cupy ]
-    ++ lib.optionals enableDimensionalityReduction [
-      autograd
-      pymanopt
+  dependencies = [
+    numpy
+    scipy
+  ];
+
+  optional-dependencies = {
+    backend-numpy = [ ];
+    backend-jax = [
+      jax
+      jaxlib
     ];
+    backend-cupy = [ ];
+    backend-tf = [ tensorflow ];
+    backend-torch = [ torch ];
+    cvxopt = [ cvxopt ];
+    dr = [
+      scikit-learn
+      pymanopt
+      autograd
+    ];
+    gnn = [
+      torch
+      # torch-geometric
+    ];
+    plot = [ matplotlib ];
+    all =
+      with optional-dependencies;
+      (
+        backend-numpy
+        ++ backend-jax
+        ++ backend-cupy
+        ++ backend-tf
+        ++ backend-torch
+        ++ optional-dependencies.cvxopt
+        ++ dr
+        ++ gnn
+        ++ plot
+      );
+  };
 
   nativeCheckInputs = [
-    cvxopt
-    matplotlib
-    numpy
-    tensorflow
-    scikit-learn
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace " --cov-report= --cov=ot" "" \
       --replace " --durations=20" "" \
       --replace " --junit-xml=junit-results.xml" ""
 
@@ -105,8 +131,6 @@ buildPythonPackage rec {
     # TypeError: Only integers, slices...
     "test_emd1d_device_tf"
   ];
-
-  disabledTestPaths = lib.optionals (!enableDimensionalityReduction) [ "test/test_dr.py" ];
 
   pythonImportsCheck = [
     "ot"

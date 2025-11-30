@@ -9,24 +9,28 @@
   pytest-astropy,
   requests,
   requests-mock,
+  setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pyvo";
-  version = "1.5.1";
-  format = "setuptools";
+  version = "1.8";
+  pyproject = true;
 
   disabled = pythonOlder "3.8"; # according to setup.cfg
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ByCBD+e3ZrpT0Q6dnkuyO8lnwVGm85LiKmy/4NRTpjI=";
+    hash = "sha256-ZvSIn9jjnd30b+SYYV02FW1JT2or7FOIa68cLFQyKGE=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     astropy
     requests
   ];

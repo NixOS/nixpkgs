@@ -12,32 +12,28 @@
   logging-journald,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   raven,
   rich,
   setproctitle,
-  typing-extensions,
   uvloop,
 }:
 
 buildPythonPackage rec {
   pname = "aiomisc";
-  version = "17.5.19";
+  version = "17.9.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0tcWfi4zxqDDMknDPOLNm+S+K1qmHQ5n/PqNFyNbwZg=";
+    hash = "sha256-c9dlFc6XFahTbg6EEBb1OiKpFJ/zlzIp34UQJc8CXKY=";
   };
 
   build-system = [ poetry-core ];
 
-  dependencies =
-    [ colorlog ]
-    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
-    ++ lib.optionals stdenv.isLinux [ logging-journald ];
+  dependencies = [
+    colorlog
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ logging-journald ];
 
   nativeCheckInputs = [
     aiocontextvars
@@ -45,9 +41,10 @@ buildPythonPackage rec {
     fastapi
     pytestCheckHook
     setproctitle
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aiohttp = [ aiohttp ];
     #asgi = [ aiohttp-asgi ];
     cron = [ croniter ];

@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "sympy";
-  version = "1.12";
+  version = "1.14.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6/WVyNrD4P3EFSxRh4tJg5bsfzDnqRTWBx5nTUlCD7g=";
+    hash = "sha256-09P+jfHloLQvDnvfUFQWl9vn0jdG6JSZDAMOKwXnJRc=";
   };
 
   nativeCheckInputs = [ glibcLocales ];
@@ -27,19 +27,16 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "sympy" ];
 
-  preCheck = ''
-    export LANG="en_US.UTF-8"
-  '';
-
   passthru.tests = {
     inherit sage;
   };
 
   meta = with lib; {
-    description = "A Python library for symbolic mathematics";
+    description = "Python library for symbolic mathematics";
     mainProgram = "isympy";
     homepage = "https://www.sympy.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ lovek323 ] ++ teams.sage.members;
+    maintainers = with maintainers; [ lovek323 ];
+    teams = [ teams.sage ];
   };
 }

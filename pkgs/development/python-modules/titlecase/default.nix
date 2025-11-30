@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ppannuto";
     repo = "python-titlecase";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-aJbbfNnQvmmYPXVOO+xx7ADetsxE+jnVQOVDzV5jUp8=";
   };
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "titlecase/tests.py" ];
+  enabledTestPaths = [ "titlecase/tests.py" ];
 
   pythonImportsCheck = [ "titlecase" ];
 
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     mainProgram = "titlecase";
     homepage = "https://github.com/ppannuto/python-titlecase";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

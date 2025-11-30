@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -18,9 +23,16 @@ let
     data-dir ${cfg.dataDir}
 
     ${concatStringsSep "\n" (mapAttrsToList (ipv4: ipv6: "map " + ipv4 + " " + ipv6) cfg.mappings)}
+
+    ${optionalString ((builtins.length cfg.log) > 0) ''
+      log ${concatStringsSep " " cfg.log}
+    ''}
+
+    wkpf-strict ${boolToYesNo cfg.wkpfStrict}
   '';
 
-  addrOpts = v:
+  addrOpts =
+    v:
     assert v == 4 || v == 6;
     {
       options = {
@@ -30,7 +42,7 @@ let
         };
 
         prefixLength = mkOption {
-          type = types.addCheck types.int (n: n >= 0 && n <= (if v == 4 then 32 else 128));
+          type = types.ints.between 0 (if v == 4 then 32 else 128);
           description = ''
             Subnet mask of the interface, specified as the number of
             bits in the prefix ("${if v == 4 then "24" else "64"}").
@@ -116,7 +128,7 @@ in
 
       mappings = mkOption {
         type = types.attrsOf types.str;
-        default = {};
+        default = { };
         description = "Static IPv4 -> IPv6 host mappings.";
         example = literalExpression ''
           {
@@ -125,6 +137,21 @@ in
             "192.168.255.2" = "2001:db8:1:569::143";
           }
         '';
+      };
+
+      log = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = "Packet errors to log (drop, reject, icmp, self)";
+        example = literalExpression ''
+          [ "drop" "reject" "icmp" "self" ]
+        '';
+      };
+
+      wkpfStrict = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Enable restrictions on the use of the well-known prefix (64:ff9b::/96) - prevents translation of non-global IPv4 ranges when using the well-known prefix. Must be enabled for RFC 6052 compatibility.";
       };
     };
   };
@@ -143,7 +170,10 @@ in
       virtualOwner = mkIf config.networking.useNetworkd "";
       ipv4 = {
         addresses = [
-          { address = cfg.ipv4.router.address; prefixLength = 32; }
+          {
+            address = cfg.ipv4.router.address;
+            prefixLength = 32;
+          }
         ];
         routes = [
           cfg.ipv4.pool
@@ -151,7 +181,10 @@ in
       };
       ipv6 = {
         addresses = [
-          { address = cfg.ipv6.router.address; prefixLength = 128; }
+          {
+            address = cfg.ipv6.router.address;
+            prefixLength = 128;
+          }
         ];
         routes = [
           cfg.ipv6.pool
@@ -159,13 +192,16 @@ in
       };
     };
 
+    environment.etc."tayga.conf".source = configFile;
+
     systemd.services.tayga = {
       description = "Stateless NAT64 implementation";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
+      reloadTriggers = [ configFile ];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/tayga -d --nodetach --config ${configFile}";
+        ExecStart = "${cfg.package}/bin/tayga -d --nodetach --config /etc/tayga.conf";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         Restart = "always";
 

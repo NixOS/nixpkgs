@@ -2,40 +2,49 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  can,
+
+  # build system
+  setuptools,
+
+  # dependencies
+  numpy,
+  nunavut,
+
+  # optional dependencies
   cobs,
   libpcap,
-  nunavut,
-  numpy,
   pyserial,
-  pytestCheckHook,
+  python-can,
+
+  # tests
   pytest-asyncio,
-  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pycyphal";
-  version = "1.18.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "1.24.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OpenCyphal";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-XkH0wss8ueh/Wwz0lhvQShOp3a4X9lNdosT/sMe7p4Q=";
+    repo = "pycyphal";
+    tag = version;
+    hash = "sha256-yrGKmJW4W8bPazKHWkwgNWDPiQYg1KTEuI7hC3yOWek=";
     fetchSubmodules = true;
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [ "numpy" ];
+
+  dependencies = [
     numpy
     nunavut
   ];
 
-  passthru.optional-dependencies = {
-    transport-can-pythoncan = [ can ] ++ can.optional-dependencies.serial;
+  optional-dependencies = {
+    transport-can-pythoncan = [ python-can ] ++ python-can.optional-dependencies.serial;
     transport-serial = [
       cobs
       pyserial
@@ -46,7 +55,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
-  ] ++ builtins.foldl' (x: y: x ++ y) [ ] (builtins.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -68,25 +78,29 @@ buildPythonPackage rec {
   disabledTestPaths = [
     "pycyphal/application/__init__.py"
     "pycyphal/application/_transport_factory.py"
-    "pycyphal/transport/udp/_ip/_link_layer.py"
-    "pycyphal/transport/udp/_ip/_v4.py"
+    "pycyphal/application/register/backend/dynamic.py"
+    "pycyphal/application/register/backend/static.py"
+    "pycyphal/transport/udp"
     "tests/application"
     "tests/demo"
     "tests/dsdl"
     "tests/presentation"
     "tests/transport"
+    # These are flaky -- test against string representations of values
+    "pycyphal/application/register/_registry.py"
+    "pycyphal/application/register/_value.py"
   ];
 
   pythonImportsCheck = [ "pycyphal" ];
 
   meta = with lib; {
-    description = "A full-featured implementation of the Cyphal protocol stack in Python";
+    description = "Full-featured implementation of the Cyphal protocol stack in Python";
     longDescription = ''
       Cyphal is an open technology for real-time intravehicular distributed computing and communication based on modern networking standards (Ethernet, CAN FD, etc.).
     '';
     homepage = "https://opencyphal.org/";
     changelog = "https://github.com/OpenCyphal/pycyphal/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = teams.ororatech.members;
+    teams = [ teams.ororatech ];
   };
 }

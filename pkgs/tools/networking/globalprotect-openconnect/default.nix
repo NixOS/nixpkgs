@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchurl
-, cmake, qtwebsockets, qtwebengine, qtkeychain, wrapQtAppsHook, openconnect
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cmake,
+  qtwebsockets,
+  qtwebengine,
+  qtkeychain,
+  wrapQtAppsHook,
+  openconnect,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,15 +19,29 @@ stdenv.mkDerivation rec {
     hash = "sha256-vhvVKESLbqHx3XumxbIWOXIreDkW3yONDMXMHxhjsvk=";
   };
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ openconnect qtwebsockets qtwebengine qtkeychain ];
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.16")
+  ];
+
+  buildInputs = [
+    openconnect
+    qtwebsockets
+    qtwebengine
+    qtkeychain
+  ];
 
   patchPhase = ''
     substituteInPlace GPService/gpservice.h \
-      --replace /usr/local/bin/openconnect ${openconnect}/bin/openconnect;
+      --replace-fail /usr/local/bin/openconnect ${openconnect}/bin/openconnect;
     substituteInPlace GPService/CMakeLists.txt \
-      --replace /etc/gpservice $out/etc/gpservice;
+      --replace-fail /etc/gpservice $out/etc/gpservice;
+    # Force minimum CMake version to 3.16 to avoid policy warnings
+    find . -name "CMakeLists.txt" -exec sed -i 's/cmake_minimum_required(VERSION [^)]*)/cmake_minimum_required(VERSION 3.16)/g' {} \;
   '';
 
   meta = with lib; {

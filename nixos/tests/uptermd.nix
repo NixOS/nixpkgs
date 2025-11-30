@@ -1,9 +1,11 @@
-import ./make-test-python.nix ({ pkgs, ...}:
+{ pkgs, ... }:
 
 let
-  client = {pkgs, ...}:{
-    environment.systemPackages = [ pkgs.upterm ];
-  };
+  client =
+    { pkgs, ... }:
+    {
+      environment.systemPackages = [ pkgs.upterm ];
+    };
 in
 {
   name = "uptermd";
@@ -12,17 +14,18 @@ in
   };
 
   nodes = {
-    server = {config, ...}: {
-      services.uptermd = {
-        enable = true;
-        openFirewall = true;
-        port = 1337;
+    server =
+      { config, ... }:
+      {
+        services.uptermd = {
+          enable = true;
+          openFirewall = true;
+          port = 1337;
+        };
       };
-    };
     client1 = client;
     client2 = client;
   };
-
 
   testScript = ''
     start_all()
@@ -63,4 +66,4 @@ in
 
     assert output.strip() == "client1"
   '';
-})
+}

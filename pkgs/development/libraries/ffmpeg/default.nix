@@ -1,50 +1,47 @@
-{ callPackage, darwin }:
+{
+  callPackage,
+  darwin,
+  cudaPackages,
+}:
 
 let
   mkFFmpeg =
     initArgs: ffmpegVariant:
     callPackage ./generic.nix (
       {
-        inherit (darwin.apple_sdk.frameworks)
-          AppKit
-          AudioToolbox
-          AVFoundation
-          CoreImage
-          VideoToolbox
-          ;
+        inherit (darwin) xcode;
+        inherit (cudaPackages) cuda_cudart cuda_nvcc libnpp;
       }
       // (initArgs // { inherit ffmpegVariant; })
     );
 
   v4 = {
-    version = "4.4.4";
-    hash = "sha256-Q8bkuF/1uJfqttJJoObnnLX3BEduv+qxsvOrVhMvRjA=";
-  };
-
-  v5 = {
-    version = "5.1.4";
-    hash = "sha256-2jUL1/xGUf7aMooST2DW41KE7bC+BtgChXmj0sAJZ90=";
+    version = "4.4.6";
+    hash = "sha256-IM+1+WJWHuUNHZCVs+eKlmaEkfbvay4vQ2I/GbV1fqk=";
   };
 
   v6 = {
-    version = "6.1.1";
-    hash = "sha256-Q0c95hbCVUHQWPoh5uC8uzMylmB4BnWg+VhXEgSouzo=";
+    version = "6.1.3";
+    hash = "sha256-NQnPOfiNmurY+L9/B7eVQc2JpOi0jhv5g9kVWsTzpis=";
   };
 
   v7 = {
-    version = "7.0";
-    hash = "sha256-RdDfv+0y90XpgjIRvTjsemKyGunzDbsh4j4WiE9rfyM=";
+    version = "7.1.2";
+    hash = "sha256-MF/0oSOhxGWuOu6Yat7O68iOvgZ+wKjpQ8zSkwpWXqQ=";
+  };
+  v8 = {
+    version = "8.0";
+    hash = "sha256-okNZ1/m/thFAY3jK/GSV0+WZFnjrMr8uBPsOdH6Wq9E=";
   };
 in
 
 rec {
+  # We keep FFmpeg 4 around for now mainly for a couple of binary
+  # packages (Spotify and REAPER). Please don’t add new source packages
+  # that depend on this version.
   ffmpeg_4 = mkFFmpeg v4 "small";
   ffmpeg_4-headless = mkFFmpeg v4 "headless";
   ffmpeg_4-full = mkFFmpeg v4 "full";
-
-  ffmpeg_5 = mkFFmpeg v5 "small";
-  ffmpeg_5-headless = mkFFmpeg v5 "headless";
-  ffmpeg_5-full = mkFFmpeg v5 "full";
 
   ffmpeg_6 = mkFFmpeg v6 "small";
   ffmpeg_6-headless = mkFFmpeg v6 "headless";
@@ -54,11 +51,21 @@ rec {
   ffmpeg_7-headless = mkFFmpeg v7 "headless";
   ffmpeg_7-full = mkFFmpeg v7 "full";
 
-  # Please make sure this is updated to the latest version on the next major
-  # update to ffmpeg
-  # Packages which use ffmpeg as a library, should pin to the relevant major
-  # version number which the upstream support.
-  ffmpeg = ffmpeg_6;
-  ffmpeg-headless = ffmpeg_6-headless;
-  ffmpeg-full = ffmpeg_6-full;
+  ffmpeg_8 = mkFFmpeg v8 "small";
+  ffmpeg_8-headless = mkFFmpeg v8 "headless";
+  ffmpeg_8-full = mkFFmpeg v8 "full";
+
+  # Please make sure this is updated to new major versions once they
+  # build and work on all the major platforms. If absolutely necessary
+  # due to severe breaking changes, the bump can wait a little bit to
+  # give the most proactive users time to migrate, but don’t hold off
+  # for too long.
+  #
+  # Packages which depend on FFmpeg should generally use these
+  # unversioned aliases to allow for quicker migration to new releases,
+  # but can pin one of the versioned variants if they do not work with
+  # the current default version.
+  ffmpeg = ffmpeg_8;
+  ffmpeg-headless = ffmpeg_8-headless;
+  ffmpeg-full = ffmpeg_8-full;
 }

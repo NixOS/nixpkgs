@@ -1,0 +1,25 @@
+diff --git a/doc/guide.tex b/doc/guide.tex
+index 12165e7..76b5c59 100644
+--- a/doc/guide.tex
++++ b/doc/guide.tex
+@@ -623,8 +623,6 @@ see the ``how to enhance cURLpp'' section.
+         cURL::CURLOPT_LOW_SPEED_TIME > LowSpeedTime;
+       typedef cURLpp::OptionTrait< long, 
+         cURL::CURLOPT_MAXCONNECTS > MaxConnects;
+-      typedef cURLpp::OptionTrait< cURL::curl_closepolicy, 
+-        cURL::CURLOPT_CLOSEPOLICY > ClosePolicy;
+       typedef cURLpp::OptionTrait< bool, 
+         cURL::CURLOPT_FRESH_CONNECT > FreshConnect;
+       typedef cURLpp::OptionTrait< bool, 
+diff --git a/include/curlpp/Options.hpp b/include/curlpp/Options.hpp
+index c705c9d..ca6fec6 100644
+--- a/include/curlpp/Options.hpp
++++ b/include/curlpp/Options.hpp
+@@ -278,7 +278,6 @@ namespace options
+ 	typedef curlpp::OptionTrait<long, CURLOPT_LOW_SPEED_LIMIT> LowSpeedLimit;
+ 	typedef curlpp::OptionTrait<long, CURLOPT_LOW_SPEED_TIME> LowSpeedTime;
+ 	typedef curlpp::OptionTrait<long, CURLOPT_MAXCONNECTS> MaxConnects;
+-	typedef curlpp::OptionTrait<curl_closepolicy, CURLOPT_CLOSEPOLICY> ClosePolicy;
+ 	typedef curlpp::OptionTrait<bool, CURLOPT_FRESH_CONNECT> FreshConnect;
+ 	typedef curlpp::OptionTrait<bool, CURLOPT_FORBID_REUSE> ForbidReuse;
+ 	typedef curlpp::OptionTrait<long, CURLOPT_CONNECTTIMEOUT> ConnectTimeout;

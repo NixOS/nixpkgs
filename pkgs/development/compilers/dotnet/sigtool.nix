@@ -1,11 +1,11 @@
-{ darwin
-, fetchFromGitHub
-, makeWrapper
+{
+  cctools,
+  darwin,
+  fetchFromGitHub,
+  makeWrapper,
 }:
-let
-  cctools = darwin.cctools;
 
-in darwin.sigtool.overrideAttrs (old: {
+darwin.sigtool.overrideAttrs (old: {
   # this is a fork of sigtool that supports -v and --remove-signature, which are
   # used by the dotnet sdk
   src = fetchFromGitHub {
@@ -15,7 +15,7 @@ in darwin.sigtool.overrideAttrs (old: {
     sha256 = "sha256-EVM5ZG3sAHrIXuWrnqA9/4pDkJOpWCeBUl5fh0mkK4k=";
   };
 
-  nativeBuildInputs = old.nativeBuildInputs or [] ++ [
+  nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
     makeWrapper
   ];
 

@@ -7,18 +7,14 @@
   fetchPypi,
   absl-py,
   etils,
-  importlib-resources,
-  typing-extensions,
-  zipp,
 }:
 
 buildPythonPackage rec {
   pname = "array-record";
-  version = "0.5.0";
+  version = "0.8.1";
   format = "wheel";
 
-  # As of 2023-10-31, PyPI includes wheels for Python 3.9, 3.10, and 3.11.
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.10" || pythonAtLeast "3.14";
 
   src =
     let
@@ -30,31 +26,29 @@ buildPythonPackage rec {
       dist = pyShortVersion;
       python = pyShortVersion;
       abi = pyShortVersion;
-      platform = "manylinux_2_17_x86_64.manylinux2014_x86_64";
+      platform = "manylinux2014_x86_64.manylinux_2_17_x86_64";
       hash =
         {
-          cp39 = "sha256-BzMOVue7E1S1+5+XTcPELko81ujc9MbmqLhNsU7pqO0=";
-          cp310 = "sha256-eUD9pQu9GsbV8MPD1MiF3Ihr+zYioSOo6P15hYIwPYo=";
-          cp311 = "sha256-rAmkI3EIZPYiXrxFowfDC0Gf3kRw0uX0i6Kx6Zu+hNM=";
+          cp311 = "sha256-CQ2ChYqTHjdU4QYvXGLCCudk8+XyTnnqkFQ5OAQ4Oo0=";
+          cp312 = "sha256-AF+29PToM7LeHE5RxiCtajCok7RtwWgDnZuzG3FGYHA=";
+          cp313 = "sha256-N7uALh/cmO22CoWVUsfn1JThQc85C/tzUKz9Y0Z9rq4=";
         }
         .${pyShortVersion} or (throw "${pname} is missing hash for ${pyShortVersion}");
     };
 
-  propagatedBuildInputs = [
+  dependencies = [
     absl-py
     etils
-    importlib-resources
-    typing-extensions
-    zipp
-  ];
+  ]
+  ++ etils.optional-dependencies.epath;
 
   pythonImportsCheck = [ "array_record" ];
 
-  meta = with lib; {
-    description = "ArrayRecord is a new file format derived from Riegeli, achieving a new frontier of IO efficiency";
+  meta = {
+    description = "New file format derived from Riegeli, achieving a new frontier of IO efficiency";
     homepage = "https://github.com/google/array_record";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = [ "x86_64-linux" ];
   };
 }

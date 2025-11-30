@@ -24,19 +24,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "--doctest-modules" ];
+  pytestFlags = [ "--doctest-modules" ];
 
   pythonImportsCheck = [ "vega_datasets" ];
 
   meta =
-    with lib;
     let
-      tag = removeSuffix ".0" "v${version}";
+      tag = lib.removeSuffix ".0" "v${version}";
     in
     {
-      description = "A Python package for offline access to vega datasets";
+      description = "Python package for offline access to vega datasets";
       homepage = "https://github.com/altair-viz/vega_datasets";
       changelog = "https://github.com/altair-viz/vega_datasets/blob/${tag}/CHANGES.md";
-      license = licenses.mit;
+      license = lib.licenses.mit;
     };
 }

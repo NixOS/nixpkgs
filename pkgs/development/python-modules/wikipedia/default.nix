@@ -27,7 +27,7 @@ buildPythonPackage rec {
   unittestFlagsArray = [ "tests/ '*test.py'" ];
 
   meta = with lib; {
-    description = "A Pythonic wrapper for the Wikipedia API";
+    description = "Pythonic wrapper for the Wikipedia API";
     homepage = "https://github.com/goldsmith/Wikipedia";
     changelog = "https://github.com/goldsmith/Wikipedia/blob/master/CHANGELOG.md";
     license = licenses.mit;

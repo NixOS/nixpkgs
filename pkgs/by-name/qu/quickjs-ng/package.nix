@@ -1,23 +1,30 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-, testers
-, texinfo
+{
+  lib,
+  cmake,
+  fetchFromGitHub,
+  stdenv,
+  testers,
+  texinfo,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickjs-ng";
-  version = "0.4.1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "quickjs-ng";
     repo = "quickjs";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-mo+YBhaCqGRWfVRvZCD0iB2pd/DsHsfWGFeFxwwyxPk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Mb0YyxTWU6a8HFTVBmlJ5yGEDmjKXHqTSszAvb8Y01U=";
   };
 
-  outputs = [ "bin" "out" "dev" "doc" "info" ];
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+    "doc"
+    "info"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -25,14 +32,22 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
     (lib.cmakeBool "BUILD_STATIC_QJS_EXE" stdenv.hostPlatform.isStatic)
   ];
 
+  strictDeps = true;
+
+  postBuild = ''
+    pushd ../docs
+    makeinfo *texi
+    popd
+  '';
+
   postInstall = ''
-    (cd ../doc
-     makeinfo --output quickjs.info quickjs.texi
-     install -Dt $info/share/info/ quickjs.info)
+    pushd ../docs
+    install -Dm644 -t ''${!outputInfo}/share/info *info
+    popd
   '';
 
   passthru.tests = {
@@ -42,12 +57,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
-    description = "A mighty JavaScript engine";
+  meta = {
     homepage = "https://github.com/quickjs-ng/quickjs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.all;
+    description = "Mighty JavaScript engine";
+    license = lib.licenses.mit;
     mainProgram = "qjs";
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
 })

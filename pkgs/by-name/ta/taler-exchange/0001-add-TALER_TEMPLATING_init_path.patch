@@ -1,0 +1,75 @@
+From 3ca51717bbb7643eb0629729d0680cca75ce34c8 Mon Sep 17 00:00:00 2001
+From: eljamm <fedi.jamoussi@protonmail.ch>
+Date: Wed, 14 Aug 2024 11:14:41 +0100
+Subject: [PATCH] add TALER_TEMPLATING_init_path
+
+The merchant uses `TALER_TEMPLATING_init` function from the exchange's
+headers, which makes it harder to patch in the correct directory.
+
+To circumvent this, a similar function that takes the templates path
+directly is added.
+---
+ src/include/taler_templating_lib.h |  9 +++++++++
+ src/templating/templating_api.c    | 25 +++++++++++++++++++++++++
+ 2 files changed, 34 insertions(+)
+
+diff --git a/src/include/taler_templating_lib.h b/src/include/taler_templating_lib.h
+index 6af6db715..343004ef1 100644
+--- a/src/include/taler_templating_lib.h
++++ b/src/include/taler_templating_lib.h
+@@ -120,6 +120,16 @@ TALER_TEMPLATING_reply_error (struct MHD_Connection *connection,
+ enum GNUNET_GenericReturnValue
+ TALER_TEMPLATING_init (const char *subsystem);
+
++/**
++ * Preload templates from path.
++ *
++ * @param subsystem name of the subsystem, "merchant" or "exchange"
++ * @param path name of the absolute template path
++ * @return #GNUNET_OK on success
++ */
++enum GNUNET_GenericReturnValue
++TALER_TEMPLATING_init_path (const char *subsystem, const char *path);
++
+
+ /**
+  * Nicely shut down templating subsystem.
+diff --git a/src/templating/templating_api.c b/src/templating/templating_api.c
+index 88a17c682..a9afa2b70 100644
+--- a/src/templating/templating_api.c
++++ b/src/templating/templating_api.c
+@@ -506,6 +506,31 @@ TALER_TEMPLATING_init (const char *subsystem)
+ }
+
+
++enum GNUNET_GenericReturnValue
++TALER_TEMPLATING_init_path (const char *subsystem, const char *path)
++{
++  char *dn;
++  int ret;
++
++  {
++    GNUNET_asprintf (&dn,
++                     "%s/%s/templates/",
++                     path,
++                     subsystem);
++  }
++  ret = GNUNET_DISK_directory_scan (dn,
++                                    &load_template,
++                                    NULL);
++  GNUNET_free (dn);
++  if (-1 == ret)
++  {
++    GNUNET_break (0);
++    return GNUNET_SYSERR;
++  }
++  return GNUNET_OK;
++}
++
++
+ void
+ TALER_TEMPLATING_done (void)
+ {
+--
+2.45.2
+

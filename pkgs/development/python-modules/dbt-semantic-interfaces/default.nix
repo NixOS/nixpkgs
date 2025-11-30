@@ -3,10 +3,8 @@
   buildPythonPackage,
   click,
   dateutils,
-  dbt-postgres,
   fetchFromGitHub,
   hatchling,
-  pythonRelaxDepsHook,
   hypothesis,
   importlib-metadata,
   jinja2,
@@ -21,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "dbt-semantic-interfaces";
-  version = "0.4.4";
+  version = "0.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,15 +27,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-semantic-interfaces";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-uvwcnOKjwxEmA+/QRGSRofpoE4jZzmE02mGSDLINrJw=";
+    tag = "v${version}";
+    hash = "sha256-I/bMpqTaAHs0XnYOYjFRgXv3qB06LItkaSxtRjk55js=";
   };
 
   pythonRelaxDeps = [ "importlib-metadata" ];
 
   build-system = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   dependencies = [
@@ -62,7 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Shared interfaces used by dbt-core and MetricFlow projects";
     homepage = "https://github.com/dbt-labs/dbt-semantic-interfaces";
-    changelog = "https://github.com/dbt-labs/dbt-semantic-interfaces/releases/tag/v${version}";
+    changelog = "https://github.com/dbt-labs/dbt-semantic-interfaces/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ pbsds ];
   };

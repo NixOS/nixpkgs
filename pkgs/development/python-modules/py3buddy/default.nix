@@ -1,23 +1,27 @@
 {
   lib,
-  stdenv,
+  buildPythonPackage,
   fetchFromGitHub,
   python,
   pyusb,
+  udevCheckHook,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+buildPythonPackage rec {
   pname = "py3buddy";
   version = "1.0";
+  pyproject = false; # manually installed
 
   src = fetchFromGitHub {
     owner = "armijnhemel";
     repo = "py3buddy";
-    rev = finalAttrs.version;
+    rev = version;
     hash = "sha256-KJ0xGEXHY6o2074WFZ0u7gATS+wrrjyzanYretckWYk=";
   };
 
-  propagatedBuildInputs = [ pyusb ];
+  dependencies = [ pyusb ];
+
+  nativeBuildInputs = [ udevCheckHook ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -40,4 +44,4 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
   };
-})
+}

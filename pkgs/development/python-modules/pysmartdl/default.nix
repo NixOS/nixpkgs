@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iTaybb";
     repo = "pySmartDL";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Etyv3xCB1cGozWDsskygwcTHJfC+V5hvqBNQAF8SIMM=";
   };
 
@@ -22,6 +22,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  # https://docs.python.org/3/whatsnew/3.13.html#unittest
+  preCheck = ''
+    substituteInPlace test/test_pySmartDL.py \
+      --replace-fail 'unittest.makeSuite(' 'unittest.TestLoader().loadTestsFromTestCase('
+  '';
   disabledTests = [
     # touch the network
     "test_basic_auth"
@@ -40,9 +45,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/iTaybb/pySmartDL";
-    description = "A Smart Download Manager for Python";
+    description = "Smart Download Manager for Python";
     changelog = "https://github.com/iTaybb/pySmartDL/blob/${src.rev}/ChangeLog.txt";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

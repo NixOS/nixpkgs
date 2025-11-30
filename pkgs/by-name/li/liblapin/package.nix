@@ -2,14 +2,14 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  sfml,
+  sfml_2,
   libffcall,
   libusb-compat-0_1,
   libudev-zero,
 }:
 
 stdenv.mkDerivation {
-  name = "liblapin";
+  pname = "liblapin";
   version = "0-unstable-2024-05-20";
 
   src = fetchFromGitHub {
@@ -41,13 +41,16 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [
-    sfml
+    sfml_2
     libffcall
     libusb-compat-0_1
     libudev-zero
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   meta = {
     description = "Multimedia library for rookies and prototyping";

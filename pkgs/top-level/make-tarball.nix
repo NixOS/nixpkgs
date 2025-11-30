@@ -1,8 +1,9 @@
-{ nixpkgs
-, officialRelease
-, pkgs ? import nixpkgs.outPath {}
-, nix ? pkgs.nix
-, lib-tests ? import ../../lib/tests/release.nix { inherit pkgs; }
+{
+  nixpkgs,
+  officialRelease,
+  pkgs ? import nixpkgs.outPath { },
+  nix ? pkgs.nix,
+  lib-tests ? import ../../lib/tests/release.nix { inherit pkgs; },
 }:
 
 pkgs.releaseTools.sourceTarball {
@@ -12,11 +13,18 @@ pkgs.releaseTools.sourceTarball {
   inherit officialRelease;
   version = pkgs.lib.fileContents ../../.version;
   versionSuffix = "pre${
-    if nixpkgs ? lastModified
-    then builtins.substring 0 8 (nixpkgs.lastModifiedDate or nixpkgs.lastModified)
-    else toString (nixpkgs.revCount or 0)}.${nixpkgs.shortRev or "dirty"}";
+    if nixpkgs ? lastModified then
+      builtins.substring 0 8 (nixpkgs.lastModifiedDate or nixpkgs.lastModified)
+    else
+      toString (nixpkgs.revCount or 0)
+  }.${nixpkgs.shortRev or "dirty"}";
 
-  buildInputs = with pkgs; [ nix.out jq lib-tests brotli ];
+  buildInputs = with pkgs; [
+    nix.out
+    jq
+    lib-tests
+    brotli
+  ];
 
   configurePhase = ''
     eval "$preConfigure"
@@ -55,6 +63,8 @@ pkgs.releaseTools.sourceTarball {
     echo "file json-br $packages" >> $out/nix-support/hydra-build-products
   '';
 
+  # --hard-dereference: reproducibility for src if auto-optimise-store = true
+  #   Some context: https://github.com/NixOS/infra/issues/438
   distPhase = ''
     mkdir -p $out/tarballs
     XZ_OPT="-T0" tar \
@@ -71,6 +81,7 @@ pkgs.releaseTools.sourceTarball {
       --sort=name \
       --mtime="@$SOURCE_DATE_EPOCH" \
       --mode=ug+w \
+      --hard-dereference \
       $src $(pwd)/{.version-suffix,.git-revision}
   '';
 }

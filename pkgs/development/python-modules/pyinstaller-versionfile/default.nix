@@ -9,16 +9,20 @@
 
 buildPythonPackage rec {
   pname = "pyinstaller-versionfile";
-  version = "2.1.1";
+  version = "3.0.1";
 
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "DudeNr33";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-lz1GuiXU+r8sMld5SsG3qS+FOsWfbvkQmO2bxAR3XcY=";
+    repo = "pyinstaller-versionfile";
+    tag = "v${version}";
+    hash = "sha256-UNrXP5strO6LIkIM3etBo1+Vm+1lR5wF0VfKtZYRoYc=";
   };
+
+  preBuild = ''
+    touch requirements.txt
+  '';
 
   propagatedBuildInputs = [
     packaging
@@ -27,10 +31,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Create a windows version-file from a simple YAML file that can be used by PyInstaller.";
+    description = "Create a windows version-file from a simple YAML file that can be used by PyInstaller";
     mainProgram = "create-version-file";
     homepage = "https://pypi.org/project/pyinstaller-versionfile/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

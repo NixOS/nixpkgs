@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -16,14 +17,17 @@ buildGoModule rec {
 
   vendorHash = "sha256-SkBHFvQn3Q6fl/d1npEspTYhq1YrnusXNWr/Ky4bv64=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/pingtunnel
   '';
 
   meta = with lib; {
-    description = "A tool that send TCP/UDP traffic over ICMP";
+    description = "Tool that send TCP/UDP traffic over ICMP";
     homepage = "https://github.com/esrrhs/pingtunnel";
     license = licenses.mit;
     maintainers = with maintainers; [ oluceps ];

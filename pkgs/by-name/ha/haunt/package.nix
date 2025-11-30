@@ -1,45 +1,32 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, autoreconfHook
-, callPackage
-, guile
-, guile-commonmark
-, guile-reader
-, makeWrapper
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  texinfo,
+  guile,
+  guile-commonmark,
+  guile-reader,
+  makeBinaryWrapper,
+  pkg-config,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "haunt";
-  version = "0.2.6";
+  version = "0.3.0";
 
-  src = fetchurl {
-    url = "https://files.dthompson.us/haunt/haunt-${finalAttrs.version}.tar.gz";
-    hash = "sha256-vPKLQ9hDJdimEAXwIBGgRRlefM8/77xFQoI+0J/lkNs=";
+  src = fetchgit {
+    url = "https://git.dthompson.us/haunt.git";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-i6MI0eaRiA/JNgkIBJGLAsqMnyJz47aavyD6kOL7sqU=";
   };
-
-  # Symbol not found: inotify_init
-  patches = [
-    (fetchpatch {
-      url = "https://git.dthompson.us/haunt.git/patch/?id=ab0b722b0719e3370a21359e4d511af9c4f14e60";
-      hash = "sha256-TPNJKGlbDkV9RpdN274qMLoN3HlwfH/yHpxlpqOPw58=";
-    })
-    (fetchpatch {
-      url = "https://git.dthompson.us/haunt.git/patch/?id=7d0b71f6a3f0e714da5a5c43e52408e27f44c383";
-      hash = "sha256-CW/h8CqsALKDuKRoN1bd/WEtFTvFj0VxtgmpatyrLm8=";
-    })
-    (fetchpatch {
-      url = "https://git.dthompson.us/haunt.git/patch/?id=1a91f3d0568fc095d8b0875c6553ef15b76efa4c";
-      hash = "sha256-+3wUlTuzbyGibAsCiYWKvzPqUrFs7VwdhnADjnPuWIY=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
-    makeWrapper
+    makeBinaryWrapper
     pkg-config
+    texinfo
   ];
 
   buildInputs = [
@@ -48,8 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     guile-reader
   ];
 
-  # Test suite is non-determinisitic in later versions
-  doCheck = false;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   postInstall = ''
     wrapProgram $out/bin/haunt \
@@ -58,9 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests = {
-      expectVersion = callPackage ./tests/001-test-version.nix { };
-    };
+    updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
   meta = {
@@ -84,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
       to do things that aren't provided out-of-the-box.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres AluisioASG ];
+    maintainers = with lib.maintainers; [ normalcea ];
     inherit (guile.meta) platforms;
   };
 })

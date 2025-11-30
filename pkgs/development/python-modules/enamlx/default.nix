@@ -4,6 +4,7 @@
   fetchFromGitHub,
   enaml,
   pyqtgraph,
+  pyqt5,
   pythonocc-core,
   typing-extensions,
 }:
@@ -15,8 +16,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "frmdstryr";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "enamlx";
+    tag = "v${version}";
     hash = "sha256-C3/G0bnu1EQh0elqdrpCwkFPZU4qmkUX7WRSRK9nkM4=";
   };
 
@@ -24,6 +25,7 @@ buildPythonPackage rec {
     enaml
     # Until https://github.com/inkcut/inkcut/issues/105 perhaps
     pyqtgraph
+    pyqt5
     pythonocc-core
     typing-extensions
   ];

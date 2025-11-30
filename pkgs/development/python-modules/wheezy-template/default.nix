@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "wheezy.template";
   version = "3.2.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,9 +18,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://wheezytemplate.readthedocs.io/en/latest/";
-    description = "A lightweight template library";
+    description = "Lightweight template library";
     mainProgram = "wheezy.template";
     license = licenses.mit;
-    maintainers = with maintainers; [ lilyinstarlight ];
+    maintainers = [ ];
   };
 }

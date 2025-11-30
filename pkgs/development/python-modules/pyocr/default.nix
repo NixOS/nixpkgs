@@ -7,12 +7,12 @@
   tesseract,
   cuneiform,
   isPy3k,
-  substituteAll,
+  replaceVars,
   pytestCheckHook,
   setuptools,
   setuptools-scm,
   withTesseractSupport ? true,
-  withCuneiformSupport ? stdenv.hostPlatform.isLinux,
+  withCuneiformSupport ? false,
 }:
 
 buildPythonPackage rec {
@@ -33,15 +33,17 @@ buildPythonPackage rec {
 
   patches =
     [ ]
-    ++ (lib.optional withTesseractSupport (substituteAll {
-      src = ./paths-tesseract.patch;
-      inherit tesseract;
-      tesseractLibraryLocation = "${tesseract}/lib/libtesseract${stdenv.hostPlatform.extensions.sharedLibrary}";
-    }))
-    ++ (lib.optional stdenv.hostPlatform.isLinux (substituteAll {
-      src = ./paths-cuneiform.patch;
-      inherit cuneiform;
-    }));
+    ++ (lib.optional withTesseractSupport (
+      replaceVars ./paths-tesseract.patch {
+        inherit tesseract;
+        tesseractLibraryLocation = "${tesseract}/lib/libtesseract${stdenv.hostPlatform.extensions.sharedLibrary}";
+      }
+    ))
+    ++ (lib.optional withCuneiformSupport (
+      replaceVars ./paths-cuneiform.patch {
+        inherit cuneiform;
+      }
+    ));
 
   propagatedBuildInputs = [ pillow ];
 
@@ -55,7 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     inherit (src.meta) homepage;
     changelog = "https://gitlab.gnome.org/World/OpenPaperwork/pyocr/-/blob/${version}/ChangeLog";
-    description = "A Python wrapper for Tesseract and Cuneiform";
+    description = "Python wrapper for Tesseract and Cuneiform";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       symphorien

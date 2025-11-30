@@ -18,23 +18,21 @@
 
 buildPythonPackage rec {
   pname = "mashumaro";
-  version = "3.13";
+  version = "3.17";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Fatal1ty";
     repo = "mashumaro";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ETK1rHKlByQkqibejiZmXF6c4eIiMazLa8XY2OH30q4=";
+    tag = "v${version}";
+    hash = "sha256-oQKSIDrIPlY1m63uP9Jxpgf7ruaZpt9uZF4hTso503U=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ typing-extensions ];
+  dependencies = [ typing-extensions ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     orjson = [ orjson ];
     msgpack = [ msgpack ];
     yaml = [ pyyaml ];
@@ -46,15 +44,16 @@ buildPythonPackage rec {
     pendulum
     pytest-mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "mashumaro" ];
 
-  meta = with lib; {
+  meta = {
     description = "Serialization library on top of dataclasses";
     homepage = "https://github.com/Fatal1ty/mashumaro";
-    changelog = "https://github.com/Fatal1ty/mashumaro/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tjni ];
+    changelog = "https://github.com/Fatal1ty/mashumaro/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ tjni ];
   };
 }

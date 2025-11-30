@@ -1,39 +1,46 @@
-import ../make-test-python.nix ({ lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   name = "vector-test1";
   meta.maintainers = [ pkgs.lib.maintainers.happysalada ];
 
-  nodes.machine = { config, pkgs, ... }: {
-    services.vector = {
-      enable = true;
-      journaldAccess = true;
-      settings = {
-        sources = {
-          journald.type = "journald";
+  nodes.machine =
+    { config, pkgs, ... }:
+    {
+      services.vector = {
+        enable = true;
+        journaldAccess = true;
+        settings = {
+          sources = {
+            journald.type = "journald";
 
-          vector_metrics.type = "internal_metrics";
+            vector_metrics.type = "internal_metrics";
 
-          vector_logs.type = "internal_logs";
-        };
-
-        sinks = {
-          file = {
-            type = "file";
-            inputs = [ "journald" "vector_logs" ];
-            path = "/var/lib/vector/logs.log";
-            encoding = { codec = "json"; };
+            vector_logs.type = "internal_logs";
           };
 
-          prometheus_exporter = {
-            type = "prometheus_exporter";
-            inputs = [ "vector_metrics" ];
-            address = "[::]:9598";
+          sinks = {
+            file = {
+              type = "file";
+              inputs = [
+                "journald"
+                "vector_logs"
+              ];
+              path = "/var/lib/vector/logs.log";
+              encoding = {
+                codec = "json";
+              };
+            };
+
+            prometheus_exporter = {
+              type = "prometheus_exporter";
+              inputs = [ "vector_metrics" ];
+              address = "[::]:9598";
+            };
           };
         };
       };
     };
-  };
 
   # ensure vector is forwarding the messages appropriately
   testScript = ''
@@ -46,4 +53,4 @@ import ../make-test-python.nix ({ lib, pkgs, ... }:
     machine.wait_until_succeeds("curl -sSf http://localhost:9598/metrics | grep vector_utilization | grep prometheus_exporter")
     machine.wait_for_file("/var/lib/vector/logs.log")
   '';
-})
+}

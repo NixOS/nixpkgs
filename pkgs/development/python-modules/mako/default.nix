@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  fetchPypi,
+  fetchFromGitHub,
   isPyPy,
 
   # build-system
@@ -23,22 +23,23 @@
 
 buildPythonPackage rec {
   pname = "mako";
-  version = "1.3.3";
+  version = "1.3.10";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    pname = "Mako";
-    inherit version;
-    hash = "sha256-4WwB2aucEfcpDu8c/vwJP7WkXuSj2gni/sLk0brlTnM=";
+  src = fetchFromGitHub {
+    owner = "sqlalchemy";
+    repo = "mako";
+    tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-lxGlYyKbrDpr2LHcsqTow+s2l8+g+63M5j8xJt++tGo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ markupsafe ];
+  dependencies = [ markupsafe ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     babel = [ babel ];
     lingua = [ lingua ];
   };
@@ -47,7 +48,8 @@ buildPythonPackage rec {
     chameleon
     mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = lib.optionals isPyPy [
     # https://github.com/sqlalchemy/mako/issues/315
@@ -66,6 +68,6 @@ buildPythonPackage rec {
     changelog = "https://docs.makotemplates.org/en/latest/changelog.html";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = [ ];
   };
 }

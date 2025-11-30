@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   flit-core,
   unittestCheckHook,
 
@@ -43,6 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cpburnz/python-path-specification";
     changelog = "https://github.com/cpburnz/python-pathspec/blob/v${version}/CHANGES.rst";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ copumpkin ];
+    maintainers = [ ];
   };
 }

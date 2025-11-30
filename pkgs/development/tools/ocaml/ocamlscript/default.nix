@@ -1,7 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, findlib }:
-
-lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
-  "ocamlscript is not available for OCaml ${ocaml.version}"
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocaml,
+  findlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-ocamlscript";
@@ -13,7 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256:10xz8jknlmcgnf233nahd04q98ijnxpijhpvb8hl7sv94dgkvpql";
   };
 
-  nativeBuildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+  ];
 
   patches = [ ./Makefile.patch ];
 
@@ -30,5 +36,6 @@ stdenv.mkDerivation rec {
     description = "Natively-compiled OCaml scripts";
     maintainers = [ maintainers.vbgl ];
     mainProgram = "ocamlscript";
+    broken = !(lib.versionAtLeast ocaml.version "4.08");
   };
 }

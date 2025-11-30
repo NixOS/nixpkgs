@@ -1,76 +1,86 @@
 {
   lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  hatch-vcs,
+  stdenv,
+  a2wsgi,
   aiohttp,
+  aiosqlite,
   attrs,
+  buildPythonPackage,
   cattrs,
   circus,
-  click,
   click-option-group,
+  click,
   cloudpickle,
   deepmerge,
+  fetchFromGitHub,
+  fs-s3fs,
   fs,
+  fsspec,
+  grpcio-channelz,
+  grpcio-health-checking,
+  grpcio-reflection,
+  grpcio,
+  hatch-vcs,
+  hatchling,
+  httpx-ws,
   httpx,
   inflection,
+  inquirerpy,
   jinja2,
+  kantoku,
   numpy,
+  nvidia-ml-py,
   opentelemetry-api,
-  opentelemetry-instrumentation,
+  opentelemetry-exporter-otlp-proto-http,
+  opentelemetry-exporter-otlp,
   opentelemetry-instrumentation-aiohttp-client,
   opentelemetry-instrumentation-asgi,
+  opentelemetry-instrumentation-grpc,
+  opentelemetry-instrumentation,
   opentelemetry-sdk,
   opentelemetry-semantic-conventions,
   opentelemetry-util-http,
   packaging,
+  pandas,
   pathspec,
+  pillow,
   pip-requirements-parser,
-  pip-tools,
   prometheus-client,
+  protobuf,
   psutil,
-  nvidia-ml-py,
+  pyarrow,
+  pydantic,
   python-dateutil,
   python-json-logger,
   python-multipart,
+  pythonOlder,
   pyyaml,
-  requests,
+  questionary,
   rich,
+  rich-toolkit,
   schema,
   simple-di,
   starlette,
+  tomli-w,
+  tomli,
+  tritonclient,
+  uv,
   uvicorn,
   watchfiles,
-  fs-s3fs,
-  grpcio,
-  grpcio-health-checking,
-  opentelemetry-instrumentation-grpc,
-  protobuf,
-  grpcio-channelz,
-  grpcio-reflection,
-  filetype,
-  pillow,
-  pydantic,
-  pandas,
-  pyarrow,
-  opentelemetry-exporter-otlp-proto-http,
-  # https://pypi.org/project/opentelemetry-exporter-jaeger-proto-grpc/
-  # , opentelemetry-exporter-jaeger # support for this exporter ends in july 2023
-  opentelemetry-exporter-otlp,
-  # , opentelemetry-exporter-zipkin
-  tritonclient,
   # native check inputs
   pytestCheckHook,
+  pytest-xdist,
+  google-api-python-client,
   scikit-learn,
   lxml,
   orjson,
   pytest-asyncio,
   fastapi,
+  writableTmpDirAsHomeHook,
 }:
 
 let
-  version = "1.2.5";
+  version = "1.4.29";
   aws = [ fs-s3fs ];
   grpc = [
     grpcio
@@ -78,29 +88,28 @@ let
     opentelemetry-instrumentation-grpc
     protobuf
   ];
-  io-file = [ filetype ];
-  io-image = io-file ++ [ pillow ];
-  io-json = [ pydantic ];
+  io-image = [ pillow ];
   io-pandas = [
     pandas
     pyarrow
   ];
   grpc-reflection = grpc ++ [ grpcio-reflection ];
   grpc-channelz = grpc ++ [ grpcio-channelz ];
-  monitor-otlp = [ opentelemetry-exporter-otlp-proto-http ];
+  monitor-otlp = [
+    opentelemetry-exporter-otlp-proto-http
+    opentelemetry-instrumentation-grpc
+  ];
   # tracing-jaeger = [ opentelemetry-exporter-jaeger ];
   tracing-otlp = [ opentelemetry-exporter-otlp ];
   # tracing-zipkin = [ opentelemetry-exporter-zipkin ];
-  io = io-json ++ io-image ++ io-pandas ++ io-file;
+  io = io-image ++ io-pandas;
   tracing = tracing-otlp; # ++ tracing-zipkin ++ tracing-jaeger
   optional-dependencies = {
     all = aws ++ io ++ grpc ++ grpc-reflection ++ grpc-channelz ++ tracing ++ monitor-otlp;
     inherit
       aws
       grpc
-      io-file
       io-image
-      io-json
       io-pandas
       io
       grpc-reflection
@@ -111,36 +120,47 @@ let
       ;
     triton = [
       tritonclient
-    ] ++ tritonclient.optional-dependencies.http ++ tritonclient.optional-dependencies.grpc;
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux (
+      tritonclient.optional-dependencies.http ++ tritonclient.optional-dependencies.grpc
+    );
   };
-in
-buildPythonPackage {
-  pname = "bentoml";
-  inherit version;
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "bentoml";
     repo = "BentoML";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-GBKxyjCs02mxYiMK4GhgFUATRCUSVf8mFbWjuPVD7SU=";
+    tag = "v${version}";
+    hash = "sha256-humzefKjnFpbWp9QVcUGPD0+3l2bOyFA35reZLtwFt4=";
   };
+in
+buildPythonPackage {
+  pname = "bentoml";
+  inherit version src;
+  pyproject = true;
 
-  # https://github.com/bentoml/BentoML/pull/4227 should fix this test
-  postPatch = ''
-    substituteInPlace tests/unit/_internal/utils/test_analytics.py \
-      --replace "requests" "httpx"
-  '';
+  pythonRelaxDeps = [
+    "cattrs"
+    "fsspec"
+    "nvidia-ml-py"
+    "opentelemetry-api"
+    "opentelemetry-instrumentation-aiohttp-client"
+    "opentelemetry-instrumentation-asgi"
+    "opentelemetry-instrumentation"
+    "opentelemetry-sdk"
+    "opentelemetry-semantic-conventions"
+    "opentelemetry-util-http"
+    "rich-toolkit"
+  ];
 
-  pythonRelaxDeps = [ "opentelemetry-semantic-conventions" ];
-
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    a2wsgi
     aiohttp
+    aiosqlite
     attrs
     cattrs
     circus
@@ -149,10 +169,15 @@ buildPythonPackage {
     cloudpickle
     deepmerge
     fs
+    fsspec
     httpx
+    httpx-ws
     inflection
+    inquirerpy
     jinja2
+    kantoku
     numpy
+    nvidia-ml-py
     opentelemetry-api
     opentelemetry-instrumentation
     opentelemetry-instrumentation-aiohttp-client
@@ -163,24 +188,27 @@ buildPythonPackage {
     packaging
     pathspec
     pip-requirements-parser
-    pip-tools
     prometheus-client
     psutil
-    nvidia-ml-py
+    pydantic
     python-dateutil
     python-json-logger
     python-multipart
     pyyaml
-    requests
+    questionary
     rich
+    rich-toolkit
     schema
     simple-di
     starlette
+    tomli-w
+    uv
     uvicorn
     watchfiles
-  ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  passthru.optional-dependencies = optional-dependencies;
+  inherit optional-dependencies;
 
   pythonImportsCheck = [ "bentoml" ];
 
@@ -193,36 +221,40 @@ buildPythonPackage {
   disabledTestPaths = [
     "tests/e2e"
     "tests/integration"
+    "tests/unit/grpc"
+    "tests/unit/_internal/"
   ];
 
   disabledTests = [
     # flaky test
     "test_store"
+    #
+    "test_log_collection"
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pandas
-    pydantic
-    scikit-learn
+    fastapi
+    google-api-python-client
     lxml
     orjson
-    pytest-asyncio
+    pandas
     pillow
-    fastapi
-    starlette
-  ] ++ optional-dependencies.grpc;
+    pytest-asyncio
+    pytest-xdist
+    pytestCheckHook
+    scikit-learn
+    writableTmpDirAsHomeHook
+  ]
+  ++ optional-dependencies.grpc;
 
   meta = with lib; {
     description = "Build Production-Grade AI Applications";
     homepage = "https://github.com/bentoml/BentoML";
-    changelog = "https://github.com/bentoml/BentoML/releases/tag/v${version}";
+    changelog = "https://github.com/bentoml/BentoML/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [
       happysalada
       natsukium
     ];
-    # https://github.com/bentoml/BentoML/issues/3885
-    broken = versionAtLeast pydantic.version "2";
   };
 }

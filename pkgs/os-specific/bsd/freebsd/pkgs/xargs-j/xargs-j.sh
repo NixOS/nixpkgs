@@ -1,4 +1,4 @@
-#! @shell@
+#! @runtimeShell@
 
 declare -a args=()
 

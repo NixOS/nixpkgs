@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "nteract";
-    repo = pname;
+    repo = "testbook";
     rev = version;
     hash = "sha256-qaDgae/5TRpjmjOf7aom7TC5HLHp0PHM/ds47AKtq8U=";
   };
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "testbook" ];
 
   meta = with lib; {
-    description = "A unit testing framework extension for testing code in Jupyter Notebooks";
+    description = "Unit testing framework extension for testing code in Jupyter Notebooks";
     homepage = "https://testbook.readthedocs.io/";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ djacu ];

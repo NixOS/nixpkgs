@@ -1,9 +1,10 @@
-{ cmake
-, fetchFromGitea
-, lib
-, nlohmann_json
-, qt6
-, stdenv
+{
+  cmake,
+  fetchFromGitea,
+  lib,
+  nlohmann_json,
+  qt6,
+  stdenv,
 }:
 stdenv.mkDerivation (finalAttrs: {
   version = "1.1";
@@ -17,14 +18,21 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OMJ9wKNuvD1Z9KV7Bp7aIA5gWbBl9PmTdGcGegE0vqM=";
   };
 
-  buildInputs = [ qt6.qtwayland nlohmann_json qt6.qtbase];
-  nativeBuildInputs = [ cmake qt6.wrapQtAppsHook ];
+  buildInputs = [
+    qt6.qtwayland
+    nlohmann_json
+    qt6.qtbase
+  ];
+  nativeBuildInputs = [
+    cmake
+    qt6.wrapQtAppsHook
+  ];
 
   doCheck = true;
 
   meta = with lib; {
     changelog = "https://git.grimmauld.de/Grimmauld/swaymux/commits/branch/main";
-    description = "A program to quickly navigate sway";
+    description = "Program to quickly navigate sway";
     homepage = "https://git.grimmauld.de/Grimmauld/swaymux";
     license = licenses.bsd3;
     longDescription = ''

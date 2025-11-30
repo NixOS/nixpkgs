@@ -2,33 +2,57 @@
   lib,
   buildPythonPackage,
   django,
-  fetchPypi,
+  fetchFromGitHub,
+  hatchling,
+  oracledb,
+  pytest-mypy-plugins,
+  pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
-  setuptools,
+  redis,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "django-stubs-ext";
-  version = "4.2.7";
+  version = "5.2.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-UZNCrAhJzaFVl0bJpWPwP/mfY2sOvnwUt16BagDf3cM=";
+  src = fetchFromGitHub {
+    owner = "typeddjango";
+    repo = "django-stubs";
+    tag = version;
+    hash = "sha256-v+MlMy9XABb9gw3U6Xv+aXXF6AZuvu+OBdU5+8tE9Oo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  postPatch = ''
+    cd ext
+    ln -s ../scripts
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     django
     typing-extensions
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  optional-dependencies = {
+    redis = [ redis ];
+    oracle = [ oracledb ];
+  };
+
+  nativeCheckInputs = [
+    pytest-mypy-plugins
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # error: Skipping analyzing "django.db": module is installed, but missing library stubs or py.typed marker  [import-untyped] (diff)
+    "tests/typecheck"
+  ];
+
+  # Tests are not shipped with PyPI
 
   pythonImportsCheck = [ "django_stubs_ext" ];
 
@@ -37,6 +61,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/typeddjango/django-stubs";
     changelog = "https://github.com/typeddjango/django-stubs/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ elohmeier ];
+    maintainers = [ ];
   };
 }

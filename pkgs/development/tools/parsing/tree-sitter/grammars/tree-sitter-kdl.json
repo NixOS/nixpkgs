@@ -1,0 +1,14 @@
+{
+  "url": "https://github.com/tree-sitter-grammars/tree-sitter-kdl",
+  "rev": "3ca569b9f9af43593c24f9e7a21f02f43a13bb88",
+  "date": "2023-05-13T01:55:45-04:00",
+  "path": "/nix/store/gmz9dnqxagdk59hqz7n9cyg43n7v0x93-tree-sitter-kdl",
+  "sha256": "1015x24ffrvzb0m0wbqdzmaqavpnjw0gvcagxi9b6vj3n1ynm0ps",
+  "hash": "sha256-+oJqfbBDbrNS7E+x/QCX9m6FVf0NLw4qWH9n54joJYA=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "fetchTags": false,
+  "leaveDotGit": false,
+  "rootDir": ""
+}

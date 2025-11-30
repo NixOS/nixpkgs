@@ -3,32 +3,21 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-hosts";
-  version = "1.0.6";
+  version = "1.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LfWfBzJ3UyArcHxrIUDsIa8pIr1WkUikf6F6v+IVLG4=";
+    hash = "sha256-XiU6aO6EhFVgj1g7TYMdbgg7IvjkU2DFoiwYikrB13A=";
   };
 
-  # win_inet_pton is required for Windows support
-  prePatch = ''
-    substituteInPlace setup.py \
-      --replace "install_requires=['win_inet_pton']," ""
-    substituteInPlace python_hosts/utils.py \
-      --replace "import win_inet_pton" ""
-  '';
-
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pyyaml

@@ -7,54 +7,71 @@
   defusedxml,
   docker,
   fetchFromGitHub,
-  numpy,
-  pillow,
+  orjson,
+  pkg-config,
   pycountry,
   pytest-asyncio,
+  pytest-codspeed,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
-  setuptools-scm,
-  svg-py,
+  rustPlatform,
+  syrupy,
   testfixtures,
+  xz,
 }:
 
 buildPythonPackage rec {
   pname = "deebot-client";
-  version = "7.2.0";
+  version = "16.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.12";
+  disabled = pythonOlder "3.13";
 
   src = fetchFromGitHub {
     owner = "DeebotUniverse";
     repo = "client.py";
-    rev = "refs/tags/${version}";
-    hash = "sha256-5GALvd9p+ksxWqkfkSd07mPNzQSbdeGzrUjQU2nWs3g=";
+    tag = version;
+    hash = "sha256-R62z102kvdsZVdRcE0lBtwgynl3SECOXCoyaj0xXv2s=";
   };
 
-  build-system = [
-    setuptools
-    setuptools-scm
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-ir3HZ3DiHcL34kGtyUwyKQZA6fiSj45eXBKL/71eqCs=";
+  };
+
+  pythonRelaxDeps = [
+    "aiohttp"
   ];
+
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+  ];
+
+  buildInputs = [ xz ];
 
   dependencies = [
     aiohttp
     aiomqtt
     cachetools
     defusedxml
-    numpy
-    pillow
-    svg-py
+    orjson
   ];
 
   nativeCheckInputs = [
     docker
     pycountry
     pytest-asyncio
+    pytest-codspeed
     pytestCheckHook
+    syrupy
     testfixtures
   ];
+
+  preCheck = ''
+    rm -rf deebot_client
+  '';
 
   pythonImportsCheck = [ "deebot_client" ];
 

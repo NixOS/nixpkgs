@@ -1,25 +1,28 @@
-{ buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, lib
-, libglvnd
-, pkg-config
-, subPackages ? ["." "netclient"]
-, xorg
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  libglvnd,
+  pkg-config,
+  subPackages ? [
+    "."
+    "netclient"
+  ],
+  xorg,
 }:
 
 buildGoModule rec {
   pname = "netmaker";
-  version = "0.24.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "gravitl";
-    repo = pname;
+    repo = "netmaker";
     rev = "v${version}";
-    hash = "sha256-Me1hux+Y3EiT9vlP4+4019JPcDEW0d5byFO6YIfKbbw=";
+    hash = "sha256-acsIe3N6F76KktfPOHreFwDatyuv1q7ui6MMhVXfj7c=";
   };
 
-  vendorHash = "sha256-BlZYXLvB05BTI2gMke8I2ob4jYSrixfpBUqKzNcHisI=";
+  vendorHash = "sha256-Ur8cuE0jToOme79BTaYbaLDl2cRMjsr1DTvZjm8zmtc=";
 
   inherit subPackages;
 
@@ -34,12 +37,15 @@ buildGoModule rec {
     xorg.libXrandr
   ];
 
-  meta = with lib; {
+  meta = {
     description = "WireGuard automation from homelab to enterprise";
     homepage = "https://netmaker.io";
     changelog = "https://github.com/gravitl/netmaker/-/releases/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ urandom qjoly ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      urandom
+      qjoly
+    ];
     mainProgram = "netmaker";
   };
 }

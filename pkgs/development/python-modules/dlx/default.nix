@@ -5,7 +5,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "dlx";
   version = "1.0.4";
   format = "setuptools";
@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Implementation of Donald Knuth's Dancing Links algorithm";
     homepage = "https://github.com/sraaphorst/dlx_python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }

@@ -1,14 +1,19 @@
-{ lib, rel, buildKodiBinaryAddon, fetchFromGitHub }:
+{
+  lib,
+  rel,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+}:
 buildKodiBinaryAddon rec {
   pname = "pvr-hts";
   namespace = "pvr.hts";
-  version = "21.2.3";
+  version = "21.2.6";
 
   src = fetchFromGitHub {
     owner = "kodi-pvr";
     repo = "pvr.hts";
     rev = "${version}-${rel}";
-    sha256 = "sha256-4jHcUjGarLHsn5CjBLWB1wQNjBBw4ftMuDY5uFAHAzY=";
+    sha256 = "sha256-opxNgin+Sz/Nb9IGZ+OFrCzbDc4FXl2LaNKUu5LAgFM=";
   };
 
   meta = with lib; {
@@ -16,6 +21,6 @@ buildKodiBinaryAddon rec {
     description = "Kodi's Tvheadend HTSP client addon";
     platforms = platforms.all;
     license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

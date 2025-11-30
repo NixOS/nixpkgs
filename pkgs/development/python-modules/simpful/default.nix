@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aresio";
     repo = "simpful";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-NtTw7sF1WfVebUk1wHrM8FHAe3/FXDcMApPkDbw0WXo=";
   };
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     plotting = [
       matplotlib
       seaborn
@@ -44,7 +44,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "simpful" ];
 
@@ -54,6 +55,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/aresio/simpful/releases/tag/${version}";
     license = with licenses; [ lgpl3Only ];
     maintainers = with maintainers; [ fab ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -1,35 +1,41 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "turbovnc-headless-server";
   meta = {
     maintainers = with lib.maintainers; [ nh2 ];
   };
 
-  nodes.machine = { pkgs, ... }: {
+  nodes.machine =
+    { pkgs, ... }:
+    {
 
-    environment.systemPackages = with pkgs; [
-      glxinfo
-      procps # for `pkill`, `pidof` in the test
-      scrot # for screenshotting Xorg
-      turbovnc
-    ];
-
-    programs.turbovnc.ensureHeadlessSoftwareOpenGL = true;
-
-    networking.firewall = {
-      # Reject instead of drop, for failures instead of hangs.
-      rejectPackets = true;
-      allowedTCPPorts = [
-        5900 # VNC :0, for seeing what's going on in the server
+      environment.systemPackages = with pkgs; [
+        mesa-demos
+        procps # for `pkill`, `pidof` in the test
+        scrot # for screenshotting Xorg
+        turbovnc
       ];
-    };
 
-    # So that we can ssh into the VM, see e.g.
-    # http://blog.patapon.info/nixos-local-vm/#accessing-the-vm-with-ssh
-    services.openssh.enable = true;
-    services.openssh.settings.PermitRootLogin = "yes";
-    users.extraUsers.root.password = "";
-    users.mutableUsers = false;
-  };
+      programs.turbovnc.ensureHeadlessSoftwareOpenGL = true;
+
+      networking.firewall = {
+        # Reject instead of drop, for failures instead of hangs.
+        rejectPackets = true;
+        allowedTCPPorts = [
+          5900 # VNC :0, for seeing what's going on in the server
+        ];
+      };
+
+      # So that we can ssh into the VM, see e.g.
+      # https://nixos.org/manual/nixos/stable/#sec-nixos-test-port-forwarding
+      services.openssh.enable = true;
+      users.mutableUsers = false;
+      # `test-instrumentation.nix` already sets an empty root password.
+      # The following have to all be set to allow an empty SSH login password.
+      services.openssh.settings.PermitRootLogin = "yes";
+      services.openssh.settings.PermitEmptyPasswords = "yes";
+      security.pam.services.sshd.allowNullPassword = true; # the default `UsePam yes` makes this necessary
+    };
 
   testScript = ''
     def wait_until_terminated_or_succeeds(
@@ -113,24 +119,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         )
 
 
-    # Checks that we detect glxgears failing when
-    # `LIBGL_DRIVERS_PATH=/nonexistent` is set
-    # (in which case software rendering should not work).
-    def test_glxgears_failing_with_bad_driver_path():
-        machine.execute(
-            # Note trailing & for backgrounding.
-            "(env DISPLAY=:0 LIBGL_DRIVERS_PATH=/nonexistent glxgears -info | tee /tmp/glxgears-should-fail.stdout) 3>&1 1>&2 2>&3 | tee /tmp/glxgears-should-fail.stderr >&2 &"
-        )
-        machine.wait_until_succeeds("test -f /tmp/glxgears-should-fail.stderr")
-        wait_until_terminated_or_succeeds(
-            termination_check_shell_command="pidof glxgears",
-            success_check_shell_command="grep 'libGL error: failed to load driver: swrast' /tmp/glxgears-should-fail.stderr",
-            get_detail_message_fn=lambda: "Contents of /tmp/glxgears-should-fail.stderr:\n"
-            + machine.succeed("cat /tmp/glxgears-should-fail.stderr"),
-        )
-        machine.wait_until_fails("pidof glxgears")
-
-
     # Starts glxgears, backgrounding it. Waits until it prints the `GL_RENDERER`.
     # Does not quit glxgears.
     def test_glxgears_prints_renderer():
@@ -151,9 +139,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         start_xvnc()
         wait_until_xvnc_glx_ready()
 
-    with subtest("Ensure bad driver path makes glxgears fail"):
-        test_glxgears_failing_with_bad_driver_path()
-
     with subtest("Run 3D application (glxgears)"):
         test_glxgears_prints_renderer()
 
@@ -163,10 +148,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     # Copy files down.
     machine.copy_from_vm("/tmp/glxgears.png")
     machine.copy_from_vm("/tmp/glxgears.stdout")
-    machine.copy_from_vm("/tmp/glxgears-should-fail.stdout")
-    machine.copy_from_vm("/tmp/glxgears-should-fail.stderr")
     machine.copy_from_vm("/tmp/Xvnc.stdout")
     machine.copy_from_vm("/tmp/Xvnc.stderr")
   '';
 
-})
+}

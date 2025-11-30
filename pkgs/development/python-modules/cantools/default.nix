@@ -3,14 +3,14 @@
   argparse-addons,
   bitstruct,
   buildPythonPackage,
-  can,
+  python-can,
   crccheck,
   diskcache,
   fetchPypi,
   matplotlib,
   parameterized,
+  pytest-freezegun,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   textparser,
@@ -18,45 +18,45 @@
 
 buildPythonPackage rec {
   pname = "cantools";
-  version = "39.4.5";
+  version = "41.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WU8q6A3q24xrCOjhMi1C4lj0DULIDWiG2E4BQ/kLWiM=";
+    hash = "sha256-WycDUgKJuRFR5fPFT8wBxoijgrqDqjf6RnQxV4Pl8uk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     argparse-addons
     bitstruct
-    can
+    python-can
     crccheck
     diskcache
     textparser
   ];
 
-  passthru.optional-dependencies.plot = [ matplotlib ];
+  optional-dependencies.plot = [ matplotlib ];
 
   nativeCheckInputs = [
     parameterized
+    pytest-freezegun
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.plot;
+  ]
+  ++ optional-dependencies.plot;
 
   pythonImportsCheck = [ "cantools" ];
 
   meta = with lib; {
     description = "Tools to work with CAN bus";
-    mainProgram = "cantools";
     homepage = "https://github.com/cantools/cantools";
     changelog = "https://github.com/cantools/cantools/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ gray-heron ];
+    mainProgram = "cantools";
   };
 }

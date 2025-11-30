@@ -5,29 +5,27 @@
   poetry-core,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
-  types-setuptools,
+  packaging,
 }:
 
 buildPythonPackage rec {
   pname = "requirements-parser";
-  version = "0.9.0";
+  version = "0.13.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "madpah";
     repo = "requirements-parser";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZkyfK2s6wmKX/AJsOXlAHOpJ2/zZO0zipdM3j2BrrWo=";
+    tag = "v${version}";
+    hash = "sha256-AwsLcHjPfP+cYpKCQVgIcyzUhnqeIBJ92QLR48E6EtI=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
-    setuptools
-    types-setuptools
+    packaging
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -37,8 +35,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pip requirements file parser";
     homepage = "https://github.com/davidfischer/requirements-parser";
-    changelog = "https://github.com/madpah/requirements-parser/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/madpah/requirements-parser/blob/${src.tag}/CHANGELOG.md";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

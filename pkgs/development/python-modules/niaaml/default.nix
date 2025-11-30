@@ -2,44 +2,47 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  loguru,
   niapy,
   numpy,
   pandas,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
-  pythonRelaxDepsHook,
   scikit-learn,
   toml-adapt,
+  typer,
 }:
 
 buildPythonPackage rec {
   pname = "niaaml";
-  version = "2.0.0";
+  version = "2.1.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
-    owner = "lukapecnik";
+    owner = "firefly-cpp";
     repo = "NiaAML";
-    rev = "refs/tags/${version}";
-    hash = "sha256-d6UlpMrT0GBZlcD1BCZxInXTdyFMBVltxnSyUFbSy0g=";
+    tag = version;
+    hash = "sha256-i5hjmvN9qJCGVDmRDBTiaNQn+1kZHr2iWNnD7GUimr4=";
   };
 
-  pythonRelaxDeps = [ "pandas" ];
+  pythonRelaxDeps = [
+    "numpy"
+    "pandas"
+    "typer"
+  ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
-    pythonRelaxDepsHook
     toml-adapt
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    loguru
     niapy
     numpy
     pandas
     scikit-learn
+    typer
   ];
 
   # create scikit-learn and niapy deps version consistent
@@ -54,8 +57,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python automated machine learning framework";
-    homepage = "https://github.com/lukapecnik/NiaAML";
-    changelog = "https://github.com/lukapecnik/NiaAML/releases/tag/${version}";
+    homepage = "https://github.com/firefly-cpp/NiaAML";
+    changelog = "https://github.com/firefly-cpp/NiaAML/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ firefly-cpp ];
   };

@@ -6,6 +6,7 @@
   setuptools,
   strct,
   pytestCheckHook,
+  pytest-cov-stub,
   pyyaml,
 }:
 
@@ -31,11 +32,6 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace-fail  \
-        "--cov" \
-        "#--cov"
-
     # configure correct version, which fails due to missing .git
     substituteInPlace versioneer.py birch/_version.py \
       --replace-fail '"0+unknown"' '"${version}"'
@@ -54,6 +50,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pyyaml
   ];
 

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "ansible-pylibssh";
-  version = "1.1.0";
+  version = "1.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-spaGux6dYvtUtpOdU6oN7SEn8IgBof2NpQSPvr+Zplg=";
+    hash = "sha256-dT5XDc3OtquONi6RzA1Zk77ryT0oe4gXjbVVCfZCOrU=";
   };
 
   # Remove after https://github.com/ansible/pylibssh/pull/502 is merged

@@ -15,13 +15,16 @@
 }:
 
 buildPythonPackage rec {
+  format = "setuptools";
   pname = "sudachipy";
   inherit (sudachi-rs) src version;
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-ARwvThfATDdzBTjPFr9yjbE/0eYvp/TCZOEGbUupJmU=";
+  patches = sudachi-rs.cargoPatches;
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    patches = sudachi-rs.cargoPatches;
+    hash = "sha256-lUP/9s4W0JehxeCjMmq6G22KMGdDNnq1YlobeLQn2AE=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +34,7 @@ buildPythonPackage rec {
     setuptools-rust
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   preBuild = ''
     cd python

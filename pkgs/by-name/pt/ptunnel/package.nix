@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, libpcap
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  libpcap,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    description = "A tool for reliably tunneling TCP connections over ICMP echo request and reply packets";
+    description = "Tool for reliably tunneling TCP connections over ICMP echo request and reply packets";
     homepage = "https://www.cs.uit.no/~daniels/PingTunnel";
     license = licenses.bsd3;
     mainProgram = "ptunnel";

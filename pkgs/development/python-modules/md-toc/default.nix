@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frnmst";
     repo = "md-toc";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-nKkKtLEW0pohXiMtjWl2Kzh7SRwZJ/yzhXpDyluLodc=";
   };
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "md_toc/tests/*.py" ];
+  enabledTestPaths = [ "md_toc/tests/*.py" ];
 
   pythonImportsCheck = [ "md_toc" ];
 

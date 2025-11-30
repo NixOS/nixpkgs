@@ -1,20 +1,25 @@
-{ lib, buildDunePackage, fetchurl }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+}:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "semaphore-compat";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchurl {
-    url = "https://github.com/mirage/semaphore-compat/releases/download/${version}/semaphore-compat-${version}.tbz";
-    sha256 = "139c5rxdp4dg1jcwyyxvhxr8213l1xdl2ab0mc288rfcppsiyxrb";
+    url = "https://github.com/mirage/semaphore-compat/releases/download/${finalAttrs.version}/semaphore-compat-${finalAttrs.version}.tbz";
+    hash = "sha256-4CnZ2vX17IPpnlA7CNeuxZEKfA5HFoeQvwH0tCKNRnY=";
   };
 
-  useDune2 = true;
-
-  meta = with lib; {
+  meta = {
     description = "Compatibility Semaphore module";
     homepage = "https://github.com/mirage/semaphore-compat";
-    license = licenses.lgpl21Only;
-    maintainers = [ maintainers.sternenseemann ];
+    license = with lib.licenses; [
+      lgpl21Plus
+      ocamlLgplLinkingException
+    ];
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})

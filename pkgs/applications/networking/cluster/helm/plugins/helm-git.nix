@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, coreutils
-, findutils
-, gitMinimal
-, gnugrep
-, gnused
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  coreutils,
+  findutils,
+  gitMinimal,
+  gnugrep,
+  gnused,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
   pname = "helm-git";
-  version = "0.16.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "aslafy-z";
-    repo = pname;
+    repo = "helm-git";
     rev = "v${version}";
-    sha256 = "sha256-/kUKi2BI6LMMUiy6AaYhpPIXU428Or352xYoDYdym8A=";
+    sha256 = "sha256-gMx61fhAaiYHYd/so65DEBKANZZO826AFLU1FIE3hSs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -32,13 +33,21 @@ stdenv.mkDerivation rec {
 
     patchShebangs $out/helm-git/helm-git{,-plugin.sh}
     wrapProgram $out/helm-git/helm-git \
-        --prefix PATH : ${lib.makeBinPath [ coreutils findutils gitMinimal gnugrep gnused ]}
+        --prefix PATH : ${
+          lib.makeBinPath [
+            coreutils
+            findutils
+            gitMinimal
+            gnugrep
+            gnused
+          ]
+        }
 
     runHook postInstall
   '';
 
   meta = with lib; {
-    description = "The Helm downloader plugin that provides GIT protocol support";
+    description = "Helm downloader plugin that provides GIT protocol support";
     homepage = "https://github.com/aslafy-z/helm-git";
     license = licenses.mit;
     maintainers = with maintainers; [ flokli ];

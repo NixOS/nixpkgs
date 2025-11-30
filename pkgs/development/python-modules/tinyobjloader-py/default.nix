@@ -5,7 +5,7 @@
   tinyobjloader,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "tinyobjloader-py";
   format = "setuptools";
   inherit (tinyobjloader) version src;
@@ -21,10 +21,7 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "tinyobjloader" ];
 
-  meta =
-    with lib;
-    tinyobjloader.meta
-    // {
-      description = "Python wrapper for the C++ wavefront .obj loader tinyobjloader";
-    };
+  meta = tinyobjloader.meta // {
+    description = "Python wrapper for the C++ wavefront .obj loader tinyobjloader";
+  };
 }

@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 let
   cfg = config.services.lanraragi;
@@ -15,6 +20,10 @@ in
         type = lib.types.port;
         default = 3000;
         description = "Port for LANraragi's web interface.";
+      };
+
+      openFirewall = lib.mkEnableOption "" // {
+        description = "Open ports in the firewall for LANraragi's web interface.";
       };
 
       passwordFile = lib.mkOption {
@@ -53,7 +62,10 @@ in
 
     systemd.services.lanraragi = {
       description = "LANraragi main service";
-      after = [ "network.target" "redis-lanraragi.service" ];
+      after = [
+        "network.target"
+        "redis-lanraragi.service"
+      ];
       requires = [ "redis-lanraragi.service" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
@@ -75,19 +87,28 @@ in
         cat > lrr.conf <<EOF
         {
           redis_address => "127.0.0.1:${toString cfg.redis.port}",
-          redis_password => "${lib.optionalString (cfg.redis.passwordFile != null) ''$(head -n1 ${cfg.redis.passwordFile})''}",
+          redis_password => "${
+            lib.optionalString (cfg.redis.passwordFile != null) ''$(head -n1 ${cfg.redis.passwordFile})''
+          }",
           redis_database => "0",
           redis_database_minion => "1",
           redis_database_config => "2",
           redis_database_search => "3",
         }
         EOF
-      '' + lib.optionalString (cfg.passwordFile != null) ''
-        ${lib.getExe pkgs.redis} -h 127.0.0.1 -p ${toString cfg.redis.port} ${lib.optionalString (cfg.redis.passwordFile != null) ''-a "$(head -n1 ${cfg.redis.passwordFile})"''}<<EOF
+      ''
+      + lib.optionalString (cfg.passwordFile != null) ''
+        ${lib.getExe pkgs.redis} -h 127.0.0.1 -p ${toString cfg.redis.port} ${
+          lib.optionalString (cfg.redis.passwordFile != null) ''-a "$(head -n1 ${cfg.redis.passwordFile})"''
+        }<<EOF
           SELECT 2
           HSET LRR_CONFIG password $(${cfg.package}/bin/helpers/lrr-make-password-hash $(head -n1 ${cfg.passwordFile}))
         EOF
       '';
+    };
+
+    networking.firewall = lib.mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.port ];
     };
   };
 }

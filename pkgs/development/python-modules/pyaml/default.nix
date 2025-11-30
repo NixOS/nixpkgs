@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pyaml";
-  version = "24.4.0";
+  version = "25.7.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Dkg9kokBDnR6Ml3EMXG8w51lYt0d1HGejMfnyWyZ/OY=";
+    hash = "sha256-4ROmTsFogb8rCS4r64S33PG9mAlq0X9fFOj7eCp12Zs=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -30,6 +30,6 @@ buildPythonPackage rec {
     mainProgram = "pyaml";
     homepage = "https://github.com/mk-fg/pretty-yaml";
     license = licenses.wtfpl;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

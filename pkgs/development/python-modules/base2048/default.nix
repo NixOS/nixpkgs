@@ -6,7 +6,6 @@
   fetchFromGitHub,
   frelatage,
   libiconv,
-  maturin,
   pytestCheckHook,
   pythonOlder,
   rustc,
@@ -23,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ionite34";
     repo = "base2048";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OXlfycJB1IrW2Zq0xPDGjjwCdRTWtX/ixPGWcd+YjAg=";
   };
 
@@ -40,9 +39,9 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     fuzz = [ frelatage ];
   };
 

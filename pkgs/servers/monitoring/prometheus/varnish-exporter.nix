@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, varnish, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  varnish,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "prometheus_varnish_exporter";

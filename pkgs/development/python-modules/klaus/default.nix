@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   isPy3k,
   flask,
   pygments,
@@ -16,20 +17,29 @@
 
 buildPythonPackage rec {
   pname = "klaus";
-  version = "2.0.3";
+  version = "3.0.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jonashaag";
-    repo = pname;
+    repo = "klaus";
     rev = version;
-    hash = "sha256-VAwIdmwdo/Rim2sVlR605Wo5/zkNOMiGkh40qLrENmU=";
+    hash = "sha256-GflSDhBmMsQ34o3ApraEJ6GmlXXP2kK6WW3lsfr6b7g=";
   };
 
   prePatch = ''
     substituteInPlace runtests.sh \
       --replace "mkdir -p \$builddir" "mkdir -p \$builddir && pwd"
   '';
+
+  # TODO: remove in next version
+  patches = [
+    (fetchpatch {
+      name = "distutils.patch";
+      url = "https://github.com/jonashaag/klaus/commit/d50d2aab97fd86c11f3b5a4c1ecbcf1e085f395f.patch";
+      hash = "sha256-gJ/ksm96VRNgqIBp+PX/ljzdfQJYbwTBmZaF2Ctu7Fc=";
+    })
+  ];
 
   propagatedBuildInputs = [
     flask
@@ -43,7 +53,8 @@ buildPythonPackage rec {
     pytest
     requests
     python-ctags3
-  ] ++ lib.optional (!isPy3k) mock;
+  ]
+  ++ lib.optional (!isPy3k) mock;
 
   checkPhase = ''
     ./runtests.sh
@@ -53,7 +64,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "The first Git web viewer that Just Works";
+    description = "First Git web viewer that Just Works";
     mainProgram = "klaus";
     homepage = "https://github.com/jonashaag/klaus";
     license = licenses.isc;

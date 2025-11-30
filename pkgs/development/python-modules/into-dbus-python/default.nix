@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
-    repo = pname;
+    repo = "into-dbus-python";
     rev = "v${version}";
     hash = "sha256-Ld/DyhVaDiWUXgqmvSmEHqFW2dcoRNM0O4X5DXE3UtM=";
   };
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "into_dbus_python" ];
 
   meta = with lib; {
-    description = "A transformer to dbus-python types";
+    description = "Transformer to dbus-python types";
     homepage = "https://github.com/stratis-storage/into-dbus-python";
     license = licenses.asl20;
     maintainers = with maintainers; [ nickcao ];

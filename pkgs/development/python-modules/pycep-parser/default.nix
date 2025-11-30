@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pycep-parser";
-  version = "0.4.2";
+  version = "0.5.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gruebel";
     repo = "pycep";
-    rev = "refs/tags/${version}";
-    hash = "sha256-qogUjj/GwMGwFEin+xJCSOCf5Ut8bgsFakyoMhkyKgU=";
+    tag = version;
+    hash = "sha256-yCcJUN+gDeuifFoYyFsS5Ak/AYxLo0Q8edmhFYfi/eA=";
   };
 
   nativeBuildInputs = [ poetry-core ];

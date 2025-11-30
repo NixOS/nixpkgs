@@ -9,30 +9,29 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-shell";
-  version = "1.9.3";
+  version = "1.13.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-33TZcRsOWP8PBAXFHy9DQn20bVECwD2wv7hcaYl0E8Y=";
+    pname = "google_cloud_shell";
+    inherit version;
+    hash = "sha256-B6SZJm7rGZDIFbF0kHPcBidBF0d+ONIKtUcpjwslkgE=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     google-auth
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock

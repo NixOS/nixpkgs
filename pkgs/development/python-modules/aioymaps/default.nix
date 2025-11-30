@@ -4,21 +4,24 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aioymaps";
-  version = "1.2.3";
-  format = "setuptools";
+  version = "1.2.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pW8FoMdA8XdQZmLRwk5SBBgFhYhgEMJPA9+b+8aicuE=";
+    hash = "sha256-tEl2tX/mB8uYTYj1YFDs/2sPXiv6897jCEmsFCWBXYg=";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   # Project has no tests
   doCheck = false;

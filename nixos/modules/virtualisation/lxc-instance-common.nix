@@ -1,6 +1,10 @@
-{lib, ...}:
+{ lib, ... }:
 
 {
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
+
   imports = [
     ./lxc-image-metadata.nix
 
@@ -22,9 +26,9 @@
   services.openssh.enable = lib.mkDefault true;
   services.openssh.startWhenNeeded = lib.mkDefault true;
 
-  # As this is intended as a standalone image, undo some of the minimal profile stuff
-  environment.noXlibs = false;
-  documentation.enable = true;
-  documentation.nixos.enable = true;
+  # friendlier defaults than minimal profile provides
+  # but we can't use mkDefault since minimal uses it
+  documentation.enable = lib.mkOverride 890 true;
+  documentation.nixos.enable = lib.mkOverride 890 true;
   services.logrotate.enable = true;
 }

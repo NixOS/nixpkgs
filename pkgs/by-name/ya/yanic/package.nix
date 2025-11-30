@@ -1,27 +1,33 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "yanic";
-  version = "1.5.0";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "FreifunkBremen";
     repo = "yanic";
     rev = "v${version}";
-    sha256 = "sha256-++tF6nTFIDeqWSqlBDXw/zEfl5YYa4ufzVZaUG2c8Zo=";
+    hash = "sha256-6jGuqqUr9DJyPYAVBBHc5qtfJIbvjGndT2Y+RSLMzhY=";
   };
 
-  vendorHash = "sha256-D9V53/+C/+iv1U4kVrYWzJ8iD0MA1QcR8f5ifejFhLo=";
+  vendorHash = "sha256-TcmkPBHxpmTgXNW8gPkzMpjPGCQu/HrZqAu9jDpPEjo=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-X github.com/FreifunkBremen/yanic/cmd.VERSION=${version}"
+    "-s"
+    "-w"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd yanic \
       --bash <($out/bin/yanic completion bash) \
       --fish <($out/bin/yanic completion fish) \
@@ -29,7 +35,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A tool to collect and aggregate respondd data";
+    description = "Tool to collect and aggregate respondd data";
     homepage = "https://github.com/FreifunkBremen/yanic";
     changelog = "https://github.com/FreifunkBremen/yanic/releases/tag/${src.rev}";
     license = licenses.agpl3Only;

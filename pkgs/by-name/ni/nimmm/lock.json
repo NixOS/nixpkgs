@@ -3,18 +3,6 @@
     {
       "method": "fetchzip",
       "packages": [
-        "lscolors"
-      ],
-      "path": "/nix/store/h2rqjnvjg3xihh88f2hm72506vpklilz-source",
-      "ref": "v0.3.3",
-      "rev": "668b46c835944254a445b9cc6dfb887e38fa13f1",
-      "sha256": "0526hqh46lcfsvymb67ldsc8xbfn24vicn3b8wrqnh6mag8wynf4",
-      "srcDir": "src",
-      "url": "https://github.com/joachimschmidt557/nim-lscolors/archive/668b46c835944254a445b9cc6dfb887e38fa13f1.tar.gz"
-    },
-    {
-      "method": "fetchzip",
-      "packages": [
         "nimbox"
       ],
       "path": "/nix/store/dyv48md5gaz0x61fxi2zc69h05a3jvfq-source",
@@ -27,14 +15,26 @@
     {
       "method": "fetchzip",
       "packages": [
+        "lscolors"
+      ],
+      "path": "/nix/store/7pk6334nqpy78l56v15mij0m7khq5skm-source",
+      "ref": "1.0.0",
+      "rev": "3aaaf0422fcf1e708b135e4118832ee6260277b3",
+      "sha256": "103x45z0bp4vh22hfnw2pgqfmgxlph9yd7lr09sggihvszj96r17",
+      "srcDir": "src",
+      "url": "https://github.com/joachimschmidt557/nim-lscolors/archive/3aaaf0422fcf1e708b135e4118832ee6260277b3.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
         "wcwidth"
       ],
       "path": "/nix/store/inpq6nm27r7ixyjsdsm4sg6qna7d2vbc-source",
-      "ref": "v0.1.3",
-      "rev": "fd60d2dd10fd945a471450551ba471c3be80df52",
+      "ref": "v0.1.3^{}",
+      "rev": "86f8db1a883f6a64e590a56aed81e788389b7196",
       "sha256": "06b9ylqbjcxgm9mjfzljbi8gr9sbajykcqpcxgyqymynqyhxmqjn",
       "srcDir": "src",
-      "url": "https://github.com/shoyu777/wcwidth-nim/archive/fd60d2dd10fd945a471450551ba471c3be80df52.tar.gz"
+      "url": "https://github.com/shoyu777/wcwidth-nim/archive/86f8db1a883f6a64e590a56aed81e788389b7196.tar.gz"
     }
   ]
 }

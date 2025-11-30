@@ -12,7 +12,6 @@
   pydantic,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   redis,
   requests,
   sentence-transformers,
@@ -37,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "HazyResearch";
     repo = "manifest";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6m1XZOXzflBYyq9+PinbrW+zqvNGFN/aRDHH1b2Me5E=";
   };
 
@@ -46,7 +45,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "pydantic" ];
 
   build-system = [
-    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -62,7 +60,7 @@ buildPythonPackage rec {
     xxhash
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     api = [
       accelerate
       # deepspeed
@@ -86,15 +84,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     export HOME=$TMPDIR
   '';
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # this file tries importing `deepspeed`, which is not yet packaged in nixpkgs
-    "--ignore=tests/test_huggingface_api.py"
+    "tests/test_huggingface_api.py"
   ];
 
   disabledTests = [
@@ -109,7 +108,7 @@ buildPythonPackage rec {
     "test_run_chat"
     "test_run"
     "test_score_run"
-    # Test is time-senstive
+    # Test is time-sensitive
     "test_timing"
   ];
 

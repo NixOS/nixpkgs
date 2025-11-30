@@ -17,23 +17,23 @@
 
 buildPythonPackage rec {
   pname = "aio-georss-client";
-  version = "0.12";
+  version = "0.14";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-georss-client";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-qs0/TkGZlwsucnkgCBco2Pqr9mf5fZHY7ikMBKff+gA=";
+    tag = "v${version}";
+    hash = "sha256-d5QKF/aDLzZ2/Pbm6VygsSYWab7Jqs/5zTeKHg6Zr74=";
   };
 
   __darwinAllowLocalNetworking = true;
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     haversine
     xmltodict
@@ -51,6 +51,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aio_georss_client" ];
 
   meta = with lib; {
+    # https://github.com/exxamalte/python-aio-georss-client/issues/63
+    broken = lib.versionAtLeast xmltodict.version "1";
     description = "Python library for accessing GeoRSS feeds";
     homepage = "https://github.com/exxamalte/python-aio-georss-client";
     changelog = "https://github.com/exxamalte/python-aio-georss-client/blob/v${version}/CHANGELOG.md";

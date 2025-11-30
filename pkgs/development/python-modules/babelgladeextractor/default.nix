@@ -28,6 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/gnome-keysign/babel-glade";
     description = "Babel Glade XML files translatable strings extractor";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

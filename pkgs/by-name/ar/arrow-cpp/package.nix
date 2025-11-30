@@ -1,11 +1,13 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchFromGitHub
-, fixDarwinDylibNames
-, autoconf
-, aws-sdk-cpp
-, aws-sdk-cpp-arrow ? aws-sdk-cpp.override {
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchFromGitHub,
+  fixDarwinDylibNames,
+  apache-orc,
+  autoconf,
+  aws-sdk-cpp,
+  aws-sdk-cpp-arrow ? aws-sdk-cpp.override {
     apis = [
       "cognito-identity"
       "config"
@@ -14,79 +16,82 @@
       "sts"
       "transfer"
     ];
-  }
-, boost
-, brotli
-, bzip2
-, c-ares
-, cmake
-, crc32c
-, curl
-, flatbuffers
-, gflags
-, glog
-, google-cloud-cpp
-, grpc
-, gtest
-, libbacktrace
-, lz4
-, minio
-, ninja
-, nlohmann_json
-, openssl
-, perl
-, protobuf
-, python3
-, rapidjson
-, re2
-, snappy
-, sqlite
-, thrift
-, tzdata
-, utf8proc
-, which
-, zlib
-, zstd
-, testers
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableFlight ? true
-, enableJemalloc ? !stdenv.isDarwin
-, enableS3 ? true
-, enableGcs ? !stdenv.isDarwin
+  },
+  boost,
+  brotli,
+  bzip2,
+  cmake,
+  crc32c,
+  curl,
+  flatbuffers,
+  gflags,
+  glog,
+  google-cloud-cpp,
+  grpc,
+  gtest,
+  libbacktrace,
+  lz4,
+  minio,
+  ninja,
+  nlohmann_json,
+  openssl,
+  perl,
+  pkg-config,
+  protobuf_31,
+  python3,
+  rapidjson,
+  re2,
+  snappy,
+  sqlite,
+  thrift,
+  tzdata,
+  utf8proc,
+  which,
+  zlib,
+  zstd,
+  testers,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableFlight ? stdenv.buildPlatform == stdenv.hostPlatform,
+  # Disable also on RiscV
+  # configure: error: cannot determine number of significant virtual address bits
+  enableJemalloc ?
+    !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isRiscV64,
+  enableS3 ? true,
+  # google-cloud-cpp fails to build on RiscV
+  enableGcs ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isRiscV64,
 }:
-
-assert lib.asserts.assertMsg
-  ((enableS3 && stdenv.isDarwin) -> (lib.versionOlder boost.version "1.69" || lib.versionAtLeast boost.version "1.70"))
-  "S3 on Darwin requires Boost != 1.69";
 
 let
   arrow-testing = fetchFromGitHub {
     name = "arrow-testing";
     owner = "apache";
     repo = "arrow-testing";
-    rev = "25d16511e8d42c2744a1d94d90169e3a36e92631";
-    hash = "sha256-fXeWM/8jBfJY7KL6PVfRbzB8i4sp6PHsnMSHCX5kzfI=";
+    rev = "d2a13712303498963395318a4eb42872e66aead7";
+    hash = "sha256-c8FL37kG0uo7o0Zp71WjCl7FD5BnVgqUCCXXX9gI0lg=";
   };
 
   parquet-testing = fetchFromGitHub {
     name = "parquet-testing";
     owner = "apache";
     repo = "parquet-testing";
-    rev = "74278bc4a1122d74945969e6dec405abd1533ec3";
-    hash = "sha256-WbpndtAviph6+I/F2bevuMI9DkfSv4SMPgMaP98k6Qo=";
+    rev = "18d17540097fca7c40be3d42c167e6bfad90763c";
+    hash = "sha256-gKEQc2RKpVp39RmuZbIeIXAwiAXDHGnLXF6VQuJtnRA=";
   };
 
+  version = "20.0.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-cpp";
-  version = "16.0.0";
+  inherit version;
 
-  src = fetchurl {
-    url = "mirror://apache/arrow/arrow-${finalAttrs.version}/apache-arrow-${finalAttrs.version}.tar.gz";
-    hash = "sha256-n0BRrpRzyXmR2a+AHi+UrjRVBncZyn+QuBN/nppwC40=";
+  src = fetchFromGitHub {
+    owner = "apache";
+    repo = "arrow";
+    rev = "apache-arrow-${version}";
+    hash = "sha256-JFPdKraCU+xRkBTAHyY4QGnBVlOjQ1P5+gq9uxyqJtk=";
   };
 
-  sourceRoot = "apache-arrow-${finalAttrs.version}/cpp";
+  sourceRoot = "${finalAttrs.src.name}/cpp";
 
   # versions are all taken from
   # https://github.com/apache/arrow/blob/apache-arrow-${version}/cpp/thirdparty/versions.txt
@@ -109,8 +114,8 @@ stdenv.mkDerivation (finalAttrs: {
   ARROW_XSIMD_URL = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xsimd";
-    rev = "9.0.1";
-    hash = "sha256-onALN6agtrHWigtFlCeefD9CiRZI4Y690XTzy2UDnrk=";
+    rev = "13.0.0";
+    hash = "sha256-qElJYW5QDj3s59L3NgZj5zkhnUMzIP2mBa1sPks3/CE=";
   };
 
   ARROW_SUBSTRAIT_URL = fetchFromGitHub {
@@ -122,11 +127,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     ninja
     autoconf # for vendored jemalloc
     flatbuffers
-  ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [
+    apache-orc
     boost
     brotli
     bzip2
@@ -137,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     libbacktrace
     lz4
     nlohmann_json # alternative JSON parser to rapidjson
-    protobuf # substrait requires protobuf
+    protobuf_31 # substrait requires protobuf
     rapidjson
     re2
     snappy
@@ -145,12 +153,17 @@ stdenv.mkDerivation (finalAttrs: {
     utf8proc
     zlib
     zstd
-  ] ++ lib.optionals enableFlight [
+  ]
+  ++ lib.optionals enableFlight [
     grpc
     openssl
-    protobuf
+    protobuf_31
     sqlite
-  ] ++ lib.optionals enableS3 [ aws-sdk-cpp-arrow openssl ]
+  ]
+  ++ lib.optionals enableS3 [
+    aws-sdk-cpp-arrow
+    openssl
+  ]
   ++ lib.optionals enableGcs [
     crc32c
     curl
@@ -159,17 +172,26 @@ stdenv.mkDerivation (finalAttrs: {
     nlohmann_json
   ];
 
+  # apache-orc looks for things in caps
+  env = {
+    LZ4_ROOT = lz4;
+    ZSTD_ROOT = zstd.dev;
+  };
+
+  # fails tests on glibc with this enabled
+  hardeningDisable = [ "glibcxxassertions" ];
+
   preConfigure = ''
     patchShebangs build-support/
     substituteInPlace "src/arrow/vendored/datetime/tz.cpp" \
-      --replace 'discover_tz_dir();' '"${tzdata}/share/zoneinfo";'
+      --replace-fail 'discover_tz_dir();' '"${tzdata}/share/zoneinfo";'
   '';
 
   cmakeFlags = [
     "-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON"
     "-DARROW_BUILD_SHARED=${if enableShared then "ON" else "OFF"}"
     "-DARROW_BUILD_STATIC=${if enableShared then "OFF" else "ON"}"
-    "-DARROW_BUILD_TESTS=ON"
+    "-DARROW_BUILD_TESTS=${if enableShared then "ON" else "OFF"}"
     "-DARROW_BUILD_INTEGRATION=ON"
     "-DARROW_BUILD_UTILITIES=ON"
     "-DARROW_EXTRA_ERROR_CONTEXT=ON"
@@ -202,16 +224,20 @@ stdenv.mkDerivation (finalAttrs: {
     "-DARROW_FLIGHT_TESTING=${if enableFlight then "ON" else "OFF"}"
     "-DARROW_S3=${if enableS3 then "ON" else "OFF"}"
     "-DARROW_GCS=${if enableGcs then "ON" else "OFF"}"
+    "-DARROW_ORC=ON"
     # Parquet options:
     "-DARROW_PARQUET=ON"
     "-DPARQUET_BUILD_EXECUTABLES=ON"
     "-DPARQUET_REQUIRE_ENCRYPTION=ON"
-  ] ++ lib.optionals (!enableShared) [
-    "-DARROW_TEST_LINKAGE=static"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ]
+  ++ lib.optionals (!enableShared) [ "-DARROW_TEST_LINKAGE=static" ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_INSTALL_RPATH=@loader_path/../lib" # needed for tools executables
-  ] ++ lib.optionals (!stdenv.isx86_64) [ "-DARROW_USE_SIMD=OFF" ]
-  ++ lib.optionals enableS3 [ "-DAWSSDK_CORE_HEADER_FILE=${aws-sdk-cpp-arrow}/include/aws/core/Aws.h" ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [ "-DARROW_USE_SIMD=OFF" ]
+  ++ lib.optionals enableS3 [
+    "-DAWSSDK_CORE_HEADER_FILE=${aws-sdk-cpp-arrow}/include/aws/core/Aws.h"
+  ];
 
   doInstallCheck = true;
   ARROW_TEST_DATA = lib.optionalString finalAttrs.doInstallCheck "${arrow-testing}/data";
@@ -219,33 +245,40 @@ stdenv.mkDerivation (finalAttrs: {
   GTEST_FILTER =
     let
       # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11398
-      filteredTests = lib.optionals stdenv.hostPlatform.isAarch64 [
-        "TestFilterKernelWithNumeric/3.CompareArrayAndFilterRandomNumeric"
-        "TestFilterKernelWithNumeric/7.CompareArrayAndFilterRandomNumeric"
-        "TestCompareKernel.PrimitiveRandomTests"
-      ] ++ lib.optionals enableS3 [
-        "S3OptionsTest.FromUri"
-        "S3RegionResolutionTest.NonExistentBucket"
-        "S3RegionResolutionTest.PublicBucket"
-        "S3RegionResolutionTest.RestrictedBucket"
-        "TestMinioServer.Connect"
-        "TestS3FS.*"
-        "TestS3FSGeneric.*"
-      ] ++ lib.optionals stdenv.isDarwin [
-        # TODO: revisit at 12.0.0 or when
-        # https://github.com/apache/arrow/commit/295c6644ca6b67c95a662410b2c7faea0920c989
-        # is available, see
-        # https://github.com/apache/arrow/pull/15288#discussion_r1071244661
-        "ExecPlanExecution.StressSourceSinkStopped"
-      ];
+      filteredTests =
+        lib.optionals stdenv.hostPlatform.isAarch64 [
+          "TestFilterKernelWithNumeric/3.CompareArrayAndFilterRandomNumeric"
+          "TestFilterKernelWithNumeric/7.CompareArrayAndFilterRandomNumeric"
+          "TestCompareKernel.PrimitiveRandomTests"
+        ]
+        ++ lib.optionals enableS3 [
+          "S3OptionsTest.FromUri"
+          "S3RegionResolutionTest.NonExistentBucket"
+          "S3RegionResolutionTest.PublicBucket"
+          "S3RegionResolutionTest.RestrictedBucket"
+          "TestMinioServer.Connect"
+          "TestS3FS.*"
+          "TestS3FSGeneric.*"
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          # TODO: revisit at 12.0.0 or when
+          # https://github.com/apache/arrow/commit/295c6644ca6b67c95a662410b2c7faea0920c989
+          # is available, see
+          # https://github.com/apache/arrow/pull/15288#discussion_r1071244661
+          "ExecPlanExecution.StressSourceSinkStopped"
+        ];
     in
     lib.optionalString finalAttrs.doInstallCheck "-${lib.concatStringsSep ":" filteredTests}";
 
   __darwinAllowLocalNetworking = true;
 
-  nativeInstallCheckInputs = [ perl which sqlite ]
-    ++ lib.optionals enableS3 [ minio ]
-    ++ lib.optionals enableFlight [ python3 ];
+  nativeInstallCheckInputs = [
+    perl
+    which
+    sqlite
+  ]
+  ++ lib.optionals enableS3 [ minio ]
+  ++ lib.optionals enableFlight [ python3 ];
 
   installCheckPhase =
     let
@@ -255,6 +288,14 @@ stdenv.mkDerivation (finalAttrs: {
         # requires networking
         "arrow-gcsfs-test"
         "arrow-flight-integration-test"
+        # File already exists in database: orc_proto.proto
+        "arrow-orc-adapter-test"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # https://github.com/NixOS/nixpkgs/issues/460687
+        # Failing with "run-test.sh: line 88: 63682 Abort trap: 6"
+        "arrow-flight-internals-test"
+        "arrow-flight-sql-test"
       ];
     in
     ''
@@ -266,11 +307,15 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   meta = with lib; {
-    description = "A cross-language development platform for in-memory data";
+    description = "Cross-language development platform for in-memory data";
     homepage = "https://arrow.apache.org/docs/cpp/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ tobim veprbl cpcloud ];
+    maintainers = with maintainers; [
+      tobim
+      veprbl
+      cpcloud
+    ];
     pkgConfigModules = [
       "arrow"
       "arrow-acero"
@@ -288,7 +333,12 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
   passthru = {
-    inherit enableFlight enableJemalloc enableS3 enableGcs;
+    inherit
+      enableFlight
+      enableJemalloc
+      enableS3
+      enableGcs
+      ;
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 })

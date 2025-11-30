@@ -1,10 +1,11 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  python3,
+  fetchFromGitHub,
 }:
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       # https://github.com/domainaware/parsedmarc/issues/464
       msgraph-core = super.msgraph-core.overridePythonAttrs (old: rec {
@@ -38,4 +39,6 @@ let
       });
     };
   };
-in with python.pkgs; toPythonApplication parsedmarc
+in
+with python.pkgs;
+toPythonApplication parsedmarc

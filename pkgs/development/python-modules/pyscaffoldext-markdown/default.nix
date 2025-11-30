@@ -41,7 +41,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     testing = [
       configupdater
       pre-commit

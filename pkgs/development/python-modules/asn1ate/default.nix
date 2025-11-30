@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "1p8hv4gsyqsdr0gafcq497n52pybiqmc22di8ai4nsj60fv0km45";
     rev = "v${version}";
     owner = "kimgr";
-    repo = pname;
+    repo = "asn1ate";
   };
 
   propagatedBuildInputs = [ pyparsing ];
@@ -24,6 +24,5 @@ buildPythonPackage rec {
     mainProgram = "asn1ate";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ leenaars ];
   };
 }

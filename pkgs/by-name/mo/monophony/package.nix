@@ -1,35 +1,41 @@
-{ lib
-, fetchFromGitLab
-, python3Packages
-, wrapGAppsHook4
-, gst_all_1
-, gobject-introspection
-, yt-dlp
-, libadwaita
-, glib-networking
-, nix-update-script
+{
+  lib,
+  fetchFromGitLab,
+  python3Packages,
+  wrapGAppsHook4,
+  gobject-introspection,
+  yt-dlp,
+  gst_all_1,
+  libadwaita,
+  glib-networking,
+  nix-update-script,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "monophony";
-  version = "2.9.0";
-  format = "other";
+  version = "4.1.2";
+  pyproject = true;
 
-  sourceRoot = "${src.name}/source";
   src = fetchFromGitLab {
     owner = "zehkira";
     repo = "monophony";
-    rev = "v${version}";
-    hash = "sha256-fZ+EQqcHJGOLBwyHZJvML6+SkfFpnt6hb8xHedJ7VSU=";
+    tag = "v${version}";
+    hash = "sha256-nX4GXuQd+WzaRGBtsWduUpwtA3DGjpRkcxPmoEj7FIA=";
   };
 
-  pythonPath = with python3Packages; [
-    mpris-server
-    pygobject3
+  sourceRoot = "${src.name}/source";
+
+  dependencies = with python3Packages; [
+    mprisify
+    requests
     ytmusicapi
   ];
 
+  build-system = with python3Packages; [
+    setuptools
+    pip
+  ];
+
   nativeBuildInputs = [
-    python3Packages.nuitka
     gobject-introspection
     wrapGAppsHook4
   ];
@@ -38,31 +44,33 @@ python3Packages.buildPythonApplication rec {
     libadwaita
     # needed for gstreamer https
     glib-networking
-  ] ++ (with gst_all_1; [
+  ]
+  ++ (with gst_all_1; [
     gst-plugins-base
     gst-plugins-good
     gstreamer
   ]);
 
-  installFlags = [ "prefix=$(out)" ];
+  postInstall = "make install prefix=$out";
+
+  dontWrapGApps = true;
 
   preFixup = ''
-    buildPythonPath "$pythonPath"
-    gappsWrapperArgs+=(
-      --prefix PYTHONPATH : "$program_PYTHONPATH"
-      --prefix PATH : "${lib.makeBinPath [yt-dlp]}"
+    makeWrapperArgs+=(
+      --prefix PATH : "${lib.makeBinPath [ yt-dlp ]}"
+      "''${gappsWrapperArgs[@]}"
     )
   '';
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
-    homepage = "https://gitlab.com/zehkira/monophony";
+  meta = {
     description = "Linux app for streaming music from YouTube";
-    longDescription = "Monophony is a free and open source Linux app for streaming music from YouTube. It has no ads and does not require an account.";
-    license = licenses.agpl3Plus;
+    longDescription = "Monophony allows you to stream and download music from YouTube Music without ads, as well as create and import playlists without signing in.";
+    homepage = "https://gitlab.com/zehkira/monophony";
+    license = lib.licenses.bsd0;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ quadradical ];
     mainProgram = "monophony";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ quadradical ];
   };
 }

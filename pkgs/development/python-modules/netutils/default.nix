@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   jinja2,
@@ -8,30 +7,27 @@
   napalm,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   toml,
 }:
 
 buildPythonPackage rec {
   pname = "netutils";
-  version = "1.8.1";
+  version = "1.15.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = "netutils";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-09SRSzA1RiBhJjq+dlln23myWvXFhr8krsPz7N80JKw=";
+    tag = "v${version}";
+    hash = "sha256-bT/a6PhjNZ7vYXio7XOKNnzRfh7UqRn3+OYbhlYL3/I=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [ jsonschema ];
 
-  passthru.optional-dependencies.optionals = [
+  optional-dependencies.optionals = [
     jsonschema
     napalm
   ];
@@ -63,9 +59,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library that is a collection of objects for common network automation tasks";
     homepage = "https://github.com/networktocode/netutils";
-    changelog = "https://github.com/networktocode/netutils/releases/tag/v${version}";
+    changelog = "https://github.com/networktocode/netutils/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
-    broken = stdenv.isDarwin;
   };
 }

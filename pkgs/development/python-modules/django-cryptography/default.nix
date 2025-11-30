@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "georgemarshall";
     repo = "django-cryptography";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-C3E2iT9JdLvF+1g+xhZ8dPDjjh25JUxLAtTMnalIxPk=";
   };
 
@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/georgemarshall/django-cryptography";
-    description = "A set of primitives for performing cryptography in Django";
+    description = "Set of primitives for performing cryptography in Django";
     license = licenses.bsd3;
     maintainers = with maintainers; [ centromere ];
   };

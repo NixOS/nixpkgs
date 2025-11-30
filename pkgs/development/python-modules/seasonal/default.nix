@@ -39,7 +39,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     csv = [ pandas ];
     plot = [ matplotlib ];
   };
@@ -51,7 +51,8 @@ buildPythonPackage rec {
   ];
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   meta = with lib; {
     description = "Robustly estimate trend and periodicity in a timeseries";

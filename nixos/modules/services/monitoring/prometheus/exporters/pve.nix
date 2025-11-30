@@ -1,4 +1,10 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.pve;
@@ -32,7 +38,7 @@ in
 
         The environment file should NOT be stored in /nix/store as it contains passwords and/or keys in plain text.
 
-        Environment reference: https://github.com/prometheus-pve/prometheus-pve-exporter#authentication
+        Environment reference: <https://github.com/prometheus-pve/prometheus-pve-exporter#authentication>
       '';
     };
 
@@ -47,7 +53,7 @@ in
 
         If both configFile and environmentFile are provided, the configFile option will be ignored.
 
-        Configuration reference: https://github.com/prometheus-pve/prometheus-pve-exporter/#authentication
+        Configuration reference: <https://github.com/prometheus-pve/prometheus-pve-exporter/#authentication>
       '';
     };
 
@@ -114,6 +120,13 @@ in
           Collect PVE onboot status
         '';
       };
+      replication = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Collect PVE replication info
+        '';
+      };
     };
   };
   serviceOpts = {
@@ -128,12 +141,14 @@ in
           --${optionalString (!cfg.collectors.cluster) "no-"}collector.cluster \
           --${optionalString (!cfg.collectors.resources) "no-"}collector.resources \
           --${optionalString (!cfg.collectors.config) "no-"}collector.config \
+          --${optionalString (!cfg.collectors.replication) "no-"}collector.replication \
           ${optionalString (cfg.server.keyFile != null) "--server.keyfile ${cfg.server.keyFile}"} \
           ${optionalString (cfg.server.certFile != null) "--server.certfile ${cfg.server.certFile}"} \
           --config.file %d/configFile \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port}
       '';
-    } // optionalAttrs (cfg.environmentFile != null) {
+    }
+    // optionalAttrs (cfg.environmentFile != null) {
       EnvironmentFile = cfg.environmentFile;
     };
   };

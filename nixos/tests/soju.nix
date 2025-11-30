@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 let
   certs = import ./common/acme/server/snakeoil-certs.nix;
   domain = certs.domain;
@@ -8,17 +8,19 @@ let
 in
 {
   name = "soju";
-  meta.maintainers = with lib.maintainers; [ Benjamin-L ];
+  meta.maintainers = [ ];
 
-  nodes.machine = { ... }: {
-    services.soju = {
-      enable = true;
-      adminSocket.enable = true;
-      hostName = domain;
-      tlsCertificate = certs.${domain}.cert;
-      tlsCertificateKey = certs.${domain}.key;
+  nodes.machine =
+    { ... }:
+    {
+      services.soju = {
+        enable = true;
+        adminSocket.enable = true;
+        hostName = domain;
+        tlsCertificate = certs.${domain}.cert;
+        tlsCertificateKey = certs.${domain}.key;
+      };
     };
-  };
 
   testScript = ''
     start_all()
@@ -28,4 +30,4 @@ in
 
     machine.succeed("sojuctl user create -username ${user} -password ${pass}")
   '';
-})
+}

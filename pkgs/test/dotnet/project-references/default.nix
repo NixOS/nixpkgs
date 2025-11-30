@@ -2,14 +2,17 @@
 # The `library` derivation exposes a .nupkg, which is then consumed by the `application` derivation.
 # https://nixos.org/manual/nixpkgs/unstable/index.html#packaging-a-dotnet-application
 
-{ lib
-, dotnet-sdk
-, buildDotnetModule
-, runCommand
+{
+  lib,
+  dotnet-sdk,
+  buildPackages, # buildDotnetModule
+  runCommand,
 }:
 
 let
-  nugetDeps = ./nuget-deps.nix;
+  inherit (buildPackages) buildDotnetModule;
+
+  nugetDeps = ./nuget-deps.json;
 
   # Specify the TargetFramework via an environment variable so that we don't
   # have to update the .csproj files when updating dotnet-sdk
@@ -18,7 +21,8 @@ let
   library = buildDotnetModule {
     name = "project-references-test-library";
     src = ./library;
-    inherit nugetDeps TargetFramework;
+    inherit nugetDeps;
+    env.TargetFramework = TargetFramework;
 
     packNupkg = true;
   };
@@ -26,7 +30,8 @@ let
   application = buildDotnetModule {
     name = "project-references-test-application";
     src = ./application;
-    inherit nugetDeps TargetFramework;
+    inherit nugetDeps;
+    env.TargetFramework = TargetFramework;
 
     projectReferences = [ library ];
   };
@@ -34,5 +39,5 @@ in
 
 runCommand "project-references-test" { } ''
   ${application}/bin/Application
-  touch $out
+  mkdir $out
 ''

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   boxfort,
   meson,
-  libcsptr,
   pkg-config,
   gettext,
   cmake,
@@ -18,7 +17,7 @@
   python3Packages,
   testers,
   criterion,
-  callPackage
+  callPackage,
 }:
 
 let
@@ -37,14 +36,14 @@ let
     hash = "sha256-+GaI5nXz4jYI0rO17xDhNtFpLlGL2WzeSVLMfB6Cl6E=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "criterion";
   version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "Snaipe";
     repo = "Criterion";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-5GH7AYjrnBnqiSmp28BoaM1Xmy8sPs1atfqJkGy3Yf0=";
   };
@@ -61,7 +60,6 @@ stdenv.mkDerivation rec {
     (lib.getDev boxfort)
     dyncall
     gettext
-    libcsptr
     nanomsg
     nanopbMalloc
     libgit2
@@ -95,16 +93,16 @@ stdenv.mkDerivation rec {
 
   passthru.tests.version =
     let
-      tester = callPackage ./tests/001-version.nix {};
+      tester = callPackage ./tests/001-version.nix { };
     in
     testers.testVersion {
       package = criterion;
       command = "${lib.getExe tester} --version";
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
 
   meta = {
-    description = "A cross-platform C and C++ unit testing framework for the 21th century";
+    description = "Cross-platform C and C++ unit testing framework for the 21th century";
     homepage = "https://github.com/Snaipe/Criterion";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
@@ -114,4 +112,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

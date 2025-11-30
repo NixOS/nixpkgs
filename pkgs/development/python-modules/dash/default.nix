@@ -1,14 +1,13 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
-  setuptools,
-  nodejs,
-  yarn,
-  fixup-yarn-lock,
+  yarnConfigHook,
   fetchYarnDeps,
+  nodejs,
+
+  setuptools,
 
   flask,
   werkzeug,
@@ -37,49 +36,45 @@
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "2.17.0";
+  version = "3.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "dash";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-45nSQ3N7VcPsXthmMj3gMWFPi/i9z0peI1Wc6fUT7So=";
+    tag = "v${version}";
+    hash = "sha256-KCGVdD1L+U2KbktU2GU19BQ6wRcmEeYtC/v8UrFTyto=";
   };
 
   nativeBuildInputs = [
-    setuptools
+    yarnConfigHook
     nodejs
-    yarn
-    fixup-yarn-lock
   ];
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/@plotly/dash-jupyterlab/yarn.lock";
-    hash = "sha256-L/or8jO6uEypI5krwy/ElIxa6jJrXGsCRZ9mh+0kcGA=";
+    hash = "sha256-Nvm9BS55q/HW9ArpHD01F5Rmx8PLS3yqaz1yDK8Sg68=";
   };
 
-  preBuild = ''
+  # as of writing this yarnConfigHook has no parameter that changes in which directory it will be run
+  # until then we use preConfigure for entering the directory and preBuild for exiting it
+  preConfigure = ''
     pushd @plotly/dash-jupyterlab
 
-    export HOME=$(mktemp -d)
+    substituteInPlace package.json \
+        --replace-fail 'jlpm' 'yarn'
+  '';
 
-    yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
-    fixup-yarn-lock yarn.lock
-
-    substituteInPlace package.json --replace jlpm yarn
-    yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts
-    patchShebangs node_modules
-
-    # Generates the jupyterlab extension files
-    yarn run build:pack
+  preBuild = ''
+    # Generate the jupyterlab extension files
+    yarn --offline run build:pack
 
     popd
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     flask
     werkzeug
     plotly
@@ -93,7 +88,12 @@ buildPythonPackage rec {
     nest-asyncio
   ];
 
-  passthru.optional-dependencies = {
+  pythonRelaxDeps = [
+    "werkzeug"
+    "flask"
+  ];
+
+  optional-dependencies = {
     celery = [
       celery
       redis
@@ -122,7 +122,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dash" ];
 
   meta = {
-    changelog = "https://github.com/plotly/dash/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/plotly/dash/blob/${src.tag}/CHANGELOG.md";
     description = "Python framework for building analytical web applications";
     homepage = "https://dash.plot.ly/";
     license = lib.licenses.mit;

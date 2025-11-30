@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "snakemake-interface-report-plugins";
-  version = "1.0.0";
+  version = "1.3.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "snakemake";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-30x4avA3FrqZ4GoTl6Js5h3VG5LW7BNHOcNWxznXoT0=";
+    repo = "snakemake-interface-report-plugins";
+    tag = "v${version}";
+    hash = "sha256-3ugEmdO1dcusKXXBZBRszlZXX5fhJyYSSF5Uj5CKJkQ=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "snakemake_interface_report_plugins" ];
 
   meta = with lib; {
-    description = "The interface for Snakemake report plugins";
+    description = "Interface for Snakemake report plugins";
     homepage = "https://github.com/snakemake/snakemake-interface-report-plugins";
     license = licenses.mit;
     maintainers = with maintainers; [ veprbl ];

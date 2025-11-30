@@ -1,25 +1,20 @@
 diff --git a/spyder/app/start.py b/spyder/app/start.py
-index 97b08a600..66486e510 100644
+index 3f225a164..10e6017b1 100644
 --- a/spyder/app/start.py
 +++ b/spyder/app/start.py
-@@ -6,20 +6,8 @@
- # (see spyder/__init__.py for details)
- # -----------------------------------------------------------------------------
-
--# Remove PYTHONPATH paths from sys.path before other imports to protect against
--# shadowed standard libraries.
+@@ -9,15 +9,6 @@
  import os
  import sys
+ 
+-# Remove PYTHONPATH paths from sys.path before other imports to protect against
+-# shadowed standard libraries.
 -if os.environ.get('PYTHONPATH'):
 -    for path in os.environ['PYTHONPATH'].split(os.pathsep):
--        if os.name == 'nt' and 'pkgs' in path:
--            # Don't remove pynsist installer entry for 'pkgs' directory
--            continue
--        else:
--            try:
--                sys.path.remove(path.rstrip(os.sep))
--            except ValueError:
--                pass
-
- # Standard library imports
- import ctypes
+-        try:
+-            sys.path.remove(path.rstrip(os.sep))
+-        except ValueError:
+-            pass
+-
+ # Remove PYTHONEXECUTABLE. See spyder-ide/spyder#24743
+ os.environ.pop("PYTHONEXECUTABLE", None)
+ 

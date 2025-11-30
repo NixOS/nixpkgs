@@ -1,28 +1,48 @@
 src: version:
-{ lib, fetchYarnDeps, nodejs_18, fixup-yarn-lock, stdenv }: stdenv.mkDerivation {
+{
+  lib,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  dart-sass,
+  nodePackages_latest,
+  fixup-yarn-lock,
+  stdenv,
+  yarn,
+  writableTmpDirAsHomeHook,
+}:
+let
+  nodejs = nodePackages_latest.nodejs;
+in
+stdenv.mkDerivation {
   name = "mealie-frontend";
   inherit version;
   src = "${src}/frontend";
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/frontend/yarn.lock";
-    hash = "sha256-zQUD/PQWzp2Q6fiVmLicvSusXffu6s9q3x/aAUnCN38=";
+    hash = "sha256-qwxsnl9xKzNJEomMB4p8eaiybmlpeUgSUpJtIRhF1Cw=";
   };
 
   nativeBuildInputs = [
     fixup-yarn-lock
-    nodejs_18
-    nodejs_18.pkgs.yarn
+    nodejs
+    (yarn.override { inherit nodejs; })
+    writableTmpDirAsHomeHook
+    dart-sass
   ];
 
   configurePhase = ''
     runHook preConfigure
 
-    export HOME=$(mktemp -d)
+    sed -i 's+"@nuxt/fonts",+// NUXT FONTS DISABLED+g' nuxt.config.ts
+
     yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
     fixup-yarn-lock yarn.lock
-    yarn install --frozen-lockfile --offline --no-progress --non-interactive
-    patchShebangs node_modules/
+    yarn install --frozen-lockfile --offline --no-progress --non-interactive --ignore-scripts
+    patchShebangs node_modules
+
+    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["dart-sass"];'
 
     runHook postConfigure
   '';
@@ -31,15 +51,13 @@ src: version:
     runHook preBuild
 
     export NUXT_TELEMETRY_DISABLED=1
-    yarn --offline build
-    yarn --offline generate
-
+    yarn --offline generate --env production
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    mv dist $out
+    mv .output/public $out
     runHook postInstall
   '';
 

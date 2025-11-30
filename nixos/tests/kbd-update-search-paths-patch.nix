@@ -1,11 +1,14 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "kbd-update-search-paths-patch";
 
-  nodes.machine = { pkgs, options, ... }: {
-    console = {
-      packages = options.console.packages.default ++ [ pkgs.terminus_font ];
+  nodes.machine =
+    { pkgs, options, ... }:
+    {
+      console = {
+        packages = options.console.packages.default ++ [ pkgs.terminus_font ];
+      };
     };
-  };
 
   testScript = ''
     command = "${pkgs.kbd}/bin/setfont ter-112n 2>&1"
@@ -16,4 +19,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     if match:
         raise Exception("command `{}` failed".format(command))
   '';
-})
+}

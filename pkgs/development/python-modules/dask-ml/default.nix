@@ -1,13 +1,13 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   hatch-vcs,
   hatchling,
-  setuptools-scm,
-  dask,
-  dask-expr,
+
+  # dependencies
   dask-glm,
   distributed,
   multipledispatch,
@@ -17,32 +17,31 @@
   pandas,
   scikit-learn,
   scipy,
+  dask,
+
+  # tests
   pytest-mock,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "dask-ml";
-  version = "2024.4.4";
+  version = "2025.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-ml";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZiBpCk3b4Tk0Hwb4uapJLEx+Nb/qHFROCnkBTNGDzoU=";
+    tag = "v${version}";
+    hash = "sha256-DHxx0LFuJmGWYuG/WGHj+a5XHAEekBmlHUUb90rl2IY=";
   };
 
   build-system = [
     hatch-vcs
     hatchling
-    setuptools-scm
   ];
 
   dependencies = [
-    dask-expr
     dask-glm
     distributed
     multipledispatch
@@ -52,7 +51,9 @@ buildPythonPackage rec {
     pandas
     scikit-learn
     scipy
-  ] ++ dask.optional-dependencies.array ++ dask.optional-dependencies.dataframe;
+  ]
+  ++ dask.optional-dependencies.array
+  ++ dask.optional-dependencies.dataframe;
 
   pythonImportsCheck = [
     "dask_ml"
@@ -66,12 +67,36 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTestPaths = [
+    # RuntimeError: Attempting to use an asynchronous Client in a synchronous context of `dask.compute`
+    # https://github.com/dask/dask-ml/issues/1016
+    "tests/model_selection/test_hyperband.py"
+    "tests/model_selection/test_incremental.py"
+    "tests/model_selection/test_incremental_warns.py"
+    "tests/model_selection/test_successive_halving.py"
+  ];
+
+  disabledTests = [
+    # AssertionError: Regex pattern did not match.
+    "test_unknown_category_transform_array"
+
+    # ValueError: cannot broadcast shape (nan,) to shape (nan,)
+    # https://github.com/dask/dask-ml/issues/1012
+    "test_fit_array"
+    "test_fit_frame"
+    "test_fit_transform_frame"
+    "test_laziness"
+    "test_lr_score"
+    "test_ok"
+    "test_scoring_string"
+  ];
+
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Scalable Machine Learn with Dask";
     homepage = "https://github.com/dask/dask-ml";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

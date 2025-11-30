@@ -4,18 +4,18 @@
   fetchFromGitHub,
   pythonOlder,
 
+  # Build system
   hatchling,
-  pythonRelaxDepsHook,
-  manim,
-  ffmpeg,
+  hatch-fancy-pypi-readme,
 
-  av,
+  # Dependencies
+  ffmpeg,
+  beautifulsoup4,
   click,
   click-default-group,
   jinja2,
   lxml,
   numpy,
-  opencv4,
   pillow,
   pydantic,
   pydantic-extra-types,
@@ -25,17 +25,19 @@
   rich,
   rtoml,
   tqdm,
-  pyqt6,
 
   # Optional dependencies
   ipython,
-
-  # As Module or application?
-  withGui ? false,
+  manim,
+  manimgl,
+  setuptools,
+  pyqt6,
+  pyside6,
+  docutils,
 }:
 buildPythonPackage rec {
   pname = "manim-slides";
-  version = "5.1.6";
+  version = "5.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -43,60 +45,76 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jeertmans";
     repo = "manim-slides";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-BFfp/jeKBXr+Ukh0jNEtMPHlstlBjhSnvA803ddYoZE=";
+    tag = "v${version}";
+    hash = "sha256-eCtV3xo6PxB6Nha4XuQmmlkAscmeN0O9tgUZ5L4ZroU=";
   };
 
   build-system = [
     hatchling
-    pythonRelaxDepsHook
+    hatch-fancy-pypi-readme
   ];
-
-  pythonRemoveDeps = [ "opencv-python" ];
 
   pythonRelaxDeps = [
-    "rtoml"
-    "qtpy"
+    "rtoml" # We only package version 0.10, but manim-slides depends on 0.11.
+  ];
+  pythonRemoveDeps = [
+    "av" # It can use ffmpeg, which we already provide.
   ];
 
-  dependencies =
-    [
-      av
-      click
-      click-default-group
-      jinja2
-      lxml
-      numpy
-      opencv4
-      pillow
-      pydantic
-      pydantic-extra-types
-      python-pptx
-      qtpy
-      requests
-      rich
-      rtoml
-      tqdm
+  dependencies = [
+    ffmpeg
+    beautifulsoup4
+    click
+    click-default-group
+    jinja2
+    lxml
+    numpy
+    pillow
+    pydantic
+    pydantic-extra-types
+    python-pptx
+    qtpy
+    requests
+    rich
+    rtoml
+    tqdm
+  ];
 
-      # avconv is a potential alternative
-      ffmpeg
-      # This could also be manimgl, but that is not (yet) packaged
+  optional-dependencies = lib.fix (self: {
+    full = self.magic ++ self.manim ++ self.sphinx-directive;
+    magic = self.manim ++ [
+      ipython
+    ];
+    manim = [
       manim
-    ]
-    ++ lib.lists.optional (!withGui) ipython
-    ++
-      lib.lists.optional withGui
-        # dependency of qtpy (could also be pyqt5)
-        pyqt6;
+    ];
+    manimgl = [
+      manimgl
+      setuptools
+    ];
+    pyqt6 = [
+      pyqt6
+    ];
+    pyqt6-full = self.full ++ self.pyqt6;
+    pyside6 = [
+      pyside6
+    ];
+    pyside6-full = self.full ++ self.pyside6;
+    sphinx-directive = self.manim ++ [
+      docutils
+    ];
+  });
 
-  pythonImportsCheck = [ "manim_slides" ];
+  pythonImportsCheck = [
+    "manim_slides"
+  ];
 
-  meta = with lib; {
-    changelog = "https://github.com/jeertmans/manim-slides/blob/${src.rev}/CHANGELOG.md";
+  meta = {
+    changelog = "https://github.com/jeertmans/manim-slides/blob/${src.tag}/CHANGELOG.md";
     description = "Tool for live presentations using manim";
     homepage = "https://github.com/jeertmans/manim-slides";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "manim-slides";
-    maintainers = with maintainers; [ soispha ];
+    maintainers = [ lib.maintainers.bpeetz ];
   };
 }

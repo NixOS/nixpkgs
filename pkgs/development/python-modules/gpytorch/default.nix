@@ -2,40 +2,50 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  linear-operator,
-  scikit-learn,
+
+  # build-system
   setuptools,
   setuptools-scm,
-  wheel,
+
+  # dependencies
+  jaxtyping,
+  linear-operator,
+  mpmath,
+  scikit-learn,
+  scipy,
   torch,
+
+  # tests
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "gpytorch";
-  version = "1.11";
-  format = "pyproject";
+  version = "1.14.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cornellius-gp";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-cpkfjx5G/4duL1Rr4nkHTHi03TDcYbcx3bKP2Ny7Ijo=";
+    repo = "gpytorch";
+    tag = "v${version}";
+    hash = "sha256-yDIGiA7q4e6T7SdnO+ALcc3ezmJK964T5Nn48+NGJV8=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    jaxtyping
     linear-operator
+    mpmath
     scikit-learn
+    scipy
     torch
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "gpytorch" ];
 
@@ -45,14 +55,17 @@ buildPythonPackage rec {
     # flaky numerical tests
     "test_classification_error"
     "test_matmul_matrix_broadcast"
+    "test_optimization_optimal_error"
     # https://github.com/cornellius-gp/gpytorch/issues/2396
     "test_t_matmul_matrix"
   ];
 
-  meta = with lib; {
-    description = "A highly efficient and modular implementation of Gaussian Processes, with GPU acceleration";
+  meta = {
+    description = "Highly efficient and modular implementation of Gaussian Processes, with GPU acceleration";
     homepage = "https://gpytorch.ai";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    downloadPage = "https://github.com/cornellius-gp/gpytorch";
+    changelog = "https://github.com/cornellius-gp/gpytorch/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

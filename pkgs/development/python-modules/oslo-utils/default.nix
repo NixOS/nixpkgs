@@ -2,38 +2,55 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  ddt,
+
+  # build-system
+  pbr,
+  setuptools,
+
+  # dependencies
   debtcollector,
-  eventlet,
-  fixtures,
   iso8601,
   netaddr,
   netifaces,
   oslo-i18n,
-  oslotest,
   packaging,
-  pbr,
+  psutil,
   pyparsing,
   pytz,
-  setuptools,
-  stestr,
-  testscenarios,
   tzdata,
-  pyyaml,
+
+  # tests
+  ddt,
+  eventlet,
+  fixtures,
   iana-etc,
   libredirect,
+  libxcrypt-legacy,
+  oslotest,
+  pyyaml,
+  qemu-utils,
+  replaceVars,
+  stdenv,
+  stestr,
+  testscenarios,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-utils";
-  version = "7.1.0";
+  version = "9.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "oslo.utils";
+    pname = "oslo_utils";
     inherit version;
-    hash = "sha256-XkLzOU0fH5duiZSsSgkYlm0vfq98dzgN1hLEpBSN2Y4=";
+    hash = "sha256-AcOHXnzKAFtZRlxCn0ZxE7X0sEIRy9U0yawvFSJ207M=";
   };
+
+  patches = [
+    (replaceVars ./ctypes.patch {
+      crypt = "${lib.getLib libxcrypt-legacy}/lib/libcrypt${stdenv.hostPlatform.extensions.sharedLibrary}";
+    })
+  ];
 
   postPatch = ''
     # only a small portion of the listed packages are actually needed for running the tests
@@ -41,18 +58,19 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     pbr
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     debtcollector
     iso8601
     netaddr
     netifaces
     oslo-i18n
     packaging
+    psutil
     pyparsing
     pytz
     tzdata
@@ -62,10 +80,12 @@ buildPythonPackage rec {
     ddt
     eventlet
     fixtures
+    libredirect.hook
     oslotest
+    pyyaml
+    qemu-utils
     stestr
     testscenarios
-    pyyaml
   ];
 
   # disabled tests:
@@ -74,20 +94,20 @@ buildPythonPackage rec {
   checkPhase = ''
     echo "nameserver 127.0.0.1" > resolv.conf
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
-    export LD_PRELOAD=${libredirect}/lib/libredirect.so
 
     stestr run -e <(echo "
       oslo_utils.tests.test_netutils.NetworkUtilsTest.test_is_valid_ip
       oslo_utils.tests.test_netutils.NetworkUtilsTest.test_is_valid_ipv4
+      oslo_utils.tests.test_eventletutils.EventletUtilsTest.test_event_set_clear_timeout
     ")
   '';
 
   pythonImportsCheck = [ "oslo_utils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Oslo Utility library";
     homepage = "https://github.com/openstack/oslo.utils";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

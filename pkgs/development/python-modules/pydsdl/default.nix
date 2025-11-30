@@ -2,32 +2,34 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pydsdl";
-  version = "1.18.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.22.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OpenCyphal";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-sn7KoJmJbr7Y+N9PAXyhJnts/hW+Gi06nrHj5VIDZMU=";
+    repo = "pydsdl";
+    tag = version;
+    hash = "sha256-JQE7e735arclu7avLu0Nf/ecULd0wuPmxyO3DtDsxLs=";
   };
+
+  build-system = [ setuptools ];
 
   # allow for writable directory for darwin
   preBuild = ''
     export HOME=$TMPDIR
   '';
 
-  # Module doesn't contain tests
-  doCheck = false;
-
   pythonImportsCheck = [ "pydsdl" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  enabledTestPaths = [ "pydsdl/_test.py" ];
 
   meta = with lib; {
     description = "Library to process Cyphal DSDL";

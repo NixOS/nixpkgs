@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 
 let
   apikey = "testapikey";
@@ -7,25 +7,31 @@ in
   name = "octoprint";
   meta.maintainers = with lib.maintainers; [ gador ];
 
-  nodes.machine = { pkgs, ... }: {
-    environment.systemPackages = with pkgs; [ jq ];
-    services.octoprint = {
-      enable = true;
-      extraConfig = {
-        server = {
-          firstRun = false;
-        };
-        api = {
-          enabled = true;
-          key = apikey;
-        };
-        plugins = {
-          # these need internet access and pollute the output with connection failed errors
-          _disabled = [ "softwareupdate" "announcements" "pluginmanager" ];
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      environment.systemPackages = with pkgs; [ jq ];
+      services.octoprint = {
+        enable = true;
+        extraConfig = {
+          server = {
+            firstRun = false;
+          };
+          api = {
+            enabled = true;
+            key = apikey;
+          };
+          plugins = {
+            # these need internet access and pollute the output with connection failed errors
+            _disabled = [
+              "softwareupdate"
+              "announcements"
+              "pluginmanager"
+            ];
+          };
         };
       };
     };
-  };
 
   testScript = ''
     import json
@@ -44,7 +50,7 @@ in
 
     # octoprint takes some time to start. This makes sure we'll retry just in case it takes longer
     # retry-all-errors in necessary, since octoprint will report a 404 error when not yet ready
-    curl_cmd = "curl --retry-all-errors --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 0 \
+    curl_cmd = "curl --retry-all-errors --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 5 \
                 --retry-max-time 40 -X GET --header 'X-API-Key: ${apikey}' "
 
     # used to fail early, in case octoprint first starts and then crashes
@@ -58,4 +64,4 @@ in
             assert version["server"] == str("${pkgs.octoprint.version}")
             assert server["safemode"] == None
   '';
-})
+}

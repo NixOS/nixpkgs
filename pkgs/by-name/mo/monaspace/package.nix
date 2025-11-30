@@ -1,34 +1,41 @@
-{ lib
-, stdenvNoCC
-, fetchzip
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "monaspace";
-  version = "1.101";
+  version = "1.301";
 
-  src = fetchzip {
-    url = "https://github.com/githubnext/monaspace/releases/download/v${finalAttrs.version}/monaspace-v${finalAttrs.version}.zip";
-    stripRoot = false;
-    hash = "sha256-o5s4XBuwqA4sJ5KhEn5oYttBj4ojekr/LO6Ww9oQRGw=";
+  src = fetchFromGitHub {
+    owner = "githubnext";
+    repo = "monaspace";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8tPwm92ZtaXL9qeDL+ay9PdXLUBBsspdk7/0U8VO0Tg=";
   };
 
-  outputs = [ "out" "woff" ];
+  outputs = [
+    "out"
+    "woff"
+  ];
 
   installPhase = ''
-    runHook preInstall
+    # Install TrueType fonts
+    install -Dm644 -t $out/share/fonts/truetype fonts/Frozen\ Fonts/*/*.ttf
+    install -Dm644 -t $out/share/fonts/truetype fonts/Variable\ Fonts/*/*.ttf
 
-    pushd monaspace-v${finalAttrs.version}/fonts/
-    install -Dm644 otf/*.otf -t $out/share/fonts/opentype
-    install -Dm644 variable/*.ttf -t $out/share/fonts/truetype
-    install -Dm644 webfonts/*.woff -t $woff/share/fonts/woff
-    popd
+    # Install OpenType fonts
+    install -Dm644 -t $out/share/fonts/opentype fonts/Static\ Fonts/*/*.otf
+    install -Dm644 -t $out/share/fonts/opentype fonts/NerdFonts/*/*.otf
 
-    runHook postInstall
+    # Install Web fonts
+    install -Dm644 -t $woff/share/fonts/woff fonts/Web\ Fonts/*/*/*.woff
+    install -Dm644 -t $woff/share/fonts/woff fonts/Web\ Fonts/*/*/*.woff2
   '';
 
   meta = {
-    description = "An innovative superfamily of fonts for code";
+    description = "Innovative superfamily of fonts for code";
     longDescription = ''
       Since the earliest days of the teletype machine, code has been set in
       monospaced type — letters, on a grid. Monaspace is a new type system that
@@ -50,7 +57,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     homepage = "https://monaspace.githubnext.com/";
     license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  python,
   pytestCheckHook,
   pythonOlder,
   six,
@@ -18,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "vlasovskikh";
-    repo = pname;
+    repo = "funcparserlib";
     rev = version;
     hash = "sha256-LE9ItCaEzEGeahpM3M3sSnDBXEr6uX5ogEkO5x2Jgzc=";
   };

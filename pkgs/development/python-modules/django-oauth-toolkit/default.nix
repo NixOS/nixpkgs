@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
+  setuptools,
 
   # propagates
   django,
@@ -12,44 +12,42 @@
 
   # tests
   djangorestframework,
+  pytest-cov-stub,
   pytest-django,
-  pytest-xdist,
   pytest-mock,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-oauth-toolkit";
-  version = "2.3.0";
-  format = "setuptools";
+  version = "3.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-oGg5MD9p4PSUVkt5pGLwjAF4SHHf4Aqr+/3FsuFaybY=";
+    repo = "django-oauth-toolkit";
+    tag = version;
+    hash = "sha256-c7LaB8426qjwDveec3BghqCEtPs572PTVodvLAO2CcQ=";
   };
 
-  postPatch = ''
-    sed -i '/cov/d' tox.ini
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     jwcrypto
     oauthlib
     requests
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-  pythonRelaxDeps = [ "django" ];
-
-  DJANGO_SETTINGS_MODULE = "tests.settings";
+  preCheck = ''
+    export DJANGO_SETTINGS_MODULE=tests.settings
+  '';
 
   # xdist is disabled right now because it can cause race conditions on high core machines
   # https://github.com/jazzband/django-oauth-toolkit/issues/1300
   nativeCheckInputs = [
     djangorestframework
+    pytest-cov-stub
     pytest-django
     # pytest-xdist
     pytest-mock
@@ -61,10 +59,11 @@ buildPythonPackage rec {
     "test_response_when_auth_server_response_return_404"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OAuth2 goodies for the Djangonauts";
     homepage = "https://github.com/jazzband/django-oauth-toolkit";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ mmai ];
+    changelog = "https://github.com/jazzband/django-oauth-toolkit/django-filer/blob/${version}/CHANGELOG.md";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ mmai ];
   };
 }

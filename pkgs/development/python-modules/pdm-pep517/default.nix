@@ -1,9 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
-  git,
+  gitMinimal,
   pytestCheckHook,
   setuptools,
 }:
@@ -27,13 +26,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    git
+    gitMinimal
     setuptools
   ];
 
   meta = with lib; {
     homepage = "https://github.com/pdm-project/pdm-pep517";
-    description = "Yet another PEP 517 backend.";
+    description = "Yet another PEP 517 backend";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
   };

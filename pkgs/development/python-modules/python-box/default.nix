@@ -4,7 +4,6 @@
   cython,
   fetchFromGitHub,
   msgpack,
-  poetry-core,
   pytestCheckHook,
   pythonOlder,
   pyyaml,
@@ -17,24 +16,24 @@
 
 buildPythonPackage rec {
   pname = "python-box";
-  version = "7.1.1";
-  format = "setuptools";
+  version = "7.3.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "cdgriffith";
     repo = "Box";
-    rev = "refs/tags/${version}";
-    hash = "sha256-oxT2y3um6BZ3bwYa+LWBoTgU+9b+V7XtQdCdECU3Gu0=";
+    tag = version;
+    hash = "sha256-aVPjIoizqC0OcG5ziy/lvp/JsFSUvcLUqJ03mKViKFs=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     setuptools
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       msgpack
       ruamel-yaml
@@ -48,7 +47,12 @@ buildPythonPackage rec {
     msgpack = [ msgpack ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.all;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.all;
+
+  disabledTests = [
+    # ruamel 8.18.13 update changed white space rules
+    "test_to_yaml_ruamel"
+  ];
 
   pythonImportsCheck = [ "box" ];
 

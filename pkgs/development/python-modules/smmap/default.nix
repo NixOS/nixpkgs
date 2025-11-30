@@ -3,8 +3,7 @@
   fetchPypi,
   buildPythonPackage,
   setuptools,
-  nosexcover,
-  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -17,14 +16,14 @@ buildPythonPackage rec {
     hash = "sha256-jXkCjqbMEx2l6rCZpdlamY1DxneZVv/+O0VQQJEQdto=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  doCheck = pythonOlder "3.12";
+  pythonImportsCheck = [ "smmap" ];
 
-  nativeCheckInputs = [ nosexcover ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    description = "A pure python implementation of a sliding window memory map manager";
+    description = "Pure python implementation of a sliding window memory map manager";
     homepage = "https://github.com/gitpython-developers/smmap";
     maintainers = [ ];
     license = lib.licenses.bsd3;

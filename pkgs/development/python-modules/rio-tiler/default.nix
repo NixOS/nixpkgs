@@ -22,15 +22,15 @@
 
 buildPythonPackage rec {
   pname = "rio-tiler";
-  version = "6.6.1";
+  version = "7.8.1";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cogeotiff";
     repo = "rio-tiler";
-    rev = version;
-    hash = "sha256-MR6kyoGM3uXt6JiIEfGcsmTmxqlLxUF9Wn+CFuK5LtQ=";
+    tag = version;
+    hash = "sha256-w7uw5PY3uiJmxsgSB1YDbtG7IY1pd4WU3JExZRc40gs=";
   };
 
   build-system = [ hatchling ];
@@ -60,6 +60,9 @@ buildPythonPackage rec {
     description = "User friendly Rasterio plugin to read raster datasets";
     homepage = "https://cogeotiff.github.io/rio-tiler/";
     license = licenses.bsd3;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
+    # Tests broken with gdal 3.10
+    # https://github.com/cogeotiff/rio-tiler/issues/769
+    broken = true;
   };
 }

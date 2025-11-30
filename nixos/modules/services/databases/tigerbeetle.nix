@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.tigerbeetle;
 in
@@ -42,8 +47,8 @@ in
       };
 
       cacheGridSize = mkOption {
-        type = types.strMatching "[0-9]+(K|M|G)B";
-        default = "1GB";
+        type = types.strMatching "[0-9]+(K|M|G)iB";
+        default = "1GiB";
         description = ''
           The grid cache size.
           The grid cache acts like a page cache for TigerBeetle.
@@ -76,7 +81,11 @@ in
         }
         {
           assertion = cfg.replicaCount == numAddresses;
-          message = if cfg.replicaCount < numAddresses then "TigerBeetle must not have more addresses than the configured number of replicas" else "TigerBeetle must be configured with the addresses of all replicas";
+          message =
+            if cfg.replicaCount < numAddresses then
+              "TigerBeetle must not have more addresses than the configured number of replicas"
+            else
+              "TigerBeetle must be configured with the addresses of all replicas";
         }
       ];
 
@@ -97,16 +106,29 @@ in
         '';
 
         serviceConfig = {
-          Type = "exec";
-
-          DynamicUser = true;
-          ProtectHome = true;
           DevicePolicy = "closed";
-
+          DynamicUser = true;
+          ExecStart = "${lib.getExe cfg.package} start --cache-grid=${cfg.cacheGridSize} --addresses=${lib.escapeShellArg (builtins.concatStringsSep "," cfg.addresses)} ${replicaDataPath}";
+          LockPersonality = true;
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "noaccess";
+          ProtectSystem = "strict";
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+          ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
           StateDirectory = "tigerbeetle";
           StateDirectoryMode = 700;
-
-          ExecStart = "${lib.getExe cfg.package} start --cache-grid=${cfg.cacheGridSize} --addresses=${lib.escapeShellArg (builtins.concatStringsSep "," cfg.addresses)} ${replicaDataPath}";
+          Type = "exec";
         };
       };
 

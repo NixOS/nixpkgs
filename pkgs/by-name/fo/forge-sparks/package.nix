@@ -1,31 +1,33 @@
-{ lib
-, blueprint-compiler
-, desktop-file-utils
-, fetchFromGitHub
-, gjs
-, glib
-, glib-networking
-, gtk4
-, libadwaita
-, libportal
-, libsecret
-, libsoup_3
-, meson
-, ninja
-, pkg-config
-, stdenv
-, wrapGAppsHook4
+{
+  lib,
+  blueprint-compiler,
+  desktop-file-utils,
+  fetchFromGitHub,
+  gjs,
+  glib,
+  glib-networking,
+  gtk4,
+  libadwaita,
+  libportal,
+  libsecret,
+  libsoup_3,
+  meson,
+  ninja,
+  nix-update-script,
+  pkg-config,
+  stdenv,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "forge-sparks";
-  version = "0.3.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "rafaelmardojai";
     repo = "forge-sparks";
     rev = finalAttrs.version;
-    hash = "sha256-1Aq9Bv1UEckoA9IkQ9++rM6623GD41hgBJoeXKr2ipM=";
+    hash = "sha256-4FzMhHE4601laKHYRN3NCZ7oBDH/2HaeCS9CdbmTNx0=";
     fetchSubmodules = true;
   };
 
@@ -58,13 +60,17 @@ stdenv.mkDerivation (finalAttrs: {
     libsoup_3
   ];
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     changelog = "https://github.com/rafaelmardojai/forge-sparks/releases/tag/${finalAttrs.version}";
     description = "Get Git forges notifications";
     homepage = "https://github.com/rafaelmardojai/forge-sparks";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "forge-sparks";
-    maintainers = with maintainers; [ michaelgrahamevans ];
-    platforms = platforms.linux;
+    teams = [ lib.teams.gnome-circle ];
+    platforms = lib.platforms.linux;
   };
 })

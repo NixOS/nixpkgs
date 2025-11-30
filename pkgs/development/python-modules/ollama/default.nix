@@ -2,42 +2,39 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
   httpx,
+  pydantic,
   pillow,
-  poetry-core,
   pytest-asyncio,
   pytest-httpserver,
   pytestCheckHook,
-  pythonOlder,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "ollama";
-  version = "0.2.0";
+  version = "0.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-kfotKUUXBekUd0X32BYAjNWvQJO94bdEDCSrBg2yJRQ=";
+    tag = "v${version}";
+    hash = "sha256-4GvONxyv3/+mago/AHp5zbfoiKskKxiDZR1h+OhVbPU=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0" "${version}"
-  '';
 
   pythonRelaxDeps = [ "httpx" ];
 
-  build-system = [ poetry-core ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-
-  dependencies = [ httpx ];
+  dependencies = [
+    httpx
+    pydantic
+  ];
 
   nativeCheckInputs = [
     pillow
@@ -46,13 +43,20 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "ollama" ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # Don't test the examples
+    "examples/"
+  ];
+
+  meta = {
     description = "Ollama Python library";
     homepage = "https://github.com/ollama/ollama-python";
-    changelog = "https://github.com/ollama/ollama-python/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/ollama/ollama-python/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

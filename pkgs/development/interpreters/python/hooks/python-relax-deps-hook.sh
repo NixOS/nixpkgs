@@ -4,12 +4,10 @@
 #
 # Example usage in a derivation:
 #
-#   { …, pythonPackages, … }:
+#   { …, python3Packages, … }:
 #
-#   pythonPackages.buildPythonPackage {
+#   python3Packages.buildPythonPackage {
 #     …
-#     nativeBuildInputs = [ pythonPackages.pythonRelaxDepsHook ];
-#
 #     # This will relax the dependency restrictions
 #     # e.g.: abc>1,<=2 -> abc
 #     pythonRelaxDeps = [ "abc" ];
@@ -44,13 +42,14 @@
 _pythonRelaxDeps() {
     local -r metadata_file="$1"
 
-    if [[ -z "${pythonRelaxDeps:-}" ]] || [[ "$pythonRelaxDeps" == 0 ]]; then
+    if [[ -z "${pythonRelaxDeps[*]-}" ]] || [[ "$pythonRelaxDeps" == 0 ]]; then
         return
     elif [[ "$pythonRelaxDeps" == 1 ]]; then
         sed -i "$metadata_file" -r \
             -e 's/(Requires-Dist: [a-zA-Z0-9_.-]+\s*(\[[^]]+\])?)[^;]*(;.*)?/\1\3/'
     else
-        for dep in $pythonRelaxDeps; do
+        # shellcheck disable=SC2048
+        for dep in ${pythonRelaxDeps[*]}; do
             sed -i "$metadata_file" -r \
                 -e "s/(Requires-Dist: $dep\s*(\[[^]]+\])?)[^;]*(;.*)?/\1\3/i"
         done
@@ -60,13 +59,14 @@ _pythonRelaxDeps() {
 _pythonRemoveDeps() {
     local -r metadata_file="$1"
 
-    if [[ -z "${pythonRemoveDeps:-}" ]] || [[ "$pythonRemoveDeps" == 0 ]]; then
+    if [[ -z "${pythonRemoveDeps[*]-}" ]] || [[ "$pythonRemoveDeps" == 0 ]]; then
         return
     elif [[ "$pythonRemoveDeps" == 1 ]]; then
         sed -i "$metadata_file" \
             -e '/Requires-Dist:.*/d'
     else
-        for dep in $pythonRemoveDeps; do
+        # shellcheck disable=SC2048
+        for dep in ${pythonRemoveDeps[*]-}; do
             sed -i "$metadata_file" \
                 -e "/Requires-Dist: $dep/d"
         done
@@ -88,11 +88,14 @@ pythonRelaxDepsHook() {
         rm -rf "$wheel"
 
         # Using no quotes on purpose since we need to expand the glob from `$metadata_file`
+        # shellcheck disable=SC2086
         _pythonRelaxDeps $metadata_file
+        # shellcheck disable=SC2086
         _pythonRemoveDeps $metadata_file
 
-        if (( "${NIX_DEBUG:-0}" >= 1 )); then
+        if (("${NIX_DEBUG:-0}" >= 1)); then
             echo "pythonRelaxDepsHook: resulting METADATA for '$wheel':"
+            # shellcheck disable=SC2086
             cat $metadata_file
         fi
 

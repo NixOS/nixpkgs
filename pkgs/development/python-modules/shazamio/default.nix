@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "shazamio";
-  version = "0.5.1";
+  version = "0.8.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dotX12";
     repo = "ShazamIO";
-    rev = "refs/tags/${version}";
-    hash = "sha256-nzKvEoh1DrZegoRNqOCh9Qm+7B7uQ9dEH75mVueGxZI=";
+    tag = version;
+    hash = "sha256-beEEr9Y8w0XlC/0+mNL/oWscmnfwt9KChlZ7Ullyk3E=";
   };
 
   patches = [
@@ -68,11 +68,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "shazamio" ];
 
   meta = with lib; {
-    description = "A free asynchronous library from reverse engineered Shazam API";
+    description = "Free asynchronous library from reverse engineered Shazam API";
     homepage = "https://github.com/dotX12/ShazamIO";
-    changelog = "https://github.com/dotX12/ShazamIO/releases/tag/${src.rev}";
+    changelog = "https://github.com/dotX12/ShazamIO/releases/tag/${src.tag}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     # https://github.com/shazamio/ShazamIO/issues/80
     broken = versionAtLeast pydantic.version "2";
   };

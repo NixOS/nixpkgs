@@ -8,7 +8,6 @@
   doit,
   feedparser,
   fetchPypi,
-  fetchpatch2,
   freezegun,
   ghp-import,
   hsluv,
@@ -30,6 +29,7 @@
   pyphen,
   pyrss2gen,
   pytestCheckHook,
+  pytest-cov-stub,
   python-dateutil,
   pythonOlder,
   requests,
@@ -44,33 +44,19 @@
 
 buildPythonPackage rec {
   pname = "nikola";
-  version = "8.3.0";
+  version = "8.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "Nikola";
-    inherit version;
-    hash = "sha256-VYuhiGLMTHcOZM8/bGZT7Xx5BOHo9gsMPjufYglrBL0=";
+    inherit pname version;
+    hash = "sha256-Y219b/wqsk9MJknoaV+LtWBOMJFT6ktgt4b6yuA6scc=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      name = "nikola-pytest8-compat.patch";
-      url = "https://github.com/getnikola/nikola/commit/5f1003f91cd59f62622d379efe9be5fb19a1ed3e.patch";
-      hash = "sha256-2H3125RUnwvN/XgwgfRe1139rhAz/9viMEcUYRGQMPs=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "--cov nikola --cov-report term-missing" ""
-  '';
-
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     babel
     blinker
@@ -109,11 +95,13 @@ buildPythonPackage rec {
     freezegun
     mock
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   disabledTests = [
     # AssertionError
     "test_compiling_markdown"
+    "test_write_content_does_not_detroy_text"
     # Date formatting slightly differs from expectation
     "test_format_date_long"
     "test_format_date_timezone"
@@ -125,10 +113,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Static website and blog generator";
-    mainProgram = "nikola";
     homepage = "https://getnikola.com/";
     changelog = "https://github.com/getnikola/nikola/blob/v${version}/CHANGES.txt";
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];
+    mainProgram = "nikola";
   };
 }

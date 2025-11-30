@@ -1,29 +1,30 @@
-{ lib
-, fetchFromGitHub
-, buildPythonApplication
-, cacert
-, setuptools
-, matrix-nio
-, python-magic
-, markdown
-, pillow
-, aiofiles
-, notify2
-, dbus-python
-, pyxdg
-, python-olm
-, emoji
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
+  cacert,
+  setuptools,
+  matrix-nio,
+  python-magic,
+  markdown,
+  pillow,
+  aiofiles,
+  notify2,
+  dbus-python,
+  pyxdg,
+  python-olm,
+  emoji,
 }:
 
 buildPythonApplication rec {
   pname = "matrix-commander";
-  version = "7.2.0";
+  version = "8.0.5";
 
   src = fetchFromGitHub {
     owner = "8go";
     repo = "matrix-commander";
     rev = "v${version}";
-    hash = "sha256-qL6ARkAWu0FEuYK2e9Z9hMSfK4TW0kGgoIFUfJ8Dgwk=";
+    hash = "sha256-eNgnjErPi5q9yA/2iEg3+CoN2xbopmFOpbgU/7GhoAQ=";
   };
 
   format = "pyproject";
@@ -41,7 +42,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [
     cacert
     setuptools
-    matrix-nio
+    (matrix-nio.override { withOlm = true; })
     python-magic
     markdown
     pillow
@@ -51,7 +52,7 @@ buildPythonApplication rec {
     pyxdg
     python-olm
     emoji
-  ] ++ matrix-nio.optional-dependencies.e2e;
+  ];
 
   meta = with lib; {
     description = "Simple but convenient CLI-based Matrix client app for sending and receiving";

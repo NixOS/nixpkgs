@@ -5,5 +5,7 @@
 mkKdeDerivation {
   pname = "kxmlgui";
 
-  extraBuildInputs = [qttools];
+  hasPythonBindings = true;
+
+  extraBuildInputs = [ qttools ];
 }

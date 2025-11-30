@@ -1,4 +1,9 @@
-{ fetchFromGitHub, lib, mkDerivation, standard-library }:
+{
+  fetchFromGitHub,
+  lib,
+  mkDerivation,
+  standard-library,
+}:
 
 mkDerivation rec {
   version = "0.5.0";
@@ -12,10 +17,6 @@ mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-3nme/eH4pY6bD0DkhL4Dj/Vp/WnZqkQtZTNk+n1oAyY=";
   };
-
-  preConfigure = ''
-    sh generate-everything.sh
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/ryanorendorff/functional-linear-algebra";

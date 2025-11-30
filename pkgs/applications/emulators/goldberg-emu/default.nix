@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, cmake
-, protobuf
- }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  protobuf,
+}:
 
 stdenv.mkDerivation rec {
   pname = "goldberg-emu";
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "mr_goldberg";
     repo = "goldberg_emulator";
     rev = version;
-    sha256 = "sha256-goOgMNjtDmIKOAv9sZwnPOY0WqTN90LFJ5iEp3Vkzog=";
+    hash = "sha256-goOgMNjtDmIKOAv9sZwnPOY0WqTN90LFJ5iEp3Vkzog=";
   };
 
   # It attempts to install windows-only libraries which we never build
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://gitlab.com/Mr_Goldberg/goldberg_emulator";
     changelog = "https://gitlab.com/Mr_Goldberg/goldberg_emulator/-/releases";
     description = "Program that emulates steam online features";
@@ -53,6 +54,6 @@ stdenv.mkDerivation rec {
     mainProgram = "lobby_connect";
     license = licenses.lgpl3Only;
     platforms = platforms.unix;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
   };
 }

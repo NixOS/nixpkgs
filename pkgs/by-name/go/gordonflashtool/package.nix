@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, nasm, unixtools }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nasm,
+  unixtools,
+}:
 
 let
   version = "10";
@@ -15,7 +21,10 @@ stdenv.mkDerivation {
     hash = "sha256-/zpw7kVdQeR7QcRsP1+qcu8+hlEQTGwOKClJkwVcBPg=";
   };
 
-  nativeBuildInputs = [ nasm unixtools.xxd ];
+  nativeBuildInputs = [
+    nasm
+    unixtools.xxd
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -32,7 +41,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://github.com/marmolak/GordonFlashTool";
-    description = "Toolset for Gotek SFR1M44-U100 formatted usb flash drives.";
+    description = "Toolset for Gotek SFR1M44-U100 formatted usb flash drives";
     maintainers = with lib.maintainers; [ marmolak ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;

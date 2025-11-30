@@ -1,33 +1,28 @@
 {
   lib,
-  async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   pyserial-asyncio-fast,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "elkm1-lib";
-  version = "2.2.7";
+  version = "2.2.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "gwww";
     repo = "elkm1";
-    rev = "refs/tags/${version}";
-    hash = "sha256-5YdmZO/8HimQ9Ft/K/I6xu0Av2SjUBp3+poBe7aVUpM=";
+    tag = version;
+    hash = "sha256-Z8OfaRggVkGzX7d/O8a7L110ophj3sKD2x5JskusUe8=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
-    async-timeout
     pyserial-asyncio-fast
   ];
 

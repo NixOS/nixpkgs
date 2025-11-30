@@ -1,47 +1,35 @@
-{ lib, stdenv, fetchCrate, rustPlatform, pkg-config, openssl, darwin, fetchurl }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
-let
-  wasiPreviewCommandComponentAdapter = fetchurl {
-    url = "https://github.com/bytecodealliance/wasmtime/releases/download/v13.0.0/wasi_snapshot_preview1.command.wasm";
-    hash = "sha256-QihT0Iaq9VJs2mLL9CdS32lVMtDc9M952k/ZZ4tO6qs=";
-  };
-  wasiPreviewReactorComponentAdapter = fetchurl {
-    url = "https://github.com/bytecodealliance/wasmtime/releases/download/v13.0.0/wasi_snapshot_preview1.reactor.wasm";
-    hash = "sha256-bNmx/IqYPkA7YHvlYvHPmIMF/fkKtSXlZx1bjR3Neow=";
-  };
-
-in rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wash-cli";
-  version = "0.24.0";
+  version = "1.0.0-beta.10";
 
-  src = fetchCrate {
-    inherit version pname;
-      hash = "sha256-exhN+44Sikcn2JiIry/jHOpYrPG2oQOpwq/Mq+0VK0U=";
+  src = fetchFromGitHub {
+    owner = "wasmCloud";
+    repo = "wash";
+    tag = "wash-v${finalAttrs.version}";
+    hash = "sha256-g1OXyxLSKicMz0mnTyHNmihtt5WMx91bNo83NhZpx9s=";
   };
 
-  cargoHash = "sha256-eEfkMoi4BPpKWkiTshHj59loFPzyrhFN/S8HKdMCGFM=";
+  cargoHash = "sha256-/Dah1F3pJBqtrCw7iVRGidQUl8rmD31Eoqva9ejc1iw=";
 
-  nativeBuildInputs = [ pkg-config ];
+  checkFlags = [
+    # Requires internet access
+    "--skip=test_end_to_end_template_to_execution"
+    "--skip=test_plugin_test_inspect_comprehensive"
+    "--skip=test_pull_and_validate_ghcr_component"
+  ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-      darwin.apple_sdk.frameworks.CoreServices
-    ];
-
-  preBuild = "
-    export WASI_PREVIEW1_COMMAND_COMPONENT_ADAPTER=${wasiPreviewCommandComponentAdapter}
-    export WASI_PREVIEW1_REACTOR_COMPONENT_ADAPTER=${wasiPreviewReactorComponentAdapter}
-  ";
-
-  # Tests require the internet and don't work when running in nix
-  doCheck = false;
-
-  meta = with lib; {
-    description = "wasmCloud Shell (wash) CLI tool";
-    homepage = "https://wasmcloud.com/";
+  meta = {
+    description = "Command-line tool for developing, building, and managing WebAssembly components";
+    homepage = "https://github.com/wasmCloud/wash";
+    changelog = "https://github.com/wasmCloud/wash/releases/tag/wash-v${finalAttrs.version}";
     mainProgram = "wash";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bloveless ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bloveless ];
   };
-}
+})

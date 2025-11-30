@@ -1,47 +1,51 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qtbase
-, qtsvg
-, qtwayland
-, qtwebengine
-, qtdeclarative
-, extra-cmake-modules
-, cpp-utilities
-, qtutilities
-, qtforkawesome
-, boost
-, wrapQtAppsHook
-, cmake
-, kio
-, plasma-framework
-, qttools
-, iconv
-, cppunit
-, syncthing
-, xdg-utils
-, webviewSupport ? true
-, jsSupport ? true
-, kioPluginSupport ? stdenv.isLinux
-, plasmoidSupport  ? stdenv.isLinux
-, systemdSupport ? stdenv.isLinux
-/* It is possible to set via this option an absolute exec path that will be
-written to the `~/.config/autostart/syncthingtray.desktop` file generated
-during runtime. Alternatively, one can edit the desktop file themselves after
-it is generated See:
-https://github.com/NixOS/nixpkgs/issues/199596#issuecomment-1310136382 */
-, autostartExecPath ? "syncthingtray"
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qtbase,
+  qtsvg,
+  qtwayland,
+  qtwebengine,
+  qtdeclarative,
+  extra-cmake-modules,
+  cpp-utilities,
+  qtutilities,
+  qtforkawesome,
+  boost,
+  wrapQtAppsHook,
+  cmake,
+  kio,
+  plasma-framework,
+  qttools,
+  iconv,
+  cppunit,
+  syncthing,
+  xdg-utils,
+  webviewSupport ? true,
+  jsSupport ? true,
+  kioPluginSupport ? stdenv.hostPlatform.isLinux,
+  plasmoidSupport ? stdenv.hostPlatform.isLinux,
+  systemdSupport ? stdenv.hostPlatform.isLinux,
+  /*
+    It is possible to set via this option an absolute exec path that will be
+    written to the `~/.config/autostart/syncthingtray.desktop` file generated
+    during runtime. Alternatively, one can edit the desktop file themselves after
+    it is generated See:
+    https://github.com/NixOS/nixpkgs/issues/199596#issuecomment-1310136382
+  */
+  autostartExecPath ? "syncthingtray",
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.5.3";
+  version = "2.0.3";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wE6N0GSdcLDQOO+M3Ahlv3Z2S+PqdvZAnueCKB9+R08=";
+    hash = "sha256-vvbzXwujOIk3g/SvNM3JGkt956RN9VR0Pcx5nzg1IU0=";
   };
 
   buildInputs = [
@@ -51,13 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
     qtutilities
     boost
     qtforkawesome
-  ] ++ lib.optionals stdenv.isDarwin [ iconv ]
-    ++ lib.optionals stdenv.isLinux [ qtwayland ]
-    ++ lib.optionals webviewSupport [ qtwebengine ]
-    ++ lib.optionals jsSupport [ qtdeclarative ]
-    ++ lib.optionals kioPluginSupport [ kio ]
-    ++ lib.optionals plasmoidSupport [ plasma-framework ]
-  ;
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ iconv ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ]
+  ++ lib.optionals webviewSupport [ qtwebengine ]
+  ++ lib.optionals jsSupport [ qtdeclarative ]
+  ++ lib.optionals kioPluginSupport [ kio ]
+  ++ lib.optionals plasmoidSupport [ plasma-framework ];
 
   nativeBuildInputs = [
     wrapQtAppsHook
@@ -69,25 +73,25 @@ stdenv.mkDerivation (finalAttrs: {
     cppunit
     syncthing
   ]
-    ++ lib.optionals plasmoidSupport [ extra-cmake-modules ]
-  ;
+  ++ lib.optionals plasmoidSupport [ extra-cmake-modules ];
 
   # syncthing server seems to hang on darwin, causing tests to fail.
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   preCheck = ''
     export QT_QPA_PLATFORM=offscreen
     export QT_PLUGIN_PATH="${lib.getBin qtbase}/${qtbase.qtPluginPrefix}"
   '';
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # put the app bundle into the proper place /Applications instead of /bin
     mkdir -p $out/Applications
     mv $out/bin/syncthingtray.app $out/Applications
     # Make binary available in PATH like on other platforms
     ln -s $out/Applications/syncthingtray.app/Contents/MacOS/syncthingtray $out/bin/syncthingtray
   '';
-  installCheckPhase = ''
-    $out/bin/syncthingtray --help | grep ${finalAttrs.version}
-  '';
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   cmakeFlags = [
     "-DQT_PACKAGE_PREFIX=Qt${lib.versions.major qtbase.version}"
@@ -99,11 +103,11 @@ stdenv.mkDerivation (finalAttrs: {
     # See https://github.com/Martchus/syncthingtray/issues/42
     "-DQT_PLUGIN_DIR:STRING=${placeholder "out"}/${qtbase.qtPluginPrefix}"
     "-DBUILD_SHARED_LIBS=ON"
-  ] ++ lib.optionals (!plasmoidSupport) ["-DNO_PLASMOID=ON"]
-    ++ lib.optionals (!kioPluginSupport) ["-DNO_FILE_ITEM_ACTION_PLUGIN=ON"]
-    ++ lib.optionals systemdSupport ["-DSYSTEMD_SUPPORT=ON"]
-    ++ lib.optionals (!webviewSupport) ["-DWEBVIEW_PROVIDER:STRING=none"]
-  ;
+  ]
+  ++ lib.optionals (!plasmoidSupport) [ "-DNO_PLASMOID=ON" ]
+  ++ lib.optionals (!kioPluginSupport) [ "-DNO_FILE_ITEM_ACTION_PLUGIN=ON" ]
+  ++ lib.optionals systemdSupport [ "-DSYSTEMD_SUPPORT=ON" ]
+  ++ lib.optionals (!webviewSupport) [ "-DWEBVIEW_PROVIDER:STRING=none" ];
 
   qtWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [ xdg-utils ]}"
@@ -115,5 +119,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ doronbehar ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "syncthingtray";
   };
 })

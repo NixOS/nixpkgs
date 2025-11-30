@@ -1,31 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, libgee
-, libhandy
-, granite
-, gtk3
-, switchboard
-, flatpak
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  gettext,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libadwaita,
+  libgee,
+  granite7,
+  gtk4,
+  switchboard,
+  flatpak,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-applications";
-  version = "7.0.1";
+  version = "8.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-r2JKiTewsLQSZPriC0w72CFevRQXytrFcO2VfA9BKHA=";
+    repo = "settings-applications";
+    tag = version;
+    hash = "sha256-kmyAEm4MlyHfm2xC55qsFSk+aLEJMMCy7/Vi0dndaNU=";
   };
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config
@@ -34,10 +37,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     flatpak
-    granite
-    gtk3
+    granite7
+    gtk4
+    libadwaita
     libgee
-    libhandy
     switchboard
   ];
 
@@ -47,9 +50,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Switchboard Applications Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-applications";
+    homepage = "https://github.com/elementary/settings-applications";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

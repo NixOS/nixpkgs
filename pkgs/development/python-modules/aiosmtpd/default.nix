@@ -9,11 +9,15 @@
   pythonOlder,
   setuptools,
   typing-extensions,
+
+  # for passthru.tests
+  django,
+  aiosmtplib,
 }:
 
 buildPythonPackage rec {
   pname = "aiosmtpd";
-  version = "1.4.5";
+  version = "1.4.6";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -21,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiosmtpd";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-8nQ4BVSLYgZHRGkbujy/olV/+GABlkDhe5wef3hyQpQ=";
+    tag = "v${version}";
+    hash = "sha256-Ih/xbWM9O/fFQiZezydlPlIr36fLRc2lLgdfxD5Jviw=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -30,7 +34,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     atpublic
     attrs
-  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ]
+  ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   nativeCheckInputs = [
     pytest-mock
@@ -48,6 +53,10 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "aiosmtpd" ];
+
+  passthru.tests = {
+    inherit django aiosmtplib;
+  };
 
   meta = with lib; {
     description = "Asyncio based SMTP server";

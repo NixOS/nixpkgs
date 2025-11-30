@@ -1,7 +1,9 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.xdg.portal.wlr;
   package = pkgs.xdg-desktop-portal-wlr;
@@ -10,11 +12,11 @@ let
 in
 {
   meta = {
-    maintainers = with maintainers; [ minijackson ];
+    maintainers = with lib.maintainers; [ minijackson ];
   };
 
   options.xdg.portal.wlr = {
-    enable = mkEnableOption ''
+    enable = lib.mkEnableOption ''
       desktop portal for wlroots-based desktops.
 
       This will add the `xdg-desktop-portal-wlr` package into
@@ -22,22 +24,22 @@ in
       configuration file
     '';
 
-    settings = mkOption {
+    settings = lib.mkOption {
       description = ''
         Configuration for `xdg-desktop-portal-wlr`.
 
-        See `xdg-desktop-portal-wlr(5)` for supported
+        See {manpage}`xdg-desktop-portal-wlr(5)` for supported
         values.
       '';
 
-      type = types.submodule {
+      type = lib.types.submodule {
         freeformType = settingsFormat.type;
       };
 
       default = { };
 
       # Example taken from the manpage
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           screencast = {
             output_name = "HDMI-A-1";
@@ -45,14 +47,14 @@ in
             exec_before = "disable_notifications.sh";
             exec_after = "enable_notifications.sh";
             chooser_type = "simple";
-            chooser_cmd = "''${pkgs.slurp}/bin/slurp -f %o -or";
+            chooser_cmd = "''${pkgs.slurp}/bin/slurp -f 'Monitor: %o' -or";
           };
         }
       '';
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     xdg.portal = {
       enable = true;
       extraPortals = [ package ];

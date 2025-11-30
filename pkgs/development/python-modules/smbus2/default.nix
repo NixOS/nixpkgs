@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "smbus2";
-  version = "0.4.3";
+  version = "0.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kplindegaard";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-tjJurJzDn0ATiYY3Xo66lwUs98/7ZLG3d4+h1prVHAI=";
+    repo = "smbus2";
+    tag = version;
+    hash = "sha256-3ZAjviVLO/c27NzrPcWf6RlZYclYkmUmOskTP9TVbNM=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

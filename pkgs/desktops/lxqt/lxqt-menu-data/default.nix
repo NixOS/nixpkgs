@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, lxqt-build-tools
-, qttools
-, wrapQtAppsHook
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  lxqt-build-tools,
+  qttools,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lxqt-menu-data";
-  version = "2.0.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "lxqt-menu-data";
     rev = version;
-    hash = "sha256-CNY23xdFiDQKKJf9GccwDOuBWXwfc7WNI7vMv/zOM9U=";
+    hash = "sha256-9TYW3VA4qGlrkUzgZGkxf8RkIW2cTLkY6H8JHGDnoLg=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +34,6 @@ stdenv.mkDerivation rec {
     description = "Menu files for LXQt Panel, Configuration Center and PCManFM-Qt/libfm-qt";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }

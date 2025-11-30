@@ -1,12 +1,14 @@
-{ autoconf
-, automake
-, cunit
-, fetchFromGitHub
-, fftw
-, lib
-, libtool
-, llvmPackages
-, stdenv
+{
+  autoconf,
+  automake,
+  cunit,
+  fetchFromGitHub,
+  fftw,
+  lib,
+  libtool,
+  llvmPackages,
+  stdenv,
+  bash,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     automake
     cunit
     libtool
+    bash
   ];
 
   preConfigure = ''
@@ -36,6 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-openmp"
     "--enable-portable-binary"
   ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
+  enableParalleBuilding = true;
 
   buildInputs = lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 

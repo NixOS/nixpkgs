@@ -4,27 +4,32 @@
   fetchPypi,
   azure-mgmt-core,
   azure-mgmt-common,
-  msrest,
+  isodate,
   pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-resource";
-  version = "23.0.1";
-  format = "setuptools";
+  version = "24.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    hash = "sha256-wrps/ZnflfVfNurcQkXj3HEyVzAqH9And1bZS9jLKOA=";
+    pname = "azure_mgmt_resource";
+    inherit version;
+    hash = "sha256-z2uJlfzdQHrJ/x3UdAhxKUKaHZDbsax3+XwZuWI3smU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-mgmt-common
     azure-mgmt-core
-    msrest
+    isodate
+    typing-extensions
   ];
 
   # Module has no tests
@@ -36,12 +41,12 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Microsoft Azure SDK for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/resources/azure-mgmt-resource";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-resource_${version}/sdk/resources/azure-mgmt-resource/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [
       olcai
       maxwilson
-      jonringer
     ];
   };
 }

@@ -1,9 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   ruff,
   click,
   click-default-group,
@@ -19,35 +18,32 @@
 
 buildPythonPackage rec {
   pname = "xsdata";
-  version = "24.2.1";
+  version = "25.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tefra";
     repo = "xsdata";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-o3G0isXShwNHaOiA4TNml0IhStB3X4jB9CgrVKViBlY=";
+    tag = "v${version}";
+    hash = "sha256-npwJlyUYjoYzvwaZZK4PIqhJmTeYGDDfc4T4/ODcx4c=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       ruff = lib.getExe ruff;
     })
   ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--benchmark-skip" ""
+      --replace-fail "--benchmark-skip" ""
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ typing-extensions ];
+  dependencies = [ typing-extensions ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [
       click
       click-default-group
@@ -59,11 +55,12 @@ buildPythonPackage rec {
     soap = [ requests ];
   };
 
-  nativeCheckInputs =
-    [ pytestCheckHook ]
-    ++ passthru.optional-dependencies.cli
-    ++ passthru.optional-dependencies.lxml
-    ++ passthru.optional-dependencies.soap;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ optional-dependencies.cli
+  ++ optional-dependencies.lxml
+  ++ optional-dependencies.soap;
 
   disabledTestPaths = [ "tests/integration/benchmarks" ];
 
@@ -86,7 +83,7 @@ buildPythonPackage rec {
     description = "Naive XML & JSON bindings for Python";
     mainProgram = "xsdata";
     homepage = "https://github.com/tefra/xsdata";
-    changelog = "https://github.com/tefra/xsdata/blob/${src.rev}/CHANGES.md";
+    changelog = "https://github.com/tefra/xsdata/blob/${src.tag}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

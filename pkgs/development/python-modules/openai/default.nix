@@ -1,41 +1,67 @@
 {
   lib,
-  anyio,
   buildPythonPackage,
-  cached-property,
-  dirty-equals,
-  distro,
   fetchFromGitHub,
-  hatch-fancy-pypi-readme,
+
+  # build-system
   hatchling,
+  hatch-fancy-pypi-readme,
+
+  # dependencies
+  anyio,
+  distro,
   httpx,
-  numpy,
-  pandas,
-  pandas-stubs,
+  jiter,
   pydantic,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  respx,
   sniffio,
   tqdm,
   typing-extensions,
+
+  # optional-dependencies (aiohttp)
+  aiohttp,
+  httpx-aiohttp,
+
+  # optional-dependencies (datalib)
+  numpy,
+  pandas,
+  pandas-stubs,
+
+  # optional-dependencies (realtime)
+  websockets,
+
+  # optional-dependencies (voice-helpers)
+  sounddevice,
+
+  # check deps
+  pytestCheckHook,
+  dirty-equals,
+  inline-snapshot,
+  nest-asyncio,
+  pytest-asyncio,
+  pytest-mock,
+  pytest-xdist,
+  respx,
+
+  # optional-dependencies toggle
+  withAiohttp ? true,
+  withDatalib ? false,
+  withRealtime ? true,
+  withVoiceHelpers ? true,
 }:
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.28.0";
+  version = "2.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7.1";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "openai-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zWvrLCAN/OsSiNLQ2jvEh9anoSpMXgEYhAFwh9btWEM=";
+    tag = "v${version}";
+    hash = "sha256-g7YbKzRZQOM4e16Mgo7u3QoQQI6VTNrV4DUip9fYsLA=";
   };
+
+  postPatch = ''substituteInPlace pyproject.toml --replace-fail "hatchling==1.26.3" "hatchling"'';
 
   build-system = [
     hatchling
@@ -43,20 +69,36 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    httpx
-    pydantic
-    typing-extensions
     anyio
     distro
+    httpx
+    jiter
+    pydantic
     sniffio
     tqdm
-  ] ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
+    typing-extensions
+  ]
+  ++ lib.optionals withAiohttp optional-dependencies.aiohttp
+  ++ lib.optionals withDatalib optional-dependencies.datalib
+  ++ lib.optionals withRealtime optional-dependencies.realtime
+  ++ lib.optionals withVoiceHelpers optional-dependencies.voice-helpers;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
+    aiohttp = [
+      aiohttp
+      httpx-aiohttp
+    ];
     datalib = [
       numpy
       pandas
       pandas-stubs
+    ];
+    realtime = [
+      websockets
+    ];
+    voice-helpers = [
+      numpy
+      sounddevice
     ];
   };
 
@@ -64,37 +106,29 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    dirty-equals
+    inline-snapshot
+    nest-asyncio
     pytest-asyncio
     pytest-mock
+    pytest-xdist
     respx
-    dirty-equals
-  ];
-
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
-
-  disabledTests = [
-    # Tests make network requests
-    "test_streaming_response"
-    "test_copy_build_request"
-
-    # Test fails with pytest>=8
-    "test_basic_attribute_access_works"
   ];
 
   disabledTestPaths = [
     # Test makes network requests
     "tests/api_resources"
+    # E   TypeError: Unexpected type for 'content', <class 'inline_snapshot._external.external'>
+    # This seems to be due to `inline-snapshot` being disabled when `pytest-xdist` is used.
+    "tests/lib/chat/test_completions_streaming.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client library for the OpenAI API";
     homepage = "https://github.com/openai/openai-python";
-    changelog = "https://github.com/openai/openai-python/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ malo ];
+    changelog = "https://github.com/openai/openai-python/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.malo ];
     mainProgram = "openai";
   };
 }

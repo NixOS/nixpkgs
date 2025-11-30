@@ -1,8 +1,8 @@
 {
   lib,
-  python,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
 
   # for passthru.tests
@@ -20,15 +20,17 @@
 
 buildPythonPackage rec {
   pname = "tornado";
-  version = "6.3.3";
-  format = "setuptools";
+  version = "6.5.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tornadoweb";
     repo = "tornado";
-    rev = "v${version}";
-    hash = "sha256-l9Ce/c2wDSmsySr9yXu5Fl/+63QkQay46aDSUTJmetA=";
+    tag = "v${version}";
+    hash = "sha256-CtmIjPKxKC0T8PGQW1wIAJm/+XxMzZXVZyZxV56sZME=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -66,9 +68,9 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "A web framework and asynchronous networking library";
+    description = "Web framework and asynchronous networking library";
     homepage = "https://www.tornadoweb.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

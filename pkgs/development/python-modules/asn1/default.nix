@@ -3,34 +3,31 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  future,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "asn1";
-  version = "2.7.0";
-  format = "setuptools";
+  version = "2.8.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "andrivet";
     repo = "python-asn1";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pXLG2Mkrv6EeJn6Dk+SefzNtrPdQ6of95LbVTKjTADQ=";
+    tag = "v${version}";
+    hash = "sha256-DLKfdQzYLhfaIEPPymTzRqj3+L/fsm5Jh8kqud/ezfw=";
   };
 
-  propagatedBuildInputs = [ future ];
+  build-system = [ setuptools ];
+
+  pythonRemoveDeps = [ "enum-compat" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "enum-compat" ""
-  '';
-
-  pytestFlagsArray = [ "tests/test_asn1.py" ];
+  enabledTestPaths = [ "tests/test_asn1.py" ];
 
   pythonImportsCheck = [ "asn1" ];
 

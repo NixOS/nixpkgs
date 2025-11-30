@@ -1,23 +1,24 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gtk3
-, adwaita-icon-theme
-, breeze-icons
-, gnome-icon-theme
-, hicolor-icon-theme
-, gitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gtk3,
+  adwaita-icon-theme,
+  breeze-icons,
+  gnome-icon-theme,
+  hicolor-icon-theme,
+  gitUpdater,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "numix-icon-theme";
-  version = "24.04.22";
+  version = "25.10.26";
 
   src = fetchFromGitHub {
     owner = "numixproject";
-    repo = pname;
+    repo = "numix-icon-theme";
     rev = version;
-    sha256 = "sha256-hFUsj0nODUVbzKyN6ud3HsaoTZBLGW+jjwc6kFFH02c=";
+    sha256 = "sha256-YKR4dncq2uuX8CMJj/Zr/0pdl7gLC8VZGvb/HI1+Uwc=";
   };
 
   nativeBuildInputs = [

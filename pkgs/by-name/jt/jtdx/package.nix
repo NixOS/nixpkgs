@@ -1,6 +1,11 @@
-{ wsjtx, fetchgit, qt5, lib }:
+{
+  wsjtx,
+  fetchgit,
+  qt5,
+  lib,
+}:
 wsjtx.overrideAttrs (old: {
-  name = "jtdx";
+  pname = "jtdx";
   version = "unstable-2022-03-01";
   src = fetchgit {
     url = "https://github.com/jtdx-project/jtdx.git";
@@ -10,7 +15,11 @@ wsjtx.overrideAttrs (old: {
   buildInputs = old.buildInputs ++ [ qt5.qtwebsockets ];
   meta = {
     description = "wsjtx fork with some extra features";
-    maintainers = with lib.maintainers; [ matthewcroughan sarcasticadmin pkharvey ];
+    maintainers = with lib.maintainers; [
+      matthewcroughan
+      sarcasticadmin
+      pkharvey
+    ];
     homepage = "https://github.com/jtdx-project/jtdx";
   };
 })

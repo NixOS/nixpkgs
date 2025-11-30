@@ -1,16 +1,20 @@
-{ lib, appimageTools, fetchurl }:
+{
+  lib,
+  appimageTools,
+  fetchurl,
+}:
 
 appimageTools.wrapType2 rec {
   pname = "xlights";
-  version = "2024.10";
+  version = "2025.12";
 
   src = fetchurl {
     url = "https://github.com/smeighan/xLights/releases/download/${version}/xLights-${version}-x86_64.AppImage";
-    hash = "sha256-h5jChYlTzKenZl0EnScU+vA+535pICXKdUhj8zAU4wc=";
+    hash = "sha256-INB4x2iCzjpURL7VhugCcYo+X6p6aKIY5Dx5dy1ZjJ8=";
   };
 
   meta = {
-    description = "xLights is a sequencer for Lights. xLights has usb and E1.31 drivers. You can create sequences in this object oriented program. You can create playlists, schedule them, test your hardware, convert between different sequencers";
+    description = "Sequencer for lights with USB and E1.31 drivers";
     homepage = "https://xlights.org";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ kashw2 ];

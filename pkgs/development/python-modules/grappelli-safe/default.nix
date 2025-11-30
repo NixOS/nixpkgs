@@ -27,7 +27,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "grappelli_safe" ];
 
   meta = with lib; {
-    description = "A snapshot of django-grappelli for the Mezzanine CMS";
+    description = "Snapshot of django-grappelli for the Mezzanine CMS";
     longDescription = ''
       grappelli_safe was created to provide a snapshot of the
       Grappelli admin skin for Django, to be referenced as a

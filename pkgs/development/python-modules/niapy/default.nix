@@ -8,21 +8,19 @@
   pandas,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
+  pytest-xdist,
 }:
 
 buildPythonPackage rec {
   pname = "niapy";
-  version = "2.3.1";
+  version = "2.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "NiaOrg";
     repo = "NiaPy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cT5CU1r3LZ9ValJwRUA0PaISmF6kXAz40alXbWYogGA=";
+    tag = "v${version}";
+    hash = "sha256-5Cxxug/FyucU+MkWXMtH43AembfZ/kj5r8nId5664z8=";
   };
 
   build-system = [ poetry-core ];
@@ -34,14 +32,21 @@ buildPythonPackage rec {
     pandas
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  pythonRelaxDeps = [
+    "numpy"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
+  ];
 
   pythonImportsCheck = [ "niapy" ];
 
   meta = with lib; {
     description = "Micro framework for building nature-inspired algorithms";
     homepage = "https://niapy.org/";
-    changelog = "https://github.com/NiaOrg/NiaPy/releases/tag/${version}";
+    changelog = "https://github.com/NiaOrg/NiaPy/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

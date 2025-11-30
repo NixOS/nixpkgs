@@ -1,8 +1,19 @@
 {
-  mkDerivation, lib, fetchurl,
-  extra-cmake-modules, shared-mime-info,
-  qtsvg, qtxmlpatterns, karchive, kconfig, kcoreaddons, kparts, kio, ki18n,
-  kdiagram, kgraphviewer
+  mkDerivation,
+  lib,
+  fetchurl,
+  extra-cmake-modules,
+  shared-mime-info,
+  qtsvg,
+  qtxmlpatterns,
+  karchive,
+  kconfig,
+  kcoreaddons,
+  kparts,
+  kio,
+  ki18n,
+  kdiagram,
+  kgraphviewer,
 }:
 
 mkDerivation rec {
@@ -14,11 +25,24 @@ mkDerivation rec {
     sha256 = "0v8z6r9gngzckvqyxjm9kp7hilwfqibyk2f9vag9l98ar0iwr97q";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules shared-mime-info ];
+  patches = [ ./cmake-minimum-required.patch ];
+
+  nativeBuildInputs = [
+    extra-cmake-modules
+    shared-mime-info
+  ];
 
   buildInputs = [
-    qtsvg qtxmlpatterns karchive kconfig kcoreaddons kparts kio ki18n
-    kdiagram kgraphviewer
+    qtsvg
+    qtxmlpatterns
+    karchive
+    kconfig
+    kcoreaddons
+    kparts
+    kio
+    ki18n
+    kdiagram
+    kgraphviewer
   ];
 
   meta = with lib; {

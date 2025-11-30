@@ -1,66 +1,65 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
 
   # build-system
-  setuptools,
+  flit-core,
 
   # dependencies
   astroid,
-  anyascii,
   jinja2,
   pyyaml,
   sphinx,
+  stdlib-list,
 
   # tests
   beautifulsoup4,
-  mock,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-autoapi";
-  version = "3.0.0";
-  format = "pyproject";
+  version = "3.6.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-CevWdKMrREZyIrD7ipF7l8iVI/INvwW1LLij8OFXFN4=";
+  src = fetchFromGitHub {
+    owner = "readthedocs";
+    repo = "sphinx-autoapi";
+    tag = "v${version}";
+    hash = "sha256-pDfGNpDyrU4q48ZHKqfN8OrxKICfIhac2qMJDB1iE0I=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
-    anyascii
+  dependencies = [
     astroid
     jinja2
     pyyaml
     sphinx
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [
+    stdlib-list
   ];
 
   nativeCheckInputs = [
     beautifulsoup4
-    mock
     pytestCheckHook
   ];
 
   disabledTests = [
-    # failing typing assertions
+    # require network access
     "test_integration"
-    "test_annotations"
-    # sphinx.errors.SphinxWarning: cannot cache unpickable configuration value: 'autoapi_prepare_jinja_env' (because it contains a function, class, or module object)
-    "test_custom_jinja_filters"
   ];
 
   pythonImportsCheck = [ "autoapi" ];
 
   meta = with lib; {
     homepage = "https://github.com/readthedocs/sphinx-autoapi";
-    changelog = "https://github.com/readthedocs/sphinx-autoapi/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/readthedocs/sphinx-autoapi/blob/${src.tag}/CHANGELOG.rst";
     description = "Provides 'autodoc' style documentation";
     longDescription = ''
       Sphinx AutoAPI provides 'autodoc' style documentation for
@@ -68,6 +67,6 @@ buildPythonPackage rec {
       import the project being documented.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ karolchmist ];
+    maintainers = [ ];
   };
 }

@@ -1,6 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, glib, gnome }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  glib,
+  gnome-shell,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gnome-shell-extension-tilingnome";
   version = "unstable-2019-09-19";
 
@@ -36,6 +42,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ benley ];
     homepage = "https://github.com/rliang/gnome-shell-extension-tilingnome";
-    platforms = gnome.gnome-shell.meta.platforms;
+    platforms = gnome-shell.meta.platforms;
   };
 }

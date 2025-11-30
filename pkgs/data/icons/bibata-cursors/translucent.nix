@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "bibata-cursors-translucent";
@@ -11,6 +15,10 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "sha256-RroynJfdFpu+Wl9iw9NrAc9wNZsSxWI+heJXUTwEe7s=";
   };
 
+  patches = [
+    ./0001-fix-broken-symlinks.patch
+  ];
+
   installPhase = ''
     install -dm 0755 $out/share/icons
     cp -pr Bibata_* $out/share/icons/
@@ -21,6 +29,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/Silicasandwhich/Bibata_Cursor_Translucent";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill AdsonCicilioti ];
+    maintainers = [ ];
   };
 }

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtwebkit, hunspell }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  qtwebkit,
+  hunspell,
+}:
 
 stdenv.mkDerivation {
   pname = "qtwebkit-plugins";
@@ -13,7 +20,10 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ qmake ];
 
-  buildInputs = [ qtwebkit hunspell ];
+  buildInputs = [
+    qtwebkit
+    hunspell
+  ];
 
   dontWrapQtApps = true;
 
@@ -27,6 +37,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/QupZilla/qtwebkit-plugins";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

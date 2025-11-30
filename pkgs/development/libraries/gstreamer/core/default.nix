@@ -1,31 +1,46 @@
-{ stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gettext
-, bison
-, flex
-, python3
-, glib
-, makeWrapper
-, libcap
-, libunwind
-, elfutils # for libdw
-, bash-completion
-, lib
-, Cocoa
-, CoreServices
-, gobject-introspection
-, rustc
-, testers
-# Checks meson.is_cross_build(), so even canExecute isn't enough.
-, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
+{
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  bison,
+  flex,
+  python3,
+  glib,
+  makeWrapper,
+  libcap,
+  elfutils, # for libdw
+  bash-completion,
+  lib,
+  testers,
+  rustc,
+  withRust ?
+    lib.any (lib.meta.platformMatch stdenv.hostPlatform) rustc.targetPlatforms
+    && lib.all (p: !lib.meta.platformMatch stdenv.hostPlatform p) rustc.badTargetPlatforms,
+  gobject-introspection,
+  buildPackages,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  libunwind,
+  withLibunwind ?
+    lib.meta.availableOn stdenv.hostPlatform libunwind
+    && lib.elem "libunwind" libunwind.meta.pkgConfigModules or [ ],
+  # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
+  hotdoc,
+  directoryListingUpdater,
+  apple-sdk_gstreamer,
 }:
 
+let
+  hasElfutils = lib.meta.availableOn stdenv.hostPlatform elfutils;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer";
-  version = "1.24.2";
+  version = "1.26.5";
 
   outputs = [
     "bin"
@@ -33,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  src = let
-    inherit (finalAttrs) pname version;
-  in fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-nK/dI70YDxaBxWzTpoeahJfM8k2m9CKmtvNW+gdKhIE=";
+  separateDebugInfo = true;
+
+  src = fetchurl {
+    url = "https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Cn7bDntC2+a1dfzmGkgIo/ayDghaHq7LwCXQ7CHx53Q=";
   };
 
   depsBuildBuild = [
@@ -56,24 +71,34 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     glib
     bash-completion
-    gobject-introspection
-    rustc
-  ] ++ lib.optionals stdenv.isLinux [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap # for setcap binary
-  ] ++ lib.optionals enableDocumentation [
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ]
+  ++ lib.optionals withRust [
+    rustc
+  ]
+  ++ lib.optionals enableDocumentation [
     hotdoc
   ];
 
   buildInputs = [
     bash-completion
-  ] ++ lib.optionals stdenv.isLinux [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
-    libunwind
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+  ]
+  ++ lib.optionals hasElfutils [
     elfutils
-  ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa
-    CoreServices
+  ]
+  ++ lib.optionals withLibunwind [
+    libunwind
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
   ];
 
   propagatedBuildInputs = [
@@ -81,13 +106,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
+    "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
     "-Ddbghelp=disabled" # not needed as we already provide libunwind and libdw, and dbghelp is a fallback to those
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    (lib.mesonEnable "ptp-helper" withRust)
+    (lib.mesonEnable "introspection" withIntrospection)
     (lib.mesonEnable "doc" enableDocumentation)
-  ] ++ lib.optionals stdenv.isDarwin [
-    # darwin.libunwind doesn't have pkg-config definitions so meson doesn't detect it.
-    "-Dlibunwind=disabled"
-    "-Dlibdw=disabled"
+    (lib.mesonEnable "libunwind" withLibunwind)
+    (lib.mesonEnable "libdw" (withLibunwind && hasElfutils))
   ];
 
   postPatch = ''
@@ -113,7 +139,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   setupHook = ./setup-hook.sh;
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru = {
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
+    updateScript = directoryListingUpdater { };
+  };
 
   meta = with lib; {
     description = "Open source multimedia framework";
@@ -123,6 +154,8 @@ stdenv.mkDerivation (finalAttrs: {
       "gstreamer-controller-1.0"
     ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ttuegel matthewbauer lilyinstarlight ];
+    maintainers = with maintainers; [
+      ttuegel
+    ];
   };
 })

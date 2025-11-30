@@ -1,14 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "payme";
-  version = "1.2.2";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "jovandeginste";
     repo = "payme";
     rev = "v${version}";
-    hash = "sha256-LZyTwi4VCetIF39yc7WU3VR20DfFxfhDr3FvVQo7b/Q=";
+    hash = "sha256-GXJjjCruDjL5+ag3aUJAHPLOvbwux9FBnyqXJ52WifE=";
     leaveDotGit = true;
     postFetch = ''
       cd "$out"

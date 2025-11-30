@@ -4,6 +4,7 @@
   cmake,
   fetchFromGitHub,
   fetchMavenArtifact,
+  fixDarwinDylibNames,
   jdk11,
   lib,
   libbsd,
@@ -11,7 +12,7 @@
   makeWrapper,
   patchelf,
   stdenv,
-  zlib
+  zlib,
 }:
 
 let
@@ -35,7 +36,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "real-logic";
     repo = "aeron";
-    rev = version;
+    tag = version;
     hash = "sha256-sROEZVOfScrlqMLbfrPtw3LQCQ5TfMcrLiP6j/Z9rSM=";
   };
 
@@ -54,11 +55,16 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    autoPatchelfHook
     cmake
     jdk11
     makeWrapper
     patchelf
+  ]
+  ++ lib.optionals stdenv.isLinux [
+    autoPatchelfHook
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    fixDarwinDylibNames
   ];
 
   configurePhase = ''
@@ -113,6 +119,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for lib in $out/lib/*.dylib; do
+      install_name_tool -change "@rpath/$(basename $lib)" "$lib" "$out/bin/aeronmd"
+    done
+  '';
+
   meta = with lib; {
     description = "Aeron Messaging C++ Library";
     homepage = "https://aeron.io/";
@@ -125,4 +137,3 @@ stdenv.mkDerivation {
     ];
   };
 }
-

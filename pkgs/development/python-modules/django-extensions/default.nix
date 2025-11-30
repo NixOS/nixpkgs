@@ -2,20 +2,22 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
 
   # build-system
   setuptools,
 
   # dependencies
+  aiosmtpd,
   django,
 
   # tests
   factory-boy,
   mock,
   pip,
+  postgresql,
   pygments,
   pytestCheckHook,
+  pytest-cov-stub,
   pytest-django,
   shortuuid,
   vobject,
@@ -24,28 +26,22 @@
 
 buildPythonPackage rec {
   pname = "django-extensions";
-  version = "3.2.3";
+  version = "4.1";
   pyproject = true;
 
-  # https://github.com/django-extensions/django-extensions/issues/1831
-  # Requires asyncore, which was dropped in 3.12
-  disabled = pythonAtLeast "3.12";
-
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-A2+5FBv0IhTJPkwgd7je+B9Ac64UHJEa3HRBbWr2FxM=";
+    owner = "django-extensions";
+    repo = "django-extensions";
+    tag = version;
+    hash = "sha256-WgO/bDe4anQCc1q2Gdq3W70yDqDgmsvn39Qf9ZNVXuE=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=django_extensions --cov-report html --cov-report term" ""
-  '';
 
   build-system = [ setuptools ];
 
-  dependencies = [ django ];
+  dependencies = [
+    aiosmtpd
+    django
+  ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -53,7 +49,9 @@ buildPythonPackage rec {
     factory-boy
     mock
     pip
+    postgresql
     pygments # not explicitly declared in setup.py, but some tests require it
+    pytest-cov-stub
     pytest-django
     pytestCheckHook
     shortuuid
@@ -62,14 +60,13 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # requires network access
-    "tests/management/commands/test_pipchecker.py"
-    # django.db.utils.OperationalError: no such table: django_extensions_permmodel
+    # https://github.com/django-extensions/django-extensions/issues/1871
     "tests/test_dumpscript.py"
   ];
 
   meta = with lib; {
-    description = "A collection of custom extensions for the Django Framework";
+    changelog = "https://github.com/django-extensions/django-extensions/releases/tag/${src.tag}";
+    description = "Collection of custom extensions for the Django Framework";
     homepage = "https://github.com/django-extensions/django-extensions";
     license = licenses.mit;
   };

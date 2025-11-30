@@ -2,6 +2,7 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  stdenv,
   pythonOlder,
   rustPlatform,
   bitstring,
@@ -18,27 +19,26 @@
   pyyaml,
   pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "sourmash";
-  version = "4.8.4";
-  format = "pyproject";
-  disabled = pythonOlder "3.8";
+  version = "4.9.4";
+  pyproject = true;
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Q1hMESwzEHGXcd4XW4nLqU8cLTCxrqRgAOr1qB77roo=";
+    hash = "sha256-KIidEQQeOYgxh1x9F6Nn4+WTewldAGdS5Fx/IwL0Ym0=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-HisWvJgx15OfYoMzzqYm1JyY1/jmGXBSZZmuNaKTDjI=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-/tVuR31T38/xx1+jglSGECAT1GmQEddQp9o6zAqlPyY=";
   };
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
+    bindgenHook
   ];
 
   buildInputs = [ iconv ];

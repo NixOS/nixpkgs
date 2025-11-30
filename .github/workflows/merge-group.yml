@@ -1,0 +1,139 @@
+name: Merge Group
+
+on:
+  merge_group:
+  workflow_call:
+    inputs:
+      artifact-prefix:
+        required: true
+        type: string
+      mergedSha:
+        required: true
+        type: string
+      targetSha:
+        required: true
+        type: string
+
+permissions: {}
+
+jobs:
+  prepare:
+    runs-on: ubuntu-slim
+    outputs:
+      baseBranch: ${{ steps.prepare.outputs.base }}
+      mergedSha: ${{ steps.prepare.outputs.mergedSha }}
+      targetSha: ${{ steps.prepare.outputs.targetSha }}
+      systems: ${{ steps.prepare.outputs.systems }}
+    steps:
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            ci/supportedSystems.json
+
+      - id: prepare
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        env:
+          MERGED_SHA: ${{ inputs.mergedSha }}
+          TARGET_SHA: ${{ inputs.targetSha }}
+        with:
+          script: |
+            const { classify } = require('./ci/supportedBranches.js')
+            const baseBranch = (
+              context.payload.merge_group?.base_ref ??
+              context.payload.pull_request.base.ref
+            ).replace(/^refs\/heads\//, '')
+            const baseClassification = classify(baseBranch)
+            core.setOutput('base', baseClassification)
+            core.info('base classification:', baseClassification)
+
+            core.setOutput('mergedSha', context.payload.merge_group?.head_sha ?? process.env.MERGED_SHA)
+            core.info(`mergedSha: ${context.payload.merge_group?.head_sha ?? process.env.MERGED_SHA}`)
+            core.setOutput('targetSha', context.payload.merge_group?.base_sha ?? process.env.TARGET_SHA)
+            core.info(`targetSha: ${context.payload.merge_group?.base_sha ?? process.env.TARGET_SHA}`)
+            core.setOutput('systems', require('./ci/supportedSystems.json'))
+
+  check:
+    name: Check
+    needs: [prepare]
+    uses: ./.github/workflows/check.yml
+    permissions:
+      # cherry-picks; formality right now, but unused
+      pull-requests: write
+    secrets:
+      CACHIX_AUTH_TOKEN_GHA: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
+    with:
+      mergedSha: ${{ needs.prepare.outputs.mergedSha }}
+      targetSha: ${{ needs.prepare.outputs.targetSha }}
+
+  lint:
+    name: Lint
+    needs: [prepare]
+    uses: ./.github/workflows/lint.yml
+    secrets:
+      CACHIX_AUTH_TOKEN_GHA: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
+    with:
+      mergedSha: ${{ needs.prepare.outputs.mergedSha }}
+      targetSha: ${{ needs.prepare.outputs.targetSha }}
+
+  eval:
+    name: Eval
+    needs: [prepare]
+    uses: ./.github/workflows/eval.yml
+    # The eval workflow requests these permissions so we must explicitly allow them,
+    # even though they are unused when working with the merge queue.
+    permissions:
+      # compare
+      statuses: write
+    secrets:
+      CACHIX_AUTH_TOKEN_GHA: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
+    with:
+      artifact-prefix: ${{ inputs.artifact-prefix }}
+      mergedSha: ${{ needs.prepare.outputs.mergedSha }}
+      targetSha: ${{ needs.prepare.outputs.targetSha }}
+      systems: ${{ needs.prepare.outputs.systems }}
+
+  build:
+    name: Build
+    needs: [prepare]
+    uses: ./.github/workflows/build.yml
+    secrets:
+      CACHIX_AUTH_TOKEN_GHA: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
+    with:
+      artifact-prefix: ${{ inputs.artifact-prefix }}
+      baseBranch: ${{ needs.prepare.outputs.baseBranch }}
+      mergedSha: ${{ needs.prepare.outputs.mergedSha }}
+      targetSha: ${{ needs.prepare.outputs.targetSha }}
+
+  # This job's only purpose is to create the target for the "Required Status Checks" branch ruleset.
+  # It "needs" all the jobs that should block the Merge Queue.
+  unlock:
+    if: github.event_name != 'pull_request' && always()
+    # Modify this list to add or remove jobs from required status checks.
+    needs:
+      - check
+      - lint
+      - eval
+      - build
+    runs-on: ubuntu-slim
+    permissions:
+      statuses: write
+    steps:
+      - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        env:
+          RESULTS: ${{ toJSON(needs.*.result) }}
+        with:
+          script: |
+            const { serverUrl, repo, runId, payload } = context
+            const target_url =
+              `${serverUrl}/${repo.owner}/${repo.repo}/actions/runs/${runId}`
+            await github.rest.repos.createCommitStatus({
+              ...repo,
+              sha: payload.merge_group.head_sha,
+              // WARNING:
+              // Do NOT change the name of this, otherwise the rule will not catch it anymore.
+              // This would prevent all PRs from merging.
+              context: 'no PR failures',
+              state: JSON.parse(process.env.RESULTS).every(result => result == 'success') ? 'success' : 'error',
+              target_url,
+            })

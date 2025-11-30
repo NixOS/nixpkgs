@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, curl, tzdata, autoPatchelfHook, fixDarwinDylibNames, glibc
-, version, hashes }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  curl,
+  tzdata,
+  autoPatchelfHook,
+  fixDarwinDylibNames,
+  glibc,
+  version,
+  hashes,
+}:
 
 let
   inherit (stdenv) hostPlatform;
@@ -23,15 +33,18 @@ stdenv.mkDerivation {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = lib.optionals hostPlatform.isLinux [
-    autoPatchelfHook
-  ] ++ lib.optionals hostPlatform.isDarwin [
-    fixDarwinDylibNames
-  ];
+  nativeBuildInputs =
+    lib.optionals hostPlatform.isLinux [
+      autoPatchelfHook
+    ]
+    ++ lib.optionals hostPlatform.isDarwin [
+      fixDarwinDylibNames
+    ];
   propagatedBuildInputs = [
     curl
     tzdata
-  ] ++ lib.optionals hostPlatform.isLinux [
+  ]
+  ++ lib.optionals hostPlatform.isLinux [
     glibc
     stdenv.cc.cc.libgcc
   ];
@@ -72,6 +85,10 @@ stdenv.mkDerivation {
     license = licenses.boost;
     maintainers = [ maintainers.lionello ];
     homepage = "https://dlang.org/";
-    platforms = [ "x86_64-darwin" "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "x86_64-darwin"
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 }

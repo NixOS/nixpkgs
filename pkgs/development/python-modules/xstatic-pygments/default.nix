@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "xstatic-pygments";
   version = "2.9.0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "XStatic-Pygments";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://pygments.org";
-    description = "pygments packaged static files for python";
+    description = "Pygments packaged static files for python";
     license = licenses.mit;
     maintainers = with maintainers; [ makefu ];
   };

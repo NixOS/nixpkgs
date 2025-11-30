@@ -1,34 +1,38 @@
-{ mkXfceDerivation
-, lib
-, docbook_xsl
-, exo
-, gdk-pixbuf
-, gtk3
-, libgudev
-, libnotify
-, libX11
-, libxfce4ui
-, libxfce4util
-, libxslt
-, pcre
-, xfconf
-, gobject-introspection
-, makeWrapper
-, symlinkJoin
-, thunarPlugins ? []
+{
+  stdenv,
+  mkXfceDerivation,
+  lib,
+  docbook_xsl,
+  exo,
+  gdk-pixbuf,
+  gtk3,
+  libexif,
+  libgudev,
+  libnotify,
+  libX11,
+  libxfce4ui,
+  libxfce4util,
+  libxslt,
+  pcre2,
+  xfce4-panel,
+  xfconf,
+  withIntrospection ? false,
+  gobject-introspection,
 }:
 
-let unwrapped = mkXfceDerivation {
+mkXfceDerivation {
   category = "xfce";
   pname = "thunar";
-  version = "4.18.10";
+  version = "4.20.6";
 
-  sha256 = "sha256-jne+jETPmM6VksdwJAxruji/GKH42iftWm74Ok9qX44=";
+  sha256 = "sha256-Ll1mJEkkxYGASWQ2z7GRiubNjggqeHXzgGSXQK+10qs=";
 
   nativeBuildInputs = [
     docbook_xsl
-    gobject-introspection
     libxslt
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -36,11 +40,13 @@ let unwrapped = mkXfceDerivation {
     gdk-pixbuf
     gtk3
     libX11
+    libexif # image properties page
     libgudev
     libnotify
     libxfce4ui
     libxfce4util
-    pcre
+    pcre2 # search & replace renamer
+    xfce4-panel # trash panel applet plugin
     xfconf
   ];
 
@@ -56,15 +62,16 @@ let unwrapped = mkXfceDerivation {
     sed -i -e 's|thunar_dialogs_show_insecure_program (parent, _(".*"), file, exec)|1|' thunar/thunar-file.c
   '';
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # https://github.com/NixOS/nixpkgs/issues/329688
+      --prefix PATH : ${lib.makeBinPath [ exo ]}
+    )
+  '';
+
   meta = with lib; {
     description = "Xfce file manager";
     mainProgram = "thunar";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
-};
-
-in if thunarPlugins == [] then unwrapped
-  else import ./wrapper.nix {
-    inherit makeWrapper symlinkJoin thunarPlugins lib;
-    thunar = unwrapped;
-  }
+}

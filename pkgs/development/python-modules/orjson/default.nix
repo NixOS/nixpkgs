@@ -19,7 +19,6 @@
   python-dateutil,
   pytz,
   xxhash,
-  python,
 
   # for passthru.tests
   falcon,
@@ -31,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "orjson";
-  version = "3.10.1";
+  version = "3.11.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,26 +38,29 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ijl";
     repo = "orjson";
-    rev = "refs/tags/${version}";
-    hash = "sha256-vEJriLd7f+zlYcMIyhDTkq2kmNc5MaNLHo0qMLS5hro=";
+    tag = version;
+    hash = "sha256-oTrmDYmUHXMKxgxzBIStw7nnWXcyH9ir0ohnbX4bdjU=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-yQkpjedHwgsZiiZEzYV66aa9RepCFW0PBqtD29tfoMI=";
+  patches = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # fix architecture checks in build.rs to fix build for riscv
+    ./cross-arch-compat.patch
+  ];
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-y6FmK1RR1DAswVoTlnl19CmoYXAco1dY7lpV/KTypzE=";
   };
 
-  maturinBuildFlags = [ "--interpreter ${python.executable}" ];
+  nativeBuildInputs = [
+    cffi
+  ]
+  ++ (with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ]);
 
-  nativeBuildInputs =
-    [ cffi ]
-    ++ (with rustPlatform; [
-      cargoSetupHook
-      maturinBuildHook
-    ]);
-
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   nativeCheckInputs = [
     numpy

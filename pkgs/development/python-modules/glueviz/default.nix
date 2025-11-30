@@ -3,69 +3,66 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  dill,
   astropy,
+  dill,
+  echo,
+  fast-histogram,
+  h5py,
+  ipython,
+  matplotlib,
+  mpl-scatter-density,
   numpy,
+  openpyxl,
   pandas,
-  qt6,
-  pyqt6,
   pyqt-builder,
-  qtconsole,
+  pytestCheckHook,
+  qt6,
+  scipy,
   setuptools,
   setuptools-scm,
-  scipy,
-  ipython,
-  ipykernel,
-  h5py,
-  matplotlib,
+  shapely,
   xlrd,
-  mpl-scatter-density,
-  pvextractor,
-  openpyxl,
-  echo,
-  pytest,
-  pytest-flakes,
-  pytest-cov,
 }:
 
 buildPythonPackage rec {
   pname = "glueviz";
-  version = "1.17.1";
-  format = "setuptools";
+  version = "1.23.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "glue-viz";
     repo = "glue";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-nr84GJAGnpKzjZEFNsQujPysSQENwGxdNfPIYUCJkK4=";
+    tag = "v${version}";
+    hash = "sha256-Ql5eMyMm48zNLQ3tkPyqM4+r3QfxqVAGHx1/LcLUiyo=";
   };
 
   buildInputs = [ pyqt-builder ];
-  nativeBuildInputs = [
+
+  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
+
+  build-system = [
     setuptools
     setuptools-scm
-    qt6.wrapQtAppsHook
   ];
-  propagatedBuildInputs = [
+
+  dependencies = [
     astropy
     dill
-    setuptools
-    scipy
-    numpy
-    matplotlib
-    pandas
-    pyqt6
-    qtconsole
-    ipython
-    ipykernel
-    h5py
-    xlrd
-    mpl-scatter-density
-    pvextractor
-    openpyxl
     echo
+    fast-histogram
+    h5py
+    ipython
+    matplotlib
+    mpl-scatter-density
+    numpy
+    openpyxl
+    pandas
+    scipy
+    setuptools
+    shapely
+    xlrd
   ];
 
   dontConfigure = true;
@@ -74,13 +71,11 @@ buildPythonPackage rec {
   # qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
   doCheck = false;
 
-  nativeCheckInputs = [
-    pytest
-    pytest-flakes
-    pytest-cov
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "glue" ];
+
+  dontWrapQtApps = true;
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")

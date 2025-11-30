@@ -42,10 +42,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "An SMTP server for use as a pytest fixture for testing";
+    description = "SMTP server for use as a pytest fixture for testing";
     homepage = "https://github.com/bebleo/smtpdfix";
     changelog = "https://github.com/bebleo/smtpdfix/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = teams.wdz.members;
+    teams = [ teams.wdz ];
   };
 }

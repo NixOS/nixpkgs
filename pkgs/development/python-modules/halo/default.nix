@@ -34,7 +34,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "halo" ];
 
   meta = with lib; {
-    description = "Beautiful Spinners for Terminal, IPython and Jupyter.";
+    description = "Beautiful Spinners for Terminal, IPython and Jupyter";
     homepage = "https://github.com/manrajgrover/halo";
     license = licenses.mit;
     maintainers = with maintainers; [ urbas ];

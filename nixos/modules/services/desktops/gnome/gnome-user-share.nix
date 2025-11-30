@@ -1,6 +1,11 @@
 # GNOME User Share daemon.
 
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
 
@@ -20,17 +25,16 @@
 
   };
 
-
   ###### implementation
 
   config = lib.mkIf config.services.gnome.gnome-user-share.enable {
 
     environment.systemPackages = [
-      pkgs.gnome.gnome-user-share
+      pkgs.gnome-user-share
     ];
 
     systemd.packages = [
-      pkgs.gnome.gnome-user-share
+      pkgs.gnome-user-share
     ];
 
   };

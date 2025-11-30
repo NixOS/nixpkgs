@@ -4,6 +4,7 @@
   buildPythonPackage,
   poetry-core,
   jsonpath-ng,
+  jsonschema,
   jinja2,
   python,
   python-docx,
@@ -11,38 +12,37 @@
   pyyaml,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "sarif-tools";
-  version = "2.0.0";
+  version = "3.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "sarif-tools";
-    rev = "v${version}";
-    hash = "sha256-80amYGnf7xZdpxzTjBGwgg39YN/jJsEkTm0uAlVbH0w=";
+    tag = "v${version}";
+    hash = "sha256-Dt8VcYIIpujRp2sOlK2JPGzy5cYZDXdXgnvT/+h3DuU=";
   };
 
   disabled = pythonOlder "3.8";
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    jsonpath-ng
+  dependencies = [
     jinja2
+    jsonpath-ng
+    matplotlib
     python
     python-docx
-    matplotlib
     pyyaml
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    jsonschema
+    pytestCheckHook
+  ];
 
   pythonRelaxDeps = [ "python-docx" ];
 
@@ -54,9 +54,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sarif" ];
 
   meta = {
-    description = "A set of command line tools and Python library for working with SARIF files";
+    description = "Set of command line tools and Python library for working with SARIF files";
     homepage = "https://github.com/microsoft/sarif-tools";
-    changelog = "https://github.com/microsoft/sarif-tools/releases/tag/v${version}";
+    changelog = "https://github.com/microsoft/sarif-tools/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ puzzlewolf ];
     mainProgram = "sarif";

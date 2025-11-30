@@ -1,28 +1,30 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, testers
-, cmake
-, cmake-extras
-, dbus
-, dbus-test-runner
-, gtest
-, pkg-config
-, procps
-, python3
-, qtbase
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  gitUpdater,
+  testers,
+  cmake,
+  cmake-extras,
+  dbus,
+  dbus-test-runner,
+  gtest,
+  pkg-config,
+  procps,
+  python3,
+  qtbase,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libqtdbustest";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/libqtdbustest";
     rev = finalAttrs.version;
-    hash = "sha256-yqqyKxsbqiVTrkas79YoPMi28dKFNntiE7+dx1v+Qh4=";
+    hash = "sha256-49YIkaQ2ceJxaPLkzOg+L3bwiPzoB36xU7skRh4vYQg=";
   };
 
   patches = [
@@ -45,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  postPatch =  lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+  postPatch = lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     # Don't build tests when we're not running them
     sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
   '';
@@ -64,9 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     dbus-test-runner
     procps
-    (python3.withPackages (ps: with ps; [
-      python-dbusmock
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        python-dbusmock
+      ]
+    ))
   ];
 
   checkInputs = [
@@ -87,14 +91,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    updateScript = gitUpdater { };
+  };
 
   meta = with lib; {
     description = "Library for testing DBus interactions using Qt";
-    homepage = "https://launchpad.net/libqtdbustest";
+    homepage = "https://gitlab.com/ubports/development/core/libqtdbustest";
     license = licenses.lgpl3Only;
     platforms = platforms.unix;
-    maintainers = teams.lomiri.members;
+    teams = [ teams.lomiri ];
     mainProgram = "qdbus-simple-test-runner";
     pkgConfigModules = [
       "libqtdbustest-1"

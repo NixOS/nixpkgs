@@ -4,14 +4,13 @@
   fetchPypi,
   google-generativeai,
   llama-index-core,
-  poetry-core,
+  hatchling,
   pythonOlder,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-vector-stores-google";
-  version = "0.1.5";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,14 +18,13 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_vector_stores_google";
     inherit version;
-    hash = "sha256-E6RNf2DzktoZW89P0VKfmeZ5SEslGkyFLRxVtnsQOYc=";
+    hash = "sha256-+7Lx//NNjYe0UWWOmLTxajKrfjG9OReVpPgOoO2fczk=";
   };
 
   pythonRelaxDeps = [ "google-generativeai" ];
 
   build-system = [
-    poetry-core
-    pythonRelaxDepsHook
+    hatchling
   ];
 
   dependencies = [

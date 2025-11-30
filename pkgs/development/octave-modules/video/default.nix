@@ -1,34 +1,52 @@
-{ buildOctavePackage
-, stdenv
-, lib
-, fetchurl
-, pkg-config
-, ffmpeg_4
+{
+  buildOctavePackage,
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  autoconf,
+  automake,
+  ffmpeg_7,
 }:
 
 buildOctavePackage rec {
   pname = "video";
-  version = "2.0.2";
+  version = "2.1.3";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-bZNaRnmJl5UF0bQMNoEWvoIXJaB0E6/V9eChE725OHY=";
+  src = fetchFromGitHub {
+    owner = "Andy1978";
+    repo = "octave-video";
+    tag = version;
+    hash = "sha256-fn9LNfuS9dSStBfzBjRRkvP50JJ5K+Em02J9+cHqt6w=";
   };
+
+  preBuild = ''
+    pushd src
+    patchShebangs bootstrap configure
+    ./bootstrap
+    ./configure
+    popd
+
+    tar --transform 's,^,video-${version}/,' -cz * -f video-${version}.tar.gz
+  '';
 
   nativeBuildInputs = [
     pkg-config
+    autoconf
+    automake
   ];
 
   propagatedBuildInputs = [
-    ffmpeg_4
+    ffmpeg_7
   ];
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/video/index.html";
-    license = with licenses; [ gpl3Plus bsd3 ];
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/video/";
+    license = with lib.licenses; [
+      gpl3Plus
+      bsd3
+    ];
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Wrapper for OpenCV's CvCapture_FFMPEG and CvVideoWriter_FFMPEG";
-    # error: declaration of 'panic' has a different language linkage
-    broken = stdenv.isDarwin;
   };
 }

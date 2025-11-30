@@ -8,7 +8,7 @@
   twisted,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "tubes";
   version = "0.2.1-unstable-2023-11-06";
   format = "setuptools";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tubes" ];
 
   meta = with lib; {
-    description = "a data-processing and flow-control engine for event-driven programs";
+    description = "Data-processing and flow-control engine for event-driven programs";
     homepage = "https://github.com/twisted/tubes";
     license = licenses.mit;
     maintainers = with maintainers; [ exarkun ];

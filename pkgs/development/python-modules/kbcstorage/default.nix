@@ -11,13 +11,14 @@
   setuptools,
   setuptools-git-versioning,
   setuptools-scm,
-  unittestCheckHook,
   urllib3,
+  google-auth,
+  google-cloud-storage,
 }:
 
 buildPythonPackage rec {
   pname = "sapi-python-client";
-  version = "0.8.0";
+  version = "0.9.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "keboola";
     repo = "sapi-python-client";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Xc4VD91Nhnj0UyWHpdwEaETJVH8Ue6/kuiKEMaiSR0g=";
+    tag = version;
+    hash = "sha256-FlafM42CVlYtJGFToLIjg0RKhwJ0/oVvGd3T8PNwhOI=";
   };
 
   postPatch = ''
@@ -34,19 +35,26 @@ buildPythonPackage rec {
       --replace-fail "urllib3<2.0.0" "urllib3"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-git-versioning
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "google-cloud-storage"
+    "google-auth"
+  ];
+
+  dependencies = [
     azure-storage-blob
     boto3
     python-dotenv
     requests
     responses
     urllib3
+    google-auth
+    google-cloud-storage
   ];
 
   # Requires API token and an active Keboola bucket
@@ -60,11 +68,11 @@ buildPythonPackage rec {
     "kbcstorage.tables"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Keboola Connection Storage API client";
     homepage = "https://github.com/keboola/sapi-python-client";
     changelog = "https://github.com/keboola/sapi-python-client/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mrmebelman ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mrmebelman ];
   };
 }

@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "torchdiffeq";
-  version = "0.2.3";
+  version = "0.2.5";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/nX0NLkJCsDCdwLgK+0hRysPhwNb5lgfUe3F1AE+oxo=";
+    hash = "sha256-tQ03YNE/0TjczqxlH0uAOW9E/vzr0DegM/7P6qnMEuc=";
   };
 
   propagatedBuildInputs = [
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "Differentiable ODE solvers with full GPU support and O(1)-memory backpropagation";
     homepage = "https://github.com/rtqichen/torchdiffeq";
     license = licenses.mit;
-    maintainers = teams.tts.members;
+    teams = [ teams.tts ];
   };
 }

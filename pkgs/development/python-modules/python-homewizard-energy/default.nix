@@ -3,10 +3,16 @@
   aiohttp,
   aresponses,
   async-timeout,
+  awesomeversion,
+  backoff,
   buildPythonPackage,
   fetchFromGitHub,
+  mashumaro,
+  multidict,
+  orjson,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   syrupy,
@@ -14,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "python-homewizard-energy";
-  version = "5.0.0";
+  version = "9.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DCSBL";
     repo = "python-homewizard-energy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-z9JJHS7w/lugV23xJjWHBWVQp38J3CKtj4IuDvpPQJw=";
+    tag = "v${version}";
+    hash = "sha256-qDLYvFl2gAPNAHJ4uwy0TqzkMUxx9hJ96QwyhbMaLqQ=";
   };
 
   postPatch = ''
@@ -31,11 +37,16 @@ buildPythonPackage rec {
       --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     async-timeout
+    awesomeversion
+    backoff
+    mashumaro
+    multidict
+    orjson
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -43,6 +54,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     syrupy
   ];
@@ -52,7 +64,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to communicate with HomeWizard Energy devices";
     homepage = "https://github.com/homewizard/python-homewizard-energy";
-    changelog = "https://github.com/homewizard/python-homewizard-energy/releases/tag/v${version}";
+    changelog = "https://github.com/homewizard/python-homewizard-energy/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

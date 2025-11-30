@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "dataclasses-json";
-  version = "0.6.6";
+  version = "0.6.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,12 +21,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lidatong";
     repo = "dataclasses-json";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-JpZwRln7QC0SO/+8xFxc6xrC+ZBFSHVQ9NJscAO+Lf8=";
+    tag = "v${version}";
+    hash = "sha256-AH/T6pa/CHtQNox67fqqs/BBnUcmThvbnSHug2p33qM=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace-fail 'documentation =' 'Documentation =' \
       --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 

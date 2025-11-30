@@ -1,17 +1,45 @@
-{ lib, mkDerivation, fetchurl, qtbase, qtscript, qtwebengine, qmake, zlib, pkg-config, poppler, wrapGAppsHook3 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  poppler,
+  qtbase,
+  qttools,
+  qtwebengine,
+  qt5compat,
+  zlib,
+}:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "texmaker";
-  version = "5.1.4";
+  version = "6.0.1";
 
   src = fetchurl {
-    url = "http://www.xm1math.net/texmaker/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-MgUE1itxtZHAa30LEgKsdQoxEv4soyjjBYAFXrMI/qY=";
+    url = "http://www.xm1math.net/texmaker/texmaker-${version}.tar.bz2";
+    hash = "sha256-uMI13wzY/XcUzXDTte42MWOwJUqd6pGAeBuPDi5GyvY=";
   };
 
-  buildInputs = [ qtbase qtscript poppler zlib qtwebengine ];
-  nativeBuildInputs = [ pkg-config poppler qmake wrapGAppsHook3 ];
-  env.NIX_CFLAGS_COMPILE = "-I${poppler.dev}/include/poppler";
+  patches = [
+    # Check if the patch can be removed next release
+    ./fix-build-with-qt-6-10.patch
+  ];
+
+  buildInputs = [
+    poppler
+    qtbase
+    qtwebengine
+    qt5compat
+    qttools
+    zlib
+  ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapQtAppsHook
+  ];
 
   qmakeFlags = [
     "DESKTOPDIR=${placeholder "out"}/share/applications"
@@ -19,15 +47,9 @@ mkDerivation rec {
     "METAINFODIR=${placeholder "out"}/share/metainfo"
   ];
 
-  dontWrapGApps = true;
-
-  preFixup = ''
-    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
-
   meta = with lib; {
     description = "TeX and LaTeX editor";
-    longDescription=''
+    longDescription = ''
       This editor is a full fledged IDE for TeX and
       LaTeX editing with completion, structure viewer, preview,
       spell checking and support of any compilation chain.
@@ -35,7 +57,10 @@ mkDerivation rec {
     homepage = "http://www.xm1math.net/texmaker/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cfouche markuskowa ];
+    maintainers = with maintainers; [
+      cfouche
+      markuskowa
+    ];
     mainProgram = "texmaker";
   };
 }

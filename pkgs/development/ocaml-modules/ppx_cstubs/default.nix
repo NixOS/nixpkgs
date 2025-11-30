@@ -1,15 +1,17 @@
-{ lib
-, fetchFromGitHub
-, buildDunePackage
-, bigarray-compat
-, containers
-, cppo
-, ctypes
-, integers
-, num
-, ppxlib
-, re
-, findlib
+{
+  lib,
+  ocaml,
+  fetchFromGitHub,
+  buildDunePackage,
+  bigarray-compat,
+  containers,
+  cppo,
+  ctypes,
+  integers,
+  num,
+  ppxlib,
+  re,
+  findlib,
 }:
 
 buildDunePackage rec {
@@ -49,5 +51,6 @@ buildDunePackage rec {
     description = "Preprocessor for easier stub generation with ocaml-ctypes";
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.osener ];
+    broken = lib.versionAtLeast ocaml.version "5.2";
   };
 }

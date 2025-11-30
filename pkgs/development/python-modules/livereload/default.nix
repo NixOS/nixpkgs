@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "livereload";
-  version = "2.6.3";
+  version = "2.7.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "lepture";
     repo = "python-livereload";
-    rev = version;
-    sha256 = "1alp83h3l3771l915jqa1ylyllad7wxnmblayan0z0zj37jkp9n7";
+    tag = "v${version}";
+    sha256 = "sha256-WFpPCUjvyGT826EkIuqAB4jcJOEqoohJY9Xw/EJrk6c=";
   };
 
   buildInputs = [ django ];
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     mainProgram = "livereload";
     homepage = "https://github.com/lepture/python-livereload";
     license = lib.licenses.bsd3;
-    maintainers = with lib; [ ];
+    maintainers = [ ];
   };
 }

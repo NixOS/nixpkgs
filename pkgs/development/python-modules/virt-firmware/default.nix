@@ -3,7 +3,7 @@
   pkgs,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitLab,
   setuptools,
   cryptography,
   pytestCheckHook,
@@ -12,12 +12,14 @@
 
 buildPythonPackage rec {
   pname = "virt-firmware";
-  version = "24.4";
+  version = "25.7.3";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-rqhaKDOQEOj6bcRz3qZJ+a4yG1qTC9SUjuxMhZlnmwU=";
+  src = fetchFromGitLab {
+    owner = "kraxel";
+    repo = "virt-firmware";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-kuFTKMhBVlgCBYLTO23IUz/tRLoMRHxjWPIaauu/PWw=";
   };
 
   build-system = [ setuptools ];
@@ -36,7 +38,7 @@ buildPythonPackage rec {
     pkgs.systemd
   ];
 
-  pytestFlagsArray = [ "tests/tests.py" ];
+  enabledTestPaths = [ "tests/tests.py" ];
 
   pythonImportsCheck = [ "virt.firmware.efi" ];
 
@@ -45,7 +47,6 @@ buildPythonPackage rec {
     homepage = "https://gitlab.com/kraxel/virt-firmware";
     license = licenses.gpl2;
     maintainers = with maintainers; [
-      lheckemann
       raitobezarius
     ];
   };

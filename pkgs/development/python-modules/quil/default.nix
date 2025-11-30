@@ -1,65 +1,61 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
-  pythonOlder,
+  pythonAtLeast,
   fetchFromGitHub,
   rustPlatform,
   numpy,
   pytestCheckHook,
   syrupy,
-  libiconv,
 }:
 
 buildPythonPackage rec {
   pname = "quil";
-  version = "0.7.1";
+  version = "0.17.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  # error: the configured Python interpreter version (3.13) is newer than PyO3's maximum supported version (3.12)
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "quil-rs";
-    rev = "quil-py/v${version}";
-    hash = "sha256-GFePbCJnVbzL4cpQ7fy1tk2l7NhAyTVW63lVYTv0/Oo=";
+    tag = "quil-py/v${version}";
+    hash = "sha256-sQvHar52IFVUM+AssPEtBcSGVEma9e909K/5c8H0WQw=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    name = "${pname}-${version}";
-    inherit src;
-    hash = "sha256-catUGCFbkvov1z52f6eyxogflu61VcjIItgEVEWzkpY=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-3qFrsevaVP2tPf0OV0hW6HhhWsj2BM/2sZUvdq1Aa4k=";
   };
 
   buildAndTestSubdir = "quil-py";
 
-  preConfigure = ''
-    cargo metadata --offline
-  '';
-
-  build-system = [
+  nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
-
   dependencies = [ numpy ];
 
-  pythonImportsCheck = [ "numpy" ];
+  pythonImportsCheck = [
+    "quil.expression"
+    "quil.instructions"
+    "quil.program"
+    "quil.validation"
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
     syrupy
   ];
 
-  disabledTests = [
-    # Syrupy snapshot needs to be regenerated
-    "test_filter_instructions"
+  pytestFlags = [
+    "quil-py/tests_py"
   ];
 
   meta = {
-    changelog = "https://github.com/rigetti/quil-rs/blob/${src.rev}/quil-py/CHANGELOG.md";
+    changelog = "https://github.com/rigetti/quil-rs/blob/${src.tag}/quil-py/CHANGELOG.md";
     description = "Python package for building and parsing Quil programs";
     homepage = "https://github.com/rigetti/quil-rs/tree/main/quil-py";
     license = lib.licenses.asl20;

@@ -8,11 +8,12 @@
   sensor-state-data,
   pytestCheckHook,
   pytest-asyncio,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "anova-wifi";
-  version = "0.12.0";
+  version = "0.17.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,14 +21,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Lash-L";
     repo = "anova_wifi";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-0RRnQBLglPnPin9/gqWDKIsfi5V7ydrdDKwm93WEnvk=";
+    tag = "v${version}";
+    hash = "sha256-TRiv5ljdVqc4qeX+fSH+aTDf5UyNII8/twlNx3KC6oI=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=anova_wifi --cov-report=term-missing:skip-covered" ""
-  '';
 
   build-system = [ poetry-core ];
 
@@ -39,17 +35,20 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
+    pytest-cov-stub
   ];
 
   disabledTests = [
     # Makes network calls
     "test_async_data_1"
+    # async def functions are not natively supported.
+    "test_can_create"
   ];
 
   pythonImportsCheck = [ "anova_wifi" ];
 
   meta = with lib; {
-    description = "A Python package for reading anova sous vide api data";
+    description = "Python package for reading anova sous vide api data";
     homepage = "https://github.com/Lash-L/anova_wifi";
     changelog = "https://github.com/Lash-L/anova_wifi/releases/tag/v${version}";
     maintainers = with maintainers; [ jamiemagee ];

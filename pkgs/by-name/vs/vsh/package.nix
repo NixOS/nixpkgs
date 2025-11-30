@@ -1,0 +1,35 @@
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
+
+buildGoModule rec {
+  pname = "vsh";
+  version = "0.14.0";
+
+  src = fetchFromGitHub {
+    owner = "fishi0x01";
+    repo = "vsh";
+    rev = "v${version}";
+    sha256 = "sha256-rYltOLDmrRc3KsxR5MmpZqf+loAs1KEdPndpnhqkBDM=";
+  };
+
+  # vendor directory is part of repository
+  vendorHash = null;
+
+  # make sure version gets set at compile time
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.vshVersion=v${version}"
+  ];
+
+  meta = with lib; {
+    description = "HashiCorp Vault interactive shell";
+    homepage = "https://github.com/fishi0x01/vsh";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fishi0x01 ];
+    mainProgram = "vsh";
+  };
+}

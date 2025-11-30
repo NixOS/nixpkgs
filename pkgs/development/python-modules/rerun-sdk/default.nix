@@ -1,48 +1,55 @@
 {
-  buildPythonPackage,
   lib,
-  rustPlatform,
   stdenv,
+  pkgs,
+  buildPythonPackage,
+  rerun,
+  python,
+
+  # nativeBuildInputs
+  rustPlatform,
+
+  # dependencies
   attrs,
-  darwin,
   numpy,
+  opencv4,
   pillow,
   pyarrow,
-  rerun,
-  torch,
+  semver,
   typing-extensions,
+
+  # tests
+  datafusion,
   pytestCheckHook,
-  python,
-  libiconv,
+  tomli,
+  torch,
 }:
 
 buildPythonPackage {
   pname = "rerun-sdk";
-  inherit (rerun) version;
   pyproject = true;
 
-  inherit (rerun) src;
-  inherit (rerun) cargoDeps;
+  inherit (rerun)
+    src
+    version
+    cargoDeps
+    postPatch
+    ;
 
   nativeBuildInputs = [
+    pkgs.protobuf # for protoc
+    rerun
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
 
-  buildInputs =
-    [
-      libiconv # No-op on Linux, necessary on Darwin.
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.CoreServices
-    ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     numpy
+    opencv4
     pillow
     pyarrow
+    semver
     typing-extensions
   ];
 
@@ -61,16 +68,21 @@ buildPythonPackage {
   pythonImportsCheck = [ "rerun" ];
 
   nativeCheckInputs = [
+    datafusion
     pytestCheckHook
+    tomli
     torch
   ];
 
   inherit (rerun) addDlopenRunpaths addDlopenRunpathsPhase;
-  postPhases = lib.optionals stdenv.isLinux [ "addDlopenRunpathsPhase" ];
+  postPhases = lib.optionals stdenv.hostPlatform.isLinux [ "addDlopenRunpathsPhase" ];
 
   disabledTestPaths = [
     # "fixture 'benchmark' not found"
     "tests/python/log_benchmark/test_log_benchmark.py"
+
+    # ValueError: Failed to start Rerun server: Error loading RRD: couldn't decode "/build/source/tests/assets/rrd/dataset/file4.rrd"
+    "rerun_py/tests/e2e_redap_tests"
   ];
 
   meta = {

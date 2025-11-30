@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.zookeeper;
 
@@ -17,38 +19,39 @@ let
     name = "zookeeper-conf";
     paths = [
       (pkgs.writeTextDir "zoo.cfg" zookeeperConfig)
-      (pkgs.writeTextDir "log4j.properties" cfg.logging)
+      (pkgs.writeTextDir "logback.xml" cfg.logging)
     ];
   };
 
-in {
+in
+{
 
   options.services.zookeeper = {
-    enable = mkEnableOption "Zookeeper";
+    enable = lib.mkEnableOption "Zookeeper";
 
-    port = mkOption {
+    port = lib.mkOption {
       description = "Zookeeper Client port.";
       default = 2181;
-      type = types.port;
+      type = lib.types.port;
     };
 
-    id = mkOption {
+    id = lib.mkOption {
       description = "Zookeeper ID.";
       default = 0;
-      type = types.int;
+      type = lib.types.int;
     };
 
-    purgeInterval = mkOption {
+    purgeInterval = lib.mkOption {
       description = ''
         The time interval in hours for which the purge task has to be triggered. Set to a positive integer (1 and above) to enable the auto purging.
       '';
       default = 1;
-      type = types.int;
+      type = lib.types.int;
     };
 
-    extraConf = mkOption {
+    extraConf = lib.mkOption {
       description = "Extra configuration for Zookeeper.";
-      type = types.lines;
+      type = lib.types.lines;
       default = ''
         initLimit=5
         syncLimit=2
@@ -56,10 +59,10 @@ in {
       '';
     };
 
-    servers = mkOption {
+    servers = lib.mkOption {
       description = "All Zookeeper Servers.";
       default = "";
-      type = types.lines;
+      type = lib.types.lines;
       example = ''
         server.0=host0:2888:3888
         server.1=host1:2888:3888
@@ -67,56 +70,75 @@ in {
       '';
     };
 
-    logging = mkOption {
-      description = "Zookeeper logging configuration.";
+    logging = lib.mkOption {
+      description = "Zookeeper logging configuration, logback.xml.";
       default = ''
-        zookeeper.root.logger=INFO, CONSOLE
-        log4j.rootLogger=INFO, CONSOLE
-        log4j.logger.org.apache.zookeeper.audit.Log4jAuditLogger=INFO, CONSOLE
-        log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender
-        log4j.appender.CONSOLE.layout=org.apache.log4j.PatternLayout
-        log4j.appender.CONSOLE.layout.ConversionPattern=[myid:%X{myid}] - %-5p [%t:%C{1}@%L] - %m%n
+        <configuration>
+          <property name="zookeeper.console.threshold" value="INFO" />
+          <property name="zookeeper.log.dir" value="." />
+          <property name="zookeeper.log.file" value="zookeeper.log" />
+          <property name="zookeeper.log.threshold" value="INFO" />
+          <property name="zookeeper.log.maxfilesize" value="256MB" />
+          <property name="zookeeper.log.maxbackupindex" value="20" />
+          <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+              <pattern>%d{ISO8601} [myid:%X{myid}] - %-5p [%t:%C{1}@%L] - %m%n</pattern>
+            </encoder>
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+              <level>''${zookeeper.console.threshold}</level>
+            </filter>
+          </appender>
+          <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+          </root>
+        </configuration>
       '';
-      type = types.lines;
+      type = lib.types.lines;
     };
 
-    dataDir = mkOption {
-      type = types.path;
+    dataDir = lib.mkOption {
+      type = lib.types.path;
       default = "/var/lib/zookeeper";
       description = ''
         Data directory for Zookeeper
       '';
     };
 
-    extraCmdLineOptions = mkOption {
+    extraCmdLineOptions = lib.mkOption {
       description = "Extra command line options for the Zookeeper launcher.";
-      default = [ "-Dcom.sun.management.jmxremote" "-Dcom.sun.management.jmxremote.local.only=true" ];
-      type = types.listOf types.str;
-      example = [ "-Djava.net.preferIPv4Stack=true" "-Dcom.sun.management.jmxremote" "-Dcom.sun.management.jmxremote.local.only=true" ];
+      default = [
+        "-Dcom.sun.management.jmxremote"
+        "-Dcom.sun.management.jmxremote.local.only=true"
+      ];
+      type = lib.types.listOf lib.types.str;
+      example = [
+        "-Djava.net.preferIPv4Stack=true"
+        "-Dcom.sun.management.jmxremote"
+        "-Dcom.sun.management.jmxremote.local.only=true"
+      ];
     };
 
-    preferIPv4 = mkOption {
-      type = types.bool;
+    preferIPv4 = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Add the -Djava.net.preferIPv4Stack=true flag to the Zookeeper server.
       '';
     };
 
-    package = mkPackageOption pkgs "zookeeper" { };
+    package = lib.mkPackageOption pkgs "zookeeper" { };
 
-    jre = mkOption {
+    jre = lib.mkOption {
       description = "The JRE with which to run Zookeeper";
       default = cfg.package.jre;
-      defaultText = literalExpression "pkgs.zookeeper.jre";
-      example = literalExpression "pkgs.jre";
-      type = types.package;
+      defaultText = lib.literalExpression "pkgs.zookeeper.jre";
+      example = lib.literalExpression "pkgs.jre";
+      type = lib.types.package;
     };
   };
 
-
-  config = mkIf cfg.enable {
-    environment.systemPackages = [cfg.package];
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [ cfg.package ];
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' 0700 zookeeper - - -"
@@ -131,9 +153,9 @@ in {
         ExecStart = ''
           ${cfg.jre}/bin/java \
             -cp "${cfg.package}/lib/*:${configDir}" \
-            ${escapeShellArgs cfg.extraCmdLineOptions} \
+            ${lib.escapeShellArgs cfg.extraCmdLineOptions} \
             -Dzookeeper.datadir.autocreate=false \
-            ${optionalString cfg.preferIPv4 "-Djava.net.preferIPv4Stack=true"} \
+            ${lib.optionalString cfg.preferIPv4 "-Djava.net.preferIPv4Stack=true"} \
             org.apache.zookeeper.server.quorum.QuorumPeerMain \
             ${configDir}/zoo.cfg
         '';
@@ -151,6 +173,6 @@ in {
       description = "Zookeeper daemon user";
       home = cfg.dataDir;
     };
-    users.groups.zookeeper = {};
+    users.groups.zookeeper = { };
   };
 }

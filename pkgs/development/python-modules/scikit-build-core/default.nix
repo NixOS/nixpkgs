@@ -1,18 +1,25 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  distlib,
+  fetchFromGitHub,
   pythonOlder,
-  exceptiongroup,
+
+  # build-system
   hatch-vcs,
   hatchling,
-  cattrs,
   cmake,
   ninja,
+
+  # dependencies
   packaging,
   pathspec,
-  pyproject-metadata,
+  exceptiongroup,
+
+  # tests
+  build,
+  cattrs,
+  numpy,
+  pybind11,
   pytest-subprocess,
   pytestCheckHook,
   setuptools,
@@ -23,61 +30,61 @@
 
 buildPythonPackage rec {
   pname = "scikit-build-core";
-  version = "0.8.2";
+  version = "0.11.5";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "scikit_build_core";
-    inherit version;
-    hash = "sha256-UOwkuVaMmqbicjPe6yl4kyvHmFYhKzBXXL+kBJZVxDY=";
+  src = fetchFromGitHub {
+    owner = "scikit-build";
+    repo = "scikit-build-core";
+    tag = "v${version}";
+    hash = "sha256-4DwODJw1U/0+K/d7znYtDO2va71lzp1gDm4Bg9OBjQY=";
   };
 
   postPatch = lib.optionalString (pythonOlder "3.11") ''
     substituteInPlace pyproject.toml \
-      --replace '"error",' '"error", "ignore::UserWarning",'
+      --replace-fail '"error",' '"error", "ignore::UserWarning",'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs =
-    [ packaging ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      exceptiongroup
-      tomli
-    ];
-
-  passthru.optional-dependencies = {
-    pyproject = [
-      distlib
-      pathspec
-      pyproject-metadata
-    ];
-  };
-
-  dontUseCmakeConfigure = true;
+  dependencies = [
+    packaging
+    pathspec
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    exceptiongroup
+    tomli
+  ];
 
   nativeCheckInputs = [
+    build
     cattrs
     cmake
     ninja
+    numpy
+    pybind11
     pytest-subprocess
     pytestCheckHook
     setuptools
     virtualenv
     wheel
-  ] ++ passthru.optional-dependencies.pyproject;
+  ];
+
+  # cmake is only used for tests
+  dontUseCmakeConfigure = true;
+  setupHooks = [
+    ./append-cmakeFlags.sh
+  ];
+
+  disabledTestMarks = [
+    "isolated"
+    "network"
+  ];
 
   disabledTestPaths = [
-    # runs pip, requires network access
-    "tests/test_custom_modules.py"
-    "tests/test_pyproject_pep517.py"
-    "tests/test_pyproject_pep518.py"
-    "tests/test_pyproject_pep660.py"
-    "tests/test_setuptools_pep517.py"
-    "tests/test_setuptools_pep518.py"
     # store permissions issue in Nix:
     "tests/test_editable.py"
   ];
@@ -85,9 +92,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "scikit_build_core" ];
 
   meta = with lib; {
-    description = "A next generation Python CMake adaptor and Python API for plugins";
+    description = "Next generation Python CMake adaptor and Python API for plugins";
     homepage = "https://github.com/scikit-build/scikit-build-core";
-    changelog = "https://github.com/scikit-build/scikit-build-core/releases/tag/v${version}";
+    changelog = "https://github.com/scikit-build/scikit-build-core/blob/${src.tag}/docs/about/changelog.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ veprbl ];
   };

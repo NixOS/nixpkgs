@@ -1,5 +1,6 @@
-{ lib
-, bundlerApp
+{
+  lib,
+  bundlerApp,
 }:
 
 bundlerApp {
@@ -8,9 +9,11 @@ bundlerApp {
   exes = [ "ceedling" ];
 
   meta = with lib; {
-    description = "A build system for C projects that is something of an extension around Ruby's Rake";
-    homepage    = "http://www.throwtheswitch.org/ceedling";
-    license     = licenses.mit;
-    platforms   = platforms.unix;
+    description = "Build system for C projects that is something of an extension around Ruby's Rake";
+    homepage = "https://www.throwtheswitch.org/ceedling";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.rlwrnc ];
+    mainProgram = "ceedling";
   };
 }

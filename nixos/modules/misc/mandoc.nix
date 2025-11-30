@@ -1,22 +1,30 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   makewhatis = "${lib.getBin cfg.package}/bin/makewhatis";
 
   cfg = config.documentation.man.mandoc;
 
-  toMandocOutput = output: (
-    lib.mapAttrsToList
-      (
-        name: value:
-          if lib.isString value || lib.isPath value then "output ${name} ${value}"
-          else if lib.isInt value then "output ${name} ${builtins.toString value}"
-          else if lib.isBool value then lib.optionalString value "output ${name}"
-          else if value == null then ""
-          else throw "Unrecognized value type ${builtins.typeOf value} of key ${name} in mandoc output settings"
-      )
-      output
-  );
+  toMandocOutput =
+    output:
+    (lib.mapAttrsToList (
+      name: value:
+      if lib.isString value || lib.isPath value then
+        "output ${name} ${value}"
+      else if lib.isInt value then
+        "output ${name} ${builtins.toString value}"
+      else if lib.isBool value then
+        lib.optionalString value "output ${name}"
+      else if value == null then
+        ""
+      else
+        throw "Unrecognized value type ${builtins.typeOf value} of key ${name} in mandoc output settings"
+    ) output);
 
   makeLeadingSlashes = map (path: if builtins.substring 0 1 path != "/" then "/${path}" else path);
 in
@@ -96,12 +104,17 @@ in
                 {option}`documentation.man.mandoc.manPath` to an empty list (`[]`).
               '';
             };
-            output.fragment = lib.mkEnableOption ''
-              Omit the <!DOCTYPE> declaration and the <html>, <head>, and <body>
-              elements and only emit the subtree below the <body> element in HTML
-              output of {manpage}`mandoc(1)`. The style argument will be ignored.
-              This is useful when embedding manual content within existing documents.
-            '';
+            output.fragment = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              example = true;
+              description = ''
+                Whether to omit the <!DOCTYPE> declaration and the <html>, <head>, and <body>
+                elements and only emit the subtree below the <body> element in HTML
+                output of {manpage}`mandoc(1)`. The style argument will be ignored.
+                This is useful when embedding manual content within existing documents.
+              '';
+            };
             output.includes = lib.mkOption {
               type = with lib.types; nullOr str;
               default = null;
@@ -160,9 +173,9 @@ in
               '';
             };
             output.toc = lib.mkEnableOption ''
-              In HTML output of {manpage}`mandoc(1)`, If an input file contains
-              at least two non-standard sections, print a table of contents near
-              the beginning of the output.
+              printing a table of contents near the beginning of the HTML output
+              of {manpage}`mandoc(1)` if an input file contains at least two
+              non-standard sections
             '';
             output.width = lib.mkOption {
               type = with lib.types; nullOr int;
@@ -203,7 +216,9 @@ in
       # TODO(@sternenseemman): fix symlinked directories not getting indexed,
       # see: https://inbox.vuxu.org/mandoc-tech/20210906171231.GF83680@athene.usta.de/T/#e85f773c1781e3fef85562b2794f9cad7b2909a3c
       extraSetup = lib.mkIf config.documentation.man.generateCaches ''
-        for man_path in ${lib.concatMapStringsSep " " (path: "$out" + lib.escapeShellArg path) cfg.cachePath}
+        for man_path in ${
+          lib.concatMapStringsSep " " (path: "$out" + lib.escapeShellArg path) cfg.cachePath
+        }
         do
           [[ -d "$man_path" ]] && ${makewhatis} -T utf8 $man_path
         done

@@ -3,9 +3,8 @@
   stdenv,
   buildPythonPackage,
   setuptools,
-  pythonAtLeast,
   fetchPypi,
-  substituteAll,
+  replaceVars,
 
   # build
   autoPatchelfHook,
@@ -13,8 +12,10 @@
   doxygen,
   pkg-config,
   python,
+  requests,
   sip,
   which,
+  buildPackages,
 
   # runtime
   cairo,
@@ -27,10 +28,9 @@
   libXtst,
   libXxf86vm,
   libglvnd,
-  mesa,
+  libgbm,
   pango,
-  SDL,
-  webkitgtk,
+  webkitgtk_4_1,
   wxGTK,
   xorgproto,
 
@@ -42,54 +42,59 @@
 
 buildPythonPackage rec {
   pname = "wxpython";
-  version = "4.2.1";
+  version = "4.2.3";
   format = "other";
-  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     pname = "wxPython";
     inherit version;
-    hash = "sha256-5I3iEaZga/By7D+neHcda3RsALf0uXDrWHKN31bRPVw=";
+    hash = "sha256-INbgySfifO2FZDcZvWPp9/1QHfbpqKqxSJsDmJf9fAE=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./4.2-ctypes.patch;
+    (replaceVars ./4.2-ctypes.patch {
       libgdk = "${gtk3.out}/lib/libgdk-3.so";
       libpangocairo = "${pango}/lib/libpangocairo-1.0.so";
       libcairo = "${cairo}/lib/libcairo.so";
     })
+    ./0001-add-missing-bool-c.patch # Add missing bool.c from old source
   ];
+
+  # https://github.com/wxWidgets/Phoenix/issues/2575
+  postPatch = ''
+    ln -s ${lib.getExe buildPackages.waf} bin/waf
+    substituteInPlace build.py \
+      --replace-fail "distutils.dep_util" "setuptools.modified"
+  '';
 
   nativeBuildInputs = [
     attrdict
     pkg-config
+    requests
     setuptools
-    SDL
     sip
     which
     wxGTK
-  ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs =
-    [
-      wxGTK
-      SDL
-    ]
-    ++ lib.optionals stdenv.isLinux [
-      gst_all_1.gst-plugins-base
-      gst_all_1.gstreamer
-      libGL
-      libGLU
-      libSM
-      libXinerama
-      libXtst
-      libXxf86vm
-      libglvnd
-      mesa
-      webkitgtk
-      xorgproto
-    ];
+  buildInputs = [
+    wxGTK
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
+    libGL
+    libGLU
+    libSM
+    libXinerama
+    libXtst
+    libXxf86vm
+    libglvnd
+    libgbm
+    webkitgtk_4_1
+    xorgproto
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -97,12 +102,13 @@ buildPythonPackage rec {
     six
   ];
 
+  wafPath = "bin/waf";
+
   buildPhase = ''
     runHook preBuild
 
     export DOXYGEN=${doxygen}/bin/doxygen
     export PATH="${wxGTK}/bin:$PATH"
-    export SDL_CONFIG="${SDL.dev}/bin/sdl-config"
 
     ${python.pythonOnBuildForHost.interpreter} build.py -v --use_syswx dox etg sip --nodoc build_py
 
@@ -130,7 +136,10 @@ buildPythonPackage rec {
     changelog = "https://github.com/wxWidgets/Phoenix/blob/wxPython-${version}/CHANGES.rst";
     description = "Cross platform GUI toolkit for Python, Phoenix version";
     homepage = "http://wxpython.org/";
-    license = licenses.wxWindows;
+    license = with licenses; [
+      lgpl2Plus
+      wxWindowsException31
+    ];
     maintainers = with maintainers; [ hexa ];
   };
 }

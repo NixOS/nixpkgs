@@ -1,31 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, kidletime
-, kwindowsystem
-, liblxqt
-, libqtxdg
-, lxqt-build-tools
-, lxqt-globalkeys
-, qtbase
-, qtsvg
-, qttools
-, qtwayland
-, solid
-, wrapQtAppsHook
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  kidletime,
+  kwindowsystem,
+  liblxqt,
+  libqtxdg,
+  lxqt-build-tools,
+  lxqt-globalkeys,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtwayland,
+  solid,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lxqt-powermanagement";
-  version = "2.0.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "lxqt-powermanagement";
     rev = version;
-    hash = "sha256-wtqVUXYQWIPhvHj7Ig9qR6sglCRQzcxG192DM3xq/mA=";
+    hash = "sha256-1TA9v2zrPoHiKUy6P4enmzvxWTD+/rGjrChE5WGMt3c=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +55,6 @@ stdenv.mkDerivation rec {
     description = "Power management module for LXQt";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }

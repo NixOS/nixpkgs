@@ -1,22 +1,26 @@
-{ lib
-, stdenv
-, fetchurl
-, unzip
-, makeBinaryWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  makeBinaryWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sloth-app";
-  version = "3.2";
+  version = "3.4";
 
   src = fetchurl {
     url = "https://github.com/sveinbjornt/Sloth/releases/download/${finalAttrs.version}/sloth-${finalAttrs.version}.zip";
-    hash = "sha256-8/x8I769V8kGxstDuXXUaMtGvg03n2vhrKvmaltSISo=";
+    hash = "sha256-K8DweBFAILEQyqri6NO+p5qRam+BHjIk1tl43gcseNs=";
   };
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ unzip makeBinaryWrapper ];
+  nativeBuildInputs = [
+    unzip
+    makeBinaryWrapper
+  ];
 
   installPhase = ''
     runHook preInstall

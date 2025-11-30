@@ -1,14 +1,16 @@
-import ./make-test-python.nix ({ lib, ... }:
+{ lib, ... }:
 
 {
   name = "fluidd";
   meta.maintainers = with lib.maintainers; [ vtuan10 ];
 
-  nodes.machine = { pkgs, ... }: {
-    services.fluidd = {
-      enable = true;
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      services.fluidd = {
+        enable = true;
+      };
     };
-  };
 
   testScript = ''
     machine.start()
@@ -16,4 +18,4 @@ import ./make-test-python.nix ({ lib, ... }:
     machine.wait_for_open_port(80)
     machine.succeed("curl -sSfL http://localhost/ | grep 'fluidd'")
   '';
-})
+}

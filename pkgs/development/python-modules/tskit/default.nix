@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools-scm,
+  setuptools,
   pythonOlder,
   numpy,
   jsonschema,
@@ -11,20 +11,27 @@
 
 buildPythonPackage rec {
   pname = "tskit";
-  version = "0.5.6";
-  format = "pyproject";
+  version = "0.6.4";
+  pyproject = true;
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3f4hPxywY822mCF3IwooBezX38fM1zAm4Th4q//SzkY=";
+    hash = "sha256-vawbt+OuPR9WLsGRtdhAFW4ILdKtxq98QbFwxPsb55I=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  postPatch = ''
+    # build-time constriant, used to ensure forward and backward compat
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0" "numpy"
+  '';
 
-  propagatedBuildInputs = [
-    numpy
+  build-system = [ setuptools ];
+
+  dependencies = [
     jsonschema
+    numpy
     svgwrite
   ];
 
@@ -34,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tskit" ];
 
-  meta = with lib; {
-    description = "The tree sequence toolkit";
+  meta = {
+    description = "Tree sequence toolkit";
     mainProgram = "tskit";
     homepage = "https://github.com/tskit-dev/tskit";
-    license = licenses.mit;
-    maintainers = with maintainers; [ alxsimon ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "alex";
-    repo = pname;
+    repo = "pretend";
     rev = "v${version}";
     hash = "sha256-OqMfeIMFNBBLq6ejR3uOCIHZ9aA4zew7iefVlAsy1JQ=";
   };
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Module for stubbing";
     homepage = "https://github.com/alex/pretend";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -6,7 +6,7 @@
   fetchFromGitHub,
   jsonconversion,
   pytestCheckHook,
-  pythonOlder,
+  pytest_7,
   setuptools,
   six,
   tabulate,
@@ -14,18 +14,16 @@
 
 buildPythonPackage rec {
   pname = "amazon-ion";
-  version = "0.12.0";
+  version = "0.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "amazon-ion";
     repo = "ion-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     # Test vectors require git submodule
     fetchSubmodules = true;
-    hash = "sha256-L21FYl4Q+nhB3CU1maOxBHSLU+ox1POHtMio8SSZ/r0=";
+    hash = "sha256-ZnslVmXE2YvTAkpfw2lbpB+uF85n/CvA22htO/Y7yWk=";
   };
 
   postPatch = ''
@@ -33,9 +31,9 @@ buildPythonPackage rec {
       --replace "'pytest-runner'," ""
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jsonconversion
     six
   ];
@@ -43,7 +41,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     cbor2
     docopt
-    pytestCheckHook
+    (pytestCheckHook.override { pytest = pytest_7; })
     tabulate
   ];
 
@@ -62,7 +60,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python implementation of Amazon Ion";
     homepage = "https://github.com/amazon-ion/ion-python";
-    changelog = "https://github.com/amazon-ion/ion-python/releases/tag/v${version}";
+    changelog = "https://github.com/amazon-ion/ion-python/releases/tag/${src.tag}";
     sourceProvenance = with sourceTypes; [
       fromSource
       binaryNativeCode

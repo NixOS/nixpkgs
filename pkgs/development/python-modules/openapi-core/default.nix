@@ -2,7 +2,6 @@
   lib,
   aiohttp,
   aioitertools,
-  asgiref,
   buildPythonPackage,
   django,
   falcon,
@@ -12,7 +11,7 @@
   httpx,
   isodate,
   jsonschema,
-  jsonschema-spec,
+  jsonschema-path,
   more-itertools,
   multidict,
   openapi-schema-validator,
@@ -20,8 +19,8 @@
   parse,
   poetry-core,
   pytest-aiohttp,
-  pytest7CheckHook,
-  pythonOlder,
+  pytest-cov-stub,
+  pytestCheckHook,
   responses,
   requests,
   starlette,
@@ -31,37 +30,34 @@
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.19.0";
+  version = "0.19.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "openapi-core";
-    rev = "refs/tags/${version}";
-    hash = "sha256-+YYcSNX717JjVHMk4Seb145iq9/rQZEVQn27Ulk1A3E=";
+    tag = version;
+    hash = "sha256-Q7Z6bq8TztNm2QLL7g23rOGnXVfiTDjquHAhcSWYlC4=";
   };
 
-  postPatch = ''
-    sed -i "/--cov/d" pyproject.toml
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ poetry-core ];
+  pythonRelaxDeps = [
+    "werkzeug"
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     isodate
     more-itertools
     parse
     openapi-schema-validator
     openapi-spec-validator
     werkzeug
-    jsonschema-spec
-    asgiref
+    jsonschema-path
     jsonschema
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aiohttp = [
       aiohttp
       multidict
@@ -82,15 +78,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     httpx
     pytest-aiohttp
-    pytest7CheckHook
+    pytest-cov-stub
+    pytestCheckHook
     responses
     webob
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
-
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     # Requires secrets and additional configuration
@@ -104,6 +97,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/python-openapi/openapi-core/releases/tag/${version}";
     description = "Client-side and server-side support for the OpenAPI Specification v3";
     homepage = "https://github.com/python-openapi/openapi-core";
     license = licenses.bsd3;

@@ -1,27 +1,27 @@
-{ stdenv
-, mkDerivation
-, lib
-, fetchFromGitHub
-, fetchpatch
-, brotli
-, lz4
-, pyotherside
-, python3
-, python3Packages
-, qtbase
-, qtcharts
-, qmake
-, qttools
-, rdbtools
-, snappy
-, wrapQtAppsHook
-, zstd
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  brotli,
+  lz4,
+  pyotherside,
+  python3,
+  python3Packages,
+  qtbase,
+  qtcharts,
+  qmake,
+  qttools,
+  rdbtools,
+  snappy,
+  wrapQtAppsHook,
+  zstd,
 }:
 
 let
   rdbtools-patched = rdbtools.overridePythonAttrs (oldAttrs: {
     # Add required additional flag for resp-app
-    patches = [
+    patches = oldAttrs.patches or [ ] ++ [
       (fetchpatch {
         name = "Add-flag-to-parse-only-key-names.patch";
         url = "https://github.com/uglide/redis-rdb-tools/commit/b74946e6fbca589947ef0186429d5ce45a074b87.patch";
@@ -39,7 +39,7 @@ mkDerivation rec {
     repo = "RedisDesktopManager";
     fetchSubmodules = true;
     rev = version;
-    sha256 = "sha256-5eI3J2RsYE5Ejb1r8YkgzmGX2FyaCLFD0lc10J+fOT4=";
+    hash = "sha256-5eI3J2RsYE5Ejb1r8YkgzmGX2FyaCLFD0lc10J+fOT4=";
   };
 
   nativeBuildInputs = [
@@ -58,8 +58,8 @@ mkDerivation rec {
     qttools
     snappy
     zstd
-  ] ++ pythonPath;
-
+  ]
+  ++ pythonPath;
 
   pythonPath = with python3Packages; [
     bitstring
@@ -100,6 +100,6 @@ mkDerivation rec {
     homepage = "https://resp.app/";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

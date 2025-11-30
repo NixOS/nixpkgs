@@ -6,19 +6,22 @@
   scipy,
   sympy,
   setuptools,
+  pytestCheckHook,
+  cython,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "pydy";
-  version = "0.7.1";
-
+  version = "0.8.0";
   pyproject = true;
-  build-system = [ setuptools ];
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aaRinJMGR8v/OVkeSp1hA4+QLOrmDWq50wvA6b/suvk=";
+    hash = "sha256-G3iqMzy/W3ctz/c4T3LqYyTTMVbly1GMkmMLi96mzMc=";
   };
+
+  build-system = [ setuptools ];
 
   dependencies = [
     numpy
@@ -26,15 +29,19 @@ buildPythonPackage rec {
     sympy
   ];
 
-  # nose test does not support 3.10 or later
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    cython
+  ];
 
   pythonImportsCheck = [ "pydy" ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Python tool kit for multi-body dynamics";
     homepage = "http://pydy.org";
-    license = licenses.bsd3;
-    maintainers = [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

@@ -1,22 +1,26 @@
-{ fetchCrate
-, lib
-, rustPlatform
-, protobuf
+{
+  fetchCrate,
+  lib,
+  rustPlatform,
+  protobuf,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "protoc-gen-rust";
-  version = "3.2.0";
+  version = "3.5.0";
 
   src = fetchCrate {
     inherit version;
     pname = "protobuf-codegen";
-    sha256 = "sha256-9Rf7GI/qxoqlISD169TJwUVAdJn8TpxTXDNxiQra2UY=";
+    hash = "sha256-yGZ4auZHGtcsN6n4/FEzabsSXproyhNTJHIwujt7ijg=";
   };
 
-  cargoSha256 = "sha256-i1ZIEbU6tw7xA1w+ffD/h1HIkOwVep9wQJys9Bydvv0=";
+  cargoHash = "sha256-cj+/X3soc//lMOmBjfjQT+QhY/EWP92gChiDQ7b2fsM=";
 
-  cargoBuildFlags = ["--bin" pname];
+  cargoBuildFlags = [
+    "--bin"
+    pname
+  ];
 
   nativeBuildInputs = [ protobuf ];
 

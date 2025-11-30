@@ -1,4 +1,8 @@
-{ lib, buildFishPlugin, fetchFromGitHub }:
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
+}:
 
 buildFishPlugin rec {
   pname = "async-prompt";
@@ -15,6 +19,6 @@ buildFishPlugin rec {
     description = "Make your prompt asynchronous to improve the reactivity";
     homepage = "https://github.com/acomagu/fish-async-prompt";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

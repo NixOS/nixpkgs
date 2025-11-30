@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jeremija";
     repo = "unipicker";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Br9nCK5eWoSN1i4LM2F31B62L9vuN5KzjS9pC9lq9oM=";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A CLI utility for searching unicode characters by description and optionally copying them to clipboard";
+    description = "CLI utility for searching unicode characters by description and optionally copying them to clipboard";
     homepage = "https://github.com/jeremija/unipicker";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];

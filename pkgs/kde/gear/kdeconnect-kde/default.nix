@@ -1,28 +1,30 @@
 {
   lib,
   mkKdeDerivation,
-  substituteAll,
+  replaceVars,
   sshfs,
+  qtbase,
   qtconnectivity,
   qtmultimedia,
-  qtwayland,
   pkg-config,
   wayland,
   wayland-protocols,
   libfakekey,
+  fetchpatch,
 }:
 mkKdeDerivation {
   pname = "kdeconnect-kde";
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-sshfs-path.patch;
+    (replaceVars ./hardcode-sshfs-path.patch {
       sshfs = lib.getExe sshfs;
     })
-    # We build OpenSSH without ssh-dss support, so sshfs explodes at runtime.
-    # See: https://github.com/NixOS/nixpkgs/commit/6ee4b8c8bf815567f7d0fa131576d2b8c0a18167
-    # FIXME: upstream?
-    ./remove-ssh-dss.patch
+    # Fix CVE-2025-66270 (https://kde.org/info/security/advisory-20251128-1.txt)
+    (fetchpatch {
+      name = "CVE-2025-66270.patch";
+      url = "https://invent.kde.org/network/kdeconnect-kde/-/commit/4e53bcdd5d4c28bd9fefd114b807ce35d7b3373e.patch";
+      hash = "sha256-qtcXNJ5qL4xtZQ70R/wWVCzFGzXNltr6XTgs0fpkTi4=";
+    })
   ];
 
   # Hardcoded as a QString, which is UTF-16 so Nix can't pick it up automatically
@@ -31,10 +33,16 @@ mkKdeDerivation {
     echo "${sshfs}" > $out/nix-support/depends
   '';
 
-  extraNativeBuildInputs = [pkg-config];
-  extraBuildInputs = [qtconnectivity qtmultimedia qtwayland wayland wayland-protocols libfakekey];
+  extraNativeBuildInputs = [ pkg-config ];
+  extraBuildInputs = [
+    qtconnectivity
+    qtmultimedia
+    wayland
+    wayland-protocols
+    libfakekey
+  ];
 
   extraCmakeFlags = [
-    "-DQtWaylandScanner_EXECUTABLE=${qtwayland}/libexec/qtwaylandscanner"
+    "-DQtWaylandScanner_EXECUTABLE=${qtbase}/libexec/qtwaylandscanner"
   ];
 }

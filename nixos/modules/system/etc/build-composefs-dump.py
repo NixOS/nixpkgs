@@ -61,7 +61,15 @@ class ComposefsPath:
         self.path = path
         self.size = size
         self.filetype = filetype
-        self.mode = mode
+
+        match len(mode):
+            case 3 | 4:
+                # We need to pad the mode, because we will later use the concatentation
+                # filetype|mode, which assumes that the mode has a length of 4.
+                self.mode = f"{mode:0>4}"
+            case _:
+                raise ValueError(f"mode should be 3 or 4 octal digits, got: {mode}")
+
         self.uid = attrs["uid"]
         self.gid = attrs["gid"]
         self.payload = payload
@@ -175,7 +183,7 @@ def main() -> None:
                 paths[glob_target] = composefs_path
                 add_leading_directories(glob_target, attrs, paths)
         else:  # Without globbing
-            if mode == "symlink":
+            if mode == "symlink" or mode == "direct-symlink":
                 composefs_path = ComposefsPath(
                     attrs,
                     # A high approximation of the size of a symlink
@@ -184,24 +192,23 @@ def main() -> None:
                     mode="0777",
                     payload=source,
                 )
+            elif os.path.isdir(source):
+                composefs_path = ComposefsPath(
+                    attrs,
+                    size=4096,
+                    filetype=FileType.directory,
+                    mode=mode,
+                    payload=source,
+                )
             else:
-                if os.path.isdir(source):
-                    composefs_path = ComposefsPath(
-                        attrs,
-                        size=4096,
-                        filetype=FileType.directory,
-                        mode=mode,
-                        payload=source,
-                    )
-                else:
-                    composefs_path = ComposefsPath(
-                        attrs,
-                        size=os.stat(source).st_size,
-                        filetype=FileType.file,
-                        mode=mode,
-                        # payload needs to be relative path in this case
-                        payload=target.lstrip("/"),
-                    )
+                composefs_path = ComposefsPath(
+                    attrs,
+                    size=os.stat(source).st_size,
+                    filetype=FileType.file,
+                    mode=mode,
+                    # payload needs to be relative path in this case
+                    payload=target.lstrip("/"),
+                )
             paths[target] = composefs_path
             add_leading_directories(target, attrs, paths)
 

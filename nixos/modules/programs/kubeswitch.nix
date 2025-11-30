@@ -18,28 +18,19 @@ in
         description = "The name of the command to use";
       };
 
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.kubeswitch;
-        defaultText = lib.literalExpression "pkgs.kubeswitch";
-        description = "The package to install for kubeswitch";
-      };
+      package = lib.mkPackageOption pkgs "kubeswitch" { };
     };
   };
 
   config =
     let
-      shell_files = pkgs.stdenv.mkDerivation rec {
-        name = "kubeswitch-shell-files";
-        phases = [ "installPhase" ];
-        installPhase = ''
-          mkdir -p $out/share
-          for shell in bash zsh; do
-            ${cfg.package}/bin/switcher init $shell | sed 's/switch(/${cfg.commandName}(/' > $out/share/${cfg.commandName}_init.$shell
-            ${cfg.package}/bin/switcher --cmd ${cfg.commandName} completion $shell > $out/share/${cfg.commandName}_completion.$shell
-          done
-        '';
-      };
+      shell_files = pkgs.runCommand "kubeswitch-shell-files" { } ''
+        mkdir -p $out/share
+        for shell in bash zsh; do
+          ${cfg.package}/bin/switcher init $shell | sed 's/switch(/${cfg.commandName}(/' > $out/share/${cfg.commandName}_init.$shell
+          ${cfg.package}/bin/switcher --cmd ${cfg.commandName} completion $shell > $out/share/${cfg.commandName}_completion.$shell
+        done
+      '';
     in
     lib.mkIf cfg.enable {
       environment.systemPackages = [ cfg.package ];

@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "kcompletion";
 
-  extraNativeBuildInputs = [qttools];
+  extraNativeBuildInputs = [ qttools ];
 }

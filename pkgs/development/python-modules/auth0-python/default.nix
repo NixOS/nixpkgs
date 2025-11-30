@@ -13,14 +13,13 @@
   pyopenssl,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "4.7.1";
+  version = "4.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,14 +27,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "auth0";
     repo = "auth0-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-udtrvAr8wfg1DbNbBEjA/tlrYhIiXtTFqi4bZCuKI0Q=";
+    tag = version;
+    hash = "sha256-+3c4fj2lv+HFhl3bJ1p1qPq602AG4oMecqE+FMpvjhI=";
   };
 
   nativeBuildInputs = [
     poetry-core
     poetry-dynamic-versioning
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -45,7 +43,8 @@ buildPythonPackage rec {
     pyopenssl
     requests
     urllib3
-  ] ++ pyjwt.optional-dependencies.crypto;
+  ]
+  ++ pyjwt.optional-dependencies.crypto;
 
   nativeCheckInputs = [
     aiohttp
@@ -69,8 +68,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Auth0 Python SDK";
     homepage = "https://github.com/auth0/auth0-python";
-    changelog = "https://github.com/auth0/auth0-python/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/auth0/auth0-python/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

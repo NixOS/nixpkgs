@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pluthon";
-  version = "0.4.6";
+  version = "1.1.0";
 
   format = "pyproject";
 
@@ -20,14 +20,15 @@ buildPythonPackage rec {
     owner = "OpShin";
     repo = "pluthon";
     rev = version;
-    hash = "sha256-ZmBkbglSbBfVhA4yP0tJdwpJiFpJ7vX0A321ldQF0lA=";
+    hash = "sha256-t8KWm2eBq6CzFPAWN9pgbpF62hvNNZWCpphJsY5T2OQ=";
   };
 
   propagatedBuildInputs = [
     setuptools
     uplc
     ordered-set
-  ] ++ lib.optional (pythonOlder "3.9") graphlib-backport;
+  ]
+  ++ lib.optional (pythonOlder "3.9") graphlib-backport;
 
   pythonImportsCheck = [ "pluthon" ];
 
@@ -35,6 +36,6 @@ buildPythonPackage rec {
     description = "Pluto-like programming language for Cardano Smart Contracts in Python";
     homepage = "https://github.com/OpShin/pluthon";
     license = licenses.mit;
-    maintainers = with maintainers; [ t4ccer ];
+    maintainers = with maintainers; [ aciceri ];
   };
 }

@@ -10,5 +10,16 @@
 mkKdeDerivation {
   pname = "libksysguard";
 
-  extraBuildInputs = [qtwebchannel qtwebengine qttools libpcap libnl lm_sensors];
+  patches = [
+    ./helper-path.patch
+  ];
+
+  extraBuildInputs = [
+    qtwebchannel
+    qtwebengine
+    qttools
+    libpcap
+    libnl
+    lm_sensors
+  ];
 }

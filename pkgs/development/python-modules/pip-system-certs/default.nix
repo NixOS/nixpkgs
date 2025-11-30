@@ -3,29 +3,27 @@
   buildPythonPackage,
   fetchPypi,
   setuptools-scm,
-  wheel,
   git-versioner,
-  wrapt,
+  pip,
 }:
 
 buildPythonPackage rec {
   pname = "pip-system-certs";
-  version = "4.0";
+  version = "5.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "pip_system_certs";
-    hash = "sha256-245qMTiNl5XskTmVffGon6UnT7ZhZEVv0JGl0+lMNQw=";
+    hash = "sha256-Gci/mVe8zn1pxNvC0LLvE94ZhNU/UKWQEubbutCvZ8Y=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
-    wheel
     git-versioner
   ];
 
-  propagatedBuildInputs = [ wrapt ];
+  dependencies = [ pip ];
 
   pythonImportsCheck = [
     "pip_system_certs.wrapt_requests"

@@ -14,21 +14,17 @@
 
 buildPythonPackage rec {
   pname = "pyerfa";
-  version = "2.0.1.4";
+  version = "2.0.1.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rLimcTIy6jXAS8bkCsTkYd/MgX05XvKjyAUcGjMkndM=";
+    hash = "sha256-F9ayT+SEbGXV59jDYtywgZncY7MKI2rt1zh1zIPh9sA=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0rc1" "numpy"
-  '';
 
   build-system = [
     jinja2
+    numpy
     packaging
     setuptools
     setuptools-scm

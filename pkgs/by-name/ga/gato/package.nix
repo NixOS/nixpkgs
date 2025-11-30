@@ -1,7 +1,8 @@
-{ lib
-, python3
-, git
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  git,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -12,14 +13,9 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "gato";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-vXQFgP0KDWo1VWe7tMGCB2yEYlr/1KMXsiNupBVLBqc=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov=gato" ""
-  '';
 
   nativeBuildInputs = with python3.pkgs; [
     setuptools
@@ -36,6 +32,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python3.pkgs; [
     git
+    pytest-cov-stub
     pytestCheckHook
   ];
 
@@ -43,12 +40,12 @@ python3.pkgs.buildPythonApplication rec {
     "gato"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GitHub Self-Hosted Runner Enumeration and Attack Tool";
     homepage = "https://github.com/praetorian-inc/gato";
     changelog = "https://github.com/praetorian-inc/gato/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "gato";
   };
 }

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "base64io";
-  version = "1.0.3-unstable-2023-10-30";
+  version = "1.0.3-unstable-2025-01-09";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "base64io-python";
-    rev = "604817576e607d1f7f8af1ffa1530522fd4e4be2";
-    hash = "sha256-RFl0iuyHdPf3VpBxH4m/N2yaKEBxkNMT1ldZP9VGGOk=";
+    rev = "1bd47f7f8cfeeff654ea0edda3fbb69f840ccd05";
+    hash = "sha256-1MUWjFFitJ3nqvVwAQYcAVVPhPs6NEgq7t/mI71u2Bk=";
   };
 
   build-system = [ setuptools ];

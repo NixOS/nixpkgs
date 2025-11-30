@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mbusd";
@@ -11,15 +17,23 @@ stdenv.mkDerivation rec {
     hash = "sha256-RQRSqlbPwBhw0SiNSP+euMVAwVBJo3lx0qB5gyWA+cM=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     description = "Modbus TCP to Modbus RTU (RS-232/485) gateway";
     homepage = "https://github.com/3cky/mbusd";
     changelog = "https://github.com/3cky/mbusd/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
     mainProgram = "mbusd";
   };
 }

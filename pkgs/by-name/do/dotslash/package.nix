@@ -1,17 +1,22 @@
-{ lib, rustPlatform, fetchCrate
-, testers, nix-update-script, dotslash
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  testers,
+  nix-update-script,
+  dotslash,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dotslash";
-  version = "0.4.1";
+  version = "0.5.7";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-d9ig6YO5kx4Qd8Ut70U4X+t8a9+MUyzPoDF/y7avP38=";
+    hash = "sha256-VFesGum2xjknUuCwIojntdst5dmhvZb78ejJ2OG1FVI=";
   };
 
-  cargoHash = "sha256-URZ6HfyfY2Fh4iVMoG4OkQFFuLIRV7s5hlZLUFzeUvA=";
+  cargoHash = "sha256-+FWDeR4AcFSFz0gGQ8VMvX68/F0yEm25cNfHeedqsWE=";
   doCheck = false; # http tests
 
   passthru = {
@@ -33,7 +38,10 @@ rustPlatform.buildRustPackage rec {
       your developers seamlessly get the tools they need, ensuring consistent
       builds across platforms.
     '';
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     mainProgram = "dotslash";
     maintainers = with maintainers; [ thoughtpolice ];
   };

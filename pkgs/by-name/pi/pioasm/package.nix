@@ -1,23 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pioasm";
-  version = "1.5.1";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "pico-sdk";
     rev = finalAttrs.version;
-    hash = "sha256-JNcxd86XNNiPkvipVFR3X255boMmq+YcuJXUP4JwInU=";
+    hash = "sha256-epO7yw6/21/ess3vMCkXvXEqAn6/4613zmH/hbaBbUw=";
   };
   sourceRoot = "${finalAttrs.src.name}/tools/pioasm";
 
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
   installPhase = ''
     runHook preInstall

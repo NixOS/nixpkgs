@@ -13,29 +13,30 @@
   numpy,
   editdistance,
   munkres,
+  pandas,
   levenshtein,
 }:
 
 buildPythonPackage rec {
   pname = "panphon";
-  version = "0.20.0";
+  version = "0.22.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gio52n1NZWeyCK+eJW/Fp827wjvwnMNDFAR4pKa8VcY=";
+    hash = "sha256-OD1HfVh/66HKWoKHjiT+d8FkXW++ngHJ6X1JjYopujU=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    setuptools # need for pkg_resources
     unicodecsv
     pyyaml
     regex
     numpy
     editdistance
     munkres
+    pandas
     levenshtein # need for align_wordlists.py script
   ];
 

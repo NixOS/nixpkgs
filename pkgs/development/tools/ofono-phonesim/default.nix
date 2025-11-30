@@ -1,9 +1,10 @@
-{ lib
-, mkDerivation
-, fetchzip
-, autoreconfHook
-, pkg-config
-, qtbase
+{
+  lib,
+  mkDerivation,
+  fetchzip,
+  autoreconfHook,
+  pkg-config,
+  qtbase,
 }:
 
 mkDerivation {
@@ -34,7 +35,7 @@ mkDerivation {
     mainProgram = "phonesim";
     homepage = "https://01.org/ofono";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

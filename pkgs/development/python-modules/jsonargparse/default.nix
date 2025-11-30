@@ -1,7 +1,6 @@
 {
   lib,
   argcomplete,
-  attrs,
   buildPythonPackage,
   docstring-parser,
   fetchFromGitHub,
@@ -9,16 +8,14 @@
   jsonnet,
   jsonschema,
   omegaconf,
-  pydantic,
   pytest-subtests,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   reconplogger,
   requests,
-  responses,
   ruyaml,
   setuptools,
+  toml,
   types-pyyaml,
   types-requests,
   typeshed-client,
@@ -26,23 +23,21 @@
 
 buildPythonPackage rec {
   pname = "jsonargparse";
-  version = "4.29.0";
+  version = "4.44.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "omni-us";
     repo = "jsonargparse";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-L+bGyn6O3lGu4FPclNFUeIzQhpznBxdkofUS5yCRM3Y=";
+    tag = "v${version}";
+    hash = "sha256-VcCfoWT54/SGPYBOTLJuyX4507HMqwrZMQbUt0sN0Wg=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ pyyaml ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       argcomplete
       fsspec
@@ -68,6 +63,7 @@ buildPythonPackage rec {
       docstring-parser
       typeshed-client
     ];
+    toml = [ toml ];
     urls = [ requests ];
   };
 
@@ -81,9 +77,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jsonargparse" ];
 
   meta = with lib; {
-    description = "Module to mplement minimal boilerplate CLIs derived from various sources";
+    description = "Module to implement minimal boilerplate CLIs derived from various sources";
     homepage = "https://github.com/omni-us/jsonargparse";
-    changelog = "https://github.com/omni-us/jsonargparse/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/omni-us/jsonargparse/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

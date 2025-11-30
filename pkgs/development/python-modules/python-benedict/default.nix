@@ -14,44 +14,39 @@
   python-decouple,
   python-fsutil,
   python-slugify,
-  pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   requests,
   setuptools,
   toml,
+  useful-types,
   xlrd,
   xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "python-benedict";
-  version = "0.33.2";
+  version = "0.35.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = "python-benedict";
-    rev = "refs/tags/${version}";
-    hash = "sha256-1/eLJFXACn1W5Yz43BIhdqqUVk3t9285d8aLwH+VmAE=";
+    tag = version;
+    hash = "sha256-b9tAK500Hr2flYI82weNMCM88d6b5+Oz9HgvBDaqNZw=";
   };
 
   pythonRelaxDeps = [ "boto3" ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     python-fsutil
     python-slugify
     requests
+    useful-types
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       beautifulsoup4
       boto3
@@ -97,7 +92,8 @@ buildPythonPackage rec {
     orjson
     pytestCheckHook
     python-decouple
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Tests require network access
@@ -119,7 +115,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module with keylist/keypath support";
     homepage = "https://github.com/fabiocaccamo/python-benedict";
-    changelog = "https://github.com/fabiocaccamo/python-benedict/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/fabiocaccamo/python-benedict/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

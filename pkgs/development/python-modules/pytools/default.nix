@@ -2,32 +2,42 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
-  decorator,
+  hatchling,
   numpy,
   platformdirs,
-  typing-extensions,
   pytestCheckHook,
+  pythonOlder,
+  typing-extensions,
+  siphash24,
 }:
 
 buildPythonPackage rec {
   pname = "pytools";
-  version = "2024.1.2";
-  format = "setuptools";
-  disabled = pythonOlder "3.6";
+  version = "2025.2.4";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CBhx5FFQXEuYbrr6aK7qv9x76z+qG6pQ9yauviHh0Fc=";
+    hash = "sha256-nLgr50dW0ZIcArrTx2fr3kZ50tFDqFpMNY0y9lRuVG8=";
   };
 
-  propagatedBuildInputs = [
-    decorator
-    numpy
-    platformdirs
-  ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  build-system = [ hatchling ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  dependencies = [
+    platformdirs
+    siphash24
+    typing-extensions
+  ];
+
+  optional-dependencies = {
+    numpy = [ numpy ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "pytools"
@@ -36,9 +46,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    description = "Miscellaneous Python lifesavers";
     homepage = "https://github.com/inducer/pytools/";
-    description = "Miscellaneous Python lifesavers.";
+    changelog = "https://github.com/inducer/pytools/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ artuuge ];
+    maintainers = [ ];
   };
 }

@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "shelly_exporter";
@@ -15,11 +20,11 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) shelly; };
 
-  meta = with lib; {
+  meta = {
     description = "Shelly humidity sensor exporter for prometheus";
     mainProgram = "shelly_exporter";
     homepage = "https://github.com/aexel90/shelly_exporter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [drupol];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

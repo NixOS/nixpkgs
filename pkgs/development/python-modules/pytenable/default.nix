@@ -1,17 +1,23 @@
 {
   lib,
   buildPythonPackage,
+  cryptography,
   defusedxml,
   fetchFromGitHub,
+  gql,
+  graphql-core,
   marshmallow,
+  pydantic-extra-types,
+  pydantic,
+  pytest-cov-stub,
   pytest-datafiles,
   pytest-vcr,
   pytestCheckHook,
   python-box,
   python-dateutil,
-  pythonOlder,
-  requests,
   requests-pkcs12,
+  requests-toolbelt,
+  requests,
   responses,
   restfly,
   semver,
@@ -21,32 +27,42 @@
 
 buildPythonPackage rec {
   pname = "pytenable";
-  version = "1.4.22";
+  version = "1.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
-    rev = "refs/tags/${version}";
-    hash = "sha256-acMafLlO0yGEnW+0XeBWUpDWvOPFAB4RK/XyAb2JbPw=";
+    tag = version;
+    hash = "sha256-ml5364D3qvd6VNhF2JyGoCzxbdO0DBkaBMoD38O5x8o=";
   };
+
+  pythonRelaxDeps = [
+    "cryptography"
+    "defusedxml"
+  ];
 
   build-system = [ setuptools ];
 
   dependencies = [
+    cryptography
     defusedxml
+    gql
+    graphql-core
     marshmallow
+    pydantic
+    pydantic-extra-types
     python-box
     python-dateutil
     requests
+    requests-toolbelt
     restfly
     semver
     typing-extensions
   ];
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytest-datafiles
     pytest-vcr
     pytestCheckHook
@@ -68,6 +84,13 @@ buildPythonPackage rec {
     # Test requires network access
     "test_assets_list_vcr"
     "test_events_list_vcr"
+    # https://github.com/tenable/pyTenable/issues/953
+    "test_construct_query_str"
+    "test_construct_query_stored_file"
+    "test_iterator_empty_page"
+    "test_iterator_max_page_term"
+    "test_iterator_pagination"
+    "test_iterator_total_term"
   ];
 
   pythonImportsCheck = [ "tenable" ];
@@ -75,8 +98,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for the Tenable.io and TenableSC API";
     homepage = "https://github.com/tenable/pyTenable";
-    changelog = "https://github.com/tenable/pyTenable/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/tenable/pyTenable/releases/tag/${src.tag}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

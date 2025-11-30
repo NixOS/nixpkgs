@@ -1,196 +1,180 @@
-{ buildGoModule
-, cacert
-, cairo
-, cargo
-, cargo-tauri
-, esbuild
-, fetchFromGitHub
-, gdk-pixbuf
-, gobject-introspection
-, jq
-, lib
-, libsoup
-, llvmPackages_15
-, makeBinaryWrapper
-, moreutils
-, nodePackages
-, pango
-, pkg-config
-, rustc
-, rustPlatform
-, stdenv
-, stdenvNoCC
-, wasm-bindgen-cli
-, webkitgtk
+{
+  buildGoModule,
+  bun,
+  cairo,
+  cargo-tauri,
+  cargo,
+  esbuild,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  glib-networking,
+  gobject-introspection,
+  jq,
+  lib,
+  libsoup_3,
+  makeBinaryWrapper,
+  moreutils,
+  nodejs,
+  openssl,
+  pango,
+  pkg-config,
+  rustc,
+  rustPlatform,
+  stdenv,
+  typescript,
+  webkitgtk_4_1,
+  writableTmpDirAsHomeHook,
 }:
-
 let
-
-  esbuild-18-20 = let version = "0.18.20";
-  in esbuild.override {
-    buildGoModule = args:
-      buildGoModule (args // {
-        inherit version;
-        src = fetchFromGitHub {
-          owner = "evanw";
-          repo = "esbuild";
-          rev = "v${version}";
-          hash = "sha256-mED3h+mY+4H465m02ewFK/BgA1i/PQ+ksUNxBlgpUoI=";
-        };
-        vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-      });
-  };
-
-  wasm-bindgen-cli-2-92 = wasm-bindgen-cli.override {
-    version = "0.2.92";
-    hash = "sha256-1VwY8vQy7soKEgbki4LD+v259751kKxSxmo/gqE6yV0=";
-    cargoHash = "sha256-aACJ+lYNEU8FFBs158G1/JG8sc6Rq080PeKCMnwdpH0=";
-  };
-
-in stdenv.mkDerivation (finalAttrs: {
+  esbuild_21-5 =
+    let
+      version = "0.21.5";
+    in
+    esbuild.override {
+      buildGoModule =
+        args:
+        buildGoModule (
+          args
+          // {
+            inherit version;
+            src = fetchFromGitHub {
+              owner = "evanw";
+              repo = "esbuild";
+              rev = "v${version}";
+              hash = "sha256-FpvXWIlt67G8w3pBKZo/mcp57LunxDmRUaCU/Ne89B8=";
+            };
+            vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+          }
+        );
+    };
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "surrealist";
-  version = "1.11.7";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
-    owner = "StarlaneStudios";
-    repo = "Surrealist";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-1jTvbr7jFo2GOB79ClwtBVVnNQlSEkqY2eqbiZxWG74=";
+    owner = "surrealdb";
+    repo = "surrealist";
+    rev = "surrealist-v${finalAttrs.version}";
+    hash = "sha256-L2O3iMoNptNgzEy7gXptAaHXhv4J5ED/72GLrH43/kQ=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/src-tauri";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src cargoRoot;
+    hash = "sha256-NhgSfiBb4FGEnirpDFWI3MIMElen8frKDFKmCBJlSBY=";
+  };
 
-  embed = stdenv.mkDerivation {
+  node_modules = stdenv.mkDerivation {
     inherit (finalAttrs) src version;
-    pname = "${finalAttrs.pname}-embed";
-    sourceRoot = "${finalAttrs.src.name}/src-embed";
-    auditable = false;
-    dontInstall = true;
-
-    cargoDeps = rustPlatform.fetchCargoTarball {
-      inherit (finalAttrs) src;
-      sourceRoot = "${finalAttrs.src.name}/src-embed";
-      hash = "sha256-0cAhaeoP8EPcE1230CyznQZZIKRs0lrI8XOXECgb8pg=";
-    };
-
-    nativeBuildInputs = [
-      cargo
-      rustc
-      llvmPackages_15.clangNoLibc
-      llvmPackages_15.lld
-      rustPlatform.cargoSetupHook
-      wasm-bindgen-cli-2-92
+    pname = "surrealist-node_modules";
+    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+      "GIT_PROXY_COMMAND"
+      "SOCKS_SERVER"
     ];
+    nativeBuildInputs = [
+      bun
+      writableTmpDirAsHomeHook
+    ];
+    dontConfigure = true;
+    buildPhase = ''
+      runHook preBuild
 
-    postBuild = ''
-      CC=clang CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER=lld cargo build \
-        --target wasm32-unknown-unknown \
-        --release
+      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
 
-      wasm-bindgen \
-        target/wasm32-unknown-unknown/release/surrealist_embed.wasm \
-        --out-dir $out \
-        --out-name surrealist-embed \
-        --target web
+      bun install --no-progress --frozen-lockfile --no-cache
+
+      runHook postBuild
     '';
-  };
+    installPhase = ''
+      runHook preInstall
 
-  pnpm-deps = stdenvNoCC.mkDerivation {
-    inherit (finalAttrs) src version;
-    pname = "${finalAttrs.pname}-pnpm-deps";
-    dontFixup = true;
+      mkdir -p $out/node_modules
+      cp -R ./node_modules $out
 
-    nativeBuildInputs = [ cacert jq moreutils nodePackages.pnpm ];
-
-    postInstall = ''
-      export HOME=$(mktemp -d)
-      pnpm config set store-dir $out
-      # use --ignore-script and --no-optional to avoid downloading binaries
-      # use --frozen-lockfile to avoid checking git deps
-      pnpm install --frozen-lockfile --no-optional --ignore-script
-
-      # Remove timestamp and sort the json files
-      rm -rf $out/v3/tmp
-      for f in $(find $out -name "*.json"); do
-        sed -i -E -e 's/"checkedAt":[0-9]+,//g' $f
-        jq --sort-keys . $f | sponge $f
-      done
+      runHook postInstall
     '';
-
+    outputHash =
+      {
+        x86_64-linux = "sha256-tZYIiWHaeryV/f9AFNknRZp8om0y8QH8RCxoqgmbR5g=";
+        aarch64-linux = "sha256-6nB8wcXIYR1WcYqZrNFl0Jfdz/Z3PttULQHsQcfAsOk=";
+      }
+      .${stdenv.hostPlatform.system}
+        or (throw "${finalAttrs.pname}: Platform ${stdenv.hostPlatform.system} is not packaged yet. Supported platforms: x86_64-linux, aarch64-linux.");
     outputHashMode = "recursive";
-    outputHash = "sha256-jT0Bw0xiusOw/5o6EUaEV3/GqkD/l6jkwXmOqc3a/nc=";
-  };
-
-  ui = stdenvNoCC.mkDerivation {
-    inherit (finalAttrs) src version;
-    pname = "${finalAttrs.pname}-ui";
-    dontFixup = true;
-
-    ESBUILD_BINARY_PATH = "${lib.getExe esbuild-18-20}";
-
-    nativeBuildInputs = [ nodePackages.pnpm ];
-
-    postPatch = ''
-      ln -s ${finalAttrs.embed} src/generated
-    '';
-
-    postBuild = ''
-      export HOME=$(mktemp -d)
-      pnpm config set store-dir ${finalAttrs.pnpm-deps}
-      pnpm install --offline --frozen-lockfile --no-optional --ignore-script
-      pnpm build
-    '';
-
-    postInstall = ''
-      cp -r dist $out
-    '';
-  };
-
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tauri-plugin-localhost-0.1.0" =
-        "sha256-7PJgz6t/jPEwX/2xaOe0SYawfPSZw/F1QtOrc6iPiP0=";
-    };
   };
 
   nativeBuildInputs = [
+    bun
     cargo
-    cargo-tauri
+    cargo-tauri.hook
+    gobject-introspection
+    jq
     makeBinaryWrapper
+    moreutils
+    nodejs
     pkg-config
     rustc
     rustPlatform.cargoSetupHook
+    typescript
   ];
 
-  buildInputs =
-    [ cairo gdk-pixbuf gobject-introspection libsoup pango webkitgtk ];
+  buildInputs = [
+    cairo
+    gdk-pixbuf
+    libsoup_3
+    openssl
+    pango
+    webkitgtk_4_1
+  ];
 
+  env = {
+    ESBUILD_BINARY_PATH = lib.getExe esbuild_21-5;
+    OPENSSL_NO_VENDOR = 1;
+  };
+
+  cargoRoot = "src-tauri";
+  buildAndTestSubdir = finalAttrs.cargoRoot;
+
+  # Deactivate the upstream update mechanism
   postPatch = ''
-    substituteInPlace ./tauri.conf.json \
-      --replace '"distDir": "../dist",' '"distDir": "${finalAttrs.ui}",' \
-      --replace '"beforeBuildCommand": "pnpm build",' '"beforeBuildCommand": "",'
-  '';
-
-  postBuild = ''
-    cargo tauri build --bundles deb
-  '';
-
-  postInstall = ''
-    install -Dm555 target/release/bundle/deb/surrealist_${finalAttrs.version}_*/data/usr/bin/surrealist -t $out/bin
-    cp -r target/release/bundle/deb/surrealist_${finalAttrs.version}_*/data/usr/share $out
+    jq '
+      .bundle.createUpdaterArtifacts = false |
+      .plugins.updater = {"active": false, "pubkey": "", "endpoints": []}
+    ' \
+    src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
   '';
 
   postFixup = ''
-    wrapProgram "$out/bin/surrealist" --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+    wrapProgram "$out/bin/surrealist" \
+      --set GIO_EXTRA_MODULES ${glib-networking}/lib/gio/modules \
+      --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+  '';
+
+  configurePhase = ''
+    runHook preConfigure
+
+    cp -R ${finalAttrs.node_modules}/node_modules .
+
+    # Bun takes executables from this folder
+    chmod -R u+rw node_modules
+    chmod -R u+x node_modules/.bin
+    patchShebangs node_modules
+
+    export HOME=$TMPDIR
+    export PATH="$PWD/node_modules/.bin:$PATH"
+
+    runHook postConfigure
   '';
 
   meta = with lib; {
-    description = "Powerful graphical SurrealDB query playground and database explorer for Browser and Desktop";
-    homepage = "https://surrealist.starlane.studio";
+    description = "Visual management of your SurrealDB database";
+    homepage = "https://surrealdb.com/surrealist";
     license = licenses.mit;
     mainProgram = "surrealist";
-    maintainers = with maintainers; [ frankp ];
+    maintainers = with maintainers; [
+      frankp
+      dmitriiStepanidenko
+    ];
     platforms = platforms.linux;
   };
 })

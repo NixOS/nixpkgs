@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, weechat }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  weechat,
+}:
 
 stdenv.mkDerivation {
   pname = "weechat-autosort";
@@ -22,7 +27,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     inherit (weechat.meta) platforms;
-    description = "autosort automatically keeps your buffers sorted and grouped by server.";
+    description = "autosort automatically keeps your buffers sorted and grouped by server";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ flokli ];
   };

@@ -4,24 +4,36 @@
   buildPythonPackage,
   fetchPypi,
   pillow,
-  poetry-core,
+  hatchling,
+  pythonOlder,
   requests,
   rich,
+  uv-dynamic-versioning,
 }:
 
 buildPythonPackage rec {
   pname = "getjump";
-  version = "2.4.2";
+  version = "2.8.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WSLfhVCqP+N+2Rs2PUXOknnlNx3UtWdFYrK1lTW1fqQ=";
+    hash = "sha256-FfAwPCbj+0wL+Lgk17peco/ogrsaa6Js+Ay5fqgPUPw=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  pythonRelaxDeps = [
+    "pillow"
+    "rich"
+  ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    hatchling
+    uv-dynamic-versioning
+  ];
+
+  dependencies = [
     beautifulsoup4
     pillow
     requests
@@ -36,6 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Get and save images from jump web viewer";
     homepage = "https://github.com/eggplants/getjump";
+    changelog = "https://github.com/eggplants/getjump/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = [ ];
     mainProgram = "jget";

@@ -3,8 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pythonRelaxDepsHook,
-  cookiecutter,
   datasets,
   dill,
   fsspec,
@@ -14,32 +12,29 @@
   numpy,
   packaging,
   pandas,
-  pyarrow,
   requests,
-  responses,
+  setuptools,
   tqdm,
   xxhash,
 }:
 
 buildPythonPackage rec {
   pname = "evaluate";
-  version = "0.4.1";
-  format = "setuptools";
+  version = "0.4.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "huggingface";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-axcJg0ZalEd4FOySCiFReKL7wmTCtLaw71YqyLHq8fc=";
+    repo = "evaluate";
+    tag = "v${version}";
+    hash = "sha256-wK50bPJSwCNFJO0l6+15+GrbaFQNfAr/djn9JTOlwpw=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-  pythonRelaxDeps = [ "responses" ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    cookiecutter
+  dependencies = [
     datasets
     numpy
     dill
@@ -51,9 +46,8 @@ buildPythonPackage rec {
     fsspec
     huggingface-hub
     packaging
-    pyarrow
-    responses
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ]
+  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # most tests require internet access.
   doCheck = false;
@@ -63,7 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://huggingface.co/docs/evaluate/index";
     description = "Easily evaluate machine learning models and datasets";
-    changelog = "https://github.com/huggingface/evaluate/releases/tag/v${version}";
+    changelog = "https://github.com/huggingface/evaluate/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ bcdarwin ];
     mainProgram = "evaluate-cli";

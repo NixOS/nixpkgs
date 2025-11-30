@@ -3,6 +3,7 @@
   pkg-config,
   qtspeech,
   qtsvg,
+  plasma-activities,
   poppler,
   libtiff,
   libspectre,
@@ -14,10 +15,12 @@
 mkKdeDerivation {
   pname = "okular";
 
-  extraNativeBuildInputs = [pkg-config];
+  extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     qtspeech
     qtsvg
+
+    plasma-activities
 
     poppler
     libtiff

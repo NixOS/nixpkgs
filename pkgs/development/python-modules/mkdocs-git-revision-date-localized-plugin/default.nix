@@ -3,29 +3,35 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+  setuptools,
+  setuptools-scm,
   babel,
   gitpython,
   mkdocs,
   pytz,
   pytestCheckHook,
-  git,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-git-revision-date-localized-plugin";
-  version = "1.2.5";
-  format = "setuptools";
+  version = "1.4.7";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "timvink";
     repo = "mkdocs-git-revision-date-localized-plugin";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cezL65Wsdaa9W4dGLgTz1x3UFrDRDJaGuttr58CBcuw=";
+    tag = "v${version}";
+    hash = "sha256-xSm+Qvk1DU5CEZpR+69oIAKnIrg/J7iECNHEZQlf/7o=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     babel
     gitpython
     mkdocs
@@ -41,7 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "MkDocs plugin that enables displaying the date of the last git modification of a page";
     homepage = "https://github.com/timvink/mkdocs-git-revision-date-localized-plugin";
-    changelog = "https://github.com/timvink/mkdocs-git-revision-date-localized-plugin/releases/tag/v${version}";
+    changelog = "https://github.com/timvink/mkdocs-git-revision-date-localized-plugin/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ totoroot ];
   };

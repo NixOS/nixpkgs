@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   cython,
   pexpect,
   python,
@@ -11,16 +11,14 @@
 
 buildPythonPackage rec {
   pname = "cpyparsing";
-  version = "2.4.7.2.3.2";
+  version = "2.4.7.2.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchFromGitHub {
-    owner = "evhub";
-    repo = "cpyparsing";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-vnzZdJ7pZz1QxlTqw5UKjxB4GVcXuCfKWX4lu3ORWas=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-2RfwGnSz/GFPk565n8MooIybHeWAlWYMDylZd0S/HTA=";
   };
 
   nativeBuildInputs = [

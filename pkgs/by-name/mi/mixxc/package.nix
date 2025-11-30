@@ -16,15 +16,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mixxc";
-  version = "0.2.2";
+  version = "0.2.5";
 
   src = fetchCrate {
     pname = "mixxc";
     inherit version;
-    hash = "sha256-Y/9l8t6Vz7yq9T1AyoHnWmIcju1rfcV0S74hiK1fEjo=";
+    hash = "sha256-YVh6SOXCf4GHqDduXP7QupC48hcIMQtjIdGJYXNXQ1E=";
   };
 
-  cargoHash = "sha256-l9inqqUiLObrqd/8pNobwBbLaiPJD39YK/38CWfDh+Q=";
+  cargoHash = "sha256-w+bHaGt6aq21DpmxYNQIf/YNigfrkqnAI25Q3l/WhHc=";
 
   cargoBuildFlags = [ "--locked" ];
 
@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    description = "A minimalistic and customizable volume mixer";
+    description = "Minimalistic and customizable volume mixer";
     homepage = "https://github.com/Elvyria/mixxc";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ daru-san ];

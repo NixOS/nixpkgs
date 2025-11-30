@@ -1,22 +1,17 @@
 {
   lib,
-  awesomeversion,
   bellows,
   buildPythonPackage,
   fetchFromGitHub,
+  freezegun,
   pyserial,
-  pyserial-asyncio,
   pyserial-asyncio-fast,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
-  python-slugify,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
-  universal-silabs-flasher,
-  wheel,
   zha-quirks,
   zigpy,
   zigpy-deconz,
@@ -27,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "zha";
-  version = "0.0.8";
+  version = "0.0.79";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -35,37 +30,24 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zha";
-    rev = "refs/tags/${version}";
-    hash = "sha256-xOaqwgL8NqB3pHNa6U/wextntI5aMivHLaIhSRqvgRU=";
+    tag = version;
+    hash = "sha256-rM0Hu/MjMBeQSyZ6HsNmHXZmWFDr3cMi0QoHaL/fKto=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools-git-versioning<2"' "" \
+      --replace-fail '"setuptools-git-versioning<3"' "" \
       --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  pythonRelaxDeps = [
-    "bellows"
-    "universal-silabs-flasher"
-    "zha-quirks"
-  ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-
   build-system = [
     setuptools
-    wheel
   ];
 
   dependencies = [
-    awesomeversion
     bellows
     pyserial
-    pyserial-asyncio
     pyserial-asyncio-fast
-    python-slugify
-    universal-silabs-flasher
     zha-quirks
     zigpy
     zigpy-deconz
@@ -75,7 +57,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-asyncio
+    freezegun
+    pytest-asyncio_0
     pytest-timeout
     pytest-xdist
     pytestCheckHook
@@ -90,7 +73,7 @@ buildPythonPackage rec {
     "test_check_available_unsuccessful"
     "test_device_counter_sensors"
     "test_device_tracker"
-    "test_device_unavailable_skips_entity_polling"
+    "test_device_unavailable_or_disabled_skips_entity_polling"
     "test_elec_measurement_sensor_polling"
     "test_electrical_measurement_init"
     "test_group_member_assume_state"
@@ -102,20 +85,21 @@ buildPythonPackage rec {
     "test_sinope_time"
     "test_siren_timed_off"
     "test_zha_group_light_entity"
+    # flaky, either due to race conditions or timeouts
+    "test_zha_group_switch_entity"
+    "test_zha_group_fan_entity"
+    "test_startup_concurrency_limit"
+    "test_fan_ikea"
+    "test_background"
   ];
 
   disabledTestPaths = [ "tests/test_cluster_handlers.py" ];
-
-  pytestFlagsArray = [
-    "-v"
-    "--timeout=5"
-  ];
 
   meta = with lib; {
     description = "Zigbee Home Automation";
     homepage = "https://github.com/zigpy/zha";
     changelog = "https://github.com/zigpy/zha/releases/tag/${version}";
-    license = licenses.gpl3Only;
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }

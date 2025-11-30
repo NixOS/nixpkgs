@@ -1,25 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, llvmPackages
-, boost
-, cmake
-, spdlog
-, libxml2
-, libffi
-, Foundation
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  llvmPackages_19,
+  boost,
+  cmake,
+  spdlog,
+  libxml2,
+  libffi,
+  testers,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  # The supported version is found in the changelog, the documentation does indicate a minimum version but not a maximum.
+  # The project is also using a `flake.nix` so we can retrieve the used llvm version with:
+  #
+  # ```shell
+  # nix eval --inputs-from .# nixpkgs#llvmPackages.libllvm.version
+  # ```
+  #
+  # > Where `.#` is the flake path were the repo `wasmedge` was cloned at the expected version.
+  llvmPackages = llvmPackages_19;
+in
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "wasmedge";
-  version = "0.13.5";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "WasmEdge";
     repo = "WasmEdge";
     rev = finalAttrs.version;
-    sha256 = "sha256-JaFaqYIwcRXYl5JukAfViUn8VTpMPThFO8EaVTPIudA=";
+    sha256 = "sha256-P4syb8v3EY/tHwG8FOvR+kgMew/nwG+pG2weN6172go=";
   };
 
   nativeBuildInputs = [
@@ -33,13 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
     llvmPackages.llvm
     libxml2
     libffi
-  ] ++ lib.optionals stdenv.isDarwin [
-    Foundation
   ];
 
   cmakeFlags = [
     "-DWASMEDGE_BUILD_TESTS=OFF" # Tests are downloaded using git
-  ] ++ lib.optionals stdenv.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DWASMEDGE_FORCE_DISABLE_LTO=ON"
   ];
 
@@ -56,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://wasmedge.org/";
     license = with licenses; [ asl20 ];
-    description = "A lightweight, high-performance, and extensible WebAssembly runtime for cloud native, edge, and decentralized applications";
+    description = "Lightweight, high-performance, and extensible WebAssembly runtime for cloud native, edge, and decentralized applications";
     maintainers = with maintainers; [ dit7ya ];
     platforms = platforms.all;
   };

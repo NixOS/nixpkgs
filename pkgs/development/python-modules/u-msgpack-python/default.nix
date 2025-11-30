@@ -23,7 +23,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ unittestCheckHook ];
 
   meta = {
-    description = "A portable, lightweight MessagePack serializer and deserializer written in pure Python";
+    description = "Portable, lightweight MessagePack serializer and deserializer written in pure Python";
     homepage = "https://github.com/vsergeev/u-msgpack-python";
     changelog = "https://github.com/vsergeev/u-msgpack-python/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;

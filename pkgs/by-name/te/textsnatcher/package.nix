@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, vala
-, wrapGAppsHook3
-, pkg-config
-, pantheon
-, libhandy
-, libportal
-, glib
-, gtk3
-, desktop-file-utils
-, scrot
-, tesseract
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  vala,
+  wrapGAppsHook3,
+  pkg-config,
+  pantheon,
+  libhandy,
+  libportal,
+  glib,
+  gtk3,
+  desktop-file-utils,
+  scrot,
+  tesseract,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,7 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath [ scrot tesseract ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          scrot
+          tesseract
+        ]
+      }
     )
   '';
 
@@ -55,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://textsnatcher.rf.gd/";
     changelog = "https://github.com/RajSolai/TextSnatcher/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ galaxy ];
     mainProgram = "com.github.rajsolai.textsnatcher";
     platforms = platforms.linux;
   };

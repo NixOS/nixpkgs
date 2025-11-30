@@ -1,30 +1,33 @@
-{ lib
-, cmake
-, fetchFromGitHub
-, primesieve
-, stdenv
+{
+  lib,
+  cmake,
+  fetchFromGitHub,
+  gitUpdater,
+  primesieve,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "primecount";
-  version = "7.13";
+  version = "7.20";
 
   src = fetchFromGitHub {
     owner = "kimwalisch";
     repo = "primecount";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VjsJjG2pSnDMVg3lY3cmpdnASeqClPjHUGY5wqupf2w=";
+    hash = "sha256-rM+c1CDD75bRqvUMI8Ej02nSqkweR8+E4Wpag7mJcM4=";
   };
 
-  outputs = [ "out" "dev" "lib" "man" ];
-
-  nativeBuildInputs = [
-    cmake
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+    "man"
   ];
 
-  buildInputs = [
-    primesieve
-  ];
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = [ primesieve ];
 
   strictDeps = true;
 
@@ -35,6 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
     (lib.cmakeBool "BUILD_TESTS" true)
   ];
+
+  passthru = {
+    tests = {
+      inherit primesieve; # dependency
+    };
+    updateScript = gitUpdater { rev-prefix = "v"; };
+  };
 
   meta = {
     homepage = "https://github.com/kimwalisch/primecount";
@@ -56,6 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/kimwalisch/primecount/blob/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.bsd2;
     mainProgram = "primecount";
-    inherit (primesieve.meta) maintainers platforms;
+    inherit (primesieve.meta) teams platforms;
   };
 })

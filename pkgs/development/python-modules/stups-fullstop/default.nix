@@ -2,11 +2,12 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  pythonAtLeast,
   requests,
   stups-cli-support,
   stups-zign,
   pytest,
-  pytest-cov,
+  pytest-cov-stub,
   isPy3k,
 }:
 
@@ -14,7 +15,7 @@ buildPythonPackage rec {
   pname = "stups-fullstop";
   version = "1.1.31";
   format = "setuptools";
-  disabled = !isPy3k;
+  disabled = !isPy3k || pythonAtLeast "3.11"; # Uses regex patterns deprecated in 3.9, errors in 3.11+
 
   src = fetchFromGitHub {
     owner = "zalando-stups";
@@ -35,11 +36,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest
-    pytest-cov
+    pytest-cov-stub
   ];
 
   meta = with lib; {
-    description = "Convenience command line tool for fullstop. audit reporting.";
+    description = "Convenience command line tool for fullstop. audit reporting";
     homepage = "https://github.com/zalando-stups/stups-fullstop-cli";
     license = licenses.asl20;
     maintainers = [ maintainers.mschuwalow ];

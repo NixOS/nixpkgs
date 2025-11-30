@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, plistcpp
-, pugixml
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  plistcpp,
+  pugixml,
 }:
 
 stdenv.mkDerivation {
@@ -28,7 +29,7 @@ stdenv.mkDerivation {
   ];
 
   meta = with lib; {
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = [ ];
     description = "Compiles CocoaTouch .xib files into .nib";
     license = licenses.mit;
     platforms = platforms.unix;

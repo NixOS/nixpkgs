@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jab";
     repo = "bidict";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WE0YaRT4a/byvU2pzcByuf1DfMlOpYA9i0PPrKXsS+M=";
   };
 
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://bidict.readthedocs.io";
     changelog = "https://bidict.readthedocs.io/changelog.html";
-    description = "The bidirectional mapping library for Python.";
+    description = "Bidirectional mapping library for Python";
     license = licenses.mpl20;
     maintainers = with maintainers; [
       jab

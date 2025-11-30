@@ -1,13 +1,12 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  fetchpatch,
-  writeText,
+
+  #  build-system
   setuptools,
-  wheel,
+
+  # dependencies
   filelock,
   huggingface-hub,
   importlib-metadata,
@@ -16,6 +15,7 @@
   regex,
   requests,
   safetensors,
+
   # optional dependencies
   accelerate,
   datasets,
@@ -27,7 +27,9 @@
   protobuf,
   tensorboard,
   torch,
-  # test dependencies
+
+  # tests
+  writeText,
   parameterized,
   pytest-timeout,
   pytest-xdist,
@@ -38,42 +40,22 @@
   torchsde,
   transformers,
   pythonAtLeast,
+  diffusers,
 }:
 
 buildPythonPackage rec {
   pname = "diffusers";
-  version = "0.27.2";
+  version = "0.35.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "diffusers";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-aRnbU3jN40xaCsoMFyRt1XB+hyIYMJP2b/T1yZho90c=";
+    tag = "v${version}";
+    hash = "sha256-VZXf1YCIFtzuBWaeYG3A+AyqnMEAKEI2nStjuPJ8ZTk=";
   };
 
-  patches = [
-    # fix python3.12 build
-    (fetchpatch {
-      # https://github.com/huggingface/diffusers/pull/7455
-      name = "001-remove-distutils.patch";
-      url = "https://github.com/huggingface/diffusers/compare/363699044e365ef977a7646b500402fa585e1b6b...3c67864c5acb30413911730b1ed4a9ad47c0a15c.patch";
-      hash = "sha256-Qyvyp1GyTVXN+A+lA1r2hf887ubTtaUknbKd4r46NZQ=";
-    })
-    (fetchpatch {
-      # https://github.com/huggingface/diffusers/pull/7461
-      name = "002-fix-removed-distutils.patch";
-      url = "https://github.com/huggingface/diffusers/commit/efbbbc38e436a1abb1df41a6eccfd6f9f0333f97.patch";
-      hash = "sha256-scdtpX1RYFFEDHcaMb+gDZSsPafkvnIO/wQlpzrQhLA=";
-    })
-  ];
-
-  build-system = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     filelock
@@ -86,7 +68,7 @@ buildPythonPackage rec {
     safetensors
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     flax = [
       flax
       jax
@@ -108,8 +90,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "diffusers" ];
 
-  # tests crash due to torch segmentation fault
-  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
+  # it takes a few hours
+  doCheck = false;
 
   nativeCheckInputs = [
     parameterized
@@ -121,7 +103,8 @@ buildPythonPackage rec {
     sentencepiece
     torchsde
     transformers
-  ] ++ passthru.optional-dependencies.torch;
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck =
     let
@@ -147,33 +130,42 @@ buildPythonPackage rec {
       '';
     in
     ''
-      export HOME=$TMPDIR
+      export HOME=$(mktemp -d)
       cat ${conftestSkipNetworkErrors} >> tests/conftest.py
     '';
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
-  disabledTests =
-    [
-      # depends on current working directory
-      "test_deprecate_stacklevel"
-      # fails due to precision of floating point numbers
-      "test_model_cpu_offload_forward_pass"
-      # tries to run ruff which we have intentionally removed from nativeCheckInputs
-      "test_is_copy_consistent"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
+  disabledTests = [
+    # depends on current working directory
+    "test_deprecate_stacklevel"
+    # fails due to precision of floating point numbers
+    "test_full_loop_no_noise"
+    "test_model_cpu_offload_forward_pass"
+    # tries to run ruff which we have intentionally removed from nativeCheckInputs
+    "test_is_copy_consistent"
 
-      # RuntimeError: Dynamo is not supported on Python 3.12+
-      "test_from_save_pretrained_dynamo"
-    ];
+    # Require unpackaged torchao:
+    # importlib.metadata.PackageNotFoundError: No package metadata was found for torchao
+    "test_load_attn_procs_raise_warning"
+    "test_save_attn_procs_raise_warning"
+    "test_save_load_lora_adapter_0"
+    "test_save_load_lora_adapter_1"
+    "test_wrong_adapter_name_raises_error"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # RuntimeError: Dynamo is not supported on Python 3.12+
+    "test_from_save_pretrained_dynamo"
+  ];
 
-  meta = with lib; {
+  passthru.tests.pytest = diffusers.overridePythonAttrs { doCheck = true; };
+
+  meta = {
     description = "State-of-the-art diffusion models for image and audio generation in PyTorch";
     mainProgram = "diffusers-cli";
     homepage = "https://github.com/huggingface/diffusers";
-    changelog = "https://github.com/huggingface/diffusers/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ natsukium ];
+    changelog = "https://github.com/huggingface/diffusers/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

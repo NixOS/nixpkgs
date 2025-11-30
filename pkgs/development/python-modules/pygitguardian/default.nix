@@ -2,11 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  marshmallow,
   marshmallow-dataclass,
+  marshmallow,
+  pdm-backend,
   pytestCheckHook,
-  pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   responses,
   setuptools,
@@ -16,29 +15,28 @@
 
 buildPythonPackage rec {
   pname = "pygitguardian";
-  version = "1.14.0";
+  version = "1.27.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "py-gitguardian";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Uw65+YOnln+IOyT+RgqMEWt5cOZsaeS8Nu8U6ooivWA=";
+    tag = "v${version}";
+    hash = "sha256-Jn8wy5UmuzqEputujGJQtAe8AoGCLYpSwZWHpDGlSWg=";
   };
 
-  pythonRelaxDeps = [ "marshmallow-dataclass" ];
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools
+  pythonRelaxDeps = [
+    "marshmallow-dataclass"
+    "setuptools"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ pdm-backend ];
+
+  dependencies = [
     marshmallow
     marshmallow-dataclass
     requests
+    setuptools
     typing-extensions
   ];
 
@@ -50,32 +48,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pygitguardian" ];
 
-  disabledTests = [
-    # Tests require an API key
-    "test_bogus_rate_limit"
-    "test_compute_sca_files"
-    "test_content_scan_exceptions"
-    "test_content_scan"
-    "test_create_honeytoken"
-    "test_create_jwt"
-    "test_extra_headers"
-    "test_health_check"
-    "test_multi_content_exceptions"
-    "test_multi_content_scan"
-    "test_multiscan_parameters"
-    "test_quota_overview"
-    "test_rate_limit"
-    "test_sca_client_scan_diff"
-    "test_sca_scan_all_with_params"
-    "test_sca_scan_directory_invalid_tar"
-    "test_sca_scan_directory"
-    "test_versions_from_headers"
-  ];
+  env.GITGUARDIAN_API_KEY = "Test key for tests";
 
   meta = with lib; {
     description = "Library to access the GitGuardian API";
     homepage = "https://github.com/GitGuardian/py-gitguardian";
-    changelog = "https://github.com/GitGuardian/py-gitguardian/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/GitGuardian/py-gitguardian/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

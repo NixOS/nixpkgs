@@ -1,12 +1,12 @@
 {
   buildPythonPackage,
+  setuptools,
   cirq-core,
-  freezegun,
   google-api-core,
   protobuf,
+  freezegun,
   pytestCheckHook,
-  pythonRelaxDepsHook,
-  setuptools,
+  typedunits,
 }:
 
 buildPythonPackage rec {
@@ -16,16 +16,19 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/${pname}";
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cirq-core
     google-api-core
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+    typedunits
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     freezegun

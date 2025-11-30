@@ -25,7 +25,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A snapshot of django-filebrowser for the Mezzanine CMS";
+    description = "Snapshot of django-filebrowser for the Mezzanine CMS";
     longDescription = ''
       filebrowser-safe was created to provide a snapshot of the
       FileBrowser asset manager for Django, to be referenced as a

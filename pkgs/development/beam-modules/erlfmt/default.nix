@@ -1,18 +1,24 @@
-{ fetchFromGitHub, rebar3Relx, lib }:
+{
+  fetchFromGitHub,
+  lib,
+  rebar3Relx,
+}:
 
 rebar3Relx rec {
   pname = "erlfmt";
-  version = "1.3.0";
+  version = "1.7.0";
   releaseType = "escript";
+
   src = fetchFromGitHub {
     owner = "WhatsApp";
     repo = "erlfmt";
-    sha256 = "sha256-fVjEVmCnoofnfcxwBk0HI4adO0M6QOshP3uZrecZ9vM=";
-    rev = "v${version}";
+    hash = "sha256-bljqWqpzAPP7+cVA3F+vXoUzUFzD4zXpUl/4XmMypB4=";
+    tag = "v${version}";
   };
+
   meta = with lib; {
     homepage = "https://github.com/WhatsApp/erlfmt";
-    description = "An automated code formatter for Erlang";
+    description = "Automated code formatter for Erlang";
     mainProgram = "erlfmt";
     platforms = platforms.unix;
     license = licenses.asl20;

@@ -4,36 +4,44 @@
   fetchPypi,
   hatch-vcs,
   hatchling,
+  pytest-asyncio,
   pytest-mock,
+  pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "filelock";
-  version = "3.13.4";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "3.20.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0T9GZhi/3nK9LBglXiafclQsbnDnusg6AjLWscxcjPQ=";
+    hash = "sha256-cR6UO07GvkLh1OZpC0jcF1yCKWdGa7McDCk/NDNME/Q=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytest-mock
+    pytest-timeout
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "filelock" ];
+
+  disabledTestPaths = [
+    # Circular dependency with virtualenv
+    "tests/test_virtualenv.py"
   ];
 
   meta = with lib; {
     changelog = "https://github.com/tox-dev/py-filelock/releases/tag/${version}";
-    description = "A platform independent file lock for Python";
+    description = "Platform independent file lock for Python";
     homepage = "https://github.com/benediktschmitt/py-filelock";
     license = licenses.unlicense;
     maintainers = with maintainers; [ hyphon81 ];

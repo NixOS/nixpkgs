@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zytedata";
     repo = "html-text";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-e9gkibQv8mn1Jbt77UmpauOeTqhJQhY9R5Sge/iYi+U=";
   };
 

@@ -5,6 +5,8 @@
   buildPythonPackage,
   fetchPypi,
   pytest-asyncio,
+  pytest-cov-stub,
+  pytest-mock,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -14,37 +16,33 @@
 
 buildPythonPackage rec {
   pname = "aioftp";
-  version = "0.22.3";
+  version = "0.27.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uqKxMYaqAWIuS4LyfC9I9Nr7SORXprGPzamakl4NwnA=";
+    hash = "sha256-fASMMiAIF5bFmDKm/Z/Y+tl+POwSpQvjq8zy3LvrJho=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov" ""
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [ siosocks ];
-
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     socks = [ siosocks ];
   };
 
   nativeCheckInputs = [
     async-timeout
     pytest-asyncio
+    pytest-cov-stub
+    pytest-mock
     pytestCheckHook
     trustme
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # uses 127.0.0.2, which macos doesn't like
     "test_pasv_connection_pasv_forced_response_address"
   ];
@@ -54,7 +52,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python FTP client/server for asyncio";
     homepage = "https://aioftp.readthedocs.io/";
+    changelog = "https://github.com/aio-libs/aioftp/blob/${version}/history.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

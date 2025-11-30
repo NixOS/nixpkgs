@@ -1,10 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  pythonAtLeast,
   fetchPypi,
-  setuptools,
+  legacy-cgi,
   pyasyncore,
+  pythonAtLeast,
+  setuptools,
   unittestCheckHook,
 }:
 
@@ -21,7 +22,9 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   # the built-in asyncore library was removed in python 3.12
-  dependencies = lib.optionals (pythonAtLeast "3.12") [ pyasyncore ];
+  dependencies =
+    lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ]
+    ++ lib.optionals (pythonAtLeast "3.12") [ pyasyncore ];
 
   pythonImportsCheck = [ "wsgitools" ];
 
@@ -29,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     maintainers = with maintainers; [ clkamp ];
-    description = "A set of tools working with WSGI";
+    description = "Set of tools working with WSGI";
     longDescription = ''
       wsgitools is a set of tools working with WSGI (see PEP 333). It
       includes classes for filtering content, middlewares for caching,

@@ -1,8 +1,6 @@
 {
   lib,
   vscode-utils,
-  writeScript,
-  runtimeShell,
   jq,
   clang-tools,
   gdbUseFixed ? true,
@@ -35,29 +33,37 @@
 
   <https://github.com/Microsoft/vscode-cpptools/issues/35>
 
-  Once the symbolic link temporary solution taken, everything shoud run smootly.
+  Once the symbolic link temporary solution taken, everything should run smootly.
 */
 
 let
   gdbDefaultsTo = if gdbUseFixed then "${gdb}/bin/gdb" else "gdb";
+  isx86Linux = stdenv.hostPlatform.system == "x86_64-linux";
+  isDarwin = stdenv.hostPlatform.isDarwin;
   supported = {
     x86_64-linux = {
-      hash = "sha256-arTBt3UWA5zoo0dL044Sx/NT1LUS76XfGIS96NOMvJk=";
+      hash = "sha256-Fnio8fB7xA7fwcP6NDSV04/NRzY1bnfPlCyMmobYOUs=";
       arch = "linux-x64";
     };
     aarch64-linux = {
-      hash = "sha256-oVuDxx117bVd/jDqn9KivTwR5T2X5UZMHk/nZ/e/IOg=";
+      hash = "sha256-0dQYD/XQ50+lo0Foh0v/9m16r2pj8Ydt9ZJCeiEIwyA=";
       arch = "linux-arm64";
+    };
+    aarch64-darwin = {
+      hash = "sha256-41+dCpsWySUnUdsRRM9mQlhcbYBoqCSBOY6Yz5ko18c=";
+      arch = "darwin-arm64";
     };
   };
 
-  base = supported.${stdenv.system} or (throw "unsupported platform ${stdenv.system}");
+  base =
+    supported.${stdenv.hostPlatform.system}
+      or (throw "unsupported platform ${stdenv.hostPlatform.system}");
 in
 vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = base // {
     name = "cpptools";
     publisher = "ms-vscode";
-    version = "1.20.5";
+    version = "1.28.3";
   };
 
   nativeBuildInputs = [
@@ -67,13 +73,13 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   buildInputs = [
     jq
-    lttng-ust
     libkrb5
     zlib
-    stdenv.cc.cc.lib
-  ];
+    (lib.getLib stdenv.cc.cc)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ lttng-ust ];
 
-  dontAutoPatchelf = true;
+  dontAutoPatchelf = isx86Linux || isDarwin;
 
   postPatch = ''
     mv ./package.json ./package_orig.json
@@ -94,14 +100,23 @@ vscode-utils.buildVscodeMarketplaceExtension {
     find "${clang-tools}" -mindepth 1 -maxdepth 1 | xargs ln -s -t "./LLVM"
 
     # Patching binaries
-    chmod +x bin/cpptools bin/cpptools-srv bin/cpptools-wordexp bin/libc.so debugAdapters/bin/OpenDebugAD7
+    chmod +x bin/cpptools bin/cpptools-srv bin/cpptools-wordexp debugAdapters/bin/OpenDebugAD7
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so.1 ./debugAdapters/bin/libcoreclrtraceptprovider.so
+  ''
+  + lib.optionalString isx86Linux ''
+    chmod +x bin/libc.so
+  ''
+  + lib.optionalString isDarwin ''
+    chmod +x debugAdapters/lldb-mi/bin/lldb-mi
   '';
 
+  # On aarch64 the binaries are statically linked
+  # but on x86 they are not.
   postFixup =
-    ''
+    lib.optionalString isx86Linux ''
       autoPatchelf $out/share/vscode/extensions/ms-vscode.cpptools/debugAdapters
-
       # cpptools* are distributed by the extension and need to be run through the distributed musl interpretter
       patchelf --set-interpreter $out/share/vscode/extensions/ms-vscode.cpptools/bin/libc.so $out/share/vscode/extensions/ms-vscode.cpptools/bin/cpptools
       patchelf --set-interpreter $out/share/vscode/extensions/ms-vscode.cpptools/bin/libc.so $out/share/vscode/extensions/ms-vscode.cpptools/bin/cpptools-srv
@@ -112,7 +127,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     '';
 
   meta = {
-    description = "The C/C++ extension adds language support for C/C++ to Visual Studio Code, including features such as IntelliSense and debugging.";
+    description = "C/C++ extension adds language support for C/C++ to Visual Studio Code, including features such as IntelliSense and debugging";
     homepage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
@@ -122,6 +137,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
+      "aarch64-darwin"
     ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

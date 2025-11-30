@@ -8,12 +8,13 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-apidoc";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Ze/NkiEqX4I3FfuV7gmLRYprsJpe5hfZ7T3q2XF3zVU=";
+    pname = "sphinxcontrib_apidoc";
+    inherit version;
+    hash = "sha256-MpuYENZpiPSOEnpr0YzI77vRzSC43rRpGjVzivSa2I0=";
   };
 
   postPatch = ''
@@ -35,6 +36,6 @@ buildPythonPackage rec {
     description = "Sphinx extension for running sphinx-apidoc on each build";
     homepage = "https://github.com/sphinx-contrib/apidoc";
     license = licenses.bsd2;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

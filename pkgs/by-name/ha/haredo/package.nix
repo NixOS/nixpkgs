@@ -2,16 +2,13 @@
   stdenv,
   lib,
   fetchFromSourcehut,
-  hare,
+  hareHook,
   scdoc,
   nix-update-script,
   makeWrapper,
   bash,
-  substituteAll,
+  replaceVars,
 }:
-let
-  arch = stdenv.hostPlatform.uname.processor;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "haredo";
   version = "1.0.5";
@@ -30,34 +27,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Use nix store's bash instead of sh. `@bash@/bin/sh` is used, since haredo expects a posix shell.
-    (substituteAll {
-      src = ./001-use-nix-store-sh.patch;
+    (replaceVars ./001-use-nix-store-sh.patch {
       inherit bash;
     })
   ];
 
   nativeBuildInputs = [
-    hare
+    hareHook
     makeWrapper
     scdoc
   ];
 
   enableParallelChecking = true;
 
+  env.PREFIX = placeholder "out";
+
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   dontConfigure = true;
 
-  preBuild = ''
-    HARECACHE="$(mktemp -d)"
-    export HARECACHE
-    export PREFIX=${builtins.placeholder "out"}
-  '';
-
   buildPhase = ''
     runHook preBuild
 
-    hare build -o bin/haredo -qRa${arch} ./src
+    hare build -o bin/haredo ./src
     scdoc <doc/haredo.1.scd >doc/haredo.1
 
     runHook postBuild
@@ -87,11 +79,11 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A simple and unix-idiomatic build automator";
+    description = "Simple and unix-idiomatic build automator";
     homepage = "https://sr.ht/~autumnull/haredo/";
     license = lib.licenses.wtfpl;
     maintainers = with lib.maintainers; [ onemoresuza ];
     mainProgram = "haredo";
-    inherit (hare.meta) platforms badPlatforms;
+    inherit (hareHook.meta) platforms badPlatforms;
   };
 })

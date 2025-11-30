@@ -1,89 +1,112 @@
 {
   lib,
-  nix-update-script,
-  buildNpmPackage,
   fetchFromGitHub,
   runCommand,
+  stdenv,
+  clang_20,
+  buildNpmPackage,
+  docify,
+  testers,
+  writeText,
   jq,
+  basedpyright,
+  pkg-config,
+  libsecret,
+  nix-update-script,
+  versionCheckHook,
 }:
 
-let
-  version = "1.12.3";
+buildNpmPackage rec {
+  pname = "basedpyright";
+  version = "1.34.0";
 
   src = fetchFromGitHub {
     owner = "detachhead";
     repo = "basedpyright";
-    rev = "v${version}";
-    hash = "sha256-n4jiKxkXGCKJkuXSsUktsiJQuCcZ+D/RJH/ippnOVw8=";
+    tag = "v${version}";
+    hash = "sha256-GTyxJBjzRlCjyaa7xayHzlKQApCbMTh+MUOEZydjteA=";
   };
 
-  patchedPackageJSON = runCommand "package.json" { } ''
-    ${jq}/bin/jq '
-      .devDependencies |= with_entries(select(.key == "glob" or .key == "jsonc-parser"))
-      | .scripts =  {  }
-      ' ${src}/package.json > $out
+  npmDepsHash = "sha256-zNmZ4wXxe31NnQ+VlTLoPM2zTDmKdw1D28pi/roybdQ=";
+  npmWorkspace = "packages/pyright";
+
+  preBuild = ''
+    # Build the docstubs
+    cp -r packages/pyright-internal/typeshed-fallback docstubs
+    docify docstubs/stdlib --builtins-only --in-place
   '';
 
-  pyright-root = buildNpmPackage {
-    pname = "pyright-root";
-    inherit version src;
-    npmDepsHash = "sha256-63kUhKrxtJhwGCRBnxBfOFXs2ARCNn+OOGu6+fSJey4=";
-    dontNpmBuild = true;
-    postPatch = ''
-      cp ${patchedPackageJSON} ./package.json
-      cp ${./package-lock.json} ./package-lock.json
-    '';
-    installPhase = ''
-      runHook preInstall
-      cp -r . "$out"
-      runHook postInstall
-    '';
-  };
+  nativeBuildInputs = [
+    docify
+    pkg-config
+  ]
+  ++ lib.optional stdenv.isDarwin [ clang_20 ]; # clang_21 breaks keytar
 
-  pyright-internal = buildNpmPackage {
-    pname = "pyright-internal";
-    inherit version src;
-    sourceRoot = "${src.name}/packages/pyright-internal";
-    npmDepsHash = "sha256-ba7GzkKrXps4W1ptv+j9fMMXwpi30ymbqgIJ64PaZ1g=";
-    dontNpmBuild = true;
-    # FIXME: Remove this flag when TypeScript 5.5 is released
-    npmFlags = [ "--legacy-peer-deps" ];
-    installPhase = ''
-      runHook preInstall
-      cp -r . "$out"
-      runHook postInstall
-    '';
-  };
-in
-buildNpmPackage rec {
-  pname = "basedpyright";
-  inherit version src;
-
-  sourceRoot = "${src.name}/packages/pyright";
-  npmDepsHash = "sha256-9V1T6w1G1SZi19dgRaFmv+Vy71hmQR+L6cDjQZJrGy8=";
-
-  postPatch = ''
-    chmod +w ../../
-    ln -s ${pyright-root}/node_modules ../../node_modules
-    chmod +w ../pyright-internal
-    ln -s ${pyright-internal}/node_modules ../pyright-internal/node_modules
-  '';
+  buildInputs = [ libsecret ];
 
   postInstall = ''
     mv "$out/bin/pyright" "$out/bin/basedpyright"
     mv "$out/bin/pyright-langserver" "$out/bin/basedpyright-langserver"
+    # Remove dangling symlinks created during installation (remove -delete to just see the files, or -print '%l\n' to see the target
+    find -L $out -type l -print -delete
   '';
 
-  dontNpmBuild = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      # We are expecting 4 errors. Any other amount would indicate not working
+      # stub files, for instance.
+      simple = testers.testEqualContents {
+        assertion = "simple type checking";
+        expected = writeText "expected" ''
+          4
+        '';
+        actual =
+          runCommand "actual"
+            {
+              nativeBuildInputs = [
+                jq
+                basedpyright
+              ];
+              base = writeText "test.py" ''
+                import sys
+                from time import tzset
+
+                def print_string(a_string: str):
+                    a_string += 42
+                    print(a_string)
+
+                if sys.platform == "win32":
+                    print_string(69)
+                    this_function_does_not_exist("nice!")
+                else:
+                    result_of_tzset_is_None: str = tzset()
+              '';
+              configFile = writeText "pyproject.toml" ''
+                [tool.pyright]
+                typeCheckingMode = "strict"
+              '';
+            }
+            ''
+              (basedpyright --outputjson $base || true) | jq -r .summary.errorCount > $out
+            '';
+      };
+    };
+  };
 
   meta = {
-    changelog = "https://github.com/detachhead/basedpyright/releases/tag/${version}";
+    changelog = "https://github.com/detachhead/basedpyright/releases/tag/${src.tag}";
     description = "Type checker for the Python language";
     homepage = "https://github.com/detachhead/basedpyright";
     license = lib.licenses.mit;
     mainProgram = "basedpyright";
-    maintainers = with lib.maintainers; [ kiike ];
+    maintainers = with lib.maintainers; [
+      kiike
+      misilelab
+    ];
   };
 }

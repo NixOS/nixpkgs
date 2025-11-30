@@ -2,34 +2,39 @@
   lib,
   buildPythonPackage,
   certifi,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
+  setuptools,
   requests,
   urllib3,
   websocket-client,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jellyfin-apiclient-python";
-  version = "1.9.2";
-  format = "setuptools";
+  version = "1.11.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-vMzZeoiWli3HjM8Dqr5RhNfR7gcjPqoXG3b/aNNlx2Q=";
+  src = fetchFromGitHub {
+    owner = "jellyfin";
+    repo = "jellyfin-apiclient-python";
+    tag = "v${version}";
+    hash = "sha256-TFF0pENSXWbmIb7IM1bayDACd0VOCTKc1WzLRvTJYNA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     certifi
     requests
     urllib3
     websocket-client
   ];
 
-  # Module has no test
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "jellyfin_apiclient_python" ];
 

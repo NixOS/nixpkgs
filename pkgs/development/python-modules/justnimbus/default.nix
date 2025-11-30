@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "justnimbus";
-  version = "0.7.3";
+  version = "0.7.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kvanzuijlen";
     repo = "justnimbus";
-    rev = "refs/tags/${version}";
-    hash = "sha256-JO8T0JItkkNHxlnDKOO8kM9KSzT7QML4sszPymgXSBA=";
+    tag = version;
+    hash = "sha256-FsuvpmMWBYI1LheO3NFfCeaW4m3YQ41Tc81TP3gdNqo=";
   };
 
   nativeBuildInputs = [ poetry-core ];

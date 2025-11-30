@@ -11,20 +11,20 @@
 
 buildPythonPackage rec {
   pname = "catkin-pkg";
-  version = "0.5.2";
+  version = "1.1.0";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ros-infrastructure";
     repo = "catkin_pkg";
-    rev = version;
-    hash = "sha256-DjaPpLDsLpYOZukf5tYe6ZetSNTe/DJ2lS9BUsehZ8k=";
+    tag = version;
+    hash = "sha256-V4iurFt1WmY2jXy0A4Qa2eKMCWmR+Hs3d9pru0/zUSM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     docutils
     pyparsing
     python-dateutil
@@ -37,9 +37,12 @@ buildPythonPackage rec {
   disabledTestPaths = [ "test/test_flake8.py" ];
 
   meta = {
-    description = "Library for retrieving information about catkin packages.";
+    changelog = "https://github.com/ros-infrastructure/catkin_pkg/blob/${src.tag}/CHANGELOG.rst";
+    description = "Library for retrieving information about catkin packages";
     homepage = "http://wiki.ros.org/catkin_pkg";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      wentasah
+    ];
   };
 }

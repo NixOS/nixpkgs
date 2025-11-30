@@ -6,6 +6,9 @@
 mkKdeDerivation {
   pname = "ark";
 
-  extraBuildInputs = [libarchive libzip];
+  extraBuildInputs = [
+    libarchive
+    (libzip.override { withOpenssl = true; })
+  ];
   meta.mainProgram = "ark";
 }

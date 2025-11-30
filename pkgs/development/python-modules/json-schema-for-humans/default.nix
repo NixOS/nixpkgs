@@ -11,8 +11,6 @@
   poetry-core,
   pygments,
   pytestCheckHook,
-  pythonOlder,
-  pythonRelaxDepsHook,
   pytz,
   pyyaml,
   requests,
@@ -20,23 +18,24 @@
 
 buildPythonPackage rec {
   pname = "json-schema-for-humans";
-  version = "1.0.2";
+  version = "1.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "coveooss";
     repo = "json-schema-for-humans";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-SSMUHC4IsMIIhmRrG0ZWNO2MNKKvoBSybmEEibAY5q0=";
+    tag = "v${version}";
+    hash = "sha256-k4/+ijlaS/bjLcgobPcq6l4yX84WP1FwfGgYHw+iAdE=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'markdown2 = "^2.5.0"' 'markdown2 = "^2.4.1"'
+  '';
 
   pythonRelaxDeps = [ "dataclasses-json" ];
 
   build-system = [ poetry-core ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     click
@@ -60,6 +59,10 @@ buildPythonPackage rec {
     "test_references_url"
     # Tests are failing
     "TestMdGenerate"
+    # Broken since click was updated to 8.2.1 in https://github.com/NixOS/nixpkgs/pull/448189
+    # Click 8.2 separates stdout and stderr, but upstream is on click 8.1 (https://github.com/pallets/click/pull/2523)
+    "test_nonexistent_output_path"
+    "test_config_parameters_with_nonexistent_output_path"
   ];
 
   pythonImportsCheck = [ "json_schema_for_humans" ];
@@ -67,7 +70,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Quickly generate HTML documentation from a JSON schema";
     homepage = "https://github.com/coveooss/json-schema-for-humans";
-    changelog = "https://github.com/coveooss/json-schema-for-humans/releases/tag/v${version}";
+    changelog = "https://github.com/coveooss/json-schema-for-humans/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ astro ];
     mainProgram = "generate-schema-doc";

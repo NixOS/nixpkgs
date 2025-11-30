@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.virtualisation.rosetta;
@@ -55,10 +60,9 @@ in
       fsType = "virtiofs";
     };
 
-
     nix.settings = {
       extra-platforms = [ "x86_64-linux" ];
-      extra-sandbox-paths =  [
+      extra-sandbox-paths = [
         "/run/binfmt"
         cfg.mountPoint
       ];
@@ -72,7 +76,7 @@ in
       mask = ''\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'';
       fixBinary = true;
       matchCredentials = true;
-      preserveArgvZero = false;
+      preserveArgvZero = true;
 
       # Remove the shell wrapper and call the runtime directly
       wrapInterpreterInShell = false;

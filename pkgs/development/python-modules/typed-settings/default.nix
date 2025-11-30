@@ -6,33 +6,37 @@
   click,
   click-option-group,
   fetchPypi,
+  hatch-vcs,
   hatchling,
+  hypothesis,
   jinja2,
   pydantic,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
+  rich-click,
+  sybil,
   tomli,
   typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "typed-settings";
-  version = "24.2.0";
+  version = "25.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "typed_settings";
     inherit version;
-    hash = "sha256-BuosfIlCgCD+h7eA/6/oE98zdURaT3eik+dysBpJR+Y=";
+    hash = "sha256-Kbr9Mc1PXgD+OAw/ADp3HXC+rnAJcFEqjlXxQq/1wRM=";
   };
 
   build-system = [ hatchling ];
 
   dependencies = lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       attrs
       cattrs
@@ -52,16 +56,21 @@ buildPythonPackage rec {
     pydantic = [ pydantic ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    typing-extensions
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  nativeBuildInputs = [ hatch-vcs ];
 
-  pytestFlagsArray = [ "tests" ];
+  nativeCheckInputs = [
+    hypothesis
+    pytest-cov-stub
+    pytestCheckHook
+    rich-click
+    sybil
+  ]
+  ++ (lib.optional (pythonOlder "3.11") typing-extensions)
+  ++ (lib.concatAttrValues optional-dependencies);
+
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
-    # AssertionError: assert [OptionInfo(p...
-    "test_deep_options"
     # 1Password CLI is not available
     "TestOnePasswordLoader"
     "test_handle_op"
@@ -79,6 +88,6 @@ buildPythonPackage rec {
     homepage = "https://gitlab.com/sscherfke/typed-settings";
     changelog = "https://gitlab.com/sscherfke/typed-settings/-/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

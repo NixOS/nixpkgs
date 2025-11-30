@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "numerodix";
     repo = "ansicolor";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-a/BAU42AfMR8C94GwmrLkvSvolFEjV0LbDypvS9UuOA=";
   };
 
@@ -28,9 +28,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ansicolor" ];
 
   meta = with lib; {
-    description = "A library to produce ansi color output and colored highlighting and diffing";
+    description = "Library to produce ansi color output and colored highlighting and diffing";
     homepage = "https://github.com/numerodix/ansicolor/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

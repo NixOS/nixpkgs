@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Gr1N";
-    repo = pname;
+    repo = "pytest-mockservers";
     rev = version;
     hash = "sha256-Mb3wSbambC1h+lFI+fafwZzm78IvADNAsF/Uw60DFHc=";
   };
@@ -46,10 +46,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  # relies on the removed event_loop fixture
+  disabledTests = [ "test_udp_server_factory" ];
+
   pythonImportsCheck = [ "pytest_mockservers" ];
 
   meta = with lib; {
-    description = "A set of fixtures to test your requests to HTTP/UDP servers";
+    description = "Set of fixtures to test your requests to HTTP/UDP servers";
     homepage = "https://github.com/Gr1N/pytest-mockservers";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

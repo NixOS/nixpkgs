@@ -26,7 +26,7 @@ CRC_COMMIT=$(curl --silent ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
     jq -r "map(select(.name == \"${LATEST_TAG_NAME}\")) | .[0] | .commit.sha")
 
 CRC_GIT_PREFETCH=$(nix-prefetch-url --unpack https://github.com/crc-org/crc/archive/${CRC_COMMIT}.tar.gz)
-CRC_GIT_HASH=$(nix hash to-sri --type sha256 ${CRC_GIT_PREFETCH})
+CRC_GIT_HASH=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 ${CRC_GIT_PREFETCH})
 
 FILE_MAKEFILE=${WORKDIR}/Makefile
 curl --silent https://raw.githubusercontent.com/crc-org/crc/${CRC_COMMIT}/Makefile >$FILE_MAKEFILE
@@ -35,9 +35,6 @@ OPENSHIFT_VERSION=$(grep 'OPENSHIFT_VERSION' ${FILE_MAKEFILE} |
     head -n1 | awk '{print $3}')
 
 OKD_VERSION=$(grep 'OKD_VERSION' ${FILE_MAKEFILE} |
-    head -n1 | awk '{print $3}')
-
-PODMAN_VERSION=$(grep 'PODMAN_VERSION' ${FILE_MAKEFILE} |
     head -n1 | awk '{print $3}')
 
 MICROSHIFT_VERSION=$(grep 'MICROSHIFT_VERSION' ${FILE_MAKEFILE} |
@@ -59,9 +56,6 @@ sed -i "s|openShiftVersion = \".*\"|openShiftVersion = \"${OPENSHIFT_VERSION:-}\
     ${NIXPKGS_CRC_FOLDER}/package.nix
 
 sed -i "s|okdVersion = \".*\"|okdVersion = \"${OKD_VERSION:-}\"|" \
-    ${NIXPKGS_CRC_FOLDER}/package.nix
-
-sed -i "s|podmanVersion = \".*\"|podmanVersion = \"${PODMAN_VERSION:-}\"|" \
     ${NIXPKGS_CRC_FOLDER}/package.nix
 
 sed -i "s|microshiftVersion = \".*\"|microshiftVersion = \"${MICROSHIFT_VERSION:-}\"|" \

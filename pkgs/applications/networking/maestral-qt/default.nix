@@ -1,16 +1,17 @@
-{ lib
-, fetchFromGitHub
-, python3
-, qtbase
-, qtsvg
-, qtwayland
-, nixosTests
-, wrapQtAppsHook
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  qtbase,
+  qtsvg,
+  qtwayland,
+  nixosTests,
+  wrapQtAppsHook,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maestral-qt";
-  version = "1.9.3";
+  version = "1.9.5";
   pyproject = true;
 
   disabled = python3.pythonOlder "3.7";
@@ -18,13 +19,11 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral-qt";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-7Lt0Neobtofd1JDoz8BhGn+nFKaMLbM/6z0QQmtEKpA=";
+    tag = "v${version}";
+    hash = "sha256-FCn9ELbodk+zCJNmlOVoxE/KSSqbxy5HTB1vpiu7AJA=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
     click
@@ -37,12 +36,10 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     qtwayland
     qtbase
-    qtsvg  # Needed for the systray icon
+    qtsvg # Needed for the systray icon
   ];
 
-  nativeBuildInputs = [
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   dontWrapQtApps = true;
 
@@ -55,6 +52,10 @@ python3.pkgs.buildPythonApplication rec {
     "--prefix PYTHONPATH : ${makePythonPath [ maestral ]}"
   ];
 
+  postInstall = ''
+    install -Dm444 -t $out/share/icons/hicolor/512x512/apps src/maestral_qt/resources/maestral.png
+  '';
+
   # no tests
   doCheck = false;
 
@@ -62,13 +63,16 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests.maestral = nixosTests.maestral;
 
-  meta = with lib; {
+  meta = {
     description = "GUI front-end for maestral (an open-source Dropbox client) for Linux";
     homepage = "https://maestral.app";
     changelog = "https://github.com/samschott/maestral/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg sfrijters ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      peterhoeg
+      sfrijters
+    ];
+    platforms = lib.platforms.linux;
     mainProgram = "maestral_qt";
   };
 }

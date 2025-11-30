@@ -5,43 +5,38 @@
   fetchPypi,
   packaging,
   pytestCheckHook,
-  pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   requests-mock,
   setuptools,
+  typing-extensions,
   versioneer,
 }:
 
 buildPythonPackage rec {
   pname = "tableauserverclient";
-  version = "0.30";
+  version = "0.38";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MIE6V84xLEbgmTwvP6jQC0H//gBnMTO1sowL1HIMbpQ=";
+    hash = "sha256-Td2QW10vsKojhk9eeO90QbArdIuNn+hbNk9LvCYwgyo=";
   };
 
-  postPatch = ''
-    # Remove vendorized versioneer
-    rm versioneer.py
-  '';
+  pythonRelaxDeps = [
+    "defusedxml"
+    "urllib3"
+  ];
 
-  pythonRelaxDeps = [ "urllib3" ];
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    pythonRelaxDepsHook
     versioneer
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     defusedxml
     requests
     packaging
+    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -59,6 +54,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tableau/server-client-python";
     changelog = "https://github.com/tableau/server-client-python/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

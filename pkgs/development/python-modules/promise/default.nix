@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "syrusakbary";
     repo = "promise";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-5s6GMANSO4UpLOP/HAQxuNFSBSjPgvJCB9R1dOoKuJ4=";
   };
 
@@ -44,6 +44,11 @@ buildPythonPackage rec {
     mock
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Failed: async def functions are not natively supported
+    "test_issue_9_safe"
   ];
 
   disabledTestPaths = [ "tests/test_benchmark.py" ];

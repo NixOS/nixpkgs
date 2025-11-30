@@ -1,30 +1,33 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
-  six,
+  setuptools,
   wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "prompt-toolkit";
-  version = "3.0.43";
-  format = "setuptools";
+  version = "3.0.52";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    pname = "prompt_toolkit";
-    inherit version;
-    hash = "sha256-NSe3ryYQbLxloEC8yEg5o1ZuwbBRuwv+lTYx5wSw/30=";
+  src = fetchFromGitHub {
+    owner = "prompt-toolkit";
+    repo = "python-prompt-toolkit";
+    tag = version;
+    hash = "sha256-ggCy7xTvOkjy6DgsO/rPNtQiAQ4FjsK4ShrvkIHioNQ=";
   };
 
-  propagatedBuildInputs = [
-    six
-    wcwidth
-  ];
+  postPatch = ''
+    # https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1988
+    substituteInPlace src/prompt_toolkit/__init__.py \
+      --replace-fail 'metadata.version("prompt_toolkit")' '"${version}"'
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [ wcwidth ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -45,8 +48,8 @@ buildPythonPackage rec {
       with a nice interactive Python shell (called ptpython) built on top.
     '';
     homepage = "https://github.com/jonathanslenders/python-prompt-toolkit";
-    changelog = "https://github.com/prompt-toolkit/python-prompt-toolkit/blob/${version}/CHANGELOG";
+    changelog = "https://github.com/prompt-toolkit/python-prompt-toolkit/releases/tag/${src.tag}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with lib.maintainers; [ sarahec ];
   };
 }

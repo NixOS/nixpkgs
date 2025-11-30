@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "glmcdona";
     repo = "binary2strings";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3UPT0PdnPAhOu3J2vU5NxE3f4Nb1zwuX3hJiy87nLD0=";
   };
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "binary2strings" ];
 
-  pytestFlagsArray = [ "tests/test.py" ];
+  enabledTestPaths = [ "tests/test.py" ];
 
   meta = with lib; {
     description = "Module to extract Ascii, Utf8, and Unicode strings from binary data";

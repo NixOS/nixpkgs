@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -10,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "open-pomodoro";
     repo = "openpomodoro-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-h/o4yxrZ8ViHhN2JS0ZJMfvcJBPCsyZ9ZQw9OmKnOfY=";
   };
 
@@ -23,7 +24,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "A command-line Pomodoro tracker which uses the Open Pomodoro Format";
+    description = "Command-line Pomodoro tracker which uses the Open Pomodoro Format";
     homepage = "https://github.com/open-pomodoro/openpomodoro-cli";
     changelog = "https://github.com/open-pomodoro/openpomodoro-cli/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

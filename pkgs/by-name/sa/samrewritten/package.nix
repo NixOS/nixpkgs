@@ -1,48 +1,60 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, unstableGitUpdater
-, curl
-, gtkmm3
-, glibmm
-, gnutls
-, yajl
-, pkg-config
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+
+  # Deps
+  gdk-pixbuf,
+  glib,
+  graphene,
+  gtk4,
+  openssl,
+  pango,
+  pkg-config,
+  wrapGAppsHook4,
 }:
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "samrewritten";
-  version = "202008-unstable-2023-05-22";
+  version = "20250919.1";
 
   src = fetchFromGitHub {
     owner = "PaulCombal";
     repo = "SamRewritten";
-    # The latest release is too old, use latest commit instead
-    rev = "39d524a72678a226bf9140db6b97641f554563c3";
-    hash = "sha256-sS/lVY5EWXdTOg7cDWPbi/n5TNt+pRAF1x7ZEaYG4wM=";
+    tag = finalAttrs.version;
+    hash = "sha256-IbWURGWiCRjTJSD8qPc1TmJeOm/WdCAFuK57laIXfXY=";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  cargoHash = "sha256-Px/TlR3BhiFCv73v06VNq0/W0bQM/ORRE/9ndv5hbpY=";
+
+  # Tests require network access and a running Steam client. Skipping.
+  doCheck = false;
 
   nativeBuildInputs = [
     pkg-config
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    curl
-    gtkmm3
-    glibmm
-    gnutls
-    yajl
+    gdk-pixbuf
+    glib
+    graphene
+    gtk4
+    openssl
+    pango
   ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  PKG_CONFIG_PATH = "${openssl.dev}/lib/pkgconfig";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Steam Achievement Manager For Linux. Rewritten in C++";
+    description = "Modern Steam achievements manager for Windows and Linux";
     mainProgram = "samrewritten";
     homepage = "https://github.com/PaulCombal/SamRewritten";
-    license = lib.licenses.gpl3Plus;
+    changelog = "https://github.com/PaulCombal/SamRewritten/releases";
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ ludovicopiero ];
-    platforms = lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 })

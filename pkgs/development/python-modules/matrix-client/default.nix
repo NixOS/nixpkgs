@@ -5,21 +5,26 @@
   pytestCheckHook,
   requests,
   responses,
+  setuptools,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "matrix-client";
   version = "0.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "matrix_client";
     inherit version;
-    sha256 = "0mii7ib3bah5ppqs7i8sjv5l0zbl57011908m4l0jbyby90ayy06";
+    hash = "sha256-BnivQPLLLwkoqQikEMApdH1Ay5YaxaPxvQWqNVY8MVY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [ "urllib3" ];
+
+  dependencies = [
     requests
     urllib3
   ];
@@ -36,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "matrix_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Matrix Client-Server SDK";
     homepage = "https://github.com/matrix-org/matrix-python-sdk";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ olejorgenb ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ olejorgenb ];
   };
 }

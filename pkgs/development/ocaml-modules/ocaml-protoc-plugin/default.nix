@@ -1,14 +1,15 @@
-{ lib
-, fetchFromGitHub
-, buildDunePackage
-, pkg-config
-, protobuf
-, zarith
-, ppx_deriving
-, ppx_deriving_yojson
-, re
-, dune-site
-, ppx_expect
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  pkg-config,
+  protobuf,
+  zarith,
+  ppx_deriving,
+  ppx_deriving_yojson,
+  re,
+  dune-site,
+  ppx_expect,
 }:
 
 buildDunePackage rec {
@@ -39,7 +40,7 @@ buildDunePackage rec {
   nativeCheckInputs = [ protobuf ];
 
   meta = {
-    description = "Maps google protobuf compiler to Ocaml types.";
+    description = "Maps google protobuf compiler to Ocaml types";
     homepage = "https://github.com/issuu/ocaml-protoc-plugin";
     license = lib.licenses.asl20;
     longDescription = ''

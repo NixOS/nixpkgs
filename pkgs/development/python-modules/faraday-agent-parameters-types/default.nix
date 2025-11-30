@@ -5,22 +5,22 @@
   marshmallow,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
+  validators,
 }:
 
 buildPythonPackage rec {
   pname = "faraday-agent-parameters-types";
-  version = "1.6.0";
+  version = "1.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "faraday_agent_parameters_types";
     inherit version;
-    hash = "sha256-yw4u1xhfY9WYLSf9CNAsiDpY7y2Llf8j4gDoNZjACw0=";
+    hash = "sha256-o4N1op+beeoM0GGtcQGWNfFt6SMDohiNnOyD8lWzuk0=";
   };
+
+  pythonRelaxDeps = [ "validators" ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -32,6 +32,7 @@ buildPythonPackage rec {
   dependencies = [
     marshmallow
     packaging
+    validators
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

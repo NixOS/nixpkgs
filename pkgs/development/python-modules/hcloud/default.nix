@@ -2,39 +2,30 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  future,
-  mock,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "hcloud";
-  version = "1.35.0";
+  version = "2.11.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sZSatje+UXt69r7Nv4QMR3IvlHHGuHDm813h72/Oo+M=";
+    hash = "sha256-8hL+H1PL+J7d2sDnAF7C6wIep4n4K+cJe9dM1wWynys=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    future
     requests
     python-dateutil
   ];
 
-  nativeCheckInputs = [
-    mock
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "hcloud" ];
 

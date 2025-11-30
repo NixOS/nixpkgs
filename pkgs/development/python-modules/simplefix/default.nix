@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "simplefix";
     owner = "da4089";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-D85JW3JRQ1xErw6krMbAg94WYjPi76Xqjv/MGNMY5ZU=";
   };
 

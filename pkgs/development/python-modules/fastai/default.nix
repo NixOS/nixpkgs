@@ -5,7 +5,6 @@
   fastprogress,
   fastcore,
   fastdownload,
-  torch,
   torchvision,
   matplotlib,
   pillow,
@@ -19,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "fastai";
-  version = "2.7.15";
+  version = "2.8.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8swg/RjN9exzjMVtKdVN51iH1IrRX501z1DDjTqFaSM=";
+    hash = "sha256-AmQoXZxnaNepeJzlw3A6jhIfVg9ABneRI4uV1WbkJY4=";
   };
 
   propagatedBuildInputs = [
@@ -48,7 +47,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/fastai/fastai";
-    description = "The fastai deep learning library";
+    description = "Fastai deep learning library";
     mainProgram = "configure_accelerate";
     changelog = "https://github.com/fastai/fastai/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;

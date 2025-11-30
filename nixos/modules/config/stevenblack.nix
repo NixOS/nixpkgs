@@ -1,34 +1,71 @@
-{ config, lib, pkgs, ... }:
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
-  inherit (lib) optionals mkOption mkEnableOption types mkIf elem concatStringsSep maintainers;
+  inherit (lib)
+    getOutput
+    maintainers
+    mkEnableOption
+    mkIf
+    mkOption
+    mkPackageOption
+    types
+    ;
+
   cfg = config.networking.stevenblack;
 
-  # needs to be in a specific order
-  activatedHosts = with cfg; [ ]
-    ++ optionals (elem "fakenews" block) [ "fakenews" ]
-    ++ optionals (elem "gambling" block) [ "gambling" ]
-    ++ optionals (elem "porn" block) [ "porn" ]
-    ++ optionals (elem "social" block) [ "social" ];
-
-  hostsPath = "${pkgs.stevenblack-blocklist}/alternates/" + concatStringsSep "-" activatedHosts + "/hosts";
+  filterHostsFile =
+    hostsFile:
+    if cfg.whitelist == [ ] then
+      hostsFile
+    else
+      let
+        pattern = lib.escape [ "." "|" ] (lib.concatStringsSep "|" cfg.whitelist);
+      in
+      pkgs.runCommand "filtered-hosts" { } ''
+        sed '/${pattern}/d' ${hostsFile} > $out
+      '';
 in
 {
   options.networking.stevenblack = {
     enable = mkEnableOption "the stevenblack hosts file blocklist";
 
+    package = mkPackageOption pkgs "stevenblack-blocklist" { };
+
     block = mkOption {
-      type = types.listOf (types.enum [ "fakenews" "gambling" "porn" "social" ]);
+      type = types.listOf (
+        types.enum [
+          "fakenews"
+          "gambling"
+          "porn"
+          "social"
+        ]
+      );
       default = [ ];
       description = "Additional blocklist extensions.";
+    };
+
+    whitelist = mkOption {
+      # https://datatracker.ietf.org/doc/html/rfc1035
+      type = types.listOf (types.strMatching "^[a-zA-Z0-9_-]+([.][a-zA-Z0-9_-]+)+$");
+      default = [ ];
+      description = "Domains to exclude from blocking.";
+      example = [ "s.click.aliexpress.com" ];
     };
   };
 
   config = mkIf cfg.enable {
-    networking.hostFiles = [ ]
-      ++ optionals (activatedHosts != [ ]) [ hostsPath ]
-      ++ optionals (activatedHosts == [ ]) [ "${pkgs.stevenblack-blocklist}/hosts" ];
+    networking.hostFiles = map (x: filterHostsFile "${getOutput x cfg.package}/hosts") (
+      [ "ads" ] ++ cfg.block
+    );
   };
 
-  meta.maintainers = [ maintainers.moni maintainers.artturin ];
+  meta.maintainers = with maintainers; [
+    moni
+    artturin
+    frontear
+  ];
 }

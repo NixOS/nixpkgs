@@ -3,23 +3,20 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tencentcloud-sdk-python";
-  version = "3.0.1154";
+  version = "3.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "TencentCloud";
     repo = "tencentcloud-sdk-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-rVNmNnLRtW7ZhJgNUoZvYlbU9dkiXXOv7/vBAvaQ18w=";
+    tag = version;
+    hash = "sha256-tNNIHO89Yda8mjqdOxhA/QI8D6veOM1xVO/LoSVEB70=";
   };
 
   build-system = [ setuptools ];
@@ -30,11 +27,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tencentcloud" ];
 
-  pytestFlagsArray = [
-    # Other tests require credentials
-    "tests/unit/test_deserialize_warning.py"
-    "tests/unit/test_import.py"
-    "tests/unit/test_serialization.py"
+  enabledTestPaths = [ "tests/unit/" ];
+
+  disabledTests = [
+    # KeyError
+    "test_sts_credential_with_default_endpoint"
+    "test_sts_credential_with_set_endpoint"
   ];
 
   meta = with lib; {

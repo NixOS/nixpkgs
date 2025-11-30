@@ -1,35 +1,41 @@
-{ lib
-, makeWrapper
-, buildGoModule
-, fetchFromGitHub
-, gopass
+{
+  lib,
+  makeWrapper,
+  buildGoModule,
+  fetchFromGitHub,
+  gopass,
 }:
 
 buildGoModule rec {
   pname = "gopass-hibp";
-  version = "1.15.13";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = "gopass-hibp";
     rev = "v${version}";
-    hash = "sha256-ja9/iS6422ygnXD6lsowjmlKbNloS0Zr3CkOkO0ieus=";
+    hash = "sha256-S4X2DWaktAfoqjLz7yAF5I0v+01bQbQLSgEb/105iCk=";
   };
 
-  vendorHash = "sha256-FI/GXPyibcQpNNHWPVSp4diFfbRPv2A8BFi4nRXCU+Y=";
+  vendorHash = "sha256-8LC271XuMeDGWZnysMMumoqLwklQpDKr8VF/zyCvwNA=";
 
   subPackages = [ "." ];
 
   nativeBuildInputs = [ makeWrapper ];
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}"
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+    "-X main.commit=${src.rev}"
   ];
 
   postFixup = ''
     wrapProgram $out/bin/gopass-hibp \
       --prefix PATH : "${lib.makeBinPath [ gopass ]}"
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Gopass haveibeenpwnd.com integration";

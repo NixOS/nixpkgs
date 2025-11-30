@@ -1,27 +1,26 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libgit2
-, openssl
-, zlib
-, stdenv
-, darwin
-, git
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libgit2,
+  openssl,
+  zlib,
+  git,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gitu";
-  version = "0.20.1";
+  version = "0.38.0";
 
   src = fetchFromGitHub {
     owner = "altsem";
     repo = "gitu";
     rev = "v${version}";
-    hash = "sha256-H1REl6DkWYwZ1s8FLyHlsFi1DQY0C3Zizz/o9KUO7XQ=";
+    hash = "sha256-eOt16jeWLQ7nxKMBwwDs/4NIf/rzr+q6s0QHcY+zzSk=";
   };
 
-  cargoHash = "sha256-/u6VmcaQpVagz7W/eAFql9sKF+9dn/o1VGvFGJAJkaA=";
+  cargoHash = "sha256-pJs8uTim+/TrqzjxCzKHlaZRQudd0dMIZXqlAZU7G1M=";
 
   nativeBuildInputs = [
     pkg-config
@@ -31,9 +30,6 @@ rustPlatform.buildRustPackage rec {
     libgit2
     openssl
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-    darwin.apple_sdk.frameworks.Security
   ];
 
   nativeCheckInputs = [
@@ -41,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A TUI Git client inspired by Magit";
+    description = "TUI Git client inspired by Magit";
     homepage = "https://github.com/altsem/gitu";
     changelog = "https://github.com/altsem/gitu/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

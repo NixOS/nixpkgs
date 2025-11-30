@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  pythonImportsCheckHook,
   pythonOlder,
   # documentation build dependencies
   sphinxHook,
@@ -19,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx-notfound-page";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,13 +31,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "readthedocs";
     repo = "sphinx-notfound-page";
-    rev = "refs/tags/${version}";
-    hash = "sha256-tG71UuYbdlWNgq6Y5xRH3aWc9/eTr/RlsRNWSUjrbBE=";
+    tag = version;
+    hash = "sha256-KkdbK8diuQtZQk6FC9xDK/U7mfRBwwUmXp4YYuKueLQ=";
   };
 
   nativeBuildInputs = [
     flit-core
-    pythonImportsCheckHook
     sphinxHook
     sphinx-prompt
     sphinx-rtd-theme
@@ -54,7 +52,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "notfound" ];
 
   meta = with lib; {
-    description = "A sphinx extension to create a custom 404 page with absolute URLs hardcoded";
+    description = "Sphinx extension to create a custom 404 page with absolute URLs hardcoded";
     homepage = "https://github.com/readthedocs/sphinx-notfound-page";
     changelog = "https://github.com/readthedocs/sphinx-notfound-page/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;

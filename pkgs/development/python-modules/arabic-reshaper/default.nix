@@ -17,11 +17,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mpcabd";
     repo = "python-arabic-reshaper";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ucSC5aTvpnlAVQcT0afVecnoN3hIZKtzUhEQ6Qg0jQM=";
   };
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     with-fonttools = [ fonttools ];
   };
 
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mpcabd/python-arabic-reshaper";
     changelog = "https://github.com/mpcabd/python-arabic-reshaper/releases/tag/v${version}";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = [ ];
   };
 }

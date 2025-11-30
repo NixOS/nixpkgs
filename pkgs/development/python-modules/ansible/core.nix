@@ -1,14 +1,14 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  python,
   pythonOlder,
-  pythonRelaxDepsHook,
   installShellFiles,
   docutils,
+  setuptools,
   ansible,
   cryptography,
-  importlib-resources,
   jinja2,
   junit-xml,
   lxml,
@@ -16,7 +16,6 @@
   packaging,
   paramiko,
   ansible-pylibssh,
-  passlib,
   pexpect,
   psutil,
   pycrypto,
@@ -27,60 +26,73 @@
   windowsSupport ? false,
   pywinrm,
   xmltodict,
+  # Additional packages to add to dependencies
+  extraPackages ? _: [ ],
 }:
 
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.16.5";
+  # IMPORTANT: When bumping the minor version (2.XX.0 - the XX), please update pinned package in pkgs/top-level/all-packages.nix
+  # There are pinned packages called ansible_2_XX, create a new one with the previous minor version and then update the version here
+  version = "2.19.4";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-zdKbDsPyDDVlc1Wi9qnB0M8RMdqZzJpKNAGAGwqzbW0=";
+  disabled = pythonOlder "3.12";
+
+  src = fetchFromGitHub {
+    owner = "ansible";
+    repo = "ansible";
+    tag = "v${version}";
+    hash = "sha256-TjafUlPKuxpXrfREK65D88SoGThGBzpbfCHr0ZkviI0=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
   # the python interpreter again, as it would break execution of
   # connection plugins.
   postPatch = ''
-    substituteInPlace lib/ansible/executor/task_executor.py \
-      --replace "[python," "["
-
     patchShebangs --build packaging/cli-doc/build.py
+
+    SETUPTOOLS_PATTERN='"setuptools[0-9 <>=.,]+"'
+    WHEEL_PATTERN='"wheel[0-9 <>=.,]+"'
+    echo "Patching pyproject.toml"
+    # print replaced patterns to stdout
+    sed -r -i -e 's/'"$SETUPTOOLS_PATTERN"'/"setuptools"/w /dev/stdout' \
+      -e 's/'"$WHEEL_PATTERN"'/"wheel"/w /dev/stdout' pyproject.toml
   '';
 
   nativeBuildInputs = [
     installShellFiles
     docutils
-  ] ++ lib.optionals (pythonOlder "3.10") [ pythonRelaxDepsHook ];
+  ];
 
-  propagatedBuildInputs =
-    [
-      # depend on ansible instead of the other way around
-      ansible
-      # from requirements.txt
-      cryptography
-      jinja2
-      packaging
-      passlib
-      pyyaml
-      resolvelib
-      # optional dependencies
-      junit-xml
-      lxml
-      ncclient
-      paramiko
-      ansible-pylibssh
-      pexpect
-      psutil
-      pycrypto
-      requests
-      scp
-      xmltodict
-    ]
-    ++ lib.optionals windowsSupport [ pywinrm ]
-    ++ lib.optionals (pythonOlder "3.10") [ importlib-resources ];
+  build-system = [ setuptools ];
 
-  pythonRelaxDeps = lib.optionals (pythonOlder "3.10") [ "importlib-resources" ];
+  dependencies = [
+    # depend on ansible instead of the other way around
+    ansible
+    # from requirements.txt
+    cryptography
+    jinja2
+    packaging
+    pyyaml
+    resolvelib
+    # optional dependencies
+    junit-xml
+    lxml
+    ncclient
+    paramiko
+    ansible-pylibssh
+    pexpect
+    psutil
+    pycrypto
+    requests
+    scp
+    xmltodict
+  ]
+  ++ lib.optionals windowsSupport [ pywinrm ]
+  ++ extraPackages python.pkgs;
+
+  pythonRelaxDeps = [ "resolvelib" ];
 
   postInstall = ''
     export HOME="$(mktemp -d)"
@@ -96,6 +108,9 @@ buildPythonPackage rec {
     description = "Radically simple IT automation";
     homepage = "https://www.ansible.com";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [
+      HarisDotParis
+      robsliwi
+    ];
   };
 }

@@ -2,59 +2,82 @@
   lib,
   acme,
   aiohttp,
+  async-timeout,
   atomicwrites-homeassistant,
   attrs,
   buildPythonPackage,
   ciso8601,
   cryptography,
   fetchFromGitHub,
+  freezegun,
+  josepy,
+  litellm,
   pycognito,
   pyjwt,
   pytest-aiohttp,
+  pytest-socket,
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
+  sentence-stream,
   setuptools,
   snitun,
   syrupy,
+  voluptuous,
+  webrtc-models,
   xmltodict,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.81.0";
+  version = "1.6.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.13";
 
   src = fetchFromGitHub {
     owner = "nabucasa";
     repo = "hass-nabucasa";
-    rev = "refs/tags/${version}";
-    hash = "sha256-61pdl9bjtvC9Fa7jCtSPEz/5PJiANmKqOSSHjK7is2s=";
+    tag = version;
+    hash = "sha256-LBJPzMosSgfdONu2preIBKmlKhY4P+jFTmR8u2BKCZI=";
   };
 
-  pythonRelaxDeps = [ "acme" ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "0.0.0" "${version}"
+  '';
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "acme"
+    "snitun"
+  ];
 
   dependencies = [
     acme
     aiohttp
+    async-timeout
     atomicwrites-homeassistant
     attrs
     ciso8601
     cryptography
+    josepy
+    litellm
     pycognito
     pyjwt
+    sentence-stream
     snitun
+    voluptuous
+    webrtc-models
+    yarl
   ];
 
   nativeCheckInputs = [
+    freezegun
     pytest-aiohttp
+    pytest-socket
     pytest-timeout
     pytestCheckHook
     syrupy
@@ -66,7 +89,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for the Home Assistant cloud integration";
     homepage = "https://github.com/NabuCasa/hass-nabucasa";
-    changelog = "https://github.com/NabuCasa/hass-nabucasa/releases/tag/${version}";
+    changelog = "https://github.com/NabuCasa/hass-nabucasa/releases/tag/${src.tag}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ Scriptkiddi ];
   };

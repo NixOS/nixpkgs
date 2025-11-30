@@ -1,25 +1,29 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "crawley";
-  version = "1.7.5";
+  version = "1.7.15";
 
   src = fetchFromGitHub {
     owner = "s0rg";
     repo = "crawley";
     rev = "v${version}";
-    hash = "sha256-Ai+Y4WoU0REmo9ECsrV/i0PnPY+gO2+22np+nVH3Xsc=";
+    hash = "sha256-fVS7/W2M97IeVpoayqYImkgiQC5A96qklt53GDsIxfc=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorHash = "sha256-bI7PdUl+/kBx4F9T+tvF7QHNQ2pSvRjT31O/nIUvUAE=";
+  vendorHash = "sha256-SaemEPcXc73G1wwxQ9/LbQV5fRd55pfd504F4PpAWVM=";
 
-  ldflags = [ "-w" "-s" ];
+  ldflags = [
+    "-w"
+    "-s"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd crawley \
@@ -28,7 +32,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "The unix-way web crawler";
+    description = "Unix-way web crawler";
     homepage = "https://github.com/s0rg/crawley";
     license = licenses.mit;
     maintainers = with maintainers; [ ltstf1re ];

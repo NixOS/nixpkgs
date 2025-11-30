@@ -1,33 +1,35 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, cmake
-, cmake-extras
-, cups
-, exiv2
-, lomiri-ui-toolkit
-, pam
-, pkg-config
-, qtbase
-, qtdeclarative
-, xvfb-run
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  cmake,
+  cmake-extras,
+  cups,
+  exiv2,
+  lomiri-ui-toolkit,
+  mesa,
+  pam,
+  pkg-config,
+  qtbase,
+  qtdeclarative,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-ui-extras";
-  version = "0.6.3";
+  version = "0.7.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-ui-extras";
-    rev = finalAttrs.version;
-    hash = "sha256-SF/UF84K9kNtLHO9FDuIFdQId0NfbmRiRZiPrOKvE9o=";
+    tag = finalAttrs.version;
+    hash = "sha256-fN9rZC8J8xyAStvBNTpLqAcssaiQQpu6INwMLlnkvfw=";
   };
 
   postPatch = ''
     substituteInPlace modules/Lomiri/Components/Extras{,/{plugin,PamAuthentication}}/CMakeLists.txt \
-      --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
   '';
 
   strictDeps = true;
@@ -47,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    mesa.llvmpipeHook # ShapeMaterial needs an OpenGL context: https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/issues/35
     qtdeclarative # qmltestrunner
     xvfb-run
   ];
@@ -59,15 +62,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (lib.concatStringsSep ";" [
-      # Exclude tests
-      "-E" (lib.strings.escapeShellArg "(${lib.concatStringsSep "|" [
-        # tst_busy_indicator runs into a codepath in lomiri-ui-toolkit that expects a working GL context
-        "^tst_busy_indicator"
-        # Photo & PhotoImageProvider Randomly fail, unsure why
-        "^tst_PhotoEditorPhoto"
-      ]})")
-    ]))
+    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
+      lib.concatStringsSep ";" [
+        # Exclude tests
+        "-E"
+        (lib.strings.escapeShellArg "(${
+          lib.concatStringsSep "|" [
+            # Photo & PhotoImageProvider Randomly fail, unsure why
+            "^tst_PhotoEditorPhoto"
+          ]
+        })")
+      ]
+    ))
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -75,19 +82,29 @@ stdenv.mkDerivation (finalAttrs: {
   # Parallelism breaks xvfb-run-launched script for QML tests
   enableParallelChecking = false;
 
-  preCheck = let
-    listToQtVar = suffix: lib.makeSearchPathOutput "bin" suffix;
-  in ''
-    export QT_PLUGIN_PATH=${listToQtVar qtbase.qtPluginPrefix [ qtbase ]}
-    export QML2_IMPORT_PATH=${listToQtVar qtbase.qtQmlPrefix ([ qtdeclarative lomiri-ui-toolkit ] ++ lomiri-ui-toolkit.propagatedBuildInputs)}
-    export XDG_RUNTIME_DIR=$PWD
-  '';
+  preCheck =
+    let
+      listToQtVar = suffix: lib.makeSearchPathOutput "bin" suffix;
+    in
+    ''
+      export QT_PLUGIN_PATH=${listToQtVar qtbase.qtPluginPrefix [ qtbase ]}
+      export QML2_IMPORT_PATH=${
+        listToQtVar qtbase.qtQmlPrefix (
+          [
+            qtdeclarative
+            lomiri-ui-toolkit
+          ]
+          ++ lomiri-ui-toolkit.propagatedBuildInputs
+        )
+      }
+      export XDG_RUNTIME_DIR=$PWD
+    '';
 
   passthru = {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lomiri UI Extra Components";
     longDescription = ''
       A collection of UI components that for various reasons can't be included in
@@ -96,8 +113,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://gitlab.com/ubports/development/core/lomiri-ui-extras";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-ui-extras/-/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.gpl3Only;
-    maintainers = teams.lomiri.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.linux;
   };
 })

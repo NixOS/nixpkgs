@@ -1,37 +1,32 @@
-{ lib
-, stdenv
-, writeShellApplication
-, fetchFromGitHub
-, cjson
-, cmake
-, git
-, makeBinaryWrapper
-, unzip
-, curl
-, freetype
-, glew
-, libjpeg
-, libogg
-, libpng
-, libtheora
-, lua5_4
-, minizip
-, openal
-, SDL2
-, sqlite
-, zlib
+{
+  lib,
+  stdenv,
+  writeScriptBin,
+  fetchFromGitHub,
+  cjson,
+  cmake,
+  curl,
+  freetype,
+  glew,
+  libjpeg,
+  libogg,
+  libpng,
+  libtheora,
+  libX11,
+  lua5_4,
+  minizip,
+  openal,
+  SDL2,
+  sqlite,
+  zlib,
 }:
 let
-  version = "2.82.1";
-  fakeGit = writeShellApplication {
-    name = "git";
-
-    text = ''
-      if [ "$1" = "describe" ]; then
-        echo "${version}"
-      fi
-    '';
-  };
+  version = "2.83.2";
+  fakeGit = writeScriptBin "git" ''
+    if [ "$1" = "describe" ]; then
+      echo "${version}"
+    fi
+  '';
 in
 stdenv.mkDerivation {
   pname = "etlegacy-unwrapped";
@@ -40,20 +35,19 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "etlegacy";
     repo = "etlegacy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-DA5tudbehXIU+4hX3ggcxWZ7AAOa8LUkIvUHbgMgDY8=";
+    tag = "v${version}";
+    hash = "sha256-hZwLYaYV0j3YwFi8KRr4DZV73L2yIwFJ3XqCyq6L7hE=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
-    cjson
     cmake
     fakeGit
-    git
-    makeBinaryWrapper
-    unzip
   ];
 
   buildInputs = [
+    cjson
     curl
     freetype
     glew
@@ -61,6 +55,7 @@ stdenv.mkDerivation {
     libogg
     libpng
     libtheora
+    libX11
     lua5_4
     minizip
     openal
@@ -69,30 +64,33 @@ stdenv.mkDerivation {
     zlib
   ];
 
-  preBuild = ''
-    # Required for build time to not be in 1980
-    export SOURCE_DATE_EPOCH=$(date +%s)
-    # This indicates the build was by a CI pipeline and prevents the resource
-    # files from being flagged as 'dirty' due to potentially being custom built.
-    export CI="true"
-  '';
-
   cmakeFlags = [
-    "-DCROSS_COMPILE32=0"
-    "-DBUILD_SERVER=1"
-    "-DBUILD_CLIENT=1"
-    "-DBUNDLED_JPEG=0"
-    "-DBUNDLED_LIBS=0"
-    "-DINSTALL_EXTRA=0"
-    "-DINSTALL_OMNIBOT=0"
-    "-DINSTALL_GEOIP=0"
-    "-DINSTALL_WOLFADMIN=0"
-    "-DFEATURE_AUTOUPDATE=0"
-    "-DINSTALL_DEFAULT_BASEDIR=${placeholder "out"}/lib/etlegacy"
-    "-DINSTALL_DEFAULT_BINDIR=${placeholder "out"}/bin"
+    (lib.cmakeBool "CROSS_COMPILE32" false)
+    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
+    (lib.cmakeBool "BUILD_SERVER" true)
+    (lib.cmakeBool "BUILD_CLIENT" true)
+    (lib.cmakeBool "BUNDLED_ZLIB" false)
+    (lib.cmakeBool "BUNDLED_CJSON" false)
+    (lib.cmakeBool "BUNDLED_JPEG" false)
+    (lib.cmakeBool "BUNDLED_LIBS" false)
+    (lib.cmakeBool "BUNDLED_LIBS_DEFAULT" false)
+    (lib.cmakeBool "BUNDLED_FREETYPE" false)
+    (lib.cmakeBool "BUNDLED_OGG_VORBIS" false)
+    (lib.cmakeBool "BUNDLED_OPENAL" false)
+    (lib.cmakeBool "BUNDLED_PNG" false)
+    (lib.cmakeBool "BUNDLED_THEORA" false)
+    (lib.cmakeBool "BUNDLED_MINIZIP" false)
+    (lib.cmakeBool "CLIENT_GLVND" true)
+    (lib.cmakeBool "ENABLE_SSE" true)
+    (lib.cmakeBool "INSTALL_EXTRA" false)
+    (lib.cmakeBool "INSTALL_OMNIBOT" false)
+    (lib.cmakeBool "INSTALL_GEOIP" false)
+    (lib.cmakeBool "INSTALL_WOLFADMIN" false)
+    (lib.cmakeBool "FEATURE_AUTOUPDATE" false)
+    (lib.cmakeBool "FEATURE_RENDERER2" false)
+    (lib.cmakeFeature "INSTALL_DEFAULT_BASEDIR" "${placeholder "out"}/lib/etlegacy")
+    (lib.cmakeFeature "INSTALL_DEFAULT_BINDIR" "${placeholder "out"}/bin")
   ];
-
-  hardeningDisable = [ "fortify" ];
 
   meta = {
     description = "ET: Legacy is an open source project based on the code of Wolfenstein: Enemy Territory which was released in 2010 under the terms of the GPLv3 license";
@@ -103,7 +101,8 @@ stdenv.mkDerivation {
       for the popular online FPS game Wolfenstein: Enemy Territory - whose
       gameplay is still considered unmatched by many, despite its great age.
     '';
-    maintainers = with lib.maintainers; [ ashleyghooper drupol ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      ashleyghooper
+    ];
   };
 }

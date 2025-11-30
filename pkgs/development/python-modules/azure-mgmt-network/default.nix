@@ -7,26 +7,29 @@
   isodate,
   pythonOlder,
   setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-network";
-  version = "25.3.0";
+  version = "29.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-3OLK+xrg5WPgte/FN9yYp8Ctgk1CYeZL7XX3iBlt1cY=";
+    pname = "azure_mgmt_network";
+    inherit version;
+    hash = "sha256-V3+8dqGV90S5e6xCdeESeffz5jxlnZh3PztKmm4JQ7k=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     azure-common
     azure-mgmt-core
     isodate
+    typing-extensions
   ];
 
   # Module has no tests
@@ -44,7 +47,6 @@ buildPythonPackage rec {
     maintainers = with maintainers; [
       olcai
       maxwilson
-      jonringer
     ];
   };
 }

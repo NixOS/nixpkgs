@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "itemloaders";
-  version = "1.2.0";
+  version = "1.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scrapy";
     repo = "itemloaders";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-DatHJnAIomVoN/GrDzM2fNnFHcXqo6zs3ucKCOCf9DU=";
+    tag = "v${version}";
+    hash = "sha256-Hs3FodJAWZGeo+kMmcto5WW433RekwVuucaJl8TKc+0=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/scrapy/itemloaders";
     changelog = "https://github.com/scrapy/itemloaders/raw/v${version}/docs/release-notes.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

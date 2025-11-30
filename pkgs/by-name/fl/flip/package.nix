@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  cmake
+  cmake,
 }:
 
 stdenv.mkDerivation {
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A tool for visualizing and communicating the errors in rendered images.";
+    description = "Tool for visualizing and communicating the errors in rendered images";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ zmitchell ];

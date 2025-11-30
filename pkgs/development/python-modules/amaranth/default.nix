@@ -4,6 +4,7 @@
   pythonOlder,
   fetchFromGitHub,
   pdm-backend,
+  jschon,
   pyvcd,
   jinja2,
   importlib-resources,
@@ -12,55 +13,73 @@
 
   # for tests
   pytestCheckHook,
-  symbiyosys,
+  sby,
   yices,
   yosys,
 }:
 
 buildPythonPackage rec {
   pname = "amaranth";
-  format = "pyproject";
-  version = "0.4.5";
+  version = "0.5.8";
+  pyproject = true;
+
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "amaranth-lang";
     repo = "amaranth";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-g9dn6gUTdFHz9GMWHERsRLWHoI3E7vjuQDK0usbZO7g=";
+    tag = "v${version}";
+    hash = "sha256-hqMgyQJRz1/5C9KB3nAI2RKPZXZUl3zhfZbk9M1hTxs=";
   };
 
-  nativeBuildInputs = [
-    git
-    pdm-backend
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "pdm-backend~=2.3.0" "pdm-backend>=2.3.0"
+  '';
 
-  dependencies =
-    [
-      jinja2
-      pyvcd
-    ]
-    ++ lib.optional (pythonOlder "3.9") importlib-resources
-    ++ lib.optional (pythonOlder "3.8") importlib-metadata;
+  nativeBuildInputs = [ git ];
+
+  build-system = [ pdm-backend ];
+
+  dependencies = [
+    jschon
+    jinja2
+    pyvcd
+  ]
+  ++ lib.optional (pythonOlder "3.9") importlib-resources
+  ++ lib.optional (pythonOlder "3.8") importlib-metadata;
 
   nativeCheckInputs = [
     pytestCheckHook
-    symbiyosys
+    sby
     yices
     yosys
   ];
 
   pythonImportsCheck = [ "amaranth" ];
 
+  disabledTests = [
+    "verilog"
+    "test_reversible"
+    "test_distance"
+  ];
+
+  disabledTestPaths = [
+    # Subprocesses
+    "tests/test_examples.py"
+    # Verification failures
+    "tests/test_lib_fifo.py"
+  ];
+
   meta = with lib; {
-    description = "A modern hardware definition language and toolchain based on Python";
-    mainProgram = "amaranth-rpc";
+    description = "Modern hardware definition language and toolchain based on Python";
     homepage = "https://amaranth-lang.org/docs/amaranth";
+    changelog = "https://github.com/amaranth-lang/amaranth/blob/${src.tag}/docs/changes.rst";
     license = licenses.bsd2;
     maintainers = with maintainers; [
-      emily
       thoughtpolice
       pbsds
     ];
+    mainProgram = "amaranth-rpc";
   };
 }

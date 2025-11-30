@@ -1,9 +1,12 @@
-{ lib, stdenv, fetchFromGitLab, ocaml, findlib, bzip2, autoreconfHook }:
-
-if lib.versionOlder ocaml.version "4.02"
-|| lib.versionAtLeast ocaml.version "5.0"
-then throw "bz2 is not available for OCaml ${ocaml.version}"
-else
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  ocaml,
+  findlib,
+  bzip2,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-bz2";
@@ -16,7 +19,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-jBFEkLN2fbC3LxTu7C0iuhvNg64duuckBHWZoBxrV/U=";
   };
 
-  autoreconfFlags = [ "-I" "." ];
+  autoreconfFlags = [
+    "-I"
+    "."
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -36,6 +42,7 @@ stdenv.mkDerivation rec {
     description = "OCaml bindings for the libbz2 (AKA, bzip2) (de)compression library";
     downloadPage = "https://gitlab.com/irill/camlbz2";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ ];
+    broken = lib.versionOlder ocaml.version "4.02" || lib.versionAtLeast ocaml.version "5.0";
+    maintainers = [ ];
   };
 }

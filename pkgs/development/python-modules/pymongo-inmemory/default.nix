@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pymongo-inmemory";
-  version = "0.4.1";
+  version = "0.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kaizendorks";
     repo = "pymongo_inmemory";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-vYWVMSawk+03ie3PtqOyzd6wxiviq+IzyQ8bvEHNHfc=";
+    tag = "v${version}";
+    hash = "sha256-iYUU2XoTEfgUm+816wHveu6dPEo6nzhlZNXyuRw42T0=";
   };
 
   postPatch = ''
@@ -55,7 +55,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/kaizendorks/pymongo_inmemory";
-    description = "A mongo mocking library with an ephemeral MongoDB running in memory";
+    description = "Mongo mocking library with an ephemeral MongoDB running in memory";
     maintainers = with lib.maintainers; [ pbsds ];
     license = lib.licenses.mit;
   };

@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "python-motionmount";
-  version = "1.0.1";
+  version = "2.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vogelsproducts";
     repo = "python-MotionMount";
-    rev = "refs/tags/${version}";
-    hash = "sha256-F/nFo/PivnIogVwEh6MsQZQWg95kQMr6pZuf0SZa3n4=";
+    tag = version;
+    hash = "sha256-cXh+7DNbwYoKp76XmzPno6dcfujZT/QUO3Ns72M4gV0=";
   };
 
   build-system = [ setuptools ];

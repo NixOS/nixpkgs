@@ -10,17 +10,17 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.7.2";
+  version = "3.9.1";
   pname = "asgiref";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "django";
     repo = "asgiref";
-    rev = "refs/tags/${version}";
-    hash = "sha256-VW1PBh6+nLMD7qxmL83ymuxCPYKVY3qGKsB7ZiMqMu8=";
+    tag = version;
+    hash = "sha256-VD8OQP+Xq3JpUz3fZRl6g+SL7mGZjeHjOU9Cd+scYzc=";
   };
 
   propagatedBuildInputs = [ typing-extensions ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [ "test_multiprocessing" ];
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [ "test_multiprocessing" ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "Reference ASGI adapters and channel layers";
     homepage = "https://github.com/django/asgiref";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

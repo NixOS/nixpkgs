@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, gtk3
-, libxml2
-, xkeyboard_config
-, wrapGAppsHook3
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  gtk3,
+  libxml2,
+  xkeyboard_config,
+  wrapGAppsHook3,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "labwc-tweaks-gtk";
-  version = "0-unstable-2024-05-19";
+  version = "0-unstable-2025-06-14";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc-tweaks-gtk";
-    rev = "6f251c525a89bbe3dc3fd1bc8cd7cad4950b348a";
-    hash = "sha256-MVnEJ3tk/TDCxAG8v5TDAZUIWmlUrP6Bq1VyeM5VkZ4=";
+    rev = "394a61ed5a546c59d4e632a5a7b184aecc79166a";
+    hash = "sha256-/iYe3FVIFo74XnyWeUHpWjmLCw8MsZBqXp55o0FjILA=";
   };
 
   nativeBuildInputs = [
@@ -46,9 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/labwc/labwc-tweaks-gtk";
     description = "Configuration gui app for labwc; gtk fork";
-    mainProgram = "labwc-tweaks";
+    mainProgram = "labwc-tweaks-gtk";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ AndersonTorres romildo ];
+    maintainers = with lib.maintainers; [ romildo ];
   };
 })

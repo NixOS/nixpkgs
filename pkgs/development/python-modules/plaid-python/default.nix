@@ -6,21 +6,25 @@
   python-dateutil,
   urllib3,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "plaid-python";
-  version = "21.1.0";
-  format = "setuptools";
+  version = "36.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-KZGfr60RclPMis3y/XPY+VMQr0IxGXMwI7tPxNOlmhg=";
+    pname = "plaid_python";
+    inherit version;
+    hash = "sha256-3TQ6jGsf+2ebYnAxRTKs4JrijDf3ojyfS4iBAMAG8FU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     nulltype
     python-dateutil
     urllib3

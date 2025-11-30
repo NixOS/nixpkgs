@@ -1,42 +1,36 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  poetry-core,
-  pythonRelaxDepsHook,
-  setuptools,
-  wheel,
+
+  # build-system
+  hatchling,
+
+  # dependencies
   ipykernel,
   nbclient,
   nbformat,
   pygments,
-  pytest,
-  pyyaml,
-  pytest-xdist,
+
+  # tests
   pytestCheckHook,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "nbmake";
-  version = "1.5.3";
+  version = "1.5.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "treebeardtech";
     repo = "nbmake";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-sX0YqyBchLlo0QPIpLvl11/gwoiZknG5rBDzmQKiXhs=";
+    tag = "v${version}";
+    hash = "sha256-Du2sxSl1a5ZVl7ueHWnkTTPtuMUlmALuOuSkoEFIQcE=";
   };
 
   build-system = [
-    poetry-core
-    pythonRelaxDepsHook
-    setuptools
-    wheel
+    hatchling
   ];
 
   dependencies = [
@@ -44,8 +38,6 @@ buildPythonPackage rec {
     nbclient
     nbformat
     pygments
-    pytest
-    pyyaml
   ];
 
   pythonRelaxDeps = [ "nbclient" ];
@@ -53,18 +45,28 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "nbmake" ];
 
   nativeCheckInputs = [
-    pytest-xdist
     pytestCheckHook
     typing-extensions
   ];
 
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  disabledTests = [
+    # depends on pytest-xdist that is not added, as
+    # tests are prone to race conditions under parallelism, they sometimes hang indefinitely
+    # https://github.com/treebeardtech/nbmake/issues/129
+    "test_when_parallel_passing_nbs_then_ok"
+  ];
+
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin for testing notebooks";
     homepage = "https://github.com/treebeardtech/nbmake";
-    changelog = "https://github.com/treebeardtech/nbmake/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ GaetanLepage ];
+    changelog = "https://github.com/treebeardtech/nbmake/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

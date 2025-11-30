@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, hicolor-icon-theme
-, openbabel
-, desktop-file-utils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  pkg-config,
+  qttools,
+  wrapQtAppsHook,
+  hicolor-icon-theme,
+  openbabel,
+  desktop-file-utils,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,15 +34,20 @@ stdenv.mkDerivation rec {
       --replace "CXX_STANDARD 14" "CXX_STANDARD 17"
   '';
 
-  preConfigure = ''
-    cmakeFlags="$cmakeFlags -DMSK_PREFIX=$out"
-  '';
+  cmakeFlags = [
+    "-DMSK_PREFIX=${placeholder "out"}"
+  ];
 
   postFixup = ''
     ln -s $out/lib/molsketch/* $out/lib/.
   '';
 
-  nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qttools
+    wrapQtAppsHook
+  ];
   buildInputs = [
     hicolor-icon-theme
     openbabel

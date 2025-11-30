@@ -8,13 +8,11 @@
   pytestCheckHook,
   pygments,
   tabulate,
-  terminaltables,
-  wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "cli-helpers";
-  version = "2.3.1";
+  version = "2.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -22,22 +20,24 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "cli_helpers";
     inherit version;
-    hash = "sha256-uCqJg87uIfGA5v0N23yo2uQ8QOkglR44F/mWqyBNrmo=";
+    hash = "sha256-YtEXENvrwvxGAAPeEhVogyXYY2hZBW1oizhBm9QEi8A=";
   };
 
   propagatedBuildInputs = [
     configobj
     tabulate
-  ] ++ tabulate.optional-dependencies.widechars;
+  ]
+  ++ tabulate.optional-dependencies.widechars;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     styles = [ pygments ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
     mock
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   meta = with lib; {
     description = "Python helpers for common CLI tasks";

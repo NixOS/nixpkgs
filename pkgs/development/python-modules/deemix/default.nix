@@ -40,7 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Deezer downloader built from the ashes of Deezloader Remix";
     mainProgram = "deemix";
-    homepage = "https://git.freezerapp.xyz/RemixDev/deemix-py";
+    homepage = "https://gitlab.com/RemixDev/deemix-py";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ natto1784 ];
   };

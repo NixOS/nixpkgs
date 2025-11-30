@@ -1,12 +1,14 @@
-{ lib
-, buildDunePackage
-, fetchFromGitHub
-, fetchpatch
-, alcotest
-, cmdliner
-, ppx_deriving
-, ppxlib
-, gitUpdater
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  fetchpatch,
+  alcotest,
+  cmdliner,
+  ppx_deriving,
+  ppxlib,
+  result,
+  gitUpdater,
 }:
 
 buildDunePackage rec {
@@ -14,7 +16,6 @@ buildDunePackage rec {
   version = "0.6.1";
 
   minimalOCamlVersion = "4.11";
-  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "hammerlab";
@@ -36,6 +37,7 @@ buildDunePackage rec {
     cmdliner
     ppx_deriving
     ppxlib
+    result
   ];
 
   doCheck = true;
@@ -50,5 +52,6 @@ buildDunePackage rec {
     homepage = "https://github.com/hammerlab/ppx_deriving_cmdliner";
     license = licenses.asl20;
     maintainers = [ maintainers.romildo ];
+    broken = lib.versionAtLeast ppxlib.version "0.36";
   };
 }

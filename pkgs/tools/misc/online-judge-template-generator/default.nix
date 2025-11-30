@@ -1,22 +1,24 @@
-{ lib
-, buildPythonApplication
-, appdirs
-, beautifulsoup4
-, colorlog
-, fetchFromGitHub
-, mako
-, online-judge-api-client
-, online-judge-tools
-, ply
-, pyyaml
-, requests
-, setuptools
-, toml
+{
+  lib,
+  buildPythonApplication,
+  appdirs,
+  beautifulsoup4,
+  colorlog,
+  fetchFromGitHub,
+  mako,
+  online-judge-api-client,
+  online-judge-tools,
+  ply,
+  pyyaml,
+  requests,
+  setuptools,
+  toml,
 }:
 
 buildPythonApplication rec {
   pname = "online-judge-template-generator";
   version = "4.8.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "online-judge-tools";

@@ -1,11 +1,12 @@
 {
-  lib,
   buildPythonPackage,
   fetchFromGitHub,
+  lib,
+  jinja2,
   mock,
+  packaging,
   ply,
   pytestCheckHook,
-  pythonAtLeast,
   pythonOlder,
   setuptools,
   six,
@@ -13,17 +14,16 @@
 
 buildPythonPackage rec {
   pname = "stone";
-  version = "3.3.6";
+  version = "3.3.9";
   pyproject = true;
 
-  # distutils removal, https://github.com/dropbox/stone/issues/323
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dropbox";
     repo = "stone";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Og0hUUCCd9wRdHUhZBl62rDAunP2Bph5COsCw/T1kUA=";
+    tag = "v${version}";
+    hash = "sha256-3tUV2JrE3S2Tj/9aHvzfBTkIWUmWzkWNsVLr5yWRE/Q=";
   };
 
   postPatch = ''
@@ -34,8 +34,10 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    jinja2
     ply
     six
+    packaging
   ];
 
   nativeCheckInputs = [
@@ -46,11 +48,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "stone" ];
 
   meta = with lib; {
-    description = "Official Api Spec Language for Dropbox";
+    description = "Official API Spec Language for Dropbox API V2";
     homepage = "https://github.com/dropbox/stone";
-    changelog = "https://github.com/dropbox/stone/releases/tag/v${version}";
+    changelog = "https://github.com/dropbox/stone/releases/tag/${src.tag}";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
     mainProgram = "stone";
   };
 }

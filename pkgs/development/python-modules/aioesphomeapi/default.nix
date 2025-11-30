@@ -1,8 +1,8 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   cython,
@@ -11,11 +11,11 @@
   # dependencies
   aiohappyeyeballs,
   async-interrupt,
-  async-timeout,
   chacha20poly1305-reuseable,
   cryptography,
   noiseprotocol,
   protobuf,
+  tzlocal,
   zeroconf,
 
   # tests
@@ -26,22 +26,22 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "24.3.0";
+  version = "42.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "aioesphomeapi";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-wQR3dwN5O++TdtQh+Wcj7c7TNMaRj2lMlOuXOAPVU0Q=";
+    tag = "v${version}";
+    hash = "sha256-33QldAjCuuZr/aqAN3chq57lKzfE8n0ZXybtrAoW4tc=";
   };
 
   build-system = [
     setuptools
     cython
   ];
+
+  pythonRelaxDeps = [ "cryptography" ];
 
   dependencies = [
     aiohappyeyeballs
@@ -50,8 +50,9 @@ buildPythonPackage rec {
     cryptography
     noiseprotocol
     protobuf
+    tzlocal
     zeroconf
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ];
 
   nativeCheckInputs = [
     mock
@@ -59,17 +60,23 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # https://github.com/esphome/aioesphomeapi/issues/837
-    "test_reconnect_logic_stop_callback"
+  # Lack of network sandboxing leads to conflicting listeners when testing
+  # this package e.g. in nixpkgs-review on the two suppoted python package sets.
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  disabledTestPaths = [
+    # benchmarking requires pytest-codespeed
+    "tests/benchmarks"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "aioesphomeapi" ];
 
   meta = with lib; {
     description = "Python Client for ESPHome native API";
     homepage = "https://github.com/esphome/aioesphomeapi";
-    changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/v${version}";
+    changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [
       fab

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
   pythonOlder,
 }:
 
@@ -15,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "bontchev";
-    repo = pname;
+    repo = "pcodedmp";
     rev = version;
     hash = "sha256-SYOFGMvrzxDPMACaCvqwU28Mh9LEuvFBGvAph4X+geo=";
   };

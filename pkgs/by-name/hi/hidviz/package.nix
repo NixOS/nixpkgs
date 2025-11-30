@@ -1,28 +1,32 @@
-{ lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, stdenv
-# Package dependencies
-, qt6
-, libusb1
-, protobuf
-, asio
+{
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  stdenv,
+  # Package dependencies
+  qt6,
+  libusb1,
+  protobuf,
+  asio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hidviz";
-  version = "0.2";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "hidviz";
     repo = "hidviz";
-    rev = "v${version}";
-    sha256 = "sha256-9crHFYVNNxJjwJojwqB8qdAGyr1Ieux9qC3m3rpIJw0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ThDDQ3FN+cLCbdQCrC5zhL4dgg2zAbRWvtei7+qmQg8=";
   };
 
-  preConfigure = ''
+  postPatch = ''
+    substituteInPlace {hidviz,libhidx{,/libhidx{,_server{,_daemon}}}}/CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 3.2)' 'cmake_minimum_required(VERSION 3.10)'
     substituteInPlace libhidx/cmake_modules/Findasio.cmake --replace-fail '/usr/include/asio' '${lib.getDev asio}/include/asio'
+    substituteInPlace libhidx/libhidx/src/Connector.cc --replace-fail '/usr/local/libexec' "$out/libexec"
   '';
 
   nativeBuildInputs = [
@@ -40,9 +44,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/hidviz/hidviz";
-    description = "A GUI application for in-depth analysis of USB HID class devices.";
+    description = "GUI application for in-depth analysis of USB HID class devices";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nayala ];
+    maintainers = [ ];
   };
-}
+})

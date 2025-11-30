@@ -6,30 +6,23 @@
   cryptography,
   fetchFromGitHub,
   poetry-core,
+  pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   sensor-state-data,
 }:
 
 buildPythonPackage rec {
   pname = "bthome-ble";
-  version = "3.9.0";
+  version = "3.15.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bthome-ble";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-umRPB0eUdFL4kIvqSfbw/Jzh7NZMY6WR4dK+1cyK3EI=";
+    tag = "v${version}";
+    hash = "sha256-AFALd5owqwaXPiMs0zHkGKpNqcpKG2O/JXXvuEF4d3s=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=bthome_ble --cov-report=term-missing:skip-covered" ""
-  '';
 
   build-system = [ poetry-core ];
 
@@ -41,15 +34,18 @@ buildPythonPackage rec {
     pytz
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "bthome_ble" ];
 
   meta = with lib; {
     description = "Library for BThome BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/bthome-ble";
-    changelog = "https://github.com/bluetooth-devices/bthome-ble/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/bluetooth-devices/bthome-ble/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

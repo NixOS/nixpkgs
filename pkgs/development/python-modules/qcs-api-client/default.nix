@@ -15,7 +15,7 @@
   python-dateutil,
   pythonAtLeast,
   pythonOlder,
-  pythonRelaxDepsHook,
+  tenacity,
   respx,
   retrying,
   rfc3339,
@@ -24,16 +24,16 @@
 
 buildPythonPackage rec {
   pname = "qcs-api-client";
-  version = "0.25.0";
+  version = "0.26.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "qcs-api-client-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-dKjiicrPLRlaIwHwSqpY5dBMTzrZD4xfw3h54IN3rh0=";
+    tag = "v${version}";
+    hash = "sha256-8ZD/vqWA1QnEQXz6P/+NIxe0go1Q/XQ3iRNL/TkoTmM=";
   };
 
   patches = [
@@ -50,11 +50,10 @@ buildPythonPackage rec {
     "httpx"
     "iso8601"
     "pydantic"
+    "tenacity"
   ];
 
   build-system = [ poetry-core ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     attrs
@@ -66,6 +65,7 @@ buildPythonPackage rec {
     python-dateutil
     retrying
     rfc3339
+    tenacity
     toml
   ];
 
@@ -83,7 +83,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for accessing the Rigetti QCS API";
     homepage = "https://qcs-api-client-python.readthedocs.io/";
-    changelog = "https://github.com/rigetti/qcs-api-client-python/releases/tag/v${version}";
+    changelog = "https://github.com/rigetti/qcs-api-client-python/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

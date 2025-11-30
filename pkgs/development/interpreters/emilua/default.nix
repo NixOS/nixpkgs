@@ -3,13 +3,12 @@
   stdenv,
   meson,
   ninja,
-  fetchFromGitHub,
   fetchFromGitLab,
   re2c,
   gperf,
   gawk,
   pkg-config,
-  boost182,
+  boost,
   fmt,
   luajit_openresty,
   ncurses,
@@ -22,31 +21,26 @@
   cmake,
   asciidoctor,
   makeWrapper,
+  versionCheckHook,
+  gitUpdater,
+  enableIoUring ? false,
+  emilua, # this package
 }:
 
-let
-  trial-protocol-wrap = fetchFromGitHub {
-    owner = "breese";
-    repo = "trial.protocol";
-    rev = "79149f604a49b8dfec57857ca28aaf508069b669";
-    name = "trial-protocol";
-    hash = "sha256-Xd8bX3z9PZWU17N9R95HXdj6qo9at5FBL/+PTVaJgkw=";
-  };
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "emilua";
-  version = "0.7.3";
+  version = "0.11.7";
 
   src = fetchFromGitLab {
     owner = "emilua";
     repo = "emilua";
-    rev = "v${version}";
-    hash = "sha256-j8ohhqHjSBgc4Xk9PcQNrbADmsz4VH2zCv+UNqiCv4I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-c+X8HD/G75XD54Fs89DSkebLDd7h12Bk45+w7VBUXPY=";
   };
 
-  buildInputs = [
+  propagatedBuildInputs = [
     luajit_openresty
-    boost182
+    boost
     fmt
     ncurses
     serd
@@ -71,47 +65,57 @@ stdenv.mkDerivation rec {
 
   dontUseCmakeConfigure = true;
 
-  # Meson is no longer able to pick up Boost automatically.
-  # https://github.com/NixOS/nixpkgs/issues/86131
-  env = {
-    BOOST_INCLUDEDIR = "${lib.getDev boost182}/include";
-    BOOST_LIBRARYDIR = "${lib.getLib boost182}/lib";
-  };
-
   mesonFlags = [
-    (lib.mesonBool "enable_file_io" true)
-    (lib.mesonBool "enable_io_uring" true)
+    (lib.mesonBool "enable_io_uring" enableIoUring)
+    (lib.mesonBool "enable_file_io" enableIoUring)
     (lib.mesonBool "enable_tests" true)
     (lib.mesonBool "enable_manpages" true)
     (lib.mesonOption "version_suffix" "-nixpkgs1")
   ];
 
   postPatch = ''
-    pushd subprojects
-    cp -r ${trial-protocol-wrap} trial-protocol
-    chmod +w trial-protocol
-    cp "packagefiles/trial.protocol/meson.build" "trial-protocol/"
-    popd
-
     patchShebangs src/emilua_gperf.awk --interpreter '${lib.getExe gawk} -f'
   '';
 
-  doCheck = true;
+  # io_uring is not allowed in Nix sandbox, that breaks the tests
+  doCheck = !enableIoUring;
 
-  # Skipped test: libpsx
-  # Known issue with no-new-privs disabled in the Nix build environment.
-  checkPhase = ''
-    runHook preCheck
-    meson test --print-errorlogs --no-suite libpsx
-    runHook postCheck
+  mesonCheckFlags = [
+    # Skipped test: libpsx
+    # Known issue with no-new-privs disabled in the Nix build environment.
+    "--no-suite"
+    "libpsx"
+  ];
+
+  postInstall = ''
+    mkdir -p $out/nix-support
+    cp ${./setup-hook.sh} $out/nix-support/setup-hook
+    substituteInPlace $out/nix-support/setup-hook \
+      --replace-fail @sitePackages@ "${finalAttrs.passthru.sitePackages}"
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+    inherit boost;
+    sitePackages = "lib/emilua-${(lib.concatStringsSep "." (lib.take 2 (lib.splitVersion finalAttrs.version)))}";
+    tests.with-io-uring = emilua.override { enableIoUring = true; };
+  };
+
+  meta = {
     description = "Lua execution engine";
     mainProgram = "emilua";
     homepage = "https://emilua.org/";
-    license = licenses.boost;
-    maintainers = with maintainers; [ manipuladordedados ];
-    platforms = platforms.linux;
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [
+      manipuladordedados
+      lucasew
+    ];
+    platforms = lib.platforms.linux;
   };
-}
+})

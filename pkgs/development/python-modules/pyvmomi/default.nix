@@ -6,29 +6,29 @@
   requests,
   six,
   pyopenssl,
-  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyvmomi";
-  version = "8.0.2.0.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "9.0.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vmware";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Y7Zor70P4lhkAslckg/prfCmnszVMFPntWdJpfWnvIM=";
+    repo = "pyvmomi";
+    tag = "v${version}";
+    hash = "sha256-4r0UtLR1dhhNQ+Lx12JiEozDAjMxPly+RR0LWRg/A4E=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
     six
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     sso = [
       lxml
       pyopenssl
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python SDK for the VMware vSphere API that allows you to manage ESX, ESXi, and vCenter";
     homepage = "https://github.com/vmware/pyvmomi";
-    changelog = "https://github.com/vmware/pyvmomi/releases/tag/v${version}";
+    changelog = "https://github.com/vmware/pyvmomi/releases/tag/${src.tag}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

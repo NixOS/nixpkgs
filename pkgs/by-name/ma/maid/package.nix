@@ -1,15 +1,16 @@
-{ bundlerApp
-, bundlerUpdateScript
-, callPackage
-, lib
+{
+  bundlerApp,
+  bundlerUpdateScript,
+  callPackage,
+  lib,
 }:
 
-bundlerApp {
+bundlerApp rec {
   pname = "maid";
   gemdir = ./.;
   exes = [ "maid" ];
 
-  passthru.updateScript = bundlerUpdateScript "maid";
+  passthru.updateScript = bundlerUpdateScript pname;
 
   passthru.tests.run = callPackage ./test.nix { };
 

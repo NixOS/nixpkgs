@@ -6,17 +6,17 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "makejinja";
-  version = "2.6.0";
+  version = "2.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mirkolenz";
     repo = "makejinja";
-    rev = "v${version}";
-    hash = "sha256-sH4m+rcHA6nW21xEJon10lS7e5QiFwUyvV49NZ3UY+s=";
+    tag = "v${version}";
+    hash = "sha256-vK5MJb4n3/NmkohpJ1shEexvjHlEAfwZJWy2oL+rzRk=";
   };
 
-  build-system = with python3Packages; [ poetry-core ];
+  build-system = with python3Packages; [ setuptools ];
 
   dependencies =
     with python3Packages;
@@ -31,12 +31,10 @@ python3Packages.buildPythonApplication rec {
     ++ typed-settings.optional-dependencies.cattrs
     ++ typed-settings.optional-dependencies.click;
 
-  preCheck = ''
-    substituteInPlace pyproject.toml \
-        --replace-fail "--cov makejinja --cov-report term-missing" ""
-  '';
-
-  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   meta = {
     description = "Generate entire directory structures using Jinja templates with support for external data and custom plugins";
@@ -48,5 +46,6 @@ python3Packages.buildPythonApplication rec {
       mirkolenz
     ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
+    changelog = "https://github.com/mirkolenz/makejinja/blob/${src.tag}/CHANGELOG.md";
   };
 }

@@ -1,25 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libcpuid";
-  version = "0.6.5";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "anrieff";
     repo = "libcpuid";
     rev = "v${version}";
-    sha256 = "sha256-Bq16UH4IUR7dU57bGHKq8P6JsjaB4arOJ4zFeNyxXSg=";
+    hash = "sha256-+/TTlGk1ePPTHrSTSZmPHT2h3gKs9ouCF4ElvLWHF/g=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
   meta = with lib; {
     homepage = "https://libcpuid.sourceforge.net/";
-    description = "A small C library for x86 CPU detection and feature extraction";
+    description = "Small C library for x86 CPU detection and feature extraction";
     mainProgram = "cpuid_tool";
     changelog = "https://raw.githubusercontent.com/anrieff/libcpuid/master/ChangeLog";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ orivej artuuge ];
+    maintainers = [
+    ];
     platforms = platforms.x86;
   };
 }

@@ -1,8 +1,13 @@
-{ lib, pythonPackages, fetchurl }:
+{
+  lib,
+  pythonPackages,
+  fetchurl,
+}:
 
 pythonPackages.buildPythonApplication rec {
   pname = "mir.qualia";
   version = "2.0.0";
+  format = "setuptools";
   doCheck = false; # 2.0.0-released pytests are broken
 
   buildInputs = with pythonPackages; [ pytest ];
@@ -17,6 +22,6 @@ pythonPackages.buildPythonApplication rec {
     mainProgram = "qualia";
     homepage = "https://github.com/darkfeline/mir.qualia";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.srhb ] ;
+    maintainers = [ lib.maintainers.srhb ];
   };
 }

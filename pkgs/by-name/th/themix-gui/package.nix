@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, sassc
-, gdk-pixbuf
-, glib
-, gobject-introspection
-, librsvg
-, gtk3
-, python3
-, fetchFromGitHub
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  sassc,
+  gdk-pixbuf,
+  glib,
+  gobject-introspection,
+  librsvg,
+  gtk3,
+  python3,
+  fetchFromGitHub,
+  wrapGAppsHook3,
 }:
 
 let
@@ -24,7 +25,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "themix-project";
     repo = "themix-gui";
-    rev = version;
+    tag = version;
     hash = "sha256-xFtwNx1c7Atb+9yorZhs/uVkkoxbZiELJ0SZ88L7KMs=";
     fetchSubmodules = true;
   };
@@ -72,7 +73,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/themix-project/themix-gui";
     license = lib.licenses.gpl3Only;
     mainProgram = "themix-gui";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

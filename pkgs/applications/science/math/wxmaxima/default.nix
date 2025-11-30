@@ -1,31 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wrapGAppsHook3
-, cmake
-, gettext
-, maxima
-, wxGTK
-, gnome
-, glib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  cmake,
+  gettext,
+  maxima,
+  wxGTK,
+  adwaita-icon-theme,
+  glib,
 }:
 
-stdenv.mkDerivation (finalAttrs:{
+stdenv.mkDerivation (finalAttrs: {
   pname = "wxmaxima";
-  version = "24.05.0";
+  version = "25.04.0";
 
   src = fetchFromGitHub {
     owner = "wxMaxima-developers";
     repo = "wxmaxima";
     rev = "Version-${finalAttrs.version}";
-    hash = "sha256-pl3sO28HANL9F41aaJznxUsH2Y7W/FO82Rik2/ik2Ag=";
+    hash = "sha256-AEy2a8BahV1yH67RIjcsVipuo5eUZcQZxR3HygSYGlU=";
   };
 
   buildInputs = [
     wxGTK
     maxima
     # So it won't embed svg files into headers.
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     # So it won't crash under Sway.
     glib
   ];

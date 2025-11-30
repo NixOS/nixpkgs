@@ -4,9 +4,8 @@
   fetchPypi,
   pythonOlder,
   setuptools,
+  setuptools-scm,
   packaging,
-  ply,
-  toml,
   tomli,
 
   # tests
@@ -17,20 +16,24 @@
 
 buildPythonPackage rec {
   pname = "sip";
-  version = "6.8.3";
+  version = "6.12.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iIVHsBi7JMNq3tUZ6T0+UT1MaqC6VbfMGv+9Rc8Qdiw=";
+    hash = "sha256-CDztlPhTFUkyMRGaY5cLK6QrHTizjnMKcOAqmRkaicY=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
     setuptools
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   # There aren't tests
   doCheck = false;
@@ -46,6 +49,6 @@ buildPythonPackage rec {
     description = "Creates C++ bindings for Python modules";
     homepage = "https://riverbankcomputing.com/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nrdxp ];
+    maintainers = [ ];
   };
 }

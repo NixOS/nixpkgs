@@ -5,7 +5,7 @@
   alsa-lib,
   boost,
   curl,
-  ffmpeg_4,
+  ffmpeg_6,
   icoutils,
   libGLU,
   libmad,
@@ -27,8 +27,8 @@
   unzip,
   zlib,
   zziplib,
-  alephone,
   testers,
+  asio,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,15 +37,15 @@ stdenv.mkDerivation (finalAttrs: {
     "icons"
   ];
   pname = "alephone";
-  version = "1.8.1";
+  version = "1.11";
 
   src = fetchurl {
     url =
       let
-        date = "20240513";
+        date = "20250829";
       in
       "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${date}/AlephOne-${date}.tar.bz2";
-    sha256 = "sha256-IUvMfG4jtN/QXq4DQIDuI0+Bl3MSSwDGKOyjfcRWgvE=";
+    hash = "sha256-58RHA0qjXdhcpoNt2DZwNMT0USqg0U6XgdcDOUYJiAY=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     boost
     curl
-    ffmpeg_4
+    ffmpeg_6
     libGLU
     libmad
     libogg
@@ -74,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     speex
     zlib
     zziplib
+    asio
   ];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ];
@@ -93,14 +94,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.version =
     # test that the version is correct
-    testers.testVersion { package = alephone; };
+    testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
     description = "Aleph One is the open source continuation of Bungie’s Marathon 2 game engine";
     mainProgram = "alephone";
     homepage = "https://alephone.lhowon.org/";
     license = [ lib.licenses.gpl3 ];
-    maintainers = with lib.maintainers; [ ehmry ];
     platforms = lib.platforms.linux;
   };
 
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
       version,
       zip,
       meta,
-      icon ? alephone.icons + "/alephone.png",
+      icon ? finalAttrs.finalPackage.icons + "/alephone.png",
       ...
     }@extraArgs:
     stdenv.mkDerivation (
@@ -141,14 +141,14 @@ stdenv.mkDerivation (finalAttrs: {
           mkdir -p $out/bin $out/data/$pname $out/share/applications
           cp -a * $out/data/$pname
           cp $desktopItem/share/applications/* $out/share/applications
-          makeWrapper ${alephone}/bin/alephone $out/bin/$pname \
+          makeWrapper ${finalAttrs.finalPackage}/bin/alephone $out/bin/$pname \
             --add-flags $out/data/$pname
         '';
       }
       // extraArgs
       // {
         meta =
-          alephone.meta
+          finalAttrs.finalPackage.meta
           // {
             license = lib.licenses.free;
             mainProgram = pname;

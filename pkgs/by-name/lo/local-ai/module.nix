@@ -1,4 +1,9 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 let
   cfg = config.services.local-ai;
   inherit (lib) mkOption types;
@@ -35,7 +40,13 @@ in
     };
 
     logLevel = mkOption {
-      type = types.enum [ "error" "warn" "info" "debug" "trace" ];
+      type = types.enum [
+        "error"
+        "warn"
+        "info"
+        "debug"
+        "trace"
+      ];
       default = "warn";
     };
   };
@@ -46,16 +57,18 @@ in
       environment.LLAMACPP_PARALLEL = toString cfg.parallelRequests;
       serviceConfig = {
         DynamicUser = true;
-        ExecStart = lib.escapeShellArgs ([
-          "${cfg.package}/bin/local-ai"
-          "--address=:${toString cfg.port}"
-          "--threads=${toString cfg.threads}"
-          "--localai-config-dir=."
-          "--models-path=${cfg.models}"
-          "--log-level=${cfg.logLevel}"
-        ]
-        ++ lib.optional (cfg.parallelRequests > 1) "--parallel-requests"
-        ++ cfg.extraArgs);
+        ExecStart = lib.escapeShellArgs (
+          [
+            "${cfg.package}/bin/local-ai"
+            "--address=:${toString cfg.port}"
+            "--threads=${toString cfg.threads}"
+            "--localai-config-dir=."
+            "--models-path=${cfg.models}"
+            "--log-level=${cfg.logLevel}"
+          ]
+          ++ lib.optional (cfg.parallelRequests > 1) "--parallel-requests"
+          ++ cfg.extraArgs
+        );
         RuntimeDirectory = "local-ai";
         WorkingDirectory = "%t/local-ai";
       };

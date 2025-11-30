@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, autoconf-archive
-, pkg-config, gettext, libssl, txt2man }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  autoconf-archive,
+  pkg-config,
+  gettext,
+  libssl,
+  txt2man,
+}:
 
 stdenv.mkDerivation rec {
   pname = "axel";
@@ -12,9 +21,22 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-5GUna5k8GhAx1Xe8n9IvXT7IO6gksxCLh+sMANlxTBM=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config autoconf-archive txt2man ];
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail "AM_GNU_GETTEXT_VERSION([0.11.1])" "AM_GNU_GETTEXT_VERSION([0.12])"
+  '';
 
-  buildInputs = [ gettext libssl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    autoconf-archive
+    txt2man
+  ];
+
+  buildInputs = [
+    gettext
+    libssl
+  ];
 
   installFlags = [ "ETCDIR=${placeholder "out"}/etc" ];
 

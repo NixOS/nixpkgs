@@ -11,14 +11,15 @@
 
 buildPythonPackage rec {
   pname = "azure-synapse-artifacts";
-  version = "0.18.0";
+  version = "0.21.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-qgiHMzW7T5NuQl0jwZheMXp7wHhNOHyH24J6wfc4VqQ=";
+    pname = "azure_synapse_artifacts";
+    inherit version;
+    hash = "sha256-1+N1Fs+FaeA8YE2SHjQH1xQM91I7Z7Z/dXyvmZ48juc=";
   };
 
   propagatedBuildInputs = [
@@ -38,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-synapse-artifacts_${version}/sdk/synapse/azure-synapse-artifacts/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

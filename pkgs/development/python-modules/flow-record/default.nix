@@ -1,30 +1,34 @@
 {
   lib,
   buildPythonPackage,
+  duckdb,
+  elastic-transport,
   elasticsearch,
   fastavro,
   fetchFromGitHub,
+  httpx,
   lz4,
+  maxminddb,
   msgpack,
   pytest7CheckHook,
-  pythonOlder,
-  setuptools,
+  pytz,
   setuptools-scm,
+  setuptools,
+  structlog,
+  tqdm,
   zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "flow-record";
-  version = "3.15";
+  version = "3.21";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "flow.record";
-    rev = "refs/tags/${version}";
-    hash = "sha256-j5N66p7feB9Ae+Fu5RhVzh8XCHiq55jJMg0Fe+C6Jvg=";
+    tag = version;
+    hash = "sha256-hJZCWF81pMeHOZGc6zTA046hV1J0PNQGMlPD3mgyrRI=";
   };
 
   build-system = [
@@ -34,24 +38,40 @@ buildPythonPackage rec {
 
   dependencies = [ msgpack ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     compression = [
       lz4
       zstandard
     ];
+    duckdb = [
+      duckdb
+      pytz
+    ];
     elastic = [ elasticsearch ];
+    geoip = [ maxminddb ];
     avro = [ fastavro ] ++ fastavro.optional-dependencies.snappy;
+    splunk = [ httpx ];
+    # xlsx = [ openpyxl ]; # Not available
+    full = [
+      structlog
+      tqdm
+    ]
+    ++ optional-dependencies.compression;
   };
 
   nativeCheckInputs = [
+    elastic-transport
     pytest7CheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "flow.record" ];
 
   disabledTestPaths = [
-    # Test requires rdump
-    "tests/test_rdump.py"
+    # Input not available
+    "tests/adapter/test_xlsx.py"
+    # Requires rdump
+    "tests/tools/test_rdump.py"
   ];
 
   disabledTests = [ "test_rdump_fieldtype_path_json" ];
@@ -59,7 +79,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for defining and creating structured data";
     homepage = "https://github.com/fox-it/flow.record";
-    changelog = "https://github.com/fox-it/flow.record/releases/tag/${version}";
+    changelog = "https://github.com/fox-it/flow.record/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

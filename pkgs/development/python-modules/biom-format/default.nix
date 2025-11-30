@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   setuptools,
   cython,
   click,
@@ -15,24 +14,15 @@
 
 buildPythonPackage rec {
   pname = "biom-format";
-  version = "2.1.15";
+  version = "2.1.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "biocore";
     repo = "biom-format";
-    rev = "refs/tags/${version}";
-    hash = "sha256-WRBc+C/UWme7wYogy4gH4KTIdIqU3KmBm2jWzGNxGQg=";
+    tag = version;
+    hash = "sha256-FjIC21LoqltixBstbbANByjTNxVm/3YCxdWaD9KbOQ0=";
   };
-
-  patches = [
-    # fixes a test, can be removed in next version after 2.1.15
-    (fetchpatch {
-      name = "fix-dataframe-comparison.patch";
-      url = "https://github.com/biocore/biom-format/commit/5d1c921ca2cde5d7332508503ce990a7209d1fdc.patch";
-      hash = "sha256-nyHi469ivjJSQ01yIk/6ZMXFdoo9wVuazJHnFdy2nBg=";
-    })
-  ];
 
   build-system = [
     setuptools
@@ -58,7 +48,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "biom_tests/tests" ];
+  enabledTestPaths = [ "biom_tests/tests" ];
 
   pythonImportsCheck = [ "biom" ];
 

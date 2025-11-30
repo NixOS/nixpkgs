@@ -1,34 +1,40 @@
-{ buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, lib
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "doggo";
-  version = "0.5.7";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "mr-karan";
-    repo = pname;
+    repo = "doggo";
     rev = "v${version}";
-    hash = "sha256-hzl7BE3vsE2G9O2nwN/gkqQTJ+9aDfNIjmpmgN1AYq8=";
+    hash = "sha256-OKzsxYQYgMhTfdFebETHC+3Fm6A8bIOkYN5F9OZk1pc=";
   };
 
-  vendorHash = "sha256-uonybBLABPj9CPtc+y82ajvQI7kubK+lKi4eLcZIUqA=";
+  vendorHash = "sha256-T6fNOX4XzUuD9eYqC9jCeAE7+8KMyg0UVbsmy9u+BP0=";
   nativeBuildInputs = [ installShellFiles ];
   subPackages = [ "cmd/doggo" ];
 
   ldflags = [
-    "-w -s"
+    "-s"
     "-X main.buildVersion=v${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd doggo \
-      --fish --name doggo.fish completions/doggo.fish \
-      --zsh --name _doggo completions/doggo.zsh
+      --bash <($out/bin/doggo completions bash) \
+      --fish <($out/bin/doggo completions fish) \
+      --zsh <($out/bin/doggo completions zsh)
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/mr-karan/doggo";
@@ -39,6 +45,9 @@ buildGoModule rec {
       It outputs information in a neat concise manner and supports protocols like DoH, DoT, DoQ, and DNSCrypt as well
     '';
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ georgesalkhouri ];
+    maintainers = with maintainers; [
+      georgesalkhouri
+      ma27
+    ];
   };
 }

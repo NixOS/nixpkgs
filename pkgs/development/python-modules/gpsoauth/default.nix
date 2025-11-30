@@ -5,24 +5,22 @@
   poetry-core,
   pycryptodomex,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "gpsoauth";
-  version = "1.1.0";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BA+2aFxpFpi6cWGl4yepba7s7BmZ1ijvSBhtS23v3QM=";
+    hash = "sha256-njt2WmpOA2TewbxBV70+1+XsMGZYnihdC0aYaRCqa9I=";
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     poetry-core
   ];
 

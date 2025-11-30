@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pylibacl";
-  version = "0.7.0";
+  version = "0.7.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-7UludMpUUtXUzr4j3yKepGJzWpZSi5+ijjzh96K+0xo=";
+    hash = "sha256-nZ/7WA4MWC1d5ZgIf3X2lARYsjgQxhVSkUPGGxcr+SI=";
   };
 
   # ERROR: testExtended (tests.test_acls.AclExtensions)
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   buildInputs = with pkgs; [ acl ];
 
   meta = {
-    description = "A Python extension module for POSIX ACLs, it can be used to query, list, add, and remove ACLs from files and directories under operating systems that support them";
+    description = "Python extension module for POSIX ACLs, it can be used to query, list, add, and remove ACLs from files and directories under operating systems that support them";
     license = lib.licenses.lgpl21Plus;
   };
 }

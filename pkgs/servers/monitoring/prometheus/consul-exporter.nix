@@ -1,32 +1,33 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "consul_exporter";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "consul_exporter";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qLc0CG+N3OF1V6rJQCWDxIrsU0lHoskMNUbwsx8pcPs=";
+    hash = "sha256-2X1nJIUwp7kqqz/D3x4bq6vHg1N8zC9AWCn02qsAyAQ=";
   };
 
-  vendorHash = "sha256-G7Gf3igUnDID9hTuvIHd7syii2+3dPAlewsW8yKNJvs=";
+  vendorHash = "sha256-z9+WrJDgjQYf4G90sdqY+SOGJa/r5Ie9GFVrihbaGGU=";
 
   ldflags = [
     "-s"
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter for Consul metrics";
     mainProgram = "consul_exporter";
     homepage = "https://github.com/prometheus/consul_exporter";
     changelog = "https://github.com/prometheus/consul_exporter/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hectorj ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hectorj ];
   };
 }

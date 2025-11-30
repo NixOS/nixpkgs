@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "chroma-hnswlib";
-  version = "0.7.3";
+  version = "0.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "hnswlib";
-    rev = "refs/tags/${version}";
-    hash = "sha256-c4FvymqZy8AZKbh6Y8xZRjKAqYcUyZABRGc1u7vwlsk=";
+    tag = version;
+    hash = "sha256-Fs/BuocZblMSlmP6yp+aykbs0n1AdvL3AVAQI1AnZ9o=";
   };
 
   nativeBuildInputs = [

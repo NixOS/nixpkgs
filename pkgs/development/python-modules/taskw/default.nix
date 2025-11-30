@@ -7,7 +7,8 @@
   setuptools,
 
   # native dependencies
-  pkgs,
+  taskwarrior2,
+  distutils,
 
   # dependencies
   kitchen,
@@ -35,12 +36,15 @@ buildPythonPackage rec {
   ];
   postPatch = ''
     substituteInPlace taskw/warrior.py \
-      --replace '@@taskwarrior@@' '${pkgs.taskwarrior}'
+      --replace '@@taskwarrior@@' '${taskwarrior2}'
   '';
 
   build-system = [ setuptools ];
 
-  buildInputs = [ pkgs.taskwarrior ];
+  buildInputs = [
+    taskwarrior2
+    distutils
+  ];
 
   dependencies = [
     kitchen

@@ -10,6 +10,7 @@ in
 buildPythonPackage {
   pname = "django-mdeditor";
   inherit version;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pylixm";
@@ -17,6 +18,10 @@ buildPythonPackage {
     rev = "v${version}";
     hash = "sha256-t57j1HhjNQtBwlbqe4mAHQ9WiNcIhMKYmrZkiqh+k5k=";
   };
+
+  patches = [
+    ./Bump-KaTeX-and-replace-bootcdn-with-jsdelivr.patch
+  ];
 
   propagatedBuildInputs = [ django ];
 

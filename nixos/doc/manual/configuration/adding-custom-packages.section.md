@@ -23,9 +23,7 @@ Then you write and test the package as described in the Nixpkgs manual.
 Finally, you add it to [](#opt-environment.systemPackages), e.g.
 
 ```nix
-{
-  environment.systemPackages = [ pkgs.my-package ];
-}
+{ environment.systemPackages = [ pkgs.my-package ]; }
 ```
 
 and you run `nixos-rebuild`, specifying your own Nixpkgs tree:
@@ -43,13 +41,15 @@ tree. For instance, here is how you specify a build of the
 {
   environment.systemPackages =
     let
-      my-hello = with pkgs; stdenv.mkDerivation rec {
-        name = "hello-2.8";
-        src = fetchurl {
-          url = "mirror://gnu/hello/${name}.tar.gz";
-          hash = "sha256-5rd/gffPfa761Kn1tl3myunD8TuM+66oy1O7XqVGDXM=";
+      my-hello =
+        with pkgs;
+        stdenv.mkDerivation rec {
+          name = "hello-2.8";
+          src = fetchurl {
+            url = "mirror://gnu/hello/${name}.tar.gz";
+            hash = "sha256-5rd/gffPfa761Kn1tl3myunD8TuM+66oy1O7XqVGDXM=";
+          };
         };
-      };
     in
     [ my-hello ];
 }
@@ -59,15 +59,13 @@ Of course, you can also move the definition of `my-hello` into a
 separate Nix expression, e.g.
 
 ```nix
-{
-  environment.systemPackages = [ (import ./my-hello.nix) ];
-}
+{ environment.systemPackages = [ (import ./my-hello.nix) ]; }
 ```
 
 where `my-hello.nix` contains:
 
 ```nix
-with import <nixpkgs> {}; # bring all of Nixpkgs into scope
+with import <nixpkgs> { }; # bring all of Nixpkgs into scope
 
 stdenv.mkDerivation rec {
   name = "hello-2.8";
@@ -90,16 +88,30 @@ Hello, world!
 
 Most pre-built executables will not work on NixOS. There are two notable
 exceptions: flatpaks and AppImages. For flatpaks see the [dedicated
-section](#module-services-flatpak). AppImages will not run "as-is" on NixOS.
-First you need to install `appimage-run`: add to `/etc/nixos/configuration.nix`
+section](#module-services-flatpak). AppImages can run "as-is" on NixOS.
+
+First you need to enable AppImage support: add to `/etc/nixos/configuration.nix`
 
 ```nix
 {
-  environment.systemPackages = [ pkgs.appimage-run ];
+  programs.appimage.enable = true;
+  programs.appimage.binfmt = true;
 }
 ```
 
-Then instead of running the AppImage "as-is", run `appimage-run foo.appimage`.
+Then you can run the AppImage "as-is" or with `appimage-run foo.appimage`.
+
+If there are shared libraries missing add them with
+
+```nix
+{
+  programs.appimage.package = pkgs.appimage-run.override {
+    extraPkgs = pkgs: [
+      # missing libraries here, e.g.: `pkgs.libepoxy`
+    ];
+  };
+}
+```
 
 To make other pre-built executables work on NixOS, you need to package them
 with Nix and special helpers like `autoPatchelfHook` or `buildFHSEnv`. See

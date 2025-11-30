@@ -1,37 +1,36 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "capslock";
-  version = "0.1.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "capslock";
-    rev = "v${version}";
-    hash = "sha256-mGrq43YCjF137c5ynQxL7IXDCUbnbBLv5E0tw/boObE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ls7+aXEelxKXhittK4orv9xgPKw1pE87yZdoSHBUgK8=";
   };
 
-  vendorHash = "sha256-WTbHcVARbz7cvAY7IZnACTrN5h9NXWXfxxEWq4hssOM=";
+  vendorHash = "sha256-2nK+yxgLmrXjt41gYSXvkpZ2glu6PAtO18Nrt1tmup4=";
 
-  subPackages = [
-    "cmd/capslock"
-  ];
+  subPackages = [ "cmd/capslock" ];
 
-  CGO_ENABLED = "0";
+  env.CGO_ENABLED = "0";
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-s" ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Capability analysis CLI for Go packages that informs users of which privileged operations a given package can access";
     homepage = "https://github.com/google/capslock";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "capslock";
-    maintainers = with maintainers; [ katexochen ];
+    maintainers = with lib.maintainers; [ katexochen ];
   };
-}
+})

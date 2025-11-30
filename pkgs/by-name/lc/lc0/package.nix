@@ -1,31 +1,32 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, python3
-, zlib
-, gtest
-, eigen
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  zlib,
+  gtest,
+  eigen,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lc0";
-  version = "0.30.0";
+  version = "0.31.2";
 
   src = fetchFromGitHub {
     owner = "LeelaChessZero";
     repo = "lc0";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Q85hXNSexHhk6W48tgJLk0Sf32xBipfg2P2SH1FF89Q=";
+    tag = "v${version}";
+    hash = "sha256-8watDDxSyZ5khYqpXPyjQso2MkOzfI6o2nt0vkuiEUI=";
     fetchSubmodules = true;
   };
 
   patchPhase = ''
     runHook prePatch
 
-    patchShebangs --build /build/source/scripts/*
+    patchShebangs --build scripts/*
 
     runHook postPatch
   '';
@@ -53,7 +54,6 @@ stdenv.mkDerivation rec {
   ]
   # in version 31 this option will be required
   ++ lib.optionals (lib.versionAtLeast version "0.31") [ "-Dnative_cuda=false" ];
-
 
   enableParallelBuilding = true;
 

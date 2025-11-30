@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -7,8 +12,7 @@ let
   smokepingHome = "/var/lib/smokeping";
   smokepingPidDir = "/run";
   configFile =
-    if cfg.config == null
-    then
+    if cfg.config == null then
       ''
         *** General ***
         cgiurl   = ${cfg.cgiUrl}
@@ -119,7 +123,8 @@ in
               MAX  0.5 144   7200
               MIN  0.5 144   7200
         '';
-        description = ''Configure the ping frequency and retention of the rrd files.
+        description = ''
+          Configure the ping frequency and retention of the rrd files.
           Once set, changing the interval will require deletion or migration of all
           the collected data.'';
       };
@@ -148,7 +153,11 @@ in
         '';
       };
       linkStyle = mkOption {
-        type = types.enum [ "original" "absolute" "relative" ];
+        type = types.enum [
+          "original"
+          "absolute"
+          "relative"
+        ];
         default = "relative";
         example = "absolute";
         description = "DNS name for the urls generated in the cgi.";
@@ -297,13 +306,12 @@ in
       }
     ];
     security.wrappers = {
-      fping =
-        {
-          setuid = true;
-          owner = "root";
-          group = "root";
-          source = "${pkgs.fping}/bin/fping";
-        };
+      fping = {
+        setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${pkgs.fping}/bin/fping";
+      };
     };
     environment.etc."smokeping.conf".source = configPath;
     environment.systemPackages = [ pkgs.fping ];
@@ -313,11 +321,16 @@ in
       group = cfg.user;
       description = "smokeping daemon user";
       home = smokepingHome;
-      createHome = true;
-      # When `cfg.webService` is enabled, `nginx` requires read permissions on the home directory.
-      homeMode = "711";
     };
+
+    users.users.${config.services.nginx.user} = mkIf cfg.webService {
+      extraGroups = [
+        cfg.user # # user == group in this module
+      ];
+    };
+
     users.groups.${cfg.user} = { };
+
     systemd.services.smokeping = {
       reloadTriggers = [ configPath ];
       requiredBy = [ "multi-user.target" ];
@@ -327,17 +340,29 @@ in
         ExecStart = "${cfg.package}/bin/smokeping --config=/etc/smokeping.conf --nodaemon";
       };
       preStart = ''
-        mkdir -m 0755 -p ${smokepingHome}/cache ${smokepingHome}/data
-        ln -snf ${cfg.package}/htdocs/css ${smokepingHome}/css
-        ln -snf ${cfg.package}/htdocs/js ${smokepingHome}/js
-        ln -snf ${cgiHome} ${smokepingHome}/smokeping.fcgi
         ${cfg.package}/bin/smokeping --check --config=${configPath}
         ${cfg.package}/bin/smokeping --static --config=${configPath}
       '';
     };
 
+    systemd.tmpfiles.rules = [
+      # create cache and data directories
+      "d ${smokepingHome}/cache 0750 ${cfg.user} ${cfg.user}"
+      "d ${smokepingHome}/data 0750 ${cfg.user} ${cfg.user}"
+      # create symlings
+      "L+ ${smokepingHome}/css - - - - ${cfg.package}/htdocs/css"
+      "L+ ${smokepingHome}/js - - - - ${cfg.package}/htdocs/js"
+      "L+ ${smokepingHome}/smokeping.fcgi - - - - ${cgiHome}"
+      # recursively adjust access mode and ownership (in case config change)
+      "Z ${smokepingHome} 0750 ${cfg.user} ${cfg.user}"
+    ];
+
     # use nginx to serve the smokeping web service
-    services.fcgiwrap.enable = mkIf cfg.webService true;
+    services.fcgiwrap.instances.smokeping = mkIf cfg.webService {
+      process.user = cfg.user;
+      process.group = cfg.user;
+      socket = { inherit (config.services.nginx) user group; };
+    };
     services.nginx = mkIf cfg.webService {
       enable = true;
       virtualHosts."smokeping" = {
@@ -349,7 +374,7 @@ in
         locations."/smokeping.fcgi" = {
           extraConfig = ''
             include ${config.services.nginx.package}/conf/fastcgi_params;
-            fastcgi_pass unix:${config.services.fcgiwrap.socketAddress};
+            fastcgi_pass unix:${config.services.fcgiwrap.instances.smokeping.socket.address};
             fastcgi_param SCRIPT_FILENAME ${smokepingHome}/smokeping.fcgi;
             fastcgi_param DOCUMENT_ROOT ${smokepingHome};
           '';
@@ -358,9 +383,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [
-    erictapen
-    nh2
-  ];
+  meta.maintainers = with lib.maintainers; [ nh2 ];
 }
-

@@ -1,16 +1,16 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
 }:
 
 let
   cfg = config.services.wyoming.openwakeword;
 
   inherit (lib)
-    concatStringsSep
-    concatMapStringsSep
-    escapeShellArgs
+    concatMap
     mkOption
     mkEnableOption
     mkIf
@@ -23,17 +23,23 @@ let
     toString
     ;
 
+  inherit (utils)
+    escapeSystemdExecArgs
+    ;
 in
 
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "wyoming" "openwakeword" "models" ] "Configuring models has been removed, they are now dynamically discovered and loaded at runtime")
+    (mkRemovedOptionModule [
+      "services"
+      "wymoing"
+      "openwakeword"
+      "preLoadModels"
+    ] "Passing a list of models to preload was removed in wyoming-openwakeword 2.0")
   ];
 
-  meta.buildDocsInSandbox = false;
-
   options.services.wyoming.openwakeword = with types; {
-    enable = mkEnableOption "Wyoming openWakeWord server";
+    enable = mkEnableOption "Wyoming protocol server for openWakeWord wake word detection system";
 
     package = mkPackageOption pkgs "wyoming-openwakeword" { };
 
@@ -48,35 +54,17 @@ in
 
     customModelsDirectories = mkOption {
       type = listOf types.path;
-      default = [];
+      default = [ ];
       description = ''
         Paths to directories with custom wake word models (*.tflite model files).
       '';
     };
 
-    preloadModels = mkOption {
-      type = listOf str;
-      default = [
-        "ok_nabu"
-      ];
-      example = [
-        # wyoming_openwakeword/models/*.tflite
-        "alexa"
-        "hey_jarvis"
-        "hey_mycroft"
-        "hey_rhasspy"
-        "ok_nabu"
-      ];
-      description = ''
-        List of wake word models to preload after startup.
-      '';
-    };
-
     threshold = mkOption {
-      type = float;
+      type = numbers.between 0.0 1.0;
       default = 0.5;
       description = ''
-        Activation threshold (0-1), where higher means fewer activations.
+        Activation threshold (0.0-1.0), where higher means fewer activations.
 
         See trigger level for the relationship between activations and
         wake word detections.
@@ -85,12 +73,22 @@ in
     };
 
     triggerLevel = mkOption {
-      type = int;
+      type = ints.unsigned;
       default = 1;
       description = ''
         Number of activations before a detection is registered.
 
         A higher trigger level means fewer detections.
+      '';
+      apply = toString;
+    };
+
+    refractorySeconds = mkOption {
+      type = either int float;
+      default = 2;
+      example = 1.5;
+      description = ''
+        Duration in seconds before a wake word can be detected again.
       '';
       apply = toString;
     };
@@ -101,7 +99,6 @@ in
       description = ''
         Extra arguments to pass to the server commandline.
       '';
-      apply = escapeShellArgs;
     };
   };
 
@@ -121,15 +118,24 @@ in
         DynamicUser = true;
         User = "wyoming-openwakeword";
         # https://github.com/home-assistant/addons/blob/master/openwakeword/rootfs/etc/s6-overlay/s6-rc.d/openwakeword/run
-        ExecStart = concatStringsSep " " [
-          "${cfg.package}/bin/wyoming-openwakeword"
-          "--uri ${cfg.uri}"
-          (concatMapStringsSep " " (model: "--preload-model ${model}") cfg.preloadModels)
-          (concatMapStringsSep " " (dir: "--custom-model-dir ${toString dir}") cfg.customModelsDirectories)
-          "--threshold ${cfg.threshold}"
-          "--trigger-level ${cfg.triggerLevel}"
-          "${cfg.extraArgs}"
-        ];
+        ExecStart = escapeSystemdExecArgs (
+          [
+            (lib.getExe cfg.package)
+            "--uri"
+            cfg.uri
+            "--threshold"
+            cfg.threshold
+            "--trigger-level"
+            cfg.triggerLevel
+            "--refractory-seconds"
+            cfg.refractorySeconds
+          ]
+          ++ (concatMap (dir: [
+            "--custom-model-dir"
+            (toString dir)
+          ]) cfg.customModelsDirectories)
+          ++ cfg.extraArgs
+        );
         CapabilityBoundingSet = "";
         DeviceAllow = "";
         DevicePolicy = "closed";

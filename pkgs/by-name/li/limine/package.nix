@@ -1,67 +1,123 @@
-# Builds limine with all available features.
-
+# Derivation containing the Limine host tool and the compiled bootloader
 {
-  # Helpers
-  stdenv
-, fetchurl
-, lib
-, # Dependencies
-  llvmPackages
-, mtools
-, nasm
+  fetchurl,
+  lib,
+  llvmPackages,
+  mtools,
+  nasm,
+  nixosTests,
+  # The following options map to configure flags.
+  enableAll ? false,
+  buildCDs ? false,
+  targets ? [ ],
+  # x86 specific flags
+  biosSupport ? true,
+  pxeSupport ? false,
 }:
-
 let
-  version = "7.5.2";
+  stdenv = llvmPackages.stdenv;
+
+  hasX86 =
+    (if targets == [ ] then stdenv.hostPlatform.isx86_32 else (builtins.elem "i686" targets))
+    || (if targets == [ ] then stdenv.hostPlatform.isx86_64 else (builtins.elem "x86_64" targets))
+    || enableAll;
+
+  missingZerocallusedregs =
+    (
+      if targets == [ ] then stdenv.hostPlatform.isLoongArch64 else (builtins.elem "loongarch64" targets)
+    )
+    || (if targets == [ ] then stdenv.hostPlatform.isRiscV64 else (builtins.elem "riscv64" targets))
+    || enableAll;
+
+  biosSupport' = biosSupport && hasX86;
+  pxeSupport' = pxeSupport && hasX86;
+
+  uefiFlags =
+    target:
+    {
+      aarch64 = [ "--enable-uefi-aarch64" ];
+      i686 = [ "--enable-uefi-ia32" ];
+      loongarch64 = [ "--enable-uefi-loongarch64" ];
+      riscv64 = [ "--enable-uefi-riscv64" ];
+      x86_64 = [ "--enable-uefi-x86-64" ];
+    }
+    .${target} or (throw "Unsupported target ${target}");
 in
 # The output of the derivation is a tool to create bootable images using Limine
 # as bootloader for various platforms and corresponding binary and helper files.
-stdenv.mkDerivation {
-  inherit version;
+stdenv.mkDerivation (finalAttrs: {
   pname = "limine";
+  version = "10.3.2";
+
   # We don't use the Git source but the release tarball, as the source has a
   # `./bootstrap` script performing network access to download resources.
   # Packaging that in Nix is very cumbersome.
   src = fetchurl {
-    url = "https://github.com/limine-bootloader/limine/releases/download/v${version}/limine-${version}.tar.gz";
-    sha256 = "sha256-l9ax89rNbQs8eNyuljdEXCvY5GRXsN9qzIDrsi76iEg=";
+    url = "https://codeberg.org/Limine/Limine/releases/download/v${finalAttrs.version}/limine-${finalAttrs.version}.tar.gz";
+    hash = "sha256-LeSBso/Y6I8lIy3TLvGeZLPjxsL1eHr/YSKXglHK08s=";
   };
+
+  enableParallelBuilding = true;
+
+  hardeningDisable = lib.optionals missingZerocallusedregs [
+    "zerocallusedregs"
+  ];
 
   nativeBuildInputs = [
-    llvmPackages.bintools
-    # gcc is used for the host tool, while clang is used for the bootloader.
-    llvmPackages.clang
+    llvmPackages.libllvm
     llvmPackages.lld
+  ]
+  ++ lib.optionals (enableAll || buildCDs) [
     mtools
-    nasm
+  ]
+  ++ lib.optionals hasX86 [ nasm ];
+
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "man"
   ];
 
-  configureFlags = [
-    "--enable-all"
-  ];
+  configureFlags =
+    lib.optionals enableAll [ "--enable-all" ]
+    ++ lib.optionals biosSupport' [ "--enable-bios" ]
+    ++ lib.optionals (buildCDs && biosSupport') [ "--enable-bios-cd" ]
+    ++ lib.optionals buildCDs [ "--enable-uefi-cd" ]
+    ++ lib.optionals pxeSupport' [ "--enable-bios-pxe" ]
+    ++ lib.concatMap uefiFlags (
+      if targets == [ ] then [ stdenv.hostPlatform.parsed.cpu.name ] else targets
+    );
 
-  installFlags = [ "destdir=$out" "manprefix=/share" ];
+  passthru.tests = nixosTests.limine;
 
-  outputs = [ "out" "doc" "dev" "man" ];
-
-  meta = with lib; {
+  meta = {
     homepage = "https://limine-bootloader.org/";
+    changelog = "https://codeberg.org/Limine/Limine/raw/tag/v${finalAttrs.version}/ChangeLog";
     description = "Limine Bootloader";
-    # Caution. Some submodules have different licenses.
-    license = [
-      licenses.bsd2 # limine, flanterm
-      licenses.bsd0 # freestanding-toolchain, freestanding-headers
-      licenses.asl20 # cc-runtime
-      licenses.mit # limine-efi, stb
-      licenses.zlib # tinf
-    ];
-    # The platforms on that the Liminine binary and helper tools can run, not
+    mainProgram = "limine";
+    # The platforms on that the Limine binary and helper tools can run, not
     # necessarily the platforms for that bootable images can be created.
-    platforms = platforms.unix;
-    badPlatforms = platforms.darwin;
-    maintainers = [
-      maintainers._48cf
-      maintainers.phip1611
+    platforms = lib.platforms.unix;
+    badPlatforms = lib.platforms.darwin;
+    # Caution. Some submodules have different licenses.
+    license = with lib.licenses; [
+      asl20 # cc-runtime
+      bsd0 # freestanding-headers, freestanding-toolchain
+      bsd2 # limine, flanterm, libfdt, PicoEFI
+      bsd2Patent # PicoEFI
+      bsd3 # PicoEFI
+      bsdAxisNoDisclaimerUnmodified # PicoEFI
+      mit # PicoEFI, stb_image
+      zlib # tinf
+    ];
+    maintainers = with lib.maintainers; [
+      johnrtitor
+      lzcunt
+      prince213
+      programmerlexi
+      surfaceflinger
+      ryand56
     ];
   };
-}
+})

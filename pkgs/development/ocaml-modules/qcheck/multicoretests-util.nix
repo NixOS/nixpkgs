@@ -1,16 +1,19 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, qcheck-core
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  qcheck-core,
 }:
 
 buildDunePackage rec {
   pname = "qcheck-multicoretests-util";
-  version = "0.3";
+  version = "0.11";
 
   src = fetchFromGitHub {
     owner = "ocaml-multicore";
     repo = "multicoretests";
     rev = version;
-    hash = "sha256-0fbMDksC23jojJV+aegBoSwKf1hNzDUvDEbo31HUDoM=";
+    hash = "sha256-QABh33C1k5AAYkOa5zDIExwwJFlhgdvSuxShJt4ESM8=";
   };
 
   propagatedBuildInputs = [ qcheck-core ];

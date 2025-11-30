@@ -1,48 +1,53 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
   cargo,
   rustPlatform,
   rustc,
+  setuptools,
   setuptools-rust,
-  libiconv,
 }:
 
 buildPythonPackage rec {
   pname = "cryptg";
-  version = "0.4";
-  format = "setuptools";
+  version = "0.5.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cher-nov";
-    repo = pname;
+    repo = "cryptg";
     rev = "v${version}";
-    hash = "sha256-2HP1mKGPr8wOL5B0APJks3EVBicX2iMFI7vLJGTa1PM=";
+    hash = "sha256-4WerXUEkdkIkVEyZB4EzM1HITvNbO7a1Cfi3bpJGUVA=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-AqSVFOB9Lfvk9h3GtoYlEOXBEt7YZYLhCDNKM9upQ2U=";
+    hash = "sha256-kR92lvyBCFxEvIlzRX796XQn71ARrlsfK+fAKrwimEo=";
   };
+
+  build-system = [
+    setuptools
+    setuptools-rust
+  ];
 
   nativeBuildInputs = [
-    setuptools-rust
     rustPlatform.cargoSetupHook
     rustc
     cargo
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
-
   # has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "cryptg" ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail "setuptools[core]" "setuptools"
+  '';
 
   meta = with lib; {
     description = "Official Telethon extension to provide much faster cryptography for Telegram API requests";

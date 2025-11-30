@@ -1,11 +1,14 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} : {
-  name = "envoy";
-  meta = with pkgs.lib.maintainers; {
+{ envoyPackage, lib, ... }:
+{
+  name = envoyPackage.pname;
+
+  meta = with lib.maintainers; {
     maintainers = [ cameronnemo ];
   };
 
-  nodes.machine = { pkgs, ... }: {
+  nodes.machine = {
     services.envoy.enable = true;
+    services.envoy.package = envoyPackage;
     services.envoy.settings = {
       admin = {
         access_log_path = "/dev/null";
@@ -18,21 +21,24 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
         };
       };
       static_resources = {
-        listeners = [];
-        clusters = [];
+        listeners = [ ];
+        clusters = [ ];
       };
     };
     specialisation = {
-      withoutConfigValidation.configuration = { ... }: {
-        services.envoy = {
-          requireValidConfig = false;
-          settings.admin.access_log_path = lib.mkForce "/var/log/envoy/access.log";
+      withoutConfigValidation.configuration =
+        { ... }:
+        {
+          services.envoy = {
+            requireValidConfig = false;
+            settings.admin.access_log_path = lib.mkForce "/var/log/envoy/access.log";
+          };
         };
-      };
     };
   };
 
-  testScript = { nodes, ... }:
+  testScript =
+    { nodes, ... }:
     let
       specialisations = "${nodes.machine.system.build.toplevel}/specialisation";
     in
@@ -51,4 +57,4 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
         machine.wait_until_succeeds("curl -fsS localhost:80/ready")
         machine.succeed('test -f /var/log/envoy/access.log')
     '';
-})
+}

@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-28mEG+3XNgQeteaYLNktqTvuFFdF9UIvN5X28ljNxu8=";
+    hash = "sha256-28mEG+3XNgQeteaYLNktqTvuFFdF9UIvN5X28ljNxu8=";
     extension = "zip";
   };
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "cPython bindings for zopfli";
+    description = "CPython bindings for zopfli";
     homepage = "https://github.com/obp/py-zopfli";
     license = licenses.asl20;
     maintainers = [ maintainers.sternenseemann ];

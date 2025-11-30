@@ -1,46 +1,87 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, python3
-, nix-update-script
+{
+  lib,
+  boost,
+  rustPlatform,
+  fetchFromGitHub,
+  python3,
+  gitMinimal,
+  versionCheckHook,
+  pkg-config,
+  nixVersions,
+  nix-update-script,
+  enableNixImport ? false,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nickel";
-  version = "1.6.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "nickel";
-    rev = "refs/tags/${version}";
-    hash = "sha256-AL5YkdITO9CPFYzMGQwHbuFZrMDUvF1yTt2XTotoymM=";
+    tag = finalAttrs.version;
+    hash = "sha256-ee9P2XrUToW0WJJk8QnIkY6/9t+RCY98Ai05cz9ViIY=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "topiary-core-0.3.0" = "sha256-KWfgbVFV2zbCuNNFp9yeSgAa0Cc7cT090KK2J1ynfKg=";
-      "tree-sitter-nickel-0.1.0" = "sha256-WuY6X1mnXdjiy4joIcY8voK2sqICFf0GvudulZ9lwqg=";
-    };
-  };
+  cargoHash = "sha256-nO8T+nSfR/EGW8IhjevmCH10P0ky+D0vyULSCVL5OYE=";
 
-  cargoBuildFlags = [ "-p nickel-lang-cli" "-p nickel-lang-lsp" ];
+  cargoBuildFlags = [
+    "-p nickel-lang-cli"
+    "-p nickel-lang-lsp"
+  ];
 
   nativeBuildInputs = [
     python3
+    gitMinimal
+  ]
+  ++ lib.optionals enableNixImport [
+    pkg-config
   ];
 
-  outputs = [ "out" "nls" ];
+  buildInputs = lib.optionals enableNixImport [
+    nixVersions.nix_2_28
+    boost
+  ];
+
+  buildFeatures = lib.optionals enableNixImport [ "nix-experimental" ];
+
+  outputs = [
+    "out"
+    "nls"
+  ];
+
+  # This fixes the way comrak is defined as a dependency, without it the build fails:
+  #
+  # cargo metadata failure: error: Package `nickel-lang-core v0.10.0
+  # (/build/source/core)` does not have feature `comrak`. It has an optional
+  # dependency with that name, but that dependency uses the "dep:" syntax in
+  # the features table, so it does not have an implicit feature with that name.
+  preBuild = ''
+    substituteInPlace core/Cargo.toml \
+      --replace-fail "dep:comrak" "comrak"
+  '';
+
+  cargoTestFlags = [
+    # Skip the py-nickel tests because linking them fails on aarch64, and we
+    # aren't packaging py-nickel anyway
+    "--workspace"
+    "--exclude=py-nickel"
+  ];
 
   postInstall = ''
     mkdir -p $nls/bin
     mv $out/bin/nls $nls/bin/nls
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://nickel-lang.org/";
     description = "Better configuration for less";
     longDescription = ''
@@ -51,9 +92,13 @@ rustPlatform.buildRustPackage rec {
       that are then fed to another system. It is designed to have a simple,
       well-understood core: it is in essence JSON with functions.
     '';
-    changelog = "https://github.com/tweag/nickel/blob/${version}/RELEASES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres felschr matthiasbeyer ];
+    changelog = "https://github.com/tweag/nickel/blob/${finalAttrs.version}/RELEASES.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      felschr
+      matthiasbeyer
+      yannham
+    ];
     mainProgram = "nickel";
   };
-}
+})

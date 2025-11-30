@@ -3,65 +3,65 @@
   buildPythonPackage,
   pythonOlder,
   fetchPypi,
-  importlib-metadata,
   packaging,
   tomli,
   pytestCheckHook,
   build,
   hatchling,
   pydantic,
+  pytest-cov-stub,
   pytest-mock,
   setuptools,
-  git,
+  gitMinimal,
   mercurial,
 }:
 
 buildPythonPackage rec {
   pname = "versioningit";
-  version = "3.1.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "3.3.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eqxxPDGlPrNnprvC6LPejMK4bRDUXFEBr9ZRRGyxD9c=";
+    hash = "sha256-uRrX1z5z0hIg5pVA8gIT8rcpofmzXATp4Tfq8o0iFNo=";
   };
 
   postPatch = ''
     substituteInPlace tox.ini \
-      --replace "--cov=versioningit" "" \
-      --replace "--cov-config=tox.ini" "" \
-      --replace "--no-cov-on-fail" ""
+      --replace-fail "ignore:.*No source for code:coverage.exceptions.CoverageWarning" ""
   '';
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs =
-    [ packaging ]
-    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ]
-    ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  dependencies = [
+    packaging
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     pytestCheckHook
     build
     hatchling
     pydantic
+    pytest-cov-stub
     pytest-mock
     setuptools
-    git
+    gitMinimal
     mercurial
   ];
 
   disabledTests = [
     # wants to write to the Nix store
     "test_editable_mode"
+    # network access
+    "test_install_from_git_url"
+    "test_install_from_zip_url"
   ];
 
   pythonImportsCheck = [ "versioningit" ];
 
   meta = with lib; {
-    description = "setuptools plugin for determining package version from VCS";
+    description = "Setuptools plugin for determining package version from VCS";
     mainProgram = "versioningit";
     homepage = "https://github.com/jwodder/versioningit";
     changelog = "https://versioningit.readthedocs.io/en/latest/changelog.html";

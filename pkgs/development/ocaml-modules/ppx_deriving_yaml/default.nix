@@ -1,26 +1,54 @@
-{ lib, buildDunePackage, fetchurl, ppxlib, alcotest, mdx
-, ppx_deriving, yaml
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ppxlib,
+  alcotest,
+  mdx,
+  ppx_deriving,
+  yaml,
 }:
+
+let
+  param =
+    if lib.versionAtLeast ppxlib.version "0.36" then
+      {
+        version = "0.4.1";
+        hash = "sha256-3CvvMEOq/3I3WJ6X5EyopiaMjshZoEMPk2K4Lx0ldSo=";
+      }
+    else
+      {
+        version = "0.4.0";
+        hash = "sha256-MVwCFAZY9Ui1gOckfbbj882w2aloHCGmJhpL1BDUEAg=";
+      };
+in
 
 buildDunePackage rec {
   pname = "ppx_deriving_yaml";
-  version = "0.2.2";
+  inherit (param) version;
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/patricoferris/ppx_deriving_yaml/releases/download/v${version}/ppx_deriving_yaml-${version}.tbz";
-    hash = "sha256-9xy43jaCpKo/On5sTTt8f0Mytyjj1JN2QuFMcoWYTBY=";
+    inherit (param) hash;
   };
 
-  propagatedBuildInputs = [ ppxlib ppx_deriving yaml ];
+  propagatedBuildInputs = [
+    ppxlib
+    ppx_deriving
+    yaml
+  ];
 
   doCheck = true;
-  checkInputs = [ alcotest ];
+  checkInputs = [
+    alcotest
+    mdx
+  ];
   nativeCheckInputs = [ mdx.bin ];
 
   meta = {
-    description = "A YAML codec generator for OCaml";
+    description = "YAML codec generator for OCaml";
     homepage = "https://github.com/patricoferris/ppx_deriving_yaml";
     license = lib.licenses.isc;
     maintainers = [ ];

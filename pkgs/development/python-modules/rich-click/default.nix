@@ -6,13 +6,12 @@
   pythonOlder,
   rich,
   setuptools,
-  typer,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "rich-click";
-  version = "1.8.2";
+  version = "1.8.9";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ewels";
     repo = "rich-click";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-O7ZV6+p0nvWmKHUy/aK+qcED/KT4hZojoQRKr9Eg848=";
+    tag = "v${version}";
+    hash = "sha256-uFb4Pcor9o4BPM/xx/sAKu9DoXvGO/RZg/3dVhbjgk0=";
   };
 
   build-system = [ setuptools ];
@@ -40,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to format click help output nicely with rich";
     homepage = "https://github.com/ewels/rich-click";
-    changelog = "https://github.com/ewels/rich-click/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/ewels/rich-click/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "rich-click";

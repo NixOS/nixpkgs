@@ -23,7 +23,7 @@ buildPythonPackage rec {
   # pypi package is missing test fixtures
   src = fetchFromGitHub {
     owner = "amelchio";
-    repo = pname;
+    repo = "pysonos";
     rev = "v${version}";
     hash = "sha256-gBOknYHL5nQWFVhCbLN0Ah+1fovcNY4P2myryZnUadk=";
   };
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A SoCo fork with fixes for Home Assistant";
+    description = "SoCo fork with fixes for Home Assistant";
     homepage = "https://github.com/amelchio/pysonos";
     license = licenses.mit;
     maintainers = with maintainers; [ juaningan ];

@@ -10,8 +10,6 @@
   marshmallow,
   marshmallow-sqlalchemy,
   openpyxl,
-  pythonOlder,
-  pythonRelaxDepsHook,
   roadlib,
   setuptools,
   sqlalchemy,
@@ -19,24 +17,19 @@
 
 buildPythonPackage rec {
   pname = "roadrecon";
-  version = "1.4.0";
+  version = "1.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OEftVwU30tLP091Z5CIl67hkjjcqY+Qo04/wHZlbuFc=";
+    hash = "sha256-fvfwgUqVr74JdL3dteX0UXbALva3vWQWEpotk8QQAiI=";
   };
 
   pythonRelaxDeps = [ "flask" ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     flask
     flask-cors
@@ -48,6 +41,9 @@ buildPythonPackage rec {
     roadlib
     sqlalchemy
   ];
+
+  # Module has no tests
+  doCheck = false;
 
   pythonImportsCheck = [ "roadtools.roadrecon" ];
 

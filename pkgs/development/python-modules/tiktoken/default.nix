@@ -9,7 +9,6 @@
   rustc,
   setuptools,
   setuptools-rust,
-  wheel,
   libiconv,
   requests,
   regex,
@@ -17,10 +16,10 @@
 }:
 let
   pname = "tiktoken";
-  version = "0.5.1";
+  version = "0.9.0";
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-J+dzVkIyAE9PgQ/R+FI2Zz7DpW7X8SBvye2GcOvtuXo=";
+    hash = "sha256-0Cpcpqk44EkOH/lXvEjIsHjIjLg5d74WJbH9iqx5LF0=";
   };
   postPatch = ''
     cp ${./Cargo.lock} Cargo.lock
@@ -33,20 +32,23 @@ buildPythonPackage {
     src
     postPatch
     ;
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  nativeBuildInput = [
+  build-system = [
     setuptools
     setuptools-rust
-    wheel
   ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src postPatch;
-    name = "${pname}-${version}";
-    hash = "sha256-Q7XO+auj4tKDAGbqNn9pmJg8EJvooN2ie0lWwZVrld4=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      postPatch
+      ;
+    hash = "sha256-MfTTRbSM+KgrYrWHYlJkGDc1qn3oulalDJM+huTaJ0g=";
   };
 
   nativeBuildInputs = [
@@ -56,9 +58,9 @@ buildPythonPackage {
     rustc
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     regex
     blobfile
@@ -70,7 +72,7 @@ buildPythonPackage {
   pythonImportsCheck = [ "tiktoken" ];
 
   meta = with lib; {
-    description = "tiktoken is a fast BPE tokeniser for use with OpenAI's models.";
+    description = "Fast BPE tokeniser for use with OpenAI's models";
     homepage = "https://github.com/openai/tiktoken";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];

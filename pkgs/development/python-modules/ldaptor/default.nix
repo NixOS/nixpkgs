@@ -5,11 +5,9 @@
   twisted,
   passlib,
   pyparsing,
-  service-identity,
   six,
   zope-interface,
   pythonOlder,
-  python,
 }:
 
 buildPythonPackage rec {
@@ -29,7 +27,8 @@ buildPythonPackage rec {
     six
     twisted
     zope-interface
-  ] ++ twisted.optional-dependencies.tls;
+  ]
+  ++ twisted.optional-dependencies.tls;
 
   nativeCheckInputs = [ twisted ];
 
@@ -43,9 +42,9 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A Pure-Python Twisted library for LDAP";
+    description = "Pure-Python Twisted library for LDAP";
     homepage = "https://github.com/twisted/ldaptor";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

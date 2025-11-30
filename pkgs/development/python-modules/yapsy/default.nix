@@ -4,11 +4,12 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
+  unstableGitUpdater,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "yapsy";
-  version = "1.12.2-unstable-2023-03-29";
+  version = "1.12.2-unstable-2023-03-28";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -18,13 +19,17 @@ buildPythonPackage {
     hash = "sha256-QKZlUAhYMCCsT/jbEHb39ESZ2+2FZYnhJnc1PgsozBA=";
   };
 
-  sourceRoot = "source/package";
+  sourceRoot = "${src.name}/package";
 
   build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "yapsy" ];
+
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "release_Yapsy-";
+  };
 
   meta = with lib; {
     homepage = "https://yapsy.sourceforge.net/";

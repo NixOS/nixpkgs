@@ -1,4 +1,9 @@
-{ linkFarm, hello, writeTextFile, runCommand }:
+{
+  linkFarm,
+  hello,
+  writeTextFile,
+  runCommand,
+}:
 let
   foo = writeTextFile {
     name = "foo";
@@ -6,18 +11,38 @@ let
   };
 
   linkFarmFromList = linkFarm "linkFarmFromList" [
-    { name = "foo"; path = foo; }
-    { name = "hello"; path = hello; }
+    {
+      name = "foo";
+      path = foo;
+    }
+    {
+      name = "hello";
+      path = hello;
+    }
   ];
 
   linkFarmWithRepeats = linkFarm "linkFarmWithRepeats" [
-    { name = "foo"; path = foo; }
-    { name = "hello"; path = hello; }
-    { name = "foo"; path = hello; }
+    {
+      name = "foo";
+      path = foo;
+    }
+    {
+      name = "hello";
+      path = hello;
+    }
+    {
+      name = "foo";
+      path = hello;
+    }
   ];
 
   linkFarmFromAttrs = linkFarm "linkFarmFromAttrs" {
     inherit foo hello;
+  };
+
+  linkFarmDelimitOptionList = linkFarm "linkFarmDelimitOptionList" {
+    "-foo" = foo;
+    "-hello" = hello;
   };
 in
 runCommand "test-linkFarm" { } ''
@@ -41,5 +66,9 @@ runCommand "test-linkFarm" { } ''
 
   assertPathEquals "${linkFarmFromAttrs}/foo" "${foo}"
   assertPathEquals "${linkFarmFromAttrs}/hello" "${hello}"
+
+  assertPathEquals "${linkFarmDelimitOptionList}/-foo" "${foo}"
+  assertPathEquals "${linkFarmDelimitOptionList}/-hello" "${hello}"
+
   touch $out
 ''

@@ -1,7 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,12 +14,6 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-FkyrtgsGzpK2rLNr+oxfPUbX43TVXYeiBg7CN1JUg8Y=";
   };
-
-  buildInputs = [
-    darwin.apple_sdk.frameworks.Foundation
-    darwin.apple_sdk.frameworks.AppKit
-    darwin.apple_sdk.frameworks.Cocoa
-  ];
 
   installPhase = ''
     runHook preInstall

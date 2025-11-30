@@ -1,10 +1,11 @@
-{ fetchFromGitHub
-, lib
-, stdenvNoCC
+{
+  fetchFromGitHub,
+  lib,
+  stdenvNoCC,
 
-, # build deps
-  clickgen
-, python3Packages
+  # build deps
+  clickgen,
+  python3Packages,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -15,7 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "ful1e5";
     repo = "pokemon-cursor";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-EL6Ztbzjm1YuQP+8ZbrhbuBXn+GFiJGG0iGNWzU/rBY=";
+    hash = "sha256-EL6Ztbzjm1YuQP+8ZbrhbuBXn+GFiJGG0iGNWzU/rBY=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +42,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "An unofficial open-source Pokemon cursor theme";
+    description = "Unofficial open-source Pokemon cursor theme";
     homepage = "https://github.com/ful1e5/pokemon-cursor";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.getpsyched ];

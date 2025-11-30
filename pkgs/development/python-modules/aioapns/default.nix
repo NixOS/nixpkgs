@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "aioapns";
-  version = "3.2";
+  version = "4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QPayQogW97saMmaPUP5x0CiXd6Qptg/OROigi5ASNQg=";
+    hash = "sha256-NxX6q/P6bAJA52N/RCfYjQiv3M6w3PuVbG0JtvSUJ/g=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -35,10 +35,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aioapns" ];
 
   meta = with lib; {
-    description = "An efficient APNs Client Library";
+    description = "Efficient APNs Client Library";
     homepage = "https://github.com/Fatal1ty/aioapns";
     changelog = "https://github.com/Fatal1ty/aioapns/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

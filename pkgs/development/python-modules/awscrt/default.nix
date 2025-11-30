@@ -2,39 +2,27 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   cmake,
   perl,
   stdenv,
-  gcc10,
-  CoreFoundation,
-  Security,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "awscrt";
-  version = "0.20.10";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.29.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vGmN6MU61KLqsWRrkhlqWE6tFwplxltZyIOFWt6lly8=";
+    hash = "sha256-D6GHTFohd2G2IlQ5PTq3r2v+qUfLqH044XEdV2/WPTE=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    CoreFoundation
-    Security
-  ];
+  build-system = [ setuptools ];
 
-  # gcc <10 is not supported, LLVM on darwin is just fine
-  nativeBuildInputs =
-    [ cmake ]
-    ++ lib.optionals (!stdenv.isDarwin && stdenv.isAarch64) [
-      gcc10
-      perl
-    ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ perl ];
+
+  hardeningDisable = [ "fortify" ]; # needed for jitterentropy
 
   dontUseCmakeConfigure = true;
 

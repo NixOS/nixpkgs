@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, gtkmm3
-, libxml2
-, libgtop
-, librsvg
-, polkit
-, systemd
-, wrapGAppsHook3
-, mate-desktop
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  gtkmm3,
+  libxml2,
+  libgtop,
+  librsvg,
+  polkit,
+  systemd,
+  wrapGAppsHook3,
+  mate-desktop,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,10 +25,13 @@ stdenv.mkDerivation rec {
     sha256 = "QtZj1rkPtTYevBP2VHmD1vHirHXcKuTxysbqYymWWiU=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     pkg-config
     gettext
     itstool
+    libxml2 # xmllint
     wrapGAppsHook3
   ];
 
@@ -56,6 +60,6 @@ stdenv.mkDerivation rec {
     homepage = "https://mate-desktop.org";
     license = [ licenses.gpl2Plus ];
     platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

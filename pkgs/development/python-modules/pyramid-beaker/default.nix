@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pyramid_beaker";
     inherit version;
-    sha256 = "sha256-zMUT60z7W0Flfym25rKMor17O/n9qRMGoQKa7pLRz6U=";
+    hash = "sha256-zMUT60z7W0Flfym25rKMor17O/n9qRMGoQKa7pLRz6U=";
   };
 
   checkPhase = ''
@@ -30,11 +30,11 @@ buildPythonPackage rec {
     pyramid
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Beaker session factory backend for Pyramid";
     homepage = "https://docs.pylonsproject.org/projects/pyramid_beaker/en/latest/";
     # idk, see https://github.com/Pylons/pyramid_beaker/blob/master/LICENSE.txt
     # license = licenses.mpl20;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = [ ];
   };
 }

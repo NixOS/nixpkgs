@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "dmenu-python";
   version = "0.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;
@@ -21,7 +22,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "A Python wrapper for dmenu";
+    description = "Python wrapper for dmenu";
     homepage = "https://dmenu.readthedocs.io";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.nico202 ];

@@ -1,21 +1,28 @@
-import ../make-test-python.nix ({ pkgs, lib, ... } : {
+{ pkgs, lib, ... }:
+{
   name = "static-web-server";
   meta = {
     maintainers = with lib.maintainers; [ mac-chaffee ];
   };
 
-  nodes.machine = { pkgs, ... }: {
-    services.static-web-server = {
-      enable = true;
-      listen = "[::]:8080";
-      root = toString (pkgs.writeTextDir "nixos-test.html" ''
-        <h1>Hello NixOS!</h1>
-      '');
-      configuration = {
-        general = { directory-listing = true; };
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      services.static-web-server = {
+        enable = true;
+        listen = "[::]:8080";
+        root = toString (
+          pkgs.writeTextDir "nixos-test.html" ''
+            <h1>Hello NixOS!</h1>
+          ''
+        );
+        configuration = {
+          general = {
+            directory-listing = true;
+          };
+        };
       };
     };
-  };
 
   testScript = ''
     machine.start()
@@ -29,4 +36,4 @@ import ../make-test-python.nix ({ pkgs, lib, ... } : {
     assert "Hello NixOS!" in response
     machine.wait_for_unit("static-web-server.service")
   '';
-})
+}

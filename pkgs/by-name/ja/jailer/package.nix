@@ -1,36 +1,45 @@
 {
   lib,
+  stdenv,
+  fetchFromGitHub,
   ant,
   copyDesktopItems,
-  fetchFromGitHub,
   jdk,
   jre,
   makeDesktopItem,
   makeWrapper,
-  stdenv,
   stripJavaArchivesHook,
   wrapGAppsHook4,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
-  name = "jailer";
-  version = "16.1.4";
+  pname = "jailer";
+  version = "16.9.3";
 
   src = fetchFromGitHub {
     owner = "Wisser";
     repo = "Jailer";
-    rev = "dcde48b2e0c7b68cc1b6f73c80fde06fdf31fdc6";
-    sha256 = "sha256-cPOWW2z44vCc/Fw1zYZUsYafgKr82e0g+K0Db5A9F5M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4uXJZZ528Bc4vL8NUQDjoWGPBu/Bd9jhOMxC3e+s9hc=";
   };
 
+  nativeBuildInputs = [
+    ant
+    jdk
+    stripJavaArchivesHook
+    makeWrapper
+    wrapGAppsHook4
+    copyDesktopItems
+  ];
 
   buildPhase = ''
     runHook preBuild
+
     rm jailer.jar
     ant
+
     runHook postBuild
   '';
-
-  nativeBuildInputs = [ ant jdk stripJavaArchivesHook makeWrapper wrapGAppsHook4 copyDesktopItems ];
 
   installPhase = ''
     runHook preInstall
@@ -73,10 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A tool for database subsetting and relational data browsing";
+    description = "Tool for database subsetting and relational data browsing";
     license = lib.licenses.asl20;
     homepage = "https://github.com/Wisser/Jailer";
-    changelog = "https://github.com/Wisser/Jailer/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/Wisser/Jailer/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ guillaumematheron ];
     mainProgram = "jailer";
   };

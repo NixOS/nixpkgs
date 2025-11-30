@@ -13,14 +13,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "plattenalbum";
-  version = "2.1.0";
+  version = "2.4.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "SoongNoonien";
     repo = "plattenalbum";
-    rev = "v${version}";
-    hash = "sha256-vRBlShbNuPpL29huhzYSuUcMJmSLljO4nc6cSAp3NB4=";
+    tag = "v${version}";
+    hash = "sha256-zk0Cs+ZR5JEiuVgjcj2ykVbRBzp0p5VioZmHgcAHq/s=";
   };
 
   nativeBuildInputs = [
@@ -46,9 +46,9 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = {
-    description = "A client for the Music Player Daemon (originally named mpdevil)";
+    description = "Client for the Music Player Daemon (originally named mpdevil)";
     homepage = "https://github.com/SoongNoonien/plattenalbum";
-    changelog = "https://github.com/SoongNoonien/plattenalbum/releases/tag/v${version}";
+    changelog = "https://github.com/SoongNoonien/plattenalbum/releases/tag/${src.tag}";
     license = with lib.licenses; [
       gpl3Only
       cc0

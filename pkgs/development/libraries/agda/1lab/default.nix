@@ -1,14 +1,18 @@
-{ lib, mkDerivation, fetchFromGitHub }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+}:
 
-mkDerivation rec {
+mkDerivation {
   pname = "1lab";
-  version = "unstable-2024-03-07";
+  version = "unstable-2025-07-01";
 
   src = fetchFromGitHub {
-    owner = "plt-amy";
-    repo = pname;
-    rev = "d698f21793c4815082c94d174b9eafae912abb1a";
-    hash = "sha256-v8avF9zNNz32kLuAacPdEVeUI9rjn6JCiWPzkXfzBS0=";
+    owner = "the1lab";
+    repo = "1lab";
+    rev = "e9c2ad2b3ba9cefad36e72cb9d732117c68ac862";
+    hash = "sha256-wKh77+xCdfMtnq9jMlpdnEptGO+/WVNlQFa1TDbdUGs=";
   };
 
   postPatch = ''
@@ -19,23 +23,11 @@ mkDerivation rec {
     shopt -s globstar extglob
     files=(src/**/*.@(agda|lagda.md))
     sed -Ei '/OPTIONS/s/ -v ?[^ #]+//g' "''${files[@]}"
-
-    # Generate all-pages manually instead of building the build script.
-    mkdir -p _build
-    for f in "''${files[@]}"; do
-      f=''${f#src/} f=''${f%%.*} f=''${f//\//.}
-      echo "open import $f"
-    done > _build/all-pages.agda
   '';
 
-  libraryName = "1lab";
-  libraryFile = "1lab.agda-lib";
-  everythingFile = "_build/all-pages.agda";
-
   meta = with lib; {
-    description =
-      "A formalised, cross-linked reference resource for mathematics done in Homotopy Type Theory ";
-    homepage = src.meta.homepage;
+    description = "Formalised, cross-linked reference resource for mathematics done in Homotopy Type Theory ";
+    homepage = "https://github.com/the1lab/1lab";
     license = licenses.agpl3Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ncfavier ];

@@ -1,13 +1,17 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.virtualisation.vmware.host;
   wrapperDir = "/run/vmware/bin"; # Perfectly fits as /usr/local/bin
   parentWrapperDir = dirOf wrapperDir;
   vmwareWrappers = # Needed as hardcoded paths workaround
-    let mkVmwareSymlink =
-      program:
-      ''
+    let
+      mkVmwareSymlink = program: ''
         ln -s "${config.security.wrapperDir}/${program}" $wrapperDir/${program}
       '';
     in
@@ -40,7 +44,7 @@ in
       package = mkPackageOption pkgs "vmware-workstation" { };
       extraPackages = mkOption {
         type = with types; listOf package;
-        default = with pkgs; [ ];
+        default = [ ];
         description = "Extra packages to be used with VMware host.";
         example = "with pkgs; [ ntfs3g ]";
       };
@@ -60,15 +64,36 @@ in
   config = lib.mkIf cfg.enable {
     boot.extraModulePackages = [ config.boot.kernelPackages.vmware ];
     boot.extraModprobeConfig = "alias char-major-10-229 fuse";
-    boot.kernelModules = [ "vmw_pvscsi" "vmw_vmci" "vmmon" "vmnet" "fuse" ];
+    boot.kernelModules = [
+      "vmw_pvscsi"
+      "vmw_vmci"
+      "vmmon"
+      "vmnet"
+      "fuse"
+    ];
 
     environment.systemPackages = [ cfg.package ] ++ cfg.extraPackages;
     services.printing.drivers = [ cfg.package ];
 
-    environment.etc."vmware/config".text = ''
-      ${builtins.readFile "${cfg.package}/etc/vmware/config"}
-      ${cfg.extraConfig}
-    '';
+    environment.etc."vmware/config".source =
+      let
+        packageConfig = "${cfg.package}/etc/vmware/config";
+      in
+      if cfg.extraConfig == "" then
+        packageConfig
+      else
+        pkgs.runCommandLocal "etc-vmware-config"
+          {
+            inherit packageConfig;
+            inherit (cfg) extraConfig;
+          }
+          ''
+            (
+              cat "$packageConfig"
+              printf "\n"
+              echo "$extraConfig"
+            ) >"$out"
+          '';
 
     environment.etc."vmware/bootstrap".source = "${cfg.package}/etc/vmware/bootstrap";
     environment.etc."vmware/icu".source = "${cfg.package}/etc/vmware/icu";
@@ -105,7 +130,7 @@ in
         # We want to place the tmpdirs for the wrappers to the parent dir.
         wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
         chmod a+rx "$wrapperDir"
-        ${lib.concatStringsSep "\n" (vmwareWrappers)}
+        ${lib.concatStringsSep "\n" vmwareWrappers}
         if [ -L ${wrapperDir} ]; then
           # Atomically replace the symlink
           # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/

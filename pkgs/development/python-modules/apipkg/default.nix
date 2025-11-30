@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "apipkg";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ANLD7fUMKN3RmAVjVkcpwUH6U9ASalXdwKtPpoC8Urs=";
   };
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test_apipkg.py" ];
+  enabledTestPaths = [ "test_apipkg.py" ];
 
   pythonImportsCheck = [ "apipkg" ];
 
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Namespace control and lazy-import mechanism";
     homepage = "https://github.com/pytest-dev/apipkg";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

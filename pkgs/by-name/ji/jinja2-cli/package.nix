@@ -1,7 +1,14 @@
-{ lib
-, python3
-, fetchFromGitHub
-, extras ? [ "hjson" "json5" "toml" "xml" "yaml" ]
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  extras ? [
+    "hjson"
+    "json5"
+    "toml"
+    "xml"
+    "yaml"
+  ],
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -25,13 +32,16 @@ python3.pkgs.buildPythonApplication rec {
     python3.pkgs.pytestCheckHook
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    jinja2
-  ] ++ lib.attrVals extras passthru.optional-dependencies;
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      jinja2
+    ]
+    ++ lib.attrVals extras optional-dependencies;
 
   pythonImportsCheck = [ "jinja2cli" ];
 
-  passthru.optional-dependencies = with python3.pkgs; {
+  optional-dependencies = with python3.pkgs; {
     hjson = [ hjson ];
     json5 = [ json5 ];
     toml = [ toml ];
@@ -43,7 +53,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "CLI for Jinja2";
     homepage = "https://github.com/mattrobenolt/jinja2-cli";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "jinja2";
   };
 }

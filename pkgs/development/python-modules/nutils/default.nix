@@ -1,52 +1,75 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  numpy,
-  treelog,
-  stringly,
   flit-core,
-  bottombar,
+  appdirs,
+  matplotlib,
+  meshio,
+  numpy,
+  nutils-poly,
+  scipy,
+  stringly,
+  treelog,
   pytestCheckHook,
   pythonOlder,
+  pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "nutils";
-  version = "8.6";
-  format = "pyproject";
+  version = "9.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "evalf";
     repo = "nutils";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-vfdb7+jcJ5EuWDoZyRExWEPEWt+lgbzmAL3QhguLtHE=";
+    tag = "v${version}";
+    hash = "sha256-NmWoRDYOfSweqUhw0KTdXubWgXmVr+odrs1dMLXdHEI=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    appdirs
     numpy
-    treelog
+    nutils-poly
     stringly
-    bottombar
+    treelog
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  optional-dependencies = {
+    export-mpl = [ matplotlib ];
+    # TODO: matrix-mkl = [ mkl ];
+    matrix-scipy = [ scipy ];
+    import-gmsh = [ meshio ];
+  };
+
+  pythonRelaxDeps = [ "psutil" ];
+
+  nativeCheckInputs = [
+    pkgs.graphviz
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  disabledTests = [
+    # Error: invalid value 'x' for farg: loading 'x' as float
+    "run.test_badvalue"
+    "choose.test_badvalue"
+    # ModuleNotFoundError: No module named 'stringly'
+    "picklability.test_basis"
+    "picklability.test_domain"
+    "picklability.test_geom"
+  ];
 
   pythonImportsCheck = [ "nutils" ];
 
-  disabledTestPaths = [
-    # AttributeError: type object 'setup' has no attribute '__code__'
-    "tests/test_cli.py"
-  ];
-
   meta = with lib; {
     description = "Numerical Utilities for Finite Element Analysis";
-    changelog = "https://github.com/evalf/nutils/releases/tag/v${version}";
+    changelog = "https://github.com/evalf/nutils/releases/tag/${src.tag}";
     homepage = "https://www.nutils.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ Scriptkiddi ];

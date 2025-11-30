@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ffmpeg
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ffmpeg,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Simple high quality GIF encoding";
     homepage = "https://github.com/lukechilds/gifgen";
     license = licenses.mit;
-    maintainers = with maintainers; [ snowflake ];
+    maintainers = [ ];
     mainProgram = "gifgen";
     platforms = platforms.all;
   };

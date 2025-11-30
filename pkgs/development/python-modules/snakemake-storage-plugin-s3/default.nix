@@ -13,24 +13,19 @@
 
 buildPythonPackage rec {
   pname = "snakemake-storage-plugin-s3";
-  version = "0.2.11";
-  format = "pyproject";
+  version = "0.3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pAMrWJe4+PWHglZ/C83Af+uHBg9wupfSlH4W8CvO9as=";
+    repo = "snakemake-storage-plugin-s3";
+    tag = "v${version}";
+    hash = "sha256-hvyQ6V6POUBWTCWt9moQlH0RgSM4J36kjbXK4TtO8Bo=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace ">=2.0,<2.2" "*"
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ poetry-core ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     boto3
     botocore
     snakemake-interface-storage-plugins
@@ -43,8 +38,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "snakemake_storage_plugin_s3" ];
 
   meta = with lib; {
-    description = "A Snakemake storage plugin for S3 API storage (AWS S3, MinIO, etc.)";
+    description = "Snakemake storage plugin for S3 API storage (AWS S3, MinIO, etc.)";
     homepage = "https://github.com/snakemake/snakemake-storage-plugin-s3";
+    changelog = "https://github.com/snakemake/snakemake-storage-plugin-s3/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ veprbl ];
   };

@@ -1,21 +1,33 @@
-{ lib, python3Packages, fetchPypi, mopidy }:
+{
+  lib,
+  pythonPackages,
+  fetchPypi,
+  mopidy,
+}:
 
-python3Packages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   pname = "mopidy-mpris";
   version = "3.0.3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "Mopidy-MPRIS";
-    sha256 = "sha256-rHQgNIyludTEL7RDC8dIpyGTMOt1Tazn6i/orKlSP4U=";
+    hash = "sha256-rHQgNIyludTEL7RDC8dIpyGTMOt1Tazn6i/orKlSP4U=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    pythonPackages.setuptools
+  ];
+
+  dependencies = [
     mopidy
-    python3Packages.pydbus
+    pythonPackages.pydbus
   ];
 
   doCheck = false;
+
+  pythonImportsCheck = [ "mopidy_mpris" ];
 
   meta = with lib; {
     homepage = "https://www.mopidy.com/";
@@ -24,4 +36,3 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ maintainers.nickhu ];
   };
 }
-

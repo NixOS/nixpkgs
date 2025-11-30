@@ -25,8 +25,13 @@ The following snippet can be used to configure IBus:
 ```nix
 {
   i18n.inputMethod = {
-    enabled = "ibus";
-    ibus.engines = with pkgs.ibus-engines; [ anthy hangul mozc ];
+    enable = true;
+    type = "ibus";
+    ibus.engines = with pkgs.ibus-engines; [
+      anthy
+      hangul
+      mozc
+    ];
   };
 }
 ```
@@ -39,6 +44,7 @@ Available extra IBus engines are:
   - Anthy (`ibus-engines.anthy`): Anthy is a system for
     Japanese input method. It converts Hiragana text to Kana Kanji mixed text.
   - Hangul (`ibus-engines.hangul`): Korean input method.
+  - libpinyin (`ibus-engines.libpinyin`): A Chinese input method.
   - m17n (`ibus-engines.m17n`): m17n is an input method that
     uses input methods and corresponding icons in the m17n database.
   - mozc (`ibus-engines.mozc`): A Japanese input method from
@@ -52,7 +58,10 @@ Available extra IBus engines are:
 
     ```nix
     {
-      ibus.engines = with pkgs.ibus-engines; [ table table-others ];
+      ibus.engines = with pkgs.ibus-engines; [
+        table
+        table-others
+      ];
     }
     ```
 
@@ -81,8 +90,13 @@ The following snippet can be used to configure Fcitx:
 ```nix
 {
   i18n.inputMethod = {
-    enabled = "fcitx5";
-    fcitx5.addons = with pkgs; [ fcitx5-mozc fcitx5-hangul fcitx5-m17n ];
+    enable = true;
+    type = "fcitx5";
+    fcitx5.addons = with pkgs; [
+      fcitx5-mozc
+      fcitx5-hangul
+      fcitx5-m17n
+    ];
   };
 }
 ```
@@ -119,7 +133,8 @@ The following snippet can be used to configure Nabi:
 ```nix
 {
   i18n.inputMethod = {
-    enabled = "nabi";
+    enable = true;
+    type = "nabi";
   };
 }
 ```
@@ -134,7 +149,8 @@ The following snippet can be used to configure uim:
 ```nix
 {
   i18n.inputMethod = {
-    enabled = "uim";
+    enable = true;
+    type = "uim";
   };
 }
 ```
@@ -154,7 +170,8 @@ The following snippet can be used to configure Hime:
 ```nix
 {
   i18n.inputMethod = {
-    enabled = "hime";
+    enable = true;
+    type = "hime";
   };
 }
 ```
@@ -168,7 +185,8 @@ The following snippet can be used to configure Kime:
 ```nix
 {
   i18n.inputMethod = {
-    enabled = "kime";
+    enable = true;
+    type = "kime";
   };
 }
 ```

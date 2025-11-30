@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, autoreconfHook
-, fetchFromGitHub
-, glib
-, pkg-config
-, readline
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  glib,
+  pkg-config,
+  readline,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,10 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/khvzak/bluez-tools";
-    description = "A set of tools to manage bluetooth devices for linux";
+    description = "Set of tools to manage bluetooth devices for linux";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "bt-agent";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

@@ -33,22 +33,22 @@ Unfortunately, Nixpkgs currently lacks a way to query available package configur
 ::: {.note}
 For example, many packages come with extensions one might add.
 Examples include:
-- [`passExtensions.pass-otp`](https://search.nixos.org/packages/query=passExtensions.pass-otp)
-- [`python310Packages.requests`](https://search.nixos.org/packages/query=python310Packages.requests)
+- [`passExtensions.pass-otp`](https://search.nixos.org/packages?query=passExtensions.pass-otp)
+- [`python312Packages.requests`](https://search.nixos.org/packages?query=python312Packages.requests)
 
 You can use them like this:
 ```nix
 {
   environment.systemPackages = with pkgs; [
     sl
-    (pass.withExtensions (subpkgs: with subpkgs; [
-      pass-audit
-      pass-otp
-      pass-genphrase
-    ]))
-    (python3.withPackages (subpkgs: with subpkgs; [
-        requests
-    ]))
+    (pass.withExtensions (
+      subpkgs: with subpkgs; [
+        pass-audit
+        pass-otp
+        pass-genphrase
+      ]
+    ))
+    (python3.withPackages (subpkgs: with subpkgs; [ requests ]))
     cowsay
   ];
 }
@@ -62,9 +62,7 @@ dependency on GTK 2. If you want to build it against GTK 3, you can
 specify that as follows:
 
 ```nix
-{
-  environment.systemPackages = [ (pkgs.emacs.override { gtk = pkgs.gtk3; }) ];
-}
+{ environment.systemPackages = [ (pkgs.emacs.override { gtk = pkgs.gtk3; }) ]; }
 ```
 
 The function `override` performs the call to the Nix function that
@@ -109,9 +107,9 @@ your customised instance, you can apply a *global* override as follows:
 
 ```nix
 {
-  nixpkgs.config.packageOverrides = pkgs:
-    { emacs = pkgs.emacs.override { gtk = pkgs.gtk3; };
-    };
+  nixpkgs.config.packageOverrides = pkgs: {
+    emacs = pkgs.emacs.override { gtk = pkgs.gtk3; };
+  };
 }
 ```
 

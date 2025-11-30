@@ -4,6 +4,7 @@
   pkgsCross,
   rustPlatform,
   stdenv,
+  glibcLocales,
   fetchFromGitHub,
   installShellFiles,
 }:
@@ -13,16 +14,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "argc";
-  version = "1.14.0";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "argc";
     rev = "v${version}";
-    hash = "sha256-Li/K5/SLG6JuoRJDz2DQoj1Oi9LQgZWHNvtZ1HVbj88=";
+    hash = "sha256-in2ymxiSZbs3wZwo/aKfu11x8SLx4OHOoa/tVxr3FyM=";
   };
 
-  cargoHash = "sha256-D1T9FWTvwKtAYoqFlR2OmLRLGWhPJ9D8J7lq/QKcBoM=";
+  cargoHash = "sha256-2UmI9CMa130T7ML9iVNQ8Zh/stiFg05eBtF1sprmwk8=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional (!canExecuteHost) buildPackages.argc;
 
@@ -36,6 +37,13 @@ rustPlatform.buildRustPackage rec {
   '';
 
   disallowedReferences = lib.optional (!canExecuteHost) buildPackages.argc;
+
+  env = {
+    LANG = "C.UTF-8";
+  }
+  // lib.optionalAttrs (glibcLocales != null) {
+    LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+  };
 
   passthru = {
     tests = {
@@ -51,16 +59,16 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command-line options, arguments and sub-commands parser for bash";
     mainProgram = "argc";
     homepage = "https://github.com/sigoden/argc";
     changelog = "https://github.com/sigoden/argc/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       # or
       asl20
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

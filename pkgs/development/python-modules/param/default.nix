@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -17,19 +16,17 @@
 
 buildPythonPackage rec {
   pname = "param";
-  version = "2.1.0";
+  version = "2.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "holoviz";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9264KfRDuHsvDyIpGKs2VTPcTZOZIFLKe7xuplkfzf4=";
+    repo = "param";
+    tag = "v${version}";
+    hash = "sha256-tucF37o4Yf1OkGz4TUUFI/cGNlVLvTMcak+SmbztCMA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
@@ -41,9 +38,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [ "param" ];
@@ -51,8 +47,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Declarative Python programming using Parameters";
     homepage = "https://param.holoviz.org/";
-    changelog = "https://github.com/holoviz/param/releases/tag/v${version}";
+    changelog = "https://github.com/holoviz/param/releases/tag/${src.tag}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

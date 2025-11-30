@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Jc2k";
     repo = "aioeafm";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-bL59EPvFd5vjay2sqBPGx+iL5sE/0n/EtR4K7obtDBE=";
   };
 
@@ -36,6 +36,8 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   dependencies = [ aiohttp ];
+
+  doCheck = false; # Failed: async def functions are not natively supported.
 
   nativeCheckInputs = [
     pytest-aiohttp

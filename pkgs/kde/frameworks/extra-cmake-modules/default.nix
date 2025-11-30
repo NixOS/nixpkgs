@@ -1,5 +1,6 @@
-{ mkKdeDerivation
-, python3
+{
+  mkKdeDerivation,
+  python3,
 }:
 mkKdeDerivation {
   pname = "extra-cmake-modules";

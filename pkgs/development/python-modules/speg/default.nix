@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  speg,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +21,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A PEG-based parser interpreter with memoization (in time)";
+    description = "PEG-based parser interpreter with memoization (in time)";
     homepage = "https://github.com/avakar/speg";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ xworld21 ];

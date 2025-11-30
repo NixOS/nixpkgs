@@ -1,45 +1,68 @@
 {
   lib,
   buildGoModule,
+  stdenv,
   fetchFromGitHub,
-  nezha-agent,
-  testers,
+  versionCheckHook,
+  nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nezha-agent";
-  version = "0.16.9";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "agent";
-    rev = "v${version}";
-    hash = "sha256-WK9aTKRSpBrqEKje168Gmn6ROLFxE/fuYp10Ywtr4ks=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1p/YEAIa0+9FC+TuNHdv7WSXzDJBS7zgrocNJZ0Tuk0=";
   };
 
-  vendorHash = "sha256-L6QdodI8Ur1H6Zc24KSTYAHfzvW2aq9SYwCVgjvSDII=";
+  vendorHash = "sha256-A0oVUyCflbEY3vBbJwy7cF2m1x9vHCY2jAOsrm3659E=";
 
   ldflags = [
     "-s"
-    "-w"
-    "-X main.version=${version}"
+    "-X github.com/nezhahq/agent/pkg/monitor.Version=${finalAttrs.version}"
+    "-X main.arch=${stdenv.hostPlatform.system}"
   ];
 
-  # The test failed due to a geoip request in the sandbox. Remove it to avoid network requirement
-  preCheck = ''
-    rm ./pkg/monitor/myip_test.go
+  checkFlags =
+    let
+      # Skip tests that require network access
+      skippedTests = [
+        "TestLookupIP"
+        "TestGeoIPApi"
+        "TestFetchGeoIP"
+        "TestCloudflareDetection"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
+  postInstall = ''
+    pushd $out/bin
+    mv agent nezha-agent
+
+    # for compatibility
+    ln -sr nezha-agent agent
+    popd
   '';
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = nezha-agent;
-      command = "${nezha-agent}/bin/agent -v";
-    };
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "-v";
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  passthru = {
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Agent of Nezha Monitoring";
     homepage = "https://github.com/nezhahq/agent";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ moraxyc ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ moraxyc ];
+    mainProgram = "nezha-agent";
   };
-}
+})

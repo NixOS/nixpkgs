@@ -38,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/wireservice/agate-excel";
     changelog = "https://github.com/wireservice/agate-excel/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = [ ];
   };
 }

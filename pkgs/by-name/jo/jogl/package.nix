@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, fetchgit
-, ant
-, jdk11
-, git
-, xmlstarlet
-, stripJavaArchivesHook
-, xcbuild
-, udev
-, xorg
-, mesa
-, darwin
-, coreutils
+{
+  lib,
+  stdenv,
+  fetchgit,
+  ant,
+  jdk11,
+  git,
+  xmlstarlet,
+  stripJavaArchivesHook,
+  xcbuild,
+  udev,
+  xorg,
+  libgbm,
+  coreutils,
 }:
 
 let
@@ -34,7 +34,10 @@ stdenv.mkDerivation {
   pname = "jogl";
   inherit version;
 
-  srcs = [ gluegen-src jogl-src ];
+  srcs = [
+    gluegen-src
+    jogl-src
+  ];
   sourceRoot = ".";
 
   unpackCmd = "cp -r $curSrc \${curSrc##*-}";
@@ -48,7 +51,7 @@ stdenv.mkDerivation {
     substituteInPlace jogl/make/build-*.xml \
       --replace-warn 'dir="''${TARGET_PLATFORM_USRLIBS}"' ""
   ''
-  # force way to do disfunctional "ant -Dsetup.addNativeBroadcom=false" and disable dependency on raspberrypi drivers
+  # force way to do dysfunctional "ant -Dsetup.addNativeBroadcom=false" and disable dependency on raspberrypi drivers
   # if arm/aarch64 support will be added, this block might be commented out on those platforms
   # on x86 compiling with default "setup.addNativeBroadcom=true" leads to unsatisfied import "vc_dispmanx_resource_delete" in libnewt.so
   + ''
@@ -56,7 +59,7 @@ stdenv.mkDerivation {
       --delete '//*[@if="setup.addNativeBroadcom"]' \
       jogl/make/build-newt.xml
   ''
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i '/if="use.macos/d' gluegen/make/gluegen-cpptasks-base.xml
     rm -r jogl/oculusvr-sdk
   '';
@@ -67,11 +70,12 @@ stdenv.mkDerivation {
     git
     xmlstarlet
     stripJavaArchivesHook
-  ] ++ lib.optionals stdenv.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     udev
     xorg.libX11
     xorg.libXrandr
@@ -80,10 +84,7 @@ stdenv.mkDerivation {
     xorg.libXt
     xorg.libXxf86vm
     xorg.libXrender
-    mesa
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.AppKit
-    darwin.apple_sdk_11_0.frameworks.Cocoa
+    libgbm
   ];
 
   env = {
@@ -120,6 +121,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Java libraries for 3D Graphics, Multimedia and Processing";
     homepage = "https://jogamp.org/";
+    changelog = "https://jogamp.org/deployment/jogamp-current/archive/ChangeLogs/";
     license = licenses.bsd3;
     platforms = platforms.all;
   };

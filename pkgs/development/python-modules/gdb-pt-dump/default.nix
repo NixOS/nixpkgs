@@ -5,7 +5,7 @@
   poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "gdb-pt-dump";
   version = "0-unstable-2024-04-01";
   pyproject = true;

@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fonttools,
-  git,
+  gitMinimal,
   gitpython,
   pytestCheckHook,
 }:
@@ -26,9 +26,8 @@ buildPythonPackage rec {
     gitpython
   ];
 
-  doCheck = true;
   nativeCheckInputs = [
-    git
+    gitMinimal
     pytestCheckHook
   ];
   preCheck = ''

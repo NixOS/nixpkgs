@@ -1,29 +1,27 @@
 {
   lib,
-  backports-datetime-fromisoformat,
   buildPythonPackage,
   charset-normalizer,
   dateparser,
   faust-cchardet,
-  fetchPypi,
+  fetchFromGitHub,
   lxml,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "htmldate";
-  version = "1.8.1";
+  version = "1.9.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-yvFobPdcYd0fBh7eXXpG51mxXV+Zh82OE8jEI3URJj0=";
+  src = fetchFromGitHub {
+    owner = "adbar";
+    repo = "htmldate";
+    tag = "v${version}";
+    hash = "sha256-ZSHQgj6zXmLdqDQWGnh2l70iXzdohsxdAIQGDSBufIA=";
   };
 
   build-system = [ setuptools ];
@@ -34,32 +32,31 @@ buildPythonPackage rec {
     lxml
     python-dateutil
     urllib3
-  ] ++ lib.optionals (pythonOlder "3.7") [ backports-datetime-fromisoformat ];
+  ];
 
-  passthru.optional-dependencies = {
-    speed =
-      [
-        faust-cchardet
-        urllib3
-      ]
-      ++ lib.optionals (pythonOlder "3.11") [ backports-datetime-fromisoformat ]
-      ++ urllib3.optional-dependencies.brotli;
-    all =
-      [
-        faust-cchardet
-        urllib3
-      ]
-      ++ lib.optionals (pythonOlder "3.11") [ backports-datetime-fromisoformat ]
-      ++ urllib3.optional-dependencies.brotli;
+  pythonRelaxDeps = [ "lxml" ];
+
+  optional-dependencies = {
+    speed = [
+      faust-cchardet
+      urllib3
+    ]
+    ++ urllib3.optional-dependencies.brotli;
+    all = [
+      faust-cchardet
+      urllib3
+    ]
+    ++ urllib3.optional-dependencies.brotli;
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # disable tests that require an internet connection
   disabledTests = [
+    # Tests that require an internet connection
     "test_input"
     "test_cli"
     "test_download"
+    "test_readme_examples"
   ];
 
   pythonImportsCheck = [ "htmldate" ];
@@ -67,7 +64,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for the extraction of original and updated publication dates from URLs and web pages";
     homepage = "https://htmldate.readthedocs.io";
-    changelog = "https://github.com/adbar/htmldate/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/adbar/htmldate/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ jokatzke ];
     mainProgram = "htmldate";

@@ -1,21 +1,20 @@
 {
   lib,
-  fsspec,
-  stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   hatch-fancy-pypi-readme,
   hatchling,
+
+  # dependencies
   awkward-cpp,
-  importlib-metadata,
+  fsspec,
   numpy,
   packaging,
-  typing-extensions,
-  jax,
-  jaxlib,
+
+  # tests
   numba,
-  setuptools,
   numexpr,
   pandas,
   pyarrow,
@@ -25,16 +24,14 @@
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.6.4";
+  version = "2.8.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "awkward";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-hoNxNxWfoSlBg6CsKvgEknM4vd+rN/9EFD5nC2y45OA=";
+    tag = "v${version}";
+    hash = "sha256-zECnqZapgvB9ngkoAwEDFMyebFbE0iJ7Yo/5iLcmRXs=";
   };
 
   build-system = [
@@ -42,49 +39,37 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies =
-    [
-      awkward-cpp
-      fsspec
-      importlib-metadata
-      numpy
-      packaging
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
-    ++ lib.optionals (pythonOlder "3.12") [ importlib-metadata ];
+  dependencies = [
+    awkward-cpp
+    fsspec
+    numpy
+    packaging
+  ];
 
   dontUseCmakeConfigure = true;
 
   pythonImportsCheck = [ "awkward" ];
 
-  nativeCheckInputs =
-    [
-      fsspec
-      numba
-      setuptools
-      numexpr
-      pandas
-      pyarrow
-      pytest-xdist
-      pytestCheckHook
-    ]
-    ++ lib.optionals (!stdenv.isDarwin) [
-      # no support for darwin
-      jax
-      jaxlib
-    ];
+  nativeCheckInputs = [
+    fsspec
+    numba
+    numexpr
+    pandas
+    pyarrow
+    pytest-xdist
+    pytestCheckHook
+  ];
 
-  # The following tests have been disabled because they need to be run on a GPU platform.
   disabledTestPaths = [
-    "tests-cuda"
-    # Disable tests dependending on jax on darwin
-  ] ++ lib.optionals stdenv.isDarwin [ "tests/test_2603_custom_behaviors_with_jax.py" ];
+    # Need to be run on a GPU platform.
+    "tests-cuda/*"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Manipulate JSON-like data with NumPy-like idioms";
     homepage = "https://github.com/scikit-hep/awkward";
-    changelog = "https://github.com/scikit-hep/awkward/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/scikit-hep/awkward/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

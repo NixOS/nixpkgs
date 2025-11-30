@@ -1,23 +1,25 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, testers
-, karmor
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  karmor,
 }:
 
 buildGoModule rec {
   pname = "karmor";
-  version = "1.2.1";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "kubearmor";
     repo = "kubearmor-client";
     rev = "v${version}";
-    hash = "sha256-NNCV/+Jh/tjc7SC4E9/gtiVthVmAxZBOyW3MFISbkH4=";
+    hash = "sha256-xOI6meI88GB5w19T9eSn+8dTnhrUxUCKHUBk/1EaDVI=";
   };
 
-  vendorHash = "sha256-CKOZxmUVZWFb7cc+amPwyMv5ScujWeipEqm95m63SYk=";
+  vendorHash = "sha256-FL5WL44dsM0uPYXMNfYKRd37umId21rMGvj84rYTU3A=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -33,6 +35,8 @@ buildGoModule rec {
 
   postInstall = ''
     mv $out/bin/{kubearmor-client,karmor}
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd karmor \
       --bash <($out/bin/karmor completion bash) \
       --fish <($out/bin/karmor completion fish) \
@@ -46,12 +50,15 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
-    description = "A client tool to help manage KubeArmor";
+  meta = {
+    description = "Client tool to help manage KubeArmor";
     mainProgram = "karmor";
     homepage = "https://kubearmor.io";
     changelog = "https://github.com/kubearmor/kubearmor-client/releases/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ urandom kashw2 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      urandom
+      kashw2
+    ];
   };
 }

@@ -1,18 +1,15 @@
 {
   lib,
   appdirs,
-  argparse,
   buildPythonPackage,
   doit,
-  fetchPypi,
+  fetchFromGitHub,
   ftfy,
   mock,
-  pyinstaller-versionfile,
   pytest-order,
   pytestCheckHook,
-  python3,
+  python,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   setuptools,
   setuptools-scm,
@@ -26,20 +23,22 @@
 
 buildPythonPackage rec {
   pname = "tabcmd";
-  version = "2.0.13";
+  version = "2.0.18";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-f9zoYeb4RzcCtgcCYYvvuCuFrjqpP3Fhv38bUWH24+g=";
+  src = fetchFromGitHub {
+    owner = "tableau";
+    repo = "tabcmd";
+    tag = "v${version}";
+    hash = "sha256-Eb9ZboYdco6opKW3Tz0+U9VREWdEyt2xuG62n9WIXPk=";
   };
 
   prePatch = ''
     # Remove an unneeded dependency that can't be resolved
     # https://github.com/tableau/tabcmd/pull/282
     sed -i "/'argparse',/d" pyproject.toml
+    # Uses setuptools-scm instead
+    sed -i "/'pyinstaller_versionfile',/d" pyproject.toml
   '';
 
   pythonRelaxDeps = [
@@ -47,16 +46,19 @@ buildPythonPackage rec {
     "urllib3"
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  build-system = [ setuptools ];
+  pythonRemoveDeps = [
+    "pyinstaller_versionfile"
+  ];
 
   dependencies = [
     appdirs
-    argparse
     doit
     ftfy
-    pyinstaller-versionfile
     requests
     setuptools-scm
     tableauserverclient
@@ -81,7 +83,7 @@ buildPythonPackage rec {
     cp -r build/lib/tabcmd/__main__.py $out/bin/
 
     # Create a 'tabcmd' script with python3 shebang
-    echo "#!${python3}/bin/python3" > $out/bin/tabcmd
+    echo "#!${python.interpreter}" > $out/bin/tabcmd
 
     # Append __main__.py contents
     cat $out/bin/__main__.py >> $out/bin/tabcmd
@@ -93,11 +95,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tabcmd" ];
 
   meta = with lib; {
-    description = "A command line client for working with Tableau Server";
+    description = "Command line client for working with Tableau Server";
     homepage = "https://github.com/tableau/tabcmd";
     changelog = "https://github.com/tableau/tabcmd/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "tabcmd";
   };
 }

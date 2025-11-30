@@ -6,36 +6,36 @@
   setuptools,
   aiohttp,
   xmltodict,
-  python-socketio,
+  python-socketio-v4,
   websocket-client,
 }:
 
 buildPythonPackage rec {
   pname = "pycontrol4";
-  version = "1.1.2";
+  version = "1.5.0";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.11";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lawtancool";
     repo = "pyControl4";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-oKKc9s3/fO7cFMjOeKtpvEwmfglxI2lxlN3EIva7zR8=";
+    tag = "v${version}";
+    hash = "sha256-r90v9vy8avvEbNKrzZgYtDS5Z5hV66Fd9fF9XJ4r7B4=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "python-socketio>=4,<5" "python-socketio>=4"
-  '';
+  patches = [
+    # https://github.com/lawtancool/pyControl4/pull/47
+    ./asyncio-timeout.patch
+  ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     xmltodict
-    python-socketio
+    python-socketio-v4
     websocket-client
   ];
 
@@ -50,6 +50,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/lawtancool/pyControl4/releases/tag/v${version}";
     description = "Python 3 asyncio package for interacting with Control4 systems";
     homepage = "https://github.com/lawtancool/pyControl4";
     license = licenses.asl20;

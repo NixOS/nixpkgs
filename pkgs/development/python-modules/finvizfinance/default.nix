@@ -3,6 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  setuptools,
   beautifulsoup4,
   datetime,
   lxml,
@@ -14,29 +15,26 @@
 
 buildPythonPackage rec {
   pname = "finvizfinance";
-  version = "0.14.7";
-  format = "setuptools";
+  version = "1.1.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "lit26";
     repo = "finvizfinance";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ht1bez04MAgugsQqa47q2ED7z8xpiXmzkOYBR7/PZHU=";
+    tag = "v${version}";
+    hash = "sha256-QVR0ig51EHdMVzg6wBDpvMGjPnmO2ZGBs2Q0SVxauik=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "bs4" "beautifulsoup4"
-  '';
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     datetime
     lxml
@@ -62,7 +60,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Finviz Finance information downloader";
     homepage = "https://github.com/lit26/finvizfinance";
-    changelog = "https://github.com/lit26/finvizfinance/releases/tag/v${version}";
+    changelog = "https://github.com/lit26/finvizfinance/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ icyrockcom ];
   };

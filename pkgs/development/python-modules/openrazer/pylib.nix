@@ -20,7 +20,7 @@ buildPythonPackage (
 
     nativeBuildInputs = [ setuptools ];
 
-    propagatedBuildInputs = [
+    dependencies = [
       dbus-python
       numpy
       openrazer-daemon
@@ -30,7 +30,7 @@ buildPythonPackage (
     doCheck = false;
 
     meta = common.meta // {
-      description = "An entirely open source Python library that allows you to manage your Razer peripherals on GNU/Linux";
+      description = "Entirely open source Python library that allows you to manage your Razer peripherals on GNU/Linux";
     };
   }
 )

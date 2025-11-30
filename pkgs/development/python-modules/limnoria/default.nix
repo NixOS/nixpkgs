@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  setuptools,
   chardet,
   cryptography,
   feedparser,
@@ -16,17 +17,19 @@
 
 buildPythonPackage rec {
   pname = "limnoria";
-  version = "2024.4.26";
-  format = "setuptools";
+  version = "2025.7.18";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-H8GAJvmkYJy8PJsXn4Yl9qY3zb9aFBa7sr4DN0bKYfQ=";
+    hash = "sha256-iXu+ObOFd0iQae8/mY2ztt7s4kuKutX3huHN7jP3cHE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     chardet
     cryptography
     feedparser
@@ -34,13 +37,14 @@ buildPythonPackage rec {
     pysocks
     python-dateutil
     python-gnupg
-  ] ++ lib.optionals (pythonOlder "3.9") [ pytz ];
+  ]
+  ++ lib.optionals (pythonOlder "3.9") [ pytz ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "version=version" 'version="${version}"'
+      --replace-fail "version=version" 'version="${version}"'
   '';
 
   checkPhase = ''
@@ -56,9 +60,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A modified version of Supybot, an IRC bot";
+    description = "Modified version of Supybot, an IRC bot";
     homepage = "https://github.com/ProgVal/Limnoria";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

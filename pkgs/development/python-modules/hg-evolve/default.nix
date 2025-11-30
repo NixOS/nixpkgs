@@ -3,17 +3,21 @@
   buildPythonPackage,
   fetchPypi,
   mercurial,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "hg-evolve";
-  version = "11.1.3";
-  format = "setuptools";
+  version = "11.1.10";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-WUPOok/tpZJSookzCIEHRKAlTzeZ6RJY0IiclgQUOs8=";
+    pname = "hg_evolve";
+    inherit version;
+    hash = "sha256-ccFq7sASkOkFJ4Or5dhZpfKR0FdZAmbziDfK3FGcaYM=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ mercurial ];
 

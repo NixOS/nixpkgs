@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "emcee";
-  version = "3.1.5";
+  version = "3.1.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dfm";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-83v7O/eo8LQux75IkLWU8moj3rYiyRjZdNeAwtjrJ60=";
+    repo = "emcee";
+    tag = "v${version}";
+    hash = "sha256-JVZK3kvDwWENho0OxZ9OxATcm3XpGmX+e7alPclRsHY=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://emcee.readthedocs.io/";
     changelog = "https://github.com/dfm/emcee/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

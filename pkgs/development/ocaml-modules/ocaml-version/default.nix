@@ -1,12 +1,17 @@
-{ lib, fetchurl, buildDunePackage, alcotest }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  alcotest,
+}:
 
 buildDunePackage rec {
   pname = "ocaml-version";
-  version = "3.6.7";
+  version = "4.0.3";
 
   src = fetchurl {
     url = "https://github.com/ocurrent/ocaml-version/releases/download/v${version}/ocaml-version-${version}.tbz";
-    hash = "sha256-1Q/9W2adM+2w2InEdqcd5IiNkACNWDNgONIQztKPgQw=";
+    hash = "sha256-GM5e7fTKWhx6tSJ9xfNdW2fy8wYWhmbf3uGvqGKQm7M=";
   };
 
   checkInputs = [ alcotest ];

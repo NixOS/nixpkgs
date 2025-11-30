@@ -1,13 +1,15 @@
 # The wrapper script ensures variables like PKG_CONFIG_PATH and
 # PKG_CONFIG_PATH_FOR_BUILD work properly.
 
-{ stdenvNoCC
-, lib
-, buildPackages
-, pkg-config
-, baseBinName ? "pkg-config"
-, propagateDoc ? pkg-config != null && pkg-config ? man
-, extraPackages ? [], extraBuildCommands ? ""
+{
+  stdenvNoCC,
+  lib,
+  buildPackages,
+  pkg-config,
+  baseBinName ? "pkg-config",
+  propagateDoc ? pkg-config != null && pkg-config ? man,
+  extraPackages ? [ ],
+  extraBuildCommands ? "",
 }:
 
 let
@@ -28,11 +30,10 @@ let
   #
   # TODO(@Ericson2314) Make unconditional, or optional but always true by
   # default.
-  targetPrefix = optionalString (targetPlatform != hostPlatform)
-                                        (targetPlatform.config + "-");
+  targetPrefix = optionalString (targetPlatform != hostPlatform) (targetPlatform.config + "-");
 
   # See description in cc-wrapper.
-  suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
+  suffixSalt = replaceStrings [ "-" "." ] [ "_" "_" ] targetPlatform.config;
 
   wrapperBinName = "${targetPrefix}${baseBinName}";
 in
@@ -58,33 +59,32 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   # Additional flags passed to pkg-config.
-  addFlags = optional stdenv.targetPlatform.isStatic "--static";
+  env.addFlags = optionalString stdenv.targetPlatform.isStatic "--static";
 
-  installPhase =
-    ''
-      mkdir -p $out/bin $out/nix-support
+  installPhase = ''
+    mkdir -p $out/bin $out/nix-support
 
-      wrap() {
-        local dst="$1"
-        local wrapper="$2"
-        export prog="$3"
-        substituteAll "$wrapper" "$out/bin/$dst"
-        chmod +x "$out/bin/$dst"
-      }
+    wrap() {
+      local dst="$1"
+      local wrapper="$2"
+      export prog="$3"
+      substituteAll "$wrapper" "$out/bin/$dst"
+      chmod +x "$out/bin/$dst"
+    }
 
-      echo $pkg-config > $out/nix-support/orig-pkg-config
+    echo $pkg-config > $out/nix-support/orig-pkg-config
 
-      wrap ${wrapperBinName} ${./pkg-config-wrapper.sh} "${getBin pkg-config}/bin/${baseBinName}"
-    ''
-    # symlink in share for autoconf to find macros
+    wrap ${wrapperBinName} ${./pkg-config-wrapper.sh} "${getBin pkg-config}/bin/${baseBinName}"
+  ''
+  # symlink in share for autoconf to find macros
 
-    # TODO(@Ericson2314): in the future just make the unwrapped pkg-config a
-    # propagated dep once we can rely on downstream deps comming first in
-    # search paths. (https://github.com/NixOS/nixpkgs/pull/31414 took a crack
-    # at this.)
-    + ''
-      ln -s ${pkg-config}/share $out/share
-    '';
+  # TODO(@Ericson2314): in the future just make the unwrapped pkg-config a
+  # propagated dep once we can rely on downstream deps coming first in
+  # search paths. (https://github.com/NixOS/nixpkgs/pull/31414 took a crack
+  # at this.)
+  + ''
+    ln -s ${pkg-config}/share $out/share
+  '';
 
   setupHooks = [
     ../setup-hooks/role.bash
@@ -105,11 +105,14 @@ stdenv.mkDerivation {
     ##
     ## Man page and doc support
     ##
-    + optionalString propagateDoc (''
-      ln -s ${pkg-config.man} $man
-    '' + optionalString (pkg-config ? doc) ''
-      ln -s ${pkg-config.doc} $doc
-    '')
+    + optionalString propagateDoc (
+      ''
+        ln -s ${pkg-config.man} $man
+      ''
+      + optionalString (pkg-config ? doc) ''
+        ln -s ${pkg-config.doc} $doc
+      ''
+    )
 
     + ''
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
@@ -128,12 +131,18 @@ stdenv.mkDerivation {
   };
 
   meta =
-    let pkg-config_ = optionalAttrs (pkg-config != null) pkg-config; in
-    (optionalAttrs (pkg-config_ ? meta) (removeAttrs pkg-config.meta ["priority" "mainProgram"])) //
-    { description =
-        attrByPath ["meta" "description"] "pkg-config" pkg-config_
-        + " (wrapper script)";
+    let
+      pkg-config_ = optionalAttrs (pkg-config != null) pkg-config;
+    in
+    (optionalAttrs (pkg-config_ ? meta) (
+      removeAttrs pkg-config.meta [
+        "priority"
+        "mainProgram"
+      ]
+    ))
+    // {
+      description = attrByPath [ "meta" "description" ] "pkg-config" pkg-config_ + " (wrapper script)";
       priority = 10;
       mainProgram = wrapperBinName;
-  };
+    };
 }

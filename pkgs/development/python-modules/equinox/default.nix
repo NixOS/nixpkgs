@@ -1,13 +1,19 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
+
+  # dependencies
   jax,
-  jaxlib,
   jaxtyping,
   typing-extensions,
+  wadler-lindig,
+
+  # tests
   beartype,
   optax,
   pytest-xdist,
@@ -16,25 +22,32 @@
 
 buildPythonPackage rec {
   pname = "equinox";
-  version = "0.11.4";
+  version = "0.13.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "equinox";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-3OwHND1YEdg/SppqiB7pCdp6v+lYwTbtX07tmyEMWDo=";
+    tag = "v${version}";
+    hash = "sha256-d7IqRuohcZ3IYpbjm76Ir6I33zI5dnHvX5eX2WjSJQk=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  # Relax speed constraints on tests that can fail on busy builders
+  postPatch = ''
+    substituteInPlace tests/test_while_loop.py \
+      --replace-fail "speed < 0.1" "speed < 0.5" \
+      --replace-fail "speed < 0.5" "speed < 1" \
+      --replace-fail "speed < 1" "speed < 20" \
+      --replace-fail "speed < 2" "speed < 20"
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     jax
-    jaxlib
     jaxtyping
     typing-extensions
+    wadler-lindig
   ];
 
   nativeCheckInputs = [
@@ -44,31 +57,27 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "equinox" ];
-
-  disabledTests = [
-    # For simplicity, JAX has removed its internal frames from the traceback of the following exception.
-    # https://github.com/patrick-kidger/equinox/issues/716
-    "test_abstract"
-    "test_complicated"
-    "test_grad"
-    "test_jvp"
-    "test_mlp"
-    "test_num_traces"
-    "test_pytree_in"
-    "test_simple"
-    "test_vmap"
-
-    # AssertionError: assert 'foo:\n   pri...pe=float32)\n' == 'foo:\n   pri...pe=float32)\n'
-    # Also reported in patrick-kidger/equinox#716
-    "test_backward_nan"
+  pytestFlags = [
+    # DeprecationWarning: The default axis_types will change in JAX v0.9.0 to jax.sharding.AxisType.Explicit.
+    "-Wignore::DeprecationWarning"
   ];
 
-  meta = with lib; {
-    description = "A JAX library based around a simple idea: represent parameterised functions (such as neural networks) as PyTrees";
+  disabledTests = [
+    # Failed: DID NOT WARN. No warnings of type (<class 'Warning'>,) were emitted.
+    "test_jax_transform_warn"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
+    "test_filter"
+  ];
+
+  pythonImportsCheck = [ "equinox" ];
+
+  meta = {
+    description = "JAX library based around a simple idea: represent parameterised functions (such as neural networks) as PyTrees";
     changelog = "https://github.com/patrick-kidger/equinox/releases/tag/v${version}";
     homepage = "https://github.com/patrick-kidger/equinox";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

@@ -2,7 +2,8 @@ let
   # arbitrary address
   ipAddr = "192.168.42.42";
 in
-import ./make-test-python.nix ({ lib, pkgs, ... }: {
+{ lib, ... }:
+{
   name = "apcupsd";
   meta.maintainers = with lib.maintainers; [ bjornfor ];
 
@@ -19,10 +20,12 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
         '';
       };
       networking.interfaces.eth1 = {
-        ipv4.addresses = [{
-          address = ipAddr;
-          prefixLength = 24;
-        }];
+        ipv4.addresses = [
+          {
+            address = ipAddr;
+            prefixLength = 24;
+          }
+        ];
       };
     };
   };
@@ -38,4 +41,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     assert "MBATTCHG : 42 Percent" in res, f"expected apcaccess output to contain '{expect_line}' but got '{res}'"
     machine.shutdown()
   '';
-})
+}

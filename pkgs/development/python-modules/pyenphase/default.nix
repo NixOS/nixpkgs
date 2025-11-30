@@ -1,17 +1,20 @@
 {
   lib,
+  aiohttp,
+  aioresponses,
   awesomeversion,
   buildPythonPackage,
   envoy-utils,
   fetchFromGitHub,
-  httpx,
   lxml,
   orjson,
   poetry-core,
   pyjwt,
   pytest-asyncio,
+  pytest-cov-stub,
+  pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
+  python-jsonpath,
   respx,
   syrupy,
   tenacity,
@@ -19,29 +22,24 @@
 
 buildPythonPackage rec {
   pname = "pyenphase";
-  version = "1.20.3";
+  version = "2.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "pyenphase";
     repo = "pyenphase";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-4lMsyzw56gFimUs52mEzy5eKYF9s2ClNi3yfdIBbccY=";
+    tag = "v${version}";
+    hash = "sha256-WpfiRACZ08M9EQbjfM5dNz2cFFGd7OlG/SB6F128Rcs=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=pyenphase --cov-report=term-missing:skip-covered" ""
-  '';
+  pythonRelaxDeps = [ "tenacity" ];
 
   build-system = [ poetry-core ];
 
   dependencies = [
+    aiohttp
     awesomeversion
     envoy-utils
-    httpx
     lxml
     orjson
     pyjwt
@@ -49,15 +47,19 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aioresponses
     pytest-asyncio
+    pytest-cov-stub
+    pytest-timeout
     pytestCheckHook
+    python-jsonpath
     respx
     syrupy
   ];
 
-  disabledTests = [
-    # https://github.com/pyenphase/pyenphase/issues/97
-    "test_with_7_x_firmware"
+  disabledTestPaths = [
+    # Tests need network access
+    "tests/test_retries.py"
   ];
 
   pythonImportsCheck = [ "pyenphase" ];
@@ -65,7 +67,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to control enphase envoy";
     homepage = "https://github.com/pyenphase/pyenphase";
-    changelog = "https://github.com/pyenphase/pyenphase/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pyenphase/pyenphase/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

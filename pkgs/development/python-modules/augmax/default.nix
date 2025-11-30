@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "augmax";
-  version = "0.3.2";
+  version = "0.3.3";
   pyproject = true;
 
   disbaled = pythonOlder "3.6";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "khdlr";
     repo = "augmax";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-xz6yJiVZUkRcRa2rKZdytfpP+XCk/QI4xtKlNaS9FYo=";
+    tag = "v${version}";
+    hash = "sha256-FXgkhZEAR1Y2LvVvV+IWMSQDWrLulLDsSKKuw4ER5wg=";
   };
 
   build-system = [ setuptools ];

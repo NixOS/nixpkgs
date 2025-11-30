@@ -1,29 +1,38 @@
 {
-  lib,
-  rustPlatform,
   fetchFromGitHub,
+  lib,
+  openssl,
+  rustPlatform,
+  stdenv,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "taskchampion-sync-server";
-  version = "0.4.1-unstable-2024-04-08";
+  version = "0.7.1";
   src = fetchFromGitHub {
-      owner = "GothenburgBitFactory";
-      repo = "taskchampion-sync-server";
-      rev = "31cb732f0697208ef9a8d325a79688612087185a";
-      fetchSubmodules = false;
-      sha256 = "sha256-CUgXJcrCOenbw9ZDFBody5FAvpT1dsZBojJk3wOv9U4=";
-    };
+    owner = "GothenburgBitFactory";
+    repo = "taskchampion-sync-server";
+    tag = "v${version}";
+    hash = "sha256-ywBmVid70ZKUkTwxORrwXPV0zur0RdHToTLTx9ynjqU=";
+  };
 
-  cargoHash = "sha256-TpShnVQ2eFNLXJzOTlWVaLqT56YkP4zCGCf3yVtNcvI=";
+  cargoHash = "sha256-1bqZAFKQGTCGUs7EXLwAgUxQU+KmhVGFIATIOb5uOlA=";
 
-  # cargo tests fail when checkType="release" (default)
-  checkType = "debug";
+  env = {
+    # Use system openssl.
+    OPENSSL_DIR = lib.getDev openssl;
+    OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
+    OPENSSL_NO_VENDOR = 1;
+  };
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    openssl
+  ];
 
   meta = {
     description = "Sync server for Taskwarrior 3";
     license = lib.licenses.mit;
     homepage = "https://github.com/GothenburgBitFactory/taskchampion-sync-server";
-    maintainers = with lib.maintainers; [mlaradji];
+    maintainers = with lib.maintainers; [ mlaradji ];
     mainProgram = "taskchampion-sync-server";
   };
 }

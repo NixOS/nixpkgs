@@ -1,36 +1,45 @@
-{ stdenv
-, lib
-, fetchurl
-, zlib
-, libXext
-, libX11
-, libXrender
-, libXtst
-, libXi
-, freetype
-, alsa-lib
-, jdk21
-, openjfx21
-, autoPatchelfHook
-, makeBinaryWrapper
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchurl,
+  zlib,
+  libXext,
+  libX11,
+  libXrender,
+  libXtst,
+  libXi,
+  freetype,
+  alsa-lib,
+  jdk21,
+  openjfx21,
+  autoPatchelfHook,
+  makeBinaryWrapper,
+  wrapGAppsHook3,
 }:
 
 let
   repo = "olvid";
 
-  javafxModules = [ "swing" "controls" "media" "fxml" "graphics" "base" ];
+  javafxModules = [
+    "swing"
+    "controls"
+    "media"
+    "fxml"
+    "graphics"
+    "base"
+  ];
 
   classpath =
     lib.concatMap (mod: [
       "${openjfx21}/modules_src/javafx.${mod}/module-info.java"
       "${openjfx21}/modules/javafx.${mod}"
       "${openjfx21}/modules_libs/javafx.${mod}"
-    ]) javafxModules ++
-    [ "$out/share/${repo}/*" ];
+    ]) javafxModules
+    ++ [ "$out/share/${repo}/*" ];
 
   jvmArgs = [
-    "-cp" (lib.concatStringsSep ":" classpath)
+    "-cp"
+    (lib.concatStringsSep ":" classpath)
     "-Djpackage.app-version=$version"
     "-Dolvid.sqlcipher=true"
     "-Dolvid.dev=false"
@@ -53,14 +62,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "olvid";
-  version = "1.5.2";
+  version = "2.5.1";
 
   dontUnpack = true;
   dontWrapGApps = true;
 
   src = fetchurl {
     url = "https://static.olvid.io/linux/${repo}-${finalAttrs.version}.tar.gz";
-    hash = "sha256-WjIOk3dPSXQdAR2fdXseV0NdOjld0PzyqnUx/VbvQio=";
+    hash = "sha256-6QEr9mB9UI+rgrG4QxxBs5hOT26Yxcmjwode+pRwYfU=";
   };
 
   nativeBuildInputs = [
@@ -98,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "The secure french messenger";
+    description = "Secure french messenger";
     homepage = "https://www.olvid.io";
     license = licenses.agpl3Only;
     mainProgram = "olvid";

@@ -1,43 +1,37 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  tailscale,
+}:
 
-let
-  version = "1.66.4";
-in
 buildGoModule {
   pname = "tailscale-nginx-auth";
-  inherit version;
+  inherit (tailscale) version src vendorHash;
 
-  src = fetchFromGitHub {
-    owner = "tailscale";
-    repo = "tailscale";
-    rev = "v${version}";
-    hash = "sha256-ETBca3qKO2iS30teIF5sr/oyJdRSKFqLFVO3+mmm7bo=";
-  };
-  vendorHash = "sha256-Hd77xy8stw0Y6sfk3/ItqRIbM/349M/4uf0iNy1xJGw=";
-
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   subPackages = [ "cmd/nginx-auth" ];
 
   ldflags = [
     "-w"
     "-s"
-    "-X tailscale.com/version.longStamp=${version}"
-    "-X tailscale.com/version.shortStamp=${version}"
+    "-X tailscale.com/version.longStamp=${tailscale.version}"
+    "-X tailscale.com/version.shortStamp=${tailscale.version}"
   ];
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     mv $out/bin/nginx-auth $out/bin/tailscale.nginx-auth
     sed -i -e "s#/usr/sbin#$out/bin#" ./cmd/nginx-auth/tailscale.nginx-auth.service
     install -D -m0444 -t $out/lib/systemd/system ./cmd/nginx-auth/tailscale.nginx-auth.service
     install -D -m0444 -t $out/lib/systemd/system ./cmd/nginx-auth/tailscale.nginx-auth.socket
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tailscale.com";
-    description = "Tool that allows users to use Tailscale Whois authentication with NGINX as a reverse proxy.";
-    license = licenses.bsd3;
+    description = "Tool that allows users to use Tailscale Whois authentication with NGINX as a reverse proxy";
+    license = lib.licenses.bsd3;
     mainProgram = "tailscale.nginx-auth";
-    maintainers = with maintainers; [ phaer ];
+    maintainers = with lib.maintainers; [ phaer ];
   };
 }

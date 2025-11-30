@@ -8,7 +8,6 @@
   click,
   fetchPypi,
   gitpython,
-  importlib-metadata,
   numpy,
   packaging,
   pandas,
@@ -16,10 +15,7 @@
   protobuf,
   pyarrow,
   pydeck,
-  pympler,
-  python-dateutil,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   requests,
   rich,
@@ -27,55 +23,48 @@
   toml,
   tornado,
   typing-extensions,
-  tzlocal,
-  validators,
   watchdog,
 }:
 
 buildPythonPackage rec {
   pname = "streamlit";
-  version = "1.35.0";
+  version = "1.51.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Z51Vu2GJdD9gar8GlmI98L/SI6bQyNlrjWBnjUiR0tY=";
+    hash = "sha256-HnQqnAtpj0Zsb1v1jTM77aWh++jeZgdDl2eRtcFEbvY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "packaging" ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     altair
     blinker
     cachetools
     click
-    gitpython
-    importlib-metadata
     numpy
     packaging
     pandas
     pillow
     protobuf
     pyarrow
-    pydeck
-    pympler
-    python-dateutil
     requests
     rich
     tenacity
     toml
-    tornado
     typing-extensions
-    tzlocal
-    validators
-  ] ++ lib.optionals (!stdenv.isDarwin) [ watchdog ];
+    gitpython
+    pydeck
+    tornado
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ watchdog ];
 
   # pypi package does not include the tests, but cannot be built with fetchFromGitHub
   doCheck = false;
@@ -89,7 +78,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://streamlit.io/";
     changelog = "https://github.com/streamlit/streamlit/releases/tag/${version}";
-    description = "The fastest way to build custom ML tools";
+    description = "Fastest way to build custom ML tools";
     mainProgram = "streamlit";
     maintainers = with maintainers; [
       natsukium

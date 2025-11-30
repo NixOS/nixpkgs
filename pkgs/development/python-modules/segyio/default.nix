@@ -1,18 +1,27 @@
 {
   lib,
-  stdenv,
+  buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   ninja,
-  python,
   scikit-build,
   pytest,
   numpy,
 }:
 
-stdenv.mkDerivation rec {
+buildPythonPackage rec {
   pname = "segyio";
-  version = "1.9.12";
+  version = "1.9.13";
+  pyproject = false; # Built with cmake
+
+  patches = [
+    # Bump minimum CMake version to 3.11
+    (fetchpatch {
+      url = "https://github.com/equinor/segyio/commit/3e2cbe6ca6d4bc7d4f4d95666f5d2983836e8461.patch?full_index=1";
+      hash = "sha256-sOBHi8meMSkxEZy0AXwebAnIVPatpwQHd+4Co5zIhLQ=";
+    })
+  ];
 
   postPatch = ''
     # Removing unecessary build dependency
@@ -26,19 +35,17 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "equinor";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+N2JvHBxpdbysn4noY/9LZ4npoQ9143iFEzaxoafnms=";
+    repo = "segyio";
+    tag = "v${version}";
+    hash = "sha256-uVQ5cs9EPGUTSbaclLjFDwnbJevtv6ie94FLi+9vd94=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
-    python
     scikit-build
   ];
 
-  doCheck = true;
   # I'm not modifying the checkPhase nor adding a pytestCheckHook because the pytest is called
   # within the cmake test phase
   nativeCheckInputs = [
@@ -46,10 +53,10 @@ stdenv.mkDerivation rec {
     numpy
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast Python library for SEGY files";
     homepage = "https://github.com/equinor/segyio";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ atila ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ atila ];
   };
 }

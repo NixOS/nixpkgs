@@ -1,10 +1,13 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
   hatch-vcs,
+
+  # dependencies
   aiohttp,
   awkward,
   cachetools,
@@ -13,8 +16,9 @@
   dask,
   dask-awkward,
   dask-histogram,
-  fsspec-xrootd,
+  fsspec,
   hist,
+  ipywidgets,
   lz4,
   matplotlib,
   mplhep,
@@ -24,32 +28,39 @@
   pandas,
   pyarrow,
   requests,
+  rich,
   scipy,
   toml,
   tqdm,
   uproot,
+  vector,
+
+  # tests
   distributed,
   pyinstrument,
+  pytest-xdist,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2024.5.0";
+  version = "2025.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "coffea";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-FHE7/VL0mnf0eBPzCsrr8ISr7OmfFvI9xuV0CPa7JdU=";
+    tag = "v${version}";
+    hash = "sha256-vv1eHb8vt4nxdnpLmE0J5g/3oYmcoIykKCuOcQoxA60=";
   };
 
   build-system = [
     hatchling
     hatch-vcs
+  ];
+
+  pythonRelaxDeps = [
+    "dask"
   ];
 
   dependencies = [
@@ -61,8 +72,9 @@ buildPythonPackage rec {
     dask
     dask-awkward
     dask-histogram
-    fsspec-xrootd
+    fsspec
     hist
+    ipywidgets
     lz4
     matplotlib
     mplhep
@@ -72,15 +84,19 @@ buildPythonPackage rec {
     pandas
     pyarrow
     requests
+    rich
     scipy
     toml
     tqdm
     uproot
-  ] ++ dask.optional-dependencies.array;
+    vector
+  ]
+  ++ dask.optional-dependencies.array;
 
   nativeCheckInputs = [
     distributed
     pyinstrument
+    pytest-xdist
     pytestCheckHook
   ];
 
@@ -90,15 +106,20 @@ buildPythonPackage rec {
     # Requires internet access
     # https://github.com/CoffeaTeam/coffea/issues/1094
     "test_lumimask"
+
+    # Flaky: FileNotFoundError: [Errno 2] No such file or directory
+    # https://github.com/scikit-hep/coffea/issues/1246
+    "test_packed_selection_cutflow_dak" # cutflow.npz
+    "test_packed_selection_nminusone_dak" # nminusone.npz
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Basic tools and wrappers for enabling not-too-alien syntax when running columnar Collider HEP analysis";
     homepage = "https://github.com/CoffeaTeam/coffea";
-    changelog = "https://github.com/CoffeaTeam/coffea/releases/tag/v${version}";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/CoffeaTeam/coffea/releases/tag/${src.tag}";
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

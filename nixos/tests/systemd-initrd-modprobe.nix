@@ -1,14 +1,17 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }: {
+{ lib, pkgs, ... }:
+{
   name = "systemd-initrd-modprobe";
 
-  nodes.machine = { pkgs, ... }: {
-    testing.initrdBackdoor = true;
-    boot.initrd.systemd.enable = true;
-    boot.initrd.kernelModules = [ "tcp_hybla" ]; # Load module in initrd.
-    boot.extraModprobeConfig = ''
-      options tcp_hybla rtt0=42
-    '';
-  };
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      testing.initrdBackdoor = true;
+      boot.initrd.systemd.enable = true;
+      boot.initrd.kernelModules = [ "tcp_hybla" ]; # Load module in initrd.
+      boot.extraModprobeConfig = ''
+        options tcp_hybla rtt0=42
+      '';
+    };
 
   testScript = ''
     machine.wait_for_unit("initrd.target")
@@ -21,4 +24,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     rtt = machine.succeed("cat /sys/module/tcp_hybla/parameters/rtt0")
     assert int(rtt) == 42, "Parameter should be respected for initrd kernel modules"
   '';
-})
+}

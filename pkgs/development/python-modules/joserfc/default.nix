@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "joserfc";
-  version = "0.9.0";
+  version = "1.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "authlib";
     repo = "joserfc";
-    rev = version;
-    hash = "sha256-+NFCveMPzE0hSs2Qe20/MDHApXVtU3cR/GPFKPqfVV4=";
+    tag = version;
+    hash = "sha256-GS1UvhOdeuyGaF/jS0zgdYkRxz6M8w4lFXcbtIPqQcY=";
   };
 
   build-system = [ setuptools ];
@@ -34,14 +34,15 @@ buildPythonPackage rec {
     drafts = [ pycryptodome ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "joserfc" ];
 
   meta = with lib; {
+    changelog = "https://github.com/authlib/joserfc/blob/${src.tag}/docs/changelog.rst";
     description = "Implementations of JOSE RFCs in Python";
     homepage = "https://github.com/authlib/joserfc";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

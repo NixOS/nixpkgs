@@ -2,34 +2,44 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   django,
   django-js-asset,
-  python,
+  model-bakery,
+  pytestCheckHook,
+  pytest-django,
 }:
 
 buildPythonPackage rec {
   pname = "django-mptt";
-  version = "0.13.4";
-  format = "setuptools";
+  version = "0.18";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "django-mptt";
+    repo = "django-mptt";
     rev = version;
-    sha256 = "12y3chxhqxk2yxin055f0f45nabj0s8hil12hw0lwzlbax6k9ss6";
+    hash = "sha256-UJQwjOde0DkG/Pa/pd2htnp4KEn5KwYAo8GP5A7/h+I=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     django
     django-js-asset
   ];
 
   pythonImportsCheck = [ "mptt" ];
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} tests/manage.py test
-    runHook postCheck
+  nativeCheckInputs = [
+    model-bakery
+    pytestCheckHook
+    pytest-django
+  ];
+
+  preCheck = ''
+    export DJANGO_SETTINGS_MODULE=tests.settings
+    export PYTHONPATH=$(pwd)/tests:$PYTHONPATH
   '';
 
   meta = with lib; {

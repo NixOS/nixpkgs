@@ -2,78 +2,91 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  # build inputs
+
+  # dependencies
+  google-generativeai,
+  joblib,
   networkx,
   numpy,
-  scipy,
-  scikit-learn,
+  opt-einsum,
   pandas,
   pyparsing,
-  torch,
+  pyro-ppl,
+  scikit-learn,
+  scipy,
   statsmodels,
+  torch,
   tqdm,
-  joblib,
-  opt-einsum,
-  # check inputs
+  xgboost,
+
+  # tests
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
   coverage,
   mock,
   black,
 }:
-let
+buildPythonPackage rec {
   pname = "pgmpy";
-  version = "0.1.25";
-in
-# optional-dependencies = {
-#   all = [ daft ];
-# };
-buildPythonPackage {
-  inherit pname version;
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pgmpy";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-d2TNcJQ82XxTWdetLgtKXRpFulAEEzrr+cyRewoA6YI=";
+    repo = "pgmpy";
+    tag = "v${version}";
+    hash = "sha256-WmRtek3lN7vEfXqoaZDiaNjMQ7R2PmJ/OEwxOV7m5sE=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
+    google-generativeai
+    joblib
     networkx
     numpy
-    scipy
-    scikit-learn
+    opt-einsum
     pandas
     pyparsing
-    torch
+    pyro-ppl
+    scikit-learn
+    scipy
     statsmodels
+    torch
     tqdm
-    joblib
-    opt-einsum
+    xgboost
   ];
 
   disabledTests = [
-    "test_to_daft" # requires optional dependency daft
+    # flaky:
+    # AssertionError: -45.78899127622197 != -45.788991276221964
+    "test_score"
+
+    # self.assertTrue(np.isclose(coef, dep_coefs[i], atol=1e-4))
+    # AssertionError: False is not true
+    "test_pillai"
+
+    # requires optional dependency daft
+    "test_to_daft"
+
+    # AssertionError
+    "test_estimate_example_smoke_test"
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
     # xdoctest
-    pytest-cov
+    pytest-cov-stub
     coverage
     mock
     black
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "pgmpy" ];
+
+  meta = {
     description = "Python Library for learning (Structure and Parameter), inference (Probabilistic and Causal), and simulations in Bayesian Networks";
     homepage = "https://github.com/pgmpy/pgmpy";
-    changelog = "https://github.com/pgmpy/pgmpy/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    changelog = "https://github.com/pgmpy/pgmpy/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

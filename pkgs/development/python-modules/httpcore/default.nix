@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "1.0.5";
+  version = "1.0.9";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,21 +32,21 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "encode";
     repo = "httpcore";
-    rev = "refs/tags/${version}";
-    hash = "sha256-05jYLrBiPRg1qQEz8mRvYJKHFsfneh7z9yHIXuYYa5o=";
+    tag = version;
+    hash = "sha256-YtAbx0iXN7u8pMBXQBUydvAH6ilH+veklvxSh5EVFXo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-fancy-pypi-readme
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     certifi
     h11
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     asyncio = [ anyio ];
     http2 = [ h2 ];
     socks = [ socksio ];
@@ -59,7 +59,8 @@ buildPythonPackage rec {
     pytest-httpbin
     pytest-trio
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "httpcore" ];
 
@@ -71,7 +72,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/encode/httpcore/blob/${version}/CHANGELOG.md";
-    description = "A minimal low-level HTTP client";
+    description = "Minimal low-level HTTP client";
     homepage = "https://github.com/encode/httpcore";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ris ];

@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, testers
-, cmake
-, cmake-extras
-, dbus
-, dbus-test-runner
-, gtest
-, libqtdbustest
-, networkmanager
-, pkg-config
-, procps
-, python3
-, qtbase
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  testers,
+  cmake,
+  cmake-extras,
+  dbus,
+  dbus-test-runner,
+  gtest,
+  libqtdbustest,
+  networkmanager,
+  pkg-config,
+  procps,
+  python3,
+  qtbase,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,7 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # Workaround for "error: expected unqualified-id before 'public'" on "**signals"
     sed -i -e '/add_definitions/a -DQT_NO_KEYWORDS' CMakeLists.txt
-  '' + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+  ''
+  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     # Don't build tests when we're not running them
     sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
   '';
@@ -52,9 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     dbus-test-runner
     procps
-    (python3.withPackages (ps: with ps; [
-      python-dbusmock
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        python-dbusmock
+      ]
+    ))
   ];
 
   checkInputs = [
@@ -82,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://launchpad.net/libqtdbusmock";
     license = licenses.lgpl3Only;
     platforms = platforms.unix;
-    maintainers = teams.lomiri.members;
+    teams = [ teams.lomiri ];
     pkgConfigModules = [
       "libqtdbusmock-1"
     ];

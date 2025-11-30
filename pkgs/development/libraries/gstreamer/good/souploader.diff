@@ -1,8 +1,8 @@
 diff --git a/ext/soup/gstsouploader.c b/ext/soup/gstsouploader.c
-index 85048ce303..d7d818cf95 100644
+index 41f3aa3783..451e15b40d 100644
 --- a/ext/soup/gstsouploader.c
 +++ b/ext/soup/gstsouploader.c
-@@ -181,7 +181,7 @@ gst_soup_load_library (void)
+@@ -178,7 +178,7 @@ gst_soup_load_library (void)
        GST_DEBUG ("LibSoup 2 found");
      } else {
        GST_DEBUG ("Trying all libsoups");

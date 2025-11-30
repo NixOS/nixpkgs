@@ -1,15 +1,20 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config
-, airspy
-, rtl-sdr
-, fdk_aac
-, faad2
-, fftwFloat
-, libsndfile
-, libsamplerate
-, portaudio
-, qtmultimedia
-, qwt
-} :
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  airspy,
+  rtl-sdr,
+  fdk_aac,
+  faad2,
+  fftwFloat,
+  libsndfile,
+  libsamplerate,
+  portaudio,
+  qtmultimedia,
+  qwt,
+}:
 
 mkDerivation rec {
   pname = "guglielmo";
@@ -17,7 +22,7 @@ mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "marcogrecopriolo";
-    repo = pname;
+    repo = "guglielmo";
     rev = "v${version}";
     sha256 = "sha256-W+KTwtxbTDrtONmkw95gXT28n3k9KS364WOzLLJdGLM=";
   };
@@ -26,7 +31,10 @@ mkDerivation rec {
     mv $out/linux-bin $out/bin
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
   buildInputs = [
     airspy
     rtl-sdr
@@ -51,6 +59,6 @@ mkDerivation rec {
     homepage = "https://github.com/marcogrecopriolo/guglielmo";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.markuskowa ];
-    platforms =  platforms.linux;
+    platforms = platforms.linux;
   };
 }

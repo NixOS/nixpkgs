@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.steam;
@@ -6,12 +11,15 @@ let
 
   extraCompatPaths = lib.makeSearchPathOutput "steamcompattool" "" cfg.extraCompatPackages;
 
-  steam-gamescope = let
-    exports = builtins.attrValues (builtins.mapAttrs (n: v: "export ${n}=${v}") cfg.gamescopeSession.env);
-  in
+  steam-gamescope =
+    let
+      exports = builtins.attrValues (
+        builtins.mapAttrs (n: v: "export ${n}=${v}") cfg.gamescopeSession.env
+      );
+    in
     pkgs.writeShellScriptBin "steam-gamescope" ''
       ${builtins.concatStringsSep "\n" exports}
-      gamescope --steam ${builtins.toString cfg.gamescopeSession.args} -- steam -tenfoot -pipewire-dmabuf
+      gamescope --steam ${builtins.toString cfg.gamescopeSession.args} -- steam ${builtins.toString cfg.gamescopeSession.steamArgs}
     '';
 
   gamescopeSessionFile =
@@ -21,8 +29,12 @@ let
       Comment=A digital distribution platform
       Exec=${steam-gamescope}/bin/steam-gamescope
       Type=Application
-    '').overrideAttrs (_: { passthru.providedSessions = [ "steam" ]; });
-in {
+    '').overrideAttrs
+      (_: {
+        passthru.providedSessions = [ "steam" ];
+      });
+in
+{
   options.programs.steam = {
     enable = lib.mkEnableOption "steam";
 
@@ -31,7 +43,7 @@ in {
       default = pkgs.steam;
       defaultText = lib.literalExpression "pkgs.steam";
       example = lib.literalExpression ''
-        pkgs.steam-small.override {
+        pkgs.steam.override {
           extraEnv = {
             MANGOHUD = true;
             OBS_VKCAPTURE = true;
@@ -42,32 +54,59 @@ in {
           ];
         }
       '';
-      apply = steam: steam.override (prev: {
-        extraEnv = (lib.optionalAttrs (cfg.extraCompatPackages != [ ]) {
-          STEAM_EXTRA_COMPAT_TOOLS_PATHS = extraCompatPaths;
-        }) // (lib.optionalAttrs cfg.extest.enable {
-          LD_PRELOAD = "${pkgs.pkgsi686Linux.extest}/lib/libextest.so";
-        }) // (prev.extraEnv or {});
-        extraLibraries = pkgs: let
-          prevLibs = if prev ? extraLibraries then prev.extraLibraries pkgs else [ ];
-          additionalLibs = with config.hardware.opengl;
-            if pkgs.stdenv.hostPlatform.is64bit
-            then [ package ] ++ extraPackages
-            else [ package32 ] ++ extraPackages32;
-        in prevLibs ++ additionalLibs;
-      } // lib.optionalAttrs (cfg.gamescopeSession.enable && gamescopeCfg.capSysNice)
-      {
-        buildFHSEnv = pkgs.buildFHSEnv.override {
-          # use the setuid wrapped bubblewrap
-          bubblewrap = "${config.security.wrapperDir}/..";
-        };
-      });
+      apply =
+        steam:
+        steam.override (
+          prev:
+          {
+            extraEnv =
+              (lib.optionalAttrs (cfg.extraCompatPackages != [ ]) {
+                STEAM_EXTRA_COMPAT_TOOLS_PATHS = extraCompatPaths;
+              })
+              // (lib.optionalAttrs cfg.extest.enable {
+                LD_PRELOAD = "${pkgs.pkgsi686Linux.extest}/lib/libextest.so";
+              })
+              // (prev.extraEnv or { });
+            extraLibraries =
+              pkgs:
+              let
+                prevLibs = if prev ? extraLibraries then prev.extraLibraries pkgs else [ ];
+                additionalLibs =
+                  with config.hardware.graphics;
+                  if pkgs.stdenv.hostPlatform.is64bit then
+                    [ package ] ++ extraPackages
+                  else
+                    [ package32 ] ++ extraPackages32;
+              in
+              prevLibs ++ additionalLibs;
+            extraPkgs = p: (cfg.extraPackages ++ lib.optionals (prev ? extraPkgs) (prev.extraPkgs p));
+          }
+          // lib.optionalAttrs (cfg.gamescopeSession.enable && gamescopeCfg.capSysNice) {
+            buildFHSEnv = pkgs.buildFHSEnv.override {
+              # use the setuid wrapped bubblewrap
+              bubblewrap = "${config.security.wrapperDir}/..";
+            };
+          }
+        );
       description = ''
         The Steam package to use. Additional libraries are added from the system
         configuration to ensure graphics work properly.
 
         Use this option to customise the Steam package rather than adding your
         custom Steam to {option}`environment.systemPackages` yourself.
+      '';
+    };
+
+    extraPackages = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [ ];
+      example = lib.literalExpression ''
+        with pkgs; [
+          gamescope
+        ]
+      '';
+      description = ''
+        Additional packages to add to the Steam environment.
       '';
     };
 
@@ -85,6 +124,19 @@ in {
         https://github.com/ValveSoftware/steam-for-linux/issues/6310.
 
         These packages must be Steam compatibility tools that have a `steamcompattool` output.
+      '';
+    };
+
+    fontPackages = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      # `fonts.packages` is a list of paths now, filter out which are not packages
+      default = builtins.filter lib.types.package.check config.fonts.packages;
+      defaultText = lib.literalExpression "builtins.filter lib.types.package.check config.fonts.packages";
+      example = lib.literalExpression "with pkgs; [ source-han-sans ]";
+      description = ''
+        Font packages to use in Steam.
+
+        Defaults to system fonts, but could be overridden to use other fonts — useful for users who would like to customize CJK fonts used in Steam. According to the [upstream issue](https://github.com/ValveSoftware/steam-for-linux/issues/10422#issuecomment-1944396010), Steam only follows the per-user fontconfig configuration.
       '';
     };
 
@@ -114,7 +166,7 @@ in {
 
     gamescopeSession = lib.mkOption {
       description = "Run a GameScope driven Steam session from your display-manager";
-      default = {};
+      default = { };
       type = lib.types.submodule {
         options = {
           enable = lib.mkEnableOption "GameScope Session";
@@ -133,6 +185,17 @@ in {
               Environmental variables to be passed to GameScope for the session.
             '';
           };
+
+          steamArgs = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [
+              "-tenfoot"
+              "-pipewire-dmabuf"
+            ];
+            description = ''
+              Arguments to be passed to Steam for the session.
+            '';
+          };
         };
       };
     };
@@ -149,10 +212,10 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    hardware.opengl = { # this fixes the "glXChooseVisual failed" bug, context: https://github.com/NixOS/nixpkgs/issues/47932
+    hardware.graphics = {
+      # this fixes the "glXChooseVisual failed" bug, context: https://github.com/NixOS/nixpkgs/issues/47932
       enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
+      enable32Bit = true;
     };
 
     security.wrappers = lib.mkIf (cfg.gamescopeSession.enable && gamescopeCfg.capSysNice) {
@@ -165,19 +228,27 @@ in {
       };
     };
 
-    programs.gamescope.enable = lib.mkDefault cfg.gamescopeSession.enable;
-    services.displayManager.sessionPackages = lib.mkIf cfg.gamescopeSession.enable [ gamescopeSessionFile ];
+    programs.steam.extraPackages = cfg.fontPackages;
 
-    # optionally enable 32bit pulseaudio support if pulseaudio is enabled
-    hardware.pulseaudio.support32Bit = config.hardware.pulseaudio.enable;
+    programs.gamescope.enable = lib.mkDefault cfg.gamescopeSession.enable;
+    services.displayManager.sessionPackages = lib.mkIf cfg.gamescopeSession.enable [
+      gamescopeSessionFile
+    ];
+
+    # enable 32bit pulseaudio/pipewire support if needed
+    services.pulseaudio.support32Bit = config.services.pulseaudio.enable;
+    services.pipewire.alsa.support32Bit = config.services.pipewire.alsa.enable;
 
     hardware.steam-hardware.enable = true;
 
     environment.systemPackages = [
       cfg.package
       cfg.package.run
-    ] ++ lib.optional cfg.gamescopeSession.enable steam-gamescope
-    ++ lib.optional cfg.protontricks.enable (cfg.protontricks.package.override { inherit extraCompatPaths; });
+    ]
+    ++ lib.optional cfg.gamescopeSession.enable steam-gamescope
+    ++ lib.optional cfg.protontricks.enable (
+      cfg.protontricks.package.override { inherit extraCompatPaths; }
+    );
 
     networking.firewall = lib.mkMerge [
       (lib.mkIf (cfg.remotePlay.openFirewall || cfg.localNetworkGameTransfers.openFirewall) {
@@ -185,8 +256,22 @@ in {
       })
 
       (lib.mkIf cfg.remotePlay.openFirewall {
-        allowedTCPPorts = [ 27036 ];
-        allowedUDPPortRanges = [ { from = 27031; to = 27035; } ];
+        # https://help.steampowered.com/en/faqs/view/3E3D-BE6B-787D-A5D2
+        # https://help.steampowered.com/en/faqs/view/2EA8-4D75-DA21-31EB
+        allowedTCPPorts = [
+          27036
+          27037
+        ];
+        allowedUDPPorts = [
+          10400
+          10401
+        ];
+        allowedUDPPortRanges = [
+          {
+            from = 27031;
+            to = 27035;
+          }
+        ];
       })
 
       (lib.mkIf cfg.dedicatedServer.openFirewall {

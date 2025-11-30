@@ -1,37 +1,33 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchCrate,
   rustPlatform,
-  shellcheck-sarif,
-  testers,
+  nix-update-script,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "shellcheck-sarif";
-  version = "0.4.2";
+  version = "0.8.0";
 
-  src = fetchFromGitHub {
-    owner = "psastras";
-    repo = "sarif-rs";
-    rev = "${pname}-v${version}";
-    hash = "sha256-EzWzDeIeSJ11CVcVyAhMjYQJcKHnieRrFkULc5eXAno=";
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-G69DiDl78vkPuLodsRTL7dbbIFtNNF/XWuLZpCHKJws=";
   };
 
-  cargoHash = "sha256-JuE/Z0qrS/3BRlb0jTGDfV0TYk74Q75X1wv/IERxqeQ=";
-  cargoBuildFlags = [
-    "--package"
-    pname
-  ];
-  cargoTestFlags = cargoBuildFlags;
+  cargoHash = "sha256-ZA7l7fmQG1wjT8oLVp6w2okPlwfNGQw/7qrH3rRS+0o=";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru = {
-    tests.version = testers.testVersion { package = shellcheck-sarif; };
+    updateScript = nix-update-script { };
   };
 
   meta = {
-    description = "A CLI tool to convert shellcheck diagnostics into SARIF";
+    description = "CLI tool to convert shellcheck diagnostics into SARIF";
     homepage = "https://psastras.github.io/sarif-rs";
-    mainProgram = "shellcheck-sarif";
-    maintainers = with lib.maintainers; [ getchoo ];
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "shellcheck-sarif";
   };
 }

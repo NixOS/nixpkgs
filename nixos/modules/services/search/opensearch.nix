@@ -1,11 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.opensearch;
 
-  settingsFormat = pkgs.formats.yaml {};
+  settingsFormat = pkgs.formats.yaml { };
 
   configDir = cfg.dataDir + "/config";
 
@@ -23,7 +25,7 @@ in
 {
 
   options.services.opensearch = {
-    enable = mkEnableOption "OpenSearch";
+    enable = lib.mkEnableOption "OpenSearch";
 
     package = lib.mkPackageOption pkgs "OpenSearch" {
       default = [ "opensearch" ];
@@ -86,7 +88,7 @@ in
         };
       };
 
-      default = {};
+      default = { };
 
       description = ''
         OpenSearch configuration.
@@ -108,13 +110,13 @@ in
         rootLogger.level = info
         rootLogger.appenderRef.console.ref = console
       '';
-      type = types.str;
+      type = lib.types.str;
     };
 
     dataDir = lib.mkOption {
       type = lib.types.path;
       default = "/var/lib/opensearch";
-      apply = converge (removeSuffix "/");
+      apply = lib.converge (lib.removeSuffix "/");
       description = ''
         Data directory for OpenSearch. If you change this, you need to
         manually create the directory. You also need to create the
@@ -168,7 +170,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.opensearch = {
       description = "OpenSearch Daemon";
       wantedBy = [ "multi-user.target" ];
@@ -186,7 +188,8 @@ in
             startPreFullPrivileges = ''
               set -o errexit -o pipefail -o nounset -o errtrace
               shopt -s inherit_errexit
-            '' + (optionalString (!config.boot.isContainer) ''
+            ''
+            + (lib.optionalString (!config.boot.isContainer) ''
               # Only set vm.max_map_count if lower than ES required minimum
               # This avoids conflict if configured via boot.kernel.sysctl
               if [ $(${pkgs.procps}/bin/sysctl -n vm.max_map_count) -lt 262144 ]; then
@@ -235,7 +238,8 @@ in
               chmod 0700 ${cfg.dataDir}/logs
               sed -e '#logs/gc.log#${cfg.dataDir}/logs/gc.log#' -i ${configDir}/jvm.options
             '';
-          in [
+          in
+          [
             "+${pkgs.writeShellScript "opensearch-start-pre-full-privileges" startPreFullPrivileges}"
             "${pkgs.writeShellScript "opensearch-start-pre-unprivileged" startPreUnprivileged}"
           ];
@@ -245,7 +249,9 @@ in
 
           # Make sure opensearch is up and running before dependents
           # are started
-          while ! ${pkgs.curl}/bin/curl -sS -f http://${cfg.settings."network.host"}:${toString cfg.settings."http.port"} 2>/dev/null; do
+          while ! ${pkgs.curl}/bin/curl -sS -f http://${cfg.settings."network.host"}:${
+            toString cfg.settings."http.port"
+          } 2>/dev/null; do
             sleep 1
           done
         '';
@@ -256,7 +262,8 @@ in
         Restart = "always";
         TimeoutStartSec = "infinity";
         DynamicUser = usingDefaultUserAndGroup && usingDefaultDataDir;
-      } // (optionalAttrs (usingDefaultDataDir) {
+      }
+      // (lib.optionalAttrs usingDefaultDataDir {
         StateDirectory = "opensearch";
         StateDirectoryMode = "0700";
       });

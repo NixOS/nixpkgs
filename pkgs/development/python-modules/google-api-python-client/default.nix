@@ -1,27 +1,25 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   google-auth,
   google-auth-httplib2,
   google-api-core,
   httplib2,
   uritemplate,
-  oauth2client,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "google-api-python-client";
-  version = "2.126.0";
+  version = "2.185.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-l8BBBjDivr0ZTZnpG9Yg2rW8a27AvwM/mpEJtwC4Oss=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "google-api-python-client";
+    tag = "v${version}";
+    hash = "sha256-uItN7P6tZTxEHfma+S0p4grRRnAaIhuTezvJzWjvkfE=";
   };
 
   build-system = [ setuptools ];
@@ -32,16 +30,12 @@ buildPythonPackage rec {
     google-api-core
     httplib2
     uritemplate
-    oauth2client
   ];
-
-  # No tests included in archive
-  doCheck = false;
 
   pythonImportsCheck = [ "googleapiclient" ];
 
-  meta = with lib; {
-    description = "The official Python client library for Google's discovery based APIs";
+  meta = {
+    description = "Official Python client library for Google's discovery based APIs";
     longDescription = ''
       These client libraries are officially supported by Google. However, the
       libraries are considered complete and are in maintenance mode. This means
@@ -49,8 +43,8 @@ buildPythonPackage rec {
       any new features.
     '';
     homepage = "https://github.com/google/google-api-python-client";
-    changelog = "https://github.com/googleapis/google-api-python-client/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/googleapis/google-api-python-client/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.sarahec ];
   };
 }

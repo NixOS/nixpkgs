@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, pcre, libxcrypt }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pcre,
+  libxcrypt,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "leafnode";
@@ -27,13 +33,16 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i validatefqdn.c -e 's/int is_validfqdn(const char \*f) {/int is_validfqdn(const char *f) { return 1;/;'
   '';
 
-  buildInputs = [ pcre libxcrypt ];
+  buildInputs = [
+    pcre
+    libxcrypt
+  ];
 
   meta = {
     homepage = "https://leafnode.sourceforge.io/index.shtml";
     description = "Implementation of a store & forward NNTP proxy, under development";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.ne9z ];
+    maintainers = [ ];
   };
 })

@@ -32,14 +32,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test/" ];
+  enabledTestPaths = [ "test/" ];
 
   pythonImportsCheck = [ "cmigemo" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/mooz/python-cmigemo";
-    description = "A pure python binding for C/Migemo";
+    description = "Pure python binding for C/Migemo";
     license = licenses.mit;
     maintainers = with maintainers; [ illustris ];
   };

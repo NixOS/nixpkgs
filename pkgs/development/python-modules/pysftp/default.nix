@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://bitbucket.org/dundeemt/pysftp";
-    description = "A friendly face on SFTP";
+    description = "Friendly face on SFTP";
     license = licenses.mit;
     longDescription = ''
       A simple interface to SFTP. The module offers high level abstractions

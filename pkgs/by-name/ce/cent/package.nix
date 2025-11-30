@@ -6,28 +6,28 @@
 
 buildGoModule rec {
   pname = "cent";
-  version = "1.3.3";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "xm1k3";
     repo = "cent";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-E3gAtrgWVucV3cD31ntgtdTDkhmqJHOiFwaUdVJj0jQ=";
+    tag = "v${version}";
+    hash = "sha256-AmOq+n+TcpwDgFjFsFNVl/fAIAJbqYdoR2P1dasb8h8=";
   };
 
-  vendorHash = "sha256-LvI9FJFXBnEXNsX3qp2Sl58ccIJtYDGSEtNUwNW/Pp0=";
+  vendorHash = "sha256-sn4ZIDP07u9dwVJHy7KrQFZHsGrqpkM8CzcIbNMDiIo=";
 
   ldflags = [
     "-s"
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to handle Nuclei community templates";
     homepage = "https://github.com/xm1k3/cent";
     changelog = "https://github.com/xm1k3/cent/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
     mainProgram = "cent";
   };
 }

@@ -28,7 +28,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ tqdm ];
 
   meta = with lib; {
-    description = "A Pure-Python library built as a PDF toolkit";
+    description = "Pure-Python library built as a PDF toolkit";
     homepage = "https://github.com/sfneal/PyPDF3";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ambroisie ];

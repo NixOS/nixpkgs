@@ -1,9 +1,14 @@
-{ stdenv, lib, fetchFromGitLab, ocaml, findlib, camlp4, config-file, lablgtk, xmlm }:
-
-if lib.versionOlder ocaml.version "4.02"
-|| lib.versionAtLeast ocaml.version "4.13"
-then throw "lablgtk-extras is not available for OCaml ${ocaml.version}"
-else
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  ocaml,
+  findlib,
+  camlp4,
+  config-file,
+  lablgtk,
+  xmlm,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.6";
@@ -18,8 +23,16 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ ocaml findlib camlp4 ];
-  propagatedBuildInputs = [ config-file lablgtk xmlm ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    camlp4
+  ];
+  propagatedBuildInputs = [
+    config-file
+    lablgtk
+    xmlm
+  ];
 
   createFindlibDestdir = true;
 
@@ -27,7 +40,8 @@ stdenv.mkDerivation rec {
     inherit (ocaml.meta) platforms;
     maintainers = with lib.maintainers; [ vbgl ];
     homepage = "https://framagit.org/zoggy/lablgtk-extras/";
-    description = "A collection of libraries and modules useful when developing OCaml/LablGtk2 applications";
+    description = "Collection of libraries and modules useful when developing OCaml/LablGtk2 applications";
     license = lib.licenses.lgpl2Plus;
+    broken = lib.versionOlder ocaml.version "4.02" || lib.versionAtLeast ocaml.version "4.13";
   };
 }

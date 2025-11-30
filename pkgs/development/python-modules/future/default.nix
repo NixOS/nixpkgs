@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -11,6 +12,9 @@ buildPythonPackage rec {
   pname = "future";
   version = "1.0.0";
   pyproject = true;
+
+  # https://github.com/PythonCharmers/python-future/issues/640
+  disabled = pythonAtLeast "3.13";
 
   src = fetchPypi {
     inherit pname version;

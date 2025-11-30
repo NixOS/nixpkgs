@@ -1,20 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bc }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+  bc,
+}:
 
 stdenv.mkDerivation {
   pname = "rtl88x2bu";
-  version = "${kernel.version}-unstable-2023-11-29";
+  version = "${kernel.version}-unstable-2025-05-29";
 
   src = fetchFromGitHub {
     owner = "morrownr";
     repo = "88x2bu-20210702";
-    rev = "cd2b6cbd9c8fbfebee8a1f28fab8e4434450456c";
-    sha256 = "sha256-t1lLJSEDzY2zvgcKYaxUq/umrlLpxu4+4zWmG8R0Wz4=";
+    rev = "fe48647496798cac77976e310ee95da000b436c9";
+    hash = "sha256-h20vwCgLOiNh0LN3MGwPl3F/PSWGc2XS4t1sdeFAOko=";
   };
 
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
-  makeFlags = kernel.makeFlags;
+  makeFlags = kernelModuleMakeFlags;
 
   prePatch = ''
     substituteInPlace ./Makefile \
@@ -35,5 +42,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ otavio ];
+    broken = kernel.kernelAtLeast "6.17";
   };
 }

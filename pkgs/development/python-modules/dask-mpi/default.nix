@@ -46,6 +46,6 @@ buildPythonPackage rec {
     mainProgram = "dask-mpi";
     homepage = "https://github.com/dask/dask-mpi";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   pkg-config,
-  qtwayland,
+  qtbase,
   libvncserver,
   pipewire,
   xorg,
@@ -10,9 +10,13 @@ mkKdeDerivation {
   pname = "krfb";
 
   extraCmakeFlags = [
-    "-DQtWaylandScanner_EXECUTABLE=${qtwayland}/libexec/qtwaylandscanner"
+    "-DQtWaylandScanner_EXECUTABLE=${qtbase}/libexec/qtwaylandscanner"
   ];
 
-  extraNativeBuildInputs = [pkg-config];
-  extraBuildInputs = [qtwayland libvncserver pipewire xorg.libXdamage];
+  extraNativeBuildInputs = [ pkg-config ];
+  extraBuildInputs = [
+    libvncserver
+    pipewire
+    xorg.libXdamage
+  ];
 }

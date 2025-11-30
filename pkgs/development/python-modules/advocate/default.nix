@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "JordanMilne";
-    repo = pname;
+    repo = "advocate";
     rev = "v${version}";
     hash = "sha256-opObkjkad+yrLE2b7DULHjGuNeVhu4fEmSavgA39YPw=";
   };
@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/JordanMilne/Advocate";
-    description = "An SSRF-preventing wrapper around Python's requests library";
+    description = "SSRF-preventing wrapper around Python's requests library";
     license = licenses.asl20;
     maintainers = with maintainers; [ pborzenkov ];
   };

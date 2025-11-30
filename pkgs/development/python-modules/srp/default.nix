@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "srp";
-  version = "1.0.20";
+  version = "1.0.22";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LbRTvc4mue6tNnp7V4MHTvgOhIK/MMAUCnuJg2oFRwc=";
+    hash = "sha256-8zDQ7HOH4qyFd0h7FkljFV1KAxvKbiAk8bCTDrkrql0=";
   };
 
   propagatedBuildInputs = [ six ];

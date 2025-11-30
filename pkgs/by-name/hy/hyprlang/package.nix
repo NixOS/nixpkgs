@@ -3,21 +3,28 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  pkg-config,
+  hyprutils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlang";
-  version = "0.5.2";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprlang";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Jq9hHYFL5nMHArWgJIcrDHGnzs/MjDi95cyB7cUZIJ4=";
+    hash = "sha256-APyQ4L05EHRbQFS1t7nXex4u+g9Sh8J70W80djOnmI4=";
   };
 
   nativeBuildInputs = [
     cmake
+    pkg-config
+  ];
+
+  buildInputs = [
+    hyprutils
   ];
 
   outputs = [
@@ -27,11 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hyprwm/hyprlang";
-    description = "The official implementation library for the hypr config language";
-    license = licenses.lgpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ iogamaster fufexan ];
+    description = "Official implementation library for the hypr config language";
+    license = lib.licenses.lgpl3Only;
+    platforms = lib.platforms.all;
+    teams = [ lib.teams.hyprland ];
   };
 })

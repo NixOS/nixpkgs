@@ -1,30 +1,36 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "bitmagnet";
-  version = "0.8.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "bitmagnet-io";
     repo = "bitmagnet";
     rev = "v${version}";
-    hash = "sha256-P5GfPRIrwLLMBRgoN6d092HiThMghEj1zcaf6BU+IWU=";
+    hash = "sha256-KgpKpnOVtS3VoIqKhIzDvbdR54M014tQj2/ufhWMZDo=";
   };
 
-  vendorHash = "sha256-exKQTsyP7LL63WHZ8/WchLh4y0Oj9LC4lxiZTOfWARU=";
+  vendorHash = "sha256-Scper1eR6I4pCXus/jytSpW8a1omg7sJIPvOn3jYcLM=";
 
-  ldflags = [ "-s" "-w" "-X github.com/bitmagnet-io/bitmagnet/internal/version.GitTag=v${version}" ];
+  subPackages = [ "." ];
+
+  ldflags = [
+    "-s"
+    "-X github.com/bitmagnet-io/bitmagnet/internal/version.GitTag=v${version}"
+  ];
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
   meta = {
-    description = "A self-hosted BitTorrent indexer, DHT crawler, and torrent search engine";
+    description = "Self-hosted BitTorrent indexer, DHT crawler, and torrent search engine";
     longDescription = ''
       A self-hosted BitTorrent indexer, DHT crawler, content classifier and torrent search engine with web UI, GraphQL API and Servarr stack integration.
     '';

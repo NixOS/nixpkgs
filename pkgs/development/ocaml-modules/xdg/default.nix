@@ -1,6 +1,10 @@
-{ lib, buildDunePackage, dune_3 }:
+{
+  lib,
+  buildDunePackage,
+  dune_3,
+}:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "xdg";
   inherit (dune_3) src version;
 
@@ -12,7 +16,7 @@ buildDunePackage rec {
   meta = with lib; {
     description = "XDG Base Directory Specification";
     inherit (dune_3.meta) homepage;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

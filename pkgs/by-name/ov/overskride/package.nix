@@ -1,24 +1,34 @@
-{ lib, fetchFromGitHub, rustPlatform, cargo, rustc, meson, ninja
-, pkg-config, wrapGAppsHook4, desktop-file-utils, appstream-glib
-, blueprint-compiler, dbus, gtk4, libadwaita, bluez, libpulseaudio }: let
-
-owner = "kaii-lb";
-name = "overskride";
-version = "0.5.7";
-
-in rustPlatform.buildRustPackage {
-
-  pname = name;
-  inherit version;
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  cargo,
+  rustc,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  appstream-glib,
+  blueprint-compiler,
+  dbus,
+  gtk4,
+  libadwaita,
+  bluez,
+  libpulseaudio,
+}:
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "overskride";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
-    inherit owner;
-    repo = name;
-    rev = "v${version}";
-    hash = "sha256-vuCpUTn/Re2wZIoCmKHwBRPdfpHDzNHi42iwvBFYjXo=";
+    owner = "kaii-lb";
+    repo = "overskride";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-q37nKP18E8aDlTlh2REgeg40KH6orD6QY+ZlDKHHC20=";
   };
 
-  cargoHash = "sha256-hX3GHRiE/CbeT/zblQHzbxLPEc/grDddXgqoAe64zUM=";
+  cargoHash = "sha256-q1g+6JFW+euYCq2uMYQn4R0AP4yt5/cJoP88AXg9NLw=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,7 +42,13 @@ in rustPlatform.buildRustPackage {
     rustc
   ];
 
-  buildInputs = [ dbus gtk4 libadwaita bluez libpulseaudio ];
+  buildInputs = [
+    dbus
+    gtk4
+    libadwaita
+    bluez
+    libpulseaudio
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -44,23 +60,19 @@ in rustPlatform.buildRustPackage {
   '';
 
   # The "Validate appstream file" test fails.
-  # TODO: This appears to have been fixed upstream
-  # so checks should be enabled with the next version.
   doCheck = false;
 
   preFixup = ''
-    glib-compile-schemas $out/share/gsettings-schemas/${name}-${version}/glib-2.0/schemas
+    glib-compile-schemas $out/share/gsettings-schemas/overskride-${finalAttrs.version}/glib-2.0/schemas
   '';
 
-  meta = with lib; {
-    description =
-      "A Bluetooth and Obex client that is straight to the point, DE/WM agnostic, and beautiful";
-    homepage = "https://github.com/${owner}/${name}";
-    changelog = "https://github.com/${owner}/${name}/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    mainProgram = name;
-    maintainers = with maintainers; [ mrcjkb ];
-    platforms = platforms.linux;
+  meta = {
+    description = "Bluetooth and Obex client that is straight to the point, DE/WM agnostic, and beautiful";
+    homepage = "https://github.com/kaii-lb/overskride";
+    changelog = "https://github.com/kaii-lb/overskride/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.gpl3Only;
+    mainProgram = "overskride";
+    maintainers = with lib.maintainers; [ mrcjkb ];
+    platforms = lib.platforms.linux;
   };
-
-}
+})

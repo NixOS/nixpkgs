@@ -1,7 +1,5 @@
 {
   python,
-  pythonAtLeast,
-  disabledIf,
   fetchurl,
   lib,
   stdenv,
@@ -10,20 +8,43 @@
   ninja,
   qt5,
   shiboken2,
+  withWebengine ? false, # vulnerable, so omit by default
 }:
 stdenv.mkDerivation rec {
   pname = "pyside2";
-  version = "5.15.11";
+  version = "5.15.17";
 
   src = fetchurl {
     url = "https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-${version}-src/pyside-setup-opensource-src-${version}.tar.xz";
-    sha256 = "sha256-2lZ807eFTSegtK/j6J3osvmLem1XOTvlbx/BP3cPryk=";
+    hash = "sha256-hKSzKPamAjW4cXrVIriKe2AAWSYMV6IYntAFEJ8kxSc=";
   };
 
-  patches = [ ./dont_ignore_optional_modules.patch ];
+  patches = [
+    ./nix_compile_cflags.patch
+    ./Final-details-to-enable-3.12-wheel-compatibility.patch
+    ./Python-3.12-Fix-the-structure-of-class-property.patch
+    ./Support-running-PySide-on-Python-3.12.patch
+    ./shiboken2-clang-Fix-and-simplify-resolveType-helper.patch
+    ./shiboken2-clang-Fix-build-with-clang-16.patch
+    ./shiboken2-clang-Fix-clashes-between-type-name-and-enumera.patch
+    ./shiboken2-clang-Record-scope-resolution-of-arguments-func.patch
+    ./shiboken2-clang-Remove-typedef-expansion.patch
+    ./shiboken2-clang-Suppress-class-scope-look-up-for-paramete.patch
+    ./shiboken2-clang-Write-scope-resolution-for-all-parameters.patch
+    ./dont_ignore_optional_modules.patch
+    ./Modify-sendCommand-signatures.patch
+  ];
 
   postPatch = ''
     cd sources/pyside2
+    for i in {.,doc}/CMakeLists.txt; do
+      substituteInPlace $i --replace-fail \
+        "cmake_minimum_required(VERSION 3.1)" \
+        "cmake_minimum_required(VERSION 3.10)"
+      substituteInPlace $i --replace-fail \
+        "cmake_policy(VERSION 3.1)" \
+        "cmake_policy(VERSION 3.10)"
+    done
   '';
 
   cmakeFlags = [
@@ -37,7 +58,12 @@ stdenv.mkDerivation rec {
     cmake
     ninja
     qt5.qmake
-    python
+    (python.withPackages (
+      ps: with ps; [
+        distutils
+        setuptools
+      ]
+    ))
   ];
 
   buildInputs =
@@ -50,13 +76,15 @@ stdenv.mkDerivation rec {
       qtlocation
       qtscript
       qtwebsockets
-      qtwebengine
       qtwebchannel
       qtcharts
       qtsensors
       qtsvg
       qt3d
     ])
+    ++ lib.optionals withWebengine [
+      qt5.qtwebengine
+    ]
     ++ (with python.pkgs; [ setuptools ])
     ++ (lib.optionals (python.pythonOlder "3.9") [
       # see similar issue: 202262
@@ -78,6 +106,8 @@ stdenv.mkDerivation rec {
     description = "LGPL-licensed Python bindings for Qt";
     license = licenses.lgpl21;
     homepage = "https://wiki.qt.io/Qt_for_Python";
-    maintainers = with maintainers; [ gebner ];
+    maintainers = [ ];
+    platforms = platforms.all;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -18,23 +18,21 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "telegraph";
     owner = "python273";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xARX8lSOftNVYY4InR5vU4OiguCJJJZv/W76G9eLgNY=";
   };
 
   propagatedBuildInputs = [ requests ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aio = [ httpx ];
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   disabledTests = [ "test_get_page" ];
-
-  doCheck = true;
 
   pythonImportsCheck = [ "telegraph" ];
 

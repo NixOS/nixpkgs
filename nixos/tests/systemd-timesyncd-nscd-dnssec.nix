@@ -4,7 +4,7 @@
 # correct time, we need to connect to an NTP server, which usually requires resolving its hostname.
 #
 # This test does the following:
-# - Sets up a DNS server (tinydns) listening on the eth1 ip addess, serving .ntp and fake.ntp records.
+# - Sets up a DNS server (tinydns) listening on the eth1 ip address, serving .ntp and fake.ntp records.
 # - Configures that DNS server as a resolver and enables DNSSEC in systemd-resolved settings.
 # - Configures systemd-timesyncd to use fake.ntp hostname as an NTP server.
 # - Performs a regular DNS lookup, to ensure it fails due to broken DNSSEC.
@@ -13,7 +13,7 @@
 #   server running. For this test to succeed, we only need to ensure that systemd-timesyncd
 #   resolves the IP address of the fake.ntp host.
 
-import ./make-test-python.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 
 let
   ntpHostname = "fake.ntp";
@@ -21,7 +21,13 @@ let
 in
 {
   name = "systemd-timesyncd";
-  nodes.machine = { pkgs, lib, config, ... }:
+  nodes.machine =
+    {
+      pkgs,
+      lib,
+      config,
+      ...
+    }:
     let
       eth1IP = (lib.head config.networking.interfaces.eth1.ipv4.addresses).address;
     in
@@ -58,4 +64,4 @@ in
     machine.fail("resolvectl query ${ntpHostname}")
     machine.wait_until_succeeds("journalctl -u systemd-timesyncd.service --grep='Resolved address ${ntpIP}:123 for ${ntpHostname}'")
   '';
-})
+}

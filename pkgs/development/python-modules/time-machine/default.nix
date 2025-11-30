@@ -2,37 +2,40 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
-  pythonOlder,
   setuptools,
-  backports-zoneinfo,
   python-dateutil,
+  tokenize-rt,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "time-machine";
-  version = "2.13.0";
+  version = "2.19.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "adamchainz";
-    repo = pname;
-    rev = version;
-    hash = "sha256-SjenPLLr4JoWK5HAokwgW+bw3mfAZiuDb1N7Za5wtrw=";
+    repo = "time-machine";
+    tag = version;
+    hash = "sha256-bPpn+RNlvy/tkFrxDY4Q13fNlNuMFj1+br8M2uU3t9A=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     python-dateutil
-  ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  optional-dependencies.cli = [
+    tokenize-rt
+  ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.9") [
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ optional-dependencies.cli;
+
+  disabledTests = [
     # https://github.com/adamchainz/time-machine/issues/405
     "test_destination_string_naive"
     # Assertion Errors related to Africa/Addis_Ababa
@@ -45,9 +48,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "time_machine" ];
 
   meta = with lib; {
-    changelog = "https://github.com/adamchainz/time-machine/blob/${src.rev}/CHANGELOG.rst";
     description = "Travel through time in your tests";
     homepage = "https://github.com/adamchainz/time-machine";
+    changelog = "https://github.com/adamchainz/time-machine/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

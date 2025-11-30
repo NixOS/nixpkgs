@@ -6,13 +6,14 @@
   fetchFromGitHub,
   gobject-introspection,
   gtk3,
-  makeWrapper,
   pygobject3,
   pyudev,
   setproctitle,
   setuptools,
-  wrapGAppsHook3,
+  wrapGAppsNoGuiHook,
   notify2,
+  glib,
+  libnotify,
 }:
 
 let
@@ -33,19 +34,30 @@ buildPythonPackage (
     postPatch = ''
       substituteInPlace openrazer_daemon/daemon.py \
         --replace-fail "plugdev" "openrazer"
+      patchShebangs run_openrazer_daemon.py
+      substituteInPlace run_openrazer_daemon.py \
+        --replace-fail "/usr/share" "$out/share"
     '';
 
-    nativeBuildInputs = [ setuptools ];
+    nativeBuildInputs = [
+      setuptools
+      wrapGAppsNoGuiHook
+      gobject-introspection
+    ];
 
-    propagatedBuildInputs = [
+    buildInputs = [
+      glib
+      gtk3
+    ];
+
+    dependencies = [
       daemonize
       dbus-python
-      gobject-introspection
-      gtk3
       pygobject3
       pyudev
       setproctitle
       notify2
+      libnotify
     ];
 
     postInstall = ''
@@ -55,8 +67,14 @@ buildPythonPackage (
     # no tests run
     doCheck = false;
 
+    dontWrapGApps = true;
+
+    preFixup = ''
+      makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    '';
+
     meta = common.meta // {
-      description = "An entirely open source user-space daemon that allows you to manage your Razer peripherals on GNU/Linux";
+      description = "Entirely open source user-space daemon that allows you to manage your Razer peripherals on GNU/Linux";
       mainProgram = "openrazer-daemon";
     };
   }

@@ -1,14 +1,15 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   absl-py,
   mujoco,
   pyparsing,
-  pythonRelaxDepsHook,
   setuptools,
-  wheel,
+
+  # dependencies
   dm-env,
   dm-tree,
   fsspec,
@@ -16,8 +17,6 @@
   h5py,
   lxml,
   mock,
-  nose,
-  nose-xunitmp,
   numpy,
   pillow,
   protobuf,
@@ -30,25 +29,21 @@
 
 buildPythonPackage rec {
   pname = "dm-control";
-  version = "1.0.19";
+  version = "1.0.34";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "dm_control";
-    rev = "refs/tags/${version}";
-    hash = "sha256-q9hY/icvc1tPI0xBYxExc2a+gv0i6utaB4GBnJwQPCw=";
+    tag = version;
+    hash = "sha256-AESUqrUw8EEUKNtZJ5M/dD7xDr+6VGi4yYacJw0q8Ls=";
   };
 
   build-system = [
     absl-py
     mujoco
     pyparsing
-    pythonRelaxDepsHook
     setuptools
-    wheel
   ];
 
   pythonRemoveDeps = [
@@ -66,8 +61,6 @@ buildPythonPackage rec {
     lxml
     mock
     mujoco
-    nose
-    nose-xunitmp
     numpy
     pillow
     protobuf
@@ -77,7 +70,8 @@ buildPythonPackage rec {
     scipy
     setuptools
     tqdm
-  ] ++ etils.optional-dependencies.epath;
+  ]
+  ++ etils.optional-dependencies.epath;
 
   pythonImportsCheck = [ "dm_control" ];
 
@@ -88,7 +82,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/google-deepmind/dm_control/releases/tag/${version}";
+    changelog = "https://github.com/google-deepmind/dm_control/releases/tag/${src.tag}";
     description = "Google DeepMind's software stack for physics-based simulation and Reinforcement Learning environments, using MuJoCo";
     homepage = "https://github.com/google-deepmind/dm_control";
     license = lib.licenses.asl20;

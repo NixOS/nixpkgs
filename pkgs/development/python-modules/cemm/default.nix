@@ -7,22 +7,20 @@
   fetchpatch,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "cemm";
   version = "0.5.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-cemm";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-BorgGHxoEeIGyJKqe9mFRDpcGHhi6/8IV7ubEI8yQE4=";
   };
 
@@ -33,17 +31,22 @@ buildPythonPackage rec {
       url = "https://github.com/klaasnicolaas/python-cemm/commit/1e373dac078f18563264e6733baf6a93962cac4b.patch";
       hash = "sha256-DVNn4BZwi8yNpKFmzt7YSYhzzB4vaAyrd/My8TtYzj0=";
     })
+    # https://github.com/klaasnicolaas/python-cemm/pull/568
+    (fetchpatch {
+      name = "replace-async_timeout.patch";
+      url = "https://github.com/klaasnicolaas/python-cemm/commit/a818e7ccf196cd5cd4c3e6bf503fb932993281ca.patch";
+      hash = "sha256-MwPxK+TRZVvf0sS6HS3+CRRY7dDr1qwCCJ+arQ26gWU=";
+    })
   ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"0.0.0"' '"${version}"' \
-      --replace 'addopts = "--cov"' ""
+      --replace-fail '"0.0.0"' '"${version}"'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     yarl
   ];
@@ -53,6 +56,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
@@ -61,8 +65,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for interacting with CEMM devices";
     homepage = "https://github.com/klaasnicolaas/python-cemm";
-    changelog = "https://github.com/klaasnicolaas/python-cemm/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/klaasnicolaas/python-cemm/releases/tag/${src.tag}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

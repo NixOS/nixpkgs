@@ -5,23 +5,26 @@
   git,
   pytestCheckHook,
   pythonOlder,
+  distutils,
   setuptools-scm,
   writeScript,
 }:
 
 buildPythonPackage rec {
   pname = "setuptools-odoo";
-  version = "3.3";
+  version = "3.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "acsone";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-38YlkDH/PuJ1yvQ43OYmdnRd1SGJULv6fC/+fitLDJ8=";
+    repo = "setuptools-odoo";
+    tag = version;
+    hash = "sha256-fTXc3ICJ1VKno1PYBVMhXr5u7awhahLdOuDJ/8czPtA=";
   };
+
+  nativeBuildInputs = [ distutils ];
 
   propagatedBuildInputs = [ setuptools-scm ];
 

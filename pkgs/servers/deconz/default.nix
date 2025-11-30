@@ -1,31 +1,41 @@
-{ stdenv
-, lib
-, fetchurl
-, wrapQtAppsHook
-, dpkg
-, autoPatchelfHook
-, qtserialport
-, qtwebsockets
-, openssl
-, libredirect
-, makeWrapper
-, gzip
-, gnutar
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchurl,
+  wrapQtAppsHook,
+  dpkg,
+  autoPatchelfHook,
+  qtserialport,
+  qtwebsockets,
+  openssl,
+  libredirect,
+  makeWrapper,
+  gzip,
+  gnutar,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "deconz";
-  version = "2.26.3";
+  version = "2.31.2";
 
   src = fetchurl {
     url = "https://deconz.dresden-elektronik.de/ubuntu/beta/deconz-${version}-qt5.deb";
-    sha256 = "sha256-BE/apFPutNdhlS1NWRHdVcVrt/16aFfZ6zRcjphIlZA=";
+    sha256 = "sha256-FiZFi7nRVn4i4KEAFc0P+5MPNw/DzBTds06jXvC7qGg=";
   };
 
-  nativeBuildInputs = [ dpkg autoPatchelfHook makeWrapper wrapQtAppsHook ];
+  nativeBuildInputs = [
+    dpkg
+    autoPatchelfHook
+    makeWrapper
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ qtserialport qtwebsockets openssl ];
+  buildInputs = [
+    qtserialport
+    qtwebsockets
+    openssl
+  ];
 
   unpackPhase = ''
     runHook preUnpack
@@ -61,7 +71,12 @@ stdenv.mkDerivation rec {
         wrapProgram "$p" \
             --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
             --set NIX_REDIRECTS "/usr/share=$out/share:/usr/bin=$out/bin" \
-            --prefix PATH : "${lib.makeBinPath [ gzip gnutar ]}"
+            --prefix PATH : "${
+              lib.makeBinPath [
+                gzip
+                gnutar
+              ]
+            }"
     done
 
     runHook postInstall
@@ -75,7 +90,7 @@ stdenv.mkDerivation rec {
     description = "Manage Zigbee network with ConBee, ConBee II or RaspBee hardware";
     homepage = "https://www.dresden-elektronik.com/wireless/software/deconz.html";
     license = licenses.unfree;
-    platforms = with platforms; [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ bjornfor ];
     mainProgram = "deCONZ";

@@ -10,24 +10,23 @@
 }:
 buildLua {
   pname = "videoclip";
-  version = "0-unstable-2024-03-08";
+  version = "0-unstable-2025-03-10";
 
   src = fetchFromGitHub {
     owner = "Ajatt-Tools";
     repo = "videoclip";
-    rev = "0e3f2245b03e888c14c093a50261e0f54ecdf8e8";
-    hash = "sha256-Sg6LHU9OVmVx3cTs8Y0WL8wACb5BlVyeBRccoX+7BXY=";
+    rev = "785eb86bc080c445e8feb947d7caa8f3a097bf2b";
+    hash = "sha256-oanc9MggMjVDrSW42XrQwwWw2YTrifiCVrg/r42oGx8=";
   };
 
-  patchPhase =
-    ''
-      substituteInPlace platform.lua \
-      --replace \'curl\' \'${lib.getExe curl}\' \
-    ''
-    + lib.optionalString stdenv.isLinux ''
-      --replace xclip ${lib.getExe xclip} \
-      --replace wl-copy ${lib.getExe' wl-clipboard "wl-copy"}
-    '';
+  patchPhase = ''
+    substituteInPlace platform.lua \
+    --replace \'curl\' \'${lib.getExe curl}\' \
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    --replace xclip ${lib.getExe xclip} \
+    --replace wl-copy ${lib.getExe' wl-clipboard "wl-copy"}
+  '';
 
   scriptPath = ".";
   passthru.scriptName = "videoclip";

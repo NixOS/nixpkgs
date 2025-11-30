@@ -1,50 +1,73 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, libkrb5
-, zlib
-, openssl
-, callPackage
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  libkrb5,
+  zlib,
+  openssl,
+  stdenv,
+  callPackage,
 }:
 
+let
+  plugins = [
+    "ArchiSteamFarm.OfficialPlugins.ItemsMatcher"
+    "ArchiSteamFarm.OfficialPlugins.MobileAuthenticator"
+    "ArchiSteamFarm.OfficialPlugins.Monitoring"
+    "ArchiSteamFarm.OfficialPlugins.SteamTokenDumper"
+  ];
+in
 buildDotnetModule rec {
   pname = "ArchiSteamFarm";
   # nixpkgs-update: no auto update
-  version = "6.0.1.24";
+  version = "6.2.2.3";
 
   src = fetchFromGitHub {
     owner = "JustArchiNET";
     repo = "ArchiSteamFarm";
     rev = version;
-    hash = "sha256-IgsiL5YUeOWQ/WIaTfs0Kmv2XFori8ntGZhrx7xeMkg=";
+    hash = "sha256-FV9dYp3E8MHra5pyrh8dqZ/85TDwNbdiLV/XdAWiJsg=";
   };
 
-  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
-  projectFile = "ArchiSteamFarm.sln";
-  executables = [ "ArchiSteamFarm" ];
+  projectFile = [
+    "ArchiSteamFarm"
+  ]
+  ++ plugins;
+  testProjectFile = "ArchiSteamFarm.Tests";
+
+  executable = "ArchiSteamFarm";
+
+  enableParallelBuilding = false;
+
+  useAppHost = false;
   dotnetFlags = [
-    "-p:PublishSingleFile=true"
-    "-p:PublishTrimmed=true"
+    # useAppHost doesn't explicitly disable this
+    "-p:UseAppHost=false"
+    "-p:RuntimeIdentifiers="
   ];
-  dotnetInstallFlags = [
-    "--framework=net8.0"
+  dotnetBuildFlags = [
+    "--framework=net9.0"
   ];
-  selfContainedBuild = true;
+  dotnetInstallFlags = dotnetBuildFlags;
 
-  runtimeDeps = [ libkrb5 zlib openssl ];
+  runtimeDeps = [
+    libkrb5
+    zlib
+    openssl
+  ];
 
-  doCheck = true;
-
-  preBuild = ''
-    export projectFile=(ArchiSteamFarm)
-  '';
+  # times out when trying to connect to something even with relaxed sandbox
+  doCheck = stdenv.hostPlatform.isLinux;
 
   preInstall = ''
+    dotnetProjectFiles=(ArchiSteamFarm)
+
     # A mutable path, with this directory tree must be set. By default, this would point at the nix store causing errors.
     makeWrapperArgs+=(
       --run 'mkdir -p ~/.config/archisteamfarm/{config,logs,plugins}'
@@ -57,12 +80,18 @@ buildDotnetModule rec {
       echo "Publishing plugin $1"
       dotnet publish $1 -p:ContinuousIntegrationBuild=true -p:Deterministic=true \
         --output $out/lib/ArchiSteamFarm/plugins/$1 --configuration Release \
-        -p:UseAppHost=false
-     }
+        --no-restore --no-build --runtime $dotnetRuntimeIds \
+        $dotnetFlags $dotnetInstallFlags
+    }
 
-     buildPlugin ArchiSteamFarm.OfficialPlugins.ItemsMatcher
-     buildPlugin ArchiSteamFarm.OfficialPlugins.MobileAuthenticator
-     buildPlugin ArchiSteamFarm.OfficialPlugins.SteamTokenDumper
+  ''
+  + lib.concatMapStrings (p: "buildPlugin ${p}\n") plugins
+  + ''
+
+    chmod +x $out/lib/ArchiSteamFarm/ArchiSteamFarm.dll
+    wrapDotnetProgram $out/lib/ArchiSteamFarm/ArchiSteamFarm.dll $out/bin/ArchiSteamFarm
+    substituteInPlace $out/bin/ArchiSteamFarm \
+      --replace-fail "exec " "exec dotnet "
   '';
 
   passthru = {

@@ -1,11 +1,11 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  ccache,
   fetchFromGitHub,
   isPyPy,
   ordered-set,
-  python3,
+  python,
   setuptools,
   zstandard,
   wheel,
@@ -13,24 +13,20 @@
 
 buildPythonPackage rec {
   pname = "nuitka";
-  version = "2.1.4";
+  version = "2.7.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Nuitka";
     repo = "Nuitka";
     rev = version;
-    hash = "sha256-bV5zTYwhR/3dTM1Ij+aC6TbcPODZ5buwQi7xN8axZi0=";
+    hash = "sha256-o+rXk8Qh9SeBpuSppPBap9TL69gy9ag7PCArFSNSv7g=";
   };
-
-  # default lto off for darwin
-  patches = [ ./darwin-lto.patch ];
 
   build-system = [
     setuptools
     wheel
   ];
-  nativeCheckInputs = [ ccache ];
 
   dependencies = [
     ordered-set
@@ -40,7 +36,7 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
 
-    ${python3.interpreter} tests/basics/run_all.py search
+    ${python.interpreter} tests/basics/run_all.py search
 
     runHook postCheck
   '';
@@ -54,5 +50,7 @@ buildPythonPackage rec {
     description = "Python compiler with full language support and CPython compatibility";
     license = licenses.asl20;
     homepage = "https://nuitka.net/";
+    # never built on darwin since first introduction in nixpkgs
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

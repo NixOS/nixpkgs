@@ -1,78 +1,81 @@
 {
   lib,
   stdenv,
-  blis,
   buildPythonPackage,
-  callPackage,
-  catalogue,
+  fetchFromGitHub,
+
+  # build-system
   cymem,
-  cython_0,
-  fetchPypi,
-  hypothesis,
-  jinja2,
-  jsonschema,
-  langcodes,
-  mock,
+  cython,
   murmurhash,
   numpy,
-  packaging,
-  pathy,
   preshed,
+  thinc,
+
+  # dependencies
+  catalogue,
+  jinja2,
+  langcodes,
+  packaging,
   pydantic,
-  pytestCheckHook,
-  python,
-  pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   setuptools,
   spacy-legacy,
   spacy-loggers,
   srsly,
-  thinc,
   tqdm,
   typer,
-  typing-extensions,
   wasabi,
   weasel,
+
+  # optional-dependencies
+  spacy-transformers,
+  spacy-lookups-data,
+
+  # tests
+  pytestCheckHook,
+  hypothesis,
+  mock,
+
+  # passthru
   writeScript,
-  nix,
   git,
+  nix,
   nix-update,
+  callPackage,
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.7.4";
+  version = "3.8.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Ul8s7S5AdhViyMrOk+9qHm6MSD8nvVZLwbFfYI776Fs=";
+  src = fetchFromGitHub {
+    owner = "explosion";
+    repo = "spaCy";
+    tag = "release-v${version}";
+    hash = "sha256-mRra5/4W3DFVI/KbReTg2Ey9mOC6eQQ31/QDt7Pw0fU=";
   };
 
-  pythonRelaxDeps = [
-    "smart-open"
-    "typer"
+  build-system = [
+    cymem
+    cython
+    murmurhash
+    numpy
+    preshed
+    thinc
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    cython_0
-  ];
+  pythonRelaxDeps = [ "thinc" ];
 
-  propagatedBuildInputs = [
-    blis
+  dependencies = [
     catalogue
     cymem
     jinja2
-    jsonschema
     langcodes
     murmurhash
     numpy
     packaging
-    pathy
     preshed
     pydantic
     requests
@@ -85,7 +88,12 @@ buildPythonPackage rec {
     typer
     wasabi
     weasel
-  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ];
+
+  optional-dependencies = {
+    transformers = [ spacy-transformers ];
+    lookups = [ spacy-lookups-data ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -93,20 +101,23 @@ buildPythonPackage rec {
     mock
   ];
 
-  doCheck = true;
-
   # Fixes ModuleNotFoundError when running tests on Cythonized code. See #255262
   preCheck = ''
     cd $out
   '';
 
-  pytestFlagsArray = [ "-m 'slow'" ];
+  disabledTestMarks = [ "slow" ];
 
   disabledTests = [
     # touches network
     "test_download_compatibility"
     "test_validate_compatibility_table"
     "test_project_assets"
+    "test_find_available_port"
+
+    # Tests for presence of outdated (and thus missing) spacy models
+    # https://github.com/explosion/spaCy/issues/13856
+    "test_registry_entries"
   ];
 
   pythonImportsCheck = [ "spacy" ];
@@ -117,13 +128,13 @@ buildPythonPackage rec {
       set -eou pipefail
       PATH=${
         lib.makeBinPath [
-          nix
           git
+          nix
           nix-update
         ]
       }
 
-      nix-update python3Packages.spacy
+      nix-update python3Packages.spacy --version-regex 'release-v([0-9.]+)'
 
       # update spacy models as well
       echo | nix-shell maintainers/scripts/update.nix --argstr package python3Packages.spacy-models.en_core_web_sm
@@ -131,12 +142,14 @@ buildPythonPackage rec {
     tests.annotation = callPackage ./annotation-test { };
   };
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true; # needed for test_find_available_port
+
+  meta = {
     description = "Industrial-strength Natural Language Processing (NLP)";
-    mainProgram = "spacy";
     homepage = "https://github.com/explosion/spaCy";
-    changelog = "https://github.com/explosion/spaCy/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/explosion/spaCy/releases/tag/release-v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sarahec ];
+    mainProgram = "spacy";
   };
 }

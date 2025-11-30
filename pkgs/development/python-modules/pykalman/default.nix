@@ -1,43 +1,41 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   numpy,
   scipy,
+  scikit-base,
   pytestCheckHook,
-  nose,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pykalman";
-  version = "0.9.7";
-  format = "setuptools";
+  version = "0.10.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-E1d5IAOTxrNwIhmQ9zFnQEcvVBNG6SEdEWMOLC2PuKA=";
+  src = fetchFromGitHub {
+    owner = "pykalman";
+    repo = "pykalman";
+    tag = "v${version}";
+    hash = "sha256-SMK0b2twlHk4sbNfwWafqDYXlhrZhgpaC1nhv2XQaqo=";
   };
 
-  patches = [
-    # https://github.com/pykalman/pykalman/issues/83
-    ./fix-masked-arrays-not-supported.patch
-    # python 3.11 issues fix: https://github.com/pykalman/pykalman/pull/101
-    ./fix-p311-issues.patch
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
+    scikit-base
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    nose
-  ];
+  pythonRelaxDeps = [ "scikit-base" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "pykalman" ];
 
   meta = with lib; {
-    description = "An implementation of the Kalman Filter, Kalman Smoother, and EM algorithm in Python";
+    description = "Implementation of the Kalman Filter, Kalman Smoother, and EM algorithm in Python";
     homepage = "https://github.com/pykalman/pykalman";
     license = licenses.bsd2;
     maintainers = with maintainers; [ mbalatsko ];

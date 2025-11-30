@@ -14,31 +14,35 @@
   pythonOlder,
   requests,
   setuptools,
+  setuptools-scm,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "cryptolyzer";
-  version = "0.12.3";
+  version = "1.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    pname = "CryptoLyzer";
-    inherit version;
-    hash = "sha256-UdM0+PkO3K4XshcqaDkEKry6Spny9KMZAHiADxxth+c=";
+    inherit pname version;
+    hash = "sha256-rRiRaXONLMNirKsK+QZWMSvaGeSLrHN9BpM8dhxoaxY=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt  \
-      --replace-warn "attrs>=20.3.0,<22.0.1" "attrs>=20.3.0" \
-      --replace-warn "bs4" "beautifulsoup4"
-  '';
+  patches = [
+    # https://gitlab.com/coroner/cryptolyzer/-/merge_requests/4
+    ./fix-dirs-exclude.patch
+  ];
 
-  nativeBuildInputs = [ setuptools ];
+  pythonRemoveDeps = [ "bs4" ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     attrs
     beautifulsoup4
     certvalidator
@@ -55,13 +59,23 @@ buildPythonPackage rec {
   # Tests require networking
   doCheck = false;
 
+  postInstall = ''
+    find $out -name "__pycache__" -type d | xargs rm -rv
+
+    # Prevent creating more binary byte code later (e.g. during
+    # pythonImportsCheck)
+    export PYTHONDONTWRITEBYTECODE=1
+  '';
+
   pythonImportsCheck = [ "cryptolyzer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cryptographic protocol analyzer";
     homepage = "https://gitlab.com/coroner/cryptolyzer";
     changelog = "https://gitlab.com/coroner/cryptolyzer/-/blob/v${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ kranzes ];
+    license = lib.licenses.mpl20;
+    mainProgram = "cryptolyze";
+    maintainers = with lib.maintainers; [ kranzes ];
+    teams = with lib.teams; [ ngi ];
   };
 }

@@ -1,36 +1,41 @@
-{ lib, stdenv
-, fetchFromGitHub
-, python3Packages
-, sox
-, flac
-, lame
-, wrapQtAppsHook
-, ffmpeg
-, vorbis-tools
-, pulseaudio
-, nodejs
-, youtube-dl
-, opusTools
-, gst_all_1
-, enableSonos ? true
-, qtwayland
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3Packages,
+  sox,
+  flac,
+  lame,
+  wrapQtAppsHook,
+  ffmpeg,
+  vorbis-tools,
+  pulseaudio,
+  nodejs,
+  youtube-dl,
+  opusTools,
+  gst_all_1,
+  enableSonos ? true,
+  qtwayland,
 }:
-let packages = [
-  vorbis-tools
-  sox
-  flac
-  lame
-  opusTools
-  gst_all_1.gstreamer
-  nodejs
-  ffmpeg
-  youtube-dl
-] ++ lib.optionals stdenv.isLinux [ pulseaudio ];
+let
+  packages = [
+    vorbis-tools
+    sox
+    flac
+    lame
+    opusTools
+    gst_all_1.gstreamer
+    nodejs
+    ffmpeg
+    youtube-dl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pulseaudio ];
 
 in
 python3Packages.buildPythonApplication {
   pname = "mkchromecast-unstable";
   version = "2022-10-31";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "muammar";
@@ -39,16 +44,21 @@ python3Packages.buildPythonApplication {
     sha256 = "sha256-dxsIcBPrZaXlsfzOEXhYj2qoK5LRducJG2ggMrMMl9Y=";
   };
 
-  buildInputs = lib.optional stdenv.isLinux qtwayland;
-  propagatedBuildInputs = with python3Packages; ([
-    pychromecast
-    psutil
-    mutagen
-    flask
-    netifaces
-    requests
-    pyqt5
-  ] ++ lib.optionals enableSonos [ soco ]);
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux qtwayland;
+  propagatedBuildInputs =
+    with python3Packages;
+    (
+      [
+        pychromecast
+        psutil
+        mutagen
+        flask
+        netifaces
+        requests
+        pyqt5
+      ]
+      ++ lib.optionals enableSonos [ soco ]
+    );
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -72,7 +82,8 @@ python3Packages.buildPythonApplication {
   postInstall = ''
     substituteInPlace $out/${python3Packages.python.sitePackages}/mkchromecast/video.py \
       --replace '/usr/share/mkchromecast/nodejs/' '${placeholder "out"}/share/mkchromecast/nodejs/'
-  '' + lib.optionalString stdenv.isDarwin ''
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install -Dm 755 -t $out/bin bin/audiodevice
     substituteInPlace $out/${python3Packages.python.sitePackages}/mkchromecast/audio_devices.py \
       --replace './bin/audiodevice' '${placeholder "out"}/bin/audiodevice'

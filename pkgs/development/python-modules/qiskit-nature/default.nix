@@ -11,7 +11,7 @@
   h5py,
   numpy,
   psutil,
-  qiskit-terra,
+  qiskit,
   rustworkx,
   scikit-learn,
   scipy,
@@ -44,11 +44,12 @@ buildPythonPackage rec {
     h5py
     numpy
     psutil
-    qiskit-terra
+    qiskit
     rustworkx
     scikit-learn
     scipy
-  ] ++ lib.optional withPyscf pyscf;
+  ]
+  ++ lib.optional withPyscf pyscf;
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -59,13 +60,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qiskit_nature" ];
 
-  pytestFlagsArray = [ "--durations=10" ];
+  pytestFlags = [ "--durations=10" ];
 
   disabledTests = [
     "test_two_qubit_reduction" # failure cause unclear
   ];
 
   meta = with lib; {
+    # broken because it depends on qiskit-algorithms which is not yet packaged in nixpkgs
+    broken = true;
     description = "Software for developing quantum computing programs";
     homepage = "https://qiskit.org";
     downloadPage = "https://github.com/QISKit/qiskit-nature/releases";
@@ -75,6 +78,6 @@ buildPythonPackage rec {
       binaryNativeCode # drivers/gaussiand/gauopen/*.so
     ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }

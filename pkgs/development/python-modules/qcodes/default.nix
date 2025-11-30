@@ -1,73 +1,87 @@
 {
   lib,
-  broadbean,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  versioningit,
+
+  # dependencies
+  broadbean,
   cf-xarray,
   dask,
-  deepdiff,
-  fetchFromGitHub,
   h5netcdf,
   h5py,
-  hypothesis,
-  importlib-metadata,
   ipykernel,
   ipython,
   ipywidgets,
   jsonschema,
-  lxml,
+  libcst,
   matplotlib,
   numpy,
-  opencensus,
-  opencensus-ext-azure,
   opentelemetry-api,
   packaging,
   pandas,
   pillow,
-  pip,
-  pytest-asyncio,
-  pytest-mock,
-  pytest-rerunfailures,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
+  pyarrow,
   pyvisa,
-  pyvisa-sim,
-  rsa,
   ruamel-yaml,
-  setuptools,
-  sphinx,
   tabulate,
   tqdm,
   typing-extensions,
   uncertainties,
-  versioningit,
   websockets,
-  wheel,
   wrapt,
   xarray,
+
+  # optional-dependencies
+  furo,
+  jinja2,
+  nbsphinx,
+  pyvisa-sim,
+  scipy,
+  sphinx,
+  sphinx-issues,
+  towncrier,
+
+  # tests
+  deepdiff,
+  hypothesis,
+  lxml,
+  pip,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytest-mock,
+  pytest-rerunfailures,
+  pytest-xdist,
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.44.1";
+  version = "0.53.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "Qcodes";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AggAVq/yfJUZRwoQb29QoIbVIAdV3solKCjivqucLZk=";
+    tag = "v${version}";
+    hash = "sha256-uXVL25U7szJF/v7OEsB9Ww1h6ziBxsMJdqhZG5qn0VU=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'default-version = "0.0"' 'default-version = "${version}"'
+  '';
+
+  build-system = [
     setuptools
     versioningit
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     broadbean
     cf-xarray
     dask
@@ -79,14 +93,12 @@ buildPythonPackage rec {
     jsonschema
     matplotlib
     numpy
-    opencensus
-    opencensus-ext-azure
     opentelemetry-api
     packaging
     pandas
     pillow
+    pyarrow
     pyvisa
-    rsa
     ruamel-yaml
     tabulate
     tqdm
@@ -95,31 +107,58 @@ buildPythonPackage rec {
     websockets
     wrapt
     xarray
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
+
+  optional-dependencies = {
+    docs = [
+      # autodocsumm
+      furo
+      jinja2
+      nbsphinx
+      pyvisa-sim
+      # qcodes-loop
+      scipy
+      sphinx
+      # sphinx-favicon
+      sphinx-issues
+      # sphinx-jsonschema
+      # sphinxcontrib-towncrier
+      towncrier
+    ];
+    loop = [
+      # qcodes-loop
+    ];
+    refactor = [
+      libcst
+    ];
+    zurichinstruments = [
+      # zhinst-qcodes
+    ];
+  };
 
   nativeCheckInputs = [
     deepdiff
     hypothesis
+    libcst
     lxml
     pip
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
     pytest-rerunfailures
     pytest-xdist
     pytestCheckHook
     pyvisa-sim
     sphinx
+    writableTmpDirAsHomeHook
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-v"
-    "-n"
-    "$NIX_BUILD_CORES"
-    # Follow upstream with settings
-    "-m 'not serial'"
     "--hypothesis-profile ci"
+    # Follow upstream with settings
     "--durations=20"
   ];
 
@@ -130,10 +169,16 @@ buildPythonPackage rec {
     "tests/dataset/test_dataset_basic.py"
   ];
 
+  disabledTestMarks = [
+    "serial"
+  ];
+
   disabledTests = [
     # Tests are time-sensitive and power-consuming
     # Those tests fails repeatably and are flaky
+    "test_access_channels_by_name"
     "test_access_channels_by_slice"
+    "test_access_channels_by_tuple"
     "test_aggregator"
     "test_datasaver"
     "test_do1d_additional_setpoints_shape"
@@ -141,7 +186,9 @@ buildPythonPackage rec {
     "test_field_limits"
     "test_get_array_in_scalar_param_data"
     "test_get_parameter_data"
+    "test_measured"
     "test_ramp_safely"
+    "test_ramp_scaled"
 
     # more flaky tests
     # https://github.com/microsoft/Qcodes/issues/5551
@@ -151,21 +198,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qcodes" ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'default-version = "0.0"' 'default-version = "${version}"'
-  '';
-
-  postInstall = ''
-    export HOME="$TMPDIR"
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Python-based data acquisition framework";
-    changelog = "https://github.com/QCoDeS/Qcodes/releases/tag/v${version}";
+    changelog = "https://github.com/QCoDeS/Qcodes/releases/tag/${src.tag}";
     downloadPage = "https://github.com/QCoDeS/Qcodes";
     homepage = "https://qcodes.github.io/Qcodes/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ evilmav ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ evilmav ];
   };
 }

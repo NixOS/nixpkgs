@@ -1,132 +1,69 @@
-{ stdenv
-, lib
-, fetchurl
-, zlib
-, pkg-config
-, autoreconfHook
-, xz
-, libintl
-, python
-, gettext
-, ncurses
-, findXMLCatalogs
-, libiconv
-# Python limits cross-compilation to an allowlist of host OSes.
-# https://github.com/python/cpython/blob/dfad678d7024ab86d265d84ed45999e031a03691/configure.ac#L534-L562
-, pythonSupport ? enableShared &&
-    (stdenv.hostPlatform == stdenv.buildPlatform || stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isWasi)
-, icuSupport ? false
-, icu
-, enableShared ? !stdenv.hostPlatform.isMinGW && !stdenv.hostPlatform.isStatic
-, enableStatic ? !enableShared
-, gnome
-, testers
+{
+  lib,
+  callPackage,
+  fetchFromGitLab,
+  fetchpatch,
 }:
 
-stdenv.mkDerivation (finalAttrs: rec {
-  pname = "libxml2";
-  version = "2.12.7";
+let
+  packages = {
+    libxml2_13 = callPackage ./common.nix {
+      version = "2.13.8";
+      src = fetchFromGitLab {
+        domain = "gitlab.gnome.org";
+        owner = "GNOME";
+        repo = "libxml2";
+        tag = "v${packages.libxml2_13.version}";
+        hash = "sha256-acemyYs1yRSTSLH7YCGxnQzrEDm8YPTK4HtisC36LsY=";
+      };
+      extraPatches = [
+        # same as upstream patch but fixed conflict and added required import:
+        # https://gitlab.gnome.org/GNOME/libxml2/-/commit/acbbeef9f5dcdcc901c5f3fa14d583ef8cfd22f0.diff
+        ./CVE-2025-6021.patch
+        (fetchpatch {
+          name = "CVE-2025-49794-49796.patch";
+          url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/f7ebc65f05bffded58d1e1b2138eb124c2e44f21.patch";
+          hash = "sha256-p5Vc/lkakHKsxuFNnCQtFczjqFJBeLnCwIwv2GnrQco=";
+        })
+        (fetchpatch {
+          name = "CVE-2025-49795.patch";
+          url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/c24909ba2601848825b49a60f988222da3019667.patch";
+          hash = "sha256-vICVSb+X89TTE4QY92/v/6fRk77Hy9vzEWWsADHqMlk=";
+          excludes = [ "runtest.c" ]; # tests were rewritten in C and are on schematron for 2.13.x, meaning this does not apply
+        })
+        # same as upstream, fixed conflicts
+        # https://gitlab.gnome.org/GNOME/libxml2/-/commit/c340e419505cf4bf1d9ed7019a87cc00ec200434
+        ./CVE-2025-6170.patch
 
-  outputs = [ "bin" "dev" "out" "doc" ]
-    ++ lib.optional pythonSupport "py"
-    ++ lib.optional (enableStatic && enableShared) "static";
-  outputMan = "bin";
-
-  src = fetchurl {
-    url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
-    hash = "sha256-JK54/xNjqXPm2L66lBp5RdoqwFbhm1OVautpJ/1s+1Y=";
-  };
-
-  strictDeps = true;
-
-  nativeBuildInputs = [
-    pkg-config
-    autoreconfHook
-  ];
-
-  buildInputs = lib.optionals pythonSupport [
-    python
-  ] ++ lib.optionals (pythonSupport && python?isPy2 && python.isPy2) [
-    gettext
-  ] ++ lib.optionals (pythonSupport && python?isPy3 && python.isPy3) [
-    ncurses
-  ] ++ lib.optionals (stdenv.isDarwin && pythonSupport && python?isPy2 && python.isPy2) [
-    libintl
-  ] ++ lib.optionals stdenv.isFreeBSD [
-    # Libxml2 has an optional dependency on liblzma.  However, on impure
-    # platforms, it may end up using that from /usr/lib, and thus lack a
-    # RUNPATH for that, leading to undefined references for its users.
-    xz
-  ];
-
-  propagatedBuildInputs = [
-    zlib
-    findXMLCatalogs
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-  ] ++ lib.optionals icuSupport [
-    icu
-  ];
-
-  configureFlags = [
-    "--exec-prefix=${placeholder "dev"}"
-    (lib.enableFeature enableStatic "static")
-    (lib.enableFeature enableShared "shared")
-    (lib.withFeature icuSupport "icu")
-    (lib.withFeature pythonSupport "python")
-    (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
-  ];
-
-  installFlags = lib.optionals pythonSupport [
-    "pythondir=\"${placeholder "py"}/${python.sitePackages}\""
-    "pyexecdir=\"${placeholder "py"}/${python.sitePackages}\""
-  ];
-
-  enableParallelBuilding = true;
-
-  doCheck =
-    (stdenv.hostPlatform == stdenv.buildPlatform) &&
-    stdenv.hostPlatform.libc != "musl";
-  preCheck = lib.optional stdenv.isDarwin ''
-    export DYLD_LIBRARY_PATH="$PWD/.libs:$DYLD_LIBRARY_PATH"
-  '';
-
-  preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
-    MACOSX_DEPLOYMENT_TARGET=10.16
-  '';
-
-  preInstall = lib.optionalString pythonSupport ''
-    substituteInPlace python/libxml2mod.la --replace "$dev/${python.sitePackages}" "$py/${python.sitePackages}"
-  '';
-
-  postFixup = ''
-    moveToOutput bin/xml2-config "$dev"
-    moveToOutput lib/xml2Conf.sh "$dev"
-  '' + lib.optionalString (enableStatic && enableShared) ''
-    moveToOutput lib/libxml2.a "$static"
-  '';
-
-  passthru = {
-    inherit version;
-    pythonSupport = pythonSupport;
-
-    updateScript = gnome.updateScript {
-      packageName = pname;
-      versionPolicy = "none";
+        # Unmerged ABI-breaking patch required to fix the following security issues:
+        # - https://gitlab.gnome.org/GNOME/libxslt/-/issues/139
+        # - https://gitlab.gnome.org/GNOME/libxslt/-/issues/140
+        # See also https://gitlab.gnome.org/GNOME/libxml2/-/issues/906
+        # Source: https://github.com/chromium/chromium/blob/4fb4ae8ce3daa399c3d8ca67f2dfb9deffcc7007/third_party/libxml/chromium/xml-attr-extra.patch
+        ./xml-attr-extra.patch
+      ];
+      freezeUpdateScript = true;
+      extraMeta = {
+        maintainers = with lib.maintainers; [
+          gepbird
+        ];
+      };
     };
-    tests = {
-      pkg-config = testers.hasPkgConfigModules {
-        package = finalAttrs.finalPackage;
+    libxml2 = callPackage ./common.nix {
+      version = "2.15.1";
+      src = fetchFromGitLab {
+        domain = "gitlab.gnome.org";
+        owner = "GNOME";
+        repo = "libxml2";
+        tag = "v${packages.libxml2.version}";
+        hash = "sha256-FUfYMq5xT2i88JdIw9OtSofraUL3yjsyOVund+mfJKQ=";
+      };
+      extraMeta = {
+        maintainers = with lib.maintainers; [
+          jtojnar
+        ];
       };
     };
   };
-
-  meta = with lib; {
-    homepage = "https://gitlab.gnome.org/GNOME/libxml2";
-    description = "XML parsing library for C";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ eelco jtojnar ];
-    pkgConfigModules = [ "libxml-2.0" ];
-  };
-})
+in
+packages

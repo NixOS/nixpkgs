@@ -1,24 +1,26 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, hicolor-icon-theme
-, gtk3
-, xcursorgen
-, librsvg
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  adwaita-icon-theme,
+  hicolor-icon-theme,
+  gtk3,
+  xcursorgen,
+  librsvg,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "elementary-icon-theme";
-  version = "8.0.0";
+  version = "8.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "icons";
-    rev = version;
-    sha256 = "sha256-EPmQgE33+HBI78SlCBV3WlyLCP6AggvqsQa7gZuOMRM=";
+    tag = version;
+    hash = "sha256-ntv+efkyfB66HL3tWEkiOj+MFRGqhfMo1/FUO2fIqBM=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +32,7 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
+    adwaita-icon-theme
     hicolor-icon-theme
   ];
 
@@ -54,6 +57,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/elementary/icons";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

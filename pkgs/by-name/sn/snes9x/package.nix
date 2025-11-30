@@ -5,6 +5,7 @@
   cmake,
   fetchFromGitHub,
   gtkmm3,
+  libGLX,
   libX11,
   libXdmcp,
   libXext,
@@ -31,14 +32,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snes9x" + lib.optionalString withGtk "-gtk";
-  version = "1.62.3-unstable-2024-04-22";
+  version = "1.63";
 
   src = fetchFromGitHub {
     owner = "snes9xgit";
     repo = "snes9x";
-    rev = "582128bce7ccf4e3cf7848ae9f6a729a1ebad4c4";
+    tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-fJ1g/L7oA9bhEawTsWjfLl1dDIKEGI+pcpWQCTutyR8=";
+    hash = "sha256-INMVyB3alwmsApO7ToAaUWgh7jlg2MeLxqHCEnUO88U=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     minizip
     zlib
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     pulseaudio
     libselinux
@@ -80,12 +81,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "format" ];
 
-  configureFlags = lib.optionals stdenv.hostPlatform.sse4_1Support [
-    "--enable-sse41"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.avx2Support [
-    "--enable-avx2"
-  ];
+  configureFlags =
+    lib.optionals stdenv.hostPlatform.sse4_1Support [
+      "--enable-sse41"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.avx2Support [
+      "--enable-avx2"
+    ];
+
+  postPatch = lib.optionalString withGtk ''
+    # Please remove after snes9x > 1.63.  Fixed by upstream:
+    # https://github.com/snes9xgit/snes9x/commit/a4b4b98fffbde417ad550480021db89f18f11a5d.patch
+    substituteInPlace external/SPIRV-Cross/CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 3.0)' 'cmake_minimum_required(VERSION 3.5)'
+
+    substituteInPlace external/glad/src/egl.c \
+      --replace-fail libEGL.so.1 "${lib.getLib libGLX}/lib/libEGL.so.1"
+    substituteInPlace external/glad/src/glx.c \
+      --replace-fail libGL.so.1 ${lib.getLib libGLX}/lib/libGL.so.1
+  '';
 
   preConfigure = ''
     cd ${if withGtk then "gtk" else "unix"}
@@ -95,16 +109,19 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm755 snes9x -t "$out/bin/"
-    install -Dm644 snes9x.conf.default -t "$out/share/doc/${finalAttrs.pname}/"
+    install -Dm644 snes9x.conf.default -t "$out/share/doc/snes9x/"
     install -Dm644 ../docs/{control-inputs,controls,snapshots}.txt -t \
-      "$out/share/doc/${finalAttrs.pname}/"
+      "$out/share/doc/snes9x/"
 
     runHook postInstall
   '';
 
-  meta = let
-    interface = if withGtk then "GTK" else "X11";
-  in
+  enableParallelBuilding = true;
+
+  meta =
+    let
+      interface = if withGtk then "GTK" else "X11";
+    in
     {
       homepage = "https://www.snes9x.com";
       description = "Super Nintendo Entertainment System (SNES) emulator, ${interface} version";
@@ -117,15 +134,15 @@ stdenv.mkDerivation (finalAttrs: {
         Version build with ${interface} interface.
       '';
       license = lib.licenses.unfreeRedistributable // {
-        url = "https://github.com/snes9xgit/snes9x/blob/${finalAttrs.src.rev}/LICENSE";
+        url = "https://github.com/snes9xgit/snes9x/blob/${finalAttrs.src.tag}/LICENSE";
       };
       mainProgram = "snes9x";
       maintainers = with lib.maintainers; [
-        AndersonTorres
         qknight
         thiagokokada
+        sugar700
       ];
       platforms = lib.platforms.unix;
-      broken = (withGtk && stdenv.isDarwin);
+      broken = (withGtk && stdenv.hostPlatform.isDarwin);
     };
 })

@@ -10,19 +10,18 @@
 
 buildPythonPackage rec {
   pname = "lzallright";
-  version = "0.2.3";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "vlaci";
-    repo = pname;
+    repo = "lzallright";
     rev = "v${version}";
-    hash = "sha256-Zzif6WtecgAkNmml0kt0Z+Ewx0L30ahr+kwzYR5aUAM=";
+    hash = "sha256-bnGnx+CKcneBWd5tpYWxEPp5f3hvGxM+8QcD2NKX4Tw=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-+pV9q2QM6qFA1a5E10OAsE7KJEUsTiEiU1KqO4/2rFw=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-RxR1EFssGCp7etTdh56LSEfDQsx8uPrQTVqTsDVvkHo=";
   };
 
   format = "pyproject";
@@ -32,7 +31,7 @@ buildPythonPackage rec {
     maturinBuildHook
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   pythonImportsCheck = [ "lzallright" ];
 

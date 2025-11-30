@@ -2,28 +2,37 @@
   lib,
   agate,
   buildPythonPackage,
+  fetchFromGitHub,
+  dbt-adapters,
+  dbt-common,
   dbt-core,
+  hatchling,
   psycopg2,
   pythonOlder,
-  setuptools,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "dbt-postgres";
+  version = "1.9.0";
   pyproject = true;
 
-  inherit (dbt-core) version src;
+  disabled = pythonOlder "3.9";
 
-  disabled = pythonOlder "3.7";
+  src = fetchFromGitHub {
+    owner = "dbt-labs";
+    repo = "dbt-postgres";
+    tag = "v${version}";
+    hash = "sha256-lywWf78rluX17D5bcfehHd7X18tAdw3HZ65v440jETc=";
+  };
 
-  sourceRoot = "${dbt-core.src.name}/plugins/postgres";
+  build-system = [ hatchling ];
 
-  env.DBT_PSYCOPG2_NAME = "psycopg2";
-
-  build-system = [ setuptools ];
+  pythonRemoveDeps = [ "psycopg2-binary" ];
 
   dependencies = [
     agate
+    dbt-adapters
+    dbt-common
     dbt-core
     psycopg2
   ];

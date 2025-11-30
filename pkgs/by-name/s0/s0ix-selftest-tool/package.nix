@@ -19,7 +19,7 @@
 }:
 
 let
-  deps = [
+  deps = lib.makeBinPath [
     acpica-tools
     bc
     coreutils
@@ -36,18 +36,18 @@ let
 in
 stdenv.mkDerivation {
   pname = "s0ix-selftest-tool";
-  version = "0-unstable-2024-05-16";
+  version = "0-unstable-2025-07-01";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "S0ixSelftestTool";
-    rev = "846e14ab86faaca2fe600c434191d33b9fc75632";
-    hash = "sha256-PlsxGkr20pbUunRSa7PXdLLUlnBAgARRC/HpAkofMds=";
+    rev = "2707d34bf8130feb21e5902efbdecbd2dc915148";
+    hash = "sha256-2quAiVYt6elULJTqMFhnciNWork6ViTWcPTRJQfvu+I=";
   };
 
   # don't use the bundled turbostat binary
   postPatch = ''
-    substituteInPlace s0ix-selftest-tool.sh --replace '"$DIR"/turbostat' 'turbostat'
+    substituteInPlace s0ix-selftest-tool.sh --replace-fail '"$DIR"/turbostat' 'turbostat'
   '';
 
   nativeBuildInputs = [ makeWrapper ];
@@ -57,7 +57,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
     install -Dm555 s0ix-selftest-tool.sh "$out/bin/s0ix-selftest-tool"
-    wrapProgram "$out/bin/s0ix-selftest-tool" --prefix PATH : ${lib.escapeShellArg deps}
+    wrapProgram "$out/bin/s0ix-selftest-tool" --prefix PATH : ${deps}
     runHook postInstall
   '';
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/intel/S0ixSelftestTool";
-    description = "A tool for testing the S2idle path CPU Package C-state and S0ix failures";
+    description = "Tool for testing the S2idle path CPU Package C-state and S0ix failures";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ adamcstephens ];

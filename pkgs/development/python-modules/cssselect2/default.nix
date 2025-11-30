@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "cssselect2";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HM2YTauJ/GiVUEOspOGwPgzynK2YgPbijjunp0sUqlo=";
+    hash = "sha256-dnT/uVSjtGFiOSruKjoK7bLhTs+Z/MKGRJAPTm4+nTo=";
   };
 
   postPatch = ''
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Kozea/cssselect2";
     changelog = "https://github.com/Kozea/cssselect2/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

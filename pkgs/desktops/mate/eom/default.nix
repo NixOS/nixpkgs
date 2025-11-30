@@ -1,22 +1,24 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, exempi
-, lcms2
-, libexif
-, libjpeg
-, librsvg
-, libxml2
-, libpeas
-, shared-mime-info
-, gtk3
-, mate-desktop
-, hicolor-icon-theme
-, wrapGAppsHook3
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  gettext,
+  itstool,
+  exempi,
+  lcms2,
+  libexif,
+  libjpeg,
+  librsvg,
+  libxml2,
+  libpeas,
+  shared-mime-info,
+  gtk3,
+  mate-desktop,
+  hicolor-icon-theme,
+  wrapGAppsHook3,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,6 +29,14 @@ stdenv.mkDerivation rec {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "mgHKsplaGoxyWMhl6uXxgu1HMMRGcq/cOgfkI+3VOrw=";
   };
+
+  patches = [
+    # Switch to girepository-2.0
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/eom/raw/84b45dc6302f378926be390d39a7cca3ec4f26ea/f/libpeas1_pygobject352.patch";
+      hash = "sha256-HcwWXAnVzz5uuAz8Mljci2FA72TZJTD28qLvczXVtZU=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -54,11 +64,11 @@ stdenv.mkDerivation rec {
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
-    description = "An image viewing and cataloging program for the MATE desktop";
+    description = "Image viewing and cataloging program for the MATE desktop";
     mainProgram = "eom";
     homepage = "https://mate-desktop.org";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

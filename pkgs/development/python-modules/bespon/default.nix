@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bespon" ];
   meta = with lib; {
-    description = "Encodes and decodes data in the BespON format.";
+    description = "Encodes and decodes data in the BespON format";
     homepage = "https://github.com/gpoore/bespon_py";
     license = licenses.bsd3;
     maintainers = with maintainers; [ synthetica ];

@@ -1,10 +1,9 @@
-{ lib
-, buildDunePackage
-, fetchFromGitHub
-, pkg-config
-, dune-configurator
-, re
-, xmlplaylist
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  re,
+  xmlplaylist,
 }:
 
 buildDunePackage rec {

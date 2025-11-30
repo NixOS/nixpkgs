@@ -7,14 +7,15 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.4.0";
+  version = "1.6.0";
   format = "setuptools";
   pname = "azure-mgmt-core";
 
   src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    hash = "sha256-0ZUgg0AJT5jlpmYbeBzeb2oFHnnOMXyqvY/5cDCps64=";
+    pname = "azure_mgmt_core";
+    inherit version;
+    extension = "tar.gz";
+    hash = "sha256-smIyr4V7Ah5h2BPZ9K5TBGUlXLELPd6UWtN0P3pY55w=";
   };
 
   propagatedBuildInputs = [
@@ -36,6 +37,6 @@ buildPythonPackage rec {
     description = "Microsoft Azure Management Core Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

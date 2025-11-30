@@ -1,12 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  case,
   celery,
   cron-descriptor,
   django-timezone-field,
   ephem,
-  fetchPypi,
+  fetchFromGitHub,
   pytest-django,
   pytest-timeout,
   pytestCheckHook,
@@ -18,19 +17,23 @@
 
 buildPythonPackage rec {
   pname = "django-celery-beat";
-  version = "2.6.0";
+  version = "2.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-91stEpcx8SFL6Dg+GPrmv+rNtV3/shFs6EkiLAEG+a0=";
+  src = fetchFromGitHub {
+    owner = "celery";
+    repo = "django-celery-beat";
+    tag = "v${version}";
+    hash = "sha256-pakOpch5r2ug0UDSqEU34qr4Tz1/mkuFiHW+IOUuGcc=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  pythonRelaxDeps = [ "django" ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cron-descriptor
     python-crontab
     celery
@@ -42,7 +45,6 @@ buildPythonPackage rec {
     ephem
     pytest-timeout
     pytest-django
-    case
     pytestCheckHook
   ];
 
@@ -56,7 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Celery Periodic Tasks backed by the Django ORM";
     homepage = "https://github.com/celery/django-celery-beat";
-    changelog = "https://github.com/celery/django-celery-beat/releases/tag/v${version}";
+    changelog = "https://github.com/celery/django-celery-beat/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ onny ];
   };

@@ -1,27 +1,30 @@
-{ python3Packages
-, fetchFromGitHub
-, qt5
-, lib
+{
+  python3Packages,
+  qt5,
+  lib,
+  opensnitch,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
+  pyproject = true;
   pname = "opensnitch-ui";
-  version = "1.6.5.1";
 
-  src = fetchFromGitHub {
-    owner = "evilsocket";
-    repo = "opensnitch";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-IVrAAHzLS7A7cYhRk+IUx8/5TGKeqC7M/7iXOpPe2ZA=";
-  };
+  inherit (opensnitch) src version;
+  sourceRoot = "${opensnitch.src.name}/ui";
+
+  patches = [
+    # https://github.com/evilsocket/opensnitch/pull/1413
+    # unicode-slugify has failing tests and is overall unmaintained and broken.
+    # python-slugify is a preferrable replacement
+    ./use_python_slugify.patch
+  ];
 
   postPatch = ''
-    substituteInPlace ui/opensnitch/utils/__init__.py \
-      --replace /usr/lib/python3/dist-packages/data ${python3Packages.pyasn}/${python3Packages.python.sitePackages}/pyasn/data
+    substituteInPlace opensnitch/utils/__init__.py \
+      --replace-fail /usr/lib/python3/dist-packages/data ${python3Packages.pyasn}/${python3Packages.python.sitePackages}/pyasn/data
   '';
 
   nativeBuildInputs = [
-    python3Packages.pyqt5
     qt5.wrapQtAppsHook
   ];
 
@@ -29,14 +32,20 @@ python3Packages.buildPythonApplication rec {
     qt5.qtwayland
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+    pyqt5
+  ];
+
+  dependencies = with python3Packages; [
     grpcio-tools
     notify2
+    packaging
     pyasn
     pyinotify
     pyqt5
     qt-material
-    unicode-slugify
+    python-slugify
     unidecode
   ];
 
@@ -44,11 +53,7 @@ python3Packages.buildPythonApplication rec {
     make -C ../proto ../ui/opensnitch/ui_pb2.py
     # sourced from ui/Makefile
     pyrcc5 -o opensnitch/resources_rc.py opensnitch/res/resources.qrc
-    sed -i 's/^import ui_pb2/from . import ui_pb2/' opensnitch/ui_pb2*
-  '';
-
-  preConfigure = ''
-    cd ui
+    sed -i 's/^import ui_pb2/from . import ui_pb2/' opensnitch/proto/ui_pb2*
   '';
 
   preCheck = ''
@@ -65,12 +70,17 @@ python3Packages.buildPythonApplication rec {
   # All tests are sandbox-incompatible and disabled for now
   doCheck = false;
 
-  meta = with lib; {
-    description = "An application firewall";
+  pythonImportsCheck = [ "opensnitch" ];
+
+  meta = {
+    description = "Application firewall";
     mainProgram = "opensnitch-ui";
     homepage = "https://github.com/evilsocket/opensnitch/wiki";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ onny ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      onny
+      grimmauld
+    ];
+    platforms = lib.platforms.linux;
   };
 }

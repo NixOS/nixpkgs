@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/mentalisttraceur/python-reprshed";
-    description = "A toolshed for writing great __repr__ methods quickly and easily";
+    description = "Toolshed for writing great __repr__ methods quickly and easily";
     license = licenses.bsd0;
     maintainers = with maintainers; [ netali ];
   };

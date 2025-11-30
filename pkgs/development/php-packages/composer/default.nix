@@ -7,21 +7,29 @@
   unzip,
   _7zz,
   xz,
-  git,
+  gitMinimal,
   curl,
   cacert,
   makeBinaryWrapper,
+  versionCheckHook,
 }:
+
+/*
+    XXX IMPORTANT
+
+    Make sure to check if the `vendorHash` of `buildComposerProject2` changes when updating!
+    See https://github.com/NixOS/nixpkgs/issues/451395
+*/
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "composer";
-  version = "2.7.6";
+  version = "2.8.12";
 
   # Hash used by ../../../build-support/php/pkgs/composer-phar.nix to
   # use together with the version from this package to keep the
   # bootstrap phar file up-to-date together with the end user composer
   # package.
-  passthru.pharHash = "sha256-KdyaGe8zU12wYbMRgLKoM6fPjSz0FFszovg1BId7ugg=";
+  passthru.pharHash = "sha256-9EbqcZcIu4X8v07xje9dBRXx+bTXA/bYIMnBZW4QovI=";
 
   composer = callPackage ../../../build-support/php/pkgs/composer-phar.nix {
     inherit (finalAttrs) version;
@@ -31,8 +39,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "composer";
     repo = "composer";
-    rev = finalAttrs.version;
-    hash = "sha256-LZwg3PR3zl07Nb6MS8oKkRfjLgqtT/c4sfUOzWE4S+U=";
+    tag = finalAttrs.version;
+    hash = "sha256-UHCsdJmoE7X2ZiiBAWfC004FUMqHyd0URt+v8R3hn70=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
@@ -86,7 +94,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-AyX57oV5Jf8U4B9tEl+b2Rnt/Igu7ockEap0wfN9b2Q=";
+    outputHash = "sha256-gnCPcp+c2dFL+9MJf0JRCQ5E95/dET1F0ZZAYj/rWq4=";
   };
 
   installPhase = ''
@@ -101,7 +109,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         lib.makeBinPath [
           _7zz
           curl
-          git
+          gitMinimal
           unzip
           xz
         ]
@@ -110,12 +118,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
   meta = {
     changelog = "https://github.com/composer/composer/releases/tag/${finalAttrs.version}";
     description = "Dependency Manager for PHP";
     homepage = "https://getcomposer.org/";
     license = lib.licenses.mit;
     mainProgram = "composer";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

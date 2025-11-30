@@ -14,8 +14,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "deepmind";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "jmp";
+    tag = "v${version}";
     hash = "sha256-+PefZU1209vvf1SfF8DXiTvKYEnZ4y8iiIr8yKikx9Y=";
   };
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "This library implements support for mixed precision training in JAX.";
+    description = "This library implements support for mixed precision training in JAX";
     homepage = "https://github.com/deepmind/jmp";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];

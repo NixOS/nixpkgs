@@ -1,43 +1,44 @@
-{ alsa-lib
-, at-spi2-core
-, atk
-, autoPatchelfHook
-, buildEnv
-, cairo
-, cups
-, dbus
-, expat
-, fetchurl
-, ffmpeg
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, gtk3
-, lib
-, libcap
-, libdrm
-, libGL
-, libnotify
-, libuuid
-, libxcb
-, libxkbcommon
-, makeWrapper
-, mesa
-, nspr
-, nss
-, pango
-, sdk ? false
-, sqlite
-, stdenv
-, systemd
-, udev
-, wrapGAppsHook3
-, xorg
+{
+  alsa-lib,
+  at-spi2-core,
+  atk,
+  autoPatchelfHook,
+  buildEnv,
+  buildPackages,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  fetchurl,
+  ffmpeg,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  lib,
+  libcap,
+  libdrm,
+  libGL,
+  libnotify,
+  libuuid,
+  libxcb,
+  libxkbcommon,
+  makeWrapper,
+  libgbm,
+  nspr,
+  nss,
+  pango,
+  sdk ? false,
+  sqlite,
+  stdenv,
+  systemd,
+  udev,
+  xorg,
 }:
 
 let
-  bits = if stdenv.hostPlatform.system == "x86_64-linux" then "x64" else "ia32";
+  bits = if stdenv.hostPlatform.is64bit then "x64" else "ia32";
 
   nwEnv = buildEnv {
     name = "nwjs-env";
@@ -59,7 +60,7 @@ let
       libGL
       libnotify
       libxkbcommon
-      mesa
+      libgbm
       nspr
       nss
       pango
@@ -84,66 +85,84 @@ let
       udev
     ];
 
-    extraOutputsToInstall = [ "lib" "out" ];
+    extraOutputsToInstall = [
+      "lib"
+      "out"
+    ];
   };
 
-  version = "0.87.0";
+  version = "0.102.1";
 in
 stdenv.mkDerivation {
   pname = "nwjs";
   inherit version;
 
   src =
-    let flavor = if sdk then "sdk-" else "";
-    in fetchurl {
+    let
+      flavor = if sdk then "sdk-" else "";
+    in
+    fetchurl {
       url = "https://dl.nwjs.io/v${version}/nwjs-${flavor}v${version}-linux-${bits}.tar.gz";
-      hash = {
-        "sdk-ia32" = "sha256-We4tSI8rQbEIoxNgTP/IkL/sD7GegVQDAtXUSY4AoB0=";
-        "sdk-x64" = "sha256-pWsNVHNm1gVAy9ofZ6g1Im5TpzxM2bmJ6RENa21N4qM=";
-        "ia32" = "sha256-ExxzzErT3GBI1yLYycojDkzKZ2VuvsOjaingQiK1Kww=";
-        "x64" = "sha256-tKm3aTlfPuevdjqFFEVU6nvIixoBDUcnJPFyO1PNRqE=";
-      }."${flavor + bits}";
+      # TODO: Write an update script to update all 4 hashes.
+      # nixpkgs-update: no auto update
+      hash =
+        {
+          "sdk-ia32" = "sha256-uzDbEq2vNC+fm95Co3lnQX7mrUXsIDWFoa0osWCn3EM=";
+          "sdk-x64" = "sha256-jWw5kXYGxu7oen8fK2Q58QPhiBRC6H2ibGXkeUFW2pI=";
+          "ia32" = "sha256-oODdSKNlOPSLD9vAqRwYcAgH6mumyOB5Fp6G9ifSgok=";
+          "x64" = "sha256-WhHV+xj2ngEz+i1ipBhwZD9b0EF/hdi8gMBZw5qYRGA=";
+        }
+        ."${flavor + bits}";
     };
 
   nativeBuildInputs = [
     autoPatchelfHook
-    (wrapGAppsHook3.override { inherit makeWrapper; })
+    # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
+    # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
+    (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
   ];
 
   buildInputs = [ nwEnv ];
-  appendRunpaths = map (pkg: (lib.getLib pkg) + "/lib") [ nwEnv stdenv.cc.libc stdenv.cc.cc ];
+  appendRunpaths = map (pkg: (lib.getLib pkg) + "/lib") [
+    nwEnv
+    stdenv.cc.libc
+    stdenv.cc.cc
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
     )
   '';
 
   installPhase = ''
-      runHook preInstall
+    runHook preInstall
 
-      mkdir -p $out/share/nwjs
-      cp -R * $out/share/nwjs
-      find $out/share/nwjs
+    mkdir -p $out/share/nwjs
+    cp -R * $out/share/nwjs
+    find $out/share/nwjs
 
-      ln -s ${lib.getLib systemd}/lib/libudev.so $out/share/nwjs/libudev.so.0
+    ln -s ${lib.getLib systemd}/lib/libudev.so $out/share/nwjs/libudev.so.0
 
-      mkdir -p $out/bin
-      ln -s $out/share/nwjs/nw $out/bin
+    mkdir -p $out/bin
+    ln -s $out/share/nwjs/nw $out/bin
 
-      mkdir $out/lib
-      ln -s $out/share/nwjs/lib/libnw.so $out/lib/libnw.so
+    mkdir $out/lib
+    ln -s $out/share/nwjs/lib/libnw.so $out/lib/libnw.so
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
-  meta = with lib; {
-    description = "An app runtime based on Chromium and node.js";
+  meta = {
+    description = "App runtime based on Chromium and node.js";
     homepage = "https://nwjs.io/";
-    platforms = [ "i686-linux" "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = [ maintainers.mikaelfangel ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    maintainers = [ lib.maintainers.mikaelfangel ];
     mainProgram = "nw";
-    license = licenses.bsd3;
+    license = lib.licenses.mit;
   };
 }

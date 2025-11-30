@@ -5,38 +5,36 @@
   fetchFromGitHub,
   dotnetCorePackages,
   wrapGAppsHook3,
-
-  libX11,
-  libICE,
-  libSM,
-  libXi,
-  libXcursor,
-  libXext,
-  libXrandr,
-  fontconfig,
   glew,
   gtk3,
+  xorg,
+  nix-update-script,
 }:
 
 buildDotnetModule rec {
   pname = "libation";
-  version = "11.3.6";
+  version = "12.5.4";
 
   src = fetchFromGitHub {
     owner = "rmcrackan";
     repo = "Libation";
-    rev = "v${version}";
-    hash = "sha256-LH8p14oMjqo648h0TYClutPx19v5cWa9ffUlxuPWX5o=";
+    tag = "v${version}";
+    hash = "sha256-W2wCtXcvft450A2cdLPbOFjHrQahSbTEbfyoSXUtH/E=";
   };
 
   sourceRoot = "${src.name}/Source";
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
 
-  nugetDeps = ./deps.nix;
+  dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
-  dotnetFlags = [ "-p:PublishReadyToRun=false" ];
+  nugetDeps = ./deps.json;
+
+  dotnetFlags = [
+    "-p:PublishReadyToRun=false"
+    # for some reason this is set to win-x64 in the project files
+    "-p:RuntimeIdentifier="
+  ];
 
   projectFile = [
     "LibationAvalonia/LibationAvalonia.csproj"
@@ -48,15 +46,10 @@ buildDotnetModule rec {
 
   runtimeDeps = [
     # For Avalonia UI
-    libX11
-    libICE
-    libSM
-    libXi
-    libXcursor
-    libXext
-    libXrandr
-    fontconfig
     glew
+    xorg.libXrandr
+    xorg.libXi
+    xorg.libXcursor
     # For file dialogs
     gtk3
   ];
@@ -65,32 +58,25 @@ buildDotnetModule rec {
     install -Dm644 LoadByOS/LinuxConfigApp/libation_glass.svg $out/share/icons/hicolor/scalable/apps/libation.svg
     install -Dm644 LoadByOS/LinuxConfigApp/Libation.desktop $out/share/applications/libation.desktop
     substituteInPlace $out/share/applications/libation.desktop \
-        --replace-fail "/usr/bin/libation" "${meta.mainProgram}"
+      --replace-fail "/usr/bin/libation" "libation"
   '';
 
-  # wrap manually, because we need lower case excutables
+  # wrap manually, because we need lower case executables
   dontDotnetFixup = true;
 
   preFixup = ''
-    # remove binaries for other platform, like upstream does
-    pushd $out/lib/${pname}
-    rm -f *.x86.dll *.x64.dll
-    ${lib.optionalString (stdenv.system != "x86_64-linux") "rm -f *.x64.so"}
-    ${lib.optionalString (stdenv.system != "aarch64-linux") "rm -f *.arm64.so"}
-    ${lib.optionalString (stdenv.system != "x86_64-darwin") "rm -f *.x64.dylib"}
-    ${lib.optionalString (stdenv.system != "aarch64-darwin") "rm -f *.arm64.dylib"}
-    popd
-
-    wrapDotnetProgram $out/lib/${pname}/Libation $out/bin/libation
-    wrapDotnetProgram $out/lib/${pname}/LibationCli $out/bin/libationcli
-    wrapDotnetProgram $out/lib/${pname}/Hangover $out/bin/hangover
+    wrapDotnetProgram $out/lib/libation/Libation $out/bin/libation
+    wrapDotnetProgram $out/lib/libation/LibationCli $out/bin/libationcli
+    wrapDotnetProgram $out/lib/libation/Hangover $out/bin/hangover
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    changelog = "https://github.com/rmcrackan/Libation/releases/tag/${src.rev}";
-    description = "An Audible audiobook manager";
+    changelog = "https://github.com/rmcrackan/Libation/releases/tag/v${version}";
+    description = "Audible audiobook manager";
     homepage = "https://github.com/rmcrackan/Libation";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "libation";
     maintainers = with lib.maintainers; [ tomasajt ];
   };

@@ -5,35 +5,32 @@
   dissect-util,
   fetchFromGitHub,
   flow-record,
+  hatch-vcs,
+  hatchling,
   httpx,
   lark,
   pycryptodome,
   pyshark,
   pytest-httpserver,
   pytestCheckHook,
-  pythonOlder,
   rich,
-  setuptools,
-  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-cobaltstrike";
-  version = "1.0.0";
+  version = "1.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.cobaltstrike";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-CS50c3r7sdxp3CRS6XJ4QUmUFtmhFg6rSdKfYzJSOV4=";
+    tag = "v${version}";
+    hash = "sha256-0Wi0H9jL7suF/d92Sg2LuE6M2EzbIWsEC7Jjd1eJGTw=";
   };
 
   build-system = [
-    setuptools
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = [
@@ -42,7 +39,7 @@ buildPythonPackage rec {
     lark
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     c2 = [
       flow-record
       httpx
@@ -68,14 +65,21 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-httpserver
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "dissect.cobaltstrike" ];
+
+  disabledTests = [
+    # Don't run tests with a beacon
+    "test_c2profile_beacon_gate"
+    "test_beacon_dump_guardrails"
+  ];
 
   meta = with lib; {
     description = "Dissect module implementing a parser for Cobalt Strike related data";
     homepage = "https://github.com/fox-it/dissect.cobaltstrike";
-    changelog = "https://github.com/fox-it/dissect.cobaltstrike/releases/tag/${version}";
+    changelog = "https://github.com/fox-it/dissect.cobaltstrike/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

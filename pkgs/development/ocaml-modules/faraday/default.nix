@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml, alcotest, bigstringaf }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  alcotest,
+  bigstringaf,
+}:
 
 buildDunePackage rec {
   pname = "faraday";

@@ -1,16 +1,26 @@
-{ lib, pythonPackages, fetchPypi, mopidy }:
+{
+  lib,
+  pythonPackages,
+  fetchPypi,
+  mopidy,
+}:
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-muse";
   version = "0.0.33";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "Mopidy-Muse";
-    sha256 = "sha256-CEPAPWtMrD+HljyqBB6EAyGVeOjzkvVoEywlE4XEJGs=";
+    hash = "sha256-CEPAPWtMrD+HljyqBB6EAyGVeOjzkvVoEywlE4XEJGs=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    pythonPackages.setuptools
+  ];
+
+  dependencies = [
     mopidy
     pythonPackages.pykka
   ];
@@ -24,6 +34,6 @@ pythonPackages.buildPythonApplication rec {
     description = "Mopidy web client with Snapcast support";
     homepage = "https://github.com/cristianpb/muse";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

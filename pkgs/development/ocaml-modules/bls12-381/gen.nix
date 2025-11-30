@@ -1,4 +1,10 @@
-{ lib, fetchFromGitLab, buildDunePackage, ff-sig, zarith }:
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  ff-sig,
+  zarith,
+}:
 
 buildDunePackage rec {
   pname = "bls12-381-gen";

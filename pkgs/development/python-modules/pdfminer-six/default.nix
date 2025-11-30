@@ -2,54 +2,39 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  importlib-metadata,
-  isPy3k,
   cryptography,
   charset-normalizer,
-  pythonOlder,
-  typing-extensions,
   pytestCheckHook,
   setuptools,
-  substituteAll,
+  setuptools-scm,
   ocrmypdf,
 }:
 
 buildPythonPackage rec {
   pname = "pdfminer-six";
-  version = "20231228";
+  version = "20250506";
   pyproject = true;
-
-  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "pdfminer";
     repo = "pdfminer.six";
-    rev = version;
-    hash = "sha256-LXPECQQojD3IY9zRkrDBufy4A8XUuYiRpryqUx/I3qo=";
+    tag = version;
+    hash = "sha256-BE/HMl/e1KnkSc2jXU5Du5FMF+rCBv5AJ7a88oFrBgM=";
   };
 
-  patches = [
-    (substituteAll {
-      src = ./disable-setuptools-git-versioning.patch;
-      inherit version;
-    })
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs =
-    [
-      charset-normalizer
-      cryptography
-    ]
-    ++ lib.optionals (pythonOlder "3.8") [
-      importlib-metadata
-      typing-extensions
-    ];
+  dependencies = [
+    charset-normalizer
+    cryptography
+  ];
 
   postInstall = ''
-    for file in $out/bin/*.py; do
-      ln $file ''${file//.py/}
+    for file in "$out/bin/"*.py; do
+      mv "$file" "''${file%.py}"
     done
   '';
 
@@ -60,16 +45,23 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTests = [
+    # The binary file samples/contrib/issue-1004-indirect-mediabox.pdf is
+    # stripped from fix-dereference-MediaBox.patch.
+    "test_contrib_issue_1004_mediabox"
+  ];
+
   passthru = {
     tests = {
       inherit ocrmypdf;
     };
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/pdfminer/pdfminer.six/blob/${src.rev}/CHANGELOG.md";
     description = "PDF parser and analyzer";
     homepage = "https://github.com/pdfminer/pdfminer.six";
-    license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psyanticy ];
   };
 }

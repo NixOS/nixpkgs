@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   numpy,
-  pytestCheckHook,
   pythonOlder,
   scipy,
 }:
@@ -17,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pbrod";
-    repo = pname;
+    repo = "numdifftools";
     rev = "v${version}";
     hash = "sha256-HYacLaowSDdrwkxL1h3h+lw/8ahzaecpXEnwrCqMCWk=";
   };

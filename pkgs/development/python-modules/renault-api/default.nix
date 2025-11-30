@@ -10,42 +10,35 @@
   marshmallow-dataclass,
   poetry-core,
   pyjwt,
-  pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
+  syrupy,
   tabulate,
   typeguard,
 }:
 
 buildPythonPackage rec {
   pname = "renault-api";
-  version = "0.2.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "0.5.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = "renault-api";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-FZ1VNO8gEH7HJRu9EVuKIwSQbceG720tCVqAPqHwISQ=";
+    tag = "v${version}";
+    hash = "sha256-FH6x+hknNGgrSHaOt7RTYeuVLqb/DNy7X3065VvcFwA=";
   };
 
   build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     cryptography
     marshmallow-dataclass
     pyjwt
   ];
 
-  dependencies = [
-    aioresponses
-    pytest-asyncio
-  ];
-
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [
       click
       dateparser
@@ -54,11 +47,13 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    aioresponses
+    pytest-asyncio
     pytestCheckHook
+    syrupy
     typeguard
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
-
-  pytestFlagsArray = [ "--asyncio-mode=auto" ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "renault_api" ];
 

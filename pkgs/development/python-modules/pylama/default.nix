@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   git,
   eradicate,
   mccabe,
@@ -12,7 +12,6 @@
   pyflakes,
   vulture,
   setuptools,
-  isort,
   pylint,
   pytestCheckHook,
 }:
@@ -25,7 +24,6 @@ let
     format = "setuptools";
 
     src = fetchFromGitHub {
-      name = "${pname}-${version}-source";
       owner = "klen";
       repo = "pylama";
       rev = version;
@@ -33,8 +31,7 @@ let
     };
 
     patches = [
-      (substituteAll {
-        src = ./paths.patch;
+      (replaceVars ./paths.patch {
         git = "${lib.getBin git}/bin/git";
       })
     ];

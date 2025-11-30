@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.netclient;
 in
@@ -13,6 +18,7 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     systemd.services.netclient = {
+      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
       description = "Netclient Daemon";

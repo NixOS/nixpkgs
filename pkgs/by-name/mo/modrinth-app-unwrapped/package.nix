@@ -1,170 +1,140 @@
 {
   lib,
   stdenv,
-  stdenvNoCC,
-  fetchFromGitHub,
-  rustPlatform,
-  buildGoModule,
-  nix-update-script,
-  modrinth-app-unwrapped,
   cacert,
   cargo-tauri,
   desktop-file-utils,
-  esbuild,
-  darwin,
-  jq,
-  libsoup,
-  moreutils,
-  nodePackages,
+  fetchFromGitHub,
+  gradle_8,
+  jdk11,
+  makeBinaryWrapper,
+  makeShellWrapper,
+  nix-update-script,
+  nodejs,
   openssl,
   pkg-config,
-  webkitgtk,
+  pnpm_9,
+  replaceVars,
+  runCommand,
+  rustPlatform,
+  turbo,
+  webkitgtk_4_1,
 }:
-rustPlatform.buildRustPackage {
+
+let
+  gradle = gradle_8.override { java = jdk; };
+  jdk = jdk11;
+  pnpm = pnpm_9;
+in
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "modrinth-app-unwrapped";
-  version = "0.7.1";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "modrinth";
-    repo = "theseus";
-    rev = "v${modrinth-app-unwrapped.version}";
-    sha256 = "sha256-JWR0e2vOBvOLosr22Oo2mAlR0KAhL+261RRybhNctlM=";
+    repo = "code";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XfJbjbVcP9N3exAhXQoMGpoHORpKAlb0dPhQq195roY=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tauri-plugin-single-instance-0.0.0" = "sha256-Mf2/cnKotd751ZcSHfiSLNe2nxBfo4dMBdoCwQhe7yI=";
-    };
-  };
+  patches = [
+    # `packages/app-lib/build.rs` requires a Gradle executable, but our flags
+    # are injected through a bash function sourced by the stdenv :(
+    #
+    # So, re-implement said wrapper to have the same behavior when Gradle is ran in `build.rs`
+    (replaceVars ./gradle-from-path.patch {
+      # Yes, it has to be a shell wrapper
+      # https://github.com/NixOS/nixpkgs/issues/172583
+      gradle =
+        runCommand "gradle-exe-wrapper-${gradle.version}" { nativeBuildInputs = [ makeShellWrapper ]; }
+          ''
+            makeShellWrapper ${lib.getExe gradle} $out \
+              --add-flags "\''${NIX_GRADLEFLAGS_COMPILE:-}"
+          '';
+    })
 
-  pnpm-deps = stdenvNoCC.mkDerivation (finalAttrs: {
-    pname = "${modrinth-app-unwrapped.pname}-pnpm-deps";
-    inherit (modrinth-app-unwrapped) version src;
-    sourceRoot = "${finalAttrs.src.name}/theseus_gui";
-
-    dontConfigure = true;
-    dontBuild = true;
-    doCheck = false;
-
-    nativeBuildInputs = [
-      cacert
-      jq
-      moreutils
-      nodePackages.pnpm
-    ];
-
-    # https://github.com/NixOS/nixpkgs/blob/763e59ffedb5c25774387bf99bc725df5df82d10/pkgs/applications/misc/pot/default.nix#L56
-    installPhase = ''
-      export HOME=$(mktemp -d)
-
-      pnpm config set store-dir "$out"
-      pnpm install --frozen-lockfile --ignore-script --force
-
-      # remove timestamp and sort json files
-      rm -rf "$out"/v3/tmp
-      for f in $(find "$out" -name "*.json"); do
-        sed -i -E -e 's/"checkedAt":[0-9]+,//g' $f
-        jq --sort-keys . "$f" | sponge "$f"
-      done
-    '';
-
-    dontFixup = true;
-    outputHashMode = "recursive";
-    outputHash = "sha256-g/uUGfC9TQh0LE8ed51oFY17FySoeTvfaeEpzpNeMao=";
-  });
-
-  nativeBuildInputs = [
-    cargo-tauri
-    desktop-file-utils
-    nodePackages.pnpm
-    pkg-config
+    # `gradle.fetchDeps` doesn't seem to pick up a few integrations here
+    # Thankfully that's fine, since it's only for development
+    ./remove-spotless.patch
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.isLinux [
-      libsoup
-      webkitgtk
-    ]
-    ++ lib.optionals stdenv.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        AppKit
-        CoreServices
-        Security
-        WebKit
-      ]
-    );
+  # Let the app know about our actual version number
+  postPatch = ''
+    substituteInPlace {apps/app,packages/app-lib}/Cargo.toml apps/app-frontend/package.json \
+      --replace-fail '1.0.0-local' '${finalAttrs.version}'
+  '';
 
-  env = {
-    tauriBundle =
-      {
-        Linux = "deb";
-        Darwin = "app";
-      }
-      .${stdenv.hostPlatform.uname.system}
-      or (builtins.throw "No tauri bundle available for ${stdenv.hostPlatform.uname.system}!");
+  cargoHash = "sha256-jWMHii65hTnTmiBFHxZ4xO5V+Qt/MPCy75eJvnlyE4c=";
 
-    ESBUILD_BINARY_PATH = lib.getExe (
-      esbuild.override {
-        buildGoModule = args: buildGoModule (args // rec {
-          version = "0.20.2";
-          src = fetchFromGitHub {
-            owner = "evanw";
-            repo = "esbuild";
-            rev = "v${version}";
-            hash = "sha256-h/Vqwax4B4nehRP9TaYbdixAZdb1hx373dNxNHvDrtY=";
-          };
-          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-        });
-      }
-    );
+  mitmCache = gradle.fetchDeps {
+    inherit (finalAttrs) pname;
+    data = ./deps.json;
   };
 
-  postPatch = ''
-    export HOME=$(mktemp -d)
-    export STORE_PATH=$(mktemp -d)
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    fetcherVersion = 1;
+    hash = "sha256-7iqXuIQPbP2p26vrWDjMoyZBPpbVQpigYAylhIg8+ZY=";
+  };
 
-    pushd theseus_gui
-    cp -rT ${modrinth-app-unwrapped.pnpm-deps} "$STORE_PATH"
-    chmod -R +w "$STORE_PATH"
+  nativeBuildInputs = [
+    cacert # Required for turbo
+    cargo-tauri.hook
+    desktop-file-utils
+    gradle
+    nodejs
+    pkg-config
+    pnpm.configHook
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin makeBinaryWrapper;
 
-    pnpm config set store-dir "$STORE_PATH"
-    pnpm install --offline --frozen-lockfile --ignore-script
-    popd
+  buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isLinux webkitgtk_4_1;
+
+  gradleFlags = [
+    "-Dfile.encoding=utf-8"
+    "--no-configuration-cache"
+  ];
+
+  dontUseGradleBuild = true;
+  dontUseGradleCheck = true;
+
+  # Tests fail on other, unrelated packages in the monorepo
+  cargoTestFlags = [
+    "--package"
+    "theseus_gui"
+  ];
+
+  # Required for mitmCache
+  __darwinAllowLocalNetworking = true;
+
+  env = {
+    TURBO_BINARY_PATH = lib.getExe turbo;
+  };
+
+  preGradleUpdate = ''
+    cd packages/app-lib/java
   '';
 
-  buildPhase = ''
-    runHook preBuild
-
-    cargo tauri build --bundles "$tauriBundle"
-
-    runHook postBuild
+  # Required for the exe wrapper above
+  preBuild = ''
+    local nixGradleFlags=()
+    concatTo nixGradleFlags gradleFlags gradleFlagsArray
+    export NIX_GRADLEFLAGS_COMPILE="''${nixGradleFlags[@]}"
   '';
 
-  installPhase =
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      makeBinaryWrapper "$out"/Applications/Modrinth\ App.app/Contents/MacOS/Modrinth\ App "$out"/bin/ModrinthApp
     ''
-      runHook preInstall
-    ''
-    + lib.optionalString stdenv.isDarwin ''
-      mkdir -p "$out"/bin
-      cp -r target/release/bundle/macos "$out"/Applications
-      mv "$out"/Applications/Modrinth\ App.app/Contents/MacOS/Modrinth\ App "$out"/bin/modrinth-app
-      ln -s "$out"/bin/modrinth-app "$out"/Applications/Modrinth\ App.app/Contents/MacOS/Modrinth\ App
-    ''
-    + lib.optionalString stdenv.isLinux ''
-      cp -r target/release/bundle/"$tauriBundle"/*/data/usr "$out"
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       desktop-file-edit \
         --set-comment "Modrinth's game launcher" \
         --set-key="StartupNotify" --set-value="true" \
         --set-key="Categories" --set-value="Game;ActionGame;AdventureGame;Simulation;" \
         --set-key="Keywords" --set-value="game;minecraft;mc;" \
         --set-key="StartupWMClass" --set-value="ModrinthApp" \
-        $out/share/applications/modrinth-app.desktop
-    ''
-    + ''
-      runHook postInstall
+        $out/share/applications/Modrinth\ App.desktop
     '';
 
   passthru = {
@@ -177,16 +147,21 @@ rustPlatform.buildRustPackage {
       A unique, open source launcher that allows you to play your favorite mods,
       and keep them up to date, all in one neat little package
     '';
-    mainProgram = "modrinth-app";
     homepage = "https://modrinth.com";
-    changelog = "https://github.com/modrinth/theseus/releases/tag/v${modrinth-app-unwrapped.version}";
     license = with lib.licenses; [
       gpl3Plus
       unfreeRedistributable
     ];
     maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "ModrinthApp";
     platforms = with lib; platforms.linux ++ platforms.darwin;
-    # this builds on architectures like aarch64, but the launcher itself does not support them yet
-    broken = !stdenv.isx86_64;
+    # This builds on architectures like aarch64, but the launcher itself does not support them yet.
+    # Darwin is the only exception
+    # See https://github.com/modrinth/code/issues/776#issuecomment-1742495678
+    broken = !stdenv.hostPlatform.isx86_64 && !stdenv.hostPlatform.isDarwin;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode # mitm cache
+    ];
   };
-}
+})

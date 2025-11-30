@@ -1,21 +1,23 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, cmake
-, boost
-, ogre_13
-, mygui
-, ois
-, SDL2
-, libvorbis
-, pkg-config
-, makeWrapper
-, enet
-, libXcursor
-, bullet
-, openal
-, tinyxml
-, tinyxml-2
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  cmake,
+  boost,
+  ogre_13,
+  mygui,
+  ois,
+  SDL2,
+  libX11,
+  libvorbis,
+  pkg-config,
+  makeWrapper,
+  enet,
+  libXcursor,
+  bullet,
+  openal,
+  tinyxml,
+  tinyxml-2,
 }:
 
 let
@@ -60,13 +62,18 @@ stdenv.mkDerivation rec {
     ln -s ${tracks}/ data/tracks
   '';
 
-  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    makeWrapper
+  ];
   buildInputs = [
     boost
     stuntrally_ogre
     stuntrally_mygui
     ois
     SDL2
+    libX11
     libvorbis
     enet
     libXcursor

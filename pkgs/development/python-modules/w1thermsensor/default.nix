@@ -2,13 +2,10 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pkgs,
   setuptools,
   aiofiles,
   click,
-  coverage,
   tomli,
-  pytest,
   pytest-mock,
   pytest-asyncio,
   pytestCheckHook,
@@ -35,21 +32,20 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ click ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     async = [ aiofiles ];
   };
 
   # Don't try to load the kernel module in tests.
   env.W1THERMSENSOR_NO_KERNEL_MODULE = 1;
 
-  nativeCheckInputs =
-    [
-      pytest-mock
-      pytest-asyncio
-      pytestCheckHook
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [ tomli ]
-    ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  nativeCheckInputs = [
+    pytest-mock
+    pytest-asyncio
+    pytestCheckHook
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "w1thermsensor" ];
 

@@ -1,23 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, udev
-, cmake
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  udev,
+  cmake,
+  pkg-config,
 }:
 
-stdenv.mkDerivation(finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libusbp";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "pololu";
     repo = "libusbp";
     rev = finalAttrs.version;
-    hash = "sha256-60xpJ97GlqEcy2+pxGNGPfWDnbIFGoPXJijaErOBXQs=";
+    hash = "sha256-hFvQceUapzlD021KIOJbSXX7qv1IQMuEudRHYeCkbS8=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -30,6 +34,7 @@ stdenv.mkDerivation(finalAttrs: {
 
   meta = with lib; {
     homepage = "https://github.com/pololu/libusbp";
+    changelog = "https://github.com/pololu/libusbp/blob/${finalAttrs.src.rev}/README.md#version-history";
     description = "Pololu USB Library (also known as libusbp)";
     longDescription = ''
       libusbp is a cross-platform C library for accessing USB devices

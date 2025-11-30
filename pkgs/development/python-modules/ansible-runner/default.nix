@@ -1,119 +1,124 @@
 {
   lib,
   stdenv,
-  ansible-core,
   buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
-  glibcLocales,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  packaging,
+  pexpect,
+  python-daemon,
+  pyyaml,
+  pythonOlder,
   importlib-metadata,
+
+  # tests
+  addBinToPathHook,
+  ansible-core,
+  glibcLocales,
   mock,
   openssh,
-  pbr,
-  pexpect,
-  psutil,
   pytest-mock,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
-  python-daemon,
-  pyyaml,
-  setuptools,
-  six,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "ansible-runner";
-  version = "2.3.6";
+  version = "2.4.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-shdKEtytLcLzQuqCh2iY9WigtmxTVoYAv4BXcVj8uhw=";
+  src = fetchFromGitHub {
+    owner = "ansible";
+    repo = "ansible-runner";
+    tag = version;
+    hash = "sha256-aO7AcDtPbbmTsY+39oZYdPABYFy6bK3ZR1jatLTb7O4=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-tests.patch";
-      url = "https://github.com/ansible/ansible-runner/commit/0d522c90cfc1f305e118705a1b3335ccb9c1633d.patch";
-      hash = "sha256-eTnQkftvjK0YHU+ovotRVSuVlvaVeXp5SvYk1DPCg88=";
-      excludes = [
-        ".github/workflows/ci.yml"
-        "tox.ini"
-      ];
-    })
-    (fetchpatch {
-      # python 3.12 compat
-      url = "https://github.com/ansible/ansible-runner/commit/dc248497bb2375a363222ce755bf3a31f21d5f64.patch";
-      hash = "sha256-QT28Iw0uENoO35rqZpYBcmJB/GNDEF4m86SKf6p0XQU=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=45, <=70.0.0" setuptools \
+      --replace-fail "setuptools-scm[toml]>=6.2, <=8.1.0" setuptools-scm
+  '';
 
   build-system = [
     setuptools
-    pbr
+    setuptools-scm
   ];
 
   dependencies = [
-    ansible-core
-    psutil
+    packaging
     pexpect
     python-daemon
     pyyaml
-    six
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     ansible-core # required to place ansible CLI onto the PATH in tests
     glibcLocales
-    pytestCheckHook
+    mock
+    openssh
     pytest-mock
     pytest-timeout
     pytest-xdist
-    mock
-    openssh
+    pytestCheckHook
+    versionCheckHook
+    writableTmpDirAsHomeHook
   ];
+  versionCheckProgramArg = "--version";
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-    export PATH="$PATH:$out/bin";
     # avoid coverage flags
     rm pytest.ini
   '';
 
   disabledTests = [
-    # Requires network access
+    # Tests require network access
     "test_callback_plugin_task_args_leak"
     "test_env_accuracy"
     # Times out on slower hardware
     "test_large_stdout_blob"
     # Failed: DID NOT RAISE <class 'RuntimeError'>
     "test_validate_pattern"
+    # Assertion error
+    "test_callback_plugin_censoring_does_not_overwrite"
+    "test_get_role_list"
+    "test_include_role_events"
+    "test_include_role_from_collection_events"
+    "test_module_level_no_log"
+    "test_output_when_given_invalid_playbook"
+    "test_resolved_actions"
   ];
 
-  disabledTestPaths =
-    [
-      # These tests unset PATH and then run executables like `bash` (see https://github.com/ansible/ansible-runner/pull/918)
-      "test/integration/test_runner.py"
-      "test/unit/test_runner.py"
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      # Integration tests on Darwin are not regularly passing in ansible-runner's own CI
-      "test/integration"
-      # These tests write to `/tmp` which is not writable on Darwin
-      "test/unit/config/test__base.py"
-    ];
+  disabledTestPaths = [
+    # These tests unset PATH and then run executables like `bash` (see https://github.com/ansible/ansible-runner/pull/918)
+    "test/integration/test_runner.py"
+    "test/unit/test_runner.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Integration tests on Darwin are not regularly passing in ansible-runner's own CI
+    "test/integration"
+    # These tests write to `/tmp` which is not writable on Darwin
+    "test/unit/config/test__base.py"
+  ];
 
   pythonImportsCheck = [ "ansible_runner" ];
 
-  meta = with lib; {
+  meta = {
     description = "Helps when interfacing with Ansible";
-    mainProgram = "ansible-runner";
     homepage = "https://github.com/ansible/ansible-runner";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/ansible/ansible-runner/releases/tag/${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+    mainProgram = "ansible-runner";
   };
 }

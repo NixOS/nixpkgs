@@ -1,25 +1,27 @@
-{ lib
-, fetchurl
-, appimageTools
-, gconf
-, imagemagick
+{
+  lib,
+  fetchurl,
+  appimageTools,
+  gconf,
+  imagemagick,
 }:
 
 let
   pname = "mendeley";
-  version = "2.114.1";
+  version = "2.138.0";
 
   executableName = "${pname}-reference-manager";
 
   src = fetchurl {
     url = "https://static.mendeley.com/bin/desktop/mendeley-reference-manager-${version}-x86_64.AppImage";
-    hash = "sha256-bvX5onyTPc4G+9PcrSXhsfkNbU6DZ5T3ljf+r77bjKw=";
+    hash = "sha256-OS5VarPvWC3KUIAFEw2QndiNZ2ryj81MxTp1fkvuobE=";
   };
 
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
   };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
@@ -34,11 +36,11 @@ in appimageTools.wrapType2 {
 
   meta = with lib; {
     homepage = "https://www.mendeley.com";
-    description = "A reference manager and academic social network";
+    description = "Reference manager and academic social network";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers  = with maintainers; [ dtzWill atila ];
+    maintainers = with maintainers; [ atila ];
     mainProgram = "mendeley-reference-manager";
   };
 

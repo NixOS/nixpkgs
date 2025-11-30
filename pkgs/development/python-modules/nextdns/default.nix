@@ -4,34 +4,34 @@
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
-  orjson,
   pytest-asyncio,
   pytest-error-for-skips,
   pytestCheckHook,
   pythonOlder,
   setuptools,
   syrupy,
+  tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "nextdns";
-  version = "3.0.0";
+  version = "4.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "nextdns";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ka/VT7c72la4z/BVAWnV06MxVmu52ZcJ4GsEeP7vbKA=";
+    tag = version;
+    hash = "sha256-VTOANFrGOI1XDU/5THWkj/o5AWIpXcPKmOF1IF0I22Y=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
-    orjson
+    tenacity
   ];
 
   nativeCheckInputs = [
@@ -40,6 +40,12 @@ buildPythonPackage rec {
     pytest-error-for-skips
     pytestCheckHook
     syrupy
+  ];
+
+  disabledTests = [
+    # mocked object called too many times
+    "test_retry_error"
+    "test_retry_success"
   ];
 
   pythonImportsCheck = [ "nextdns" ];

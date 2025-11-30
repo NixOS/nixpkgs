@@ -3,28 +3,29 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  humanfriendly,
   reretry,
   snakemake-interface-common,
   throttler,
   wrapt,
-  snakemake,
 }:
 
 buildPythonPackage rec {
   pname = "snakemake-interface-storage-plugins";
-  version = "3.2.2";
+  version = "4.2.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "snakemake";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-syUjK32RPV9FMV7RSpXy+PJ2AVigGH+ywm6iTjUAuec=";
+    repo = "snakemake-interface-storage-plugins";
+    tag = "v${version}";
+    hash = "sha256-gez2UptlCorf42qHnnG31gfjzcTm9uyerF23N2fmTiM=";
   };
 
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
+    humanfriendly
     reretry
     snakemake-interface-common
     throttler

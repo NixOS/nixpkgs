@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,9 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-
   meta = with lib; {
-    description = "A tool for relaying TCP connections over DNS";
+    description = "Tool for relaying TCP connections over DNS";
     homepage = "https://github.com/alex-sector/dns2tcp";
     license = licenses.gpl2Plus;
     mainProgram = "dns2tcpc";

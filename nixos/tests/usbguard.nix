@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "usbguard";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ tnias ];
@@ -9,7 +10,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     {
       services.usbguard = {
         enable = true;
-        IPCAllowedUsers = [ "alice" "root" ];
+        IPCAllowedUsers = [
+          "alice"
+          "root"
+        ];
 
         # As virtual USB devices get attached to the "QEMU USB Hub" we need to
         # allow Hubs. Otherwise we would have to explicitly allow them too.
@@ -59,4 +63,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         machine.succeed("usbguard list-devices | grep -E ' allow .*QEMU USB HARDDRIVE'")
         machine.fail("usbguard list-devices | grep -E ' block .*QEMU USB HARDDRIVE'")
   '';
-})
+}

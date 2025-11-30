@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromSourcehut,
 
@@ -19,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "pyatem";
-  version = "0.10.0"; # check latest version in setup.py
+  version = "0.13.0"; # check latest version in setup.py
   pyproject = true;
 
   src = fetchFromSourcehut {
     owner = "~martijnbraam";
     repo = "pyatem";
     rev = version;
-    hash = "sha256-O+f1vVwfGJjLem25hsYE1Q1V4vzjrc0HxTBUCANCEwE=";
+    hash = "sha256-eEn09e+ZED4DGEWTUou9CRgazngHIXZv51CLhX9YuBI=";
   };
 
   nativeBuildInputs = [ setuptools ];

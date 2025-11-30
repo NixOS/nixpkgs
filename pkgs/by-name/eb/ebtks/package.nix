@@ -1,14 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libminc }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libminc,
+}:
 
 stdenv.mkDerivation {
   pname = "ebtks";
-  version  = "unstable-2017-09-23";
+  version = "unstable-2017-09-23";
 
   src = fetchFromGitHub {
-    owner  = "BIC-MNI";
-    repo   = "EBTKS";
-    rev    = "67e4e197d8a32d6462c9bdc7af44d64ebde4fb5c";
-    sha256 = "1a1qw6i47fs1izx60l1ysabpmyx9j5sjnbdv8b47wi2xcc9i3hpq";
+    owner = "BIC-MNI";
+    repo = "EBTKS";
+    rev = "67e4e197d8a32d6462c9bdc7af44d64ebde4fb5c";
+    hash = "sha256-+MIRE2NdRH7IQrstK3WRqft6l9I+UGD6j0G7Q6LhOKg=";
   };
 
   # error: use of undeclared identifier 'finite'; did you mean 'isfinite'?
@@ -31,6 +37,6 @@ stdenv.mkDerivation {
     description = "Library for working with MINC files";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
-    license   = licenses.free;
+    license = licenses.free;
   };
 }

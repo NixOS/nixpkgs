@@ -6,22 +6,23 @@
   gettext,
   pytestCheckHook,
   pythonOlder,
+  python,
   hatch-vcs,
   hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "humanize";
-  version = "4.9.0";
+  version = "4.12.3";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-humanize";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-sLlgR6c65RmUNZdH2pHuxzo7dm71uUZXGqzcqyxCrk4=";
+    repo = "humanize";
+    tag = version;
+    hash = "sha256-VsB59tS2KRZ0JKd1FzA+RTEzpkUyj9RhhSopseHg+m8=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +36,7 @@ buildPythonPackage rec {
   '';
 
   postInstall = ''
-    cp -r 'src/humanize/locale' "$out/lib/"*'/site-packages/humanize/'
+    cp -r 'src/humanize/locale' "$out/${python.sitePackages}/humanize/"
   '';
 
   nativeCheckInputs = [

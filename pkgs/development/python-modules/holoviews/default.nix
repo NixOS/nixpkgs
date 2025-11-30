@@ -1,34 +1,50 @@
 {
   lib,
-  bokeh,
+  stdenv,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatch-vcs,
+  hatchling,
+
+  # dependencies
   colorcet,
-  fetchPypi,
-  ipython,
-  matplotlib,
-  notebook,
   numpy,
   pandas,
   panel,
   param,
-  pythonOlder,
   pyviz-comms,
-  scipy,
+
+  # tests
+  pytestCheckHook,
+  pytest-asyncio,
+  flaky,
 }:
 
 buildPythonPackage rec {
   pname = "holoviews";
-  version = "1.18.3";
-  format = "setuptools";
+  version = "1.21.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-V44w6J1ydU+XqD6+CBmP7I6HzH5JslufMew5P5OcpQA=";
+  src = fetchFromGitHub {
+    owner = "holoviz";
+    repo = "holoviews";
+    tag = "v${version}";
+    hash = "sha256-JEGTfi4CaJaL/5AFtB92RV0DJvaIYVloukWKQSUFBZA=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"ignore:No data was collected:coverage.exceptions.CoverageWarning",' ""
+  '';
+
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
+
+  dependencies = [
     colorcet
     numpy
     pandas
@@ -37,16 +53,44 @@ buildPythonPackage rec {
     pyviz-comms
   ];
 
-  # tests not fully included with pypi release
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    flaky
+  ];
+
+  pytestFlags = [
+    "-Wignore::FutureWarning"
+  ];
+
+  disabledTests = [
+    # All the below fail due to some change in flaky API
+    "test_periodic_param_fn_non_blocking"
+    "test_callback_cleanup"
+    "test_poly_edit_callback"
+    "test_launch_server_with_complex_plot"
+    "test_launch_server_with_stream"
+    "test_launch_simple_server"
+    "test_server_dynamicmap_with_dims"
+    "test_server_dynamicmap_with_stream"
+    "test_server_dynamicmap_with_stream_dims"
+
+    # ModuleNotFoundError: No module named 'param'
+    "test_no_blocklist_imports"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fails due to font rendering differences
+    "test_categorical_axis_fontsize_both"
+  ];
 
   pythonImportsCheck = [ "holoviews" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python data analysis and visualization seamless and simple";
+    changelog = "https://github.com/holoviz/holoviews/releases/tag/${src.tag}";
     mainProgram = "holoviews";
     homepage = "https://www.holoviews.org/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

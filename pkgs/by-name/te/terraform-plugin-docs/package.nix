@@ -1,25 +1,26 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, go
-, testers
-, terraform-plugin-docs
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  go,
+  testers,
+  terraform-plugin-docs,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "terraform-plugin-docs";
-  version = "0.19.2";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "terraform-plugin-docs";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-1ZJPy/kRYKcwr/k/u8ux5Eo1LIkrNpVyXrd9ff+Na6I=";
+    tag = "v${version}";
+    hash = "sha256-wN85uTZgHasP4EsG/tNkt28tnLRFfosN6N89iwcAX80=";
   };
 
-  vendorHash = "sha256-dBDvh3aIHu8iGwFt+29SdCl1gICwO7LnxQ7Wux+2tOk=";
+  vendorHash = "sha256-ZL61b2LAE+GFRtfUBIAoF7O65s7FeQw7cX4Aw2Cfd+k=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -29,13 +30,13 @@ buildGoModule rec {
 
   allowGoReference = true;
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.commit=${src.rev}"
+    "-X github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs/build.version=${version}"
+    "-X github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs/build.commit=${src.tag}"
   ];
 
   postInstall = ''
@@ -50,12 +51,12 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Generate and validate Terraform plugin/provider documentation";
     homepage = "https://github.com/hashicorp/terraform-plugin-docs";
     changelog = "https://github.com/hashicorp/terraform-plugin-docs/releases/tag/v${version}";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     mainProgram = "tfplugindocs";
-    maintainers = with maintainers; [ lewo ];
+    maintainers = with lib.maintainers; [ lewo ];
   };
 }

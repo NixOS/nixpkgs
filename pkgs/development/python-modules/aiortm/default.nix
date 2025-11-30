@@ -4,58 +4,61 @@
   aioresponses,
   buildPythonPackage,
   ciso8601,
-  click,
   fetchFromGitHub,
   mashumaro,
-  poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
+  typer,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aiortm";
-  version = "0.8.13";
+  version = "0.11.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
     repo = "aiortm";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-JoolmxZFN0UG8wAMxMAYL8APFjpEcMECirCKUA/UBlY=";
+    tag = "v${version}";
+    hash = "sha256-KghKxaa1MhNH13NdUpDiT5h8ZEj5aWLUVhvQKvLC+oM=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=aiortm --cov-report=term-missing:skip-covered" ""
-  '';
+  pythonRelaxDeps = [ "typer" ];
 
-  build-system = [ poetry-core ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
     ciso8601
-    click
     mashumaro
     yarl
   ];
 
+  optional-dependencies = {
+    cli = [ typer ];
+  };
+
   nativeCheckInputs = [
     aioresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "aiortm" ];
 
   meta = with lib; {
     description = "Library for the Remember the Milk API";
     homepage = "https://github.com/MartinHjelmare/aiortm";
-    changelog = "https://github.com/MartinHjelmare/aiortm/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 ];
+    changelog = "https://github.com/MartinHjelmare/aiortm/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     mainProgram = "aiortm";
   };

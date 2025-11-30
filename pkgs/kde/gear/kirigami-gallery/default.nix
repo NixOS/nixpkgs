@@ -1,11 +1,15 @@
 {
   mkKdeDerivation,
   qtsvg,
+  qttools,
 }:
 mkKdeDerivation {
   pname = "kirigami-gallery";
 
-  extraBuildInputs = [qtsvg];
-  # FIXME(qt5)
-  meta.broken = true;
+  extraNativeBuildInputs = [
+    qtsvg
+    qttools
+  ];
+
+  meta.mainProgram = "kirigami2gallery";
 }

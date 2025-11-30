@@ -8,38 +8,31 @@
   parameterized,
   poetry-core,
   pytest-mock,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   requests-mock,
   responses,
   rich,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "censys";
-  version = "2.2.12";
+  version = "2.2.18";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "censys";
     repo = "censys-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Gw3JbAdg/ObWdD6vl8Wuct6VCcP4GAZbiesXSSnW1Mg=";
+    tag = "v${version}";
+    hash = "sha256-fHqDXqhjqfj8VBb7Od7wuUXAEHQBXwm5LAUPLM0oN2Q=";
   };
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace-fail "--cov" ""
-  '';
-
-  build-system = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     argcomplete
@@ -52,20 +45,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     parameterized
     pytest-mock
+    pytest-cov-stub
     pytestCheckHook
     requests-mock
     responses
-  ];
-
-  pythonRelaxDeps = [
-    "backoff"
-    "requests"
-    "rich"
+    writableTmpDirAsHomeHook
   ];
 
   # The tests want to write a configuration file
   preCheck = ''
-    export HOME=$(mktemp -d)
     mkdir -p $HOME
   '';
 
@@ -74,8 +62,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API wrapper for the Censys Search Engine (censys.io)";
     homepage = "https://github.com/censys/censys-python";
-    changelog = "https://github.com/censys/censys-python/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
+    changelog = "https://github.com/censys/censys-python/releases/tag/v${src.tag}";
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     mainProgram = "censys";
   };

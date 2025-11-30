@@ -5,48 +5,78 @@
   pythonOlder,
 
   # build time
-  astropy-extension-helpers,
-  cython,
-  jinja2,
-  oldest-supported-numpy,
-  setuptools-scm,
-  wheel,
-  # testing
-  pytestCheckHook,
   stdenv,
-  pytest-xdist,
-  pytest-astropy,
+  cython,
+  extension-helpers,
+  setuptools,
+  setuptools-scm,
 
-  # runtime
+  # dependencies
   astropy-iers-data,
   numpy,
   packaging,
   pyerfa,
   pyyaml,
+
+  # optional-dependencies
+  scipy,
+  matplotlib,
+  ipython,
+  ipywidgets,
+  ipykernel,
+  pandas,
+  certifi,
+  dask,
+  h5py,
+  pyarrow,
+  beautifulsoup4,
+  html5lib,
+  sortedcontainers,
+  pytz,
+  jplephem,
+  mpmath,
+  asdf,
+  asdf-astropy,
+  bottleneck,
+  fsspec,
+  s3fs,
+  uncompresspy,
+
+  # testing
+  hypothesis,
+  pytestCheckHook,
+  pytest-xdist,
+  pytest-astropy-header,
+  pytest-doctestplus,
+  pytest-remotedata,
+  threadpoolctl,
+
 }:
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "6.0.1";
+  version = "7.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8"; # according to setup.cfg
+  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ial13jVtBgjnTx9JNEL7Osu7eoW3OeB0RguwNAAUs5w=";
+    hash = "sha256-yPJUMiKVsbjPJDA9bxVb9+/bbBKCiCuWbOMEDv+MU8U=";
   };
 
-  nativeBuildInputs = [
-    astropy-extension-helpers
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=unused-command-line-argument";
+  };
+
+  build-system = [
     cython
-    jinja2
-    oldest-supported-numpy
+    extension-helpers
+    setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     astropy-iers-data
     numpy
     packaging
@@ -54,36 +84,79 @@ buildPythonPackage rec {
     pyyaml
   ];
 
+  optional-dependencies = lib.fix (self: {
+    recommended = [
+      scipy
+      matplotlib
+    ];
+    ipython = [
+      ipython
+    ];
+    jupyter = [
+      ipywidgets
+      ipykernel
+      # ipydatagrid
+      pandas
+    ]
+    ++ self.ipython;
+    all = [
+      certifi
+      dask
+      h5py
+      pyarrow
+      beautifulsoup4
+      html5lib
+      sortedcontainers
+      pytz
+      jplephem
+      mpmath
+      asdf
+      asdf-astropy
+      bottleneck
+      fsspec
+      s3fs
+      uncompresspy
+    ]
+    ++ self.recommended
+    ++ self.ipython
+    ++ self.jupyter
+    ++ dask.optional-dependencies.array
+    ++ fsspec.optional-dependencies.http;
+  });
+
   nativeCheckInputs = [
+    hypothesis
     pytestCheckHook
     pytest-xdist
-    pytest-astropy
-  ];
+    pytest-astropy-header
+    pytest-doctestplus
+    pytest-remotedata
+    threadpoolctl
+    # FIXME remove in 7.2.0
+    # see https://github.com/astropy/astropy/pull/18882
+    uncompresspy
+  ]
+  ++ optional-dependencies.recommended;
 
-  # Not running it inside the build directory. See:
-  # https://github.com/astropy/astropy/issues/15316#issuecomment-1722190547
+  pythonImportsCheck = [ "astropy" ];
+
+  __darwinAllowLocalNetworking = true;
+
   preCheck = ''
-    cd "$out"
     export HOME="$(mktemp -d)"
     export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
+    # See https://github.com/astropy/astropy/issues/17649 and see
+    # --hypothesis-profile=ci pytest flag below.
+    cp conftest.py $out/
+    # https://github.com/NixOS/nixpkgs/issues/255262
+    cd "$out"
   '';
-  pythonImportsCheck = [ "astropy" ];
-  disabledTests = [
-    # May fail due to parallelism, see:
-    # https://github.com/astropy/astropy/issues/15441
-    "TestUnifiedOutputRegistry"
-
-    # fail due to pytest>=8
-    # https://github.com/astropy/astropy/issues/15960#issuecomment-1913654471
-    "test_distortion_header"
-
-    # flaky
-    "test_timedelta_conversion"
-    # More flaky tests, see: https://github.com/NixOS/nixpkgs/issues/294392
-    "test_sidereal_lon_independent"
-    "test_timedelta_full_precision_arithmetic"
-    "test_datetime_to_timedelta"
-  ] ++ lib.optionals stdenv.isDarwin [ "test_sidereal_lat_independent" ];
+  pytestFlags = [
+    "--hypothesis-profile=ci"
+  ];
+  postCheck = ''
+    rm conftest.py
+  '';
 
   meta = {
     description = "Astronomy/Astrophysics library for Python";

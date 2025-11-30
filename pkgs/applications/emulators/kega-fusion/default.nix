@@ -1,9 +1,40 @@
-{ stdenv, lib, writeText, fetchurl, upx, libGL, libGLU, glib, gtk2, alsa-lib, libSM, libX11, gdk-pixbuf, pango, libXinerama, mpg123, runtimeShell }:
+{
+  stdenv,
+  lib,
+  writeText,
+  fetchurl,
+  upx,
+  libGL,
+  libGLU,
+  glib,
+  gtk2,
+  alsa-lib,
+  libSM,
+  libX11,
+  gdk-pixbuf,
+  pango,
+  libXinerama,
+  mpg123,
+  runtimeShell,
+}:
 
 let
-  libPath = lib.makeLibraryPath [ stdenv.cc.cc libGL libGLU glib gtk2 alsa-lib libSM libX11 gdk-pixbuf pango libXinerama ];
+  libPath = lib.makeLibraryPath [
+    stdenv.cc.cc
+    libGL
+    libGLU
+    glib
+    gtk2
+    alsa-lib
+    libSM
+    libX11
+    gdk-pixbuf
+    pango
+    libXinerama
+  ];
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "kega-fusion";
   version = "3.63x";
 
@@ -71,7 +102,7 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "Sega SG1000, SC3000, SF7000, Master System, Game Gear, Genesis/Megadrive, SVP, Pico, SegaCD/MegaCD and 32X emulator";
     homepage = "https://www.carpeludum.com/kega-fusion/";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfreeRedistributable;
     platforms = [ "i686-linux" ];

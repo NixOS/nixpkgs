@@ -1,31 +1,38 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, glib
-, gtk3
-, meson
-, mesonEmulatorHook
-, ninja
-, pkg-config
-, gobject-introspection
-, gtk-doc
-, docbook-xsl-nons
-, gitUpdater
-, dbus
-, xvfb-run
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  glib,
+  gtk3,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  gtk-doc,
+  docbook-xsl-nons,
+  gitUpdater,
+  dbus,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgedit-amtk";
-  version = "5.8.0";
+  version = "5.9.2";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
-  src = fetchFromGitHub {
-    owner = "gedit-technology";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    group = "World";
+    owner = "gedit";
     repo = "libgedit-amtk";
     rev = version;
-    hash = "sha256-U77/KMZw9k9ukebCXVXAsCa4uJaTgw9irfZ/l0303kk=";
+    hash = "sha256-TpPiVIsHIBrRzDG2oBwtrIYB3CYEW6SRRVow9pe2XFs=";
   };
 
   strictDeps = true;
@@ -36,7 +43,8 @@ stdenv.mkDerivation rec {
     gobject-introspection
     gtk-doc
     docbook-xsl-nons
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
 
@@ -50,7 +58,7 @@ stdenv.mkDerivation rec {
     dbus # For dbus-run-session
   ];
 
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
   checkPhase = ''
     runHook preCheck
 
@@ -62,15 +70,17 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  passthru.updateScript = gitUpdater {
-    odd-unstable = true;
-  };
+  passthru.updateScript = gitUpdater { ignoredVersions = "(alpha|beta|rc).*"; };
 
-  meta = with lib; {
-    homepage = "https://github.com/gedit-technology/libgedit-amtk";
+  meta = {
+    homepage = "https://gitlab.gnome.org/World/gedit/libgedit-amtk";
+    changelog = "https://gitlab.gnome.org/World/gedit/libgedit-amtk/-/blob/${version}/NEWS?ref_type=tags";
     description = "Actions, Menus and Toolbars Kit for GTK applications";
-    maintainers = with maintainers; [ manveru bobby285271 ];
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [
+      manveru
+      bobby285271
+    ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
   };
 }

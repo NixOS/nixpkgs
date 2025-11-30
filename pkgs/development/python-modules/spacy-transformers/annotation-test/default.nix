@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   pytest,
   spacy-models,
@@ -7,11 +8,15 @@
 stdenv.mkDerivation {
   name = "spacy-transformers-annotation-test";
 
-  src = ./.;
+  src = lib.fileset.toSource {
+    root = ./.;
+    fileset = lib.fileset.unions [
+      ./annotate.py
+    ];
+  };
 
   dontConfigure = true;
   dontBuild = true;
-  doCheck = true;
 
   nativeCheckInputs = [
     pytest

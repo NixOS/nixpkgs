@@ -1,32 +1,25 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  setuptools,
-  wheel,
+  hatchling,
   sortedcontainers,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "portion";
-  version = "2.4.2";
+  version = "2.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "AlexandreDecan";
     repo = "portion";
-    rev = "refs/tags/${version}";
-    hash = "sha256-URoyuE0yivUqPjJZbvATkAnTxicY4F2eiJ16rIUdY3Y=";
+    tag = version;
+    hash = "sha256-K4mZn8Fm96ZBBdLTMfM9f1GKDdIrRwDRzk6ObaXSFG4=";
   };
 
-  build-system = [
-    setuptools
-    wheel
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [ sortedcontainers ];
 
@@ -34,11 +27,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Portion, a Python library providing data structure and operations for intervals";
     homepage = "https://github.com/AlexandreDecan/portion";
     changelog = "https://github.com/AlexandreDecan/portion/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

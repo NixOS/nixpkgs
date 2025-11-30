@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "oslotest";
-  version = "5.0.0";
+  version = "6.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-97skDGy+8voLq7lRP/PafQ8ozDja+Y70Oy6ISDZ/vSA=";
+    hash = "sha256-CHBKOnoEtZtQAu5YTFPKlYn0VU/hAA5nbs4wwZVHgj4=";
   };
 
   nativeBuildInputs = [ pbr ];
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Oslo test framework";
     homepage = "https://github.com/openstack/oslotest";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

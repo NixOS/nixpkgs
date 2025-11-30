@@ -1,24 +1,28 @@
 {
   lib,
   stdenv,
-  addOpenGLRunpath,
-  autoPatchelfHook,
   buildPythonPackage,
-  cudaPackages,
+  python,
   fetchurl,
-  ffmpeg_4,
-  ffmpeg_5,
+  pythonOlder,
+  pythonAtLeast,
+
+  # buildInputs
+  cudaPackages,
   ffmpeg_6,
   sox,
-  pythonAtLeast,
-  pythonOlder,
-  python,
+
+  # nativeBuildInputs
+  addDriverRunpath,
+  autoPatchelfHook,
+
+  # dependencies
   torch-bin,
 }:
 
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.3.0";
+  version = "2.9.1";
   format = "wheel";
 
   src =
@@ -29,37 +33,34 @@ buildPythonPackage rec {
     in
     fetchurl srcs;
 
-  disabled = (pythonOlder "3.8") || (pythonAtLeast "3.13");
+  disabled = (pythonOlder "3.10") || (pythonAtLeast "3.15");
 
-  buildInputs =
+  buildInputs = [
+    # We need to patch lib/torio/_torio_ffmpeg6
+    ffmpeg_6.dev
+    sox
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux (
+    with cudaPackages;
     [
-      # We need to patch the lib/_torchaudio_ffmpeg[4-6]
-      ffmpeg_4.dev
-      ffmpeg_5.dev
-      ffmpeg_6.dev
-      sox
+      # $out/${sitePackages}/torchaudio/lib/libtorchaudio*.so wants libcudart.so.11.0 but torch/lib only ships
+      # libcudart.$hash.so.11.0
+      cuda_cudart
+
+      # $out/${sitePackages}/torchaudio/lib/libtorchaudio*.so wants libnvToolsExt.so.2 but torch/lib only ships
+      # libnvToolsExt-$hash.so.1
+      cuda_nvtx
     ]
-    ++ lib.optionals stdenv.isLinux (
-      with cudaPackages;
-      [
-        # $out/${sitePackages}/torchaudio/lib/libtorchaudio*.so wants libcudart.so.11.0 but torch/lib only ships
-        # libcudart.$hash.so.11.0
-        cuda_cudart
+  );
 
-        # $out/${sitePackages}/torchaudio/lib/libtorchaudio*.so wants libnvToolsExt.so.2 but torch/lib only ships
-        # libnvToolsExt-$hash.so.1
-        cuda_nvtx
-      ]
-    );
-
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
-    addOpenGLRunpath
+    addDriverRunpath
   ];
 
   dependencies = [ torch-bin ];
 
-  preInstall = lib.optionals stdenv.isLinux ''
+  preInstall = lib.optionals stdenv.hostPlatform.isLinux ''
     addAutoPatchelfSearchPath "${torch-bin}/${python.sitePackages}/torch"
   '';
 
@@ -68,20 +69,23 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "torchaudio" ];
 
-  meta = with lib; {
+  meta = {
     description = "PyTorch audio library";
     homepage = "https://pytorch.org/";
     changelog = "https://github.com/pytorch/audio/releases/tag/v${version}";
     # Includes CUDA and Intel MKL, but redistributions of the binary are not limited.
     # https://docs.nvidia.com/cuda/eula/index.html
     # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
-    license = licenses.bsd3;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.bsd3;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
       "aarch64-darwin"
     ];
-    maintainers = with maintainers; [ junjihashimoto ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      junjihashimoto
+    ];
   };
 }

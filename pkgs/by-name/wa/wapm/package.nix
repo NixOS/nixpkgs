@@ -1,11 +1,10 @@
-{ lib
-, fetchFromGitHub
-, perl
-, libiconv
-, openssl
-, rustPlatform
-, stdenv
-, darwin
+{
+  lib,
+  fetchFromGitHub,
+  perl,
+  libiconv,
+  openssl,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,20 +15,22 @@ rustPlatform.buildRustPackage rec {
     owner = "wasmerio";
     repo = "wapm-cli";
     rev = "v${version}";
-    sha256 = "sha256-T7YEe8xg5iwI/npisW0m+6FLi+eaAQVgYNe6TvMlhAs=";
+    hash = "sha256-T7YEe8xg5iwI/npisW0m+6FLi+eaAQVgYNe6TvMlhAs=";
   };
 
-  cargoSha256 = "sha256-r4123NJ+nxNOVIg6svWr636xbxOJQ7tp76JoAi2m9p8=";
+  cargoHash = "sha256-GW5/1/RsS5jn6DoR+wGpwNzUW+nN45cxpE85XbnXqso=";
 
   nativeBuildInputs = [ perl ];
 
-  buildInputs = [ libiconv openssl ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security SystemConfiguration ]);
+  buildInputs = [
+    libiconv
+    openssl
+  ];
 
   doCheck = false;
 
   meta = with lib; {
-    description = "A package manager for WebAssembly modules";
+    description = "Package manager for WebAssembly modules";
     mainProgram = "wapm";
     homepage = "https://docs.wasmer.io/ecosystem/wapm";
     license = with licenses; [ mit ];

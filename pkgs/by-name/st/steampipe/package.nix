@@ -11,23 +11,25 @@
 
 buildGoModule rec {
   pname = "steampipe";
-  version = "0.23.1";
+  version = "2.3.2";
+
+  env.CGO_ENABLED = 0;
 
   src = fetchFromGitHub {
     owner = "turbot";
     repo = "steampipe";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-OpZqOEE5lIJOBaDfQFi71XmPqCjJXIYeCaWUFqbcgMc=";
+    tag = "v${version}";
+    hash = "sha256-RAMCbajhXzJDeDuNy0rE6jJDkw3NOw0dC4jLafkNmJc=";
   };
 
-  vendorHash = "sha256-KY5mVs+YsyHHtV6DvfwwxcF8K9IQWxlxIJeSyFsKkpc=";
+  vendorHash = "sha256-1o7ANCyz19WSIkYYoA0DpYzkY2qBXHHSfAGrAG2+k88=";
   proxyVendor = true;
 
   postPatch = ''
     # Patch test that relies on looking up homedir in user struct to prefer ~
     substituteInPlace pkg/steampipeconfig/shared_test.go \
       --replace-fail 'filehelpers "github.com/turbot/go-kit/files"' "" \
-      --replace-fail 'filepaths.SteampipeDir, _ = filehelpers.Tildefy("~/.steampipe")' 'filepaths.SteampipeDir = "~/.steampipe"';
+      --replace-fail 'app_specific.InstallDir, _ = filehelpers.Tildefy("~/.steampipe")' 'app_specific.InstallDir = "~/.steampipe"';
   '';
 
   nativeBuildInputs = [
@@ -38,6 +40,10 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
+    "-X main.version=${version}"
+    "-X main.commit=${src.rev}"
+    "-X main.date=unknown"
+    "-X main.builtBy=nixpkgs"
   ];
 
   doCheck = true;
@@ -47,8 +53,6 @@ buildGoModule rec {
       skippedTests = [
         # panic: could not create backups directory: mkdir /var/empty/.steampipe: operation not permitted
         "TestTrimBackups"
-        # Skip tests that require network access
-        "TestIsPortBindable"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -80,6 +84,9 @@ buildGoModule rec {
     homepage = "https://steampipe.io/";
     license = lib.licenses.agpl3Only;
     mainProgram = "steampipe";
-    maintainers = with lib.maintainers; [ hardselius anthonyroussel ];
+    maintainers = with lib.maintainers; [
+      hardselius
+      anthonyroussel
+    ];
   };
 }

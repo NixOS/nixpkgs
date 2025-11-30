@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   pythonOlder,
+  setuptools,
   fetchFromGitHub,
   bleach,
   mt-940,
@@ -12,25 +13,33 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.0.0";
+  version = "4.2.4";
   pname = "fints";
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
-  format = "setuptools";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "python-fints";
-    rev = "v${version}";
-    hash = "sha256-SREprcrIdeKVpL22IViexwiKmFfbT2UbKEmxtVm6iu0=";
+    tag = "v${version}";
+    hash = "sha256-la5vpWBoZ7hZsAyjjCqHpFfOykDVosI/S9amox1dmzY=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    mt-940
-    sepaxml
+  pythonRemoveDeps = [ "enum-tools" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     bleach
+    mt-940
+    requests
+    sepaxml
   ];
+
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [ "fints" ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -42,7 +51,6 @@ buildPythonPackage rec {
     description = "Pure-python FinTS (formerly known as HBCI) implementation";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [
-      elohmeier
       dotlambda
     ];
   };

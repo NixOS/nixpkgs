@@ -1,37 +1,90 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, makeWrapper, glibc, adcli, augeas, dnsutils, c-ares, curl,
-  cyrus_sasl, ding-libs, libnl, libunistring, nss, samba, nfs-utils, doxygen,
-  python3, pam, popt, talloc, tdb, tevent, pkg-config, ldb, openldap,
-  pcre2, libkrb5, cifs-utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
-  libuuid, systemd, nspr, check, cmocka, uid_wrapper, p11-kit,
-  nss_wrapper, ncurses, Po4a, http-parser, jansson, jose,
-  docbook_xsl, docbook_xml_dtd_44,
-  testers, nix-update-script, nixosTests, fetchpatch,
-  withSudo ? false }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  replaceVars,
+  autoreconfHook,
+  makeWrapper,
+  glibc,
+  adcli,
+  augeas,
+  dnsutils,
+  c-ares,
+  curl,
+  cyrus_sasl,
+  ding-libs,
+  libnl,
+  libunistring,
+  nss,
+  samba,
+  nfs-utils,
+  doxygen,
+  python3,
+  pam,
+  popt,
+  talloc,
+  tdb,
+  tevent,
+  pkg-config,
+  ldb,
+  openldap,
+  pcre2,
+  libkrb5,
+  libcap,
+  cifs-utils,
+  glib,
+  keyutils,
+  dbus,
+  fakeroot,
+  libxslt,
+  libxml2,
+  libuuid,
+  systemd,
+  nspr,
+  check,
+  cmocka,
+  uid_wrapper,
+  p11-kit,
+  nss_wrapper,
+  ncurses,
+  Po4a,
+  jansson,
+  jose,
+  docbook_xsl,
+  docbook_xml_dtd_45,
+  testers,
+  versionCheckHook,
+  nix-update-script,
+  nixosTests,
+  withSudo ? false,
+}:
 
 let
-  docbookFiles = "${docbook_xsl}/share/xml/docbook-xsl/catalog.xml:${docbook_xml_dtd_44}/xml/dtd/docbook/catalog.xml";
+  docbookFiles = "${docbook_xsl}/share/xml/docbook-xsl/catalog.xml:${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sssd";
-  version = "2.9.4";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "SSSD";
     repo = "sssd";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-VJXZndbmC6mAVxzvv5Wjb4adrQkP16Rt4cgjl4qGDIc=";
+    tag = finalAttrs.version;
+    hash = "sha256-JN4GVx5rBfNBLaMpLcKgyd+CyNDafz85BXUcfg5kDXQ=";
   };
 
   patches = [
-    # Fix the build with Samba 4.20
-    (fetchpatch {
-      url = "https://github.com/SSSD/sssd/commit/1bf51929a48b84d62ac54f2a42f17e7fbffe1612.patch";
-      hash = "sha256-VLx04APEipp860iOJNIwTGywxZ7rIDdyh3te6m7Ymlo=";
+    (replaceVars ./fix-ldb-modules-path.patch {
+      inherit ldb;
+      out = null; # will be replaced in postPatch https://github.com/NixOS/nixpkgs/pull/446589#discussion_r2384899857
     })
   ];
 
   postPatch = ''
     patchShebangs ./sbus_generate.sh.in
+
+    substituteInPlace src/confdb/confdb.c \
+      --replace-fail "@out@" "${placeholder "out"}"
   '';
 
   # Something is looking for <libxml/foo.h> instead of <libxml2/libxml/foo.h>
@@ -42,7 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure = ''
     export SGML_CATALOG_FILES="${docbookFiles}"
-    export PYTHONPATH=$(find ${python3.pkgs.python-ldap} -type d -name site-packages)
     export PATH=$PATH:${openldap}/libexec
 
     configureFlagsArray=(
@@ -54,13 +106,16 @@ stdenv.mkDerivation (finalAttrs: {
       --with-pid-path=/run
       --with-python3-bindings
       --with-syslog=journald
+      --with-initscript=systemd
       --without-selinux
       --without-semanage
       --with-xml-catalog-path=''${SGML_CATALOG_FILES%%:*}
       --with-ldb-lib-dir=$out/modules/ldb
       --with-nscd=${glibc.bin}/sbin/nscd
+      --with-sssd-user=root
     )
-  '' + lib.optionalString withSudo ''
+  ''
+  + lib.optionalString withSudo ''
     configureFlagsArray+=("--with-sudo")
   '';
 
@@ -68,31 +123,81 @@ stdenv.mkDerivation (finalAttrs: {
   # Disable parallel install due to missing depends:
   #   libtool:   error: error: relink '_py3sss.la' with the above command before installing i
   enableParallelInstalling = false;
-  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config doxygen ];
-  buildInputs = [ augeas dnsutils c-ares curl cyrus_sasl ding-libs libnl libunistring nss
-                  samba nfs-utils p11-kit python3 popt
-                  talloc tdb tevent ldb pam openldap pcre2 libkrb5
-                  cifs-utils glib keyutils dbus fakeroot libxslt libxml2
-                  libuuid python3.pkgs.python-ldap systemd nspr check cmocka uid_wrapper
-                  nss_wrapper ncurses Po4a http-parser jansson jose ];
+
+  nativeBuildInputs = [
+    autoreconfHook
+    makeWrapper
+    pkg-config
+    doxygen
+  ];
+
+  buildInputs = [
+    augeas
+    dnsutils
+    c-ares
+    curl
+    cyrus_sasl
+    ding-libs
+    libcap
+    libnl
+    libunistring
+    nss
+    samba
+    nfs-utils
+    p11-kit
+    (python3.withPackages (
+      p: with p; [
+        setuptools
+        distutils
+        python-ldap
+      ]
+    ))
+    popt
+    talloc
+    tdb
+    tevent
+    ldb
+    pam
+    openldap
+    pcre2
+    libkrb5
+    cifs-utils
+    glib
+    keyutils
+    dbus
+    fakeroot
+    libxslt
+    libxml2
+    libuuid
+    systemd
+    nspr
+    check
+    cmocka
+    uid_wrapper
+    nss_wrapper
+    ncurses
+    Po4a
+    jansson
+    jose
+  ];
 
   makeFlags = [
     "SGML_CATALOG_FILES=${docbookFiles}"
   ];
 
   installFlags = [
-     "sysconfdir=$(out)/etc"
-     "localstatedir=$(out)/var"
-     "pidpath=$(out)/run"
-     "sss_statedir=$(out)/var/lib/sss"
-     "logpath=$(out)/var/log/sssd"
-     "pubconfpath=$(out)/var/lib/sss/pubconf"
-     "dbpath=$(out)/var/lib/sss/db"
-     "mcpath=$(out)/var/lib/sss/mc"
-     "pipepath=$(out)/var/lib/sss/pipes"
-     "gpocachepath=$(out)/var/lib/sss/gpo_cache"
-     "secdbpath=$(out)/var/lib/sss/secrets"
-     "initdir=$(out)/rc.d/init"
+    "sysconfdir=$(out)/etc"
+    "localstatedir=$(out)/var"
+    "pidpath=$(out)/run"
+    "sss_statedir=$(out)/var/lib/sss"
+    "logpath=$(out)/var/log/sssd"
+    "pubconfpath=$(out)/var/lib/sss/pubconf"
+    "dbpath=$(out)/var/lib/sss/db"
+    "mcpath=$(out)/var/lib/sss/mc"
+    "pipepath=$(out)/var/lib/sss/pipes"
+    "gpocachepath=$(out)/var/lib/sss/gpo_cache"
+    "secdbpath=$(out)/var/lib/sss/secrets"
+    "initdir=$(out)/rc.d/init"
   ];
 
   postInstall = ''
@@ -101,31 +206,37 @@ stdenv.mkDerivation (finalAttrs: {
     rm -f "$out"/modules/ldb/memberof.la
     find "$out" -depth -type d -exec rmdir --ignore-fail-on-non-empty {} \;
   '';
+
   postFixup = ''
     for f in $out/bin/sss{ctl,_cache,_debuglevel,_override,_seed}; do
       wrapProgram $f --prefix LDB_MODULES_PATH : $out/modules/ldb
     done
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
   passthru = {
     tests = {
-      inherit (nixosTests) sssd sssd-ldap;
+      inherit (nixosTests) sssd-ldap sssd-legacy-config;
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        command = "sssd --version";
-      };
     };
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "System Security Services Daemon";
     homepage = "https://sssd.io/";
     changelog = "https://sssd.io/release-notes/sssd-${finalAttrs.version}.html";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ illustris ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      illustris
+      liberodark
+    ];
     pkgConfigModules = [
       "ipa_hbac"
       "sss_certmap"

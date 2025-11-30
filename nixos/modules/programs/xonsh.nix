@@ -1,11 +1,17 @@
 # This module defines global configuration for the xonsh.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
   cfg = config.programs.xonsh;
-
+  package = cfg.package.override { inherit (cfg) extraPackages; };
+  bashCompletionPath = "${cfg.bashCompletion.package}/share/bash-completion/bash_completion";
 in
 
 {
@@ -23,15 +29,41 @@ in
       };
 
       package = lib.mkPackageOption pkgs "xonsh" {
-        example = "xonsh.override { extraPackages = ps: [ ps.requests ]; }";
+        extraDescription = ''
+          The argument `extraPackages` of this package will be overridden by
+          the option `programs.xonsh.extraPackages`.
+        '';
       };
 
       config = lib.mkOption {
         default = "";
-        description = "Control file to customize your shell behavior.";
+        description = ''
+          Extra text added to the end of `/etc/xonsh/xonshrc`,
+          the system-wide control file for xonsh.
+        '';
         type = lib.types.lines;
       };
 
+      extraPackages = lib.mkOption {
+        default = (ps: [ ]);
+        defaultText = lib.literalExpression "ps: [ ]";
+        example = lib.literalExpression ''
+          ps: with ps; [ numpy xonsh.xontribs.xontrib-vox ]
+        '';
+        type =
+          with lib.types;
+          coercedTo (listOf lib.types.package) (v: (_: v)) (functionTo (listOf lib.types.package));
+        description = ''
+          Xontribs and extra Python packages to be available in xonsh.
+        '';
+      };
+
+      bashCompletion = {
+        enable = lib.mkEnableOption "bash completions for xonsh" // {
+          default = true;
+        };
+        package = lib.mkPackageOption pkgs "bash-completion" { };
+      };
     };
 
   };
@@ -61,17 +93,16 @@ in
               aliases['ls'] = _ls_alias
           del _ls_alias
 
+      ${lib.optionalString cfg.bashCompletion.enable "$BASH_COMPLETIONS = '${bashCompletionPath}'"}
 
       ${cfg.config}
     '';
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ package ];
 
-    environment.shells =
-      [ "/run/current-system/sw/bin/xonsh"
-        "${cfg.package}/bin/xonsh"
-      ];
-
+    environment.shells = [
+      "/run/current-system/sw/bin/xonsh"
+      "${lib.getExe package}"
+    ];
   };
-
 }

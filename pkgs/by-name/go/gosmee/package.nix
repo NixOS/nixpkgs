@@ -1,18 +1,20 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "gosmee";
-  version = "0.21.0";
+  version = "0.28.3";
 
   src = fetchFromGitHub {
     owner = "chmouel";
     repo = "gosmee";
     rev = "v${version}";
-    sha256 = "sha256-VNBz6roula/YlsYMM1kjQT3TLuQ86/MESzNNkEf/92M=";
+    hash = "sha256-97Z/q0cOX4zPGYaeAKqxm3sb7WfJ1fpUcMhuqHsPG1c=";
   };
   vendorHash = null;
 
@@ -22,7 +24,7 @@ buildGoModule rec {
     printf ${version} > gosmee/templates/version
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd gosmee \
       --bash <($out/bin/gosmee completion bash) \
       --fish <($out/bin/gosmee completion fish) \
@@ -33,6 +35,9 @@ buildGoModule rec {
     description = "Command line server and client for webhooks deliveries (and https://smee.io)";
     homepage = "https://github.com/chmouel/gosmee";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ vdemeester chmouel ];
+    maintainers = with lib.maintainers; [
+      vdemeester
+      chmouel
+    ];
   };
 }

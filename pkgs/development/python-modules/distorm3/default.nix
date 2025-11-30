@@ -1,8 +1,8 @@
 {
   lib,
   buildPythonPackage,
+  distutils,
   fetchFromGitHub,
-  pythonAtLeast,
   pythonOlder,
   pytestCheckHook,
   setuptools,
@@ -11,30 +11,30 @@
 
 buildPythonPackage rec {
   pname = "distorm3";
-  version = "3.5.2";
+  version = "3.5.2b";
   pyproject = true;
 
-  # Still uses distutils, https://github.com/gdabah/distorm/issues/191
-  disabled = pythonOlder "3.5" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "gdabah";
     repo = "distorm";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Fhvxag2UN5wXEySP1n1pCahMQR/SfssywikeLmiASwQ=";
+    tag = version;
+    hash = "sha256-2ftEV3TMS3HT7f96k+Pwt3Mm31fVEXcHpcbbz05jycU=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    distutils
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
     yasm
   ];
 
-  disabledTests = [
-    # TypeError: __init__() missing 3 required positional...
-    "test_dummy"
-  ];
+  # TypeError: __init__() missing 3 required positional...
+  doCheck = false;
 
   pythonImportsCheck = [ "distorm3" ];
 

@@ -1,40 +1,41 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, blueprint-compiler
-, cargo
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, wrapGAppsHook4
-, cairo
-, dbus
-, gdk-pixbuf
-, glib
-, gtk4
-, libadwaita
-, openssl
-, pango
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  blueprint-compiler,
+  cargo,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
+  cairo,
+  dbus,
+  gdk-pixbuf,
+  glib,
+  gtk4,
+  libadwaita,
+  openssl,
+  pango,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "impression";
-  version = "3.1.0";
+  version = "3.5.4";
 
   src = fetchFromGitLab {
     owner = "adhami3310";
     repo = "Impression";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-5hBpe8D3DVXP6Hq5L4OUL9rCml0MoLdK7uZzbIIkNh0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jOQ3WLsbL/ODTfTPjb8wbd2QDER2ubtan2jL0nw/rk4=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) src;
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-lbpbggf4DEjpXJ52aM7qNd01XCEY3xj8dKGMfCZ9i3A=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-uUW8xeqQCav7YP/FScySZ2z9jWatkgKw8bPpwX0TOVw=";
   };
 
   nativeBuildInputs = [
@@ -60,12 +61,18 @@ stdenv.mkDerivation (finalAttrs: {
     pango
   ];
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Straight-forward and modern application to create bootable drives";
     homepage = "https://gitlab.com/adhami3310/Impression";
+    changelog = "https://gitlab.com/adhami3310/Impression/-/releases/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     mainProgram = "impression";
     maintainers = with lib.maintainers; [ dotlambda ];
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
 })

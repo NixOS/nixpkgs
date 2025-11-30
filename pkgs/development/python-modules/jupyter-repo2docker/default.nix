@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "jupyter-repo2docker";
-  version = "2024.03.0";
+  version = "2025.08.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "repo2docker";
-    rev = "refs/tags/${version}";
-    hash = "sha256-D8sgeyfQjEkBYck/CikAVNZzUSl1R9uXSv75DTXT5U0=";
+    tag = version;
+    hash = "sha256-vqLZbqshEl3xC5hcE4OkWfZpPSlSfv70oygEYPFqyFE=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -64,8 +64,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Turn code repositories into Jupyter enabled Docker Images";
     homepage = "https://repo2docker.readthedocs.io/";
-    changelog = "https://github.com/jupyterhub/repo2docker/blob/${src.rev}/docs/source/changelog.md";
+    changelog = "https://github.com/jupyterhub/repo2docker/blob/${src.tag}/docs/source/changelog.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

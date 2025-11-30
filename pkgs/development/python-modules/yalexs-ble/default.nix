@@ -10,27 +10,25 @@
   lru-dict,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "yalexs-ble";
-  version = "2.4.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  version = "3.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-A/4N3vmFuzg9vaPISs0P3KxRQZSquPpR1zYcYEePkTA=";
+    repo = "yalexs-ble";
+    tag = "v${version}";
+    hash = "sha256-50gI1vcA3GPm5yqLxKa6tV0bv5xUMfNFvdabJ2KY99I=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     async-interrupt
     async-timeout
     bleak
@@ -41,21 +39,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=yalexs_ble --cov-report=term-missing:skip-covered" ""
-  '';
 
   pythonImportsCheck = [ "yalexs_ble" ];
 
   meta = with lib; {
     description = "Library for Yale BLE devices";
     homepage = "https://github.com/bdraco/yalexs-ble";
-    changelog = "https://github.com/bdraco/yalexs-ble/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ gpl3Only ];
+    changelog = "https://github.com/bdraco/yalexs-ble/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
   };
 }

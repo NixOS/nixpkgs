@@ -5,40 +5,46 @@
   fetchPypi,
   google-api-python-client,
   google-auth-oauthlib,
+  jsonschema,
   jupyterhub,
   mwoauth,
   pyjwt,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
+  requests,
   requests-mock,
+  ruamel-yaml,
   setuptools,
+  tornado,
+  traitlets,
 }:
 
 buildPythonPackage rec {
   pname = "oauthenticator";
-  version = "16.3.0";
+  version = "17.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QMddGJUfafXoBxMCjlx1lH45a4Bab3AP4j8Px7JxYaQ=";
+    hash = "sha256-5dkMskEf/z3G/MFjNGgjPA4OAjlCLAh8dzTRaFBVuPM=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=oauthenticator" ""
-  '';
 
   build-system = [ setuptools ];
 
   dependencies = [
+    jsonschema
     jupyterhub
     pyjwt
+    requests
+    ruamel-yaml
+    tornado
+    traitlets
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     googlegroups = [
       google-api-python-client
       google-auth-oauthlib
@@ -48,9 +54,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     requests-mock
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Tests are outdated, https://github.com/jupyterhub/oauthenticator/issues/432
@@ -75,6 +83,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyterhub/oauthenticator";
     changelog = "https://github.com/jupyterhub/oauthenticator/blob/${version}/docs/source/reference/changelog.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

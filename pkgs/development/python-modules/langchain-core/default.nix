@@ -1,51 +1,54 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  freezegun,
-  grandalf,
+
+  # build-system
+  hatchling,
+
+  # dependencies
   jsonpatch,
   langsmith,
-  numpy,
   packaging,
-  poetry-core,
   pydantic,
+  pyyaml,
+  tenacity,
+  typing-extensions,
+
+  # tests
+  blockbuster,
+  freezegun,
+  grandalf,
+  httpx,
+  langchain-core,
+  langchain-tests,
+  numpy,
   pytest-asyncio,
   pytest-mock,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
-  pythonRelaxDepsHook,
-  pyyaml,
   syrupy,
-  tenacity,
-  writeScript,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.2.1";
+  version = "1.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "langchain-core==${version}";
-    hash = "sha256-D0y6kW5bWcCKW2TwVPlZcAUxqADgsOm9fWySAjHYYIg=";
+    tag = "langchain-core==${version}";
+    hash = "sha256-uDMex+2wvvNvdFSTHjShsrJeeMymOMKCmfS+AyMMH6c=";
   };
 
   sourceRoot = "${src.name}/libs/core";
 
-  pythonRelaxDeps = [
-    "langsmith"
-    "packaging"
-  ];
-
-  build-system = [ poetry-core ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  build-system = [ hatchling ];
 
   dependencies = [
     jsonpatch
@@ -54,13 +57,19 @@ buildPythonPackage rec {
     pydantic
     pyyaml
     tenacity
+    typing-extensions
   ];
 
   pythonImportsCheck = [ "langchain_core" ];
 
+  # avoid infinite recursion
+  doCheck = false;
+
   nativeCheckInputs = [
+    blockbuster
     freezegun
     grandalf
+    langchain-tests
     numpy
     pytest-asyncio
     pytest-mock
@@ -69,26 +78,67 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   passthru = {
-    updateScript = writeScript "update.sh" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p nix-update
-
-      set -eu -o pipefail
-      nix-update --commit --version-regex 'langchain-core==(.*)' python3Packages.langchain-core
-      nix-update --commit --version-regex 'langchain-text-splitters==(.*)' python3Packages.langchain-text-splitters
-      nix-update --commit --version-regex 'langchain==(.*)' python3Packages.langchain
-      nix-update --commit --version-regex 'langchain-community==(.*)' python3Packages.langchain-community
-    '';
+    tests.pytest = langchain-core.overridePythonAttrs (_: {
+      doCheck = true;
+    });
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-core==";
+    };
   };
 
-  meta = with lib; {
+  disabledTests = [
+    # flaky, sometimes fail to strip uuid from AIMessageChunk before comparing to test value
+    "test_map_stream"
+    # Compares with machine-specific timings
+    "test_rate_limit"
+    # flaky: assert (1726352133.7419367 - 1726352132.2697523) < 1
+    "test_benchmark_model"
+
+    # TypeError: exceptions must be derived from Warning, not <class 'NoneType'>
+    "test_chat_prompt_template_variable_names"
+    "test_create_model_v2"
+
+    # Comparison with magic strings
+    "test_prompt_with_chat_model"
+    "test_prompt_with_chat_model_async"
+    "test_prompt_with_llm"
+    "test_prompt_with_llm_parser"
+    "test_prompt_with_llm_and_async_lambda"
+    "test_prompt_with_chat_model_and_parser"
+    "test_combining_sequences"
+
+    # AssertionError: assert [+ received] == [- snapshot]
+    "test_chat_input_schema"
+    # AssertionError: assert {'$defs': {'D...ype': 'array'} == {'$defs': {'D...ype': 'array'}
+    "test_schemas"
+    # AssertionError: assert [+ received] == [- snapshot]
+    "test_graph_sequence_map"
+    "test_representation_of_runnables"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Langchain-core the following tests due to the test comparing execution time with magic values.
+    "test_queue_for_streaming_via_sync_call"
+    "test_same_event_loop"
+    # Comparisons with magic numbers
+    "test_rate_limit_ainvoke"
+    "test_rate_limit_astream"
+  ];
+
+  disabledTestPaths = [ "tests/unit_tests/runnables/test_runnable_events_v2.py" ];
+
+  meta = {
     description = "Building applications with LLMs through composability";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/core";
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }

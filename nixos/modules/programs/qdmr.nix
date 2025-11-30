@@ -7,8 +7,9 @@
 
 let
   cfg = config.programs.qdmr;
-in {
-  meta.maintainers = [ lib.maintainers.janik ];
+in
+{
+  meta.maintainers = [ ];
 
   options = {
     programs.qdmr = {
@@ -20,6 +21,6 @@ in {
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     services.udev.packages = [ cfg.package ];
-    users.groups.dialout = {};
+    users.groups.dialout = { };
   };
 }

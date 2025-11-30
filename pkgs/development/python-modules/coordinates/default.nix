@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "clbarnes";
     repo = "coordinates";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-S/AmH5FinTpHFFcrGAUSyjfqoIgq14QlHk9CnUkqCv4=";
   };
 
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/clbarnes/coordinates";
     changelog = "https://github.com/clbarnes/coordinates/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

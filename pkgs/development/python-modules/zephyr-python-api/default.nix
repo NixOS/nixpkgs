@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "zephyr-python-api";
   version = "0.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "zephyr_python_api";
@@ -17,9 +17,9 @@ buildPythonPackage rec {
     hash = "sha256-YupGiybfhwb+I4ofr6RNBzS6LQfx5BQD/SU5nYrnqFk=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ requests ];
+  dependencies = [ requests ];
 
   # No tests in archive
   doCheck = false;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/nassauwinter/zephyr-python-api";
-    description = "A set of wrappers for Zephyr Scale (TM4J) REST API";
+    description = "Set of wrappers for Zephyr Scale (TM4J) REST API";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rapiteanu ];
   };

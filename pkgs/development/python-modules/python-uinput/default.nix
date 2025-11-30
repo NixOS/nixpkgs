@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-hTaXNEtk31U31K4yum+88FFdUakBCRD11QGZWQOLbro=";
+    hash = "sha256-hTaXNEtk31U31K4yum+88FFdUakBCRD11QGZWQOLbro=";
   };
 
   buildInputs = [ udev ];
@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "Pythonic API to Linux uinput kernel module";
     homepage = "https://tjjr.fi/sw/python-uinput/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

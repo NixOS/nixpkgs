@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchFromSourcehut }:
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+}:
 
-let version = "0.5.1";
-in stdenv.mkDerivation {
+let
+  version = "0.5.1";
+in
+stdenv.mkDerivation {
   pname = "nix-lib-nmt";
   inherit version;
 
@@ -22,7 +28,7 @@ in stdenv.mkDerivation {
 
   meta = {
     homepage = "https://git.sr.ht/~rycee/nmt";
-    description = "A basic test framework for projects using the Nixpkgs module system";
+    description = "Basic test framework for projects using the Nixpkgs module system";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rycee ];
   };

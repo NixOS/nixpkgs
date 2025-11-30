@@ -5,7 +5,6 @@
   mock,
   msgpack,
   pandas,
-  pynose,
   pytestCheckHook,
   python-dateutil,
   pytz,
@@ -24,6 +23,11 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-WMZH9gQ3Et2G6a7hLrTM+7tUFUZ7yZEKSKqMdMEQiXA=";
   };
+
+  patches = [
+    # https://github.com/influxdata/influxdb-python/pull/835
+    ./remove-nose.patch
+  ];
 
   postPatch = ''
     for f in influxdb/tests/dataframe_client_test.py influxdb/tests/influxdb08/dataframe_client_test.py; do
@@ -52,7 +56,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pandas
-    pynose
     pytestCheckHook
     requests-mock
   ];
@@ -67,7 +70,7 @@ buildPythonPackage rec {
     "test_write_points_from_dataframe_with_nan_json"
     "test_write_points_from_dataframe_with_tags_and_nan_json"
     "test_write_points_from_dataframe_with_numeric_precision"
-    # Reponse is not empty but `s = '孝'` and the JSON decoder chokes on that
+    # Response is not empty but `s = '孝'` and the JSON decoder chokes on that
     "test_query_with_empty_result"
     # Pandas API changes cause it to no longer infer datetimes in the expected manner
     "test_multiquery_into_dataframe"

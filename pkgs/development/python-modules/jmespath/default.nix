@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "JMESPath allows you to declaratively specify how to extract elements from a JSON document";
     mainProgram = "jp.py";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

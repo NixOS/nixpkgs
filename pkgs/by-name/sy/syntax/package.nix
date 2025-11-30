@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, buildNpmPackage
-, stdenv
-, nix-update-script
+{
+  lib,
+  fetchFromGitHub,
+  buildNpmPackage,
+  stdenv,
+  nix-update-script,
 }:
 
 buildNpmPackage rec {
@@ -17,6 +18,8 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-jZwbRGGg4tek6Jr+V7/SceJlsbIv7jFWQ+qa+fnChTw=";
 
+  dontCheckForBrokenSymlinks = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
@@ -25,6 +28,6 @@ buildNpmPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ h7x4 ];
     mainProgram = "syntax-cli";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

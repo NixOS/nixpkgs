@@ -1,6 +1,7 @@
-{ stdenv
-, lib
-, fetchFromGitHub
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ENso0y7yEaXzGXzZOnlZ1L7+j/qayJL+f55/NYLz2ew=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile \
         --replace g++ c++
   '';
@@ -28,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "Construct is an abstraction over x86 NASM Assembly";
+    description = "Abstraction over x86 NASM Assembly";
     longDescription = "Construct adds features such as while loops, if statements, scoped macros and function-call syntax to NASM Assembly.";
     homepage = "https://github.com/Thomas-de-Bock/construct";
     maintainers = with maintainers; [ rucadi ];

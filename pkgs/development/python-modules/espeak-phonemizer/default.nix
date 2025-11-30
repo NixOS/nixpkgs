@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   espeak-ng,
   pytestCheckHook,
 }:
@@ -15,13 +15,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "espeak-phonemizer";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-K0s24mzXUqG0Au40jjGbpKNAznBkMHQzfh2/CDBN0F8=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./cdll.patch;
+    (replaceVars ./cdll.patch {
       libespeak_ng = "${lib.getLib espeak-ng}/lib/libespeak-ng.so";
     })
   ];

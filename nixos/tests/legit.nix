@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 let
   port = 5000;
   scanPath = "/var/lib/legit";
@@ -8,20 +8,23 @@ in
   meta.maintainers = [ lib.maintainers.ratsclub ];
 
   nodes = {
-    server = { config, pkgs, ... }: {
-      services.legit = {
-        enable = true;
-        settings = {
-          server.port = 5000;
-          repo = { inherit scanPath; };
+    server =
+      { config, pkgs, ... }:
+      {
+        services.legit = {
+          enable = true;
+          settings = {
+            server.port = 5000;
+            repo = { inherit scanPath; };
+          };
         };
-      };
 
-      environment.systemPackages = [ pkgs.git ];
-    };
+        environment.systemPackages = [ pkgs.git ];
+      };
   };
 
-  testScript = { nodes, ... }:
+  testScript =
+    { nodes, ... }:
     let
       strPort = builtins.toString port;
     in
@@ -51,4 +54,4 @@ in
           "curl -f http://localhost:${strPort}/some-repo"
       )
     '';
-})
+}

@@ -2,36 +2,46 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
 
-  # build
+  # build-system
   setuptools,
 
-  # runtime
+  # dependencies
+  jsonargparse,
+  looseversion,
   packaging,
+  tomlkit,
   typing-extensions,
 
   # tests
   pytest-timeout,
-  pytest7CheckHook,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "lightning-utilities";
-  version = "0.11.2";
+  version = "0.15.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "utilities";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-IT9aRAUNc2cP2erLr0MglZSVLfDjOxg8PVIIe9AvO0o=";
+    tag = "v${version}";
+    hash = "sha256-0unIL5jylunxTJxFTN+Q4aCFtD5zIHRNWEAWSbw+Fsk=";
   };
+
+  postPatch = ''
+    substituteInPlace src/lightning_utilities/install/requirements.py \
+      --replace-fail "from distutils.version import LooseVersion" "from looseversion import LooseVersion"
+  '';
 
   build-system = [ setuptools ];
 
   dependencies = [
+    jsonargparse
+    looseversion
     packaging
+    tomlkit
     typing-extensions
   ];
 
@@ -39,20 +49,22 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-timeout
-    pytest7CheckHook
+    pytestCheckHook
   ];
 
   disabledTests = [
-    "lightning_utilities.core.enums.StrEnum"
+    # DocTestFailure
     "lightning_utilities.core.imports.RequirementCache"
+
+    # NameError: name 'operator' is not defined. Did you forget to import 'operator'
     "lightning_utilities.core.imports.compare_version"
+
+    # importlib.metadata.PackageNotFoundError: No package metadata was found for pytorch-lightning==1.8.0
     "lightning_utilities.core.imports.get_dependency_min_version_spec"
+
     # weird doctests fail on imports, but providing the dependency
     # fails another test
     "lightning_utilities.core.imports.ModuleAvailableCache"
-    "lightning_utilities.core.imports.requires"
-    # Failed: DID NOT RAISE <class 'AssertionError'>
-    "test_no_warning_call"
   ];
 
   disabledTestPaths = [
@@ -61,18 +73,11 @@ buildPythonPackage rec {
     "src/lightning_utilities/install/requirements.py"
   ];
 
-  pytestFlagsArray = [
-    # warns about distutils removal in python 3.12
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
-
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/Lightning-AI/utilities/releases/tag/v${version}";
     description = "Common Python utilities and GitHub Actions in Lightning Ecosystem";
     homepage = "https://github.com/Lightning-AI/utilities";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ GaetanLepage ];
-    broken = pythonAtLeast "3.12";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

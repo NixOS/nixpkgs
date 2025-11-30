@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "dronecan";
-  version = "1.0.26";
+  version = "1.0.27";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-D2odxa9ADswrg6rgKLTyQulHpGec1r0lWRUZDV5YvyE=";
+    hash = "sha256-m6xfk/2pKfzbr0fu2GUjJnRcicoZDWzhrGJ6DDs2rBw=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -27,6 +27,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://dronecan.github.io/";
     license = licenses.mit;
-    maintainers = teams.ororatech.members;
+    teams = [ teams.ororatech ];
   };
 }

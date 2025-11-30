@@ -1,4 +1,8 @@
-{ stdenvNoCC, lib, fetchurl }:
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+}:
 
 let
   version = "1.0";
@@ -23,7 +27,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A sharp, readable, vector-y version of Monocraft";
+    description = "Sharp, readable, vector-y version of Monocraft";
     homepage = "https://github.com/IdreesInc/Miracode";
     license = licenses.ofl;
     platforms = platforms.all;

@@ -9,39 +9,43 @@
   pandas,
   pytestCheckHook,
   python-dateutil,
-  python-snappy,
+  cramjam,
   pythonOlder,
+  setuptools,
   zlib-ng,
   zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "fastavro";
-  version = "1.9.4";
-  format = "setuptools";
+  version = "1.12.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-UWvNEi6vzQknUws+b7UCFUajMUJkfnQkfBeCR0XfqQY=";
+    owner = "fastavro";
+    repo = "fastavro";
+    tag = version;
+    hash = "sha256-r/dNXBmsNnvYbvXdZC5++1B9884dQV76pLga6u3XtO8=";
   };
 
   preBuild = ''
     export FASTAVRO_USE_CYTHON=1
   '';
 
-  nativeBuildInputs = [ cython ];
+  build-system = [
+    cython
+    setuptools
+  ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     codecs = [
+      cramjam
       lz4
-      python-snappy
       zstandard
     ];
-    snappy = [ python-snappy ];
+    snappy = [ cramjam ];
     zstandard = [ zstandard ];
     lz4 = [ lz4 ];
   };
@@ -52,7 +56,8 @@ buildPythonPackage rec {
     pytestCheckHook
     python-dateutil
     zlib-ng
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   # Fails with "AttributeError: module 'fastavro._read_py' has no attribute
   # 'CYTHON_MODULE'." Doesn't appear to be serious. See https://github.com/fastavro/fastavro/issues/112#issuecomment-387638676.
@@ -67,7 +72,7 @@ buildPythonPackage rec {
     description = "Fast read/write of AVRO files";
     mainProgram = "fastavro";
     homepage = "https://github.com/fastavro/fastavro";
-    changelog = "https://github.com/fastavro/fastavro/blob/${version}/ChangeLog";
+    changelog = "https://github.com/fastavro/fastavro/blob/${src.tag}/ChangeLog";
     license = licenses.mit;
     maintainers = with maintainers; [ samuela ];
   };

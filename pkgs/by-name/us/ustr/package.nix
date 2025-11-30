@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchgit {
     url = "http://www.and.org/ustr/ustr.git";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pQrQy+S9fVFl8Mop4QmwEAXGiBSheQE4HgAZ4srFz64=";
   };
 
@@ -41,12 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     find $out/lib -name \*debug\* -delete
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.and.org/ustr/";
     description = "Micro String API for C language";
     mainProgram = "ustr-import";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

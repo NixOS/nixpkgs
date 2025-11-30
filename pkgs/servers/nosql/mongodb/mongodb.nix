@@ -1,54 +1,53 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPackages
-, boost
-, gperftools
-, pcre-cpp
-, snappy
-, zlib
-, yaml-cpp
-, sasl
-, net-snmp
-, openldap
-, openssl
-, libpcap
-, python3
-, curl
-, Security
-, CoreFoundation
-, cctools
-, xz
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPackages,
+  boost,
+  gperftools,
+  snappy,
+  zlib,
+  yaml-cpp,
+  sasl,
+  net-snmp,
+  openldap,
+  openssl,
+  libpcap,
+  curl,
+  cctools,
+  xz,
 }:
 
 # Note:
 #   The command line administrative tools are part of other packages:
 #   see pkgs.mongodb-tools and pkgs.mongosh.
 
-with lib;
-
-{ version, sha256, patches ? []
-, license ? lib.licenses.sspl
+{
+  version,
+  sha256,
+  patches ? [ ],
+  license ? lib.licenses.sspl,
+  avxSupport ? stdenv.hostPlatform.avxSupport,
+  passthru ? { },
 }:
 
 let
   scons = buildPackages.scons;
-  python = scons.python.withPackages (ps: with ps; [
-    pyyaml
-    cheetah3
-    psutil
-    setuptools
-  ] ++ lib.optionals (versionAtLeast version "6.0") [
-    packaging
-    pymongo
-  ]);
-
-  mozjsVersion = "60";
-  mozjsReplace = "defined(HAVE___SINCOS)";
+  python = scons.python.withPackages (
+    ps: with ps; [
+      pyyaml
+      cheetah3
+      psutil
+      setuptools
+      distutils
+      packaging
+      pymongo
+    ]
+  );
 
   system-libraries = [
     "boost"
-    "pcre"
+    #pcre2 -- breaks on pcre2-10.46 with at least version 7.0.24
     "snappy"
     "yaml"
     "zlib"
@@ -56,11 +55,13 @@ let
     #"stemmer"  -- not nice to package yet (no versioning, no makefile, no shared libs).
     #"valgrind" -- mongodb only requires valgrind.h, which is vendored in the source.
     #"wiredtiger"
-  ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ "tcmalloc" ];
   inherit (lib) systems subtractLists;
 
-in stdenv.mkDerivation rec {
-  inherit version;
+in
+stdenv.mkDerivation rec {
+  inherit version passthru;
   pname = "mongodb";
 
   src = fetchFromGitHub {
@@ -73,7 +74,8 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     scons
     python
-  ] ++ lib.optional stdenv.isLinux net-snmp;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux net-snmp;
 
   buildInputs = [
     boost
@@ -83,12 +85,14 @@ in stdenv.mkDerivation rec {
     yaml-cpp
     openssl
     openldap
-    pcre-cpp
     sasl
     snappy
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [ Security CoreFoundation cctools ]
-  ++ lib.optional stdenv.isLinux net-snmp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux net-snmp
   ++ [ xz ];
 
   # MongoDB keeps track of its build parameters, which tricks nix into
@@ -100,24 +104,21 @@ in stdenv.mkDerivation rec {
     # fix environment variable reading
     substituteInPlace SConstruct \
         --replace "env = Environment(" "env = Environment(ENV = os.environ,"
-   '' + ''
+  ''
+  + ''
     # Fix debug gcc 11 and clang 12 builds on Fedora
     # https://github.com/mongodb/mongo/commit/e78b2bf6eaa0c43bd76dbb841add167b443d2bb0.patch
     substituteInPlace src/mongo/db/query/plan_summary_stats.h --replace '#include <string>' '#include <optional>
     #include <string>'
     substituteInPlace src/mongo/db/exec/plan_stats.h --replace '#include <string>' '#include <optional>
     #include <string>'
-  '' + lib.optionalString (stdenv.isDarwin && versionOlder version "6.0") ''
-    substituteInPlace src/third_party/mozjs-${mozjsVersion}/extract/js/src/jsmath.cpp --replace '${mozjsReplace}' 0
-  '' + lib.optionalString stdenv.isi686 ''
-
-    # don't fail by default on i686
-    substituteInPlace src/mongo/db/storage/storage_options.h \
-      --replace 'engine("wiredTiger")' 'engine("mmapv1")'
+  ''
+  + lib.optionalString (!avxSupport) ''
+    substituteInPlace SConstruct \
+      --replace-fail "default=['+sandybridge']," 'default=[],'
   '';
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
-    "-Wno-unused-command-line-argument";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
 
   sconsFlags = [
     "--release"
@@ -137,12 +138,14 @@ in stdenv.mkDerivation rec {
   hardeningDisable = [ "fortify3" ];
 
   preBuild = ''
-    sconsFlags+=" CC=$CC"
-    sconsFlags+=" CXX=$CXX"
-  '' + optionalString (!stdenv.isDarwin) ''
-    sconsFlags+=" AR=$AR"
-  '' + optionalString stdenv.isAarch64 ''
-    sconsFlags+=" CCFLAGS='-march=armv8-a+crc'"
+    appendToVar sconsFlags "CC=$CC"
+    appendToVar sconsFlags "CXX=$CXX"
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    appendToVar sconsFlags "AR=$AR"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isAarch64 ''
+    appendToVar sconsFlags "CCFLAGS=-march=armv8-a+crc"
   '';
 
   preInstall = ''
@@ -160,23 +163,20 @@ in stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  installTargets =
-    if (versionAtLeast version "6.0") then "install-devcore"
-    else "install-core";
+  installTargets = "install-devcore";
 
   prefixKey = "DESTDIR=";
 
   enableParallelBuilding = true;
 
-  hardeningEnable = [ "pie" ];
-
-  meta = {
-    description = "A scalable, high-performance, open source NoSQL database";
+  meta = with lib; {
+    description = "Scalable, high-performance, open source NoSQL database";
     homepage = "http://www.mongodb.org";
     inherit license;
 
-    maintainers = with maintainers; [ bluescreen303 offline ];
+    maintainers = with maintainers; [
+      offline
+    ];
     platforms = subtractLists systems.doubles.i686 systems.doubles.unix;
-    broken = (versionOlder version "6.0" && stdenv.system == "aarch64-darwin");
   };
 }

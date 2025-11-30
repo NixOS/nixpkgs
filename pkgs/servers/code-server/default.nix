@@ -1,30 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildGoModule
-, makeWrapper
-, cacert
-, moreutils
-, jq
-, git
-, rsync
-, pkg-config
-, yarn
-, python3
-, esbuild
-, nodejs
-, node-gyp
-, libsecret
-, xorg
-, ripgrep
-, AppKit
-, Cocoa
-, CoreServices
-, Security
-, cctools
-, xcbuild
-, quilt
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildGoModule,
+  makeWrapper,
+  cacert,
+  moreutils,
+  jq,
+  git,
+  rsync,
+  pkg-config,
+  yarn,
+  python3,
+  esbuild,
+  nodejs,
+  node-gyp,
+  libsecret,
+  xorg,
+  ripgrep,
+  cctools,
+  xcbuild,
+  quilt,
+  nixosTests,
 }:
 
 let
@@ -35,16 +32,21 @@ let
   defaultYarnOpts = [ ];
 
   esbuild' = esbuild.override {
-    buildGoModule = args: buildGoModule (args // rec {
-      version = "0.16.17";
-      src = fetchFromGitHub {
-        owner = "evanw";
-        repo = "esbuild";
-        rev = "v${version}";
-        hash = "sha256-8L8h0FaexNsb3Mj6/ohA37nYLFogo5wXkAhGztGUUsQ=";
-      };
-      vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-    });
+    buildGoModule =
+      args:
+      buildGoModule (
+        args
+        // rec {
+          version = "0.16.17";
+          src = fetchFromGitHub {
+            owner = "evanw";
+            repo = "esbuild";
+            rev = "v${version}";
+            hash = "sha256-8L8h0FaexNsb3Mj6/ohA37nYLFogo5wXkAhGztGUUsQ=";
+          };
+          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+        }
+      );
   };
 
   # replaces esbuild's download script with a binary from nixpkgs
@@ -71,25 +73,29 @@ let
   # To compute the commit when upgrading this derivation, do:
   # `$ git rev-parse <git-rev>` where <git-rev> is the git revision of the `src`
   # Example: `$ git rev-parse v4.16.1`
-  commit = "effc6e95b4ad1c5ac5f9083ec06663ba4a2e005c";
+  commit = "1962f48b7f71772dc2c060dbaa5a6b4c0792a549";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "code-server";
-  version = "4.89.1";
+  version = "4.91.1";
 
   src = fetchFromGitHub {
     owner = "coder";
     repo = "code-server";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-exFt7dgy076MJJKDzTRRlTVjucfIXVaXKgurYfJ1Uvo=";
+    hash = "sha256-w0+lg/DcxKLrAz6DQGQ9+yPn42LrQ95Yn16IKNfqPvE=";
   };
 
   yarnCache = stdenv.mkDerivation {
     name = "${finalAttrs.pname}-${finalAttrs.version}-${system}-yarn-cache";
     inherit (finalAttrs) src;
 
-    nativeBuildInputs = [ yarn' git cacert ];
+    nativeBuildInputs = [
+      yarn'
+      git
+      cacert
+    ];
 
     buildPhase = ''
       runHook preBuild
@@ -114,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-BYz7ym+tsdbExUNOL3GV0wSMYuy4Q0GadZterH0ZGM0=";
+    outputHash = "sha256-LCmygPid6VJqR1PCOMk/Hc6bo4nwsLwYr7O1p3FQVvQ=";
   };
 
   nativeBuildInputs = [
@@ -133,13 +139,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     xorg.libX11
     xorg.libxkbfile
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libsecret
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-    Cocoa
-    CoreServices
-    Security
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
     xcbuild
   ];
@@ -246,7 +250,8 @@ stdenv.mkDerivation (finalAttrs: {
         xargs -I {} sh -c 'jq -e ".scripts.postinstall" {}/package.json >/dev/null && yarn --cwd {} postinstall --frozen-lockfile --offline || true'
     patchShebangs .
 
-  '' + lib.optionalString stdenv.isDarwin ''
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Use prebuilt binary for @parcel/watcher, which requires macOS SDK 10.13+
     # (see issue #101229).
     pushd ./lib/vscode/remote/node_modules/@parcel/watcher
@@ -254,7 +259,8 @@ stdenv.mkDerivation (finalAttrs: {
     mv ./prebuilds/darwin-x64/node.napi.glibc.node ./build/Release/watcher.node
     jq "del(.scripts) | .gypfile = false" ./package.json | sponge ./package.json
     popd
-  '' + ''
+  ''
+  + ''
 
     # Build binary packages (argon2, node-pty, etc).
     npm rebuild --offline
@@ -311,6 +317,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://github.com/coder/code-server/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Run VS Code on a remote server";
     longDescription = ''
       code-server is VS Code running on a remote server, accessible through the
@@ -318,8 +325,16 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/coder/code-server";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ offline henkery code-asher ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    maintainers = with lib.maintainers; [
+      offline
+      henkery
+      code-asher
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+    ];
     mainProgram = "code-server";
   };
 })

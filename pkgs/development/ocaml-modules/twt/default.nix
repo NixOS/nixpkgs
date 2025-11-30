@@ -1,7 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, findlib }:
-
-lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
-  "twt is not available for OCaml ${ocaml.version}"
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocaml,
+  findlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-twt";
@@ -14,7 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xbjLPd7P1KyuC3i6WHLBcdLwd14atcBsd5ER+l97KAk=";
   };
 
-  nativeBuildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+  ];
 
   strictDeps = true;
 
@@ -35,6 +41,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.vbgl ];
     mainProgram = "ocaml+twt";
+    broken = lib.versionAtLeast ocaml.version "5.0";
     inherit (ocaml.meta) platforms;
   };
 }

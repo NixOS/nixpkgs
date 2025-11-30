@@ -7,8 +7,6 @@
   pysigma-pipeline-sysmon,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
-  requests,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nNipsx-Sec";
     repo = "pySigma-backend-qradar";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VymaxX+iqrRlf+WEt4xqEvNt5kg8xI5O/MoYahayu0o=";
   };
 
@@ -29,7 +27,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [ pysigma ];

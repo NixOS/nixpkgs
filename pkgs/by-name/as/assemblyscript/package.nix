@@ -1,24 +1,25 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
 buildNpmPackage rec {
   pname = "assemblyscript";
-  version = "0.27.23";
+  version = "0.28.2";
 
   src = fetchFromGitHub {
     owner = "AssemblyScript";
-    repo = pname;
+    repo = "assemblyscript";
     rev = "v${version}";
-    sha256 = "sha256-pKb46AfL5MGKiH1AjyPeHw7ZeLnIiPYmf8b2bOkuRe0=";
+    hash = "sha256-8nY3Rst6i+RGW+kfjn/QSbYkaZf67k/KwuyIp40fCSM=";
   };
 
-  npmDepsHash = "sha256-io/3T0LE1kupjtMg8rpQlRmIn048X0jqhKKj/W7Ilo0=";
+  npmDepsHash = "sha256-wj/PMoqUBjXqz8/KOFAH5P5eFty3pztpQ8inGIy+ve4=";
 
   meta = with lib; {
-    homepage = "https://github.com/AssemblyScript/${pname}";
-    description = "A TypeScript-like language for WebAssembly";
+    homepage = "https://github.com/AssemblyScript/assemblyscript";
+    description = "TypeScript-like language for WebAssembly";
     license = licenses.asl20;
     maintainers = with maintainers; [ lucperkins ];
   };

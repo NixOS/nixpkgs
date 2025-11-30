@@ -9,17 +9,13 @@
   tsort,
   lorder,
   statHook,
-  rsync,
   uudecode,
   config,
   genassym,
   defaultMakeFlags,
-  common,
 }:
 {
   path = "sys";
-  version = "9.2";
-  sha256 = "03s18q8d9giipf05bx199fajc2qwikji0djz7hw63d2lya6bfnpj";
 
   # Make the build ignore linker warnings
   prePatch = ''
@@ -36,14 +32,13 @@
     ./sys-headers-incsdir.patch
   ];
 
-  postPatch =
-    ''
-      substituteInPlace sys/arch/i386/stand/efiboot/Makefile.efiboot \
-        --replace "-nocombreloc" "-z nocombreloc"
-    ''
-    +
-      # multiple header dirs, see above
-      include.postPatch;
+  postPatch = ''
+    substituteInPlace sys/arch/i386/stand/efiboot/Makefile.efiboot \
+      --replace "-nocombreloc" "-z nocombreloc"
+  ''
+  +
+    # multiple header dirs, see above
+    include.postPatch;
 
   CONFIG = "GENERIC";
 
@@ -56,20 +51,18 @@
     tsort
     lorder
     statHook
-    rsync
     uudecode
     config
     genassym
   ];
 
-  postConfigure =
-    ''
-      pushd arch/$MACHINE/conf
-      config $CONFIG
-      popd
-    ''
-    # multiple header dirs, see above
-    + include.postConfigure;
+  postConfigure = ''
+    pushd arch/$MACHINE/conf
+    config $CONFIG
+    popd
+  ''
+  # multiple header dirs, see above
+  + include.postConfigure;
 
   makeFlags = defaultMakeFlags ++ [ "FIRMWAREDIR=$(out)/libdata/firmware" ];
   hardeningDisable = [ "pic" ];
@@ -88,6 +81,13 @@
     cp arch/$MACHINE/compile/$CONFIG/netbsd $out
   '';
 
+  postIncludes = ''
+    install $BSDSRCDIR/lib/libossaudio/soundcard.h $out/include/soundcard.h
+  '';
+
   meta.platforms = lib.platforms.netbsd;
-  extraPaths = [ common ];
+  extraPaths = [
+    "common"
+    "lib/libossaudio"
+  ];
 }

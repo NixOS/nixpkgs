@@ -1,31 +1,49 @@
-{ lib
-, stdenv
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, mono
+{
+  lib,
+  stdenv,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  mono,
+  jq,
 }:
 
 buildDotnetModule rec {
   pname = "bicep";
-  version = "0.27.1";
+  version = "0.36.177";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "bicep";
     rev = "v${version}";
-    hash = "sha256-7yEsxKUG2jhki1u5CObdjN4JMnEcAYR+SoGPaNJ+9Fs=";
+    hash = "sha256-ah8g1mU2etQ/zoXcGbS+xRkTb4DjPmofe2ubZSNRhNU=";
   };
 
-  projectFile = "src/Bicep.Cli/Bicep.Cli.csproj";
+  patches = [
+    ./0001-Revert-Bump-Grpc.Tools-from-2.68.1-to-2.69.0-16097.patch
+  ];
 
-  nugetDeps = ./deps.nix;
+  postPatch = ''
+    substituteInPlace src/Directory.Build.props --replace-fail "<TreatWarningsAsErrors>true</TreatWarningsAsErrors>" ""
+    # Upstream uses rollForward = disable, which pins to an *exact* .NET SDK version.
+    jq '.sdk.rollForward = "latestMinor"' < global.json > global.json.tmp
+    mv global.json.tmp global.json
+  '';
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  projectFile = [
+    "src/Bicep.Cli/Bicep.Cli.csproj"
+    "src/Bicep.LangServer/Bicep.LangServer.csproj"
+  ];
+
+  nugetDeps = ./deps.json;
+
+  dotnet-sdk = dotnetCorePackages.sdk_8_0_4xx-bin;
 
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
-  doCheck = !(stdenv.isDarwin && stdenv.isAarch64); # mono is not available on aarch64-darwin
+  nativeBuildInputs = [ jq ];
+
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64); # mono is not available on aarch64-darwin
 
   nativeCheckInputs = [ mono ];
 
@@ -34,11 +52,12 @@ buildDotnetModule rec {
   passthru.updateScript = ./updater.sh;
 
   meta = {
-    broken = stdenv.isDarwin;
     description = "Domain Specific Language (DSL) for deploying Azure resources declaratively";
     homepage = "https://github.com/Azure/bicep/";
     changelog = "https://github.com/Azure/bicep/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ khaneliman ];
+    maintainers = [ ];
+    teams = [ lib.teams.stridtech ];
+    mainProgram = "bicep";
   };
 }

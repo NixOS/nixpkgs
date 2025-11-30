@@ -9,7 +9,6 @@
   buildPythonPackage,
   cleanlab,
   datasets,
-  deprecated,
   elasticsearch8,
   evaluate,
   factory-boy,
@@ -28,8 +27,10 @@
   packaging,
   pandas,
   passlib,
+  pdm-backend,
   peft,
   pgmpy,
+  pillow,
   plotly,
   prodict,
   psutil,
@@ -41,19 +42,18 @@
   python-jose,
   python-multipart,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   rich,
   schedule,
   scikit-learn,
   sentence-transformers,
   seqeval,
-  setuptools,
   smart-open,
   snorkel,
-  spacy,
   spacy-transformers,
+  spacy,
   sqlalchemy,
+  standardwebhooks,
   tqdm,
   transformers,
   typer,
@@ -68,17 +68,19 @@
 
 buildPythonPackage rec {
   pname = "argilla";
-  version = "1.28.0";
+  version = "2.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "argilla-io";
     repo = "argilla";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-gQpJ2umi3IE5BhRu3bM7ONPIP0hb2YG37jGvDKQHZWA=";
+    tag = "v${version}";
+    hash = "sha256-8j7/Gtn4FnAZA3oIV7dLxKwNtigqB7AweHtQ/kzLwm4=";
   };
+
+  sourceRoot = "${src.name}/${pname}";
 
   pythonRelaxDeps = [
     "httpx"
@@ -88,51 +90,51 @@ buildPythonPackage rec {
     "wrapt"
   ];
 
-  build-system = [ setuptools ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  build-system = [ pdm-backend ];
 
   dependencies = [
     httpx
-    deprecated
+    datasets
     packaging
     pandas
     pydantic
     wrapt
     numpy
     tqdm
-    backoff
+    pillow
+    huggingface-hub
     monotonic
     rich
     typer
+    standardwebhooks
   ];
 
-  passthru.optional-dependencies = {
-    server =
-      [
-        aiofiles
-        aiosqlite
-        alembic
-        brotli-asgi
-        elasticsearch8
-        fastapi
-        greenlet
-        luqum
-        opensearch-py
-        passlib
-        psutil
-        python-jose
-        python-multipart
-        pyyaml
-        scikit-learn
-        smart-open
-        sqlalchemy
-        uvicorn
-      ]
-      ++ elasticsearch8.optional-dependencies.async
-      ++ uvicorn.optional-dependencies.standard
-      ++ python-jose.optional-dependencies.cryptography
-      ++ passlib.optional-dependencies.bcrypt;
+  optional-dependencies = {
+    server = [
+      aiofiles
+      aiosqlite
+      alembic
+      backoff
+      brotli-asgi
+      elasticsearch8
+      fastapi
+      greenlet
+      luqum
+      opensearch-py
+      passlib
+      psutil
+      python-jose
+      python-multipart
+      pyyaml
+      scikit-learn
+      smart-open
+      sqlalchemy
+      uvicorn
+    ]
+    ++ elasticsearch8.optional-dependencies.async
+    ++ uvicorn.optional-dependencies.standard
+    ++ python-jose.optional-dependencies.cryptography
+    ++ passlib.optional-dependencies.bcrypt;
     postgresql = [
       asyncpg
       psycopg2
@@ -143,11 +145,9 @@ buildPythonPackage rec {
     ];
     integrations = [
       cleanlab
-      datasets
       evaluate
       faiss
       flyingsquid
-      huggingface-hub
       openai
       peft
       pgmpy
@@ -164,7 +164,8 @@ buildPythonPackage rec {
       # span_marker
       # trl
       # spacy-huggingface-hub
-    ] ++ transformers.optional-dependencies.torch;
+    ]
+    ++ transformers.optional-dependencies.torch;
   };
 
   # Still quite a bit of optional dependencies missing
@@ -179,14 +180,15 @@ buildPythonPackage rec {
     pytest-mock
     pytest-asyncio
     factory-boy
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [ "tests/server/datasets/test_dao.py" ];
 
   meta = with lib; {
     description = "Open-source data curation platform for LLMs";
     homepage = "https://github.com/argilla-io/argilla";
-    changelog = "https://github.com/argilla-io/argilla/releases/tag/v${version}";
+    changelog = "https://github.com/argilla-io/argilla/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];
     mainProgram = "argilla";

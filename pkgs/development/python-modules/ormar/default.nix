@@ -21,23 +21,22 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   sqlalchemy,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "ormar";
-  version = "0.12.2";
+  version = "0.20.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "collerek";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-Yd5ex0bcy61zq5Sn2dKeb98s/CMxUWnyGx6jFWQ3RUs=";
+    repo = "ormar";
+    tag = version;
+    hash = "sha256-jg1qgOJiRBJCRThhq/jaXNmSoL0FmceIOWMKNxtyGJI=";
   };
 
   pythonRelaxDeps = [
@@ -48,23 +47,21 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs =
-    [
-      databases
-      psycopg2
-      pydantic
-      sqlalchemy
-      psycopg2
-    ]
-    ++ lib.optionals (pythonOlder "3.8") [
-      typing-extensions
-      importlib-metadata
-    ];
+  propagatedBuildInputs = [
+    databases
+    psycopg2
+    pydantic
+    sqlalchemy
+    psycopg2
+  ]
+  ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+    importlib-metadata
+  ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     postgresql = [ asyncpg ];
     postgres = [ asyncpg ];
     aiopg = [ aiopg ];
@@ -91,7 +88,8 @@ buildPythonPackage rec {
     httpx
     nest-asyncio
     pytest-asyncio
-  ] ++ passthru.optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   disabledTestPaths = [ "benchmarks/test_benchmark_*.py" ];
 
@@ -144,8 +142,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Async ORM with fastapi in mind and pydantic validation";
     homepage = "https://github.com/collerek/ormar";
-    changelog = "https://github.com/collerek/ormar/releases/tag/${version}";
+    changelog = "https://github.com/collerek/ormar/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ andreasfelix ];
+    broken = true;
   };
 }

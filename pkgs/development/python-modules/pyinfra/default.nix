@@ -2,48 +2,52 @@
   lib,
   buildPythonPackage,
   click,
-  colorama,
-  configparser,
   distro,
   fetchFromGitHub,
   gevent,
+  importlib-metadata,
   jinja2,
+  packaging,
   paramiko,
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
   pywinrm,
-  pyyaml,
   setuptools,
+  typeguard,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pyinfra";
-  version = "2.9.2";
-  format = "setuptools";
+  version = "3.4.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Fizzadar";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-lzbFwAg1aLCfBnSnqq4oVteArpkRBa7hU8V3vB5ODa8=";
+    repo = "pyinfra";
+    tag = "v${version}";
+    hash = "sha256-7bNkDm5SyIgVkrGQ95/q7AiY/JnxtWx+jkDO/rJQ2WQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     click
-    colorama
-    configparser
     distro
     gevent
     jinja2
+    packaging
     paramiko
     python-dateutil
     pywinrm
-    pyyaml
     setuptools
-  ];
+    typeguard
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -56,15 +60,15 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python-based infrastructure automation";
-    mainProgram = "pyinfra";
     longDescription = ''
       pyinfra automates/provisions/manages/deploys infrastructure. It can be used for
       ad-hoc command execution, service deployment, configuration management and more.
     '';
     homepage = "https://pyinfra.com";
     downloadPage = "https://pyinfra.com/Fizzadar/pyinfra/releases";
-    changelog = "https://github.com/Fizzadar/pyinfra/blob/v${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ totoroot ];
+    changelog = "https://github.com/Fizzadar/pyinfra/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
+    maintainers = with maintainers; [ totoroot ];
+    mainProgram = "pyinfra";
   };
 }

@@ -1,42 +1,62 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  replaceVars,
   cmake,
-  pybind11,
   numpy,
+  pybind11,
+  setuptools,
   scipy,
   pytestCheckHook,
+  qdldl,
 }:
 
 buildPythonPackage rec {
   pname = "qdldl";
-  version = "0.1.7.post2";
-  format = "setuptools";
+  version = "0.1.7.post5";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-SxU5pewQzHV6/XFW1960AGAHythtd0yfD9w+NEFVV9M=";
+  src = fetchFromGitHub {
+    owner = "osqp";
+    repo = "qdldl-python";
+    tag = "v${version}";
+    hash = "sha256-XHdvYWORHDYy/EIqmlmFQZwv+vK3I+rPIrvcEW1JyIw=";
   };
 
+  # use up-to-date qdldl for CMake v4
+  patches = [
+    (replaceVars ./use-qdldl.patch {
+      inherit qdldl;
+    })
+  ];
+
   dontUseCmakeConfigure = true;
-  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ pybind11 ];
+  build-system = [
+    cmake
+    numpy
+    pybind11
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
+  ];
+
+  propagatedBuildInputs = [
+    qdldl
   ];
 
   pythonImportsCheck = [ "qdldl" ];
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
-    description = "A free LDL factorization routine";
-    homepage = "https://github.com/oxfordcontrol/qdldl";
-    downloadPage = "https://github.com/oxfordcontrol/qdldl-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+  meta = {
+    description = "Python interface to the QDLDL";
+    homepage = "https://github.com/osqp/qdldl-python";
+    changelog = "https://github.com/osqp/qdldl-python/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

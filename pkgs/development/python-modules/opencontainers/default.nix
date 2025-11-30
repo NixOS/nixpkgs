@@ -8,23 +8,23 @@
 
 buildPythonPackage rec {
   pname = "opencontainers";
-  version = "0.0.14";
+  version = "0.0.15";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/eO4CZtWtclWQV34kz4iJ+GRToBaJ3uETy+eUjQXOPI=";
+    hash = "sha256-o6QBJMxo7aVse0xauSTxi1UEW4RYrKlhH1v6g/fvrv4=";
   };
 
   postPatch = ''
     sed -i "/pytest-runner/d" setup.py
   '';
 
-  passthru.optional-dependencies.reggie = [ requests ];
+  optional-dependencies.reggie = [ requests ];
 
   pythonImportsCheck = [ "opencontainers" ];
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.reggie;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.reggie;
 
   __darwinAllowLocalNetworking = true;
 
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "Python module for oci specifications";
     homepage = "https://github.com/vsoch/oci-python";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

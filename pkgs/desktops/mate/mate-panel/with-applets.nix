@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, glib
-, wrapGAppsHook3
-, xorg
-, marco
-, mate-panel
-, panelApplets
-, applets ? [ ]
-, useDefaultApplets ? true
+{
+  stdenv,
+  lib,
+  glib,
+  wrapGAppsHook3,
+  xorg,
+  marco,
+  mate-panel,
+  panelApplets,
+  applets ? [ ],
+  useDefaultApplets ? true,
 }:
 
 let
@@ -15,11 +16,15 @@ let
 in
 stdenv.mkDerivation {
   pname = "${mate-panel.pname}-with-applets";
-  version = mate-panel.version;
+  inherit (mate-panel) version outputs;
 
   src = null;
 
-  paths = [ mate-panel ] ++ selectedApplets;
+  paths = [
+    mate-panel.out
+    mate-panel.man
+  ]
+  ++ selectedApplets;
   passAsFile = [ "paths" ];
 
   nativeBuildInputs = [
@@ -27,8 +32,12 @@ stdenv.mkDerivation {
     wrapGAppsHook3
   ];
 
-  buildInputs = lib.forEach selectedApplets (x: x.buildInputs) ++ selectedApplets
-    ++ [ mate-panel ] ++ mate-panel.buildInputs ++ mate-panel.propagatedBuildInputs;
+  buildInputs =
+    lib.forEach selectedApplets (x: x.buildInputs)
+    ++ selectedApplets
+    ++ [ mate-panel ]
+    ++ mate-panel.buildInputs
+    ++ mate-panel.propagatedBuildInputs;
 
   dontUnpack = true;
   dontConfigure = true;
@@ -57,5 +66,5 @@ stdenv.mkDerivation {
     )
   '';
 
-  inherit (mate-panel.meta);
+  inherit (mate-panel) meta;
 }

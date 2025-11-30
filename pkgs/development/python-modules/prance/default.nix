@@ -13,33 +13,29 @@
   setuptools-scm,
   six,
   swagger-spec-validator,
+  pytest-cov-stub,
   pytestCheckHook,
   openapi-spec-validator,
 }:
 
 buildPythonPackage rec {
   pname = "prance";
-  version = "23.06.21.0";
-  format = "pyproject";
+  version = "25.04.08.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "RonnyPfannschmidt";
-    repo = pname;
-    rev = "v${version}";
+    repo = "prance";
+    tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-p+LZbQal4DPeMp+eJ2O83rCaL+QIUDcU34pZhYdN4bE=";
+    hash = "sha256-71M9ufxb0aaSgokThlsTS4ElOJLZntF2TYIErPccQbU=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=prance --cov-report=term-missing --cov-fail-under=90" ""
-  '';
+  build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [ setuptools-scm ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     chardet
     packaging
     requests
@@ -47,7 +43,7 @@ buildPythonPackage rec {
     six
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [ click ];
     flex = [ flex ];
     icu = [ pyicu ];
@@ -56,8 +52,10 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   # Disable tests that require network
   disabledTestPaths = [ "tests/test_convert.py" ];
@@ -70,11 +68,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "prance" ];
 
   meta = with lib; {
-    changelog = "https://github.com/RonnyPfannschmidt/prance/blob/${src.rev}/CHANGES.rst";
     description = "Resolving Swagger/OpenAPI 2.0 and 3.0.0 Parser";
-    mainProgram = "prance";
     homepage = "https://github.com/RonnyPfannschmidt/prance";
+    changelog = "https://github.com/RonnyPfannschmidt/prance/blob/${src.rev}/CHANGES.rst";
     license = licenses.mit;
     maintainers = [ ];
+    mainProgram = "prance";
   };
 }

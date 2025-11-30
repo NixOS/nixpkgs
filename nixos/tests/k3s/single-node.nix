@@ -1,3 +1,4 @@
+# A test that runs a single node k3s cluster and verify a pod can run
 import ../make-test-python.nix (
   {
     pkgs,
@@ -40,7 +41,6 @@ import ../make-test-python.nix (
   in
   {
     name = "${k3s.name}-single-node";
-    meta.maintainers = k3s.meta.maintainers;
 
     nodes.machine =
       { pkgs, ... }:
@@ -58,19 +58,13 @@ import ../make-test-python.nix (
         services.k3s.role = "server";
         services.k3s.package = k3s;
         # Slightly reduce resource usage
-        services.k3s.extraFlags = builtins.toString [
-          "--disable"
-          "coredns"
-          "--disable"
-          "local-storage"
-          "--disable"
-          "metrics-server"
-          "--disable"
-          "servicelb"
-          "--disable"
-          "traefik"
-          "--pause-image"
-          "test.local/pause:local"
+        services.k3s.extraFlags = [
+          "--disable coredns"
+          "--disable local-storage"
+          "--disable metrics-server"
+          "--disable servicelb"
+          "--disable traefik"
+          "--pause-image test.local/pause:local"
         ];
 
         users.users = {
@@ -82,17 +76,14 @@ import ../make-test-python.nix (
         };
       };
 
-    testScript =
+    testScript = # python
       ''
         start_all()
 
         machine.wait_for_unit("k3s")
         machine.succeed("kubectl cluster-info")
         machine.fail("sudo -u noprivs kubectl cluster-info")
-      '' # Fix-Me: Tests fail for 'aarch64-linux' as: "CONFIG_CGROUP_FREEZER: missing (fail)"
-      + lib.optionalString (!pkgs.stdenv.isAarch64) ''machine.succeed("k3s check-config")''
-      + ''
-
+        machine.succeed("k3s check-config")
         machine.succeed(
             "${pauseImage} | ctr image import -"
         )
@@ -110,15 +101,15 @@ import ../make-test-python.nix (
             # Call the killall script with a clean path to assert that
             # all required commands are wrapped
             output = machine.succeed("PATH= ${k3s}/bin/k3s-killall.sh 2>&1 | tee /dev/stderr")
-            assert "command not found" not in output, "killall script contains unknown command"
+            t.assertNotIn("command not found", output, "killall script contains unknown command")
 
             # Check that killall cleaned up properly
             machine.fail("systemctl is-active k3s.service")
             machine.fail("systemctl list-units | grep containerd")
             machine.fail("ip link show | awk -F': ' '{print $2}' | grep -e flannel -e cni0")
             machine.fail("ip netns show | grep cni-")
-
-        machine.shutdown()
       '';
+
+    meta.maintainers = lib.teams.k3s.members;
   }
 )

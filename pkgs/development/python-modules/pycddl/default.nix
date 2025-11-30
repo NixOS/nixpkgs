@@ -7,18 +7,19 @@
   pytestCheckHook,
   psutil,
   cbor2,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
   pname = "pycddl";
-  version = "0.5.2";
-  format = "pyproject";
+  version = "0.6.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LdecJPSov2Y/QI4MWb20DcF0EtMuDO0VwiQDUeD55GI=";
+    hash = "sha256-aUa6Q3e1RwvWN0NPqbJtWW3o/yzJxUc0g7gUGKUlOXo=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -38,17 +39,23 @@ buildPythonPackage rec {
     rm tests/test_benchmarks.py
   '';
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-FJET2Xb1cq4aePFhPXpp2oEPIOtpugYWNFAa2Dj0F6Y=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-cEpvkSqe/wRCxEajmM148jbo6a346x2t81pMRpKEJyE=";
   };
 
   nativeCheckInputs = [
+    hypothesis
     pytestCheckHook
     psutil
     cbor2
   ];
+
+  disabledTests = [
+    # flaky
+    "test_memory_usage"
+  ];
+
   pythonImportsCheck = [ "pycddl" ];
 
   meta = with lib; {

@@ -1,15 +1,35 @@
-{ lib, stdenv, fetchurl, pkg-config, meson, ninja, python3, gtk3, glibmm, cairomm, pangomm, atkmm, libepoxy, gnome, glib, gdk-pixbuf }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  python3,
+  gtk3,
+  glibmm,
+  cairomm,
+  pangomm,
+  atkmm,
+  libepoxy,
+  gnome,
+  glib,
+  gdk-pixbuf,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gtkmm";
-  version = "3.24.9";
+  version = "3.24.10";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "MNW/5ARXHOVmqOk4yLrBdXZCDrUI8eJXg32mPxStRM4=";
+    url = "mirror://gnome/sources/gtkmm/${lib.versions.majorMinor version}/gtkmm-${version}.tar.xz";
+    sha256 = "erfiJmgIcW4mw5kkrOH7RtqGwX7znZiWJMQjFLMrWnY=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -21,15 +41,21 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ libepoxy ];
 
-  propagatedBuildInputs = [ glibmm gtk3 atkmm cairomm pangomm ];
+  propagatedBuildInputs = [
+    glibmm
+    gtk3
+    atkmm
+    cairomm
+    pangomm
+  ];
 
   # https://bugzilla.gnome.org/show_bug.cgi?id=764521
   doCheck = false;
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "${pname}3";
+      packageName = "gtkmm";
+      attrPath = "gtkmm3";
       versionPolicy = "odd-unstable";
       freeze = true;
     };
@@ -48,7 +74,7 @@ stdenv.mkDerivation rec {
       tutorial.
     '';
 
-    homepage = "https://gtkmm.org/";
+    homepage = "https://gtkmm.gnome.org/";
 
     license = licenses.lgpl2Plus;
 

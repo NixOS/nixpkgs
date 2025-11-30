@@ -16,13 +16,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "whitequark";
     repo = "python-itanium_demangler";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-I6NUfckt2cocQt5dZSFadpshTCuA/6bVNauNXypWh+A=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/test.py" ];
+  enabledTestPaths = [ "tests/test.py" ];
 
   pythonImportsCheck = [ "itanium_demangler" ];
 

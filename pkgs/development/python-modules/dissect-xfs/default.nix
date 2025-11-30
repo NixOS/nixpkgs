@@ -7,21 +7,18 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-xfs";
-  version = "3.9";
+  version = "3.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.xfs";
-    rev = "refs/tags/${version}";
-    hash = "sha256-jUNstyHVPJazf4idXNe9xICpi0MKkz8q0rWUEHjk2ZA=";
+    tag = version;
+    hash = "sha256-dFM/xYJR3wBvOe/8rLJz4AK2jmp67T5vo/4TCMRSXzw=";
   };
 
   build-system = [
@@ -44,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parser for the XFS file system";
     homepage = "https://github.com/fox-it/dissect.xfs";
-    changelog = "https://github.com/fox-it/dissect.xfs/releases/tag/${version}";
+    changelog = "https://github.com/fox-it/dissect.xfs/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

@@ -20,7 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-fKVjPb+p4OD6QA0xUaigxL7FO9Ls7cCmdwWxdWXDGoM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Fast, pure-Python full text indexing, search, and spell checking library";
     homepage = "https://github.com/mchaput/whoosh";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

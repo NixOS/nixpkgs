@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, more-itertools
-, click
-, hyprland
-, makeWrapper
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  more-itertools,
+  click,
+  hyprland,
+  makeWrapper,
 }:
 
 buildPythonPackage rec {
   pname = "hyprshade";
-  version = "3.2.1";
+  version = "4.0.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "loqusion";
     repo = "hyprshade";
-    rev = "refs/tags/${version}";
-    hash = "sha256-MlbNE9n//Qb6OJc3DMkOpnPtoodfV8JlG/I5rOfWMtQ=";
+    tag = version;
+    hash = "sha256-NnKhIgDAOKOdEqgHzgLq1MSHG3FDT2AVXJZ53Ozzioc=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +26,10 @@ buildPythonPackage rec {
     makeWrapper
   ];
 
-  propagatedBuildInputs = [ more-itertools click ];
+  propagatedBuildInputs = [
+    more-itertools
+    click
+  ];
 
   postFixup = ''
     wrapProgram $out/bin/hyprshade \

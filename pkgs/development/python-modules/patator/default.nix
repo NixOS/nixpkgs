@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "patator";
-  version = "1.0";
+  version = "1.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VQ7JPyQOY9X/7LVAvTwftoOegt4KyfERgu38HfmsYDM=";
+    hash = "sha256-BupB/s4HNk6DUxbrHB/onqeS7kL0WsGPZ2jqKUj7DJw=";
   };
 
   postPatch = ''
@@ -60,6 +60,8 @@ buildPythonPackage rec {
     description = "Multi-purpose brute-forcer";
     homepage = "https://github.com/lanjelot/patator";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ y0no ];
+    # Still uses cx-oracle which is broken and was replaced by oracledb
+    # https://github.com/lanjelot/patator/issues/234
+    broken = true;
   };
 }

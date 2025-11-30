@@ -16,25 +16,27 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dataproc";
-  version = "5.9.3";
+  version = "5.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-l9ZHiR5/TNJfa4Oa5XzTVYCd8so5ZlPtJK9itO8C9BI=";
+    pname = "google_cloud_dataproc";
+    inherit version;
+    hash = "sha256-zkGy0LLTnTqvLckUCRMtNP4n+KpdKtat3fQqz78rW/A=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     grpc-google-iam-v1
     libcst
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock
@@ -57,6 +59,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-dataproc";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-dataproc-v${version}/packages/google-cloud-dataproc/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -3,7 +3,16 @@
 with pkgs.lib;
 
 {
-  makeEc2Test = { name, image, userData, script, hostname ? "ec2-instance", sshPublicKey ? null, meta ? {} }:
+  makeEc2Test =
+    {
+      name,
+      image,
+      userData,
+      script,
+      hostname ? "ec2-instance",
+      sshPublicKey ? null,
+      meta ? { },
+    }:
     let
       metaData = pkgs.stdenv.mkDerivation {
         name = "metadata";
@@ -12,15 +21,17 @@ with pkgs.lib;
           ln -s ${pkgs.writeText "userData" userData} $out/1.0/user-data
           echo "${hostname}" > $out/1.0/meta-data/hostname
           echo "(unknown)" > $out/1.0/meta-data/ami-manifest-path
-        '' + optionalString (sshPublicKey != null) ''
+        ''
+        + optionalString (sshPublicKey != null) ''
           mkdir -p $out/1.0/meta-data/public-keys/0
           ln -s ${pkgs.writeText "sshPublicKey" sshPublicKey} $out/1.0/meta-data/public-keys/0/openssh-key
         '';
       };
       indentLines = str: concatLines (map (s: "  " + s) (splitString "\n" str));
-    in makeTest {
+    in
+    makeTest {
       name = "ec2-" + name;
-      nodes = {};
+      nodes = { };
       testScript = ''
         import os
         import subprocess
@@ -63,7 +74,9 @@ with pkgs.lib;
 
         machine = create_machine(start_command)
         try:
-      '' + indentLines script + ''
+      ''
+      + indentLines script
+      + ''
         finally:
           machine.shutdown()
       '';

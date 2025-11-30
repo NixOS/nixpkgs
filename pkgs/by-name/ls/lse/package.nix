@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "diego-treitos";
     repo = "linux-smart-enumeration";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-qGLmrbyeyhHG6ONs7TJLTm68xpvxB1iAnMUApfTSqEk=";
   };
 
@@ -28,13 +28,13 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ bash ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux enumeration tool with verbosity levels";
     homepage = "https://github.com/diego-treitos/linux-smart-enumeration";
     changelog = "https://github.com/diego-treitos/linux-smart-enumeration/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "lse.sh";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

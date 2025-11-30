@@ -1,6 +1,7 @@
-{ lib
-, fetchurl
-, appimageTools
+{
+  lib,
+  fetchurl,
+  appimageTools,
 }:
 
 appimageTools.wrapType2 rec {
@@ -28,7 +29,7 @@ appimageTools.wrapType2 rec {
     '';
 
   meta = with lib; {
-    description = "Organise secure online meetings via your web browser, your mobile, your tablet or your computer.";
+    description = "Organise secure online meetings via your web browser, your mobile, your tablet or your computer";
     homepage = "https://www.infomaniak.com/en/apps/download-kmeet";
     license = licenses.unfree;
     maintainers = [ maintainers.vinetos ];

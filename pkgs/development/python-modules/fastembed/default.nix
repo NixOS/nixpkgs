@@ -2,59 +2,72 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  huggingface-hub,
-  pythonOlder,
-  pythonRelaxDepsHook,
+
+  # build-system
   poetry-core,
-  onnx,
+
+  # dependencies
+  huggingface-hub,
+  loguru,
+  mmh3,
+  numpy,
   onnxruntime,
+  pillow,
+  py-rust-stemmers,
+  pystemmer,
   requests,
+  snowballstemmer,
   tokenizers,
   tqdm,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "fastembed";
-  version = "0.2.2";
+  version = "0.7.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "fastembed";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ufgco5wPBG19GM99rZV7LKQqEzzCv24I8026SMz0CH4=";
+    tag = "v${version}";
+    hash = "sha256-sH/uiab+4fdowaEA+yNvA4PN7Xfuuu3eTF47FitEDvA=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     huggingface-hub
-    onnx
+    loguru
+    mmh3
+    numpy
     onnxruntime
+    pillow
+    py-rust-stemmers
+    pystemmer
     requests
+    snowballstemmer
     tokenizers
     tqdm
   ];
 
   pythonImportsCheck = [ "fastembed" ];
 
-  pythonRelaxDeps = [ "huggingface-hub" ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  pythonRelaxDeps = [
+    "mmh3"
+    "onnxruntime"
+    "pillow"
+  ];
 
   # there is one test and it requires network
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Fast, Accurate, Lightweight Python library to make State of the Art Embedding";
     homepage = "https://github.com/qdrant/fastembed";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    changelog = "https://github.com/qdrant/fastembed/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
+    # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

@@ -1,5 +1,4 @@
 {
-  lib,
   buildPythonPackage,
   pythonOlder,
   flaky,
@@ -7,7 +6,6 @@
   opentelemetry-api,
   opentelemetry-semantic-conventions,
   opentelemetry-test-utils,
-  setuptools,
   typing-extensions,
   pytestCheckHook,
 }:

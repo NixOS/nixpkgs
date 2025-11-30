@@ -12,26 +12,27 @@
 
 buildPythonPackage rec {
   pname = "azure-storage-queue";
-  version = "12.9.0";
+  version = "12.14.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-mBAbDhfaDUcM9XALbEDP50Q57Dycds84OYCW5zcbnRs=";
+    pname = "azure_storage_queue";
+    inherit version;
+    hash = "sha256-j3r7MR7xuZBzFuWbs+BkU5fI12BzrbG1lfAnsXwLevE=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     azure-core
     cryptography
     isodate
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aio = [ azure-core ] ++ azure-core.optional-dependencies.aio;
   };
 

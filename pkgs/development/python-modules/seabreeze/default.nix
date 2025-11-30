@@ -9,11 +9,13 @@
   pkgconfig,
   setuptools,
   setuptools-scm,
+  udevCheckHook,
 
   # dependneices
   numpy,
+  libusb-compat-0_1,
 
-  # optional-dependenices
+  # optional-dependencies
   pyusb,
 
   # tests
@@ -29,16 +31,25 @@
 
 buildPythonPackage rec {
   pname = "seabreeze";
-  version = "2.6.0";
+  version = "2.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ap--";
     repo = "python-seabreeze";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Ead9G4i8/mFwPqL2PGsndtmX93Njld3nvTTr6ROJTac=";
+    tag = "v${version}";
+    hash = "sha256-PplymlXZlRt+BzhCzIYRMjr+rMFf+XfSq846QAlbRi0=";
     leaveDotGit = true;
   };
+
+  enableParallelBuilding = true;
+
+  postPatch = ''
+    # pkgconfig cant find libusb, doing it manually
+    substituteInPlace setup.py \
+      --replace-fail 'pkgconfig.parse("libusb")' \
+        "{'include_dirs': ['${libusb-compat-0_1}/include'], 'library_dirs': ['${libusb-compat-0_1}/lib'], 'libraries': ['usb']}"
+  '';
 
   nativeBuildInputs = [
     cython
@@ -46,11 +57,15 @@ buildPythonPackage rec {
     pkgconfig
     setuptools
     setuptools-scm
+    udevCheckHook
   ];
 
-  propagatedBuildInputs = [ numpy ];
+  propagatedBuildInputs = [
+    numpy
+    libusb-compat-0_1
+  ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     pyseabreeze = [ pyusb ];
   };
 
@@ -64,13 +79,16 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
     zipp
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  disabledTests = [ "TestHardware" ];
 
   setupPyBuildFlags = [ "--without-cseabreeze" ];
 
   meta = with lib; {
     homepage = "https://github.com/ap--/python-seabreeze";
-    description = "A python library to access Ocean Optics spectrometers";
+    description = "Python library to access Ocean Optics spectrometers";
     maintainers = [ ];
     license = licenses.mit;
   };

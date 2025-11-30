@@ -1,22 +1,25 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   flit-core,
   django,
   djangorestframework,
   pytestCheckHook,
   pytest-django,
+  pytz,
 }:
 
 buildPythonPackage rec {
   pname = "django-filter";
-  version = "24.2";
+  version = "25.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-SOX8HaPM1soNX5u1UJc1GM6Xek7d6dKooVSn9PC5+W4=";
+  src = fetchFromGitHub {
+    owner = "carltongibson";
+    repo = "django-filter";
+    tag = version;
+    hash = "sha256-ODbBlaJo6sgXkFxLNhqwGTXSHs2d6R6wGKyDz5qA7bs=";
   };
 
   build-system = [ flit-core ];
@@ -29,6 +32,7 @@ buildPythonPackage rec {
     djangorestframework
     pytestCheckHook
     pytest-django
+    pytz
   ];
 
   env.DJANGO_SETTINGS_MODULE = "tests.settings";

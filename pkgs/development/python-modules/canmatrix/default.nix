@@ -4,46 +4,41 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
-  future,
-  importlib-metadata,
   ldfparser,
   lxml,
   openpyxl,
+  pytest-cov-stub,
+  pytest-timeout,
   pytestCheckHook,
   pythonOlder,
   pyyaml,
-  six,
+  setuptools,
   xlrd,
   xlwt,
 }:
 
 buildPythonPackage rec {
   pname = "canmatrix";
-  version = "1.0";
-  format = "setuptools";
+  version = "1.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ebroecker";
     repo = "canmatrix";
-    rev = "refs/tags/${version}";
-    hash = "sha256-UUJnLVt+uOj8Eav162btprkUeTemItGrSnBBB9UhJJI=";
+    tag = version;
+    hash = "sha256-PfegsFha7ernSqnMeaDoLf1jLx1CiOoiYi34dESEgBY=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "version = versioneer.get_version()" 'version = "${version}"'
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     click
-    future
-    six
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     arxml = [ lxml ];
     fibex = [ lxml ];
     kcd = [ lxml ];
@@ -58,12 +53,20 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    pytest-cov-stub
+    pytest-timeout
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # long_envvar_name_imports requires stable key value pair ordering
-    "-s src/canmatrix"
+    "-s"
+  ];
+
+  enabledTestPaths = [
+    "src/canmatrix"
+    "tests/"
   ];
 
   disabledTests = [ "long_envvar_name_imports" ];

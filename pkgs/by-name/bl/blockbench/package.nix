@@ -7,46 +7,44 @@
   imagemagick,
   copyDesktopItems,
   makeDesktopItem,
-  electron_28,
+  electron,
 }:
 
-let
-  electron = electron_28;
-  electronDist = "${electron}/${if stdenv.isDarwin then "Applications" else "libexec/electron"}";
-in
 buildNpmPackage rec {
   pname = "blockbench";
-  version = "4.10.1";
+  version = "5.0.4";
 
   src = fetchFromGitHub {
     owner = "JannisX11";
     repo = "blockbench";
-    rev = "v${version}";
-    hash = "sha256-LuWxjBsOBo6tSlSGaDWrNYcTerIpU+rw3r+zN6gtYb0=";
+    tag = "v${version}";
+    hash = "sha256-f7+/OXdQEyN9XSkVRDRVUUdNGGEgyu3e/Y2oS7De96Y=";
   };
 
-  nativeBuildInputs =
-    [ makeWrapper ]
-    ++ lib.optionals (!stdenv.isDarwin) [
-      imagemagick # for icon resizing
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    imagemagick # for icon resizing
+    copyDesktopItems
+  ];
 
-  npmDepsHash = "sha256-CHZdCiewkmToDHhTTvOqQfWrphOw1oGLgwSRRH3YFWE=";
+  npmDepsHash = "sha256-OSrX/H1m89GLIznP8/Q1pVDgrlfp55ZUnYjyQIwlJi4=";
+  makeCacheWritable = true;
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   # disable code signing on Darwin
-  postConfigure = lib.optionalString stdenv.isDarwin ''
+  postConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export CSC_IDENTITY_AUTO_DISCOVERY=false
     sed -i "/afterSign/d" package.json
   '';
 
-  npmBuildScript = "bundle";
+  npmBuildScript = "build-electron";
 
   postBuild = ''
     # electronDist needs to be modifiable on Darwin
-    cp -r ${electronDist} electron-dist
+    cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
 
     npm exec electron-builder -- \
@@ -57,28 +55,27 @@ buildNpmPackage rec {
 
   installPhase = ''
     runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r dist-electron/mac*/Blockbench.app $out/Applications
+    makeWrapper $out/Applications/Blockbench.app/Contents/MacOS/Blockbench $out/bin/blockbench
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    mkdir -p $out/share/blockbench
+    cp -r dist-electron/*-unpacked/{locales,resources{,.pak}} $out/share/blockbench
 
-    ${lib.optionalString stdenv.isDarwin ''
-      mkdir -p $out/Applications
-      cp -r dist/mac*/Blockbench.app $out/Applications
-      makeWrapper $out/Applications/Blockbench.app/Contents/MacOS/Blockbench $out/bin/blockbench
-    ''}
+    for size in 16 32 48 64 128 256 512; do
+      mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+      magick icon.png -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/blockbench.png
+    done
 
-    ${lib.optionalString (!stdenv.isDarwin) ''
-      mkdir -p $out/share/blockbench
-      cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/blockbench
-
-      for size in 16 32 48 64 128 256 512; do
-        mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-        convert -resize "$size"x"$size" icon.png $out/share/icons/hicolor/"$size"x"$size"/apps/blockbench.png
-      done
-
-      makeWrapper ${lib.getExe electron} $out/bin/blockbench \
-          --add-flags $out/share/blockbench/resources/app.asar \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
-          --inherit-argv0
-    ''}
-
+    makeWrapper ${lib.getExe electron} $out/bin/blockbench \
+      --add-flags $out/share/blockbench/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --inherit-argv0
+  ''
+  + ''
     runHook postInstall
   '';
 
@@ -97,14 +94,11 @@ buildNpmPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/JannisX11/blockbench/releases/tag/${src.rev}";
+    changelog = "https://github.com/JannisX11/blockbench/releases/tag/v${version}";
     description = "Low-poly 3D modeling and animation software";
     homepage = "https://blockbench.net/";
     license = lib.licenses.gpl3Only;
     mainProgram = "blockbench";
-    maintainers = with lib.maintainers; [
-      ckie
-      tomasajt
-    ];
+    maintainers = with lib.maintainers; [ tomasajt ];
   };
 }

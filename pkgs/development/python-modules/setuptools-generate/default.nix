@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Freed-Wu";
     repo = "setuptools-generate";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-xDjxkWy/n0jStI9eLcM6WduyU9vGjtBOmJ86dpXjceQ=";
   };
 
@@ -33,7 +33,8 @@ buildPythonPackage rec {
     help2man
     markdown-it-py
     shtab
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -5,64 +5,80 @@
   rustPlatform,
   cargo-about,
   nix-update-script,
+  pkg-config,
+  libbpf,
+  elfutils,
+  libseccomp,
+  zlib,
+  clang,
 }:
-let
+
+rustPlatform.buildRustPackage rec {
   pname = "tracexec";
-  version = "0.3.1";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "kxxt";
     repo = "tracexec";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-w43wYHyKrrBhph1Of07YAdcoAB+AMcmRyaiVPQUdZPk=";
+    rev = "dbb9b733370f5200df2a0de7f007312c23431480";
+    hash = "sha256-M2ZIfWupnFxQZvr5cl8V0xtLgh+xBcaHHVsHIoio7nI=";
   };
 
-  cargoHash = "sha256-ks+z6jnf1H+j5g1Ml3zjHmlvhtpZxUiORkHHZzDMSuw=";
+  cargoHash = "sha256-cyzSxibLw6sb0V3ueNcp55OhFQ5jUNJWcSF8uYnzG2M=";
+
+  hardeningDisable = [ "zerocallusedregs" ];
 
   nativeBuildInputs = [
     cargo-about
+    pkg-config
+    clang
   ];
 
+  buildInputs = [
+    libbpf
+    elfutils
+    libseccomp
+    zlib
+  ];
+
+  cargoBuildFlags = [
+    "--no-default-features"
+    "--features=recommended"
+  ]
   # Remove RiscV64 specialisation when this is fixed:
   # * https://github.com/NixOS/nixpkgs/pull/310158#pullrequestreview-2046944158
   # * https://github.com/rust-vmm/seccompiler/pull/72
-  cargoBuildFlags = lib.optional stdenv.hostPlatform.isRiscV64 "--no-default-features";
+  ++ lib.optional stdenv.hostPlatform.isRiscV64 "--no-default-features";
 
   preBuild = ''
     sed -i '1ino-clearly-defined = true' about.toml  # disable network requests
     cargo about generate --config about.toml -o THIRD_PARTY_LICENSES.HTML about.hbs
   '';
 
-  # Tests don't work for native non-x86 compilation
-  # because upstream overrides the name of the linker executables,
-  # see https://github.com/NixOS/nixpkgs/pull/310158#issuecomment-2118845043
-  doCheck = stdenv.hostPlatform.isx86_64;
-
   checkFlags = [
     "--skip=cli::test::log_mode_without_args_works" # `Permission denied` (needs `CAP_SYS_PTRACE`)
-    "--skip=tracer::test::tracer_emits_exec_event" # needs `/bin/true`
   ];
 
   postInstall = ''
     # Remove test binaries (e.g. `empty-argv`, `corrupted-envp`) and only retain `tracexec`
     find "$out/bin" -type f \! -name tracexec -print0 | xargs -0 rm -v
 
-    install -Dm644 LICENSE -t "$out/share/licenses/${pname}/"
-    install -Dm644 THIRD_PARTY_LICENSES.HTML -t "$out/share/licenses/${pname}/"
+    install -Dm644 LICENSE -t "$out/share/licenses/tracexec/"
+    install -Dm644 THIRD_PARTY_LICENSES.HTML -t "$out/share/licenses/tracexec/"
   '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/kxxt/tracexec/blob/v${version}/CHANGELOG.md";
-    description = "A small utility for tracing execve{,at} and pre-exec behavior";
+    description = "Small utility for tracing execve{,at} and pre-exec behavior";
     homepage = "https://github.com/kxxt/tracexec";
     license = lib.licenses.gpl2Plus;
     mainProgram = "tracexec";
-    maintainers = with lib.maintainers; [ fpletz nh2 ];
+    maintainers = with lib.maintainers; [
+      fpletz
+      nh2
+    ];
     platforms = lib.platforms.linux;
   };
 }

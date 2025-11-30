@@ -1,9 +1,10 @@
-{ lib
-, callPackage
-, fetchFromGitHub
-, python27
-, fetchPypi
-, ...
+{
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  python27,
+  fetchPypi,
+  ...
 }:
 
 /*
@@ -21,6 +22,7 @@ rec {
   configargparse = python27.pkgs.buildPythonPackage rec {
     pname = "configargparse";
     version = "1.5.3";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "bw2";
@@ -34,7 +36,7 @@ rec {
     pythonImportsCheck = [ "configargparse" ];
 
     meta = with lib; {
-      description = "A drop-in replacement for argparse";
+      description = "Drop-in replacement for argparse";
       homepage = "https://github.com/bw2/ConfigArgParse";
       license = licenses.mit;
     };
@@ -51,7 +53,7 @@ rec {
     doCheck = false;
 
     meta = {
-      description = "A Python 2 and 3 compatibility library";
+      description = "Python 2 and 3 compatibility library";
       homepage = "https://pypi.python.org/pypi/six/";
       license = lib.licenses.mit;
     };

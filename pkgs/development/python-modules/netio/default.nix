@@ -5,7 +5,6 @@
   poetry-core,
   pyopenssl,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
 }:
 
@@ -19,13 +18,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "netioproducts";
     repo = "PyNetio";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-s/X2WGhQXYsbo+ZPpkVSF/vclaThYYNHu0UY0yCnfPA=";
   };
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "pyopenssl" ];

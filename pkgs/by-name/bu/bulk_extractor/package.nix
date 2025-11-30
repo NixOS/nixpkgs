@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, exiv2
-, flex
-, libewf
-, libxml2
-, openssl
-, zlib
-, pkg-config
-, python310
-, re2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  exiv2,
+  flex,
+  libewf,
+  libxml2,
+  openssl,
+  zlib,
+  pkg-config,
+  python310,
+  re2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "simsong";
     repo = "bulk_extractor";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Jj/amXESFBu/ZaiIRlDKmtWTBVQ2TEvOM2jBYP3y1L8=";
     fetchSubmodules = true;
   };
@@ -47,12 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
     aclocal -I m4
   '';
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/be20_api/feature_recorder_set.cpp --replace-fail '#warn ' '#warning '
   '';
 
   meta = with lib; {
-    description = "A digital forensics tool for extracting information from file systems";
+    description = "Digital forensics tool for extracting information from file systems";
     longDescription = ''
       bulk_extractor is a C++ program that scans a disk image, a file, or a
       directory of files and extracts useful information without parsing

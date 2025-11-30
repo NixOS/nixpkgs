@@ -7,25 +7,27 @@
   chardet,
   cssselect,
   lxml,
+  lxml-html-clean,
   timeout-decorator,
 }:
 
 buildPythonPackage rec {
   pname = "readability-lxml";
-  version = "0.8.1";
+  version = "0.8.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "buriy";
     repo = "python-readability";
     rev = "v${version}";
-    hash = "sha256-MKdQRety24qOG9xgIdaCJ72XEImP42SlMG6tC7bwzo4=";
+    hash = "sha256-6A4zpe3GvHHf235Ovr2RT/cJgj7bWasn96yqy73pVgY=";
   };
 
   propagatedBuildInputs = [
     chardet
     cssselect
     lxml
+    lxml-html-clean
   ];
 
   postPatch = ''
@@ -37,7 +39,7 @@ buildPythonPackage rec {
     timeout-decorator
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Test is broken on darwin. Fix in master from https://github.com/buriy/python-readability/pull/178
     "test_many_repeated_spaces"
   ];

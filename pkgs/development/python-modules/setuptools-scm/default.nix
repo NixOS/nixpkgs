@@ -19,23 +19,34 @@
 
 buildPythonPackage rec {
   pname = "setuptools-scm";
-  version = "8.0.4";
+  version = "9.0.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-tfQ/9oAGaVlRk/0JiRVk7p0dfcsZbKtLJQbVOi4clcc=";
+    pname = "setuptools_scm";
+    inherit version;
+    hash = "sha256-RuHPfooJZSthP5uk/ptV8vSW56Iz5OANJafLQflMPAs=";
   };
 
-  nativeBuildInputs = [ setuptools ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  postPatch =
+    if (pythonOlder "3.11") then
+      ''
+        substituteInPlace pyproject.toml \
+          --replace-fail 'tomli<=2.0.2' 'tomli'
+      ''
+    else
+      null;
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+
+  dependencies = [
     packaging
     setuptools
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     rich = [ rich ];
   };
 

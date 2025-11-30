@@ -1,15 +1,16 @@
-{ lib
-, fetchFromGitLab
-, buildDunePackage
-, clap
-, ezjsonm
-, lwt
-, re
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  clap,
+  ezjsonm,
+  lwt,
+  re,
 }:
 
 buildDunePackage rec {
   pname = "tezt";
-  version = "4.0.0";
+  version = "4.2.0";
 
   minimalOCamlVersion = "4.12";
 
@@ -17,7 +18,7 @@ buildDunePackage rec {
     owner = "nomadic-labs";
     repo = pname;
     rev = version;
-    hash = "sha256-waFjE/yR+XAJOew1YsCnbvsJR8oe9gflyVj4yXAvNuM=";
+    hash = "sha256-8+q/A1JccH3CfWxfNhgJU5X+KEp+Uw7nvS72ZcPRsd8=";
   };
 
   propagatedBuildInputs = [

@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-3YzBMnqmcTIpn5UOFg3SDTFLjPSE9UDw0i8fB8LYh2s=";
+    hash = "sha256-3YzBMnqmcTIpn5UOFg3SDTFLjPSE9UDw0i8fB8LYh2s=";
   };
 
   propagatedBuildInputs = [
@@ -54,10 +54,10 @@ buildPythonPackage rec {
     "argostranslate.translate"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open-source offline translation library written in Python";
     homepage = "https://www.argosopentech.com";
-    license = licenses.mit;
-    maintainers = with maintainers; [ misuzu ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ misuzu ];
   };
 }

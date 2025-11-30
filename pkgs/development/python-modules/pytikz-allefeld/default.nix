@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   buildPythonPackage,
   pythonOlder,
@@ -11,7 +10,7 @@
   texlive,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pytikz-allefeld"; # "pytikz" on pypi is a different module
   version = "unstable-2022-11-01";
   pyproject = true;
@@ -51,9 +50,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/allefeld/pytikz";
-    description = "A Python interface to TikZ";
+    description = "Python interface to TikZ";
     license = licenses.gpl3;
     maintainers = with maintainers; [ pbsds ];
-    broken = stdenv.isDarwin;
   };
 }

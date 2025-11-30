@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   capstone,
-  fetchFromGitHub,
   fetchPypi,
   gevent,
   keystone-engine,
@@ -56,6 +55,7 @@ buildPythonPackage rec {
     homepage = "https://qiling.io/";
     changelog = "https://github.com/qilingframework/qiling/releases/tag/${version}";
     license = licenses.gpl2Only;
+    broken = true;
     maintainers = [ ];
   };
 }

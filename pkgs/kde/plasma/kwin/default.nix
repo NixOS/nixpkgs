@@ -8,10 +8,12 @@
   qtwayland,
   libinput,
   xorg,
+  xwayland,
+  libcanberra,
   libdisplay-info,
-  mesa,
+  libei,
+  libgbm,
   lcms2,
-  libcap,
   pipewire,
   krunner,
   python3,
@@ -20,10 +22,6 @@ mkKdeDerivation {
   pname = "kwin";
 
   patches = [
-    # Follow symlinks when searching for aurorae configs
-    # FIXME(later): upstream?
-    ./0001-follow-symlinks.patch
-    # The rest are NixOS-specific hacks
     ./0003-plugins-qpa-allow-using-nixos-wrapper.patch
     ./0001-NixOS-Unwrap-executable-name-for-.desktop-search.patch
     ./0001-Lower-CAP_SYS_NICE-from-the-ambient-set.patch
@@ -39,7 +37,10 @@ mkKdeDerivation {
     "--set-default TZDIR /etc/zoneinfo"
   ];
 
-  extraNativeBuildInputs = [pkg-config python3];
+  extraNativeBuildInputs = [
+    pkg-config
+    python3
+  ];
   extraBuildInputs = [
     qtquick3d
     qtsensors
@@ -49,13 +50,16 @@ mkKdeDerivation {
 
     krunner
 
-    mesa # libgbm
+    libgbm
     lcms2
-    libcap
+    libcanberra
     libdisplay-info
+    libei
     libinput
     pipewire
 
     xorg.libxcvt
+    # we need to provide this so it knows our xwayland supports new features
+    xwayland
   ];
 }

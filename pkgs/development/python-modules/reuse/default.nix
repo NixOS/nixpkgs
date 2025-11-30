@@ -3,47 +3,87 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  sphinxHook,
+  furo,
+  myst-parser,
+  pbr,
+  sphinxcontrib-apidoc,
+
+  # dependencies
+  attrs,
   binaryornot,
   boolean-py,
-  debian,
+  click,
+  python-debian,
   jinja2,
   license-expression,
+  python-magic,
+  tomlkit,
+
+  # test dependencies
+  freezegun,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "reuse";
-  version = "3.0.2";
+  version = "6.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsfe";
     repo = "reuse-tool";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZYmQtJ503HDmu+Cd6IxOrCcOVH+CcFnFe3oe6PqvcE0=";
+    tag = "v${version}";
+    hash = "sha256-J49RIt7MxnsMJqJAaGvYgUzXMHAT9/frMmrkhWXe5tQ=";
   };
 
-  build-system = [ poetry-core ];
-
-  dependencies = [
-    binaryornot
-    boolean-py
-    debian
-    jinja2
-    license-expression
+  outputs = [
+    "out"
+    "doc"
+    "man"
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  build-system = [
+    poetry-core
+    sphinxHook
+    furo
+    myst-parser
+    pbr
+    sphinxcontrib-apidoc
+  ];
+
+  dependencies = [
+    attrs
+    binaryornot
+    boolean-py
+    click
+    python-debian
+    jinja2
+    license-expression
+    python-magic
+    tomlkit
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    freezegun
+  ];
 
   disabledTestPaths = [
     # pytest wants to execute the actual source files for some reason, which fails with ImportPathMismatchError()
     "src/reuse"
   ];
 
+  sphinxBuilders = [
+    "html"
+    "man"
+  ];
+  sphinxRoot = "docs";
+
   pythonImportsCheck = [ "reuse" ];
 
   meta = with lib; {
-    description = "A tool for compliance with the REUSE Initiative recommendations";
+    description = "Tool for compliance with the REUSE Initiative recommendations";
     homepage = "https://github.com/fsfe/reuse-tool";
     changelog = "https://github.com/fsfe/reuse-tool/blob/v${version}/CHANGELOG.md";
     license = with licenses; [

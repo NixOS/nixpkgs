@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, libGLU, libXmu, libXi, libXext
-, OpenGL
-, enableEGL ? false
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  libGLU,
+  libXmu,
+  libXi,
+  libXext,
+  enableEGL ? (!stdenv.hostPlatform.isDarwin),
+  testers,
+  mesa,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -9,28 +18,50 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.2.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/glew/${finalAttrs.pname}-${finalAttrs.version}.tgz";
+    url = "mirror://sourceforge/glew/glew-${finalAttrs.version}.tgz";
     sha256 = "1qak8f7g1iswgswrgkzc7idk7jmqgwrs58fhg2ai007v7j4q5z6l";
   };
 
-  outputs = [ "bin" "out" "dev" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+  ];
 
   patches = [
     # https://github.com/nigels-com/glew/pull/342
     (fetchpatch {
       url = "https://github.com/nigels-com/glew/commit/966e53fa153175864e151ec8a8e11f688c3e752d.diff";
-      sha256 = "sha256-xsSwdAbdWZA4KVoQhaLlkYvO711i3QlHGtv6v1Omkhw=";
+      hash = "sha256-xsSwdAbdWZA4KVoQhaLlkYvO711i3QlHGtv6v1Omkhw=";
+    })
+
+    # don't make EGL support disable GLX, use the same patch as ArchLinux
+    # https://gitlab.archlinux.org/archlinux/packaging/packages/glew/-/blob/ca08ff5d4cd3548a593eb1118d0a84b0c3670349/egl+glx.patch
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/glew/-/raw/ca08ff5d4cd3548a593eb1118d0a84b0c3670349/egl+glx.patch?inline=false";
+      hash = "sha256-IG3FPhhaor1kshEH3Kr8yzIHqBhczRwCqH7ZeDwlzGE=";
+    })
+
+    # cmake 4 compatibility
+    (fetchpatch {
+      url = "https://github.com/nigels-com/glew/commit/a4d8b2a2a30576eb1b984ba5d573702acfc5b92e.diff";
+      hash = "sha256-S6Om0A4y5po2rHl8OXcue2zOcBpCmBZYvf10LfKEYfI=";
     })
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ libXmu libXi libXext ];
-  propagatedBuildInputs = if stdenv.isDarwin then [ OpenGL ] else [ libGLU ]; # GL/glew.h includes GL/glu.h
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libXmu
+    libXi
+    libXext
+  ];
+  propagatedBuildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libGLU ]; # GL/glew.h includes GL/glu.h
 
   cmakeDir = "cmake";
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-  ] ++ lib.optional enableEGL "-DGLEW_EGL=ON";
+  ]
+  ++ lib.optional enableEGL "-DGLEW_EGL=ON";
 
   postInstall = ''
     moveToOutput lib/cmake "''${!outputDev}"
@@ -53,14 +84,17 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
-    description = "An OpenGL extension loading library for C/C++";
+    description = "OpenGL extension loading library for C/C++";
     homepage = "https://glew.sourceforge.net/";
-    license = with licenses; [ /* modified bsd */ free mit gpl2Only ]; # For full details, see https://github.com/nigels-com/glew#copyright-and-licensing
+    license = with licenses; [
+      # modified bsd
+      free
+      mit
+      gpl2Only
+    ]; # For full details, see https://github.com/nigels-com/glew#copyright-and-licensing
     pkgConfigModules = [ "glew" ];
-    platforms = with platforms;
-      if enableEGL then
-        subtractLists darwin mesaPlatforms
-      else
-        mesaPlatforms;
+    platforms =
+      with platforms;
+      if enableEGL then subtractLists darwin mesa.meta.platforms else mesa.meta.platforms;
   };
 })

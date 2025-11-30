@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A digital investigation tool that collects data from allocated files in a mounted file system";
+    description = "Digital investigation tool that collects data from allocated files in a mounted file system";
     mainProgram = "mac-robber";
     homepage = "https://www.sleuthkit.org/mac-robber/";
     maintainers = with maintainers; [ d3vil0p3r ];

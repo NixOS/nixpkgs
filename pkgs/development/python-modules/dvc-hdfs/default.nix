@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvc-hdfs";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Bo8+El5GC7iyT8SxaJquWFG29BOeilmEMDtTG+RkDGI=";
   };
 
@@ -31,7 +31,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     dvc
     fsspec
-  ] ++ fsspec.optional-dependencies.arrow;
+  ]
+  ++ fsspec.optional-dependencies.arrow;
 
   # Circular dependency with dvc
   doCheck = false;

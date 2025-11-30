@@ -1,23 +1,23 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  pythonOlder,
 
-, certifi
-, charset-normalizer
-, enochecker-core
-, exceptiongroup
-, idna
-, iniconfig
-, jsons
-, packaging
-, pluggy
-, pytest
-, requests
-, tomli
-, typish
-, urllib3
+  certifi,
+  charset-normalizer,
+  enochecker-core,
+  exceptiongroup,
+  idna,
+  iniconfig,
+  jsons,
+  packaging,
+  pluggy,
+  pytest,
+  requests,
+  tomli,
+  typish,
+  urllib3,
 }:
 
 buildPythonApplication rec {
@@ -34,7 +34,6 @@ buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = true;

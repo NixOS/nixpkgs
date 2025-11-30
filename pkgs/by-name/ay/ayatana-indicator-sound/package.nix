@@ -1,41 +1,42 @@
-{ stdenv
-, lib
-, gitUpdater
-, fetchFromGitHub
-, nixosTests
-, accountsservice
-, cmake
-, dbus
-, dbus-test-runner
-, glib
-, gobject-introspection
-, gtest
-, intltool
-, libayatana-common
-, libgee
-, libnotify
-, libpulseaudio
-, libqtdbusmock
-, libqtdbustest
-, libsForQt5
-, libxml2
-, lomiri
-, pkg-config
-, python3
-, systemd
-, vala
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  gitUpdater,
+  fetchFromGitHub,
+  nixosTests,
+  accountsservice,
+  cmake,
+  dbus,
+  dbus-test-runner,
+  glib,
+  gobject-introspection,
+  gtest,
+  intltool,
+  libayatana-common,
+  libgee,
+  libnotify,
+  libpulseaudio,
+  libqtdbusmock,
+  libqtdbustest,
+  libsForQt5,
+  libxml2,
+  lomiri,
+  pkg-config,
+  python3,
+  systemd,
+  vala,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-sound";
-  version = "24.4.0";
+  version = "24.5.2";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-sound";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-2B2CFUjDvBpZ8R4fnGDViS3pXO1L0kP1tnJCtqKeLaQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-qdvte+Mm64O/JhI0luJAGAWoCgukKCbPrp5k8SIDuwM=";
   };
 
   postPatch = ''
@@ -47,6 +48,17 @@ stdenv.mkDerivation (finalAttrs: {
     # Build-time Vala codegen
     substituteInPlace src/CMakeLists.txt \
       --replace-fail '/usr/share/gir-1.0/AccountsService-1.0.gir' '${lib.getDev accountsservice}/share/gir-1.0/AccountsService-1.0.gir'
+
+    # timeouts are too short for aarch64 OfBorg builder under loads, which leads to spurious test failures
+    substituteInPlace \
+      tests/accounts-service-user.cc \
+      tests/media-player-user.cc \
+      tests/name-watch-test.cc \
+      tests/notifications-test.cc \
+      tests/volume-control-test.cc \
+      --replace-quiet 'loop(50)' 'loop(500)' \
+      --replace-quiet 'loop(100)' 'loop(1000)' \
+      --replace-quiet 'loop(500)' 'loop(5000)' \
   '';
 
   strictDeps = true;
@@ -71,7 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     libxml2
     systemd
-  ] ++ (with lomiri; [
+  ]
+  ++ (with lomiri; [
     cmake-extras
     lomiri-api
     lomiri-schemas
@@ -79,9 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     dbus
-    (python3.withPackages (ps: with ps; [
-      python-dbusmock
-    ]))
+    (python3.withPackages (ps: with ps; [ python-dbusmock ]))
   ];
 
   checkInputs = [
@@ -104,13 +115,24 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
+  # Starts & talks to D-Bus, breaks under parallelism
+  enableParallelChecking = false;
+
   passthru = {
-    ayatana-indicators = [ "ayatana-indicator-sound" ];
-    tests.vm = nixosTests.ayatana-indicators;
+    ayatana-indicators = {
+      ayatana-indicator-sound = [
+        "ayatana"
+        "lomiri"
+      ];
+    };
+    tests = {
+      startup = nixosTests.ayatana-indicators;
+      lomiri = nixosTests.lomiri.desktop-ayatana-indicator-sound;
+    };
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Ayatana Indicator for managing system sound";
     longDescription = ''
       Ayatana Indicator Sound that provides easy control of the PulseAudio
@@ -118,8 +140,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/AyatanaIndicators/ayatana-indicator-sound";
     changelog = "https://github.com/AyatanaIndicators/ayatana-indicator-sound/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.linux;
   };
 })

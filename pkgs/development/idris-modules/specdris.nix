@@ -1,7 +1,8 @@
-{ build-idris-package
-, fetchFromGitHub
-, effects
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  effects,
+  lib,
 }:
 build-idris-package {
   pname = "specdris";
@@ -20,7 +21,7 @@ build-idris-package {
   doCheck = false;
 
   meta = {
-    description = "A testing library for Idris";
+    description = "Testing library for Idris";
     homepage = "https://github.com/pheymann/specdris";
     license = lib.licenses.mit;
   };

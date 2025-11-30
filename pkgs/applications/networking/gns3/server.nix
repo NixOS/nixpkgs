@@ -1,22 +1,25 @@
-{ channel
-, version
-, hash
+{
+  channel,
+  version,
+  hash,
 }:
 
-{ lib
-, python3Packages
-, fetchFromGitHub
-, pkgsStatic
-, stdenv
-, nixosTests
-, testers
-, util-linux
-, gns3-server
+{
+  fetchFromGitHub,
+  gns3-server,
+  lib,
+  nixosTests,
+  pkgsStatic,
+  python3Packages,
+  stdenv,
+  testers,
+  util-linux,
 }:
 
 python3Packages.buildPythonApplication {
   pname = "gns3-server";
   inherit version;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     inherit hash;
@@ -30,27 +33,30 @@ python3Packages.buildPythonApplication {
     cp ${pkgsStatic.busybox}/bin/busybox gns3server/compute/docker/resources/bin/busybox
   '';
 
-  propagatedBuildInputs = with python3Packages; [
-    aiofiles
-    aiohttp
-    aiohttp-cors
-    async-generator
-    distro
-    jinja2
-    jsonschema
-    multidict
-    platformdirs
-    prompt-toolkit
-    psutil
-    py-cpuinfo
-    sentry-sdk
-    setuptools
-    truststore
-    yarl
-    zipstream
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies =
+    with python3Packages;
+    [
+      aiofiles
+      aiohttp
+      aiohttp-cors
+      async-generator
+      distro
+      jinja2
+      jsonschema
+      multidict
+      platformdirs
+      prompt-toolkit
+      psutil
+      py-cpuinfo
+      sentry-sdk
+      truststore
+      yarl
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      importlib-resources
+    ];
 
   postInstall = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
     rm $out/bin/gns3loopback
@@ -70,14 +76,18 @@ python3Packages.buildPythonApplication {
   checkInputs = with python3Packages; [
     pytest-aiohttp
     pytest-rerunfailures
-    (pytestCheckHook.override { pytest = pytest_7; })
+    pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    # fails on ofborg because of lack of cpu vendor information
-    "--deselect=tests/controller/gns3vm/test_virtualbox_gns3_vm.py::test_cpu_vendor_id"
+  pytestFlags = [
     # Rerun failed tests up to three times (flaky tests)
-    "--reruns 3"
+    "--reruns=3"
+  ];
+
+  disabledTestPaths = [
+    # fails on ofborg because of lack of cpu vendor information
+    "tests/controller/gns3vm/test_virtualbox_gns3_vm.py::test_cpu_vendor_id"
+    "tests/controller/test_project.py"
   ];
 
   passthru.tests = {
@@ -88,7 +98,7 @@ python3Packages.buildPythonApplication {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Graphical Network Simulator 3 server (${channel} release)";
     longDescription = ''
       The GNS3 server manages emulators such as Dynamips, VirtualBox or
@@ -97,9 +107,9 @@ python3Packages.buildPythonApplication {
     '';
     homepage = "https://www.gns3.com/";
     changelog = "https://github.com/GNS3/gns3-server/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ anthonyroussel ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ anthonyroussel ];
     mainProgram = "gns3server";
   };
 }

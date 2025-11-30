@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchPypi,
   pyqt5,
@@ -14,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pyqtchart";
-  version = "5.15.6";
+  version = "5.15.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyQtChart";
     inherit version;
-    hash = "sha256-JpF5b+kqKUphdZKlxcNeeF3JH3dZ3vnrItp532N2Izk=";
+    hash = "sha256-vJ8dJscl6CCw//jbbpBuiyhhKKFLOpjFmgzQw9mSQJU=";
   };
 
   postPatch = ''

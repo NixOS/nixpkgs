@@ -1,8 +1,8 @@
 {
   lib,
   buildPythonPackage,
+  setuptools,
   colorama,
-  configobj,
   fetchPypi,
   packaging,
   pykwalify,
@@ -12,19 +12,20 @@
 
 buildPythonPackage rec {
   pname = "west";
-  version = "1.2.0";
-  format = "setuptools";
+  version = "1.5.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tB5RrJA5OUT5wB974nAA1LMpYVt+0HT7DvaTtGRoEpc=";
+    hash = "sha256-cIj+Dpr+Bxnr7pXFHFKRSfe8/JGdg6ggbTX6nGg+0KU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     colorama
-    configobj
     packaging
     pyyaml
     pykwalify

@@ -26,7 +26,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/tgalal/python-axolotl";
     description = "Python port of libaxolotl-android";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     license = licenses.gpl3;
   };
 }

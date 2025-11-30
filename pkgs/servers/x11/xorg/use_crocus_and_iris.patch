@@ -10,7 +10,7 @@
 -			return "i965";
 +			return "iris";
  	}
- 
+
  	return s;
 --- a/src/sna/sna_dri2.c
 +++ b/src/sna/sna_dri2.c
@@ -24,5 +24,5 @@
 -			return "i965";
 +			return "iris";
  	}
- 
+
  	return s;

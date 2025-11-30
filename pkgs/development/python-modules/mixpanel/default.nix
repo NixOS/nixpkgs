@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mixpanel";
     repo = "mixpanel-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-i5vT5FTnw+BanHHrlRsPJ3EooZjQcaosbaHoh/uPRmQ=";
   };
 

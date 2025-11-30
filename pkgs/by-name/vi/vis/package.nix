@@ -1,31 +1,46 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, makeWrapper
-, copyDesktopItems, makeDesktopItem
-, ncurses, libtermkey, lua, tre
-, acl, libselinux
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  makeWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
+  ncurses,
+  libtermkey,
+  lua,
+  tre,
+  acl,
+  libselinux,
 }:
 
 let
-  luaEnv = lua.withPackages(ps: [ ps.lpeg ]);
+  luaEnv = lua.withPackages (ps: [ ps.lpeg ]);
 in
 stdenv.mkDerivation rec {
   pname = "vis";
-  version  = "0.9";
+  version = "0.9";
 
   src = fetchFromGitHub {
     rev = "v${version}";
-    sha256 = "sha256-SYM3zlzhp3NdyOjtXc+pOiWY4/WA/Ax+qAWe18ggq3g=";
+    hash = "sha256-SYM3zlzhp3NdyOjtXc+pOiWY4/WA/Ax+qAWe18ggq3g=";
     repo = "vis";
     owner = "martanne";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+    copyDesktopItems
+  ];
 
   buildInputs = [
     ncurses
     libtermkey
     luaEnv
     tre
-  ] ++ lib.optionals stdenv.isLinux [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     acl
     libselinux
   ];
@@ -46,18 +61,26 @@ stdenv.mkDerivation rec {
       comment = meta.description;
       desktopName = "vis";
       genericName = "Text editor";
-      categories = [ "Application" "Development" "IDE" ];
-      mimeTypes = [ "text/plain" "application/octet-stream" ];
+      categories = [
+        "Application"
+        "Development"
+        "IDE"
+      ];
+      mimeTypes = [
+        "text/plain"
+        "application/octet-stream"
+      ];
       startupNotify = false;
       terminal = true;
     })
   ];
 
   meta = with lib; {
-    description = "A vim like editor";
+    description = "Vim like editor";
     homepage = "https://github.com/martanne/vis";
     license = licenses.isc;
-    maintainers = with maintainers; [ vrthra ramkromberg ];
+    maintainers = with maintainers; [ ramkromberg ];
     platforms = platforms.unix;
+    mainProgram = "vis";
   };
 }

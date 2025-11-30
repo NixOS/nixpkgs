@@ -1,7 +1,29 @@
-{ buildDunePackage, dns, dns-tsig, dns-client-lwt, dns-server, dns-certify, dnssec
-, bos, cmdliner, fpath, x509, mirage-crypto, mirage-crypto-pk
-, mirage-crypto-rng, hex, ptime, mtime, logs, fmt, ipaddr, lwt
-, randomconv, alcotest
+{
+  buildDunePackage,
+  dns,
+  dns-tsig,
+  dns-client-lwt,
+  dns-server,
+  dns-certify,
+  dns-resolver,
+  dnssec,
+  bos,
+  cmdliner,
+  fpath,
+  x509,
+  mirage-crypto,
+  mirage-crypto-pk,
+  mirage-crypto-rng,
+  mirage-mtime,
+  ohex,
+  ptime,
+  mtime,
+  logs,
+  fmt,
+  ipaddr,
+  lwt,
+  randomconv,
+  alcotest,
 }:
 
 buildDunePackage {
@@ -10,7 +32,6 @@ buildDunePackage {
   minimalOCamlVersion = "4.08";
 
   inherit (dns) version src;
-  duneVersion = "3";
 
   # no need to propagate as this is primarily
   # an executable package
@@ -20,6 +41,7 @@ buildDunePackage {
     dns-client-lwt
     dns-server
     dns-certify
+    dns-resolver
     dnssec
     bos
     cmdliner
@@ -28,7 +50,8 @@ buildDunePackage {
     mirage-crypto
     mirage-crypto-pk
     mirage-crypto-rng
-    hex
+    mirage-mtime
+    ohex
     ptime
     mtime
     logs

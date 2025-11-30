@@ -1,27 +1,35 @@
-{ lib, fetchCrate, rustPlatform, clang, rustfmt
-, runtimeShell
-, bash
+{
+  lib,
+  fetchCrate,
+  rustPlatform,
+  clang,
+  rustfmt,
 }:
 let
   # bindgen hardcodes rustfmt outputs that use nightly features
   rustfmt-nightly = rustfmt.override { asNightly = true; };
-in rustPlatform.buildRustPackage rec {
+in
+rustPlatform.buildRustPackage rec {
   pname = "rust-bindgen-unwrapped";
-  version = "0.69.4";
+  version = "0.72.1";
 
   src = fetchCrate {
     pname = "bindgen-cli";
     inherit version;
-    sha256 = "sha256-5fwJq1WsL3IEcVUjsyqKdQU8VufbbPk6TglwJg3C1Gw=";
+    hash = "sha256-rhdQZcnlqVSUqvFDg0Scs1+DHGcKyazeS5H9HH7u8Fk=";
   };
 
-  cargoHash = "sha256-UROy/MyPBKJe+EaiUIDbOYKVbge0C9LsmfnsvOLEONE=";
-
-  buildInputs = [ clang.cc.lib ];
+  cargoHash = "sha256-YNpqVB+zdZ76Av2L+yQuBrxKvNML9+3H7ES4+7mED0E=";
 
   preConfigure = ''
-    export LIBCLANG_PATH="${clang.cc.lib}/lib"
+    export LIBCLANG_PATH="${lib.getLib clang.cc}/lib"
   '';
+
+  # Disable the "runtime" feature, so libclang is linked.
+  buildNoDefaultFeatures = true;
+  buildFeatures = [ "logging" ];
+  checkNoDefaultFeatures = buildNoDefaultFeatures;
+  checkFeatures = buildFeatures;
 
   doCheck = true;
   nativeCheckInputs = [ clang ];
@@ -43,7 +51,7 @@ in rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/rust-lang/rust-bindgen";
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ johntitor ralith ];
+    maintainers = with maintainers; [ johntitor ];
     mainProgram = "bindgen";
     platforms = platforms.unix;
   };

@@ -19,33 +19,33 @@
 
 buildPythonPackage rec {
   pname = "zigpy-znp";
-  version = "0.12.1";
+  version = "0.14.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zigpy";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Bs/m9Iyr8x+sMUVXt1whk2E4EJ5bpitMsEWZtmCyIf8=";
+    repo = "zigpy-znp";
+    tag = "v${version}";
+    hash = "sha256-B4AyCLuhKUdQ0nzwFy5xWXpzR31R50lcC5EJMIJfDKE=";
   };
-
-  nativeBuildInputs = [ setuptools ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "timeout = 20" "timeout = 300" \
-      --replace ', "setuptools-git-versioning<2"' "" \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail "timeout = 20" "timeout = 300" \
+      --replace-fail ', "setuptools-git-versioning<2"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  propagatedBuildInputs = [
-    async-timeout
+  build-system = [ setuptools ];
+
+  dependencies = [
     coloredlogs
     jsonschema
     voluptuous
     zigpy
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
   ];
 
   nativeCheckInputs = [
@@ -57,17 +57,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--reruns=3" ];
+  pytestFlags = [ "--reruns=3" ];
 
   disabledTests = [
-    # failing since zigpy 0.60.0
-    "test_join_device"
-    "test_nonstandard_profile"
-    "test_permit_join"
-    "test_request_recovery_route_rediscovery_zdo"
-    "test_watchdog"
-    "test_zigpy_request"
-    "test_zigpy_request_failure"
+    # broken by https://github.com/zigpy/zigpy/pull/1635
+    "test_concurrency_auto_config"
+    "test_request_concurrency"
   ];
 
   pythonImportsCheck = [ "zigpy_znp" ];

@@ -3,10 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pythonAtLeast,
   ninja,
-  ignite,
   numpy,
+  packaging,
   pybind11,
   torch,
   which,
@@ -14,34 +13,44 @@
 
 buildPythonPackage rec {
   pname = "monai";
-  version = "1.3.1";
+  version = "1.5.0";
   pyproject = true;
-  # upper bound due to use of `distutils`; remove after next release:
-  disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Project-MONAI";
     repo = "MONAI";
-    rev = "refs/tags/${version}";
-    hash = "sha256-YjEJbDM9+PiC3Kse8NA/b/yJBsReaK6yIyEB9uktiEc=";
+    tag = version;
+    hash = "sha256-SUZSWChO0oQlLblPwmCg2zt2Jp5QnpM1CXWnMiOiLhw=";
+    # note: upstream consistently seems to modify the tag shortly after release,
+    # so best to wait a few days before updating
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail 'torch>=2.4.1, <2.7.0' 'torch'
+  '';
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES;
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     ninja
     which
   ];
+
   buildInputs = [ pybind11 ];
-  propagatedBuildInputs = [
+
+  dependencies = [
     numpy
+    packaging
     torch
-    ignite
   ];
 
-  BUILD_MONAI = 1;
+  pythonRelaxDeps = [ "torch" ];
+
+  env.BUILD_MONAI = 1;
 
   doCheck = false; # takes too long; tries to download data
 

@@ -1,5 +1,7 @@
-{ git
-, runCommand
+{
+  gitMinimal,
+  lib,
+  runCommand,
 }:
 
 {
@@ -7,15 +9,22 @@
   # a) python3
   # b) python3.withPackages (ps: [...])
   # See https://github.com/NixOS/nixpkgs/pull/97467#issuecomment-689315186
-  addPackagesToPython = python: packages:
-    if python ? "env" then python.override (old: {
-      extraLibs = old.extraLibs ++ packages;
-    })
-    else python.withPackages (ps: packages);
+  addPackagesToPython =
+    python: packages:
+    # TODO: this stopped working because "env" ended up being a key of the base
+    # derivation like "python3" as well. Is there a robust way to determine if
+    # this Python is already wrapped?
+    if python ? "env" && lib.isDerivation python.env then
+      python.override (old: {
+        extraLibs = old.extraLibs ++ packages;
+      })
+    else
+      python.withPackages (ps: packages);
 
   # Convert an ordinary source checkout into a repo with a single commit
-  repoifySimple = name: path:
-    runCommand ''${name}-repoified'' {buildInputs = [git];} ''
+  repoifySimple =
+    name: path:
+    runCommand ''${name}-repoified'' { buildInputs = [ gitMinimal ]; } ''
       mkdir -p $out
       cp -r ${path}/. $out
       cd $out
@@ -29,8 +38,9 @@
     '';
 
   # Convert an dependency source info into a repo with a single commit
-  repoifyInfo = uuid: info:
-    runCommand ''julia-${info.name}-${info.version}'' {buildInputs = [git];} ''
+  repoifyInfo =
+    uuid: info:
+    runCommand ''julia-${info.name}-${info.version}'' { buildInputs = [ gitMinimal ]; } ''
       mkdir -p $out
       cp -r ${info.src}/. $out
       cd $out

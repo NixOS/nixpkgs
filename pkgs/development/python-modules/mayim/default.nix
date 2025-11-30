@@ -11,48 +11,44 @@
 
   # test
   pytest-asyncio,
+  pytest-cov-stub,
 
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mayim";
-  version = "1.1.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ahopkins";
     repo = "mayim";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-nb0E9kMEJUihaCp8RnqGh0nSyDQo50eL1C4K5lBPlPQ=";
+    tag = "v${version}";
+    hash = "sha256-mXGbPPO19H6fsWkvRzYyIVykHRryQo46WtH/XfqSIgY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov=src --cov-append --cov-report term-missing" ""
-  '';
-
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     postgres = [ psycopg ] ++ psycopg.optional-dependencies.pool;
     mysql = [ asyncmy ];
     sqlite = [ aiosqlite ];
   };
 
-  nativeCheckInputs =
-    [
-      pytestCheckHook
-      pytest-asyncio
-    ]
-    ++ (with passthru.optional-dependencies; [
-      postgres
-      mysql
-      sqlite
-    ]);
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    pytest-cov-stub
+  ]
+  ++ (with optional-dependencies; [
+    postgres
+    mysql
+    sqlite
+  ]);
 
   pythonImportsCheck = [ "mayim" ];
 

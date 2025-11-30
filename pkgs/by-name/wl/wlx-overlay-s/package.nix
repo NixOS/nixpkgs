@@ -1,41 +1,55 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, alsa-lib
-, dbus
-, fontconfig
-, libxkbcommon
-, makeWrapper
-, openvr
-, openxr-loader
-, pipewire
-, pkg-config
-, pulseaudio
-, shaderc
-, wayland
-, xorg
+{
+  alsa-lib,
+  dbus,
+  fetchFromGitHub,
+  fontconfig,
+  lib,
+  libGL,
+  libX11,
+  libxcb,
+  libXext,
+  libXrandr,
+  libxkbcommon,
+  makeWrapper,
+  nix-update-script,
+  openvr,
+  openxr-loader,
+  pipewire,
+  pkg-config,
+  pulseaudio,
+  rustPlatform,
+  shaderc,
+  stdenv,
+  testers,
+  wayland,
+  wlx-overlay-s,
+  # openvr support is broken on aarch64-linux
+  withOpenVr ? !stdenv.hostPlatform.isAarch64,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wlx-overlay-s";
-  version = "0.3.2";
+  version = "25.4.2";
 
   src = fetchFromGitHub {
     owner = "galister";
     repo = "wlx-overlay-s";
     rev = "v${version}";
-    hash = "sha256-5uvdLBUnc8ba6b/dJNWsuqjnbbidaCcqgvSafFEXaMU=";
+    hash = "sha256-lWUfhiHRxu72p9ZG2f2fZH6WZECm/fOKcK05MLZV+MI=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ovr_overlay-0.0.0" = "sha256-b2sGzBOB2aNNJ0dsDBjgV2jH3ROO/Cdu8AIHPSXMCPg=";
-      "vulkano-0.34.0" = "sha256-0ZIxU2oItT35IFnS0YTVNmM775x21gXOvaahg/B9sj8=";
-      "wlx-capture-0.3.1" = "sha256-kK3OQMdIqCLZlgZuevNtfMDmpR8J2DFFD8jRHHWAvSA=";
-    };
-  };
+  cargoHash = "sha256-em5sWSty2/pZp2jTwBnLUIBgPOcoMpwELwj984XYf+k=";
+
+  # explicitly only add openvr if withOpenVr is set to true.
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "openxr"
+    "osc"
+    "x11"
+    "wayland"
+    "wayvr"
+  ]
+  ++ lib.optional withOpenVr "openvr";
 
   nativeBuildInputs = [
     makeWrapper
@@ -47,37 +61,46 @@ rustPlatform.buildRustPackage rec {
     alsa-lib
     dbus
     fontconfig
+    libGL
+    libX11
+    libxcb
+    libXext
+    libXrandr
     libxkbcommon
-    openvr
     openxr-loader
     pipewire
-    xorg.libX11
-    xorg.libXext
-    xorg.libXrandr
-  ];
+    wayland
+  ]
+  ++ lib.optional withOpenVr openvr;
 
   env.SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
 
   postPatch = ''
     substituteAllInPlace src/res/watch.yaml \
       --replace '"pactl"' '"${lib.getExe' pulseaudio "pactl"}"'
+    substituteInPlace wlx-overlay-s.desktop \
+      --replace 'Categories=Utility;' 'Categories=Utility;X-WiVRn-VR;'
 
     # TODO: src/res/keyboard.yaml references 'whisper_stt'
   '';
-
   postInstall = ''
-    patchelf $out/bin/wlx-overlay-s \
-      --add-needed ${lib.getLib wayland}/lib/libwayland-client.so.0 \
-      --add-needed ${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0
+    install -Dm644 wlx-overlay-s.desktop $out/share/applications/wlx-overlay-s.desktop
+    install -Dm644 wlx-overlay-s.svg $out/share/icons/hicolor/scalable/apps/wlx-overlay-s.svg
   '';
 
-  meta = with lib; {
+  passthru = {
+    tests.testVersion = testers.testVersion { package = wlx-overlay-s; };
+
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Wayland/X11 desktop overlay for SteamVR and OpenXR, Vulkan edition";
     homepage = "https://github.com/galister/wlx-overlay-s";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ Scrumplex ];
-    platforms = platforms.linux;
-    broken = stdenv.isAarch64;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ Scrumplex ];
+    platforms = lib.platforms.linux;
+    broken = stdenv.hostPlatform.isAarch64 && withOpenVr;
     mainProgram = "wlx-overlay-s";
   };
 }

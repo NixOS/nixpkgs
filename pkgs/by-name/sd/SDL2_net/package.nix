@@ -1,12 +1,11 @@
 {
   lib,
   SDL2,
-  darwin,
   fetchFromGitHub,
   pkg-config,
   stdenv,
   # Boolean flags
-  enableSdltest ? (!stdenv.isDarwin),
+  enableSdltest ? (!stdenv.hostPlatform.isDarwin),
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,15 +19,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-sEcKn/apA6FcR7ijb7sfuvP03ZdVfjkNZTXsasK8fAI=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     SDL2
     pkg-config
-  ];
-
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.libobjc
   ];
 
   propagatedBuildInputs = [ SDL2 ];
@@ -44,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/libsdl-org/SDL_net";
     description = "SDL multiplatform networking library";
     license = lib.licenses.zlib;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    teams = [ lib.teams.sdl ];
     inherit (SDL2.meta) platforms;
   };
 })

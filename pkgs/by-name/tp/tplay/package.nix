@@ -1,28 +1,29 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, clang
-, ffmpeg
-, openssl
-, alsa-lib
-, libclang
-, opencv
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  clang,
+  ffmpeg_6-headless,
+  openssl,
+  alsa-lib,
+  opencv,
+  makeWrapper,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tplay";
-  version = "0.5.0";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "maxcurzi";
     repo = "tplay";
-    rev =  "v${version}";
-    hash = "sha256-/3ui0VOxf+kYfb0JQXPVbjAyXPph2LOg2xB0DGmAbwc=";
+    rev = "v${version}";
+    hash = "sha256-JVkezG2bs99IFOTONeZZRljjbi0EhFf+DMxcfiWI4p4=";
   };
 
-  cargoHash = "sha256-zRkIEH37pvxHUbnfg25GW1Z7od9XMkRmP2Qvs64uUjg=";
+  cargoHash = "sha256-LHRTmjAwDPMOP6YQfL01leEzqRKtteU1cnUqL6UeWKk=";
   checkFlags = [
-        # requires network access
+    # requires network access
     "--skip=pipeline::image_pipeline::tests::test_process"
     "--skip=pipeline::image_pipeline::tests::test_to_ascii"
     "--skip=pipeline::image_pipeline::tests::test_to_ascii_ext"
@@ -33,22 +34,29 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
     pkg-config
     clang
-    ffmpeg
+    makeWrapper
   ];
 
   buildInputs = [
     openssl.dev
     alsa-lib.dev
-    libclang.lib
-    ffmpeg.dev
+    ffmpeg_6-headless.dev
     opencv
   ];
+
+  postFixup = ''
+    wrapProgram $out/bin/tplay \
+      --prefix PATH : "${lib.makeBinPath [ ffmpeg_6-headless ]}"
+  '';
 
   meta = {
     description = "Terminal Media Player";
     homepage = "https://github.com/maxcurzi/tplay";
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ demine colemickens ];
+    maintainers = with lib.maintainers; [
+      demine
+      colemickens
+    ];
   };
 }

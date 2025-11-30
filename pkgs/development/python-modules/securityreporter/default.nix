@@ -5,24 +5,26 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
 }:
 
 buildPythonPackage rec {
   pname = "securityreporter";
-  version = "1.0.2";
+  version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dongit-org";
     repo = "python-reporter";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-mBZVsoDnDRYHdcFzi4kuwmAJDRdpysUbNRcDzIhYRGY=";
+    tag = "v${version}";
+    hash = "sha256-YvUDgsKM0JUajp8JAR2vj30QsNtcGvADGCZ791ZZD/8=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+  '';
 
   build-system = [ poetry-core ];
 
@@ -42,7 +44,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Python wrapper for the Reporter API";
+    description = "Python wrapper for the Reporter API";
     homepage = "https://github.com/dongit-org/python-reporter";
     changelog = "https://github.com/dongit-org/python-reporter/releases/tag/v${version}";
     license = licenses.mit;

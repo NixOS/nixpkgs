@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchPypi,
   pyqt5,
@@ -14,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pyqtdatavisualization";
-  version = "5.15.5";
+  version = "5.15.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyQtDataVisualization";
     inherit version;
-    hash = "sha256-iSf496pwhX7wDFHj379vg92fOFX0FuDVMVknYcu53H8=";
+    hash = "sha256-ntM7IOdHvGnh1hnxR7sWJcwA1u9ATb8Ha6E6n/b2Bh0=";
   };
 
   postPatch = ''

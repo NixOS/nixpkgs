@@ -1,44 +1,57 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   cmake,
-  eigen,
   ninja,
-  scikit-build,
+  pathspec,
+  scikit-build-core,
+
+  # dependencies
+  eigen,
+
+  # tests
   pytestCheckHook,
   numpy,
   scipy,
   torch,
+  tensorflow-bin,
   jax,
   jaxlib,
-  tensorflow,
-  setuptools,
+
+  nanobind,
 }:
 buildPythonPackage rec {
   pname = "nanobind";
-  version = "1.9.2";
+  version = "2.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wjakob";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-6swDqw7sEYOawQbNWD8VfSQoi+9wjhOhOOwPPkahDas=";
+    repo = "nanobind";
+    tag = "v${version}";
     fetchSubmodules = true;
+    hash = "sha256-cC+sf2FUm1jdGMRdDoaQK8rjUVkWjn/53c1HQ5gsUWs=";
   };
 
-  disabled = pythonOlder "3.8";
-
-  nativeBuildInputs = [
+  build-system = [
     cmake
     ninja
-    scikit-build
-    setuptools
+    pathspec
+    scikit-build-core
   ];
-  buildInputs = [ eigen ];
+
+  dependencies = [ eigen ];
+
   dontUseCmakeBuildDir = true;
+
+  # nanobind check requires heavy dependencies such as tensorflow
+  # which are less than ideal to be imported in children packages that
+  # use it as build-system parameter.
+  doCheck = false;
 
   preCheck = ''
     # build tests
@@ -50,16 +63,20 @@ buildPythonPackage rec {
     numpy
     scipy
     torch
-    tensorflow
-    # Uncomment at next release (1.9.3)
-    # See https://github.com/wjakob/nanobind/issues/578
-    # jax
-    # jaxlib
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform tensorflow-bin) [
+    tensorflow-bin
+    jax
+    jaxlib
   ];
 
-  meta = with lib; {
+  passthru.tests = {
+    pytest = nanobind.overridePythonAttrs { doCheck = true; };
+  };
+
+  meta = {
     homepage = "https://github.com/wjakob/nanobind";
-    changelog = "https://github.com/wjakob/nanobind/blob/${src.rev}/docs/changelog.rst";
+    changelog = "https://github.com/wjakob/nanobind/blob/${src.tag}/docs/changelog.rst";
     description = "Tiny and efficient C++/Python bindings";
     longDescription = ''
       nanobind is a small binding library that exposes C++ types in Python and
@@ -68,7 +85,7 @@ buildPythonPackage rec {
       more efficient: bindings compile in a shorter amount of time, produce
       smaller binaries, and have better runtime performance.
     '';
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ parras ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ parras ];
   };
 }

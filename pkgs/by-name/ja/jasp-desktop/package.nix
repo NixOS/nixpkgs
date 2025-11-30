@@ -1,36 +1,45 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, callPackage
-, buildEnv
-, linkFarm
-, substituteAll
-, R
-, rPackages
-, cmake
-, ninja
-, pkg-config
-, boost
-, libarchive
-, readstat
-, qt6
+{
+  lib,
+  stdenv,
+
+  fetchFromGitHub,
+  fetchpatch,
+
+  buildEnv,
+  linkFarm,
+
+  cmake,
+  ninja,
+  pkg-config,
+
+  boost,
+  freexl,
+  libarchive,
+  librdata,
+  qt6,
+  R,
+  readstat,
+  rPackages,
 }:
 
 let
-  version = "0.18.3";
+  version = "0.95.0";
 
   src = fetchFromGitHub {
     owner = "jasp-stats";
     repo = "jasp-desktop";
-    rev = "v${version}";
-    hash = "sha256-eKBxCIamNhUig+0vUEqXYbPjiaOsZk6QnOw8cnpjKFY=";
+    tag = "v${version}";
     fetchSubmodules = true;
+    hash = "sha256-RR7rJJb0qKqZs7K3zP6GxlDXpmSNnGQ3WDExUgm9pKQ=";
   };
 
-  inherit (callPackage ./modules.nix {
+  moduleSet = import ./modules.nix {
+    inherit fetchFromGitHub rPackages;
     jasp-src = src;
     jasp-version = version;
-  }) engine modules;
+  };
+
+  inherit (moduleSet) jaspBase modules;
 
   # Merges ${R}/lib/R with all used R packages (even propagated ones)
   customREnv = buildEnv {
@@ -38,32 +47,40 @@ let
     paths = [
       "${R}/lib/R"
       rPackages.RInside
-      engine.jaspBase # Should already be propagated from modules, but include it again, just in case
-    ] ++ lib.attrValues modules;
+      jaspBase # Should already be propagated from modules, but include it again, just in case
+    ]
+    ++ lib.attrValues modules;
   };
 
-  modulesDir = linkFarm "jasp-${version}-modules"
-    (lib.mapAttrsToList (name: drv: { name = name; path = "${drv}/library"; }) modules);
+  moduleLibs = linkFarm "jasp-${version}-module-libs" (
+    lib.mapAttrsToList (name: drv: {
+      name = name;
+      path = "${drv}/library";
+    }) modules
+  );
 in
 stdenv.mkDerivation {
   pname = "jasp-desktop";
   inherit version src;
 
   patches = [
-    # remove unused cmake deps, ensure boost is dynamically linked, patch readstat path
-    (substituteAll {
-      src = ./cmake.patch;
-      inherit readstat;
+    (fetchpatch {
+      name = "readstat-use-find-library.patch";
+      url = "https://github.com/jasp-stats/jasp-desktop/commit/87c5a1f4724833aed0f7758499b917b3107ee196.patch";
+      hash = "sha256-0CrMKJkZpS97KmQFvZPyV1h3C7eKVr/IT0dARYBoKFo=";
     })
+    ./link-boost-dynamically.patch
+    ./disable-module-install-logic.patch # don't try to install modules via cmake
+    ./disable-renv-logic.patch
+    ./dont-check-for-module-deps.patch # dont't check for dependencies required for building modules
   ];
 
   cmakeFlags = [
-    "-DGITHUB_PAT=dummy"
-    "-DGITHUB_PAT_DEF=dummy"
-    "-DINSTALL_R_FRAMEWORK=OFF"
-    "-DLINUX_LOCAL_BUILD=OFF"
-    "-DINSTALL_R_MODULES=OFF"
-    "-DCUSTOM_R_PATH=${customREnv}"
+    (lib.cmakeFeature "GITHUB_PAT" "dummy")
+    (lib.cmakeFeature "GITHUB_PAT_DEF" "dummy")
+    (lib.cmakeBool "LINUX_LOCAL_BUILD" false)
+    (lib.cmakeBool "INSTALL_R_MODULES" false)
+    (lib.cmakeFeature "CUSTOM_R_PATH" "${customREnv}")
   ];
 
   nativeBuildInputs = [
@@ -74,41 +91,41 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    customREnv
     boost
+    customREnv
+    freexl
     libarchive
+    librdata
     readstat
-  ] ++ (with qt6; [
-    qtbase
-    qtdeclarative
-    qtwebengine
-    qtsvg
-    qt5compat
-  ]);
 
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qtwebengine
+    qt6.qtsvg
+    qt6.qt5compat
+  ];
+
+  # needed so that the linker can find libRInside.so
   env.NIX_LDFLAGS = "-L${rPackages.RInside}/library/RInside/lib";
 
   postInstall = ''
-    # Remove unused cache locations
-    rm -r $out/lib64 $out/Modules
-
     # Remove flatpak proxy script
     rm $out/bin/org.jaspstats.JASP
     substituteInPlace $out/share/applications/org.jaspstats.JASP.desktop \
-        --replace "Exec=org.jaspstats.JASP" "Exec=JASP"
+      --replace-fail "Exec=org.jaspstats.JASP" "Exec=JASP"
 
     # symlink modules from the store
-    ln -s ${modulesDir} $out/Modules
+    ln -s ${moduleLibs} $out/Modules/module_libs
   '';
 
   passthru = {
-    inherit modules engine;
+    inherit jaspBase modules;
     env = customREnv;
   };
 
   meta = {
     changelog = "https://jasp-stats.org/release-notes";
-    description = "A complete statistical package for both Bayesian and Frequentist statistical methods";
+    description = "Complete statistical package for both Bayesian and Frequentist statistical methods";
     homepage = "https://github.com/jasp-stats/jasp-desktop";
     license = lib.licenses.agpl3Plus;
     mainProgram = "JASP";
@@ -118,4 +135,3 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
   };
 }
-

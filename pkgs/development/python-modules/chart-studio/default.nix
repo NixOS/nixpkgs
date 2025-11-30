@@ -3,53 +3,52 @@
   buildPythonPackage,
   fetchFromGitHub,
   mock,
-  nose,
   plotly,
-  pytest,
   requests,
   retrying,
   setuptools,
-  six,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "chart-studio";
-  version = "5.22.0";
+  version = "1.1.0-unstable-2025-01-30";
   pyproject = true;
 
-  # chart-studio was split from plotly
   src = fetchFromGitHub {
     owner = "plotly";
-    repo = "plotly.py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cEm0vLQ4PAVxvplqK+yayxLpNCvyfZtjZva0Bl2Sdfs=";
+    repo = "chart-studio";
+    rev = "44c7c43be0fe7e031ec281c86ee7dae0efa0619e";
+    hash = "sha256-RekcZzUcunIqXOSriW+RvpLdvATQWTeRAiR8LFodfQg=";
   };
 
-  sourceRoot = "${src.name}/packages/python/chart-studio";
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     plotly
     requests
     retrying
-    six
   ];
 
   nativeCheckInputs = [
     mock
-    nose
-    pytest
+    plotly
+    pytestCheckHook
   ];
-  # most tests talk to a service
-  checkPhase = ''
-    HOME=$TMPDIR pytest chart_studio/tests/test_core chart_studio/tests/test_plot_ly/test_api
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
   '';
 
-  meta = with lib; {
+  # most tests talk to a network service, so only run ones that don't do that.
+  enabledTestPaths = [
+    "chart_studio/tests/test_core"
+  ];
+
+  meta = {
     description = "Utilities for interfacing with Plotly's Chart Studio service";
-    homepage = "https://github.com/plotly/plotly.py/tree/master/packages/python/chart-studio";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ jonringer ];
+    homepage = "https://github.com/plotly/chart-studio";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ sarahec ];
   };
 }

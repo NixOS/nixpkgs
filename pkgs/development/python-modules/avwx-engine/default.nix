@@ -3,13 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   geopy,
+  hatchling,
   httpx,
   numpy,
-  poetry-core,
-  pytestCheckHook,
   pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   rapidfuzz,
   scipy,
   shapely,
@@ -19,23 +19,17 @@
 
 buildPythonPackage rec {
   pname = "avwx-engine";
-  version = "1.8.28";
+  version = "1.9.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "avwx-rest";
     repo = "avwx-engine";
-    rev = "refs/tags/${version}";
-    hash = "sha256-sxOLhcmTJg/dTrtemr9BcfcBoHTP1eGo8U1ab8iSvUM=";
+    tag = version;
+    hash = "sha256-j+WT0v1h+dOGW90u+LIVQ0xIE4YzsWRo2E0mGOZUU1A=";
   };
 
-  postPatch = ''
-    sed -i -e "/--cov/d" -e "/--no-cov/d" pyproject.toml
-  '';
-
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     geopy
@@ -44,7 +38,7 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       numpy
       rapidfuzz
@@ -61,9 +55,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     time-machine
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "avwx" ];
 
@@ -77,7 +73,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Aviation Weather parsing engine";
     homepage = "https://github.com/avwx-rest/avwx-engine";
-    changelog = "https://github.com/avwx-rest/avwx-engine/blob/${version}/changelog.md";
+    changelog = "https://github.com/avwx-rest/avwx-engine/blob/${src.tag}/changelog.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

@@ -2,28 +2,39 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-janitor";
-  version = "0.2.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "nobbz";
     repo = "nix-janitor";
-    rev = "refs/tags/${version}";
-    hash = "sha256-nGtbBNU6xFWXnmL1AaUbSpO0z5Kq2t/Mn8sqwzjNlkE=";
+    tag = version;
+    hash = "sha256-MRhTkxPl0tlObbXO7/0cD2pbd9/uQCeRKV3DStGvZMQ=";
   };
 
-  cargoHash = "sha256-j3i4c3KjI8ehg42FqbPp+8M15zT9Bu76P4zv8ApUoeA=";
+  cargoHash = "sha256-t4TZkwWIp/VYj4tMd5CdYuAQt3GquMRZ3wyAK3oic5k=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    for shell in bash fish zsh; do
+      completionFile=janitor.$shell
+      $out/bin/janitor --completions $shell > $completionFile
+      installShellCompletion $completionFile
+    done
+  '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/nobbz/nix-janitor";
     changelog = "https://github.com/NobbZ/nix-janitor/blob/${version}/CHANGELOG.md";
-    description = "A tool to clean up old profile generations";
+    description = "Tool to clean up old profile generations";
     mainProgram = "janitor";
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;

@@ -2,10 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build
-  poetry-core,
+  pdm-backend,
 
   # propagates
   aiohttp,
@@ -19,28 +18,23 @@
   pytestCheckHook,
 }:
 
-let
-  pname = "kanidm";
-  version = "0.0.3-unstable-2023-08-23";
-in
 buildPythonPackage rec {
-  inherit pname version;
+  pname = "kanidm";
+  version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "kanidm";
     repo = "kanidm";
-    rev = "def4420c4c5c3ec4f9b02776e1d5fdb07aa3a729";
-    hash = "sha256-5qQb+Itguw2v1Wdvc2vp00zglfvNd3LFEDvaweRJcOc=";
+    rev = "1774f9428ccdc357d514652acbcae49f6b16687a";
+    hash = "sha256-SE3b9Ug0EZFygGf9lsmVsQzmop9qOMiCUsbO//1QWF8=";
   };
 
   sourceRoot = "${src.name}/pykanidm";
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ pdm-backend ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     authlib
     pydantic
@@ -53,7 +47,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "-m 'not network'" ];
+  disabledTestMarks = [ "network" ];
 
   pythonImportsCheck = [ "kanidm" ];
 

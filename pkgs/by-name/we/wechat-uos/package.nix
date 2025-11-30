@@ -1,66 +1,51 @@
-{ stdenvNoCC
-, stdenv
-, lib
-, fetchurl
-, requireFile
-, dpkg
-, nss
-, nspr
-, xorg
-, pango
-, zlib
-, atkmm
-, libdrm
-, libxkbcommon
-, xcbutilwm
-, xcbutilimage
-, xcbutilkeysyms
-, xcbutilrenderutil
-, mesa
-, alsa-lib
-, wayland
-, openssl_1_1
-, atk
-, qt6
-, at-spi2-atk
-, at-spi2-core
-, dbus
-, cups
-, gtk3
-, libxml2
-, cairo
-, freetype
-, fontconfig
-, vulkan-loader
-, gdk-pixbuf
-, libexif
-, ffmpeg
-, pulseaudio
-, systemd
-, libuuid
-, expat
-, bzip2
-, glib
-, libva
-, libGL
-, libnotify
-, buildFHSEnv
-, writeShellScript
-, /**
-  License for wechat-uos, packed in a gz archive named "license.tar.gz".
-  It should have the following files:
-  license.tar.gz
-  ├── etc
-  │   ├── lsb-release
-  │   └── os-release
-  └── var
-      ├── lib
-      │   └── uos-license
-      │       └── .license.json
-      └── uos
-          └── .license.key
-  */
-  uosLicense ? null
+{
+  stdenvNoCC,
+  stdenv,
+  lib,
+  fetchurl,
+  dpkg,
+  nss,
+  nspr,
+  xorg,
+  pango,
+  zlib,
+  atkmm,
+  libdrm,
+  libxkbcommon,
+  xcbutilwm,
+  xcbutilimage,
+  xcbutilkeysyms,
+  xcbutilrenderutil,
+  libgbm,
+  alsa-lib,
+  wayland,
+  atk,
+  qt6,
+  at-spi2-atk,
+  at-spi2-core,
+  dbus,
+  cups,
+  gtk3,
+  libxml2,
+  cairo,
+  freetype,
+  fontconfig,
+  vulkan-loader,
+  gdk-pixbuf,
+  libexif,
+  ffmpeg,
+  pulseaudio,
+  systemd,
+  libuuid,
+  expat,
+  bzip2,
+  glib,
+  libva,
+  libGL,
+  libnotify,
+  krb5,
+  buildFHSEnv,
+  writeShellScript,
 }:
 let
   wechat-uos-env = stdenvNoCC.mkDerivation {
@@ -68,43 +53,14 @@ let
     name = "wechat-uos-env";
     buildCommand = ''
       mkdir -p $out/etc
-      mkdir -p $out/lib/license
       mkdir -p $out/usr/bin
       mkdir -p $out/usr/share
       mkdir -p $out/opt
       mkdir -p $out/var
 
       ln -s ${wechat}/opt/* $out/opt/
-      ln -s ${wechat}/usr/lib/wechat-uos/license/etc/os-release  $out/etc/os-release
-      ln -s ${wechat}/usr/lib/wechat-uos/license/etc/lsb-release  $out/etc/lsb-release
-      ln -s ${wechat}/usr/lib/wechat-uos/license/var/*  $out/var/
-      ln -s ${wechat}/usr/lib/wechat-uos/license/libuosdevicea.so $out/lib/license/
     '';
     preferLocalBuild = true;
-  };
-
-  uosLicenseUnzipped = stdenvNoCC.mkDerivation {
-    name = "uos-license-unzipped";
-    src =
-      if uosLicense == null then
-        requireFile
-          {
-            name = "license.tar.gz";
-            url = "https://www.uniontech.com";
-            sha256 = "53760079c1a5b58f2fa3d5effe1ed35239590b288841d812229ef4e55b2dbd69";
-          } else uosLicense;
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out
-      cp -r * $out/
-
-      runHook postInstall
-    '';
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-pNftwtUZqBsKBSPQsEWlYLlb6h2Xd9j56ZRMi8I82ME=";
   };
 
   wechat-uos-runtime = with xorg; [
@@ -159,55 +115,33 @@ let
     libxml2
     pango
     libdrm
-    mesa
+    libgbm
     vulkan-loader
     systemd
     wayland
     pulseaudio
     qt6.qt5compat
-    openssl_1_1
     bzip2
+    krb5
   ];
 
-  sources = import ./sources.nix;
+  wechat =
+    let
+      sources = import ./sources.nix;
 
-  wechat = stdenvNoCC.mkDerivation
-    rec {
       pname = "wechat-uos";
       version = sources.version;
-
-      src = {
-        x86_64-linux = fetchurl {
-          url = sources.amd64_url;
-          hash = sources.amd64_hash;
-        };
-        aarch64-linux = fetchurl {
-          url = sources.arm64_url;
-          hash = sources.arm64_hash;
-        };
-        loongarch64-linux = fetchurl {
-          url = sources.loongarch64_url;
-          hash = sources.loongarch64_hash;
-        };
-      }.${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
-
-      # Don't blame about this. WeChat requires some binary from here to work properly
-      uosSrc = {
-        x86_64-linux = fetchurl {
-          url = "https://pro-store-packages.uniontech.com/appstore/pool/appstore/c/com.tencent.weixin/com.tencent.weixin_2.1.5_amd64.deb";
-          hash = "sha256-vVN7w+oPXNTMJ/g1Rpw/AVLIytMXI+gLieNuddyyIYE=";
-        };
-        aarch64-linux = fetchurl {
-          url = "https://pro-store-packages.uniontech.com/appstore/pool/appstore/c/com.tencent.weixin/com.tencent.weixin_2.1.5_arm64.deb";
-          hash = "sha256-XvGFPYJlsYPqRyDycrBGzQdXn/5Da1AJP5LgRVY1pzI=";
-        };
-        loongarch64-linux = fetchurl {
-          url = "https://pro-store-packages.uniontech.com/appstore/pool/appstore/c/com.tencent.weixin/com.tencent.weixin_2.1.5_loongarch64.deb";
-          hash = "sha256-oa6rLE6QXMCPlbebto9Tv7xT3fFqYIlXL6WHpB2U35s=";
-        };
-      }.${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
-
-      inherit uosLicense;
+      src = fetchurl (
+        {
+          curlOpts = "-A apt";
+        }
+        // (sources.${stdenv.hostPlatform.system}
+          or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
+        )
+      );
+    in
+    stdenvNoCC.mkDerivation {
+      inherit pname src version;
 
       nativeBuildInputs = [ dpkg ];
 
@@ -215,7 +149,6 @@ let
         runHook preUnpack
 
         dpkg -x $src ./wechat-uos
-        dpkg -x $uosSrc ./wechat-uos-old-source
 
         runHook postUnpack
       '';
@@ -227,10 +160,6 @@ let
 
         cp -r wechat-uos/* $out
 
-        mkdir -pv $out/usr/lib/wechat-uos/license
-        ln -s ${uosLicenseUnzipped}/* $out/usr/lib/wechat-uos/license/
-        cp -r wechat-uos-old-source/usr/lib/license/libuosdevicea.so $out/usr/lib/wechat-uos/license/
-
         runHook postInstall
       '';
 
@@ -238,17 +167,25 @@ let
         description = "Messaging app";
         homepage = "https://weixin.qq.com/";
         license = licenses.unfree;
-        platforms = [ "x86_64-linux" "aarch64-linux" "loongarch64-linux" ];
+        platforms = [
+          "x86_64-linux"
+          "aarch64-linux"
+          "loongarch64-linux"
+        ];
         sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-        maintainers = with maintainers; [ pokon548 ];
+        maintainers = with maintainers; [
+          pokon548
+          xddxdd
+        ];
         mainProgram = "wechat-uos";
       };
     };
 in
 buildFHSEnv {
-  inherit (wechat) name meta;
+  inherit (wechat) pname version meta;
   runScript = writeShellScript "wechat-uos-launcher" ''
     export QT_QPA_PLATFORM=xcb
+    export QT_AUTO_SCREEN_SCALE_FACTOR=1
     export LD_LIBRARY_PATH=${lib.makeLibraryPath wechat-uos-runtime}
 
     if [[ ''${XMODIFIERS} =~ fcitx ]]; then
@@ -268,14 +205,23 @@ buildFHSEnv {
     cp -r ${wechat.outPath}/opt/apps/com.tencent.wechat/entries/applications/com.tencent.wechat.desktop $out/share/applications
     cp -r ${wechat.outPath}/opt/apps/com.tencent.wechat/entries/icons/* $out/share/icons/
 
-    mv $out/bin/$name $out/bin/wechat-uos
-
     substituteInPlace $out/share/applications/com.tencent.wechat.desktop \
       --replace-quiet 'Exec=/usr/bin/wechat' "Exec=$out/bin/wechat-uos --"
+
+    # See https://github.com/NixOS/nixpkgs/issues/413491
+    sed -i \
+      -e '/\[Desktop Entry\]/a\' \
+      -e 'StartupWMClass=wechat' \
+      $out/share/applications/com.tencent.wechat.desktop
   '';
   targetPkgs = pkgs: [ wechat-uos-env ];
 
   passthru.updateScript = ./update.sh;
 
-  extraOutputsToInstall = [ "usr" "var/lib/uos" "var/uos" "etc" ];
+  extraOutputsToInstall = [
+    "usr"
+    "var/lib/uos"
+    "var/uos"
+    "etc"
+  ];
 }

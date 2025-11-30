@@ -4,13 +4,13 @@
   pythonOlder,
   fetchFromGitHub,
   setuptools,
-  incremental,
   pytestCheckHook,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "systembridgemodels";
-  version = "4.0.4";
+  version = "5.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -18,22 +18,36 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = "system-bridge-models";
-    rev = "refs/tags/${version}";
-    hash = "sha256-iFJ95ouhfbaC0D2Gkc1KO+JueYTFTOj1unnYSDyPAe8=";
+    tag = version;
+    hash = "sha256-Yh16la+3zk+igdMyHov4rf2M1yAT3JYYe/0IYu/SmVY=";
   };
 
   postPatch = ''
-    substituteInPlace systembridgemodels/_version.py \
-      --replace-fail ", dev=1" ""
+    substituteInPlace setup.py \
+      --replace-fail ".dev0" ""
   '';
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [ incremental ];
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "systembridgemodels" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    syrupy
+  ];
+
+  disabledTests = [
+    "test_system"
+    "test_update"
+  ];
+
+  disabledTestPaths = [
+    # https://github.com/timmo001/system-bridge-models/commit/9523179e73b6a13b9987fa861d77bfeeb88203a7
+    "tests/test_update.py"
+    "tests/test_version.py"
+  ];
+
+  pytestFlags = [ "--snapshot-warn-unused" ];
 
   meta = {
     changelog = "https://github.com/timmo001/system-bridge-models/releases/tag/${version}";

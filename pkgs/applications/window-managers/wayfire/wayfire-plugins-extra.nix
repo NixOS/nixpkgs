@@ -1,54 +1,64 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, wayfire
-, wf-config
-, libevdev
-, libinput
-, libxkbcommon
-, nlohmann_json
-, xcbutilwm
-, gtkmm3
-, gtk-layer-shell
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  wayfire,
+  wayland-scanner,
+  wf-config,
+  boost,
+  libdrm,
+  libevdev,
+  libinput,
+  libxkbcommon,
+  vulkan-headers,
+  xcbutilwm,
+  gtkmm3,
+  withFiltersPlugin ? true,
+  withFocusRequestPlugin ? true,
+  withPixdecorPlugin ? true,
+  withWayfireShadowsPlugin ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayfire-plugins-extra";
-  version = "0.8.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wayfire-plugins-extra";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-MF4tDzIZnnTXH2ZUxltIw1RP3pfRQFGrc/n9H47yW0g";
+    hash = "sha256-C5dgs81R4XuPjIm7sj1Mtu4IMIRBEYU6izg2olymeVI=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [
     wayfire
     wf-config
+    boost
+    libdrm
     libevdev
     libinput
     libxkbcommon
-    nlohmann_json
+    vulkan-headers
     xcbutilwm
     gtkmm3
-    gtk-layer-shell
   ];
 
   mesonFlags = [
-    # plugins in submodule, packaged individually
-    (lib.mesonBool "enable_windecor" false)
-    (lib.mesonBool "enable_wayfire_shadows" false)
-    (lib.mesonBool "enable_focus_request" false)
+    (lib.mesonBool "enable_filters" withFiltersPlugin)
+    (lib.mesonBool "enable_focus_request" withFocusRequestPlugin)
+    (lib.mesonBool "enable_pixdecor" withPixdecorPlugin)
+    (lib.mesonBool "enable_wayfire_shadows" withWayfireShadowsPlugin)
   ];
 
   env = {
@@ -59,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/WayfireWM/wayfire-plugins-extra";
     description = "Additional plugins for Wayfire";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ rewine ];
+    maintainers = with lib.maintainers; [ wineee ];
     inherit (wayfire.meta) platforms;
   };
 })

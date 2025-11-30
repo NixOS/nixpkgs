@@ -1,38 +1,49 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   rope,
-  pytestCheckHook,
   python-lsp-server,
-  pythonOlder,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pylsp-rope";
-  version = "0.1.16";
-  format = "setuptools";
+  version = "0.1.17";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-1oC2iMYKQCV6iELsgIpuDeFZakelMA8irs/caVVQIKc=";
+  src = fetchFromGitHub {
+    owner = "python-rope";
+    repo = "pylsp-rope";
+    tag = version;
+    hash = "sha256-gEmSZQZ2rtSljN8USsUiqsP2cr54k6kwvsz8cjam9dU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     rope
     python-lsp-server
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
   pythonImportsCheck = [ "pylsp_rope" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
     description = "Extended refactoring capabilities for Python LSP Server using Rope";
     homepage = "https://github.com/python-rope/pylsp-rope";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    changelog = "https://github.com/python-rope/pylsp-rope/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

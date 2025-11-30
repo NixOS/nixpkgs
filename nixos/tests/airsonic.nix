@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "airsonic";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ sumnerevans ];
@@ -26,4 +27,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     with machine.nested("Waiting for UI to work"):
         retry(airsonic_is_up)
   '';
-})
+}

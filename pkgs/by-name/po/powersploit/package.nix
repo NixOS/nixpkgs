@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, stdenvNoCC
+{
+  lib,
+  fetchFromGitHub,
+  stdenvNoCC,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -24,7 +25,7 @@ stdenvNoCC.mkDerivation {
 
   meta = {
     changelog = "https://github.com/PowerShellMafia/PowerSploit/releases/";
-    description = "A PowerShell Post-Exploitation Framework";
+    description = "PowerShell Post-Exploitation Framework";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ shard7 ];
     platforms = lib.platforms.all;

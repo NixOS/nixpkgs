@@ -8,12 +8,11 @@
 mkKdeDerivation {
   pname = "solid";
 
-  patches = [
-    # Also search /run/wrappers for mount/umount
-    ./fix-search-path.patch
+  extraNativeBuildInputs = [
+    qttools
+    bison
+    flex
   ];
-
-  extraNativeBuildInputs = [qttools bison flex];
-  extraBuildInputs = [libimobiledevice];
+  extraBuildInputs = [ libimobiledevice ];
   meta.mainProgram = "solid-hardware6";
 }

@@ -3,17 +3,17 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+  setuptools,
   stups-tokens,
   stups-cli-support,
-  pytest,
-  pytest-cov,
+  pytestCheckHook,
   isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "stups-zign";
   version = "1.2";
-  format = "setuptools";
+  pyproject = true;
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
@@ -31,7 +31,9 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     stups-tokens
     stups-cli-support
   ];
@@ -40,13 +42,10 @@ buildPythonPackage rec {
     export HOME=$TEMPDIR
   ";
 
-  nativeCheckInputs = [
-    pytest
-    pytest-cov
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "OAuth2 token management command line utility.";
+    description = "OAuth2 token management command line utility";
     homepage = "https://github.com/zalando-stups/zign";
     license = licenses.asl20;
     maintainers = [ maintainers.mschuwalow ];

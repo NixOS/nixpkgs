@@ -4,6 +4,7 @@
   pythonOlder,
   fetchFromGitHub,
   buildPythonPackage,
+  nix-update-script,
 
   # build
   cython,
@@ -15,6 +16,7 @@
 
   # optionals
   aiomysql,
+  # TODO: aioodbc
   aiosqlite,
   asyncmy,
   asyncpg,
@@ -28,10 +30,11 @@
   psycopg,
   psycopg2,
   psycopg2cffi,
-  # TODO: pymssql
+  pymssql,
   pymysql,
   pyodbc,
-  # TODO: sqlcipher3
+  sqlcipher3,
+  types-greenlet,
 
   # tests
   mock,
@@ -41,36 +44,37 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy";
-  version = "2.0.30";
-  format = "pyproject";
+  version = "2.0.44";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
-    rev = "refs/tags/rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-l6VxBK4RT/sAFkz3g633MrfQH9Bvp/JE12mdtqjsxd8=";
+    tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-XjmSMgFOMYzJ5IR7tDImj37mM7qhiesKsaBerfzxL4g=";
   };
 
   postPatch = ''
     sed -i '/tag_build = dev/d' setup.cfg
   '';
 
-  nativeBuildInputs = [ setuptools ] ++ lib.optionals (!isPyPy) [ cython ];
+  build-system = [ setuptools ] ++ lib.optionals (!isPyPy) [ cython ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     greenlet
     typing-extensions
   ];
 
-  passthru.optional-dependencies = lib.fix (self: {
+  optional-dependencies = lib.fix (self: {
     asyncio = [ greenlet ];
-    mypy = [ mypy ];
-    mssql = [ pyodbc ];
-    mssql_pymysql = [
-      # TODO: pymssql
+    mypy = [
+      mypy
+      types-greenlet
     ];
+    mssql = [ pyodbc ];
+    mssql_pymysql = [ pymssql ];
     mssql_pyodbc = [ pyodbc ];
     mysql = [ mysqlclient ];
     mysql_connector = [ mysql-connector ];
@@ -86,14 +90,10 @@ buildPythonPackage rec {
     postgresql_psycopgbinary = [ psycopg ];
     pymysql = [ pymysql ];
     aiomysql = [ aiomysql ] ++ self.asyncio;
+    # TODO: aioodbc
     asyncmy = [ asyncmy ] ++ self.asyncio;
-    aiosqlite = [
-      aiosqlite
-      typing-extensions
-    ] ++ self.asyncio;
-    sqlcipher = [
-      # TODO: sqlcipher3
-    ];
+    aiosqlite = [ aiosqlite ] ++ self.asyncio;
+    sqlcipher = [ sqlcipher3 ];
   });
 
   nativeCheckInputs = [
@@ -110,11 +110,18 @@ buildPythonPackage rec {
     "test/aaa_profiling"
   ];
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^rel_([0-9]+)_([0-9]+)_([0-9]+)$"
+    ];
+  };
+
   meta = with lib; {
     changelog = "https://github.com/sqlalchemy/sqlalchemy/releases/tag/rel_${
       builtins.replaceStrings [ "." ] [ "_" ] version
     }";
-    description = "The Python SQL toolkit and Object Relational Mapper";
+    description = "Python SQL toolkit and Object Relational Mapper";
     homepage = "http://www.sqlalchemy.org/";
     license = licenses.mit;
   };

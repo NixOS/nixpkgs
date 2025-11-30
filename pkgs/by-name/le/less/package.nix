@@ -1,51 +1,63 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, ncurses
-, pcre2
+{
+  lib,
+  fetchurl,
+  fetchpatch,
+  ncurses,
+  pcre2,
+  stdenv,
+  versionCheckHook,
+  # Boolean options
+  withSecure ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "less";
-  version = "643";
+  version = "679";
 
-  # Only tarballs on the website are valid releases,
-  # other versions, e.g. git tags are considered snapshots.
+  # `less` is provided by the following sources:
+  # - meta.homepage
+  # - GitHub: https://github.com/gwsw/less/
+  # The releases recommended for general consumption are only those from
+  # homepage, and only those not marked as beta.
   src = fetchurl {
     url = "https://www.greenwoodsoftware.com/less/less-${finalAttrs.version}.tar.gz";
-    hash = "sha256-KRG1QyyDb6CEyKLmj2zWMSNywCalj6qpiGJzHItgUug=";
+    hash = "sha256-m2iCDDT6igr2sOAbdPApi83UCgSJxhZJtHBYkIoVPXg=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://www.openwall.com/lists/oss-security/2024/04/12/5
-      name = "sec-issue-newline-path.patch";
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/less/-/raw/1d570db0c84fe95799f460526492e45e24c30ad0/backport-007521ac3c95bc76.patch";
-      hash = "sha256-BT8DLIu7oVhL5XL50uFVUp97qjklcvRHy85UQwVKAmc=";
-    })
-  ];
 
   buildInputs = [
     ncurses
     pcre2
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   configureFlags = [
-    # Look for 'sysless' in /etc.
-    "--sysconfdir=/etc"
-    "--with-regex=pcre2"
+    "--sysconfdir=/etc" # Look for 'sysless' in /etc
+    (lib.withFeatureAs true "regex" "pcre2")
+    (lib.withFeature withSecure "secure")
   ];
+
+  strictDeps = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://www.greenwoodsoftware.com/less/";
-    description = "A more advanced file pager than 'more'";
+    description = "More advanced file pager than 'more'";
     changelog = "https://www.greenwoodsoftware.com/less/news.${finalAttrs.version}.html";
     license = lib.licenses.gpl3Plus;
     mainProgram = "less";
-    maintainers = with lib.maintainers; [ eelco dtzWill ];
+    maintainers = with lib.maintainers; [
+      # not active
+      dtzWill
+    ];
     platforms = lib.platforms.unix;
   };
 })

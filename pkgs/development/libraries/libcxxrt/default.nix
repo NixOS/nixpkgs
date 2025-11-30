@@ -1,19 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, cmake, unstableGitUpdater }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  unstableGitUpdater,
+}:
 
 stdenv.mkDerivation {
   pname = "libcxxrt";
-  version = "4.0.10-unstable-2024-04-15";
+  version = "4.0.10-unstable-2025-02-25";
 
   src = fetchFromGitHub {
     owner = "libcxxrt";
     repo = "libcxxrt";
-    rev = "25541e312f7094e9c90895000d435af520d42418";
-    sha256 = "d5uhtlO+28uc2Xnf5trXsy43jgmzBHs2jZhCK57qRM4=";
+    rev = "a6f71cbc3a1e1b8b9df241e081fa0ffdcde96249";
+    sha256 = "+oTjU/DgOEIwJebSVkSEt22mJSdeONozB8FfzEiESHU=";
   };
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   nativeBuildInputs = [ cmake ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   installPhase = ''
     mkdir -p $dev/include $out/lib

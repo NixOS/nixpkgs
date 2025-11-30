@@ -1,38 +1,41 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "docuum";
-  version = "0.24.0";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "stepchowfun";
     repo = "docuum";
-    rev = "v${version}";
-    hash = "sha256-/30wuLnCcomgJ14c5rNbitD1dEpvyRal3L60gQdZPBU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fc+qEDYQGRxOSfFng3/K3xYWb8mKTuuKWanQS+/UIMo=";
   };
 
-  cargoHash = "sha256-BvZM0tAgwoOO0VFQEoifgmENnW3cfKV3Zj872/Lki6A=";
+  cargoHash = "sha256-IryniHpSJDxjW6FRqTILKzp6XrTHxJ19BiYqRYIHnGo=";
 
   checkFlags = [
     # fails, no idea why
     "--skip=format::tests::code_str_display"
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.IOKit
-  ];
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Least recently used (LRU) eviction of Docker images";
     homepage = "https://github.com/stepchowfun/docuum";
-    changelog = "https://github.com/stepchowfun/docuum/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mkg20001 ];
+    changelog = "https://github.com/stepchowfun/docuum/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mkg20001 ];
     mainProgram = "docuum";
   };
-}
+})

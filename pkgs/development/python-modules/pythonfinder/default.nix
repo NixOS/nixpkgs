@@ -5,6 +5,7 @@
   click,
   fetchFromGitHub,
   packaging,
+  pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pythonfinder";
-  version = "2.1.0";
+  version = "3.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,27 +22,24 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sarugaku";
     repo = "pythonfinder";
-    rev = "refs/tags/${version}";
-    hash = "sha256-CbaKXD7Sde8euRqvc/IHoXoSMF+dNd7vT9LkLWq4/IU=";
+    tag = version;
+    hash = "sha256-Qym/t+IejBMFHvBfIm+G5+J3GBC9O3RFrwSqHLuxwcg=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov" ""
-  '';
 
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ packaging ] ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [ click ];
   };
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytest-timeout
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "pythonfinder" ];
 
@@ -49,7 +47,7 @@ buildPythonPackage rec {
     description = "Cross platform search tool for finding Python";
     mainProgram = "pyfinder";
     homepage = "https://github.com/sarugaku/pythonfinder";
-    changelog = "https://github.com/sarugaku/pythonfinder/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/sarugaku/pythonfinder/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
   };

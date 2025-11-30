@@ -3,7 +3,6 @@
   buildPythonPackage,
   coverage,
   fetchFromGitHub,
-  poetry-core,
   pytest,
   pythonOlder,
   setuptools,
@@ -11,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "pytest-testmon";
-  version = "2.1.1";
+  version = "2.1.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tarpas";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zbMX9r9lftdm9hzXMZRZZ/GEDViGk9QiYYUhO9ZcEAc=";
+    repo = "pytest-testmon";
+    tag = "v${version}";
+    hash = "sha256-T/dvNUg1O6bIGgix8YS52zgt1wT8Fol6CscqcS8MjcA=";
   };
 
   nativeBuildInputs = [ setuptools ];

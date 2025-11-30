@@ -1,4 +1,10 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -41,7 +47,7 @@ in
       hkpPort = mkOption {
         default = sksCfg.hkpPort;
         defaultText = literalExpression "config.${sksOpt.hkpPort}";
-        type = types.int;
+        type = types.port;
         description = ''
           Which port the sks-keyserver is listening on.
         '';
@@ -53,19 +59,21 @@ in
 
     services.nginx.enable = true;
 
-    services.nginx.virtualHosts = let
-      hkpPort = builtins.toString cfg.hkpPort;
-    in {
-      ${cfg.hostname} = {
-        root = webPkg;
-        locations = {
-          "/pks".extraConfig = ''
-            proxy_pass         http://${cfg.hkpAddress}:${hkpPort};
-            proxy_pass_header  Server;
-            add_header         Via "1.1 ${cfg.hostname}";
-          '';
+    services.nginx.virtualHosts =
+      let
+        hkpPort = builtins.toString cfg.hkpPort;
+      in
+      {
+        ${cfg.hostname} = {
+          root = webPkg;
+          locations = {
+            "/pks".extraConfig = ''
+              proxy_pass         http://${cfg.hkpAddress}:${hkpPort};
+              proxy_pass_header  Server;
+              add_header         Via "1.1 ${cfg.hostname}";
+            '';
+          };
         };
       };
-    };
   };
 }

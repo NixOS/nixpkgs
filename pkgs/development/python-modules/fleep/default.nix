@@ -5,7 +5,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "fleep";
   version = "1.0.1";
   format = "setuptools";
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "File format determination library";
     homepage = "https://github.com/floyernick/fleep-py";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

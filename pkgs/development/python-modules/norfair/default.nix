@@ -11,29 +11,28 @@
   motmetrics,
   opencv4,
   pytestCheckHook,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "norfair";
-  version = "2.2.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tryolabs";
     repo = "norfair";
-    rev = "v${version}";
-    hash = "sha256-aKB5TYSLW7FOXIy9u2hK7px6eEmIQdKPrhChKaU1uYs=";
+    tag = "v${version}";
+    hash = "sha256-3a9Z4mbmqmSnOD69RAcKSX6N7vdDU5F/xgsEURnzIR0=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
+  build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [
+    "numpy"
+    "rich"
   ];
 
-  pythonRelaxDeps = [ "rich" ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     filterpy
     importlib-metadata
     numpy
@@ -41,7 +40,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     metrics = [ motmetrics ];
     video = [ opencv4 ];
   };
@@ -52,7 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Lightweight Python library for adding real-time multi-object tracking to any detector";
-    changelog = "https://github.com/tryolabs/norfair/releases/tag/v${version}";
+    changelog = "https://github.com/tryolabs/norfair/releases/tag/${src.tag}";
     homepage = "https://github.com/tryolabs/norfair";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fleaz ];

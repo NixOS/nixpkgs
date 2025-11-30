@@ -3,8 +3,8 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  unstableGitUpdater,
   poetry-core,
-  pythonRelaxDepsHook,
   pdfrw,
   reportlab,
   rmscene,
@@ -13,9 +13,9 @@
   xdg,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "rmrl";
-  version = "0.2.1-unstable-2023-06-1";
+  version = "0.2.1-unstable-2023-06-01";
 
   disabled = pythonOlder "3.10";
 
@@ -30,7 +30,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -52,6 +51,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "rmrl" ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Render reMarkable documents to PDF";

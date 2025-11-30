@@ -1,16 +1,18 @@
 # buildFHSEnv {#sec-fhs-environments}
 
-`buildFHSEnv` provides a way to build and run FHS-compatible lightweight sandboxes. It creates an isolated root filesystem with the host's `/nix/store`, so its footprint in terms of disk space is quite small. This allows you to run software which is hard or unfeasible to patch for NixOS; 3rd-party source trees with FHS assumptions, games distributed as tarballs, software with integrity checking and/or external self-updated binaries for instance.
+`buildFHSEnv` provides a way to build and run an FHS-compatible, lightweight sandbox. It creates an isolated root filesystem with the host's `/nix/store`, so its footprint in terms of disk space is quite small. This allows you to run software which is hard or unfeasible to patch for NixOS; 3rd-party source trees with FHS assumptions, games distributed as tarballs, software with integrity checking and/or external self-updated binaries for instance.
 It uses Linux' namespaces feature to create temporary lightweight environments which are destroyed after all child processes exit, without requiring elevated privileges. It works similar to containerisation technology such as Docker or FlatPak but provides no security-relevant separation from the host system.
 
 Accepted arguments are:
 
 - `name`
-        The name of the environment, and the wrapper executable if `pname` is unset.
+        The name of the environment.
 - `pname`
-        The pname of the environment and the wrapper executable.
+        The pname of the environment.
 - `version`
         The version of the environment.
+- `executableName`
+        The name of the wrapper executable. Defaults to `pname` if set, or `name` otherwise.
 - `targetPkgs`
         Packages to be installed for the main host's architecture (i.e. x86_64 on x86_64 installations). Along with libraries binaries are also installed.
 - `multiPkgs`
@@ -34,22 +36,29 @@ Accepted arguments are:
 You can create a simple environment using a `shell.nix` like this:
 
 ```nix
-{ pkgs ? import <nixpkgs> {} }:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 
 (pkgs.buildFHSEnv {
   name = "simple-x11-env";
-  targetPkgs = pkgs: (with pkgs; [
-    udev
-    alsa-lib
-  ]) ++ (with pkgs.xorg; [
-    libX11
-    libXcursor
-    libXrandr
-  ]);
-  multiPkgs = pkgs: (with pkgs; [
-    udev
-    alsa-lib
-  ]);
+  targetPkgs =
+    pkgs:
+    (with pkgs; [
+      udev
+      alsa-lib
+    ])
+    ++ (with pkgs.xorg; [
+      libX11
+      libXcursor
+      libXrandr
+    ]);
+  multiPkgs =
+    pkgs:
+    (with pkgs; [
+      udev
+      alsa-lib
+    ]);
   runScript = "bash";
 }).env
 ```

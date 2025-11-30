@@ -1,54 +1,56 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, python3
-, vala
-, wrapGAppsHook3
-, gtk3
-, libgee
-, pantheon
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  sassc,
+  vala,
+  wrapGAppsHook4,
+  gnome-settings-daemon,
+  gtk4,
+  pango,
+  pantheon,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pantheon-tweaks";
-  version = "2.0.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "pantheon-tweaks";
-    repo = pname;
+    repo = "pantheon-tweaks";
     rev = version;
-    hash = "sha256-P3eM+xgsAMvqr2mIEjkQSjhxvQAwtSNItxAUcjO3ciY=";
+    hash = "sha256-cCrHGOo7dZc28hbZD6Zv8Dw4Ks5JTDsm6A6nkmpUAxk=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    python3
+    sassc
     vala
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    gtk3
-    libgee
-  ] ++ (with pantheon; [
-    elementary-files # settings schemas
-    elementary-terminal # settings schemas
-    granite
+    gnome-settings-daemon # org.gnome.settings-daemon.plugins.xsettings
+    gtk4
+    pango
+  ]
+  ++ (with pantheon; [
+    elementary-files # io.elementary.files.preferences
+    elementary-terminal # io.elementary.terminal.settings
+    granite7
+    switchboard
+    wingpanel-indicator-sound # io.elementary.desktop.wingpanel.sound
   ]);
 
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-
-    substituteInPlace src/Settings/ThemeSettings.vala \
-      --replace-fail "/usr/share/" "/run/current-system/sw/share/"
-  '';
+  mesonFlags = [
+    "-Dsystheme_rootdir=/run/current-system/sw/share"
+  ];
 
   passthru = {
     updateScript = nix-update-script { };
@@ -63,7 +65,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/pantheon-tweaks/pantheon-tweaks";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     mainProgram = "pantheon-tweaks";
   };
 }

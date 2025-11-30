@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pdm-backend,
   httpx,
   zstandard,
@@ -10,16 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pbs-installer";
-  version = "2024.4.24";
+  version = "2025.11.20";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "frostming";
     repo = "pbs-installer";
-    rev = "refs/tags/${version}";
-    hash = "sha256-a35xQEdo7OOFlXk2vsTdVpEhqPRKFZRQzNnZw3c7ybA=";
+    tag = version;
+    hash = "sha256-43IcNdeJvfvSTRAYDwQPACRQuDowFjACIITV6haT/aE=";
   };
 
   build-system = [ pdm-backend ];
@@ -38,8 +35,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Installer for Python Build Standalone";
     homepage = "https://github.com/frostming/pbs-installer";
-    changelog = "https://github.com/frostming/pbs-installer/releases/tag/${version}";
+    changelog = "https://github.com/frostming/pbs-installer/releases/tag/${src.tag}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -3,37 +3,41 @@
   anyio,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   hishel,
   httpx,
-  poetry-core,
   pydantic,
   pyjwt,
+  pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "githubkit";
-  version = "0.11.4";
+  version = "0.13.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "yanyongyu";
     repo = "githubkit";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-uxXRDavp5c3e1MOZR2B4wUxEHh6K81avTeaIVsOdup8=";
+    tag = "v${version}";
+    hash = "sha256-67Y0r4Po3z4YmnbWC0HBLmsKD68HMIGvHKo5SLe+KRc=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=githubkit --cov-append --cov-report=term-missing" ""
-  '';
+  patches = [
+    (fetchpatch2 {
+      name = "uv-build.patch";
+      url = "https://github.com/yanyongyu/githubkit/commit/2817664d904541242d4cedf7aae85cd4c4b606e2.patch?full_index=1";
+      hash = "sha256-mmtjlebHZpHX457frSOe88tsUo7iNdSIUynGZjcjuw4=";
+    })
+  ];
 
-  build-system = [ poetry-core ];
+  pythonRelaxDeps = [ "hishel" ];
+
+  build-system = [ uv-build ];
 
   dependencies = [
     hishel
@@ -42,7 +46,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       anyio
       pyjwt
@@ -58,8 +62,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pytest-xdist
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "githubkit" ];
 
@@ -76,7 +82,7 @@ buildPythonPackage rec {
   meta = {
     description = "GitHub SDK for Python";
     homepage = "https://github.com/yanyongyu/githubkit";
-    changelog = "https://github.com/yanyongyu/githubkit/releases/tag/v${version}";
+    changelog = "https://github.com/yanyongyu/githubkit/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kranzes ];
   };

@@ -1,20 +1,27 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "sway-assign-cgroups";
-  version = "0.4.0";
+  version = "0.4.1";
   src = fetchFromGitHub {
     owner = "alebastr";
     repo = "sway-systemd";
-    rev = "v${version}";
-    sha256 = "sha256-wznYE1/lVJtvf5Nq96gbPYisxc2gWLahVydwcH1vwoQ=";
+    tag = "v${version}";
+    hash = "sha256-AJ87/sPy8IVJgb5YehfUfNTOFEDithLfiTxgZfZf238=";
   };
   format = "other";
 
-  propagatedBuildInputs = with python3Packages; [ dbus-next i3ipc psutil tenacity xlib ];
+  propagatedBuildInputs = with python3Packages; [
+    dbus-next
+    i3ipc
+    psutil
+    tenacity
+    xlib
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -24,7 +31,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Place GUI applications into systemd scopes for systemd-oomd compatibility.";
+    description = "Place GUI applications into systemd scopes for systemd-oomd compatibility";
     mainProgram = "assign-cgroups.py";
     longDescription = ''
       Automatically assign a dedicated systemd scope to the GUI applications

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   requests,
   rx,
   pytestCheckHook,
@@ -12,7 +13,7 @@
 buildPythonPackage rec {
   pname = "twitch-python";
   version = "0.0.20";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -22,10 +23,12 @@ buildPythonPackage rec {
   disabled = !isPy3k;
 
   postPatch = ''
-    substituteInPlace setup.py --replace "'pipenv'," ""
+    substituteInPlace setup.py --replace-fail "'pipenv'," ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
     rx
   ];
@@ -41,6 +44,6 @@ buildPythonPackage rec {
     description = "Twitch module for Python";
     homepage = "https://github.com/PetterKraabol/Twitch-Python";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

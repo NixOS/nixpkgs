@@ -1,50 +1,60 @@
 {
   lib,
   buildPythonPackage,
-  cloudpickle,
-  einops,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
   jax,
-  jaxlib,
-  keras,
-  matplotlib,
   msgpack,
   numpy,
   optax,
   orbax-checkpoint,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   rich,
-  setuptools-scm,
-  tensorflow,
   tensorstore,
   typing-extensions,
+
+  # optional-dependencies
+  matplotlib,
+
+  # tests
+  cloudpickle,
+  keras,
+  einops,
+  flaxlib,
+  pytestCheckHook,
+  pytest-xdist,
+  sphinx,
+  tensorflow,
+  treescope,
+
+  writeScript,
+  tomlq,
 }:
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.8.3";
+  version = "0.12.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flax";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-uDGTyksUZTTL6FiTJP+qteFLOjr75dcTj9yRJ6Jm8xU=";
+    tag = "v${version}";
+    hash = "sha256-AUgNU1ww1Ic+lfdHtdP4fdFuvIatAXqs7AX615aVPKM=";
   };
 
   build-system = [
-    jaxlib
-    pythonRelaxDepsHook
+    setuptools
     setuptools-scm
   ];
 
   dependencies = [
+    flaxlib
     jax
     msgpack
     numpy
@@ -53,10 +63,11 @@ buildPythonPackage rec {
     pyyaml
     rich
     tensorstore
+    treescope
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [ matplotlib ];
   };
 
@@ -64,21 +75,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     cloudpickle
-    einops
     keras
-    pytest-xdist
+    einops
     pytestCheckHook
+    pytest-xdist
+    sphinx
     tensorflow
-  ];
-
-  pytestFlagsArray = [
-    "-W ignore::FutureWarning"
-    "-W ignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [
     # Docs test, needs extra deps + we're not interested in it.
     "docs/_ext/codediff_test.py"
+
     # The tests in `examples` are not designed to be executed from a single test
     # session and thus either have the modules that conflict with each other or
     # wrong import paths, depending on how they're invoked. Many tests also have
@@ -86,23 +94,29 @@ buildPythonPackage rec {
     # `tensorflow_datasets`, `vocabulary`) so the benefits of trying to run them
     # would be limited anyway.
     "examples/*"
-    "flax/experimental/nnx/examples/*"
-    # See https://github.com/google/flax/issues/3232.
-    "tests/jax_utils_test.py"
-    # Requires tree
-    "tests/tensorboard_test.py"
   ];
 
   disabledTests = [
-    # ValueError: Checkpoint path should be absolute
-    "test_overwrite_checkpoints0"
+    # AssertionError: [Chex] Function 'add' is traced > 1 times!
+    "PadShardUnpadTest"
+
+    # AssertionError: nnx_model.kernel.value.sharding = NamedSharding(...
+    "test_linen_to_nnx_metadata"
   ];
 
-  meta = with lib; {
+  passthru = {
+    updateScript = writeScript "update.sh" ''
+      nix-update flax # does not --build by default
+      nix-build . -A flax.src # src is essentially a passthru
+      nix-update flaxlib --version="$(${lib.getExe tomlq} <result/Cargo.toml .something.version)" --commit
+    '';
+  };
+
+  meta = {
     description = "Neural network library for JAX";
     homepage = "https://github.com/google/flax";
     changelog = "https://github.com/google/flax/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ndl ];
   };
 }

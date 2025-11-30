@@ -2,16 +2,24 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+
+  # build-system
   hatchling,
+
+  # dependencies
   anyio,
+  pycrdt,
+  pycrdt-store,
+  sqlite-anyio,
+
+  # optional-dependencies
   channels,
+
+  # tests
   httpx-ws,
   hypercorn,
-  pycrdt,
   pytest-asyncio,
   pytestCheckHook,
-  sqlite-anyio,
   trio,
   uvicorn,
   websockets,
@@ -19,16 +27,14 @@
 
 buildPythonPackage rec {
   pname = "pycrdt-websocket";
-  version = "0.13.4";
+  version = "0.16.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
-    owner = "jupyter-server";
+    owner = "y-crdt";
     repo = "pycrdt-websocket";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-nkm1ZQ6bYBRDDoREovhEthDZoHApYxzAnwVgDgpWW/s=";
+    tag = version;
+    hash = "sha256-Qux8IxJR1nGbdpGz7RZBKJjYN0qfwfEpd2UDlduOna0=";
   };
 
   build-system = [ hatchling ];
@@ -36,6 +42,7 @@ buildPythonPackage rec {
   dependencies = [
     anyio
     pycrdt
+    pycrdt-store
     sqlite-anyio
   ];
 
@@ -43,7 +50,7 @@ buildPythonPackage rec {
     django = [ channels ];
   };
 
-  pythonImportsCheck = [ "pycrdt_websocket" ];
+  pythonImportsCheck = [ "pycrdt.websocket" ];
 
   nativeCheckInputs = [
     httpx-ws
@@ -55,6 +62,13 @@ buildPythonPackage rec {
     websockets
   ];
 
+  disabledTests = [
+    # Looking for a certfile
+    # FileNotFoundError: [Errno 2] No such file or directory
+    "test_asgi"
+    "test_yroom_restart"
+  ];
+
   disabledTestPaths = [
     # requires nodejs and installed js modules
     "tests/test_pycrdt_yjs.py"
@@ -62,11 +76,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "WebSocket Connector for pycrdt";
     homepage = "https://github.com/jupyter-server/pycrdt-websocket";
-    changelog = "https://github.com/jupyter-server/pycrdt-websocket/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = teams.jupyter.members;
+    changelog = "https://github.com/jupyter-server/pycrdt-websocket/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    teams = [ lib.teams.jupyter ];
   };
 }

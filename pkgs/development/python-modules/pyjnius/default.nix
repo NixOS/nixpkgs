@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyjnius";
-  version = "1.6.1";
+  version = "1.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0qfs5u15vx1/l6T21hMC2fHXZSGCo+TIpp267zE5bmA=";
+    hash = "sha256-n4FwhISwqE6tPrC6hOU6xXnkxDyhDHRvmJip891Q9U0=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jnius" ];
 
   meta = with lib; {
-    description = "A Python module to access Java classes as Python classes using the Java Native Interface (JNI)";
+    description = "Python module to access Java classes as Python classes using the Java Native Interface (JNI)";
     homepage = "https://github.com/kivy/pyjnius";
     changelog = "https://github.com/kivy/pyjnius/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "iprange";
@@ -10,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "manage IP ranges";
+    description = "Manage IP ranges";
     mainProgram = "iprange";
     homepage = "https://github.com/firehol/iprange";
     license = licenses.gpl2;

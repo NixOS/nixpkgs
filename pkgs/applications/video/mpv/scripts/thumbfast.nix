@@ -8,13 +8,13 @@
 
 buildLua {
   pname = "mpv-thumbfast";
-  version = "0-unstable-2023-12-08";
+  version = "0-unstable-2025-02-04";
 
   src = fetchFromGitHub {
     owner = "po5";
     repo = "thumbfast";
-    rev = "03e93feee5a85bf7c65db953ada41b4826e9f905";
-    hash = "sha256-5u5WBvWOEydJrnr/vilEgW4+fxkxM6wNjb9Fyyxx/1c=";
+    rev = "9deb0733c4e36938cf90e42ddfb7a19a8b2f4641";
+    hash = "sha256-avG1CRBrs0UM4HcFMUVAQyOtcIFkZ/H+PbjZJKU7o2A=";
   };
   passthru.updateScript = unstableGitUpdater { };
 

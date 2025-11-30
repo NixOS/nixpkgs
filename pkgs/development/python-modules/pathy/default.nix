@@ -6,7 +6,6 @@
   pathlib-abc,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   smart-open,
   typer,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-uz0OawuL92709jxxkeluCvLtZcj9tfoXSI+ch55jcG0=";
   };
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "smart-open" ];
 
@@ -51,7 +48,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pathy" ];
 
   meta = with lib; {
-    description = "A Path interface for local and cloud bucket storage";
+    # https://github.com/justindujardin/pathy/issues/113
+    broken = pathlib-abc.version != "0.1.1";
+    description = "Path interface for local and cloud bucket storage";
     mainProgram = "pathy";
     homepage = "https://github.com/justindujardin/pathy";
     license = licenses.asl20;

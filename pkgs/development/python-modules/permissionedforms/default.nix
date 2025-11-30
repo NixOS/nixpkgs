@@ -30,9 +30,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "permissionedforms" ];
 
   meta = with lib; {
-    description = "A Django extension for creating forms that vary according to user permissions";
-    homepage = "https://github.com/wagtail/permissionedforms";
-    changelog = "https://github.com/wagtail/permissionedforms/blob/v${version}/CHANGELOG.md";
+    description = "Django extension for creating forms that vary according to user permissions";
+    homepage = "https://github.com/wagtail/django-permissionedforms";
+    changelog = "https://github.com/wagtail/django-permissionedforms/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ sephi ];
   };

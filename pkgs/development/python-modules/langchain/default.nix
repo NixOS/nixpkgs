@@ -1,75 +1,82 @@
 {
   lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  hatchling,
+
+  # dependencies
   aiohttp,
   async-timeout,
-  azure-core,
-  azure-cosmos,
-  azure-identity,
-  bash,
-  buildPythonPackage,
-  chardet,
-  clarifai,
-  cohere,
-  esprima,
-  fetchFromGitHub,
-  freezegun,
-  huggingface-hub,
   langchain-core,
   langchain-text-splitters,
+  langgraph,
   langsmith,
-  lark,
-  manifest-ml,
-  nlpcloud,
   numpy,
-  openai,
-  pandas,
-  poetry-core,
   pydantic,
+  pyyaml,
+  requests,
+  sqlalchemy,
+  tenacity,
+
+  # runtime
+  runtimeShell,
+
+  # tests
+  blockbuster,
+  freezegun,
+  httpx,
+  lark,
+  pandas,
   pytest-asyncio,
   pytest-mock,
   pytest-socket,
   pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  qdrant-client,
   requests-mock,
-  requests,
   responses,
-  sentence-transformers,
-  sqlalchemy,
   syrupy,
-  tenacity,
-  tiktoken,
   toml,
-  torch,
-  transformers,
-  typer,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.2.1";
+  version = "1.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain==${version}";
-    hash = "sha256-cLJhdeft9XNLk5njSBaEBSuP31c2VFCJ1ET+ypo6mNY=";
+    tag = "langchain==${version}";
+    hash = "sha256-NQra/L7OfnVyFTbGkSDcG30r8W733eAs9abII53wy4g=";
   };
 
-  sourceRoot = "${src.name}/libs/langchain";
+  sourceRoot = "${src.name}/libs/langchain_v1";
 
-  build-system = [ poetry-core ];
+  postPatch = ''
+    substituteInPlace langchain/agents/middleware/shell_tool.py \
+      --replace-fail '"/bin/bash"' '"${runtimeShell}"'
+  '';
 
-  buildInputs = [ bash ];
+  build-system = [ hatchling ];
+
+  pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individual components.
+    "langchain-core"
+    "numpy"
+    "tenacity"
+  ];
 
   dependencies = [
     aiohttp
     langchain-core
     langchain-text-splitters
+    langgraph
     langsmith
     numpy
     pydantic
@@ -77,50 +84,17 @@ buildPythonPackage rec {
     requests
     sqlalchemy
     tenacity
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ]
+  ++ lib.optional (pythonOlder "3.11") async-timeout;
 
-  passthru.optional-dependencies = {
-    llms = [
-      clarifai
-      cohere
-      openai
-      # openlm
-      nlpcloud
-      huggingface-hub
-      manifest-ml
-      torch
-      transformers
-    ];
-    qdrant = [ qdrant-client ];
-    openai = [
-      openai
-      tiktoken
-    ];
-    text_helpers = [ chardet ];
-    clarifai = [ clarifai ];
-    cohere = [ cohere ];
-    docarray = [
-      # docarray
-    ];
-    embeddings = [ sentence-transformers ];
-    javascript = [ esprima ];
-    azure = [
-      azure-identity
-      azure-cosmos
-      openai
-      azure-core
-      # azure-ai-formrecognizer
-      # azure-ai-vision
-      # azure-cognitiveservices-speech
-      # azure-search-documents
-      # azure-ai-textanalytics
-    ];
-    all = [ ];
-    cli = [ typer ];
+  optional-dependencies = {
+    numpy = [ numpy ];
   };
 
   nativeCheckInputs = [
+    blockbuster
     freezegun
+    httpx
     lark
     pandas
     pytest-asyncio
@@ -133,43 +107,49 @@ buildPythonPackage rec {
     toml
   ];
 
-  pytestFlagsArray = [
-    # integration_tests require network access, database access and require `OPENAI_API_KEY`, etc.
-    "tests/unit_tests"
+  pytestFlags = [
     "--only-core"
   ];
 
+  enabledTestPaths = [
+    # integration_tests require network access, database access and require `OPENAI_API_KEY`, etc.
+    "tests/unit_tests"
+  ];
+
+  # All pass with sandbox=false
   disabledTests = [
-    # These tests have database access
-    "test_table_info"
-    "test_sql_database_run"
-    # These tests have network access
-    "test_socket_disabled"
-    "test_openai_agent_with_streaming"
-    "test_openai_agent_tools_agent"
-    # This test may require a specific version of langchain-community
-    "test_compatible_vectorstore_documentation"
-    # AssertionErrors
-    "test_callback_handlers"
-    "test_generic_fake_chat_model"
-    # Test is outdated
-    "test_serializable_mapping"
-    "test_person"
-    "test_aliases_hidden"
+    # Depends on shell's truncation style
+    "test_truncation_indicator_present"
+    # Depends on the sleep shell command
+    "test_timeout_returns_error"
+    # Can't see the shell session results when sandboxed
+    "test_startup_and_shutdown_commands"
+  ];
+
+  disabledTestPaths = [
+    # Their configuration tests don't place nicely with nixpkgs
+    "tests/unit_tests/test_pytest_config.py"
   ];
 
   pythonImportsCheck = [ "langchain" ];
 
   passthru = {
-    updateScript = langchain-core.updateScript;
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain==";
+    };
   };
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Building applications with LLMs through composability";
     homepage = "https://github.com/langchain-ai/langchain";
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
-    mainProgram = "langchain-server";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }

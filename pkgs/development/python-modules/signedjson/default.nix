@@ -26,16 +26,15 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs =
-    [
-      canonicaljson
-      unpaddedbase64
-      pynacl
-    ]
-    ++ lib.optionals (pythonOlder "3.8") [
-      importlib-metadata
-      typing-extensions
-    ];
+  propagatedBuildInputs = [
+    canonicaljson
+    unpaddedbase64
+    pynacl
+  ]
+  ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+    typing-extensions
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -45,6 +44,6 @@ buildPythonPackage rec {
     description = "Sign JSON with Ed25519 signatures";
     homepage = "https://github.com/matrix-org/python-signedjson";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -13,6 +13,7 @@
   pyqt5-sip,
   pyqt-builder,
   libsForQt5,
+  mesa,
   enableVerbose ? true,
   withConnectivity ? false,
   withMultimedia ? false,
@@ -22,13 +23,12 @@
   withSerialPort ? false,
   withTools ? false,
   pkgsBuildTarget,
-  buildPackages,
-  dbusSupport ? !stdenv.isDarwin,
+  dbusSupport ? !stdenv.hostPlatform.isDarwin,
 }:
 
 buildPythonPackage rec {
   pname = "pyqt5";
-  version = "5.15.9";
+  version = "5.15.10";
   format = "pyproject";
 
   disabled = isPy27;
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyQt5";
     inherit version;
-    hash = "sha256-3EHoQBqQ3D4raStBG9VJKrVZrieidCTu1L05FVZOxMA=";
+    hash = "sha256-1Gt4BLGxCk/5F1P4ET5bVYDStEYvMiYoji2ESXM0iYo=";
   };
 
   patches = [
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     # Due to bug in SIP .whl name generation we have to bump minimal macos sdk upto 11.0 for
     # aarch64-darwin. This patch can be removed once SIP will fix it in upstream,
     # see https://github.com/NixOS/nixpkgs/pull/186612#issuecomment-1214635456.
-    + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
       minimum-macos-version = "11.0"
     ''
     + ''
@@ -118,32 +118,33 @@ buildPythonPackage rec {
 
   dontWrapQtApps = true;
 
-  nativeBuildInputs =
-    [ pkg-config ]
-    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ libsForQt5.qmake ]
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ libsForQt5.qmake ]
+  ++ [
+    setuptools
+    lndir
+    sip
+  ]
+  ++ (
+    with pkgsBuildTarget.targetPackages.libsForQt5;
+    [ ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ qmake ]
     ++ [
-      setuptools
-      lndir
-      sip
+      qtbase
+      qtsvg
+      qtdeclarative
+      qtwebchannel
     ]
-    ++ (
-      with pkgsBuildTarget.targetPackages.libsForQt5;
-      [ ]
-      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ qmake ]
-      ++ [
-        qtbase
-        qtsvg
-        qtdeclarative
-        qtwebchannel
-      ]
-      ++ lib.optional withConnectivity qtconnectivity
-      ++ lib.optional withMultimedia qtmultimedia
-      ++ lib.optional withWebKit qtwebkit
-      ++ lib.optional withWebSockets qtwebsockets
-      ++ lib.optional withLocation qtlocation
-      ++ lib.optional withSerialPort qtserialport
-      ++ lib.optional withTools qttools
-    );
+    ++ lib.optional withConnectivity qtconnectivity
+    ++ lib.optional withMultimedia qtmultimedia
+    ++ lib.optional withWebKit qtwebkit
+    ++ lib.optional withWebSockets qtwebsockets
+    ++ lib.optional withLocation qtlocation
+    ++ lib.optional withSerialPort qtserialport
+    ++ lib.optional withTools qttools
+  );
 
   buildInputs =
     with libsForQt5;
@@ -182,27 +183,26 @@ buildPythonPackage rec {
   # Checked using pythonImportsCheck
   doCheck = false;
 
-  pythonImportsCheck =
-    [
-      "PyQt5"
-      "PyQt5.QtCore"
-      "PyQt5.QtQml"
-      "PyQt5.QtWidgets"
-      "PyQt5.QtGui"
-    ]
-    ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
-    ++ lib.optional withWebKit "PyQt5.QtWebKit"
-    ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
-    ++ lib.optional withConnectivity "PyQt5.QtBluetooth"
-    ++ lib.optional withLocation "PyQt5.QtPositioning"
-    ++ lib.optional withSerialPort "PyQt5.QtSerialPort"
-    ++ lib.optional withTools "PyQt5.QtDesigner";
+  pythonImportsCheck = [
+    "PyQt5"
+    "PyQt5.QtCore"
+    "PyQt5.QtQml"
+    "PyQt5.QtWidgets"
+    "PyQt5.QtGui"
+  ]
+  ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
+  ++ lib.optional withWebKit "PyQt5.QtWebKit"
+  ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
+  ++ lib.optional withConnectivity "PyQt5.QtBluetooth"
+  ++ lib.optional withLocation "PyQt5.QtPositioning"
+  ++ lib.optional withSerialPort "PyQt5.QtSerialPort"
+  ++ lib.optional withTools "PyQt5.QtDesigner";
 
   meta = with lib; {
     description = "Python bindings for Qt5";
     homepage = "https://riverbankcomputing.com/";
     license = licenses.gpl3Only;
-    platforms = platforms.mesaPlatforms;
+    inherit (mesa.meta) platforms;
     maintainers = with maintainers; [ sander ];
   };
 }

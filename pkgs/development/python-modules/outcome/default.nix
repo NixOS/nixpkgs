@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "outcome";
   version = "1.3.0.post0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,7 +25,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "Capture the outcome of Python function calls.";
+    description = "Capture the outcome of Python function calls";
     homepage = "https://github.com/python-trio/outcome";
     license = with lib.licenses; [
       mit

@@ -28,12 +28,10 @@ buildPythonPackage rec {
     greenlet
   ];
 
-  dontUseSetuptoolsCheck = true;
-
   pythonImportsCheck = [ "eventlib" ];
 
   meta = with lib; {
-    description = "A networking library written in Python";
+    description = "Networking library written in Python";
     homepage = "https://github.com/AGProjects/python3-eventlib";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ chanley ];

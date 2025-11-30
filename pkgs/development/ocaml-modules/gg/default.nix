@@ -1,12 +1,17 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, topkg, ocamlbuild }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+  findlib,
+  topkg,
+  ocamlbuild,
+}:
 
 let
   homepage = "https://erratique.ch/software/gg";
   version = "1.0.0";
 in
-
-lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
-  "gg is not available for OCaml ${ocaml.version}"
 
 stdenv.mkDerivation {
 
@@ -20,7 +25,12 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    ocamlbuild
+    topkg
+  ];
   buildInputs = [ topkg ];
 
   inherit (topkg) buildPhase installPhase;
@@ -37,5 +47,6 @@ stdenv.mkDerivation {
     inherit (ocaml.meta) platforms;
     license = licenses.bsd3;
     maintainers = [ maintainers.jirkamarsik ];
+    broken = !(lib.versionAtLeast ocaml.version "4.08");
   };
 }

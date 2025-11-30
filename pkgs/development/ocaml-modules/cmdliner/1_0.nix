@@ -1,6 +1,9 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, result }:
-
-assert (lib.versionAtLeast ocaml.version "4.03");
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cmdliner";
@@ -25,9 +28,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://erratique.ch/software/cmdliner";
-    description = "An OCaml module for the declarative definition of command line interfaces";
+    description = "OCaml module for the declarative definition of command line interfaces";
     license = licenses.isc;
     inherit (ocaml.meta) platforms;
     maintainers = [ maintainers.vbgl ];
+    broken = !(lib.versionAtLeast ocaml.version "4.03");
   };
 }

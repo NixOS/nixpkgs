@@ -2,17 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
-  pydantic,
-  requests,
+  nix-update-script,
   pytestCheckHook,
-  pytest-asyncio,
   setuptools,
 }:
 
 buildPythonPackage {
   pname = "smpp-pdu";
-  version = "unstable-2022-09-02";
+  version = "0.3-unstable-2022-09-01";
   format = "pyproject";
 
   # Upstream was once mozes/smpp.pdu, but it's dead and Python 2 only.
@@ -29,13 +26,14 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "smpp.pdu" ];
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
+
   meta = with lib; {
     description = "Library for parsing Protocol Data Units (PDUs) in SMPP protocol";
     homepage = "https://github.com/hologram-io/smpp.pdu";
     license = licenses.asl20;
-    maintainers = with maintainers; [
-      flokli
-      janik
-    ];
+    maintainers = with maintainers; [ flokli ];
   };
 }

@@ -1,8 +1,4 @@
-{ system ? builtins.currentSystem, config ? { }
-, pkgs ? import ../.. { inherit system config; } }:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
-with pkgs.lib;
+{ runTest }:
 
 let
   stunnelCommon = {
@@ -16,50 +12,66 @@ let
       group = "stunnel";
     };
   };
-  makeCert = { config, pkgs, ... }: {
-    systemd.services.create-test-cert = {
-      wantedBy = [ "sysinit.target" ];
-      before = [ "sysinit.target" "shutdown.target" ];
-      conflicts = [ "shutdown.target" ];
-      unitConfig.DefaultDependencies = false;
-      serviceConfig.Type = "oneshot";
-      script = ''
-        ${pkgs.openssl}/bin/openssl req -batch -x509 -newkey rsa -nodes -out /test-cert.pem -keyout /test-key.pem -subj /CN=${config.networking.hostName}
-        ( umask 077; cat /test-key.pem /test-cert.pem > /test-key-and-cert.pem )
-        chown stunnel /test-key.pem /test-key-and-cert.pem
-    '';
+  makeCert =
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
+    {
+      systemd.services.create-test-cert = {
+        wantedBy = [ "sysinit.target" ];
+        before = [
+          "sysinit.target"
+          "shutdown.target"
+        ];
+        conflicts = [ "shutdown.target" ];
+        unitConfig.DefaultDependencies = false;
+        serviceConfig.Type = "oneshot";
+        script = ''
+          ${lib.getExe pkgs.openssl} req -batch -x509 -newkey rsa -nodes -out /test-cert.pem -keyout /test-key.pem -subj /CN=${config.networking.hostName}
+          ( umask 077; cat /test-key.pem /test-cert.pem > /test-key-and-cert.pem )
+          chown stunnel /test-key.pem /test-key-and-cert.pem
+        '';
+      };
     };
-  };
-  serverCommon = { pkgs, ... }: {
-    networking.firewall.allowedTCPPorts = [ 443 ];
-    services.stunnel.servers.https = {
-      accept = "443";
-      connect = 80;
-      cert = "/test-key-and-cert.pem";
+  serverCommon =
+    { lib, pkgs, ... }:
+    {
+      networking.firewall.allowedTCPPorts = [ 443 ];
+      services.stunnel.servers.https = {
+        accept = "443";
+        connect = 80;
+        cert = "/test-key-and-cert.pem";
+      };
+      systemd.services.simple-webserver = {
+        wantedBy = [ "multi-user.target" ];
+        script = ''
+          cd /etc/webroot
+          ${lib.getExe' pkgs.python3 "python"} -m http.server 80
+        '';
+      };
     };
-    systemd.services.simple-webserver = {
-      wantedBy = [ "multi-user.target" ];
-      script = ''
-        cd /etc/webroot
-        ${pkgs.python3}/bin/python -m http.server 80
-      '';
-    };
-  };
   copyCert = src: dest: filename: ''
     from shlex import quote
     ${src}.wait_for_file("/test-key-and-cert.pem")
     server_cert = ${src}.succeed("cat /test-cert.pem")
     ${dest}.succeed("echo %s > ${filename}" % quote(server_cert))
   '';
-
-in {
-  basicServer = makeTest {
+in
+{
+  basicServer = runTest {
     name = "basicServer";
 
     nodes = {
       client = { };
       server = {
-        imports = [ makeCert serverCommon stunnelCommon ];
+        imports = [
+          makeCert
+          serverCommon
+          stunnelCommon
+        ];
         environment.etc."webroot/index.html".text = "well met";
       };
     };
@@ -77,7 +89,7 @@ in {
     '';
   };
 
-  serverAndClient = makeTest {
+  serverAndClient = runTest {
     name = "serverAndClient";
 
     nodes = {
@@ -104,7 +116,11 @@ in {
         };
       };
       server = {
-        imports = [ makeCert serverCommon stunnelCommon ];
+        imports = [
+          makeCert
+          serverCommon
+          stunnelCommon
+        ];
         environment.etc."webroot/index.html".text = "hello there";
       };
     };
@@ -131,12 +147,15 @@ in {
     '';
   };
 
-  mutualAuth = makeTest {
+  mutualAuth = runTest {
     name = "mutualAuth";
 
     nodes = rec {
       client = {
-        imports = [ makeCert stunnelCommon ];
+        imports = [
+          makeCert
+          stunnelCommon
+        ];
         services.stunnel.clients.authenticated-https = {
           accept = "80";
           connect = "server:443";
@@ -148,7 +167,11 @@ in {
       };
       wrongclient = client;
       server = {
-        imports = [ makeCert serverCommon stunnelCommon ];
+        imports = [
+          makeCert
+          serverCommon
+          stunnelCommon
+        ];
         services.stunnel.servers.https = {
           CAFile = "/authorized-client-certs.crt";
           verifyPeer = true;

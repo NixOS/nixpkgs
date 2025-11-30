@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "coder";
   meta.maintainers = pkgs.coder.meta.maintainers;
 
@@ -13,10 +14,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   testScript = ''
     machine.start()
-    machine.wait_for_unit("postgresql.service")
+    machine.wait_for_unit("postgresql.target")
     machine.wait_for_unit("coder.service")
     machine.wait_for_open_port(3000)
 
     machine.succeed("curl --fail http://localhost:3000")
   '';
-})
+}

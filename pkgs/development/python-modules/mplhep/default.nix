@@ -1,62 +1,74 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  hist,
+  fetchFromGitHub,
+
+  # build-system
+  hatch-vcs,
+  hatchling,
+
+  # dependencies
   matplotlib,
   mplhep-data,
-  pytestCheckHook,
+  numpy,
+  packaging,
+  uhi,
+
+  # tests
+  hist,
   pytest-mock,
   pytest-mpl,
+  pytestCheckHook,
   scipy,
-  setuptools,
-  setuptools-scm,
-  uhi,
   uproot,
 }:
 
 buildPythonPackage rec {
   pname = "mplhep";
-  version = "0.3.48";
-  format = "pyproject";
+  version = "0.4.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-rAIiaTTSf1xINdadjHk32KOpW4SMg8jdwFt8z1oiLis=";
+  src = fetchFromGitHub {
+    owner = "scikit-hep";
+    repo = "mplhep";
+    tag = "v${version}";
+    hash = "sha256-Sx/VR573Vhxfv043mVdMpu/v6Ukv/JrVXBlpbILqGsI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
+  build-system = [
+    hatch-vcs
+    hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     matplotlib
-    uhi
     mplhep-data
+    numpy
+    packaging
+    uhi
   ];
 
   nativeCheckInputs = [
     hist
-    pytestCheckHook
     pytest-mock
     pytest-mpl
+    pytestCheckHook
     scipy
     uproot
   ];
 
-  disabledTests = [
+  disabledTestPaths = [
     # requires uproot4
-    "test_inputs_uproot"
-    "test_uproot_versions"
+    "tests/test_inputs.py"
   ];
 
   pythonImportsCheck = [ "mplhep" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extended histogram plots on top of matplotlib and HEP compatible styling similar to current collaboration requirements (ROOT)";
     homepage = "https://github.com/scikit-hep/mplhep";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/scikit-hep/mplhep/releases/tag/${src.tag}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

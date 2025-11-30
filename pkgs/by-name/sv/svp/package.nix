@@ -1,25 +1,23 @@
-{ stdenv
-, buildFHSEnv
-, writeShellScriptBin
-, fetchurl
-, callPackage
-, makeDesktopItem
-, copyDesktopItems
-, ffmpeg
-, glibc
-, gnome
-, jq
-, lib
-, libmediainfo
-, libsForQt5
-, libusb1
-, ocl-icd
-, p7zip
-, patchelf
-, socat
-, vapoursynth
-, xdg-utils
-, xorg
+{
+  stdenv,
+  lib,
+  buildFHSEnv,
+  writeShellScriptBin,
+  fetchurl,
+  callPackage,
+  makeDesktopItem,
+  copyDesktopItems,
+  socat,
+  jq,
+  kdePackages,
+  ffmpeg,
+  libmediainfo,
+  libusb1,
+  vapoursynth,
+  xorg,
+  systemdLibs,
+  openssl,
+  p7zip,
 }:
 let
   mpvForSVP = callPackage ./mpv.nix { };
@@ -38,46 +36,50 @@ let
     done
   '';
 
+  # SVP expects findmnt to return path to storage device for software protection.
+  # Workaround for tmp-as-root and encrypted root use cases, by returning first storage device on system.
+  fakeFindmnt = writeShellScriptBin "findmnt" ''
+    find /dev/ -name 'nvme*n*p*' -or -name 'sd*' -or -name 'vd*' 2>/dev/null | sort | head -n1
+  '';
+
   libraries = [
-    fakeLsof
-    ffmpeg.bin
-    glibc
-    gnome.zenity
-    libmediainfo
-    libsForQt5.qtbase
-    libsForQt5.qtwayland
-    libsForQt5.qtdeclarative
-    libsForQt5.qtscript
-    libsForQt5.qtsvg
-    libusb1
     mpvForSVP
-    ocl-icd
-    stdenv.cc.cc.lib
+    fakeLsof
+    fakeFindmnt
+    (lib.getLib stdenv.cc.cc)
+    kdePackages.qtbase
+    kdePackages.qtdeclarative
+    ffmpeg.bin
+    libmediainfo
+    libusb1
     vapoursynth
-    xdg-utils
     xorg.libX11
+    systemdLibs
+    openssl
   ];
 
-  svp-dist = stdenv.mkDerivation rec {
+  svp-dist = stdenv.mkDerivation (finalAttrs: {
     pname = "svp-dist";
-    version = "4.5.210-2";
+    version = "4.7.305";
     src = fetchurl {
-      url = "https://www.svp-team.com/files/svp4-linux.${version}.tar.bz2";
-      hash = "sha256-dY9uQ9jzTHiN2XSnOrXtHD11IIJW6t9BUzGGQFfZ+yg=";
+      url = "https://www.svp-team.com/files/svp4-linux.${finalAttrs.version}.tar.bz2";
+      hash = "sha256-PWAcm/hIA4JH2QtJPP+gSJdJLRdfdbZXIVdWELazbxQ=";
     };
 
-    nativeBuildInputs = [ p7zip patchelf ];
+    nativeBuildInputs = [
+      p7zip
+    ];
     dontFixup = true;
 
     unpackPhase = ''
-      tar xf ${src}
+      tar xf ${finalAttrs.src}
     '';
 
     buildPhase = ''
       mkdir installer
-      LANG=C grep --only-matching --byte-offset --binary --text  $'7z\xBC\xAF\x27\x1C' "svp4-linux-64.run" |
+      LANG=C grep --only-matching --byte-offset --binary --text  $'7z\xBC\xAF\x27\x1C' "svp4-linux.run" |
         cut -f1 -d: |
-        while read ofs; do dd if="svp4-linux-64.run" bs=1M iflag=skip_bytes status=none skip=$ofs of="installer/bin-$ofs.7z"; done
+        while read ofs; do dd if="svp4-linux.run" bs=1M iflag=skip_bytes status=none skip=$ofs of="installer/bin-$ofs.7z"; done
     '';
 
     installPhase = ''
@@ -92,10 +94,11 @@ let
       done
       rm -f $out/opt/{add,remove}-menuitem.sh
     '';
-  };
+  });
 
   fhs = buildFHSEnv {
-    name = "SVPManager";
+    pname = "SVPManager";
+    inherit (svp-dist) version;
     targetPkgs = pkgs: libraries;
     runScript = "${svp-dist}/opt/SVPManager";
     unshareUser = false;
@@ -129,15 +132,26 @@ stdenv.mkDerivation {
       desktopName = "SVP 4 Linux";
       genericName = "Real time frame interpolation";
       icon = "svp-manager4";
-      categories = [ "AudioVideo" "Player" "Video" ];
-      mimeTypes = [ "video/x-msvideo" "video/x-matroska" "video/webm" "video/mpeg" "video/mp4" ];
+      categories = [
+        "AudioVideo"
+        "Player"
+        "Video"
+      ];
+      mimeTypes = [
+        "video/x-msvideo"
+        "video/x-matroska"
+        "video/webm"
+        "video/mpeg"
+        "video/mp4"
+      ];
       terminal = false;
       startupNotify = true;
     })
   ];
 
   meta = with lib; {
-    description = "SmoothVideo Project 4 (SVP4) converts any video to 60 fps (and even higher) and performs this in real time right in your favorite video player.";
+    mainProgram = "SVPManager";
+    description = "SmoothVideo Project 4 (SVP4) converts any video to 60 fps (and even higher) and performs this in real time right in your favorite video player";
     homepage = "https://www.svp-team.com/wiki/SVP:Linux";
     platforms = [ "x86_64-linux" ];
     license = licenses.unfree;

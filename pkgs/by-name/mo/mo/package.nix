@@ -1,7 +1,7 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, runtimeShell
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "tests-always-included";
-    repo = pname;
+    repo = "mo";
     rev = version;
     hash = "sha256-CFAvTpziKzSkdomvCf8PPXYbYcJxjB4EValz2RdD2b0=";
   };

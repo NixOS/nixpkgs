@@ -1,11 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, ocaml, findlib, ocamlbuild }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  ocaml,
+  findlib,
+  ocamlbuild,
+}:
 
-if lib.versionOlder ocaml.version "4.02"
-|| lib.versionAtLeast ocaml.version "5.0"
-then throw "erm_xml is not available for OCaml ${ocaml.version}"
-else
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ocaml${ocaml.version}-erm_xml";
   version = "0.3+20180112";
 
@@ -16,7 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OQdLTq9tJZc6XlcuPv2gxzYiQAUGd6AiBzfSi169XL0=";
   };
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    ocamlbuild
+  ];
 
   strictDeps = true;
 
@@ -27,6 +33,7 @@ stdenv.mkDerivation rec {
     description = "XML Parser for discrete data";
     platforms = ocaml.meta.platforms or [ ];
     license = lib.licenses.bsd3;
+    broken = lib.versionOlder ocaml.version "4.02" || lib.versionAtLeast ocaml.version "5.0";
     maintainers = with lib.maintainers; [ vbgl ];
   };
 }

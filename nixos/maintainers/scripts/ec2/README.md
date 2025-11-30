@@ -18,10 +18,10 @@ nix run nixpkgs#upload-ami -- --image-info ./result/nix-support/image-info.json
 
 ## How to build your own NixOS config into an AMI
 
-I suggest looking at https://github.com/nix-community/nixos-generators for a user-friendly interface.
+Use `nixos-rebuild build-image` as follows:
 
 ```bash
-nixos-generate -c ./my-config.nix -f amazon
+NIXOS_CONFIG="$(pwd)/my-config.nix" nixos-rebuild build-image --image-variant amazon
 
 export AWS_REGION=us-west-2
 export AWS_PROFILE=my-profile

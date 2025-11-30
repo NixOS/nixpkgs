@@ -1,47 +1,74 @@
 {
   lib,
-  asciitree,
   buildPythonPackage,
-  fasteners,
   fetchPypi,
-  numcodecs,
-  msgpack,
+
+  # build-system
+  hatchling,
+  hatch-vcs,
+
+  # dependencies
+  donfig,
   numpy,
+  numcodecs,
+  packaging,
+  typing-extensions,
+
+  # tests
+  hypothesis,
+  pytest-asyncio,
+  pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
-  setuptools-scm,
+  tomlkit,
 }:
 
 buildPythonPackage rec {
   pname = "zarr";
-  version = "2.17.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "3.1.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LLqmy040LUUVLUp6SyATwzf806jnvJglNWAYDeYFUs4=";
+    hash = "sha256-F9ty838kiUUtITesiRxBM7j5dvkYnY79PnXzs63YTow=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
-  propagatedBuildInputs = [
-    asciitree
-    numpy
-    fasteners
+  dependencies = [
+    donfig
     numcodecs
-  ] ++ numcodecs.optional-dependencies.msgpack;
+    numpy
+    packaging
+    typing-extensions
+  ]
+  ++ numcodecs.optional-dependencies.crc32c;
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    hypothesis
+    pytest-asyncio
+    pytest-xdist
+    pytestCheckHook
+    tomlkit
+  ];
+
+  disabledTestPaths = [
+    # requires uv and then fails at setting up python envs
+    "tests/test_examples.py"
+  ];
 
   pythonImportsCheck = [ "zarr" ];
 
-  meta = with lib; {
-    description = "An implementation of chunked, compressed, N-dimensional arrays for Python";
+  # FIXME remove once zarr's reverse dependencies support v3
+  passthru.skipBulkUpdate = true;
+
+  meta = {
+    description = "Implementation of chunked, compressed, N-dimensional arrays for Python";
     homepage = "https://github.com/zarr-developers/zarr";
     changelog = "https://github.com/zarr-developers/zarr-python/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

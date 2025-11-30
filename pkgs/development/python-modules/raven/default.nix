@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "raven" ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     flask = [
       blinker
       flask
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     mainProgram = "raven";
     homepage = "https://github.com/getsentry/raven-python";
     license = [ lib.licenses.bsd3 ];
-    maintainers = with lib.maintainers; [ primeos ];
+    maintainers = [ ];
   };
 }

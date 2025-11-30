@@ -2,9 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+
+  # build-system
   setuptools,
-  # propagated build inputs
+
+  # dependencies
   filelock,
   huggingface-hub,
   numpy,
@@ -16,7 +18,8 @@
   tokenizers,
   safetensors,
   tqdm,
-  # optional dependencies
+
+  # optional-dependencies
   diffusers,
   scikit-learn,
   tensorflow,
@@ -51,20 +54,19 @@
   torchvision,
   av,
   sentencepiece,
+  hf-xet,
 }:
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.41.1";
+  version = "4.57.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "transformers";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-eUMdlqHjCmK51hUPxjZq3tOl0o6EjipOziWergHwmPk=";
+    tag = "v${version}";
+    hash = "sha256-QqlNE2UJqn5ylVhSX5qak62ooda5IQbsc1F7SYU8Kjw=";
   };
 
   build-system = [ setuptools ];
@@ -82,7 +84,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  passthru.optional-dependencies =
+  optional-dependencies =
     let
       audio = [
         librosa
@@ -133,6 +135,9 @@ buildPythonPackage rec {
         flax
         optax
       ];
+      hf_xet = [
+        hf-xet
+      ];
       tokenizers = [ tokenizers ];
       ftfy = [ ftfy ];
       onnxruntime = [
@@ -153,7 +158,7 @@ buildPythonPackage rec {
       ];
       fairscale = [ fairscale ];
       optuna = [ optuna ];
-      ray = [ ray ] ++ ray.optional-dependencies.tune-deps;
+      ray = [ ray ] ++ ray.optional-dependencies.tune;
       # sigopt = [ sigopt ];
       # integrations = ray ++ optuna ++ sigopt;
       serving = [
@@ -172,7 +177,6 @@ buildPythonPackage rec {
       # natten = [ natten ];
       # codecarbon = [ codecarbon ];
       video = [
-        # decord
         av
       ];
       sentencepiece = [

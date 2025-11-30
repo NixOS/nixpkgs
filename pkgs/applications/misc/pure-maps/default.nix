@@ -1,28 +1,48 @@
-{ lib, mkDerivation, fetchFromGitHub
-, cmake, qttools, kirigami2, qtquickcontrols2, qtlocation, qtsensors
-, nemo-qml-plugin-dbus, mapbox-gl-qml, s2geometry
-, python3, pyotherside
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  qttools,
+  kirigami2,
+  qtquickcontrols2,
+  qtlocation,
+  qtsensors,
+  nemo-qml-plugin-dbus,
+  mapbox-gl-qml,
+  s2geometry,
+  python3,
+  pyotherside,
 }:
 
 mkDerivation rec {
   pname = "pure-maps";
-  version = "3.3.0";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "rinigus";
     repo = "pure-maps";
     rev = version;
-    hash = "sha256-TeFolD3jXRdLGfXdy+QcwtOcQQVUB5fn8PwoYfRLaPQ=";
+    hash = "sha256-UkPZ5Wy/05srZv1r5GLoT5hFQVLfYF6Q2rQDFoILlQ0=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    cmake python3 qttools python3.pkgs.wrapPython
+    cmake
+    python3
+    qttools
+    python3.pkgs.wrapPython
   ];
 
   buildInputs = [
-    kirigami2 qtquickcontrols2 qtlocation qtsensors
-    nemo-qml-plugin-dbus pyotherside mapbox-gl-qml s2geometry
+    kirigami2
+    qtquickcontrols2
+    qtlocation
+    qtsensors
+    nemo-qml-plugin-dbus
+    pyotherside
+    mapbox-gl-qml
+    s2geometry
   ];
 
   cmakeFlags = [ "-DFLAVOR=kirigami" ];

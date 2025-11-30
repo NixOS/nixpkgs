@@ -1,9 +1,13 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, topkg, ocamlbuild, cmdliner }:
-
-let
-
-in lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
-"b0 is not available for OCaml ${ocaml.version}"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+  findlib,
+  topkg,
+  ocamlbuild,
+  cmdliner,
+}:
 
 stdenv.mkDerivation rec {
 
@@ -17,8 +21,16 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
-  buildInputs = [ topkg cmdliner ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    ocamlbuild
+    topkg
+  ];
+  buildInputs = [
+    topkg
+    cmdliner
+  ];
 
   inherit (topkg) buildPhase installPhase;
 
@@ -42,5 +54,6 @@ stdenv.mkDerivation rec {
     inherit (ocaml.meta) platforms;
     license = licenses.isc;
     maintainers = [ maintainers.Julow ];
+    broken = !(lib.versionAtLeast ocaml.version "4.08");
   };
 }

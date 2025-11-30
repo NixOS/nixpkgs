@@ -2,36 +2,42 @@
   lib,
   aiohttp,
   buildPythonPackage,
-  certifi,
   elastic-transport,
   fetchPypi,
+  hatchling,
+  orjson,
+  pyarrow,
+  python-dateutil,
   pythonOlder,
   requests,
-  urllib3,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "elasticsearch";
-  version = "8.13.0";
-  format = "setuptools";
+  version = "8.18.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-5Ovrsi0J8O+DnCa2qpjhnM1ja8t38IwStWKwLKzV50Q=";
+    hash = "sha256-mYA18XqMH7p64msYPcp5fc+V24baan7LpW0xr8QPB8c=";
   };
 
-  nativeBuildInputs = [ elastic-transport ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
-    urllib3
-    certifi
+  dependencies = [
+    elastic-transport
+    python-dateutil
+    typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     requests = [ requests ];
     async = [ aiohttp ];
+    orjson = [ orjson ];
+    pyarrow = [ pyarrow ];
   };
 
   pythonImportsCheck = [ "elasticsearch" ];
@@ -45,6 +51,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/elasticsearch/elasticsearch-py";
     changelog = "https://github.com/elastic/elasticsearch-py/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ desiderius ];
   };
 }

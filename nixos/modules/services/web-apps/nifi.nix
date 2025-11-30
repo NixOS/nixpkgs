@@ -1,4 +1,10 @@
-{ lib, pkgs, config, options, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.nifi;
@@ -11,10 +17,14 @@ let
     NIFI_LOG_DIR = "/var/log/nifi";
   };
 
-  envFile = pkgs.writeText "nifi.env" (lib.concatMapStrings (s: s + "\n") (
-    (lib.concatLists (lib.mapAttrsToList (name: value:
-      lib.optional (value != null) ''${name}="${toString value}"''
-    ) env))));
+  envFile = pkgs.writeText "nifi.env" (
+    lib.concatMapStrings (s: s + "\n") (
+      lib.concatLists (
+        lib.mapAttrsToList (name: value: lib.optional (value != null) ''${name}="${toString value}"'') env
+      )
+    )
+
+  );
 
   nifiEnv = pkgs.writeShellScriptBin "nifi-env" ''
     set -a
@@ -22,17 +32,13 @@ let
     eval -- "\$@"
   '';
 
-in {
+in
+{
   options = {
     services.nifi = {
       enable = lib.mkEnableOption "Apache NiFi";
 
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.nifi;
-        defaultText = lib.literalExpression "pkgs.nifi";
-        description = "Apache NiFi package to use.";
-      };
+      package = lib.mkPackageOption pkgs "nifi" { };
 
       user = lib.mkOption {
         type = lib.types.str;
@@ -64,7 +70,7 @@ in {
       };
 
       listenPort = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.port;
         default = if cfg.enableHTTPS then 8443 else 8080;
         defaultText = lib.literalExpression ''
           if config.${opt.enableHTTPS}
@@ -86,7 +92,7 @@ in {
       };
 
       proxyPort = lib.mkOption {
-        type = lib.types.nullOr lib.types.int;
+        type = lib.types.nullOr lib.types.port;
         default = if cfg.enableHTTPS then 8443 else null;
         defaultText = lib.literalExpression ''
           if config.${opt.enableHTTPS}
@@ -127,39 +133,45 @@ in {
 
   config = lib.mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.initUser!=null || cfg.initPasswordFile==null;
-          message = ''
-            <option>services.nifi.initUser</option> needs to be set if <option>services.nifi.initPasswordFile</option> enabled.
-          '';
+      {
+        assertion = cfg.initUser != null || cfg.initPasswordFile == null;
+        message = ''
+          <option>services.nifi.initUser</option> needs to be set if <option>services.nifi.initPasswordFile</option> enabled.
+        '';
       }
-      { assertion = cfg.initUser==null || cfg.initPasswordFile!=null;
-          message = ''
-            <option>services.nifi.initPasswordFile</option> needs to be set if <option>services.nifi.initUser</option> enabled.
-          '';
+      {
+        assertion = cfg.initUser == null || cfg.initPasswordFile != null;
+        message = ''
+          <option>services.nifi.initPasswordFile</option> needs to be set if <option>services.nifi.initUser</option> enabled.
+        '';
       }
-      { assertion = cfg.proxyHost==null || cfg.proxyPort!=null;
-          message = ''
-            <option>services.nifi.proxyPort</option> needs to be set if <option>services.nifi.proxyHost</option> value specified.
-          '';
+      {
+        assertion = cfg.proxyHost == null || cfg.proxyPort != null;
+        message = ''
+          <option>services.nifi.proxyPort</option> needs to be set if <option>services.nifi.proxyHost</option> value specified.
+        '';
       }
-      { assertion = cfg.proxyHost!=null || cfg.proxyPort==null;
-          message = ''
-            <option>services.nifi.proxyHost</option> needs to be set if <option>services.nifi.proxyPort</option> value specified.
-          '';
+      {
+        assertion = cfg.proxyHost != null || cfg.proxyPort == null;
+        message = ''
+          <option>services.nifi.proxyHost</option> needs to be set if <option>services.nifi.proxyPort</option> value specified.
+        '';
       }
-      { assertion = cfg.initJavaHeapSize==null || cfg.maxJavaHeapSize!=null;
-          message = ''
-            <option>services.nifi.maxJavaHeapSize</option> needs to be set if <option>services.nifi.initJavaHeapSize</option> value specified.
-          '';
+      {
+        assertion = cfg.initJavaHeapSize == null || cfg.maxJavaHeapSize != null;
+        message = ''
+          <option>services.nifi.maxJavaHeapSize</option> needs to be set if <option>services.nifi.initJavaHeapSize</option> value specified.
+        '';
       }
-      { assertion = cfg.initJavaHeapSize!=null || cfg.maxJavaHeapSize==null;
-          message = ''
-            <option>services.nifi.initJavaHeapSize</option> needs to be set if <option>services.nifi.maxJavaHeapSize</option> value specified.
-          '';
+      {
+        assertion = cfg.initJavaHeapSize != null || cfg.maxJavaHeapSize == null;
+        message = ''
+          <option>services.nifi.initJavaHeapSize</option> needs to be set if <option>services.nifi.maxJavaHeapSize</option> value specified.
+        '';
       }
     ];
 
-    warnings = lib.optional (cfg.enableHTTPS==false) ''
+    warnings = lib.optional (cfg.enableHTTPS == false) ''
       Please do not disable HTTPS mode in production. In this mode, access to the nifi is opened without authentication.
     '';
 
@@ -172,7 +184,6 @@ in {
         argument = "${cfg.package}/lib";
       };
     };
-
 
     systemd.services.nifi = {
       description = "Apache NiFi";
@@ -233,20 +244,26 @@ in {
               -e '/nifi.security.keyPasswd/s|^#\+||' \
               -e '/nifi.security.truststorePasswd/s|^#\+||'
           ''}
-          ${lib.optionalString ((cfg.enableHTTPS == true) && (cfg.proxyHost != null) && (cfg.proxyPort != null)) ''
-            sed -i /var/lib/nifi/conf/nifi.properties \
-              -e 's|nifi.web.proxy.host=.*|nifi.web.proxy.host=${cfg.proxyHost}:${(toString cfg.proxyPort)}|g'
-          ''}
-          ${lib.optionalString ((cfg.enableHTTPS == false) || (cfg.proxyHost == null) && (cfg.proxyPort == null)) ''
-            sed -i /var/lib/nifi/conf/nifi.properties \
-              -e 's|nifi.web.proxy.host=.*|nifi.web.proxy.host=|g'
-          ''}
-          ${lib.optionalString ((cfg.initJavaHeapSize != null) && (cfg.maxJavaHeapSize != null))''
+          ${lib.optionalString
+            ((cfg.enableHTTPS == true) && (cfg.proxyHost != null) && (cfg.proxyPort != null))
+            ''
+              sed -i /var/lib/nifi/conf/nifi.properties \
+                -e 's|nifi.web.proxy.host=.*|nifi.web.proxy.host=${cfg.proxyHost}:${(toString cfg.proxyPort)}|g'
+            ''
+          }
+          ${lib.optionalString
+            ((cfg.enableHTTPS == false) || (cfg.proxyHost == null) && (cfg.proxyPort == null))
+            ''
+              sed -i /var/lib/nifi/conf/nifi.properties \
+                -e 's|nifi.web.proxy.host=.*|nifi.web.proxy.host=|g'
+            ''
+          }
+          ${lib.optionalString ((cfg.initJavaHeapSize != null) && (cfg.maxJavaHeapSize != null)) ''
             sed -i /var/lib/nifi/conf/bootstrap.conf \
               -e 's|java.arg.2=.*|java.arg.2=-Xms${(toString cfg.initJavaHeapSize)}m|g' \
               -e 's|java.arg.3=.*|java.arg.3=-Xmx${(toString cfg.maxJavaHeapSize)}m|g'
           ''}
-          ${lib.optionalString ((cfg.initJavaHeapSize == null) && (cfg.maxJavaHeapSize == null))''
+          ${lib.optionalString ((cfg.initJavaHeapSize == null) && (cfg.maxJavaHeapSize == null)) ''
             sed -i /var/lib/nifi/conf/bootstrap.conf \
               -e 's|java.arg.2=.*|java.arg.2=-Xms512m|g' \
               -e 's|java.arg.3=.*|java.arg.3=-Xmx512m|g'
@@ -292,14 +309,17 @@ in {
         RestrictAddressFamilies = [ "AF_INET AF_INET6" ];
         RestrictNamespaces = true;
         LockPersonality = true;
-        MemoryDenyWriteExecute  = false;
+        MemoryDenyWriteExecute = false;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         RemoveIPC = true;
         PrivateMounts = true;
         # System Call Filtering
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "~@cpu-emulation @debug @keyring @memlock @mount @obsolete @resources @privileged @setuid" "@chown" ];
+        SystemCallFilter = [
+          "~@cpu-emulation @debug @keyring @memlock @mount @obsolete @resources @privileged @setuid"
+          "@chown"
+        ];
       };
     };
 

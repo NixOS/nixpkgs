@@ -1,63 +1,73 @@
-{ lib, stdenvNoCC, fetchurl, nixosTests
-, nextcloud27Packages
-, nextcloud28Packages
-, nextcloud29Packages
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  nixosTests,
+  cacert,
+  caBundle ? "${cacert}/etc/ssl/certs/ca-bundle.crt",
+  nextcloud31Packages,
+  nextcloud32Packages,
 }:
 
 let
-  generic = {
-    version, hash
-  , eol ? false, extraVulnerabilities ? []
-  , packages
-  }: stdenvNoCC.mkDerivation rec {
-    pname = "nextcloud";
-    inherit version;
+  generic =
+    {
+      version,
+      hash,
+      eol ? false,
+      extraVulnerabilities ? [ ],
+      packages,
+    }:
+    stdenvNoCC.mkDerivation rec {
+      pname = "nextcloud";
+      inherit version;
 
-    src = fetchurl {
-      url = "https://download.nextcloud.com/server/releases/${pname}-${version}.tar.bz2";
-      inherit hash;
+      src = fetchurl {
+        url = "https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2";
+        inherit hash;
+      };
+
+      passthru = {
+        tests = lib.filterAttrs (
+          key: _: (lib.hasSuffix (lib.versions.major version) key)
+        ) nixosTests.nextcloud;
+        inherit packages;
+      };
+
+      postPatch = ''
+        cp ${caBundle} resources/config/ca-bundle.crt
+      '';
+
+      installPhase = ''
+        runHook preInstall
+        mkdir -p $out/
+        cp -R . $out/
+        runHook postInstall
+      '';
+
+      meta = {
+        changelog = "https://nextcloud.com/changelog/#${lib.replaceStrings [ "." ] [ "-" ] version}";
+        description = "Sharing solution for files, calendars, contacts and more";
+        homepage = "https://nextcloud.com";
+        teams = [ lib.teams.nextcloud ];
+        license = lib.licenses.agpl3Plus;
+        platforms = lib.platforms.linux;
+        knownVulnerabilities =
+          extraVulnerabilities ++ (lib.optional eol "Nextcloud version ${version} is EOL");
+      };
     };
-
-    passthru = {
-      tests = nixosTests.nextcloud;
-      inherit packages;
-    };
-
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/
-      cp -R . $out/
-      runHook postInstall
-    '';
-
-    meta = with lib; {
-      changelog = "https://nextcloud.com/changelog/#${lib.replaceStrings [ "." ] [ "-" ] version}";
-      description = "Sharing solution for files, calendars, contacts and more";
-      homepage = "https://nextcloud.com";
-      maintainers = with maintainers; [ schneefux bachp globin ma27 ];
-      license = licenses.agpl3Plus;
-      platforms = platforms.linux;
-      knownVulnerabilities = extraVulnerabilities
-        ++ (optional eol "Nextcloud version ${version} is EOL");
-    };
-  };
-in {
-  nextcloud27 = generic {
-    version = "27.1.9";
-    hash = "sha256-+P4QzLWFNJ+EUQ25tLAgjbfziV2vPXpejxfSNuzEEfU=";
-    packages = nextcloud27Packages;
+in
+{
+  nextcloud31 = generic {
+    version = "31.0.11";
+    hash = "sha256-iC95OquosB5ZgrZCJSJrMjcxUrv/HNLJLjMudJcLe8Y=";
+    packages = nextcloud31Packages;
   };
 
-  nextcloud28 = generic {
-    version = "28.0.5";
-    hash = "sha256-3KEQD5W4ZLreETR3cjxxrIlxkzUsMX45zShth2NXBus=";
-    packages = nextcloud28Packages;
-  };
-
-  nextcloud29 = generic {
-    version = "29.0.0";
-    hash = "sha256-6bU/ZDK29mRIfThpZF+hIaZM8O1q7oOqVgkD2vhrUr0=";
-    packages = nextcloud29Packages;
+  nextcloud32 = generic {
+    version = "32.0.2";
+    hash = "sha256-Fe3hmtiOxySDTfrX+uMGpy+TL9BC82szP+JBgVWpN8U=";
+    packages = nextcloud32Packages;
   };
 
   # tip: get the sha with:

@@ -1,31 +1,20 @@
-import ./make-test-python.nix ({ lib, ... }:
 {
   name = "chrony";
 
-  meta = {
-    maintainers = with lib.maintainers; [ fpletz ];
-  };
+  nodes.machine = {
+    services.chrony.enable = true;
 
-  nodes = {
-    default = {
-      services.chrony.enable = true;
-    };
-    graphene-hardened = {
-      services.chrony.enable = true;
-      services.chrony.enableMemoryLocking = true;
+    specialisation.hardened.configuration = {
       environment.memoryAllocator.provider = "graphene-hardened";
-      # dhcpcd privsep is incompatible with graphene-hardened
-      networking.useNetworkd = true;
     };
   };
 
-  testScript = {nodes, ...} : let
-    graphene-hardened = nodes.graphene-hardened.system.build.toplevel;
-  in ''
-    default.start()
-    default.wait_for_unit('multi-user.target')
-    default.succeed('systemctl is-active chronyd.service')
-    default.succeed('${graphene-hardened}/bin/switch-to-configuration test')
-    default.succeed('systemctl is-active chronyd.service')
+  testScript = ''
+    machine.start()
+    machine.wait_for_unit('multi-user.target')
+    machine.succeed('systemctl is-active chronyd.service')
+    machine.succeed('/run/booted-system/specialisation/hardened/bin/switch-to-configuration test')
+    machine.succeed('systemctl restart chronyd.service')
+    machine.wait_for_unit('chronyd.service')
   '';
-})
+}

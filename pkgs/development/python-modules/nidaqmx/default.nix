@@ -1,54 +1,73 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
+  click,
+  deprecation,
+  distro,
   fetchFromGitHub,
-  six,
+  grpcio,
+  hightime,
   numpy,
-  pytestCheckHook,
-  pykka,
-  pythonAtLeast,
+  poetry-core,
+  protobuf,
+  python-decouple,
+  requests,
+  sphinx-rtd-theme,
+  sphinx,
+  toml,
+  tzlocal,
 }:
-
-# Note we currently do not patch the path to the drivers
-# because those are not available in Nixpkgs.
-# https://github.com/NixOS/nixpkgs/pull/74980
 
 buildPythonPackage rec {
   pname = "nidaqmx";
-  version = src.rev;
-  format = "setuptools";
-
-  # 3.10 is not supported, upstream inactive
-  disabled = pythonAtLeast "3.10";
+  version = "1.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ni";
     repo = "nidaqmx-python";
-    rev = "0.5.7";
-    sha256 = "19m9p99qvdmvvqbwmqrqm6b50x7czgrj07gdsxbbgw04shf5bhrs";
+    tag = version;
+    hash = "sha256-uxf+1nmJ+YFS3zGu+0YP4zOdBlSCHPYC8euqZIGwb00=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    click
+    deprecation
+    hightime
     numpy
-    six
+    python-decouple
+    requests
+    tzlocal
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    distro
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pykka
-  ];
+  optional-dependencies = {
+    docs = [
+      sphinx
+      sphinx-rtd-theme
+      toml
+    ];
+    grpc = [
+      grpcio
+      protobuf
+    ];
+  };
 
-  dontUseSetuptoolsCheck = true;
-
-  # Older pytest is needed
-  # https://github.com/ni/nidaqmx-python/issues/80
-  # Fixture "x_series_device" called directly. Fixtures are not meant to be called directly
+  # Tests require hardware
   doCheck = false;
 
-  pythonImportsCheck = [ "nidaqmx.task" ];
+  pythonImportsCheck = [ "nidaqmx" ];
 
   meta = {
+    changelog = "https://github.com/ni/nidaqmx-python/releases/tag/${src.tag}";
     description = "API for interacting with the NI-DAQmx driver";
-    license = [ lib.licenses.mit ];
+    homepage = "https://github.com/ni/nidaqmx-python";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fsagbuya ];
   };
 }

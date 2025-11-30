@@ -21,7 +21,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "morfessor" ];
 
   meta = with lib; {
-    description = "A tool for unsupervised and semi-supervised morphological segmentation";
+    description = "Tool for unsupervised and semi-supervised morphological segmentation";
     homepage = "https://github.com/aalto-speech/morfessor";
     license = licenses.bsd2;
     maintainers = with maintainers; [ misuzu ];

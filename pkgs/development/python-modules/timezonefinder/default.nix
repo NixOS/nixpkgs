@@ -1,47 +1,51 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
   cffi,
+  fetchFromGitHub,
+  flatbuffers,
   h3,
   numba,
   numpy,
-  poetry-core,
+  pydantic,
   pytestCheckHook,
-  pythonOlder,
+  pytz,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "timezonefinder";
-  version = "6.5.0";
+  version = "8.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jannikmi";
     repo = "timezonefinder";
-    rev = "refs/tags/${version}";
-    hash = "sha256-V5g1zTdXWeJba71/eUGQbF9XOhMQuzivtGkqGD4OHMY=";
+    tag = version;
+    hash = "sha256-jIsS8RcbMNhj5Z/AYbNyVsbQOozbk75tXSLRqhez9Ug=";
   };
 
-  nativeBuildInputs = [
-    cffi
-    poetry-core
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ cffi ];
+
+  dependencies = [
     cffi
+    flatbuffers
     h3
     numpy
   ];
 
+  optional-dependencies = {
+    numba = [ numba ];
+    pytz = [ pytz ];
+  };
+
   nativeCheckInputs = [
-    numba
+    pydantic
     pytestCheckHook
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "timezonefinder" ];
 
@@ -50,12 +54,22 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
+  disabledTestPaths = [
+    # Don't test the archive content
+    "tests/test_package_contents.py"
+    "tests/test_integration.py"
+    # Don't test the example
+    "tests/test_example_scripts.py"
+    # Tests require clang extension
+    "tests/utils_test.py"
+  ];
+
   meta = with lib; {
-    changelog = "https://github.com/jannikmi/timezonefinder/blob/${version}/CHANGELOG.rst";
     description = "Module for finding the timezone of any point on earth (coordinates) offline";
-    mainProgram = "timezonefinder";
     homepage = "https://github.com/MrMinimal64/timezonefinder";
+    changelog = "https://github.com/jannikmi/timezonefinder/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "timezonefinder";
   };
 }

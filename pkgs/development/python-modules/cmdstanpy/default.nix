@@ -2,9 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   cmdstan,
-  pythonRelaxDepsHook,
   setuptools,
   pandas,
   numpy,
@@ -17,19 +16,18 @@
 
 buildPythonPackage rec {
   pname = "cmdstanpy";
-  version = "1.2.1";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stan-dev";
     repo = "cmdstanpy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-q+AFhWEzjYElJpiHT4h6YfZrwZJ56pv+8R+001vREyQ=";
+    tag = "v${version}";
+    hash = "sha256-XVviGdJ41mcjCscL3jvcpHi6zMREHsuShGHpnMQX6V8=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./use-nix-cmdstan-path.patch;
+    (replaceVars ./use-nix-cmdstan-path.patch {
       cmdstan = "${cmdstan}/opt/cmdstan";
     })
   ];
@@ -41,7 +39,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -51,7 +48,7 @@ buildPythonPackage rec {
     stanio
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [ xarray ];
   };
 
@@ -61,7 +58,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.all;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.all;
 
   disabledTestPaths = [
     # No need to test these when using Nix
@@ -69,22 +66,24 @@ buildPythonPackage rec {
     "test/test_cxx_installation.py"
   ];
 
-  disabledTests =
-    [
-      "test_serialization" # Pickle class mismatch errors
-      # These tests use the flag -DSTAN_THREADS which doesn't work in cmdstan (missing file)
-      "test_multi_proc_threads"
-      "test_compile_force"
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      "test_init_types" # CmdStan error: error during processing Operation not permitted
-    ];
+  disabledTests = [
+    "test_serialization" # Pickle class mismatch errors
+    # These tests use the flag -DSTAN_THREADS which doesn't work in cmdstan (missing file)
+    "test_multi_proc_threads"
+    "test_compile_force"
+    # These tests require a writeable cmdstan source directory
+    "test_pathfinder_threads"
+    "test_save_profile"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_init_types" # CmdStan error: error during processing Operation not permitted
+  ];
 
   pythonImportsCheck = [ "cmdstanpy" ];
 
   meta = {
     homepage = "https://github.com/stan-dev/cmdstanpy";
-    description = "A lightweight interface to Stan for Python users";
+    description = "Lightweight interface to Stan for Python users";
     changelog = "https://github.com/stan-dev/cmdstanpy/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ tomasajt ];

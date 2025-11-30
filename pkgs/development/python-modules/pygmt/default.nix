@@ -1,13 +1,11 @@
 {
   lib,
-  stdenv,
   pythonOlder,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools-scm,
   gmt,
   numpy,
-  netcdf4,
   pandas,
   packaging,
   xarray,
@@ -19,28 +17,27 @@
 
 buildPythonPackage rec {
   pname = "pygmt";
-  version = "0.11.0";
-  format = "pyproject";
+  version = "0.17.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "GenericMappingTools";
     repo = "pygmt";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-DbewB/lP44bpNSQ4ht7n0coS2Ml7qmEU4CP91p5YtZg=";
+    tag = "v${version}";
+    hash = "sha256-YW111pgaW13TrD6mu+WgeLNljgmXWT/r1mZDbl9uROw=";
   };
 
   postPatch = ''
     substituteInPlace pygmt/clib/loading.py \
-      --replace "env.get(\"GMT_LIBRARY_PATH\", \"\")" "env.get(\"GMT_LIBRARY_PATH\", \"${gmt}/lib\")"
+      --replace-fail "env.get(\"GMT_LIBRARY_PATH\")" "env.get(\"GMT_LIBRARY_PATH\", \"${gmt}/lib\")"
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
-    netcdf4
     pandas
     packaging
     xarray
@@ -62,13 +59,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pygmt" ];
 
-  meta = with lib; {
-    description = "A Python interface for the Generic Mapping Tools";
+  meta = {
+    description = "Python interface for the Generic Mapping Tools";
     homepage = "https://github.com/GenericMappingTools/pygmt";
-    license = licenses.bsd3;
-    changelog = "https://github.com/GenericMappingTools/pygmt/releases/tag/v${version}";
-    # pygmt.exceptions.GMTCLibNotFoundError: Error loading the GMT shared library '/nix/store/r3xnnqgl89vrnq0kzxx0bmjwzks45mz8-gmt-6.1.1/lib/libgmt.dylib'
-    broken = stdenv.isDarwin;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.bsd3;
+    changelog = "https://github.com/GenericMappingTools/pygmt/releases/tag/${src.tag}";
+    teams = [ lib.teams.geospatial ];
   };
 }

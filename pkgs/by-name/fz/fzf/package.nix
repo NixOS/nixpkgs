@@ -1,37 +1,43 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, runtimeShell
-, installShellFiles
-, bc
-, ncurses
-, testers
-, fzf
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  runtimeShell,
+  installShellFiles,
+  bc,
+  ncurses,
+  testers,
+  fzf,
 }:
 
 buildGoModule rec {
   pname = "fzf";
-  version = "0.52.1";
+  version = "0.67.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = "fzf";
-    rev = version;
-    hash = "sha256-cnLPn1AKq1BaWwXsWwQfC/lnejdyd1WdH1qIJRcfdks=";
+    rev = "v${version}";
+    hash = "sha256-P6jyKskc2jT6zMLAMxklN8e/630oWYT4bWim20IMKvo=";
   };
 
-  vendorHash = "sha256-Kc/bYzakx9c/bF42LYyE1t8JCUqBsJQFtczrFocx/Ps=";
+  vendorHash = "sha256-uFXHoseFOxGIGPiWxWfDl339vUv855VHYgSs9rnDyuI=";
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ ncurses ];
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version} -X main.revision=${src.rev}"
+    "-s"
+    "-w"
+    "-X main.version=${version} -X main.revision=${src.rev}"
   ];
 
   # The vim plugin expects a relative path to the binary; patch it to abspath.
@@ -45,7 +51,7 @@ buildGoModule rec {
 
     # fzf-tmux depends on bc
     substituteInPlace bin/fzf-tmux \
-      --replace "bc" "${bc}/bin/bc"
+      --replace-fail "bc" "${lib.getExe bc}"
   '';
 
   postInstall = ''
@@ -53,18 +59,12 @@ buildGoModule rec {
 
     installManPage man/man1/fzf.1 man/man1/fzf-tmux.1
 
-    install -D plugin/* -t $out/share/vim-plugins/${pname}/plugin
+    install -D plugin/* -t $out/share/vim-plugins/fzf/plugin
     mkdir -p $out/share/nvim
-    ln -s $out/share/vim-plugins/${pname} $out/share/nvim/site
+    ln -s $out/share/vim-plugins/fzf $out/share/nvim/site
 
     # Install shell integrations
     install -D shell/* -t $out/share/fzf/
-    install -D shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
-    mkdir -p $out/share/fish/vendor_conf.d
-    cat << EOF > $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
-      status is-interactive; or exit 0
-      fzf_key_bindings
-    EOF
 
     cat <<SCRIPT > $out/bin/fzf-share
     #!${runtimeShell}
@@ -80,11 +80,15 @@ buildGoModule rec {
   };
 
   meta = {
-    changelog = "https://github.com/junegunn/fzf/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/junegunn/fzf/blob/${src.rev}/CHANGELOG.md";
     description = "Command-line fuzzy finder written in Go";
     homepage = "https://github.com/junegunn/fzf";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Br1ght0ne ma27 zowoq ];
+    maintainers = with lib.maintainers; [
+      Br1ght0ne
+      ma27
+      zowoq
+    ];
     mainProgram = "fzf";
     platforms = lib.platforms.unix;
   };

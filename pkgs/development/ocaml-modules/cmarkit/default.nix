@@ -1,16 +1,13 @@
-{ lib
-, stdenv
-, cmdliner
-, fetchurl
-, findlib
-, ocaml
-, ocamlbuild
-, topkg
+{
+  lib,
+  stdenv,
+  cmdliner,
+  fetchurl,
+  findlib,
+  ocaml,
+  ocamlbuild,
+  topkg,
 }:
-
-if lib.versionOlder ocaml.version "4.14.0"
-then throw "cmarkit is not available for OCaml ${ocaml.version}"
-else
 
 stdenv.mkDerivation rec {
   pname = "cmarkit";
@@ -44,5 +41,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     maintainers = [ ];
     inherit (ocaml.meta) platforms;
+    broken = lib.versionOlder ocaml.version "4.14.0";
   };
 }

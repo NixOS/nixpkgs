@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gtest
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gtest,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "parallel-hashmap";
-  version = "1.3.12";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "greg7mdp";
     repo = "parallel-hashmap";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-6KhzXUxa4WOsRrPmSSgguFxRGTOTIaxiJBFFSzOhch0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JiDhEpAQyyPXGkY9DYLvJ2XW1Bp3Ex1iMtbzNdra95g=";
   };
 
   postPatch = ''
@@ -28,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DPHMAP_BUILD_TESTS=${if finalAttrs.doCheck then "ON" else "OFF"}"
+    "-DPHMAP_BUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
     "-DPHMAP_BUILD_EXAMPLES=OFF"
   ];
 
@@ -39,9 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   meta = with lib; {
-    description = "A family of header-only, very fast and memory-friendly hashmap and btree containers";
+    description = "Family of header-only, very fast and memory-friendly hashmap and btree containers";
     homepage = "https://github.com/greg7mdp/parallel-hashmap";
-    changelog = "https://github.com/greg7mdp/parallel-hashmap/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/greg7mdp/parallel-hashmap/releases/tag/v${finalAttrs.version}";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ natsukium ];

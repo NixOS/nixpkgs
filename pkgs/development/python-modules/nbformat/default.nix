@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  pythonAtLeast,
   pythonOlder,
   fetchPypi,
   hatchling,
@@ -45,11 +46,13 @@ buildPythonPackage rec {
     testpath
   ];
 
+  pytestFlags = [ "-Wignore::pytest.PytestUnraisableExceptionWarning" ];
+
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    description = "The Jupyter Notebook format";
+    description = "Jupyter Notebook format";
     mainProgram = "jupyter-trust";
     homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;

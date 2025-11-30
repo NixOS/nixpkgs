@@ -3,9 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
   runCommand,
-  python3,
   wireshark-cli,
   pytestCheckHook,
+  manuf, # remove when buildPythonPackage supports finalAttrs
 }:
 
 buildPythonPackage rec {
@@ -42,14 +42,14 @@ buildPythonPackage rec {
 
   passthru.tests = {
     testMacAddress = runCommand "${pname}-test" { } ''
-      ${python3.pkgs.manuf}/bin/manuf BC:EE:7B:00:00:00 > $out
+      ${lib.getExe manuf} BC:EE:7B:00:00:00 > $out
       [ "$(cat $out | tr -d '\n')" = "Vendor(manuf='ASUSTekC', manuf_long='ASUSTek COMPUTER INC.', comment=None)" ]
     '';
   };
 
   meta = with lib; {
     homepage = "https://github.com/coolbho3k/manuf";
-    description = " Parser library for Wireshark's OUI database";
+    description = "Parser library for Wireshark's OUI database";
     mainProgram = "manuf";
     platforms = platforms.linux;
     license = with licenses; [

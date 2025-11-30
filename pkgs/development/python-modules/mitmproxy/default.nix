@@ -1,75 +1,71 @@
 {
   lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pythonOlder,
-  pythonRelaxDepsHook,
-  # Mitmproxy requirements
   aioquic,
+  argon2-cffi,
   asgiref,
-  blinker,
+  bcrypt,
   brotli,
+  buildPythonPackage,
   certifi,
   cryptography,
+  fetchFromGitHub,
   flask,
   h11,
   h2,
   hyperframe,
+  hypothesis,
   kaitaistruct,
   ldap3,
-  mitmproxy-macos,
   mitmproxy-rs,
   msgpack,
-  passlib,
-  protobuf,
+  nixosTests,
   publicsuffix2,
   pyopenssl,
   pyparsing,
   pyperclip,
-  ruamel-yaml,
-  setuptools,
-  sortedcontainers,
-  tornado,
-  urwid-mitmproxy,
-  wsproto,
-  zstandard,
-  # Additional check requirements
-  hypothesis,
-  parver,
   pytest-asyncio,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
   requests,
+  ruamel-yaml,
+  setuptools,
+  sortedcontainers,
+  tornado,
+  urwid,
+  wsproto,
+  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "10.3.0";
+  version = "12.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-YjvGsnpQQ8GWLyKmnd3lOxesnr+F2xCNXyahZh0JQnc=";
+    tag = "v${version}";
+    hash = "sha256-z3JJOql4JacXSeo6dRbKOaL+kLlSnpKQkeXzZdzLQJo=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-
   pythonRelaxDeps = [
-    "aioquic"
-    "cryptography"
+    "zstandard"
+
+    # requested by maintainer
+    "brotli"
+    # just keep those
+    "typing-extensions"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aioquic
+    argon2-cffi
     asgiref
-    blinker
     brotli
+    bcrypt
     certifi
     cryptography
     flask
@@ -80,24 +76,20 @@ buildPythonPackage rec {
     ldap3
     mitmproxy-rs
     msgpack
-    passlib
-    protobuf
     publicsuffix2
     pyopenssl
     pyparsing
     pyperclip
     ruamel-yaml
-    setuptools
     sortedcontainers
     tornado
-    urwid-mitmproxy
+    urwid
     wsproto
     zstandard
-  ] ++ lib.optionals stdenv.isDarwin [ mitmproxy-macos ];
+  ];
 
   nativeCheckInputs = [
     hypothesis
-    parver
     pytest-asyncio
     pytest-timeout
     pytest-xdist
@@ -125,17 +117,42 @@ buildPythonPackage rec {
     "test_statusbar"
     # FileNotFoundError: [Errno 2] No such file or directory
     # likely wireguard is also not working in the sandbox
+    "test_tun_mode"
     "test_wireguard"
+    # test require a DNS server
+    # RuntimeError: failed to get dns servers: io error: entity not found
+    "test_errorcheck"
+    "test_errorcheck"
+    "test_dns"
+    "test_order"
+    # fails in pytest asyncio internals
+    "test_decorator"
+    "test_exception_handler"
+  ];
+
+  disabledTestPaths = [
+    # test require a DNS server
+    # RuntimeError: failed to get dns servers: io error: entity not found
+    "test/mitmproxy/addons/test_dns_resolver.py"
+    "test/mitmproxy/tools/test_dump.py"
+    "test/mitmproxy/tools/test_main.py"
+    "test/mitmproxy/tools/web/test_app.py"
+    "test/mitmproxy/tools/web/test_app.py" # 2 out of 31 tests work
+    "test/mitmproxy/tools/web/test_master.py"
   ];
 
   dontUsePytestXdist = true;
 
   pythonImportsCheck = [ "mitmproxy" ];
 
+  passthru.tests = {
+    inherit (nixosTests) mitmproxy;
+  };
+
   meta = with lib; {
     description = "Man-in-the-middle proxy";
     homepage = "https://mitmproxy.org/";
-    changelog = "https://github.com/mitmproxy/mitmproxy/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/mitmproxy/mitmproxy/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

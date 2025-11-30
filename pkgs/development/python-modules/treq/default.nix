@@ -5,11 +5,12 @@
 
   # build-system
   incremental,
-  setuptools,
+  hatchling,
 
-  # dependenices
+  # dependencies
   attrs,
   hyperlink,
+  multipart,
   requests,
   twisted,
 
@@ -19,26 +20,28 @@
 
 buildPythonPackage rec {
   pname = "treq";
-  version = "23.11.0";
+  version = "25.5.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CRT/kp/RYyzhZ5cjUmD4vBnSD/fEWcHeq9ZbjGjL6sU=";
+    hash = "sha256-Jd3jpVroXsLyxWMyyZrvJVqxT5l9DQBVLr/xNTipgEo=";
   };
 
   nativeBuildInputs = [
     incremental
-    setuptools
+    hatchling
   ];
 
   propagatedBuildInputs = [
     attrs
     hyperlink
     incremental
+    multipart
     requests
     twisted
-  ] ++ twisted.optional-dependencies.tls;
+  ]
+  ++ twisted.optional-dependencies.tls;
 
   nativeCheckInputs = [
     httpbin
@@ -57,6 +60,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/twisted/treq";
     description = "Requests-like API built on top of twisted.web's Agent";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

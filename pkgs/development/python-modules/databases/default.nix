@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "encode";
     repo = "databases";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Zf9QqBgDhWAnHdNvzjXtri5rdT00BOjc4YTNzJALldM=";
   };
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ sqlalchemy ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     postgresql = [ asyncpg ];
     asyncpg = [ asyncpg ];
     aiopg = [ aiopg ];
@@ -59,6 +59,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/encode/databases";
     changelog = "https://github.com/encode/databases/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

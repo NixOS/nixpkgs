@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchgit
-, autoreconfHook
-, pkg-config
-, boost
-, cppunit
-, librevenge
-, libxml2
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  pkg-config,
+  boost,
+  cppunit,
+  librevenge,
+  libxml2,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An EPUB generator for librevenge";
+    description = "EPUB generator for librevenge";
     homepage = "https://sourceforge.net/projects/libepubgen/";
     license = licenses.mpl20;
     maintainers = [ ];

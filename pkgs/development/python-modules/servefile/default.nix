@@ -1,7 +1,7 @@
 {
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  legacy-cgi,
   lib,
   pyopenssl,
   pytestCheckHook,
@@ -15,12 +15,15 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "sebageek";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "servefile";
+    tag = "v${version}";
     hash = "sha256-hIqXwhmvstCslsCO973oK5FF2c8gZJ0wNUI/z8W+OjU=";
   };
 
-  propagatedBuildInputs = [ pyopenssl ];
+  dependencies = [
+    legacy-cgi
+    pyopenssl
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

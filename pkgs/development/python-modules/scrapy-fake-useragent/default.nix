@@ -1,41 +1,46 @@
 {
   lib,
   buildPythonPackage,
+  setuptools,
   fake-useragent,
   faker,
   fetchFromGitHub,
+  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
   scrapy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "scrapy-fake-useragent";
   version = "1.4.4";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   # PyPi tarball is corrupted
   src = fetchFromGitHub {
     owner = "alecxe";
-    repo = pname;
+    repo = "scrapy-fake-useragent";
     rev = "59c20d38c58c76618164760d546aa5b989a79b8b"; # no tags
     hash = "sha256-khQMOQrrdHokvNqfaMWqXV7AzwGxTuxaLsZoLkNpZ3k=";
   };
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace " --cov=scrapy_fake_useragent --cov-report=term --cov-report=html --fulltrace" ""
+      --replace-fail " --fulltrace" ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     fake-useragent
     faker
   ];
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
     scrapy
@@ -53,6 +58,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/alecxe/scrapy-fake-useragent";
     changelog = "https://github.com/alecxe/scrapy-fake-useragent/blob/master/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

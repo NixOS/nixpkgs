@@ -8,70 +8,67 @@
   dill,
   fetchFromGitHub,
   moto,
-  poetry-core,
-  poetry-dynamic-versioning,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
-  pythonRelaxDepsHook,
-  requests,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "aioboto3";
-  version = "12.3.0";
+  version = "15.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
-    owner = "terrycain";
+    owner = "terricain";
     repo = "aioboto3";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-GDuxy/V+j0LRJ2lbcRHMEAga+pdCbYIWhEt3ItrHMB4=";
+    tag = "v${version}";
+    hash = "sha256-H/hAfFyBfeBoR6nW0sv3/AzFPATUl2uJ+JbzNB5xemo=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-    poetry-dynamic-versioning
-    pythonRelaxDepsHook
+  # https://github.com/terricain/aioboto3/pull/377
+  patches = [ ./boto3-compat.patch ];
+
+  pythonRelaxDeps = [
+    "aiobotocore"
   ];
 
-  pythonRelaxDeps = [ "aiobotocore" ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [ aiobotocore ] ++ aiobotocore.optional-dependencies.boto3;
+  dependencies = [
+    aiobotocore
+    aiofiles
+  ]
+  ++ aiobotocore.optional-dependencies.boto3;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     chalice = [ chalice ];
     s3cse = [ cryptography ];
   };
 
   nativeCheckInputs = [
-    aiofiles
     dill
     moto
     pytest-asyncio
     pytestCheckHook
-    requests
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ]
+  ++ moto.optional-dependencies.server
+  ++ lib.concatAttrValues optional-dependencies;
+
+  disabledTests = [
+    "test_patches"
+  ];
 
   pythonImportsCheck = [ "aioboto3" ];
 
-  disabledTests = [
-    # Our moto package is not ready to support more tests
-    "encrypt_decrypt_aes_cbc"
-    "test_chalice_async"
-    "test_dynamo"
-    "test_flush_doesnt_reset_item_buffer"
-    "test_kms"
-    "test_s3"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Wrapper to use boto3 resources with the aiobotocore async backend";
-    homepage = "https://github.com/terrycain/aioboto3";
-    changelog = "https://github.com/terrycain/aioboto3/blob/${src.rev}/CHANGELOG.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mbalatsko ];
+    homepage = "https://github.com/terricain/aioboto3";
+    changelog = "https://github.com/terricain/aioboto3/blob/${src.rev}/CHANGELOG.rst";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

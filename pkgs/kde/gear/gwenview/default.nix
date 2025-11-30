@@ -1,5 +1,6 @@
 {
   mkKdeDerivation,
+  qtmultimedia,
   qtsvg,
   qtwayland,
   qtimageformats,
@@ -14,10 +15,12 @@
 mkKdeDerivation {
   pname = "gwenview";
 
-  extraNativeBuildInputs = [pkg-config];
+  extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
+    qtmultimedia
     qtsvg
     qtwayland
+
     # adds support for webp and other image formats
     qtimageformats
 

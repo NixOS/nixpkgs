@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "khanaa";
-  version = "0.0.6";
+  version = "0.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,11 +20,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cakimpei";
     repo = "khanaa";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-BzxNHYMkp5pdJYQ80EI5jlP654yX9woW7wz1jArCln4=";
+    tag = "v${version}";
+    hash = "sha256-QFvvahVEld3BooINeUYJDahZyfh5xmQNtWRLAOdr6lw=";
   };
 
   build-system = [ setuptools ];
+
+  patches = [
+    ./001-skip-broken-test.patch
+  ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 
@@ -36,7 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "khanaa" ];
 
   meta = with lib; {
-    description = "A tool to make spelling Thai more convenient";
+    description = "Tool to make spelling Thai more convenient";
     homepage = "https://github.com/cakimpei/khanaa";
     changelog = "https://github.com/cakimpei/khanaa/blob/main/CHANGELOG.md";
     license = licenses.mit;

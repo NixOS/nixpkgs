@@ -7,7 +7,6 @@
   mock,
   pyjwt,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 
   # for passthru.tests
@@ -19,21 +18,19 @@
 
 buildPythonPackage rec {
   pname = "oauthlib";
-  version = "3.2.2";
+  version = "3.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "oauthlib";
     repo = "oauthlib";
-    rev = "v${version}";
-    hash = "sha256-KADS1pEaLYi86LEt2VVuz8FVTBANzxC8EeQLgGMxuBU=";
+    tag = "v${version}";
+    hash = "sha256-ZTmR+pTNQaRQMnUA+8hXM5VACRd8Hn62KTNooy5FQyk=";
   };
 
   nativeBuildInputs = [ setuptools ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     rsa = [ cryptography ];
     signedtoken = [
       cryptography
@@ -45,7 +42,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  disabledTests = [
+    # too narrow time comparison issues
+    "test_fetch_access_token"
+  ];
 
   pythonImportsCheck = [ "oauthlib" ];
 
@@ -59,7 +62,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/oauthlib/oauthlib/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/oauthlib/oauthlib/blob/${src.tag}/CHANGELOG.rst";
     description = "Generic, spec-compliant, thorough implementation of the OAuth request-signing logic";
     homepage = "https://github.com/oauthlib/oauthlib";
     license = licenses.bsd3;

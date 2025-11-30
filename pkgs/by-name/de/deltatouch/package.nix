@@ -1,34 +1,54 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, fetchpatch
-, cmake
-, intltool
-, libdeltachat
-, lomiri
-, qt5
-, quirc
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  intltool,
+  libdeltachat,
+  lomiri,
+  qt5,
+  quirc,
+  rustPlatform,
 }:
 
+let
+  libdeltachat' = libdeltachat.overrideAttrs rec {
+    version = "2.22.0";
+    src = fetchFromGitHub {
+      owner = "chatmail";
+      repo = "core";
+      tag = "v${version}";
+      hash = "sha256-DKqqdcG3C7/RF/wz2SqaiPUjZ/7vMFJTR5DIGTXjoTY=";
+    };
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      pname = "chatmail-core";
+      inherit version src;
+      hash = "sha256-x71vytk9ytIhHlRR0lDhDcIaDNJGDdPwb6fkB1SI+NQ=";
+    };
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "deltatouch";
-  version = "1.4.0";
+  version = "2.22.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "lk108";
     repo = "deltatouch";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-tqcQmFmF8Z9smVMfaXOmXQ3Uw41bUcU4iUi8fxBlg8U=";
-    fetchSubmodules = true;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-e8kS6kAjOZ2V33XJuJbvDZ9mfRknDh9un0dn5HtD3UY=";
   };
-
 
   patches = [
     (fetchpatch {
-      name = "0001-deltatouch-Fix-localisation.patch";
-      url = "https://codeberg.org/lk108/deltatouch/commit/dcfdd8a0fca5fff10d0383f77f4c0cbea302de00.patch";
-      hash = "sha256-RRjHG/xKtj757ZP2SY0GtWwh66kkTWoICV1vDkFAw3k=";
+      url = "https://codeberg.org/lk108/deltatouch/commit/b19c088ce95e8ca6ff1102c36d91b1db937e3a3a.patch";
+      hash = "sha256-58WPUSFaAUqVVU3iq05tae5Gvvr405zDA145V9DbJ54=";
+    })
+    (fetchpatch {
+      url = "https://codeberg.org/lk108/deltatouch/commit/139f3a4abd772b17142a7f61ef9b442200728f4a.patch";
+      hash = "sha256-bEX4g88CCt7AFok8kTeItzCripXFoG2ED7R9lGYoCAw=";
     })
   ];
 
@@ -42,50 +62,25 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.qtbase
     qt5.qtwebengine
     qt5.qtquickcontrols2
+    libdeltachat'
     lomiri.lomiri-ui-toolkit
     lomiri.lomiri-ui-extras
     lomiri.lomiri-api
-    lomiri.lomiri-indicator-network # Lomiri.Connectivity module
     lomiri.qqc2-suru-style
+    quirc
   ];
 
-  postPatch = ''
-    # Fix all sorts of install locations
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'set(DATA_DIR /)' 'set(DATA_DIR ''${CMAKE_INSTALL_DATAROOTDIR})' \
-      --replace-fail 'RUNTIME DESTINATION ''${CMAKE_INSTALL_PREFIX}' 'RUNTIME DESTINATION ''${CMAKE_INSTALL_BINDIR}' \
-      --replace-fail 'assets/logo.svg DESTINATION assets' 'assets/logo.svg DESTINATION ''${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps RENAME deltatouch.svg' \
-      --replace-fail "\''${DESKTOP_FILE_NAME} DESTINATION \''${DATA_DIR}" "\''${DESKTOP_FILE_NAME} DESTINATION \''${CMAKE_INSTALL_DATAROOTDIR}/applications"
-
-    substituteInPlace plugins/DeltaHandler/CMakeLists.txt plugins/DTWebEngineProfile/CMakeLists.txt \
-      --replace-fail 'set(QT_IMPORTS_DIR "/lib/''${ARCH_TRIPLET}")' 'set(QT_IMPORTS_DIR "${placeholder "out"}/${qt5.qtbase.qtQmlPrefix}")'
-
-    # Fix import of library dependencies
-    substituteInPlace plugins/DeltaHandler/CMakeLists.txt \
-      --replace-fail 'IMPORTED_LOCATION "''${CMAKE_CURRENT_BINARY_DIR}/libdeltachat.so"' 'IMPORTED_LOCATION "${lib.getLib libdeltachat}/lib/libdeltachat.so"' \
-      --replace-fail 'IMPORTED_LOCATION "''${CMAKE_CURRENT_BINARY_DIR}/libquirc.so.1.2"' 'IMPORTED_LOCATION "${lib.getLib quirc}/lib/libquirc.so"'
-
-    # Fix icon reference in desktop file
-    substituteInPlace deltatouch.desktop.in \
-      --replace-fail 'Icon=assets/logo.svg' 'Icon=deltatouch'
-  '';
-
-  postInstall = ''
-    # Remove clickable metadata & helpers from out
-    rm $out/{manifest.json,share/push*}
-  '';
-
-  meta = with lib; {
-    changelog = "https://codeberg.org/lk108/deltatouch/src/commit/${finalAttrs.src.rev}/CHANGELOG";
+  meta = {
+    changelog = "https://codeberg.org/lk108/deltatouch/src/tag/${finalAttrs.src.tag}/CHANGELOG";
     description = "Messaging app for Ubuntu Touch, powered by Delta Chat core";
     longDescription = ''
       DeltaTouch is a messenger for Ubuntu Touch based on Delta Chat core.
       Delta Chat works over email.
     '';
     homepage = "https://codeberg.org/lk108/deltatouch";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ link2xt ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ link2xt ];
     mainProgram = "deltatouch";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

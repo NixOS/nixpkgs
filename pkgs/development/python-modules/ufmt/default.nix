@@ -1,37 +1,45 @@
 {
   lib,
-  black,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
+
+  # build-system
   flit-core,
+
+  # dependencies
+  black,
+  click,
   libcst,
   moreorless,
-  pythonOlder,
   tomlkit,
   trailrunner,
   typing-extensions,
-  unittestCheckHook,
   usort,
+
+  # optional-dependencies
+  pygls_2,
+  ruff-api,
+
+  # tests
+  unittestCheckHook,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ufmt";
-  version = "2.1.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "2.9.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "omnilib";
     repo = "ufmt";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-eQIbSC0Oxi6JD7/3o2y9f+KhT8GIiFiYiV4A3QBoWl0=";
+    tag = "v${version}";
+    hash = "sha256-/5sfawsBmsStCCdu4lIq2iL0zywrWAN+qW/t3h2UIu0=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     black
     click
     libcst
@@ -42,16 +50,26 @@ buildPythonPackage rec {
     usort
   ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  optional-dependencies = {
+    lsp = [ pygls_2 ];
+    ruff = [ ruff-api ];
+  };
+
+  nativeCheckInputs = [
+    unittestCheckHook
+    versionCheckHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "ufmt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Safe, atomic formatting with black and usort";
-    mainProgram = "ufmt";
     homepage = "https://github.com/omnilib/ufmt";
     changelog = "https://github.com/omnilib/ufmt/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "ufmt";
   };
 }

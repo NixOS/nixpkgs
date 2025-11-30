@@ -1,0 +1,41 @@
+diff --git a/tests/cxxrtl/run-test.sh b/tests/cxxrtl/run-test.sh
+index ee299fc82..595cd3f88 100755
+--- a/tests/cxxrtl/run-test.sh
++++ b/tests/cxxrtl/run-test.sh
+@@ -5,7 +5,7 @@ set -ex
+ run_subtest () {
+     local subtest=$1; shift
+
+-    ${CC:-gcc} -std=c++11 -O2 -o cxxrtl-test-${subtest} -I../../backends/cxxrtl/runtime test_${subtest}.cc -lstdc++
++    ${CXX:-gcc} -std=c++11 -O2 -o cxxrtl-test-${subtest} -I../../backends/cxxrtl/runtime test_${subtest}.cc -lstdc++
+     ./cxxrtl-test-${subtest}
+ }
+
+@@ -14,4 +14,4 @@ run_subtest value_fuzz
+
+ # Compile-only test.
+ ../../yosys -p "read_verilog test_unconnected_output.v; select =*; proc; clean; write_cxxrtl cxxrtl-test-unconnected_output.cc"
+-${CC:-gcc} -std=c++11 -c -o cxxrtl-test-unconnected_output -I../../backends/cxxrtl/runtime cxxrtl-test-unconnected_output.cc
++${CXX:-gcc} -std=c++11 -c -o cxxrtl-test-unconnected_output -I../../backends/cxxrtl/runtime cxxrtl-test-unconnected_output.cc
+diff --git a/tests/fmt/run-test.sh b/tests/fmt/run-test.sh
+index 998047f83..2a4a59f01 100644
+--- a/tests/fmt/run-test.sh
++++ b/tests/fmt/run-test.sh
+@@ -51,7 +51,7 @@ test_cxxrtl () {
+ 	local subtest=$1; shift
+
+ 	../../yosys -p "read_verilog ${subtest}.v; proc; clean; write_cxxrtl -print-output std::cerr yosys-${subtest}.cc"
+-	${CC:-gcc} -std=c++11 -o yosys-${subtest} -I../../backends/cxxrtl/runtime ${subtest}_tb.cc -lstdc++
++	${CXX:-gcc} -std=c++11 -o yosys-${subtest} -I../../backends/cxxrtl/runtime ${subtest}_tb.cc -lstdc++
+ 	./yosys-${subtest} 2>yosys-${subtest}.log
+ 	iverilog -o iverilog-${subtest} ${subtest}.v ${subtest}_tb.v
+ 	./iverilog-${subtest} |grep -v '\$finish called' >iverilog-${subtest}.log
+@@ -69,7 +69,7 @@ diff iverilog-always_full.log iverilog-always_full-1.log
+
+ ../../yosys -p "read_verilog display_lm.v" >yosys-display_lm.log
+ ../../yosys -p "read_verilog display_lm.v; write_cxxrtl yosys-display_lm.cc"
+-${CC:-gcc} -std=c++11 -o yosys-display_lm_cc -I../../backends/cxxrtl/runtime display_lm_tb.cc -lstdc++
++${CXX:-gcc} -std=c++11 -o yosys-display_lm_cc -I../../backends/cxxrtl/runtime display_lm_tb.cc -lstdc++
+ ./yosys-display_lm_cc >yosys-display_lm_cc.log
+ for log in yosys-display_lm.log yosys-display_lm_cc.log; do
+ 	grep "^%l: \\\\bot\$" "$log"

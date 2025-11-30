@@ -12,19 +12,17 @@
 
 buildPythonPackage rec {
   pname = "platformdirs";
-  version = "4.2.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "4.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-DjRqOIkyhkA3Z1gl2o78R4kp23qJBj+pRmDBld8AbDI=";
+    owner = "tox-dev";
+    repo = "platformdirs";
+    tag = version;
+    hash = "sha256-ESXp9I6SL13BdsQLCUcfS8kwqayURCEguhINnK6Dd6k=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
@@ -37,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "platformdirs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for determining appropriate platform-specific directories";
     homepage = "https://platformdirs.readthedocs.io/";
-    changelog = "https://github.com/platformdirs/platformdirs/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/tox-dev/platformdirs/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

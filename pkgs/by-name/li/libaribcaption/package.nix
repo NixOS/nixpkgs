@@ -1,15 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 
-, fontconfig
-, freetype
+  fontconfig,
+  freetype,
 
-, ApplicationServices
-, CoreFoundation
-, CoreGraphics
-, CoreText
 }:
 
 stdenv.mkDerivation rec {
@@ -27,14 +24,9 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
-  buildInputs = lib.optionals (!stdenv.isDarwin) [
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     fontconfig
     freetype
-  ] ++ lib.optionals stdenv.isDarwin [
-    ApplicationServices
-    CoreFoundation
-    CoreGraphics
-    CoreText
   ];
 
   meta = with lib; {

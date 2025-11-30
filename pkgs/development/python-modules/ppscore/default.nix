@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
   setuptools,
   pandas,
   pytestCheckHook,
@@ -20,12 +19,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "8080labs";
     repo = "ppscore";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-gJStsL8fN17kvXO8EH/NHGIBelPknJzYw5WEvHsFooU=";
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

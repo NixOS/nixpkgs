@@ -2,26 +2,26 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  debtcollector,
   netaddr,
   oslo-i18n,
   pbr,
   pyyaml,
   requests,
   rfc3986,
+  setuptools,
   stevedore,
   callPackage,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-config";
-  version = "9.4.0";
-  format = "setuptools";
+  version = "10.1.0";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "oslo.config";
+    pname = "oslo_config";
     inherit version;
-    hash = "sha256-NbEaZhtgjttQMF2tkeTjCBnZDveUt9fbpb2LLvLrjA0=";
+    hash = "sha256-k6aPm9UiQhmLQEuweyuB9kQAgESkiC6xtQQkF7mBmzY=";
   };
 
   postPatch = ''
@@ -30,8 +30,9 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  propagatedBuildInputs = [
-    debtcollector
+  build-system = [ setuptools ];
+
+  dependencies = [
     netaddr
     oslo-i18n
     pbr
@@ -54,6 +55,6 @@ buildPythonPackage rec {
     description = "Oslo Configuration API";
     homepage = "https://github.com/openstack/oslo.config";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

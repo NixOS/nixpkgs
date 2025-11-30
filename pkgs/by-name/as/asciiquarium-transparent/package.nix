@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "asciiquarium-transparent";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "nothub";
     repo = "asciiquarium";
-    rev = "${finalAttrs.version}";
-    hash = "sha256-zQyVIfwmhF3WsCeIZLwjDufvKzAfjLxaK2s7WTedqCg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-lUNPg+/R/UwnHxjVXROMjvQxBZuCPBrYWB546OHplJM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "An aquarium/sea animation in ASCII art (with option of transparent background)";
+    description = "Aquarium/sea animation in ASCII art (with option of transparent background)";
     homepage = "https://github.com/nothub/asciiquarium";
     license = lib.licenses.gpl2Only;
     mainProgram = "asciiquarium";

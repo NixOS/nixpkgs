@@ -1,19 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, unstableGitUpdater
-, pkg-config
-, glfw
-, libvgm
-, libX11
-, libXau
-, libXdmcp
-, Carbon
-, Cocoa
-, cppunit
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  pkg-config,
+  glfw,
+  libvgm,
+  libX11,
+  libXau,
+  libXdmcp,
+  cppunit,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mmlgui";
   version = "210420-preview-unstable-2024-04-15";
 
@@ -54,13 +53,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glfw
     libvgm
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libX11
     libXau
     libXdmcp
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Carbon
-    Cocoa
   ];
 
   checkInputs = [

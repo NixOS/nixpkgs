@@ -40,6 +40,6 @@ buildPythonPackage rec {
     homepage = "https://hitchdev.com/strictyaml/";
     changelog = "https://hitchdev.com/strictyaml/changelog/";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

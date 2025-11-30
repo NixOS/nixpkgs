@@ -1,27 +1,36 @@
-{ lib
-, fetchFromGitLab
-, cmake
-, extra-cmake-modules
-, ffmpeg
-, openal
-, stdenv
-, libsForQt5
+{
+  lib,
+  fetchFromGitLab,
+  cmake,
+  extra-cmake-modules,
+  ffmpeg_6,
+  openal,
+  stdenv,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation rec {
   pname = "subtitlecomposer";
-  version = "0.8.0";
+  version = "0.8.2";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "multimedia";
     repo = "subtitlecomposer";
     rev = "v${version}";
-    hash = "sha256-RKS3VTtpxnox0hzessMHmoGPpT+Ho0b3fxtQMGw9OrM=";
+    hash = "sha256-zGbI960NerlOEUvhOLm+lEJdbhj8VFUfm8pkOYGRcGw=";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules libsForQt5.wrapQtAppsHook ];
-  buildInputs = [ ffmpeg openal ] ++ (with libsForQt5; [
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    libsForQt5.wrapQtAppsHook
+  ];
+  buildInputs = [
+    ffmpeg_6
+    openal
+  ]
+  ++ (with libsForQt5; [
     kcodecs
     kconfig
     kconfigwidgets
@@ -36,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://apps.kde.org/subtitlecomposer";
-    description = "An open source text-based subtitle editor";
+    description = "Open source text-based subtitle editor";
     longDescription = ''
       An open source text-based subtitle editor that supports basic and
       advanced editing operations, aiming to become an improved version of

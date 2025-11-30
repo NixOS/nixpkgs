@@ -1,32 +1,51 @@
-{ lib,
-buildGoModule,
-fetchFromGitHub,
-nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
+  nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "glance";
-  version = "0.4.0";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "glanceapp";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-vcK8AW+B/YK4Jor86SRvJ8XFWvzeAUX5mVbXwrgxGlA=";
+    repo = "glance";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4su8CGtS4wqWcQ3yTvZiUHOnTMLICS3XIG8kS+bJ3LQ=";
   };
 
-  vendorHash = "sha256-Okme73vLc3Pe9+rNlmG8Bj1msKaVb5PaIBsAAeTer6s=";
+  vendorHash = "sha256-Ek1LVCSEJzoI0nVu6zVsSbd/Jzv6/pyMIm991ebvkZY=";
 
-  excludedPackages = [ "scripts/build-and-ship" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/glanceapp/glance/internal/glance.buildVersion=v${finalAttrs.version}"
+  ];
 
-  passthru.updateScript = nix-update-script { };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      service = nixosTests.glance;
+    };
+  };
+
+  meta = {
     homepage = "https://github.com/glanceapp/glance";
-    changelog = "https://github.com/glanceapp/glance/releases/tag/v${version}";
-    description = "A self-hosted dashboard that puts all your feeds in one place";
+    changelog = "https://github.com/glanceapp/glance/releases/tag/v${finalAttrs.version}";
+    description = "Self-hosted dashboard that puts all your feeds in one place";
     mainProgram = "glance";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ dvn0 ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
+      dvn0
+      defelo
+    ];
   };
-}
+})

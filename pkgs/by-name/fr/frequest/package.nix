@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, qt5 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  qt5,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "frequest";
@@ -59,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A fast, lightweight and opensource desktop application to make HTTP(s) requests";
+    description = "Fast, lightweight and opensource desktop application to make HTTP(s) requests";
     homepage = "https://fabiobento512.github.io/FRequest";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ eliandoran ];

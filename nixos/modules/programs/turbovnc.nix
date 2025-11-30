@@ -1,6 +1,11 @@
 # Global configuration for the SSH client.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.turbovnc;
@@ -17,7 +22,7 @@ in
           Whether to set up NixOS such that TurboVNC's built-in software OpenGL
           implementation works.
 
-          This will enable {option}`hardware.opengl.enable` so that OpenGL
+          This will enable {option}`hardware.graphics.enable` so that OpenGL
           programs can find Mesa's llvmpipe drivers.
 
           Setting this option to `false` does not mean that software
@@ -40,13 +45,13 @@ in
     # software rendering to implement GLX (OpenGL on Xorg).
     # However, just building TurboVNC with support for that is not enough
     # (it only takes care of the X server side part of OpenGL);
-    # the indiviudual applications (e.g. `glxgears`) also need to directly load
+    # the individual applications (e.g. `glxgears`) also need to directly load
     # the OpenGL libs.
     # Thus, this creates `/run/opengl-driver` populated by Mesa so that the applications
     # can find the llvmpipe `swrast.so` software rendering DRI lib via `libglvnd`.
     # This comment exists to explain why `hardware.` is involved,
     # even though 100% software rendering is used.
-    hardware.opengl.enable = true;
+    hardware.graphics.enable = true;
 
   };
 }

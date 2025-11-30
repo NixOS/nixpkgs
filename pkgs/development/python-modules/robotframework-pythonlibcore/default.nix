@@ -3,7 +3,6 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  fetchpatch2,
   setuptools,
   robotframework,
   approvaltests,
@@ -14,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "robotframework-pythonlibcore";
-  version = "4.4.0";
+  version = "4.4.1";
 
   disabled = pythonOlder "3.8";
 
@@ -23,16 +22,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "robotframework";
     repo = "PythonLibCore";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-282A4EW88z6ODSIEIIeBbN8YO491rwI4M7njI7kL3XQ=";
+    tag = "v${version}";
+    hash = "sha256-5RUi65+DljCqWoB8vZxc0hyIefEFOWuKluplXrD0SkI=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/robotframework/PythonLibCore/commit/8b756a4bd119d660109437023789bfada21bdc78.patch";
-      hash = "sha256-4NtgkGbIj9gH9Det6VNh1MpGSGroESxQ8X2ZTeoX/zU=";
-    })
-  ];
 
   build-system = [ setuptools ];
 

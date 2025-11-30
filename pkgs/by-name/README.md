@@ -18,7 +18,7 @@ pkgs
 
 ```
 
-Where `some-package` is the package name and `so` is the lowercased 2-letter prefix of the package name.
+Where `some-package` is the attribute name corresponding to the package, and `so` is the lowercase 2-letter prefix of the attribute name.
 
 The `package.nix` may look like this:
 
@@ -37,8 +37,7 @@ The `package.nix` may look like this:
 # The return value must be a derivation
 stdenv.mkDerivation {
   # ...
-  buildInputs =
-    lib.optional enableBar libbar;
+  buildInputs = lib.optional enableBar libbar;
 }
 ```
 
@@ -63,38 +62,51 @@ The above expression is called using these arguments by default:
 ```
 
 But the package might need `pkgs.libbar_2` instead.
-While the function could be changed to take `libbar_2` directly as an argument,
-this would change the `.override` interface, breaking code like `.override { libbar = ...; }`.
-So instead it is preferable to use the same generic parameter name `libbar`
-and override its value in [`pkgs/top-level/all-packages.nix`](../top-level/all-packages.nix):
+While the `libbar` argument could explicitly be overridden in `all-packages.nix` with `libbar_2`, this would hide important information about this package from its interface.
+The fact that the package requires a certain version of `libbar` to work should not be hidden in a separate place.
+It is preferable to use `libbar_2` as a argument name instead.
 
-```nix
-{
-  libfoo = callPackage ../by-name/so/some-package/package.nix {
-    libbar = libbar_2;
-  };
-}
-```
+This approach also has the benefit that, if the expectation of the package changes to require a different version of `libbar`, a downstream user with an override of this argument will receive an error.
+This is comparable to a merge conflict in git: It's much better to be forced to explicitly address the conflict instead of silently keeping the override - which might lead to a different problem that is likely much harder to debug.
 
 ## Manual migration guidelines
 
 Most packages are still defined in `all-packages.nix` and the [category hierarchy](../README.md#category-hierarchy).
-Please hold off migrating your maintained packages to this directory.
+Since it would take a lot of contributor and reviewer time to migrate all packages manually,
+an [automated migration is planned](https://github.com/NixOS/nixpkgs/pull/211832),
+though it is expected to still take some time to get done.
+If you're interested in helping out with this effort,
+please see [this ticket](https://github.com/NixOS/nixpkgs-vet/issues/56).
 
-1. An automated migration for the majority of packages [is being worked on](https://github.com/NixOS/nixpkgs/pull/211832).
-   In order to save on contributor and reviewer time, packages should only be migrated manually afterwards if they couldn't be migrated automatically.
+Since [only PRs to packages in `pkgs/by-name` can be automatically merged](../../CONTRIBUTING.md#how-to-merge-pull-requests-yourself),
+if package maintainers would like to use this feature, they are welcome to migrate their packages to `pkgs/by-name`.
+To lessen PR traffic, they're encouraged to also perform some more general maintenance on the package in the same PR,
+though this is not required and must not be expected.
 
-1. Manual migrations should only be lightly encouraged if the relevant code is being worked on anyways.
-   For example with a package update or refactoring.
+Note that `callPackage` definitions in `all-packages.nix` with custom arguments should not be removed.
+That is a backwards-incompatible change because it changes the `.override` interface.
+Such packages may still be moved to `pkgs/by-name` however, in order to avoid the slightly superficial choice of directory / category in which the `default.nix` file was placed, but please keep the definition in `all-packages.nix` using `callPackage`.
+See also [changing implicit attribute defaults](#changing-implicit-attribute-defaults).
 
-1. Manual migrations should not remove definitions from `all-packages.nix` with custom arguments.
-   That is a backwards-incompatible change because it changes the `.override` interface.
-   Such packages may still be moved to `pkgs/by-name` however, while keeping the definition in `all-packages.nix`.
-   See also [changing implicit attribute defaults](#changing-implicit-attribute-defaults).
+Definitions like the following however, _can_ be transitioned:
+
+```nix
+# all-packages.nix
+{
+  fooWithBaz = foo.override { bar = baz; };
+}
+```
+
+```nix
+# turned into pkgs/by-name/fo/fooWithBaz/package.nix with:
+{ foo, baz }:
+
+foo.override { bar = baz; }
+```
 
 ## Limitations
 
-There's some limitations as to which packages can be defined using this structure:
+There are some limitations as to which packages can be defined using this structure:
 
 - Only packages defined using `pkgs.callPackage`.
   This excludes packages defined using `pkgs.python3Packages.callPackage ...`.
@@ -110,16 +122,14 @@ There's some limitations as to which packages can be defined using this structur
 
 ## Validation
 
-CI performs [certain checks](https://github.com/NixOS/nixpkgs-check-by-name?tab=readme-ov-file#validity-checks) on the `pkgs/by-name` structure.
-This is done using the [`nixpkgs-check-by-name` tool](https://github.com/NixOS/nixpkgs-check-by-name).
+CI performs [certain checks](https://github.com/NixOS/nixpkgs-vet?tab=readme-ov-file#validity-checks) on the `pkgs/by-name` structure.
+This is done using the [`nixpkgs-vet` tool](https://github.com/NixOS/nixpkgs-vet).
 
 You can locally emulate the CI check using
 
 ```
-$ ./maintainers/scripts/check-by-name.sh master
+$ ./ci/nixpkgs-vet.sh master
 ```
-
-See [here](../../.github/workflows/check-by-name.yml) for more info.
 
 ## Recommendation for new packages with multiple versions
 
@@ -163,10 +173,7 @@ because it establishes a clear connection between related attributes.
 This is not required, but the above solution also allows refactoring the definitions into a separate file:
 
 ```nix
-{
-  inherit (import ../tools/foo pkgs)
-    foo_1 foo_2;
-}
+{ inherit (import ../tools/foo pkgs) foo_1 foo_2; }
 ```
 
 ```nix
@@ -181,19 +188,19 @@ Alternatively using [`callPackages`](https://nixos.org/manual/nixpkgs/unstable/#
 if `callPackage` isn't used underneath and you want the same `.override` arguments for all attributes:
 
 ```nix
-{
-  inherit (callPackages ../tools/foo { })
-    foo_1 foo_2;
-}
+{ inherit (callPackages ../tools/foo { }) foo_1 foo_2; }
 ```
 
 ```nix
 # pkgs/tools/foo/default.nix
+{ stdenv }:
 {
-  stdenv
-}: {
-  foo_1 = stdenv.mkDerivation { /* ... */ };
-  foo_2 = stdenv.mkDerivation { /* ... */ };
+  foo_1 = stdenv.mkDerivation {
+    # ...
+  };
+  foo_2 = stdenv.mkDerivation {
+    # ...
+  };
 }
 ```
 

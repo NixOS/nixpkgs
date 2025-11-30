@@ -1,8 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
   setuptools-scm,
   pytestCheckHook,
   filelock,
@@ -14,36 +14,39 @@
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
-  version = "3.5.0";
-  disabled = pythonOlder "3.7";
-
+  version = "3.8.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-y7NvPWfgxHi6pX+k7ciEOIfg9s/ELWd1MKNtdHKzLYo=";
+  src = fetchFromGitHub {
+    owner = "pytest-dev";
+    repo = "pytest-xdist";
+    tag = "v${version}";
+    hash = "sha256-2x3znm92wo8DCshf5sYK0stnESg0oVXbxsWRAaTj6oQ=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [ execnet ];
+  dependencies = [ execnet ];
 
   nativeCheckInputs = [
     filelock
     pytestCheckHook
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     psutil = [ psutil ];
     setproctitle = [ setproctitle ];
   };
 
-  pytestFlagsArray = [
-    # pytest can already use xdist at this point
-    "--numprocesses=$NIX_BUILD_CORES"
-  ];
+  # pytest can already use xdist at this point
+  preCheck = ''
+    appendToVar pytestFlags "--numprocesses=$NIX_BUILD_CORES"
+  '';
 
   # access file system
   disabledTests = [
@@ -61,11 +64,11 @@ buildPythonPackage rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib; {
-    changelog = "https://github.com/pytest-dev/pytest-xdist/blob/v${version}/CHANGELOG.rst";
-    description = "Pytest xdist plugin for distributed testing and loop-on-failing modes";
+  meta = {
+    changelog = "https://github.com/pytest-dev/pytest-xdist/blob/${src.tag}/CHANGELOG.rst";
+    description = "Pytest plugin for distributed testing";
     homepage = "https://github.com/pytest-dev/pytest-xdist";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

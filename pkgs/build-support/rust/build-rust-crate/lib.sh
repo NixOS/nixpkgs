@@ -60,7 +60,11 @@ build_bin() {
     --color ${colors} \
 
   if [ "$crate_name_" != "$crate_name" ]; then
-    mv target/bin/$crate_name_ target/bin/$crate_name
+    if [ -f "target/bin/$crate_name_.wasm" ]; then
+      mv target/bin/$crate_name_.wasm target/bin/$crate_name.wasm
+    else
+      mv target/bin/$crate_name_ target/bin/$crate_name
+    fi
   fi
 }
 
@@ -113,6 +117,12 @@ setup_link_paths() {
   if [[ -e target/link ]]; then
      tr '\n' ' ' < target/link > target/link_
      LINK=$(cat target/link_)
+  fi
+
+  # Add "rustc-cdylib-link-arg" as linker arguments
+  # https://doc.rust-lang.org/cargo/reference/build-scripts.html#rustc-cdylib-link-arg
+  if [[ -n "$CRATE_TYPE_IS_CDYLIB" ]]; then
+    EXTRA_BUILD+=" $EXTRA_CDYLIB_LINK_ARGS"
   fi
 }
 

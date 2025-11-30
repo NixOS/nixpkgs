@@ -1,8 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, python, stdenv }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  python,
+  stdenv,
+}:
 
 buildPythonPackage rec {
   pname = "futures";
   version = "3.3.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -16,12 +24,12 @@ buildPythonPackage rec {
     ${python.interpreter} test_futures.py
   '';
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Backport of the concurrent.futures package from Python 3.2";
     homepage = "https://github.com/agronholm/pythonfutures";
     license = licenses.bsd2;
-    maintainers = with maintainers; [  ];
+    maintainers = [ ];
   };
 }

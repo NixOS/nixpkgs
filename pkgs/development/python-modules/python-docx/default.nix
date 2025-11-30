@@ -2,7 +2,7 @@
   lib,
   behave,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   lxml,
   mock,
   pyparsing,
@@ -14,19 +14,21 @@
 
 buildPythonPackage rec {
   pname = "python-docx";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-WCm3IhQc8at5rt8MNNn+mSSyl2RYTA8hZOsrAtzfF8k=";
+  src = fetchFromGitHub {
+    owner = "python-openxml";
+    repo = "python-docx";
+    tag = "v${version}";
+    hash = "sha256-5x2VmMiY5fZiXoswCDcs89olL0vbpGzmJZThrNS/SmI=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     lxml
     typing-extensions
   ];
@@ -49,9 +51,8 @@ buildPythonPackage rec {
     "it_accepts_unicode_providing_there_is_no_encoding_declaration"
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = with lib; {

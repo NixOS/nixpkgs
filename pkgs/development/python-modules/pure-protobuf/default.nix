@@ -8,13 +8,13 @@
   typing-extensions,
   pytestCheckHook,
   pytest-benchmark,
-  pytest-cov,
+  pytest-cov-stub,
   pydantic,
 }:
 
 buildPythonPackage rec {
   pname = "pure-protobuf";
-  version = "3.1.0";
+  version = "3.1.5";
 
   format = "pyproject";
   # < 3.10 requires get-annotations which isn't packaged yet
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eigenein";
     repo = "protobuf";
-    rev = "refs/tags/${version}";
-    hash = "sha256-JXC68iEX5VepIe4qpugvY0Qb3JlM5mPGHnUVWvb1TDA=";
+    tag = version;
+    hash = "sha256-Gr5fKpagSUzH34IKHb+pBta4q71AqYa/KG9XW2AxZqk=";
   };
 
   build-system = [
@@ -39,17 +39,17 @@ buildPythonPackage rec {
     pydantic
     pytestCheckHook
     pytest-benchmark
-    pytest-cov
+    pytest-cov-stub
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "pure_protobuf" ];
 
   meta = with lib; {
     description = "Python implementation of Protocol Buffers with dataclass-based schemas";
     homepage = "https://github.com/eigenein/protobuf";
-    changelog = "https://github.com/eigenein/protobuf/releases/tag/${version}";
+    changelog = "https://github.com/eigenein/protobuf/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ chuangzhu ];
   };

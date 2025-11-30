@@ -7,6 +7,7 @@
   certifi,
   ecs-logging,
   fetchFromGitHub,
+  fetchpatch,
   httpx,
   jinja2,
   jsonschema,
@@ -18,8 +19,6 @@
   pytest-mock,
   pytest-random-order,
   pytestCheckHook,
-  pythonOlder,
-  pythonRelaxDepsHook,
   sanic,
   sanic-testing,
   setuptools,
@@ -33,23 +32,17 @@
 
 buildPythonPackage rec {
   pname = "elastic-apm";
-  version = "6.22.2";
+  version = "6.24.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "apm-agent-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AHKF+o0iZ+c1JFq3lL5XdHBDAae9qTR1OJvwuUVsaeU=";
+    tag = "v${version}";
+    hash = "sha256-8Q2fzaIG9dghjt4T00nqffGEfPDr4DEcdeHPJqhU8fs=";
   };
 
-  pythonRelaxDeps = [ "wrapt" ];
-
   build-system = [ setuptools ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     aiohttp
@@ -80,25 +73,29 @@ buildPythonPackage rec {
     webob
   ];
 
-  disabledTests = [ "elasticapm_client" ];
+  disabledTests = [
+    "elasticapm_client"
+    "test_get_name_from_func_partialmethod_unbound"
+  ];
 
-  disabledTestPaths =
-    [
-      # Exclude tornado tests
-      "tests/contrib/asyncio/tornado/tornado_tests.py"
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      # Flaky tests on Darwin
-      "tests/utils/threading_tests.py"
-    ];
+  disabledTestPaths = [
+    # Exclude tornado tests
+    "tests/contrib/asyncio/tornado/tornado_tests.py"
+    # Exclude client tests
+    "tests/instrumentation/asyncio_tests/aiohttp_client_tests.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Flaky tests on Darwin
+    "tests/utils/threading_tests.py"
+  ];
 
   pythonImportsCheck = [ "elasticapm" ];
 
   meta = with lib; {
     description = "Python agent for the Elastic APM";
     homepage = "https://github.com/elastic/apm-agent-python";
-    changelog = "https://github.com/elastic/apm-agent-python/releases/tag/v${version}";
-    license = with licenses; [ bsd3 ];
+    changelog = "https://github.com/elastic/apm-agent-python/releases/tag/${src.tag}";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
     mainProgram = "elasticapm-run";
   };

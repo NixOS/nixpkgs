@@ -1,8 +1,6 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
-  django,
   dnspython,
   fetchFromGitHub,
   protobuf,
@@ -20,10 +18,11 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   setupPyBuildFlags = [
-    "--with-mysql-capi=\"${mysql80}\""
-    "--with-openssl-include-dir=\"${openssl.dev}/include\""
-    "--with-openssl-lib-dir=\"${lib.getLib openssl}/lib\""
-    "-L \"${lib.getLib pkgs.zstd}/lib:${lib.getLib mysql80}/lib\""
+    "--with-mysql-capi=${mysql80}"
+    "--with-openssl-include-dir=${openssl.dev}/include"
+    "--with-openssl-lib-dir=${lib.getLib openssl}/lib"
+    "-L"
+    "${lib.getLib pkgs.zstd}/lib:${lib.getLib mysql80}/lib"
   ];
 
   src = fetchFromGitHub {
@@ -58,7 +57,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A MySQL driver";
+    description = "MySQL driver";
     longDescription = ''
       A MySQL driver that does not depend on MySQL C client libraries and
       implements the DB API v2.0 specification.
@@ -68,7 +67,6 @@ buildPythonPackage rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [
       neosimsim
-      turion
     ];
   };
 }

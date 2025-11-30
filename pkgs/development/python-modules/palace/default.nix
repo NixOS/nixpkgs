@@ -7,7 +7,6 @@
   cython_0,
   setuptools,
   alure2,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromSourcehut {
     owner = "~cnx";
-    repo = pname;
+    repo = "palace";
     rev = version;
     sha256 = "1z0m35y4v1bg6vz680pwdicm9ssryl0q6dm9hfpb8hnifmridpcj";
   };
@@ -27,7 +26,8 @@ buildPythonPackage rec {
   # Nix uses Release CMake configuration instead of what is assumed by palace.
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace IMPORTED_LOCATION_NOCONFIG IMPORTED_LOCATION_RELEASE
+      --replace-fail IMPORTED_LOCATION_NOCONFIG IMPORTED_LOCATION_RELEASE \
+      --replace-fail "cmake_minimum_required(VERSION 2.6.0)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   build-system = [

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gtk3
-, glib
-, gsettings-desktop-schemas
-, pkg-config
-, curl
-, openssl
-, jansson
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gtk3,
+  glib,
+  gsettings-desktop-schemas,
+  pkg-config,
+  curl,
+  openssl,
+  jansson,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Linux-native graphical uploader for iBroadcast";
+    description = "Linux-native graphical uploader for iBroadcast";
     downloadPage = "https://github.com/tobz619/MediaSyncLiteLinuxNix";
     homepage = "https://github.com/iBroadcastMediaServices/MediaSyncLiteLinux";
     license = licenses.gpl3Only;

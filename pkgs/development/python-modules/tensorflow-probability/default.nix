@@ -1,34 +1,47 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  bazel_6,
+  fetchpatch2,
+
+  # bazel wheel
   buildBazelPackage,
-  buildPythonPackage,
-  cctools,
+  fetchFromGitHub,
+
+  # nativeBuildInputs
   python,
   setuptools,
   wheel,
   absl-py,
-  tensorflow,
-  six,
-  numpy,
-  dm-tree,
-  keras,
-  decorator,
+
+  #bazel_6,
+  bazel,
+  cctools,
+
+  # python package
+  buildPythonPackage,
+
+  # dependencies
   cloudpickle,
+  decorator,
+  dm-tree,
   gast,
+  keras,
+  numpy,
+  six,
+  tensorflow,
+
+  # tests
   hypothesis,
-  scipy,
-  pandas,
-  mpmath,
   matplotlib,
   mock,
+  mpmath,
+  pandas,
   pytest,
+  scipy,
 }:
 
 let
-  version = "0.21.0";
+  version = "0.25.0";
   pname = "tensorflow-probability";
 
   # first build all binaries and generate setup.py using bazel
@@ -38,21 +51,34 @@ let
       owner = "tensorflow";
       repo = "probability";
       rev = "refs/tags/v${version}";
-      hash = "sha256-DsJd1E5n86xNS7Ci0DXxoUxQ9jH8OwTZq2UuLlQtMUU=";
+      hash = "sha256-LXQfGFgnM7WYUQjJ2Y3jskdeJ/dEKz+Afg+UOQjv5kc=";
     };
+
+    patches = [
+      # AttributeError: jax.interpreters.xla.pytype_aval_mappings was deprecated in JAX v0.5.0 and
+      # removed in JAX v0.7.0. jax.core.pytype_aval_mappings can be used as a replacement in most cases.
+      # TODO: remove when updating to the next release
+      (fetchpatch2 {
+        name = "future-proof-reference-to-deprecated-pytype_aval_mappings";
+        url = "https://github.com/tensorflow/probability/commit/135080b6b1ac5724fc1731b0a9ca6f2010b1aea5.patch";
+        hash = "sha256-27yWIw5pI86KcUz0TsYwRFyLDoeiqmxgsRMBXaauzVw=";
+      })
+    ];
+
     nativeBuildInputs = [
+      absl-py
       # needed to create the output wheel in installPhase
       python
       setuptools
-      wheel
-      absl-py
       tensorflow
+      wheel
     ];
 
-    bazel = bazel_6;
+    #bazel = bazel_6;
+    bazel = bazel;
 
     bazelTargets = [ ":pip_pkg" ];
-    LIBTOOL = lib.optionalString stdenv.isDarwin "${cctools}/bin/libtool";
+    LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
 
     fetchAttrs = {
       sha256 = "sha256-TbWcWYidyXuAMgBnO2/k0NKCzc4wThf2uUeC3QxdBJY=";
@@ -83,27 +109,27 @@ buildPythonPackage {
 
   src = bazel-wheel;
 
-  propagatedBuildInputs = [
-    tensorflow
-    six
-    numpy
-    decorator
+  dependencies = [
     cloudpickle
-    gast
+    decorator
     dm-tree
+    gast
     keras
+    numpy
+    six
+    tensorflow
   ];
 
   # Listed here:
   # https://github.com/tensorflow/probability/blob/f3777158691787d3658b5e80883fe1a933d48989/testing/dependency_install_lib.sh#L83
   nativeCheckInputs = [
     hypothesis
-    pytest
-    scipy
-    pandas
-    mpmath
     matplotlib
     mock
+    mpmath
+    pandas
+    pytest
+    scipy
   ];
 
   # Ideally, we run unit tests with pytest, but in checkPhase, only the Bazel-build wheel is available.
@@ -114,10 +140,13 @@ buildPythonPackage {
   # sanity check
   pythonImportsCheck = [ "tensorflow_probability" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for probabilistic reasoning and statistical analysis";
     homepage = "https://www.tensorflow.org/probability/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ GaetanLepage ];
+    changelog = "https://github.com/tensorflow/probability/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+    # Needs update for Bazel 7.
+    broken = true;
   };
 }

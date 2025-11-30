@@ -9,27 +9,21 @@
 
 buildPythonPackage rec {
   pname = "pygmars";
-  version = "0.8.0";
-  format = "setuptools";
+  version = "1.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "nexB";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-PiH1lV1Vt9VTSOB+jep8FHIdk8qnauxj4nP3CIi/m7o=";
+    repo = "pygmars";
+    tag = "v${version}";
+    hash = "sha256-AbBhWR9ycOFrxS7Vz0bSsSyS3FEEm2bXJAvMhIba6XQ=";
   };
-
-  postPatch = ''
-    # https://github.com/nexB/pygmars/pull/9
-    substituteInPlace setup.cfg \
-      --replace ">=3.6.*" ">=3.6"
-  '';
 
   dontConfigure = true;
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -38,7 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python lexing and parsing library";
     homepage = "https://github.com/nexB/pygmars";
-    changelog = "https://github.com/nexB/pygmars/releases/tag/v${version}";
+    changelog = "https://github.com/aboutcode-org/pygmars/blob/${src.tag}/CHANGELOG.rst";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

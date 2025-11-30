@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, bootstrapped-pip
-, fetchFromGitHub
-, mock
-, scripttest
-, virtualenv
-, pretend
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  bootstrapped-pip,
+  fetchFromGitHub,
+  mock,
+  scripttest,
+  virtualenv,
+  pretend,
+  pytest,
 }:
 
 buildPythonPackage rec {
@@ -28,12 +29,18 @@ buildPythonPackage rec {
   # to force it a little.
   pipInstallFlags = [ "--ignore-installed" ];
 
-  nativeCheckInputs = [ mock scripttest virtualenv pretend pytest ];
+  nativeCheckInputs = [
+    mock
+    scripttest
+    virtualenv
+    pretend
+    pytest
+  ];
   # Pip wants pytest, but tests are not distributed
   doCheck = false;
 
   meta = {
-    description = "The PyPA recommended tool for installing Python packages";
+    description = "PyPA recommended tool for installing Python packages";
     license = with lib.licenses; [ mit ];
     homepage = "https://pip.pypa.io/";
     priority = 10;

@@ -1,14 +1,24 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 let
   cfg = config.systemd.sysupdate;
 
   format = pkgs.formats.ini { listToValue = toString; };
 
-  definitionsDirectory = utils.systemdUtils.lib.definitions
-    "sysupdate.d"
-    format
-    cfg.transfers;
+  # TODO: Switch back to using utils.systemdUtils.lib.definitions once
+  # https://github.com/systemd/systemd/pull/38187 is resolved. Also ensure
+  # utils.systemdUtils.lib.definitions is capable of setting a custom file
+  # suffix.
+  sysupdateTransfers = lib.mapAttrs' (name: value: {
+    name = "sysupdate.d/${name}.transfer";
+    value.source = format.generate "${name}.transfer" value;
+  }) cfg.transfers;
 in
 {
   options.systemd.sysupdate = {
@@ -21,9 +31,7 @@ in
         If enabled, updates are triggered in regular intervals via a
         `systemd.timer` unit.
 
-        Please see
-        <https://www.freedesktop.org/software/systemd/man/systemd-sysupdate.html>
-        for more details.
+        Please see {manpage}`systemd-sysupdate(8)` for more details.
       '';
     };
 
@@ -79,7 +87,11 @@ in
           Source = {
             Type = "url-file";
             Path = "https://download.example.com/";
-            MatchPattern = [ "nixos_@v+@l-@d.efi" "nixos_@v+@l.efi" "nixos_@v.efi" ];
+            MatchPattern = [
+              "nixos_@v+@l-@d.efi"
+              "nixos_@v+@l.efi"
+              "nixos_@v.efi"
+            ];
           };
 
           Target = {
@@ -101,8 +113,7 @@ in
       description = ''
         Specify transfers as a set of the names of the transfer files as the
         key and the configuration as its value. The configuration can use all
-        upstream options. See
-        <https://www.freedesktop.org/software/systemd/man/sysupdate.d.html>
+        upstream options. See {manpage}`sysupdate.d(5)`
         for all available options.
       '';
     };
@@ -110,13 +121,22 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = config.systemd.package.withSysupdate;
+        message = "Cannot enable systemd-sysupdate with systemd package not built with sysupdate support";
+      }
+    ];
 
     systemd.additionalUpstreamSystemUnits = [
       "systemd-sysupdate.service"
       "systemd-sysupdate.timer"
       "systemd-sysupdate-reboot.service"
       "systemd-sysupdate-reboot.timer"
+      "systemd-sysupdated.service"
     ];
+
+    systemd.services.systemd-sysupdated.aliases = [ "dbus-org.freedesktop.sysupdate1.service" ];
 
     systemd.timers = {
       "systemd-sysupdate" = {
@@ -129,8 +149,11 @@ in
       };
     };
 
-    environment.etc."sysupdate.d".source = definitionsDirectory;
+    environment.etc = sysupdateTransfers;
   };
 
-  meta.maintainers = with lib.maintainers; [ nikstur ];
+  meta.maintainers = with lib.maintainers; [
+    nikstur
+    jmbaur
+  ];
 }

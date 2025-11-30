@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "michaelarnauts";
     repo = "comfoconnect";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-I/0vCgSEi6mgYg1fMH4Ha7PoonewtqYYsvXZT8y4rJE=";
   };
 

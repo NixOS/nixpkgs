@@ -4,27 +4,35 @@
   fetchPypi,
   pytestCheckHook,
   python-dateutil,
+  pythonAtLeast,
   pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "freezegun";
-  version = "1.4.0";
+  version = "1.5.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EJObC6D/Wtrs87BqXC9zBx2WeOUHxertsjx2HVasd0s=";
+    hash = "sha256-eYuTcv3U2QfzPotqWLxk5oLZ/6jUlM5g94AZfugfrtE=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ python-dateutil ];
+  dependencies = [ python-dateutil ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.13") [
+    # https://github.com/spulec/freezegun/issues/547
+    "test_method_decorator_works_on_unittest_kwarg_frozen_time"
+    "test_method_decorator_works_on_unittest_kwarg_frozen_time_with_func"
+    "test_method_decorator_works_on_unittest_kwarg_hello"
+  ];
 
   pythonImportsCheck = [ "freezegun" ];
 

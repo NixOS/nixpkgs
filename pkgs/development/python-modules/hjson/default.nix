@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hjson";
     repo = "hjson-py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VrCLHfXShF45IEhGVQpryBzjxreQEunyghazDNKRh8k=";
   };
 
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A user interface for JSON";
+    description = "User interface for JSON";
     homepage = "https://github.com/hjson/hjson-py";
     changelog = "https://github.com/hjson/hjson-py/releases/tag/v${version}";
     license = licenses.mit;

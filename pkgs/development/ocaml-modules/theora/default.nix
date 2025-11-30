@@ -1,20 +1,21 @@
-{ lib, buildDunePackage, fetchFromGitHub, dune-configurator, ogg, libtheora }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  dune-configurator,
+  ogg,
+  libtheora,
+}:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "theora";
-  version = "0.4.0";
-
-  duneVersion = "3";
-
-  src = fetchFromGitHub {
-    owner = "savonet";
-    repo = "ocaml-theora";
-    rev = "v${version}";
-    hash = "sha256-VN1XYqxMCO0W9tMTqSAwWKv7GErTtRZgnC2SnmmV7+k=";
-  };
+  inherit (ogg) version src;
 
   buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [ ogg libtheora ];
+  propagatedBuildInputs = [
+    ogg
+    libtheora
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/savonet/ocaml-theora";

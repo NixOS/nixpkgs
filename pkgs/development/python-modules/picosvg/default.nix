@@ -11,14 +11,14 @@
 }:
 buildPythonPackage rec {
   pname = "picosvg";
-  version = "0.22.1";
+  version = "0.22.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "googlefonts";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-jG1rfamegnX8GXDwqkGFBFzUeycRLDObJvGbxNk6OpM=";
+    repo = "picosvg";
+    tag = "v${version}";
+    hash = "sha256-ocdHF0kYnfllpvul32itu1QtlDrqVeq5sT8Ecb5V1yk=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   # a few tests are failing on aarch64
-  doCheck = !stdenv.isAarch64;
+  doCheck = !stdenv.hostPlatform.isAarch64;
 
   meta = with lib; {
     description = "Tool to simplify SVGs";

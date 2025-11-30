@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   mock,
   pytestCheckHook,
   cryptography,
@@ -10,17 +11,26 @@
 
 buildPythonPackage rec {
   pname = "py-vapid";
-  version = "1.9.0";
-  format = "setuptools";
+  version = "1.9.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-BmSreJl0LvKyhzl6TUYe9pHtDML1hyBRKNjPYX/9uRk=";
+    pname = "py_vapid";
+    inherit version;
+    hash = "sha256-PIlzts+DhK0MmuZNYnDMxIDguSxwLY9eoswD5rUSR/k=";
   };
 
-  propagatedBuildInputs = [ cryptography ];
+  patches = [
+    # Fix tests with latest cryptography
+    # Upstream PR: https://github.com/web-push-libs/vapid/pull/110
+    ./cryptography.patch
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [ cryptography ];
 
   nativeCheckInputs = [
     mock
@@ -32,6 +42,6 @@ buildPythonPackage rec {
     mainProgram = "vapid";
     homepage = "https://github.com/mozilla-services/vapid";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,35 +1,48 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
 let
-  font-awesome = { version, hash, rev ? version }: stdenvNoCC.mkDerivation {
-    pname = "font-awesome";
-    inherit version;
+  font-awesome =
+    {
+      version,
+      hash,
+      rev ? version,
+    }:
+    stdenvNoCC.mkDerivation {
+      pname = "font-awesome";
+      inherit version;
 
-    src = fetchFromGitHub {
-      owner = "FortAwesome";
-      repo = "Font-Awesome";
-      inherit rev hash;
-    };
+      src = fetchFromGitHub {
+        owner = "FortAwesome";
+        repo = "Font-Awesome";
+        inherit rev hash;
+      };
 
-    installPhase = ''
-      runHook preInstall
+      installPhase = ''
+        runHook preInstall
 
-      install -m444 -Dt $out/share/fonts/opentype {fonts,otfs}/*.otf
+        install -m444 -Dt $out/share/fonts/opentype {fonts,otfs}/*.otf
 
-      runHook postInstall
-    '';
-
-    meta = with lib; {
-      description = "Font Awesome - OTF font";
-      longDescription = ''
-        Font Awesome gives you scalable vector icons that can instantly be customized.
-        This package includes only the OTF font. For full CSS etc. see the project website.
+        runHook postInstall
       '';
-      homepage = "https://fontawesome.com/";
-      license = licenses.ofl;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ abaldeau johnazoidberg ];
+
+      meta = with lib; {
+        description = "Font Awesome - OTF font";
+        longDescription = ''
+          Font Awesome gives you scalable vector icons that can instantly be customized.
+          This package includes only the OTF font. For full CSS etc. see the project website.
+        '';
+        homepage = "https://fontawesome.com/";
+        license = licenses.ofl;
+        platforms = platforms.all;
+        maintainers = with maintainers; [
+          abaldeau
+          johnazoidberg
+        ];
+      };
     };
-  };
 in
 {
   # Keeping version 4 and 5 because version 6 is incompatible for some icons. That
@@ -48,7 +61,11 @@ in
     hash = "sha256-gd23ZplNY56sm1lfkU3kPXUOmNmY5SRnT0qlQZRNuBo=";
   };
   v6 = font-awesome {
-    version = "6.5.2";
-    hash = "sha256-kUa/L/Krxb5v8SmtACCSC6CI3qTTOTr4Ss/FMRBlKuw=";
+    version = "6.7.2";
+    hash = "sha256-MaJG96kYj8ukJVyqOTDpkHH/eWr/ZlbVKk9AvJM7ub4=";
+  };
+  v7 = font-awesome {
+    version = "7.0.1";
+    hash = "sha256-ucKE4euZf7teosY+6X0W1wDOdnlW1SRcZhQdBvvOY1s=";
   };
 }

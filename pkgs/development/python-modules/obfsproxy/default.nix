@@ -35,7 +35,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A pluggable transport proxy";
+    description = "Pluggable transport proxy";
     homepage = "https://www.torproject.org/projects/obfsproxy";
     maintainers = with maintainers; [ thoughtpolice ];
   };

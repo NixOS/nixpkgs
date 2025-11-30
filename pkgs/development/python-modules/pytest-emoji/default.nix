@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hackebrot";
     repo = "pytest-emoji";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-GuKBbIIODDnMi9YMX3zR4Jc3cbK+Zibj1ZeWvYkUY24=";
   };
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A pytest plugin that adds emojis to test result report";
+    description = "Pytest plugin that adds emojis to test result report";
     homepage = "https://github.com/hackebrot/pytest-emoji";
     changelog = "https://github.com/hackebrot/pytest-emoji/releases/tag/0.2.0";
     license = licenses.mit;

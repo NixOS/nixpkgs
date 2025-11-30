@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools-scm }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+}:
 
 buildPythonPackage rec {
   pname = "filelock";
   version = "3.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/benediktschmitt/py-filelock";
-    description = "A platform independent file lock for Python";
+    description = "Platform independent file lock for Python";
     license = licenses.unlicense;
     maintainers = with maintainers; [ henkkalkwater ];
   };

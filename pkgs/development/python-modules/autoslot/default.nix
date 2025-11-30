@@ -4,30 +4,21 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "autoslot";
-  version = "2022.12.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "2025.11.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cjrh";
     repo = "autoslot";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-fG4rRwRubJt2aXChEsMybEKal6LscZI7GA2uwtK5Vtg=";
+    tag = "v${version}";
+    hash = "sha256-mPGfBUSKkskiiokqo/TJWdDzuvcg/LDULx+Gx8LexV8=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'requires = ["flit"]' 'requires = ["flit_core"]' \
-      --replace 'build-backend = "flit.buildapi"' 'build-backend = "flit_core.buildapi"'
-  '';
-
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

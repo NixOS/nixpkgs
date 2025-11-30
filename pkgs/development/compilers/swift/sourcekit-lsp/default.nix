@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, callPackage
-, fetchpatch
-, pkg-config
-, swift
-, swiftpm
-, swiftpm2nix
-, Foundation
-, XCTest
-, sqlite
-, ncurses
-, CryptoKit
-, LocalAuthentication
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchpatch,
+  pkg-config,
+  swift,
+  swiftpm,
+  swiftpm2nix,
+  Dispatch,
+  Foundation,
+  XCTest,
+  sqlite,
+  ncurses,
 }:
 let
   sources = callPackage ../sources.nix { };
@@ -21,7 +21,7 @@ let
   # are part of libsystem. Adding its headers to the search path causes strange
   # mixing and errors.
   # TODO: Find a better way to prevent this conflict.
-  ncursesInput = if stdenv.isDarwin then ncurses.out else ncurses;
+  ncursesInput = if stdenv.hostPlatform.isDarwin then ncurses.out else ncurses;
 in
 stdenv.mkDerivation {
   pname = "sourcekit-lsp";
@@ -29,29 +29,37 @@ stdenv.mkDerivation {
   inherit (sources) version;
   src = sources.sourcekit-lsp;
 
-  nativeBuildInputs = [ pkg-config swift swiftpm ];
+  nativeBuildInputs = [
+    pkg-config
+    swift
+    swiftpm
+  ];
   buildInputs = [
     Foundation
     XCTest
     sqlite
     ncursesInput
-  ] ++ lib.optionals stdenv.isDarwin [ CryptoKit LocalAuthentication ];
+  ];
+
+  env.LD_LIBRARY_PATH = lib.optionalString stdenv.hostPlatform.isLinux (
+    lib.makeLibraryPath [ Dispatch ]
+  );
 
   configurePhase = generated.configure + ''
     swiftpmMakeMutable indexstore-db
     patch -p1 -d .build/checkouts/indexstore-db -i ${./patches/indexstore-db-macos-target.patch}
-
-    swiftpmMakeMutable swift-tools-support-core
-    patch -p1 -d .build/checkouts/swift-tools-support-core -i ${fetchpatch {
-      url = "https://github.com/apple/swift-tools-support-core/commit/990afca47e75cce136d2f59e464577e68a164035.patch";
-      hash = "sha256-PLzWsp+syiUBHhEFS8+WyUcSae5p0Lhk7SSRdNvfouE=";
-      includes = [ "Sources/TSCBasic/FileSystem.swift" ];
-    }}
+    patch -p1 -d .build/checkouts/indexstore-db -i ${
+      # Fix the build with modern Clang.
+      fetchpatch {
+        url = "https://github.com/swiftlang/indexstore-db/commit/6120b53b1e8774ef4e2ad83438d4d94961331e72.patch";
+        hash = "sha256-tMAfTIa3RKiA/jDtP02mHcpPaF2s9a+3q/PLJxqn30M=";
+      }
+    }
 
     # This toggles a section specific to Xcode XCTest, which doesn't work on
     # Darwin, where we also use swift-corelibs-xctest.
     substituteInPlace Sources/LSPTestSupport/PerfTestCase.swift \
-      --replace '#if os(macOS)' '#if false'
+      --replace-fail '#if os(macOS)' '#if false'
 
     # Required to link with swift-corelibs-xctest on Darwin.
     export SWIFTTSC_MACOS_DEPLOYMENT_TARGET=10.12
@@ -76,6 +84,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/apple/sourcekit-lsp";
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dtzWill trepetti dduan trundle stephank ];
+    teams = [ lib.teams.swift ];
   };
 }

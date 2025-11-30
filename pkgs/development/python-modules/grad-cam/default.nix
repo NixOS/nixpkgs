@@ -1,14 +1,14 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
   pythonOlder,
+  fetchPypi,
+  setuptools,
   matplotlib,
   numpy,
-  opencv4,
+  opencv-python,
   pillow,
   scikit-learn,
-  setuptools,
   torch,
   torchvision,
   ttach,
@@ -17,27 +17,31 @@
 
 buildPythonPackage rec {
   pname = "grad-cam";
-  version = "1.5.0";
+  version = "1.5.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aw7Z/6/AMKH2PVBcOr8HxsmRDa6c3v8Xd4xa8HTiFGA=";
+    hash = "sha256-aQxDPSJtNcicnrFwRi2yBJCcsGs5xzgeaICkm2/DcBU=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt\
-      --replace "opencv-python" "opencv"
-  '';
+  nativeBuildInputs = [
+  ];
 
-  nativeBuildInputs = [ setuptools ];
+  pythonRelaxDeps = [
+    "torchvision"
+  ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     matplotlib
     numpy
-    opencv4
+    opencv-python
     pillow
     scikit-learn
     torchvision
@@ -60,10 +64,10 @@ buildPythonPackage rec {
     "pytorch_grad_cam.utils.model_targets"
   ];
 
-  meta = with lib; {
-    description = "Advanced AI explainability for computer vision.";
+  meta = {
+    description = "Advanced AI explainability for computer vision";
     homepage = "https://jacobgil.github.io/pytorch-gradcam-book";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

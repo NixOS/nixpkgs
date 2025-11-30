@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "ijson";
-  version = "3.2.3";
+  version = "3.4.0.post0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EClOm/ictxPaBbxHkL3/YWYQQy21YZZIJwdImOF0+Rc=";
+    hash = "sha256-mqAtxwuyRWcKbKf7pze5kq7rSJU2CYBiL35Wjb8j5B4=";
   };
 
   build-system = [ setuptools ];
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ICRAR/ijson";
     changelog = "https://github.com/ICRAR/ijson/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

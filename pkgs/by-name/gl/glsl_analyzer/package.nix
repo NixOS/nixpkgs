@@ -1,25 +1,25 @@
-{ lib
-, pkgs
-, fetchFromGitHub
-, zig_0_12
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zig_0_14,
 }:
-
-let stdenv = if pkgs.stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else pkgs.stdenv; in
-
+let
+  zig = zig_0_14;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "glsl_analyzer";
-  version = "1.4.5";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "nolanderc";
     repo = "glsl_analyzer";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-+eYBw/F1RzI5waAkLgbV0J/Td91hbNcAtHcisQaL82k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-429S4iTkXQ64Fd153Xr7Z7eKbqKe0gI9yAvMPNV2/dE=";
   };
 
   nativeBuildInputs = [
-    zig_0_12.hook
+    zig.hook
   ];
 
   postPatch = ''

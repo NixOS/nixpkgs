@@ -1,32 +1,33 @@
-{ fetchFromGitHub
-, lib
-, stdenv
-, cmake
-, pkg-config
-, apacheHttpd
-, apr
-, aprutil
-, boost
-, cairo
-, curl
-, glib
-, harfbuzz
-, icu
-, iniparser
-, libmemcached
-, mapnik
-, nix-update-script
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  cmake,
+  pkg-config,
+  apacheHttpd,
+  apr,
+  aprutil,
+  boost,
+  cairo,
+  curl,
+  glib,
+  harfbuzz,
+  icu,
+  iniparser,
+  libmemcached,
+  mapnik,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mod_tile";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "mod_tile";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zXUwTG8cqAkY5MC1jAc2TtMgNMQPLc5nc22okVYP4ME=";
+    tag = "v${version}";
+    hash = "sha256-JC275LKsCeEo5DcIX0X7kcLoijQJqfJvBvw8xi2gwpk=";
   };
 
   nativeBuildInputs = [
@@ -64,13 +65,15 @@ stdenv.mkDerivation rec {
   installFlags = [ "DESTDIR=$(out)" ];
 
   doCheck = true;
+  # Do not run tests in parallel
+  enableParallelChecking = false;
 
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/openstreetmap/mod_tile";
     description = "Efficiently render and serve OpenStreetMap tiles using Apache and Mapnik";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jglukasik ];
     platforms = platforms.linux;
   };

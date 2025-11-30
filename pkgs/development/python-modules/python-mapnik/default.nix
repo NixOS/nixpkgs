@@ -2,9 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   isPyPy,
   python,
+  setuptools,
   pillow,
   pycairo,
   pkg-config,
@@ -21,23 +22,21 @@
   zlib,
   libxml2,
   sqlite,
-  nose,
   pytestCheckHook,
-  stdenv,
+  sparsehash,
+  pybind11,
 }:
 
 buildPythonPackage rec {
   pname = "python-mapnik";
-  version = "unstable-2023-02-23";
-  format = "setuptools";
+  version = "4.1.3.unstable-2025-09-25";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mapnik";
     repo = "python-mapnik";
-    # Use proj6 branch in order to support Proj >= 6 (excluding commits after 2023-02-23)
-    # https://github.com/mapnik/python-mapnik/compare/master...proj6
-    rev = "687b2c72a24c59d701d62e4458c380f8c54f0549";
-    hash = "sha256-q3Snd3K/JndckwAVwSKU+kFK5E1uph78ty7mwVo/7Ik=";
+    rev = "4b51d57911dc6a1a9f35c62c681fbdeb56fc69d4";
+    hash = "sha256-oXxfLvmptW1v19vaUj11nGEcTHOrneBIea2+GB6uK48=";
     # Only needed for test data
     fetchSubmodules = true;
   };
@@ -45,18 +44,22 @@ buildPythonPackage rec {
   patches = [
     # python-mapnik seems to depend on having the mapnik src directory
     # structure available at build time. We just hardcode the paths.
-    (substituteAll {
-      src = ./find-libmapnik.patch;
+    (replaceVars ./find-libmapnik.patch {
       libmapnik = "${mapnik}/lib";
     })
   ];
 
+  stdenv = python.stdenv;
+
+  build-system = [ setuptools ];
+
   nativeBuildInputs = [
     mapnik # for mapnik_config
     pkg-config
+    pybind11
   ];
 
-  buildInputs = [
+  dependencies = [
     mapnik
     boost
     cairo
@@ -70,6 +73,7 @@ buildPythonPackage rec {
     zlib
     libxml2
     sqlite
+    sparsehash
   ];
 
   propagatedBuildInputs = [
@@ -89,39 +93,43 @@ buildPythonPackage rec {
     export XMLPARSER=libxml2
   '';
 
-  nativeCheckInputs = [
-    nose
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck =
-    ''
-      # import from $out
-      rm -r mapnik
-    ''
-    + lib.optionalString stdenv.isDarwin ''
-      # Replace the hardcoded /tmp references with $TMPDIR
-      sed -i "s,/tmp,$TMPDIR,g" test/python_tests/*.py
-    '';
+  preCheck = ''
+    # import from $out
+    rm -r mapnik
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Replace the hardcoded /tmp references with $TMPDIR
+    sed -i "s,/tmp,$TMPDIR,g" test/python_tests/*.py
+  '';
 
   # https://github.com/mapnik/python-mapnik/issues/255
   disabledTests = [
     "test_geometry_type"
-    "test_marker_ellipse_render1"
-    "test_marker_ellipse_render2"
-    "test_normalizing_definition"
     "test_passing_pycairo_context_pdf"
     "test_pdf_printing"
-    "test_visual_zoom_all_rendering2"
-    "test_wgs84_inverse_forward"
-  ] ++ lib.optionals stdenv.isDarwin [ "test_passing_pycairo_context_svg" ];
+    "test_render_with_scale_factor"
+    "test_raster_warping"
+    "test_pycairo_svg_surface1"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_passing_pycairo_context_png"
+    "test_passing_pycairo_context_svg"
+    "test_pycairo_pdf_surface1"
+    "test_pycairo_pdf_surface2"
+    "test_pycairo_pdf_surface3"
+    "test_pycairo_svg_surface2"
+    "test_pycairo_svg_surface3"
+  ];
 
   pythonImportsCheck = [ "mapnik" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for Mapnik";
-    maintainers = with maintainers; [ ];
     homepage = "https://mapnik.org";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.geospatial ];
+    broken = true;
   };
 }

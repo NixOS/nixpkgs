@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 let
@@ -15,15 +16,18 @@ in
 python3.pkgs.buildPythonApplication {
   pname = "xmldiff";
   inherit version src;
+  pyproject = true;
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     lxml
-    setuptools
+    setuptools # pkg_resources is imported during runtime
   ];
 
   meta = {
     homepage = "https://xmldiff.readthedocs.io/en/stable/";
-    description = "A library and command line utility for diffing xml";
+    description = "Library and command line utility for diffing xml";
     longDescription = ''
       xmldiff is a library and a command-line utility for making diffs out of
       XML. This may seem like something that doesn't need a dedicated utility,
@@ -32,10 +36,10 @@ python3.pkgs.buildPythonApplication {
       computer readable data, it is also often used as a format for hierarchical
       data that can be rendered into human readable formats. A traditional diff
       on such a format would tell you line by line the differences, but this
-      would not be be readable by a human. xmldiff provides tools to make human
+      would not be readable by a human. xmldiff provides tools to make human
       readable diffs in those situations.
     '';
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres anpryl ];
+    maintainers = with lib.maintainers; [ anpryl ];
   };
 }

@@ -1,19 +1,19 @@
 { config, lib, ... }:
-
-with lib;
-
 {
   meta = {
-    maintainers = [ maintainers.joachifm ];
+    maintainers = [ lib.maintainers.joachifm ];
   };
 
   imports = [
-    (lib.mkRenamedOptionModule [ "security" "virtualization" "flushL1DataCache" ] [ "security" "virtualisation" "flushL1DataCache" ])
+    (lib.mkRenamedOptionModule
+      [ "security" "virtualization" "flushL1DataCache" ]
+      [ "security" "virtualisation" "flushL1DataCache" ]
+    )
   ];
 
   options = {
-    security.allowUserNamespaces = mkOption {
-      type = types.bool;
+    security.allowUserNamespaces = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether to allow creation of user namespaces.
@@ -31,8 +31,8 @@ with lib;
       '';
     };
 
-    security.unprivilegedUsernsClone = mkOption {
-      type = types.bool;
+    security.unprivilegedUsernsClone = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         When disabled, unprivileged users will not be able to create new namespaces.
@@ -41,16 +41,16 @@ with lib;
       '';
     };
 
-    security.protectKernelImage = mkOption {
-      type = types.bool;
+    security.protectKernelImage = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to prevent replacing the running kernel image.
       '';
     };
 
-    security.allowSimultaneousMultithreading = mkOption {
-      type = types.bool;
+    security.allowSimultaneousMultithreading = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether to allow SMT/hyperthreading.  Disabling SMT means that only
@@ -68,8 +68,8 @@ with lib;
       '';
     };
 
-    security.forcePageTableIsolation = mkOption {
-      type = types.bool;
+    security.forcePageTableIsolation = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to force-enable the Page Table Isolation (PTI) Linux kernel
@@ -80,8 +80,14 @@ with lib;
       '';
     };
 
-    security.virtualisation.flushL1DataCache = mkOption {
-      type = types.nullOr (types.enum [ "never" "cond" "always" ]);
+    security.virtualisation.flushL1DataCache = lib.mkOption {
+      type = lib.types.nullOr (
+        lib.types.enum [
+          "never"
+          "cond"
+          "always"
+        ]
+      );
       default = null;
       description = ''
         Whether the hypervisor should flush the L1 data cache before
@@ -100,41 +106,44 @@ with lib;
     };
   };
 
-  config = mkMerge [
-    (mkIf (!config.security.allowUserNamespaces) {
+  config = lib.mkMerge [
+    (lib.mkIf (!config.security.allowUserNamespaces) {
       # Setting the number of allowed user namespaces to 0 effectively disables
       # the feature at runtime.  Note that root may raise the limit again
       # at any time.
       boot.kernel.sysctl."user.max_user_namespaces" = 0;
 
       assertions = [
-        { assertion = config.nix.settings.sandbox -> config.security.allowUserNamespaces;
+        {
+          assertion = config.nix.settings.sandbox -> config.security.allowUserNamespaces;
           message = "`nix.settings.sandbox = true` conflicts with `!security.allowUserNamespaces`.";
         }
       ];
     })
 
-    (mkIf config.security.unprivilegedUsernsClone {
-      boot.kernel.sysctl."kernel.unprivileged_userns_clone" = mkDefault true;
+    (lib.mkIf config.security.unprivilegedUsernsClone {
+      boot.kernel.sysctl."kernel.unprivileged_userns_clone" = lib.mkDefault true;
     })
 
-    (mkIf config.security.protectKernelImage {
+    (lib.mkIf config.security.protectKernelImage {
       # Disable hibernation (allows replacing the running kernel)
       boot.kernelParams = [ "nohibernate" ];
       # Prevent replacing the running kernel image w/o reboot
-      boot.kernel.sysctl."kernel.kexec_load_disabled" = mkDefault true;
+      boot.kernel.sysctl."kernel.kexec_load_disabled" = lib.mkDefault true;
     })
 
-    (mkIf (!config.security.allowSimultaneousMultithreading) {
+    (lib.mkIf (!config.security.allowSimultaneousMultithreading) {
       boot.kernelParams = [ "nosmt" ];
     })
 
-    (mkIf config.security.forcePageTableIsolation {
+    (lib.mkIf config.security.forcePageTableIsolation {
       boot.kernelParams = [ "pti=on" ];
     })
 
-    (mkIf (config.security.virtualisation.flushL1DataCache != null) {
-      boot.kernelParams = [ "kvm-intel.vmentry_l1d_flush=${config.security.virtualisation.flushL1DataCache}" ];
+    (lib.mkIf (config.security.virtualisation.flushL1DataCache != null) {
+      boot.kernelParams = [
+        "kvm-intel.vmentry_l1d_flush=${config.security.virtualisation.flushL1DataCache}"
+      ];
     })
   ];
 }

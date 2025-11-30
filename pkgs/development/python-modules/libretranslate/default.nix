@@ -1,9 +1,10 @@
 {
   lib,
+  pkgs,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
   pytestCheckHook,
+  runCommand,
   hatchling,
   argostranslate,
   flask,
@@ -16,6 +17,7 @@
   expiringdict,
   langdetect,
   lexilang,
+  libretranslate,
   ltpycld2,
   morfessor,
   appdirs,
@@ -27,23 +29,23 @@
   prometheus-client,
   polib,
   python,
+  xorg,
 }:
 
 buildPythonPackage rec {
   pname = "libretranslate";
-  version = "1.5.7";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LibreTranslate";
     repo = "LibreTranslate";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-lOVi/809ig+KtiNwdt9Wovn+2Q8I6amps1sZ5JJy7WE=";
+    tag = "v${version}";
+    hash = "sha256-Hes5ZDzqbulUxEhuBCcwuOmNDClY8xyzeXbj1FaVvd0=";
   };
 
   build-system = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = true;
@@ -87,10 +89,30 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libretranslate" ];
 
+  passthru = {
+    static-compressed =
+      runCommand "libretranslate-data-compressed"
+        {
+          nativeBuildInputs = [
+            pkgs.brotli
+            xorg.lndir
+          ];
+        }
+        ''
+          mkdir -p $out/share/libretranslate/static
+          lndir ${libretranslate}/share/libretranslate/static $out/share/libretranslate/static
+
+          # Create static gzip and brotli files
+          find -L $out -type f -regextype posix-extended -iregex '.*\.(css|ico|js|svg|ttf)' \
+            -exec gzip --best --keep --force {} ';' \
+            -exec brotli --best --keep --no-copy-stat {} ';'
+        '';
+  };
+
   meta = with lib; {
     description = "Free and Open Source Machine Translation API. Self-hosted, no limits, no ties to proprietary services";
     homepage = "https://libretranslate.com";
-    changelog = "https://github.com/LibreTranslate/LibreTranslate/releases/tag/v${version}";
+    changelog = "https://github.com/LibreTranslate/LibreTranslate/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ misuzu ];
   };

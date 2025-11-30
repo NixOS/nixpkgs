@@ -1,34 +1,50 @@
 {
   lib,
   aiohttp,
+  aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  mashumaro,
+  pytest-asyncio,
+  pytestCheckHook,
   pythonOlder,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "fyta-cli";
-  version = "0.4.1";
+  version = "0.7.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "dontinelli";
     repo = "fyta_cli";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-eWuuHIq79n1oFsvBfVySfGCtHz+MlFRR3j8uqtVR+V0=";
+    tag = "v${version}";
+    hash = "sha256-YYH15ZuRZirSFC7No1goY/afk2BGtCCykcZAnCDdq7U=";
   };
 
   build-system = [ hatchling ];
 
-  dependencies = [ aiohttp ];
+  dependencies = [
+    aiohttp
+    mashumaro
+  ];
 
-  # Module has no tests
-  doCheck = false;
+  doCheck = false; # Failed: async def functions are not natively supported.
+
+  nativeCheckInputs = [
+    aioresponses
+    pytest-asyncio
+    pytestCheckHook
+    syrupy
+  ];
 
   pythonImportsCheck = [ "fyta_cli" ];
+
+  pytestFlags = [ "--snapshot-update" ];
 
   meta = with lib; {
     description = "Module to access the FYTA API";

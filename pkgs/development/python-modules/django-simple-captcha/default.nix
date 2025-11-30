@@ -1,47 +1,65 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  python,
-  testfixtures,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   django,
   django-ranged-response,
   pillow,
-  withTTS ? true,
+
+  # tests
   flite,
+  pytest-django,
+  pytestCheckHook,
+  testfixtures,
 }:
 
 buildPythonPackage rec {
   pname = "django-simple-captcha";
-  version = "0.6.0";
-  format = "setuptools";
+  version = "0.6.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-0YhRbTJvrdLVrQduuJZJ1VwCyrr+P9zCFUrBjp9tS5c=";
+  src = fetchFromGitHub {
+    owner = "mbi";
+    repo = "django-simple-captcha";
+    tag = "v${version}";
+    hash = "sha256-hOvZQCAAlMYaNpAN+junhfgWej92shto7ejhKUPqbX0=";
   };
 
-  nativeCheckInputs = [ testfixtures ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    django
+    pillow
+    django-ranged-response
+  ];
+
+  nativeCheckInputs = [
+    flite
+    pytest-django
+    pytestCheckHook
+    testfixtures
+  ];
 
   checkPhase = ''
-    cd testproject
-    ${python.interpreter} manage.py test captcha
+    runHook preCheck
+    pushd testproject
+    python manage.py test captcha
+    popd
+    runHook postCheck
   '';
-
-  propagatedBuildInputs = [
-    django
-    django-ranged-response
-    pillow
-  ] ++ lib.optional withTTS flite;
 
   meta = with lib; {
     description = "Customizable Django application to add captcha images to any Django form";
     homepage = "https://github.com/mbi/django-simple-captcha";
-    changelog = "https://github.com/mbi/django-simple-captcha/blob/v${version}/CHANGES";
+    changelog = "https://github.com/mbi/django-simple-captcha/blob/${src.tag}/CHANGES";
     license = licenses.mit;
     maintainers = with maintainers; [
       mrmebelman
-      schmittlauch
     ];
   };
 }

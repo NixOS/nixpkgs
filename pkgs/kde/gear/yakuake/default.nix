@@ -5,6 +5,6 @@
 mkKdeDerivation {
   pname = "yakuake";
 
-  extraBuildInputs = [qtsvg];
+  extraBuildInputs = [ qtsvg ];
   meta.mainProgram = "yakuake";
 }

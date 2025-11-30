@@ -2,26 +2,25 @@
   lib,
   stdenv,
   buildPythonPackage,
-  CoreFoundation,
-  fetchPypi,
-  IOKit,
+  fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
   python,
-  pythonOlder,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "5.9.8";
-  format = "setuptools";
+  version = "7.1.2";
+  pyproject = true;
 
   inherit stdenv;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-a+Em4yJUht/yhqj7mgYkalJT9MfFO0depfWsk05kGUw=";
+  src = fetchFromGitHub {
+    owner = "giampaolo";
+    repo = "psutil";
+    tag = "release-${version}";
+    hash = "sha256-LyGnLrq+SzCQmz8/P5DOugoNEyuH0IC7uIp8UAPwH0U=";
   };
 
   postPatch = ''
@@ -32,24 +31,21 @@ buildPythonPackage rec {
       --replace-fail kIOMainPortDefault kIOMasterPortDefault
   '';
 
-  buildInputs =
-    # workaround for https://github.com/NixOS/nixpkgs/issues/146760
-    lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ CoreFoundation ]
-    ++ lib.optionals stdenv.isDarwin [ IOKit ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   # Segfaults on darwin:
   # https://github.com/giampaolo/psutil/issues/1715
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   # In addition to the issues listed above there are some that occure due to
   # our sandboxing which we can work around by disabling some tests:
   # - cpu_times was flaky on darwin
-  # - the other disabled tests are likely due to sanboxing (missing specific errors)
-  pytestFlagsArray = [
+  # - the other disabled tests are likely due to sandboxing (missing specific errors)
+  enabledTestPaths = [
     # Note: $out must be referenced as test import paths are relative
-    "$out/${python.sitePackages}/psutil/tests/test_system.py"
+    "${placeholder "out"}/${python.sitePackages}/psutil/tests/test_system.py"
   ];
 
   disabledTests = [
@@ -67,11 +63,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "psutil" ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "release-";
+  };
+
+  meta = {
     description = "Process and system utilization information interface";
     homepage = "https://github.com/giampaolo/psutil";
-    changelog = "https://github.com/giampaolo/psutil/blob/release-${version}/HISTORY.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jonringer ];
+    changelog = "https://github.com/giampaolo/psutil/blob/${src.tag}/HISTORY.rst";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

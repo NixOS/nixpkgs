@@ -2,67 +2,74 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
+  setuptools-scm,
   dill,
   dnslib,
   dnspython,
   plux,
   pyaes,
+  pyjwt,
+  pyotp,
   python-jose,
   requests,
+  python-dateutil,
   tabulate,
 
-  # Sensitive downstream dependencies
-  localstack,
+  # use for testing promoted localstack
+  pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "localstack-ext";
-  version = "2.3.2";
-  format = "setuptools";
+  version = "4.8.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Ex5ZPlteDaiyex90QumucVdTTbpp9uWiBrvw1kMr++8=";
+    pname = "localstack_ext";
+    inherit version;
+    hash = "sha256-XW7ZjZ1Y/yIYcSxFEc5XeED5QYsE+k/AOLEymYpl7KY=";
   };
 
-  postPatch = ''
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  pythonRemoveDeps = [
     # Avoid circular dependency
-    sed -i '/localstack>=/d' setup.cfg
+    "localstack"
+    "build"
+  ];
 
-    # Pip is unable to resolve attr logic, so it will emit version as 0.0.0
-    substituteInPlace setup.cfg \
-      --replace "version = attr: localstack_ext.__version__" "version = ${version}"
-    cat setup.cfg
-
-    substituteInPlace setup.cfg \
-      --replace "dill==0.3.2" "dill~=0.3.0" \
-      --replace "requests>=2.20.0,<2.26" "requests~=2.20"
-  '';
-
-  propagatedBuildInputs = [
+  dependencies = [
     dill
     dnslib
     dnspython
     plux
     pyaes
+    pyjwt
+    pyotp
+    python-dateutil
     python-jose
     requests
     tabulate
-  ];
+  ]
+  ++ python-jose.optional-dependencies.cryptography;
 
-  pythonImportsCheck = [ "localstack_ext" ];
+  pythonImportsCheck = [ "localstack" ];
 
   # No tests in repo
   doCheck = false;
 
   passthru.tests = {
-    inherit localstack;
+    inherit (pkgs) localstack;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Extensions for LocalStack";
     homepage = "https://github.com/localstack/localstack";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jonringer ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

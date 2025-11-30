@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, qtbase }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libirc";
   version = "unstable-2022-10-15";
 
@@ -12,6 +18,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail 'cmake_minimum_required(VERSION 3.0)' 'cmake_minimum_required(VERSION 3.10)'
+  '';
 
   cmakeFlags = [
     "-DQT5_BUILD=1"

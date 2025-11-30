@@ -13,8 +13,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "mkaz";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "termgraph";
+    tag = "v${version}";
     hash = "sha256-0J9mEpDIdNEYwO+A+HBOaSw+Ct+HsbSPwGQYuYH6NN8=";
   };
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "termgraph" ];
 
   meta = with lib; {
-    description = "A python command-line tool which draws basic graphs in the terminal";
+    description = "Python command-line tool which draws basic graphs in the terminal";
     mainProgram = "termgraph";
     homepage = "https://github.com/mkaz/termgraph";
     license = licenses.mit;

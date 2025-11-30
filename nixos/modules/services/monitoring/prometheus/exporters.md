@@ -18,9 +18,7 @@ running on. The exporter could be configured as follows:
       "logind"
       "systemd"
     ];
-    disabledCollectors = [
-      "textfile"
-    ];
+    disabledCollectors = [ "textfile" ];
     openFirewall = true;
     firewallFilter = "-i br0 -p tcp -m tcp --dport 9100";
   };
@@ -39,20 +37,24 @@ the [available options](https://nixos.org/nixos/options.html#prometheus.exporter
 Prometheus can now be configured to consume the metrics produced by the exporter:
 ```nix
 {
-    services.prometheus = {
-      # ...
+  services.prometheus = {
+    # ...
 
-      scrapeConfigs = [
-        {
-          job_name = "node";
-          static_configs = [{
-            targets = [ "localhost:${toString config.services.prometheus.exporters.node.port}" ];
-          }];
-        }
-      ];
+    scrapeConfigs = [
+      {
+        job_name = "node";
+        static_configs = [
+          {
+            targets = [
+              "localhost:${toString config.services.prometheus.exporters.node.port}"
+            ];
+          }
+        ];
+      }
+    ];
 
-      # ...
-    };
+    # ...
+  };
 }
 ```
 
@@ -82,10 +84,12 @@ example:
     specific options and configuration:
     ```nix
     # nixpkgs/nixos/modules/services/prometheus/exporters/postfix.nix
-    { config, lib, pkgs, options }:
-
-    with lib;
-
+    {
+      config,
+      lib,
+      pkgs,
+      options,
+    }:
     let
       # for convenience we define cfg here
       cfg = config.services.prometheus.exporters.postfix;
@@ -97,15 +101,15 @@ example:
       # (and optional overrides for default options).
       # Note that this attribute is optional.
       extraOpts = {
-        telemetryPath = mkOption {
-          type = types.str;
+        telemetryPath = lib.mkOption {
+          type = lib.types.str;
           default = "/metrics";
           description = ''
             Path under which to expose metrics.
           '';
         };
-        logfilePath = mkOption {
-          type = types.path;
+        logfilePath = lib.mkOption {
+          type = lib.types.path;
           default = /var/log/postfix_exporter_input.log;
           example = /var/log/mail.log;
           description = ''
@@ -113,8 +117,8 @@ example:
             This file will be truncated by this exporter!
           '';
         };
-        showqPath = mkOption {
-          type = types.path;
+        showqPath = lib.mkOption {
+          type = lib.types.path;
           default = /var/spool/postfix/public/showq;
           example = /var/lib/postfix/queue/public/showq;
           description = ''
@@ -136,7 +140,7 @@ example:
             ${pkgs.prometheus-postfix-exporter}/bin/postfix_exporter \
               --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
               --web.telemetry-path ${cfg.telemetryPath} \
-              ${concatStringsSep " \\\n  " cfg.extraFlags}
+              ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
           '';
         };
       };
@@ -154,9 +158,12 @@ Should an exporter option change at some point, it is possible to add
 information about the change to the exporter definition similar to
 `nixpkgs/nixos/modules/rename.nix`:
 ```nix
-{ config, lib, pkgs, options }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+}:
 
 let
   cfg = config.services.prometheus.exporters.nginx;
@@ -173,10 +180,10 @@ in
   };
   imports = [
     # 'services.prometheus.exporters.nginx.telemetryEndpoint' -> 'services.prometheus.exporters.nginx.telemetryPath'
-    (mkRenamedOptionModule [ "telemetryEndpoint" ] [ "telemetryPath" ])
+    (lib.mkRenamedOptionModule [ "telemetryEndpoint" ] [ "telemetryPath" ])
 
     # removed option 'services.prometheus.exporters.nginx.insecure'
-    (mkRemovedOptionModule [ "insecure" ] ''
+    (lib.mkRemovedOptionModule [ "insecure" ] ''
       This option was replaced by 'prometheus.exporters.nginx.sslVerify' which defaults to true.
     '')
     ({ options.warnings = options.warnings; })

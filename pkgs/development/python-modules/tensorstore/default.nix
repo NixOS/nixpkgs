@@ -12,21 +12,28 @@
 let
   pythonVersionNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   systemToPlatform = {
-    "x86_64-linux" = "manylinux_2_17_x86_64.manylinux2014_x86_64";
+    "aarch64-linux" = "manylinux_2_27_aarch64.manylinux_2_28_aarch64";
+    "x86_64-linux" = "manylinux_2_27_x86_64.manylinux_2_28_x86_64";
     "aarch64-darwin" = "macosx_11_0_arm64";
   };
   hashes = {
-    "310-x86_64-linux" = "sha256-1b6w9wgT6fffTTpJ3MxdPSrFD7Xaby6prQYFljVn4x4=";
-    "311-x86_64-linux" = "sha256-8+HlzaxH30gB5N+ZKR0Oq+yswhq5gjiSF9jVsg8U22E=";
-    "312-x86_64-linux" = "sha256-e8iEQzB4D3RSXgrcPC4me/vsFKoXf1QFNZfQ7968zQE=";
-    "310-aarch64-darwin" = "sha256-2C60yJk/Pbx2woV7hzEmWGzNKWWnySDfTPm247PWIRA=";
-    "311-aarch64-darwin" = "sha256-rdLB7l/8ZYjV589qKtORiyu1rC7W30wzrsz1uihNRpk=";
-    "312-aarch64-darwin" = "sha256-DpbYMIbqceQeiL7PYwnvn9jLtv8EmfHXmxvPfZCw914=";
+    "311-x86_64-linux" = "sha256-gwcu4OVR1tylguFUtkyLgGbSduwHWXhOMUnCghKmHxg=";
+    "312-x86_64-linux" = "sha256-YI9xeOxuTko8JlRbCkT0S/g0ONBL8tlgzQ52meqpnvY=";
+    "313-x86_64-linux" = "sha256-yfLcM0LkaGr5j24lncn7N38b9le2ScJHv2ZHu+T5gJA=";
+    "314-x86_64-linux" = "sha256-evlCImnCv83s+d1VMJBgZlq5wtf2yJI3ftMsAyQA/uo=";
+    "311-aarch64-linux" = "sha256-xCMLj9KXleiORB90nYgZc+yo2t8zxSYrNng5+4iR95s=";
+    "312-aarch64-linux" = "sha256-3r1DUELAC+aLofs89ZMlp7q7P0o89HRMh93jRoAsu7Q=";
+    "313-aarch64-linux" = "sha256-lNj8nfFyGwKHBGrKcgn9UECInK1CAue3Oh/bd82bccY=";
+    "314-aarch64-linux" = "sha256-hHmCZSJz+3staUt4kgV0eq8+UK5kc4xct7XrA9hqmUc=";
+    "311-aarch64-darwin" = "sha256-XhUtM0vzT7q9/o5bw1uH0fmUcGWST/g8KeZZMIs26Ug=";
+    "312-aarch64-darwin" = "sha256-EIwOhnqiyH1JgsxjJaLeDE9b1jwr6hitsZOjcMQFlM4=";
+    "313-aarch64-darwin" = "sha256-Kc9DNhU68TasisUo4u1G3xk2ftrn4U43vKGot8SEjvI=";
+    "314-aarch64-darwin" = "sha256-l3VtLLo8XOIeFWAsKvWgJSHMDs2n+fttGNovO9UYJ/Q=";
   };
 in
 buildPythonPackage rec {
   pname = "tensorstore";
-  version = "0.1.53";
+  version = "0.1.79";
   format = "wheel";
 
   # The source build involves some wonky Bazel stuff.
@@ -42,21 +49,21 @@ buildPythonPackage rec {
         or (throw "unsupported system/python version combination");
   };
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ml-dtypes
     numpy
   ];
 
   pythonImportsCheck = [ "tensorstore" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for reading and writing large multi-dimensional arrays";
     homepage = "https://google.github.io/tensorstore";
     changelog = "https://github.com/google/tensorstore/releases/tag/v${version}";
-    license = licenses.asl20;
-    sourceProvenance = [ sourceTypes.binaryNativeCode ];
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.asl20;
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

@@ -5,35 +5,36 @@
   google-api-core,
   google-cloud-core,
   google-cloud-testutils,
+  grpc-google-iam-v1,
   mock,
   proto-plus,
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-translate";
-  version = "3.15.3";
+  version = "3.23.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7Vh6HmDPhHw7Gt1rKCVuLRci+nOkKFM09excqTPmFvI=";
+    pname = "google_cloud_translate";
+    inherit version;
+    hash = "sha256-KKMSMN6AoP74etT8Y+o32Sbuhln3LVW51wnpCPATlag=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     google-cloud-core
+    grpc-google-iam-v1
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     google-cloud-testutils
@@ -61,9 +62,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Google Cloud Translation API client library";
-    homepage = "https://github.com/googleapis/python-translate";
-    changelog = "https://github.com/googleapis/python-translate/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-translate";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-translate-v${version}/packages/google-cloud-translate/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

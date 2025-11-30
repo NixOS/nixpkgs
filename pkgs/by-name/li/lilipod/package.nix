@@ -1,8 +1,11 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, stdenv
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  shadow,
+  util-linux,
 }:
 
 buildGoModule rec {
@@ -17,8 +20,6 @@ buildGoModule rec {
   };
 
   vendorHash = null;
-
-  nativeBuildInputs = [ installShellFiles ];
 
   buildPhase = ''
     runHook preBuild
@@ -44,15 +45,8 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd lilipod \
-      --bash <($out/bin/lilipod completion bash) \
-      --fish <($out/bin/lilipod completion fish) \
-      --zsh <($out/bin/lilipod completion zsh)
-  '';
-
   meta = {
-    description = "A very simple (as in few features) container and image manager";
+    description = "Very simple (as in few features) container and image manager";
     longDescription = ''
       Lilipod is a very simple container manager with minimal features to:
 

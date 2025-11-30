@@ -1,9 +1,7 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonRelaxDepsHook,
   contexter,
   eventlet,
   mock,
@@ -27,8 +25,6 @@ buildPythonPackage rec {
       --replace "--pep8 --cov" "" \
       --replace "--cov-report html" ""
   '';
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     contexter

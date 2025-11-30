@@ -14,14 +14,15 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-secret-manager";
-  version = "2.20.0";
+  version = "2.25.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-oIanQTqvT/+9HE/pIp7wzpvPSPWo31tEnEoy3rWiz94=";
+    pname = "google_cloud_secret_manager";
+    inherit version;
+    hash = "sha256-o3krscswcyaQgpemFTYDGslIUsIiSPBK4RL/UahTtWE=";
   };
 
   build-system = [ setuptools ];
@@ -31,7 +32,8 @@ buildPythonPackage rec {
     grpc-google-iam-v1
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     pytest-asyncio

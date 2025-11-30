@@ -8,23 +8,26 @@
   requests,
   requests-toolbelt,
   responses,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "proxmoxer";
-  version = "2.0.1";
-  format = "setuptools";
+  version = "2.2.0-unstable-2025-02-18";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-kwD6yJhVTaVAAUVA6k4r6HZy4w+MPDF7DfJBS8wGE/c=";
+    owner = "proxmoxer";
+    repo = "proxmoxer";
+    rev = "cf1bcde696537c74ef00d8e71fb86735fb4c2c79";
+    hash = "sha256-h5Sla7/4XiZSGwKstyiqs/T2Qgi13jI9YMVPqDcF3sA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     paramiko
     requests
   ];
@@ -38,6 +41,14 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests require openssh_wrapper which is outdated and not available
     "tests/test_openssh.py"
+  ];
+
+  disabledTests = [
+    # Tests require openssh_wrapper which is outdated and not available
+    "test_repr_openssh"
+
+    # Test fails randomly
+    "test_timeout"
   ];
 
   pythonImportsCheck = [ "proxmoxer" ];

@@ -1,36 +1,40 @@
 {
   lib,
   buildPythonPackage,
+  pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
+
+  # dependencies
   mypy,
   pytestCheckHook,
   python-lsp-server,
-  pythonOlder,
   tomli,
 }:
 
 buildPythonPackage rec {
   pname = "pylsp-mypy";
-  version = "0.6.8";
-  format = "pyproject";
+  version = "0.7.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = "pylsp-mypy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-oEWUXkE8U7/ye6puJZRSkQFi10BPGuc8XZQbHwqOPEI=";
+    tag = version;
+    hash = "sha256-rS0toZaAygNJ3oe3vfP9rKJ1A0avIdp5yjNx7oGOB4o=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     mypy
     python-lsp-server
-    tomli
-  ];
+  ]
+  ++ lib.optional (pythonOlder "3.11") tomli;
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -41,10 +45,11 @@ buildPythonPackage rec {
     "test_option_overrides_dmypy"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Mypy plugin for the Python LSP Server";
     homepage = "https://github.com/python-lsp/pylsp-mypy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    changelog = "https://github.com/python-lsp/pylsp-mypy/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

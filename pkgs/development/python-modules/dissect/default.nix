@@ -1,11 +1,12 @@
 {
   lib,
   buildPythonPackage,
+  dissect-apfs,
   dissect-archive,
   dissect-btrfs,
   dissect-cim,
   dissect-clfs,
-  dissect-cobaltstrike,
+  dissect-cramfs,
   dissect-cstruct,
   dissect-esedb,
   dissect-etl,
@@ -15,10 +16,12 @@
   dissect-extfs,
   dissect-fat,
   dissect-ffs,
+  dissect-fve,
   dissect-hypervisor,
   dissect-jffs,
   dissect-ntfs,
   dissect-ole,
+  dissect-qnxfs,
   dissect-regf,
   dissect-shellitem,
   dissect-sql,
@@ -29,24 +32,20 @@
   dissect-volume,
   dissect-xfs,
   fetchFromGitHub,
-  pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "dissect";
-  version = "3.14";
+  version = "3.21";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect";
-    rev = "refs/tags/${version}";
-    hash = "sha256-wHLpysvOkJ1t0KKJXwfeRp/7mSom5WvrJ0lyRGoDwJM=";
+    tag = version;
+    hash = "sha256-INqZwN3x5MzrACyaUOa2A7mrKvld9reN1PJVxkq837o=";
   };
 
   pythonRelaxDeps = true;
@@ -56,14 +55,13 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-
   dependencies = [
+    dissect-apfs
     dissect-archive
     dissect-btrfs
     dissect-cim
     dissect-clfs
-    dissect-cobaltstrike
+    dissect-cramfs
     dissect-cstruct
     dissect-esedb
     dissect-etl
@@ -73,10 +71,12 @@ buildPythonPackage rec {
     dissect-extfs
     dissect-fat
     dissect-ffs
+    dissect-fve
     dissect-hypervisor
     dissect-jffs
     dissect-ntfs
     dissect-ole
+    dissect-qnxfs
     dissect-regf
     dissect-shellitem
     dissect-sql
@@ -86,7 +86,8 @@ buildPythonPackage rec {
     dissect-vmfs
     dissect-volume
     dissect-xfs
-  ] ++ dissect-target.optional-dependencies.full;
+  ]
+  ++ dissect-target.optional-dependencies.full;
 
   # Module has no tests
   doCheck = false;
@@ -96,7 +97,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect meta module";
     homepage = "https://github.com/fox-it/dissect";
-    changelog = "https://github.com/fox-it/dissect/releases/tag/${version}";
+    changelog = "https://github.com/fox-it/dissect/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

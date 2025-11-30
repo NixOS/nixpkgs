@@ -2,23 +2,31 @@
   lib,
   config,
   stdenv,
+  pkgs,
   buildPythonPackage,
   fetchPypi,
 
   # build-system
+  scikit-build-core,
+
+  # nativeBuildInputs
   cmake,
   ninja,
   pathspec,
   pyproject-metadata,
-  scikit-build-core,
+  writableTmpDirAsHomeHook,
+
+  # buildInputs
+  llvmPackages,
+  boost,
+  ocl-icd,
+  opencl-headers,
 
   # dependencies
-  llvmPackages,
   numpy,
   scipy,
-  pythonOlder,
 
-  # optionals
+  # optional-dependencies
   cffi,
   dask,
   pandas,
@@ -26,36 +34,51 @@
   scikit-learn,
 
   # optionals: gpu
-  boost,
-  ocl-icd,
-  opencl-headers,
-  gpuSupport ? stdenv.isLinux && !cudaSupport,
+  gpuSupport ? stdenv.hostPlatform.isLinux && !cudaSupport,
   cudaSupport ? config.cudaSupport,
   cudaPackages,
 }:
 
-assert gpuSupport -> cudaSupport != true;
-assert cudaSupport -> gpuSupport != true;
+assert gpuSupport -> !cudaSupport;
+assert cudaSupport -> !gpuSupport;
 
 buildPythonPackage rec {
-  pname = "lightgbm";
-  version = "4.3.0";
+  inherit (pkgs.lightgbm)
+    pname
+    version
+    patches
+    ;
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AG9XhKm87kPlp+lD3E8C3hui7np68e5fGQ04Pztsnr4=";
+    hash = "sha256-yxxZcg61aTicC6dNFPUjUbVzr0ifIwAyocnzFPi6t/4=";
   };
+
+  # Patch dll search path to fix proper discovery of lib_lightgbm.so
+  #   Exception: Cannot find lightgbm library file in following paths:
+  # /nix/store/...-python3.13-lightgbm-4.6.0/lib/python3.13/site-packages/lib_lightgbm.so
+  # /nix/store/...-python3.13-lightgbm-4.6.0/lib/python3.13/site-packages/lightgbm/bin/lib_lightgbm.so
+  # /nix/store/...-python3.13-lightgbm-4.6.0/lib/python3.13/site-packages/lightgbm/lib/lib_lightgbm.so
+  postPatch = ''
+    substituteInPlace lightgbm/libpath.py \
+      --replace-fail \
+        'curr_path.parents[0] / "lib",' \
+        'curr_path.parents[1] / "lib",'
+  '';
+
+  build-system = [
+    scikit-build-core
+  ];
 
   nativeBuildInputs = [
     cmake
     ninja
     pathspec
     pyproject-metadata
-    scikit-build-core
-  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
   dontUseCmakeConfigure = true;
 
@@ -71,45 +94,39 @@ buildPythonPackage rec {
       cudaPackages.cuda_cudart
     ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
   ];
 
-  pypaBuildFlags =
-    lib.optionals gpuSupport [ "--config-setting=cmake.define.USE_GPU=ON" ]
-    ++ lib.optionals cudaSupport [ "--config-setting=cmake.define.USE_CUDA=ON" ];
+  cmakeFlags = [
+    (lib.cmakeBool "USE_GPU" gpuSupport)
+    (lib.cmakeBool "USE_CUDA" cudaSupport)
+  ];
 
-  postConfigure = ''
-    export HOME=$(mktemp -d)
-  '';
-
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     arrow = [
       cffi
       pyarrow
     ];
-    dask =
-      [
-        dask
-        pandas
-      ]
-      ++ dask.optional-dependencies.array
-      ++ dask.optional-dependencies.dataframe
-      ++ dask.optional-dependencies.distributed;
+    dask = [
+      dask
+      pandas
+    ]
+    ++ dask.optional-dependencies.array
+    ++ dask.optional-dependencies.dataframe
+    ++ dask.optional-dependencies.distributed;
     pandas = [ pandas ];
     scikit-learn = [ scikit-learn ];
   };
 
-  # The pypi package doesn't distribute the tests from the GitHub
-  # repository. It contains c++ tests which don't seem to wired up to
-  # `make check`.
+  # No python tests
   doCheck = false;
 
   pythonImportsCheck = [ "lightgbm" ];
 
   meta = {
-    description = "A fast, distributed, high performance gradient boosting (GBDT, GBRT, GBM or MART) framework";
+    description = "Fast, distributed, high performance gradient boosting (GBDT, GBRT, GBM or MART) framework";
     homepage = "https://github.com/Microsoft/LightGBM";
     changelog = "https://github.com/microsoft/LightGBM/releases/tag/v${version}";
     license = lib.licenses.mit;

@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "5.1.23";
+  version = "5.1.27";
 in
 buildPecl {
   inherit version;
@@ -16,16 +16,11 @@ buildPecl {
     owner = "krakjoe";
     repo = "apcu";
     rev = "v${version}";
-    sha256 = "sha256-UDKLLCCnYJj/lCD8ZkkDf2WYZMoIbcP75+0/IXo4vdQ=";
+    sha256 = "sha256-kf1d+WLpwhzQVn9pnkXtPPTXI5XaAuIAReI6rDGypB8=";
   };
 
   buildInputs = [ pcre2 ];
   doCheck = true;
-  checkTarget = "test";
-  checkFlagsArray = [
-    "REPORT_EXIT_STATUS=1"
-    "NO_INTERACTION=1"
-  ];
   makeFlags = [ "phpincludedir=$(dev)/include" ];
   outputs = [
     "out"
@@ -37,6 +32,6 @@ buildPecl {
     description = "Userland cache for PHP";
     homepage = "https://pecl.php.net/package/APCu";
     license = licenses.php301;
-    maintainers = teams.php.members;
+    teams = [ teams.php ];
   };
 }

@@ -5,7 +5,6 @@
   folium,
   gdal,
   geopandas,
-  hatchling,
   matplotlib,
   networkx,
   numpy,
@@ -17,25 +16,26 @@
   scikit-learn,
   scipy,
   shapely,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "osmnx";
-  version = "1.9.1";
+  version = "2.0.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "gboeing";
     repo = "osmnx";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-od/0IuiK2CvrD0lfcTzkImK/5hcm6m61ULYzEtv/YeA=";
+    tag = "v${version}";
+    hash = "sha256-y2gKToDzG1IIcLN+hK/WeS+/z6MNabiIr+8Em1Ct72Q=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ uv-build ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     geopandas
     matplotlib
     networkx
@@ -56,11 +56,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "osmnx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Package to easily download, construct, project, visualize, and analyze complex street networks from OpenStreetMap with NetworkX";
     homepage = "https://github.com/gboeing/osmnx";
-    changelog = "https://github.com/gboeing/osmnx/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    changelog = "https://github.com/gboeing/osmnx/blob/${src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psyanticy ];
+    teams = [ lib.teams.geospatial ];
   };
 }

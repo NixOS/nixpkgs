@@ -1,0 +1,16 @@
+diff --git a/src/gwt/build.xml b/src/gwt/build.xml
+index 27ffe33..4218678 100644
+--- a/src/gwt/build.xml
++++ b/src/gwt/build.xml
+@@ -139,11 +139,6 @@
+       <echo message="panmirror minify: ${panmirror.minify}"/>
+ 
+       <mkdir dir="${panmirror.build.dir}"/>
+-      <exec executable="${yarn.bin}" dir="${panmirror.dir}" resolveexecutable="true" failonerror="true">
+-         <arg value="install"/>
+-         <arg value="--network-timeout"/>
+-         <arg value="240000"/>
+-      </exec>
+       <exec executable="${yarn.bin}" dir="${panmirror.dir}" resolveexecutable="true" failonerror="true">
+          <arg value="build"/>
+          <arg value="--minify"/>

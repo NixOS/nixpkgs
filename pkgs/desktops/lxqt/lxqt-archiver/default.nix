@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, lxqt-build-tools
-, json-glib
-, libexif
-, libfm-qt
-, menu-cache
-, qtbase
-, qttools
-, qtwayland
-, wrapQtAppsHook
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  lxqt-build-tools,
+  json-glib,
+  libexif,
+  libfm-qt,
+  menu-cache,
+  qtbase,
+  qttools,
+  qtwayland,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lxqt-archiver";
-  version = "1.0.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-archiver";
     rev = version;
-    hash = "sha256-32Wq0Faphu0uSG0RdOqrDD/igrNaP6l1mtuV+HcsdcQ=";
+    hash = "sha256-57ufvirD1YYEVoFtX/JY8EnMRWZ4ouhbxNm8przg5XA=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +54,7 @@ stdenv.mkDerivation rec {
     mainProgram = "lxqt-archiver";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ jchw ] ++ teams.lxqt.members;
+    maintainers = with maintainers; [ jchw ];
+    teams = [ teams.lxqt ];
   };
 }

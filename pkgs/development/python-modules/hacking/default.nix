@@ -1,35 +1,36 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pbr,
-  flake8,
-  stestr,
   ddt,
+  fetchPypi,
+  flake8,
+  pbr,
+  pythonOlder,
+  setuptools,
+  stestr,
   testscenarios,
 }:
 
 buildPythonPackage rec {
   pname = "hacking";
-  version = "6.1.0";
-  format = "setuptools";
+  version = "8.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3lBqMSQDThi046acld5JjDRgvLxJwWQ9MXjRW8barBQ=";
+    hash = "sha256-N89wYj7PMkdMTNYWSCeuff9HU62n+e/HBeiIOhAPi7I=";
   };
 
   postPatch = ''
     sed -i 's/flake8.*/flake8/' requirements.txt
-    substituteInPlace hacking/checks/python23.py \
-      --replace 'H236: class Foo(object):\n    __metaclass__ = \' 'Okay: class Foo(object):\n    __metaclass__ = \'
-    substituteInPlace hacking/checks/except_checks.py \
-      --replace 'H201: except:' 'Okay: except:'
   '';
 
-  nativeBuildInputs = [ pbr ];
+  build-system = [
+    pbr
+    setuptools
+  ];
 
-  propagatedBuildInputs = [ flake8 ];
+  dependencies = [ flake8 ];
 
   nativeCheckInputs = [
     ddt
@@ -38,10 +39,9 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    # tries to trigger flake8 and fails
-    rm hacking/tests/test_doctest.py
-
+    runHook preCheck
     stestr run
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "hacking" ];
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "OpenStack Hacking Guideline Enforcement";
     homepage = "https://github.com/openstack/hacking";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

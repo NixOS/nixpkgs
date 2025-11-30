@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "bitbox02";
-  version = "6.3.0";
+  version = "7.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0D+yIovlYw8dfDUeW+vcualbvmLs+IySkTpmHwk2meM=";
+    hash = "sha256-J9UQXrFaVTcZ+p0+aJIchksAyGGzpkQETZrGhCbxhEc=";
   };
 
   build-system = [ setuptools ];
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/digitalbitbox/bitbox02-firmware/";
     changelog = "https://github.com/digitalbitbox/bitbox02-firmware/blob/py-bitbox02-${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -4,19 +4,22 @@
   buildPythonPackage,
   dvc-objects,
   fetchPypi,
-  pythonRelaxDepsHook,
   setuptools-scm,
   sshfs,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dvc-ssh";
-  version = "4.1.1";
+  version = "4.2.2";
   pyproject = true;
 
+  disabled = pythonOlder "3.9";
+
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-lvC6oAXQR4u7s+11n6NgQExPc9yrq3JAmmXtuOw22tI=";
+    pname = "dvc_ssh";
+    inherit version;
+    hash = "sha256-T6yTLF8ivZRE2H1Oez/9bAnMjlbZjrPG1LRDAdNTUBc=";
   };
 
   pythonRemoveDeps = [
@@ -24,16 +27,17 @@ buildPythonPackage rec {
     "dvc"
   ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-    pythonRelaxDepsHook
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bcrypt
     dvc-objects
     sshfs
   ];
+
+  optional-dependencies = {
+    gssapi = [ sshfs ];
+  };
 
   # bcrypt is enabled for sshfs in nixpkgs
   postPatch = ''
@@ -49,7 +53,7 @@ buildPythonPackage rec {
   # ];
 
   meta = with lib; {
-    description = "ssh plugin for dvc";
+    description = "SSH plugin for dvc";
     homepage = "https://pypi.org/project/dvc-ssh/${version}";
     changelog = "https://github.com/iterative/dvc-ssh/releases/tag/${version}";
     license = licenses.asl20;

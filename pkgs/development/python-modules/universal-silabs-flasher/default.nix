@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
+  pythonOlder,
 
   # build-system
   setuptools,
@@ -15,6 +15,7 @@
   coloredlogs,
   crc,
   libgpiod,
+  pyserial-asyncio-fast,
   typing-extensions,
   zigpy,
 
@@ -27,40 +28,35 @@
 
 buildPythonPackage rec {
   pname = "universal-silabs-flasher";
-  version = "0.0.19";
+  version = "0.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = "universal-silabs-flasher";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-VoO9B27CNY2Cnt/Q2HsU6DVYkukQMgbIHc6xqfN0P7w=";
+    tag = "v${version}";
+    hash = "sha256-Qeudh75PzIxI4vr3H4nBULhM2X8WSPF8hrT2uMWopHQ=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools-git-versioning<2"' "" \
+      --replace-fail '"setuptools-git-versioning>=2.0,<3"' "" \
       --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-
   build-system = [ setuptools ];
 
-  pythonRelaxDeps = [
-    # https://github.com/NabuCasa/universal-silabs-flasher/pull/50
-    "gpiod"
-  ];
-
-  propagatedBuildInputs = [
-    async-timeout
+  dependencies = [
     bellows
     click
     coloredlogs
     crc
+    pyserial-asyncio-fast
     typing-extensions
     zigpy
-  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libgpiod ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libgpiod ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -72,7 +68,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "universal_silabs_flasher" ];
 
   meta = with lib; {
-    changelog = "https://github.com/NabuCasa/universal-silabs-flasher/releases/tag/v${version}";
+    changelog = "https://github.com/NabuCasa/universal-silabs-flasher/releases/tag/${src.tag}";
     description = "Flashes Silicon Labs radios running EmberZNet or CPC multi-pan firmware";
     mainProgram = "universal-silabs-flasher";
     homepage = "https://github.com/NabuCasa/universal-silabs-flasher";

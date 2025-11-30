@@ -1,27 +1,38 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
   elasticsearch,
+  fetchPypi,
   python-dateutil,
-  six,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "elasticsearch-dsl";
-  version = "8.13.0";
-  format = "setuptools";
+  version = "8.18.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-cy/IEae7B2O8P7WJLk6nzwbTG7o1XoezM1PpLfrNebQ=";
+    pname = "elasticsearch_dsl";
+    inherit version;
+    hash = "sha256-djRl26nq4Wat0QVn6STGVzCqEigZsIv+mgd+kbE7MNE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     elasticsearch
     python-dateutil
-    six
+    typing-extensions
   ];
+
+  optional-dependencies = {
+    async = [ elasticsearch ] ++ elasticsearch.optional-dependencies.async;
+  };
 
   # ImportError: No module named test_elasticsearch_dsl
   # Tests require a local instance of elasticsearch
@@ -35,7 +46,7 @@ buildPythonPackage rec {
       the official low-level client (elasticsearch-py).
     '';
     homepage = "https://github.com/elasticsearch/elasticsearch-dsl-py";
+    changelog = "https://github.com/elastic/elasticsearch-dsl-py/blob/v${version}/Changelog.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ desiderius ];
   };
 }

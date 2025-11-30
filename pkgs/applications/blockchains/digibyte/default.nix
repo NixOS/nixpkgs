@@ -1,18 +1,20 @@
-{ lib, stdenv
-, fetchFromGitHub
-, openssl
-, boost
-, libevent
-, autoreconfHook
-, db4
-, pkg-config
-, protobuf
-, hexdump
-, zeromq
-, withGui
-, qtbase ? null
-, qttools ? null
-, wrapQtAppsHook ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  boost,
+  libevent,
+  autoreconfHook,
+  db4,
+  pkg-config,
+  protobuf,
+  hexdump,
+  zeromq,
+  withGui,
+  qtbase ? null,
+  qttools ? null,
+  wrapQtAppsHook ? null,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +34,8 @@ stdenv.mkDerivation rec {
     autoreconfHook
     pkg-config
     hexdump
-  ] ++ lib.optionals withGui [
+  ]
+  ++ lib.optionals withGui [
     wrapQtAppsHook
   ];
 
@@ -42,7 +45,8 @@ stdenv.mkDerivation rec {
     libevent
     db4
     zeromq
-  ] ++ lib.optionals withGui [
+  ]
+  ++ lib.optionals withGui [
     qtbase
     qttools
     protobuf
@@ -51,10 +55,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configureFlags = [
-      "--with-boost-libdir=${boost.out}/lib"
-  ] ++ lib.optionals withGui [
-      "--with-gui=qt5"
-      "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
+    "--with-boost-libdir=${boost.out}/lib"
+  ]
+  ++ lib.optionals withGui [
+    "--with-gui=qt5"
+    "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
   ];
 
   meta = with lib; {

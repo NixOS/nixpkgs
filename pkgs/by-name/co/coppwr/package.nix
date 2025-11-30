@@ -1,33 +1,28 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libxkbcommon
-, pipewire
-, libGL
-, wayland
-, xorg
-, vulkan-loader
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libxkbcommon,
+  pipewire,
+  vulkan-loader,
+  wayland,
+  libGL,
+  xorg,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "coppwr";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "dimtpap";
     repo = "coppwr";
-    rev = version;
-    hash = "sha256-7z1b++itHoqVX5KB9gv6dMAzq1j7VDGYzuJArUDPlD4=";
+    tag = version;
+    hash = "sha256-9oFWX44jToJh0vJaDV/KZXVNQgLG0lr1iA+0hInAhLA=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "egui_node_graph-0.4.0" = "sha256-VtHgKWh+bHSFltNgYaFmYhZW9tqwiWJjiCCspeKgSXQ=";
-      "libspa-0.8.0" = "sha256-X8mwLtuPuMxZY71GNPAgiJGJ9JNMj7AbCliXiBxJ4vQ=";
-    };
-  };
+  cargoHash = "sha256-Fq8I1pt83yqrjiA4VXA+z7o2LFTac2SonAwTycQRP8M=";
 
   nativeBuildInputs = [
     pkg-config
@@ -37,13 +32,12 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libxkbcommon
     pipewire
-    libGL
+    vulkan-loader
     wayland
+    libGL
     xorg.libXcursor
     xorg.libXi
-    xorg.libXrandr
     xorg.libX11
-    vulkan-loader
   ];
 
   preBuild = ''
@@ -63,16 +57,22 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postFixup = ''
-    patchelf $out/bin/${pname} \
-      --add-rpath ${lib.makeLibraryPath [ libGL libxkbcommon wayland ]}
+    patchelf $out/bin/coppwr \
+      --add-rpath ${
+        lib.makeLibraryPath [
+          libGL
+          libxkbcommon
+          wayland
+        ]
+      }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Low level control GUI for the PipeWire multimedia server";
     homepage = "https://github.com/dimtpap/coppwr";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ravenz46 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ravenz46 ];
     mainProgram = "coppwr";
+    platforms = lib.platforms.linux;
   };
 }

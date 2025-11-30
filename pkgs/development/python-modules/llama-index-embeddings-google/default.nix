@@ -4,14 +4,13 @@
   fetchPypi,
   google-generativeai,
   llama-index-core,
-  poetry-core,
+  hatchling,
   pythonOlder,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-embeddings-google";
-  version = "0.1.6";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,14 +18,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_embeddings_google";
     inherit version;
-    hash = "sha256-XPqZ+4aZfrTGU4sOLxMElG6kuGVJa8/3uxW+icSHpzQ=";
+    hash = "sha256-bVVg+oHf8KPb04F/HE/2XVkn4NY/Bb+PPj3fypkJ/zE=";
   };
 
   pythonRelaxDeps = [ "google-generativeai" ];
 
-  build-system = [ poetry-core ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  build-system = [ hatchling ];
 
   dependencies = [
     google-generativeai

@@ -8,6 +8,7 @@
 
   # dependencies
   colorama,
+  httpx,
   sphinx,
   starlette,
   uvicorn,
@@ -20,20 +21,21 @@
 
 buildPythonPackage rec {
   pname = "sphinx-autobuild";
-  version = "2024.04.16";
+  version = "2025.08.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = "sphinx-autobuild";
-    rev = "refs/tags/${version}";
-    hash = "sha256-5HgRqt2ZTGcQ6X2sZN0gRfahmwlqpDbae5gOnGa02L0=";
+    tag = version;
+    hash = "sha256-JfhLC1924bU1USvoYwluFGdxxahS+AfRSHnGlLfE0NY=";
   };
 
   build-system = [ flit-core ];
 
   dependencies = [
     colorama
+    httpx
     sphinx
     starlette
     uvicorn

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bondhome";
     repo = "bond-async";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YRJHUOYFLf4dtQGIFKHLdUQxWTnZzG1MPirMsGvDor8=";
   };
 

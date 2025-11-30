@@ -1,12 +1,16 @@
-{ lib, stdenv
-, fetchFromGitHub
-, kernel
-, kmod
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+  kmod,
 }:
 
 let
   kerneldir = "lib/modules/${kernel.modDirVersion}";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "gcadapter-oc-kmod";
   version = "unstable-2021-12-11";
 
@@ -19,7 +23,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KERNEL_SOURCE_DIR=${kernel.dev}/${kerneldir}/build"
     "INSTALL_MOD_PATH=$(out)"
   ];
@@ -31,7 +35,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Kernel module for overclocking the Nintendo Wii U/Mayflash GameCube adapter";
     homepage = "https://github.com/HannesMann/gcadapter-oc-kmod";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ r-burns ];
     platforms = platforms.linux;
   };

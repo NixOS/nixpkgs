@@ -1,27 +1,29 @@
-{ lib
-, stdenv
-, pkgs
-, fetchFromGitHub
-, fetchurl
-, mpiCheckPhaseHook
-, which
-, openssh
-, gcc
-, gfortran
-, perl
-, mpi
-, blas
-, lapack
-, python3
-, tcsh
-, bash
-, automake
-, autoconf
-, libtool
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  mpiCheckPhaseHook,
+  which,
+  openssh,
+  gcc,
+  gfortran,
+  perl,
+  mpi,
+  blas,
+  lapack,
+  scalapack,
+  libxc,
+  python3,
+  tcsh,
+  automake,
+  autoconf,
+  libtool,
+  makeWrapper,
 }:
 
 assert blas.isILP64 == lapack.isILP64;
+assert blas.isILP64 == scalapack.isILP64;
 
 let
   versionGA = "5.8.2"; # Fixed by nwchem
@@ -34,34 +36,33 @@ let
   };
 
   dftd3Src = fetchurl {
-    url = "https://www.chemiebn.uni-bonn.de/pctc/mulliken-center/software/dft-d3/dftd3.tgz";
+    url = "https://www.chemie.uni-bonn.de/grimme/software/dft-d3/dftd3.tgz";
     hash = "sha256-2Xz5dY9hqoH9hUJUSPv0pujOB8EukjZzmDGjrzKID1k=";
-  };
-
-  versionLibxc = "6.1.0";
-  libxcSrc = fetchurl {
-    url = "https://gitlab.com/libxc/libxc/-/archive/${versionLibxc}/libxc-${versionLibxc}.tar.gz";
-    hash = "sha256-9ZN0X6R+v7ndxGeqr9wvoSdfDXJQxpLOl2E4mpDdjq8=";
   };
 
   plumedSrc = fetchFromGitHub {
     owner = "edoapra";
     repo = "plumed2";
-    rev = "e7c908da50bde1c6399c9f0e445d6ea3330ddd9b";
-    hash = "sha256-CNlb6MTEkD977hj3xonYqZH1/WlQ1EdVD7cvL//heRM=";
+    rev = "88f06db71173e7893713a582e5ada7193e8ae1c9";
+    hash = "sha256-p5XNxHcE/QkJ5WdQH/xPp2EyrqCNjA/w/e1R2fkwYts=";
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "nwchem";
-  version = "7.2.2";
+  version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "nwchemgit";
     repo = "nwchem";
     rev = "v${version}-release";
-    hash = "sha256-BcYRqPaPR24OTRY0MJgBxi46HvUG4uFaY0unZmu5b9k=";
+    hash = "sha256-2qc4kLb/WmUJuJGonIyS7pgCfyt8yXdcpDAKU0RMY58=";
   };
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     perl
@@ -77,6 +78,8 @@ stdenv.mkDerivation rec {
     openssh
     blas
     lapack
+    scalapack
+    libxc
     python3
   ];
   propagatedBuildInputs = [ mpi ];
@@ -93,7 +96,6 @@ stdenv.mkDerivation rec {
 
     # Provide tarball in expected location
     ln -s ${dftd3Src} source/src/nwpw/nwpwlib/nwpwxc/dftd3.tgz
-    ln -s ${libxcSrc} source/src/libext/libxc/libxc-${versionLibxc}.tar.gz
   '';
 
   postPatch = ''
@@ -135,6 +137,13 @@ stdenv.mkDerivation rec {
     export BLASOPT="-L${blas}/lib -lblas"
     export LAPACK_LIB="-L${lapack}/lib -llapack"
     export BLAS_SIZE=${if blas.isILP64 then "8" else "4"}
+    export USE_SCALAPACK="y"
+    export SCALAPACK="-L${scalapack}/lib -lscalapack"
+    export SCALAPACK_SIZE=${if scalapack.isILP64 then "8" else "4"}
+
+    export LIBXC_INCLUDE="${lib.getDev libxc}/include"
+    export LIBXC_MODDIR="${lib.getDev libxc}/include"
+    export LIBXC_LIB="${lib.getLib libxc}/lib"
 
     # extra TCE related options
     export MRCC_METHODS="y"
@@ -147,6 +156,9 @@ stdenv.mkDerivation rec {
 
     runHook postConfigure
   '';
+
+  # Required for build with gcc-14
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
 
   enableParallelBuilding = true;
 
@@ -166,6 +178,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/nwchem
 
     cp $NWCHEM_TOP/bin/LINUX64/nwchem $out/bin/nwchem
@@ -188,12 +202,14 @@ stdenv.mkDerivation rec {
     charmm_s $out/share/nwchem/data/charmm_s/
     charmm_x $out/share/nwchem/data/charmm_x/
     EOF
+
+    runHook postInstall
   '';
 
   doCheck = false;
 
   doInstallCheck = true;
-  nativeCheckInputs = [ mpiCheckPhaseHook ];
+  nativeInstallCheckInputs = [ mpiCheckPhaseHook ];
   installCheckPhase = ''
     runHook preInstallCheck
 
@@ -209,8 +225,14 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open Source High-Performance Computational Chemistry";
     mainProgram = "nwchem";
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ sheepforce markuskowa ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with maintainers; [
+      sheepforce
+      markuskowa
+    ];
     homepage = "https://nwchemgit.github.io";
     license = licenses.ecl20;
   };

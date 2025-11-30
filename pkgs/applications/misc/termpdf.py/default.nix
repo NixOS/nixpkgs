@@ -1,9 +1,22 @@
-{ lib, buildPythonApplication, fetchFromGitHub, bibtool, pybtex, pymupdf, pynvim
-, pyperclip, roman, pdfrw, pagelabels, setuptools }:
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  bibtool,
+  pybtex,
+  pymupdf,
+  pynvim,
+  pyperclip,
+  roman,
+  pdfrw,
+  pagelabels,
+  setuptools,
+}:
 
 buildPythonApplication {
   pname = "termpdf.py";
   version = "2022-03-28";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dsanson";

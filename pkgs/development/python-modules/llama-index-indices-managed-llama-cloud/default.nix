@@ -2,14 +2,15 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  poetry-core,
+  hatchling,
+  llama-cloud,
   llama-index-core,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-indices-managed-llama-cloud";
-  version = "0.1.6";
+  version = "0.9.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,12 +18,17 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_indices_managed_llama_cloud";
     inherit version;
-    hash = "sha256-dLOw6ev500jTBU+fwMZXAxrM65NRwxEWrY1aeuRyn1w=";
+    hash = "sha256-teAHUqswVkq/GcV1laIQf1aXw7A7CFgXtPyoSjjrvVk=";
   };
 
-  build-system = [ poetry-core ];
+  pythonRelaxDeps = [ "llama-cloud" ];
 
-  dependencies = [ llama-index-core ];
+  build-system = [ hatchling ];
+
+  dependencies = [
+    llama-cloud
+    llama-index-core
+  ];
 
   # Tests are only available in the mono repo
   doCheck = false;

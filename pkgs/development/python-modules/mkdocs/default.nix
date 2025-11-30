@@ -17,6 +17,7 @@
   markdown,
   markupsafe,
   mergedeep,
+  mkdocs-get-deps,
   packaging,
   pathspec,
   platformdirs,
@@ -35,43 +36,51 @@
 
 buildPythonPackage rec {
   pname = "mkdocs";
-  version = "1.5.3";
+  version = "1.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-axH4AeL+osxoUIVJbW6YjiTfUr6TAXMB4raZ3oO0fyw=";
+    owner = "mkdocs";
+    repo = "mkdocs";
+    tag = version;
+    hash = "sha256-JQSOgV12iYE6FubxdoJpWy9EHKFxyKoxrm/7arCn9Ak=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [
+    hatchling
+    # babel, setuptools required as "build hooks"
+    babel
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     ghp-import
     jinja2
     markdown
     markupsafe
     mergedeep
+    mkdocs-get-deps
     packaging
     pathspec
     platformdirs
     pyyaml
     pyyaml-env-tag
     watchdog
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
-  passthru.optional-dependencies = {
-    i18n = [ babel ] ++ lib.optionals (pythonAtLeast "3.12") [ setuptools ];
+  optional-dependencies = {
+    i18n = [ babel ];
   };
 
   nativeCheckInputs = [
     unittestCheckHook
     mock
-  ] ++ passthru.optional-dependencies.i18n;
+  ]
+  ++ optional-dependencies.i18n;
 
   unittestFlagsArray = [
     "-v"

@@ -1,11 +1,12 @@
-{ stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, cryptominisat
-, boost
-, louvain-community
-, lib
+{
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  cryptominisat,
+  boost,
+  louvain-community,
+  lib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,6 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
     cryptominisat
     louvain-community
   ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.3 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   meta = with lib; {
     description = "CNF minimizer and minimal independent set calculator";

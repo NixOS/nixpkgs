@@ -20,21 +20,21 @@
 
 buildPythonPackage rec {
   pname = "pytelegrambotapi";
-  version = "4.18.0";
+  version = "4.29.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "eternnoir";
     repo = "pyTelegramBotAPI";
-    rev = "refs/tags/${version}";
-    hash = "sha256-MlKLLLoEbB+ju+ewYDSEUCLVpCt+MsRKzTDVDuxDr8I=";
+    tag = version;
+    hash = "sha256-djiuIHTcPiKIfMxFevCa4c3V8ydGpSqH4mo0qH+Cpw8=";
   };
 
   build-system = [ hatchling ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     json = [ ujson ];
     PIL = [ pillow ];
     redis = [ redis ];
@@ -50,14 +50,16 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     requests
-  ] ++ passthru.optional-dependencies.watchdog ++ passthru.optional-dependencies.aiohttp;
+  ]
+  ++ optional-dependencies.watchdog
+  ++ optional-dependencies.aiohttp;
 
   pythonImportsCheck = [ "telebot" ];
 
   meta = with lib; {
     description = "Python implementation for the Telegram Bot API";
     homepage = "https://github.com/eternnoir/pyTelegramBotAPI";
-    changelog = "https://github.com/eternnoir/pyTelegramBotAPI/releases/tag/${version}";
+    changelog = "https://github.com/eternnoir/pyTelegramBotAPI/releases/tag/${src.tag}";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ das_j ];
   };

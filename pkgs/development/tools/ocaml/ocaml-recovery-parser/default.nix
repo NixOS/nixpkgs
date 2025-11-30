@@ -1,15 +1,13 @@
-{ lib
-, fetchFromGitHub
-, ocaml
-, buildDunePackage
-, fix
-, menhirLib
-, menhirSdk
-, gitUpdater
+{
+  lib,
+  fetchFromGitHub,
+  ocaml,
+  buildDunePackage,
+  fix,
+  menhirLib,
+  menhirSdk,
+  gitUpdater,
 }:
-
-lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
-  "ocaml-recovery-parser is not available for OCaml ${ocaml.version}"
 
 buildDunePackage rec {
   pname = "ocaml-recovery-parser";
@@ -34,10 +32,15 @@ buildDunePackage rec {
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description = "A simple fork of OCaml parser with support for error recovery";
+    description = "Simple fork of OCaml parser with support for error recovery";
     homepage = "https://github.com/serokell/ocaml-recovery-parser";
-    license = with licenses; [ lgpl2Only mit mpl20 ];
+    license = with licenses; [
+      lgpl2Only
+      mit
+      mpl20
+    ];
     maintainers = with maintainers; [ romildo ];
     mainProgram = "menhir-recover";
+    broken = lib.versionAtLeast ocaml.version "5.0";
   };
 }

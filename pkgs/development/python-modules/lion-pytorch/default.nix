@@ -8,15 +8,15 @@
 
 buildPythonPackage rec {
   pname = "lion-pytorch";
-  version = "0.1.4";
+  version = "0.2.3";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "lucidrains";
     repo = "lion-pytorch";
-    rev = "refs/tags/${version}";
-    hash = "sha256-8LbALBKQ5ACwmLWYUz3GYkkkhhy8emi6n3kgwYdnDSI=";
+    tag = version;
+    hash = "sha256-RHixPIZ1kCawWQiqYqLY+c3r6Rg86LKm3tQTyW2BNFU=";
   };
 
   propagatedBuildInputs = [ torch ];

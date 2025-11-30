@@ -3,6 +3,8 @@
   buildPythonPackage,
   certifi,
   click,
+  cryptography,
+  dotmap,
   ecs-logging,
   elastic-transport,
   elasticsearch8,
@@ -12,16 +14,15 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   requests,
-  six,
+  tiered-debug,
   voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "es-client";
-  version = "8.13.1";
+  version = "8.18.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,24 +30,24 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "untergeek";
     repo = "es_client";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-4v9SRWVG9p4kCob4C3by2JxNqX6L3yMHpbnMYEAM7A0=";
+    tag = "v${version}";
+    hash = "sha256-siB17xVRS/eeKOsJcWdh4foOHXbeV8wwRclXDHodADM=";
   };
 
   pythonRelaxDeps = true;
 
   build-system = [ hatchling ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-
   dependencies = [
     certifi
     click
+    cryptography
+    dotmap
     ecs-logging
     elastic-transport
     elasticsearch8
     pyyaml
-    six
+    tiered-debug
     voluptuous
   ];
 
@@ -60,22 +61,21 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "es_client" ];
 
   disabledTests = [
-    # Tests require network access
+    # Tests require local Elasticsearch instance
     "test_bad_version_raises"
     "test_basic_operation"
-    "test_basic_operation"
     "test_client_info"
-    "test_logging_options_ecs"
-    "test_logging_options_json"
+    "test_client_info"
+    "test_exit_if_not_master"
     "test_multiple_hosts_raises"
-    "test_non_dict_passed"
     "test_skip_version_check"
+    "TestCLIExample"
   ];
 
   meta = with lib; {
     description = "Module for building Elasticsearch client objects";
     homepage = "https://github.com/untergeek/es_client";
-    changelog = "https://github.com/untergeek/es_client/releases/tag/v${version}";
+    changelog = "https://github.com/untergeek/es_client/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

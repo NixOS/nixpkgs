@@ -7,7 +7,6 @@
   fsspec,
   funcy,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools-scm,
 }:
 
@@ -21,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvc-http";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ru/hOFv/RcS/7SBpTJU8xFxdllmaiH4dV1ouS6GGKkY=";
   };
 

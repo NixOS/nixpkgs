@@ -1,39 +1,59 @@
-{ lib
-, mkXfceDerivation
-, gobject-introspection
-, wayland-scanner
-, glib
-, gtk3
-, libwnck
-, libX11
-, wayland
-, wlr-protocols
+{
+  stdenv,
+  lib,
+  mkXfceDerivation,
+  python3,
+  wayland-scanner,
+  glib,
+  gtk3,
+  libdisplay-info,
+  libwnck,
+  libX11,
+  libXrandr,
+  wayland,
+  wayland-protocols,
+  wlr-protocols,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  buildPackages,
+  gobject-introspection,
 }:
 
 mkXfceDerivation {
   category = "xfce";
   pname = "libxfce4windowing";
-  version = "4.19.3";
+  version = "4.20.4";
 
-  sha256 = "sha256-nsobRyGeagUq1WHzYBq6vd9g5A65KEQC4cX+m7w0pqg=";
+  sha256 = "sha256-8iLkljuGyJ4giVN5yuOFuTZsrdr8U3avTS/1aRSpaxc=";
 
   nativeBuildInputs = [
-    gobject-introspection
+    python3
     wayland-scanner
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
   ];
 
   buildInputs = [
     glib
     gtk3
+    libdisplay-info
     libwnck
     libX11
+    libXrandr
     wayland
+    wayland-protocols
     wlr-protocols
   ];
+
+  postPatch = ''
+    patchShebangs xdt-gen-visibility
+  '';
 
   meta = {
     description = "Windowing concept abstraction library for X11 and Wayland";
     license = lib.licenses.lgpl21Plus;
-    maintainers = lib.teams.xfce.members;
+    teams = [ lib.teams.xfce ];
   };
 }

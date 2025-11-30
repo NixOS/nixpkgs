@@ -11,11 +11,10 @@
   cryptography,
   fetchFromGitHub,
   freezegun,
-  importlib-resources,
+  frozendict,
   jsonschema,
-  pycryptodome,
-  pyserial-asyncio,
-  pytest-asyncio,
+  pyserial-asyncio-fast,
+  pytest-asyncio_0,
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
@@ -26,16 +25,14 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.64.0";
+  version = "0.86.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-4p/CUAZQLiADWzjXMOeYUX0OJgZczHrI2/sVRuXiFSI=";
+    tag = version;
+    hash = "sha256-PROJKC8ZxAZ8zZR4if33553qtp7i9y58LPr1d1gCXVQ=";
   };
 
   postPatch = ''
@@ -46,26 +43,24 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      attrs
-      aiohttp
-      aiosqlite
-      crccheck
-      cryptography
-      jsonschema
-      pyserial-asyncio
-      typing-extensions
-      pycryptodome
-      voluptuous
-    ]
-    ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ]
-    ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  dependencies = [
+    attrs
+    aiohttp
+    aiosqlite
+    crccheck
+    cryptography
+    frozendict
+    jsonschema
+    pyserial-asyncio-fast
+    typing-extensions
+    voluptuous
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     aioresponses
     freezegun
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-timeout
     pytestCheckHook
   ];
@@ -73,11 +68,16 @@ buildPythonPackage rec {
   disabledTests = [
     # assert quirked.quirk_metadata.quirk_location.endswith("zigpy/tests/test_quirks_v2.py]-line:104") is False
     "test_quirks_v2"
-  ] ++ lib.optionals (stdenv.isLinux && stdenv.isx86_64) [ "test_periodic_scan_priority" ];
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+    "test_periodic_scan_priority"
+  ];
 
   disabledTestPaths = [
     # Tests require network access
     "tests/ota/test_ota_providers.py"
+    # All tests fail to shutdown thread during teardown
+    "tests/ota/test_ota_matching.py"
   ];
 
   pythonImportsCheck = [

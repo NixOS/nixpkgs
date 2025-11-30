@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchurl
-, xz
-, pkg-config
-, guile
-, scheme-bytestructures
+{
+  stdenv,
+  lib,
+  fetchurl,
+  xz,
+  pkg-config,
+  guile,
+  scheme-bytestructures,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # In procedure bytevector-u8-ref: Argument 2 out of range
-  dontStrip = stdenv.isDarwin;
+  dontStrip = stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     homepage = "https://ngyro.com/software/guile-lzma.html";

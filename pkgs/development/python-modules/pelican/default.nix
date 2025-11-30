@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pythonRelaxDepsHook,
 
   # build-system
   pdm-backend,
@@ -15,7 +14,6 @@
   typogrify,
 
   # dependencies
-  backports-zoneinfo,
   blinker,
   docutils,
   feedgenerator,
@@ -30,6 +28,8 @@
   watchfiles,
 
   # tests
+  beautifulsoup4,
+  lxml,
   mock,
   pytestCheckHook,
   pytest-xdist,
@@ -37,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "pelican";
-  version = "4.9.1";
+  version = "4.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "getpelican";
     repo = "pelican";
-    rev = "refs/tags/${version}";
-    hash = "sha256-nz2OnxJ4mGgnafz4Xp8K/BTyVgXNpNYqteNL1owP8Hk=";
+    tag = version;
+    hash = "sha256-SrzHAqDX+DCeaWMmlG8tgA1RKLDnICkvDIE/kUQZN+s=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     postFetch = ''
@@ -59,12 +59,9 @@ buildPythonPackage rec {
       --replace "'git'" "'${git}/bin/git'"
   '';
 
-  nativeBuildInputs = [
-    pdm-backend
-    pythonRelaxDepsHook
-  ];
+  build-system = [ pdm-backend ];
 
-  pythonRelaxDeps = [ "unidecode" ];
+  pythonRelaxDeps = [ "pygments" ];
 
   buildInputs = [
     glibcLocales
@@ -74,7 +71,7 @@ buildPythonPackage rec {
     typogrify
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     blinker
     docutils
     feedgenerator
@@ -86,18 +83,24 @@ buildPythonPackage rec {
     tzdata
     unidecode
     watchfiles
-  ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
-
-  nativeCheckInputs = [
-    mock
-    pytest-xdist
-    pytestCheckHook
-    pandoc
   ];
 
-  pytestFlagsArray = [
+  optional-dependencies = {
+    markdown = [ markdown ];
+  };
+
+  nativeCheckInputs = [
+    beautifulsoup4
+    lxml
+    mock
+    pandoc
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  pytestFlags = [
     # DeprecationWarning: 'jinja2.Markup' is deprecated and...
-    "-W ignore::DeprecationWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = [
@@ -105,6 +108,11 @@ buildPythonPackage rec {
     "test_basic_generation_works"
     "test_custom_generation_works"
     "test_custom_locale_generation_works"
+    "test_deprecated_attribute"
+    # AttributeError
+    "test_wp_custpost_true_dirpage_false"
+    "test_can_toggle_raw_html_code_parsing"
+    "test_dirpage_directive_for_page_kind"
   ];
 
   env.LC_ALL = "en_US.UTF-8";
@@ -123,6 +131,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Static site generator that requires no database or server-side logic";
     homepage = "https://getpelican.com/";
+    changelog = "https://github.com/getpelican/pelican/blob/${src.tag}/docs/changelog.rst";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [
       offline

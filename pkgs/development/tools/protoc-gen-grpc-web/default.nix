@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, protobuf
-, isStatic ? stdenv.hostPlatform.isStatic
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  protobuf,
+  isStatic ? stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=$(out)"
-    "STATIC=${if isStatic then "yes" else "no"}"
+    "STATIC=${lib.boolToYesNo isStatic}"
   ];
 
   doCheck = true;

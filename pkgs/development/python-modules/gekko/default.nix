@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "gekko";
-  version = "1.1.1";
+  version = "1.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xc6NfPCvkEYjUG82QmFqDuu02QNwKfoS6DDpkdaMWJ8=";
+    hash = "sha256-S/uHA1UPPX159ZOk/vItSVWZ4VVu1Bylhc98LslAutI=";
   };
 
   build-system = [ setuptools ];

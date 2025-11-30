@@ -6,14 +6,14 @@
   pythonOlder,
   iso4217,
   pyserial,
-  pyserial-asyncio,
+  pyserial-asyncio-fast,
   pytestCheckHook,
   pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "aioraven";
-  version = "0.5.3";
+  version = "0.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cottsay";
     repo = "aioraven";
-    rev = "refs/tags/${version}";
-    hash = "sha256-kGCFwpMaLWxLUp8k5H5AnL21KrwohbUYLswLcLqmc3M=";
+    tag = version;
+    hash = "sha256-rGqaDJtpdDWd8fxdfwU+rmgwEzZyYHfbiZxUlWoH2ks=";
   };
 
   build-system = [ setuptools ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   dependencies = [
     iso4217
     pyserial
-    pyserial-asyncio
+    pyserial-asyncio-fast
   ];
 
   nativeCheckInputs = [

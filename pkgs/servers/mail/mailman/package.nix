@@ -1,10 +1,11 @@
-{ lib
-, fetchpatch
-, python3
-, fetchPypi
-, postfix
-, lynx
-, nixosTests
+{
+  lib,
+  fetchpatch,
+  python3,
+  fetchPypi,
+  postfix,
+  lynx,
+  nixosTests,
 }:
 
 with python3.pkgs;
@@ -12,6 +13,8 @@ with python3.pkgs;
 buildPythonPackage rec {
   pname = "mailman";
   version = "3.3.9";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
@@ -19,7 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-GblXI6IwkLl+V1gEbMAe1baVyZOHMaYaYITXcTkp2Mo=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     aiosmtpd
     alembic
     authheaders
@@ -35,6 +42,7 @@ buildPythonPackage rec {
     python-dateutil
     requests
     sqlalchemy
+    standard-nntplib
     zope-component
     zope-configuration
   ];
@@ -51,6 +59,11 @@ buildPythonPackage rec {
     (fetchpatch {
       url = "https://gitlab.com/mailman/mailman/-/commit/9613154f3c04fa2383fbf017031ef263c291418d.patch";
       sha256 = "0vyw87s857vfxbf7kihwb6w094xyxmxbi1bpdqi3ybjamjycp55r";
+    })
+    (fetchpatch {
+      name = "python-3.13.patch";
+      url = "https://gitlab.com/mailman/mailman/-/commit/685d9a7bdbd382d9e8d4a2da74bd973e93356e05.patch";
+      hash = "sha256-KCXVP+5zqgluUXQCGmMRC+G1hEDnFBlTUETGpmFDOOk=";
     })
     ./log-stderr.patch
   ];

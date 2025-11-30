@@ -1,31 +1,45 @@
-{ lib, buildDunePackage, ocaml, alcotest
-, functoria, mirage-runtime, bos
-, ipaddr, astring, logs, stdlib-shims
+{
+  buildDunePackage,
+  ocaml,
+  mirage-runtime,
+  astring,
+  bos,
+  cmdliner,
+  emile,
+  fmt,
+  fpath,
+  ipaddr,
+  logs,
+  rresult,
+  uri,
 }:
 
 buildDunePackage rec {
   pname = "mirage";
   inherit (mirage-runtime) version src;
 
-  minimalOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.13";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   propagatedBuildInputs = [
-    ipaddr
-    functoria
-    mirage-runtime
-    bos
     astring
+    bos
+    cmdliner
+    emile
+    fmt
+    fpath
+    ipaddr
     logs
-    stdlib-shims
+    rresult
+    uri
   ];
 
   # Tests need opam-monorepo
   doCheck = false;
-  checkInputs = [
-    alcotest
-  ];
 
   installPhase = ''
     runHook preInstall
@@ -34,6 +48,6 @@ buildDunePackage rec {
   '';
 
   meta = mirage-runtime.meta // {
-    description = "The MirageOS library operating system";
+    description = "MirageOS library operating system";
   };
 }

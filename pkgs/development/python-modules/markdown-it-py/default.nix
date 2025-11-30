@@ -21,7 +21,6 @@
   stdenv,
   pytest-regressions,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   pythonOlder,
 }:
 
@@ -34,8 +33,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "executablebooks";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "markdown-it-py";
+    tag = "v${version}";
     hash = "sha256-cmjLElJA61EysTUFMVY++Kw0pI4wOIXOyCY3To9fpQc=";
   };
 
@@ -43,7 +42,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "linkify-it-py" ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     flit-core
   ];
 
@@ -52,17 +50,18 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-regressions
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.linkify;
+  ]
+  ++ optional-dependencies.linkify;
 
   # disable and remove benchmark tests
   preCheck = ''
     rm -r benchmarking
   '';
-  doCheck = !stdenv.isi686;
+  doCheck = !stdenv.hostPlatform.isi686;
 
   pythonImportsCheck = [ "markdown_it" ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     compare = [
       commonmark
       markdown

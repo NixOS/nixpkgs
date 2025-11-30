@@ -21,7 +21,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ fonttools ];
 
-  doCheck = true;
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {

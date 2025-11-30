@@ -83,10 +83,23 @@
   # TypeError: __init__() got an unexpected keyword argument 'msg' - maybe you meant pytest.mark.skipif?
   "test_force_window_opengl_render_with_movies"
 
-  # mismatching expecation on the new commandline
+  # mismatching expectation on the new commandline
   "test_manim_new_command"
 
   # This tests checks if the manim executable is a python script. In our case it is not.
   # It is a wrapper shell script instead.
   "test_manim_checkhealth_subcommand"
+
+  # failing with:
+  # E       AssertionError: assert 'Manim Commun...developers.\n' == 'Manim Community v0.19.0\n\n'
+  # E
+  # E           Manim Community v0.19.0
+  # E
+  # E         + Usage: manim cfg [OPTIONS] COMMAND [ARGS]...
+  # E         +
+  # E         +   Manages Manim configuration files.
+  # E         + ...
+  # E
+  # E         ...Full output truncated (9 lines hidden), use '-vv' to show
+  "test_manim_cfg_subcommand"
 ]

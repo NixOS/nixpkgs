@@ -1,10 +1,11 @@
-{ lib
-, makeWrapper
-, symlinkJoin
-, plugins
-, rizin
-, isCutter ? false
-, cutter
+{
+  lib,
+  makeWrapper,
+  symlinkJoin,
+  plugins,
+  rizin,
+  isCutter ? false,
+  cutter,
 }:
 
 let
@@ -29,9 +30,7 @@ symlinkJoin {
 
   postBuild = ''
     rm $out/bin/*
-    wrapperArgs=(--set NIX_RZ_PREFIX $out${
-      lib.optionalString isCutter " --prefix XDG_DATA_DIRS : $out/share"
-    })
+    wrapperArgs=(--set NIX_RZ_PREFIX $out${lib.optionalString isCutter " --prefix XDG_DATA_DIRS : $out/share"})
     for binary in $(ls ${unwrapped}/bin); do
       makeWrapper ${unwrapped}/bin/$binary $out/bin/$binary "''${wrapperArgs[@]}"
     done
@@ -39,6 +38,6 @@ symlinkJoin {
 
   meta = unwrapped.meta // {
     # prefer wrapped over unwrapped
-    priority = (unwrapped.meta.priority or 0) - 1;
+    priority = (unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
   };
 }

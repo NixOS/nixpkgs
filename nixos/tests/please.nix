@@ -1,15 +1,15 @@
-import ./make-test-python.nix ({ lib, ... }:
+{ lib, ... }:
 {
   name = "please";
-  meta.maintainers = with lib.maintainers; [ azahi ];
+  meta.maintainers = [ ];
 
   nodes.machine =
     { ... }:
     {
       users.users = lib.mkMerge [
-        (lib.listToAttrs (map
-          (n: lib.nameValuePair n { isNormalUser = true; })
-          (lib.genList (x: "user${toString x}") 6)))
+        (lib.listToAttrs (
+          map (n: lib.nameValuePair n { isNormalUser = true; }) (lib.genList (x: "user${toString x}") 6)
+        ))
         {
           user0.extraGroups = [ "wheel" ];
         }
@@ -63,4 +63,4 @@ import ./make-test-python.nix ({ lib, ... }:
     with subtest("user5: cannot edit /etc/hosts"):
         machine.fail('su - user5 -c "EDITOR=cat pleaseedit /etc/hosts"')
   '';
-})
+}

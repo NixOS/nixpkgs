@@ -2,8 +2,6 @@
   lib,
   aiohttp,
   buildPythonPackage,
-  pythonOlder,
-  pythonRelaxDepsHook,
   fetchFromGitHub,
   setuptools,
   construct,
@@ -14,26 +12,21 @@
 
 buildPythonPackage rec {
   pname = "vallox-websocket-api";
-  version = "5.2.0";
+  version = "5.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "yozik04";
     repo = "vallox_websocket_api";
-    rev = "refs/tags/${version}";
-    hash = "sha256-qq58ZSrKVQ00rtXMe4L9xfz0QB+UpjGOhPo1srPYIY4=";
+    tag = version;
+    hash = "sha256-L9duL8XfDUxHgJxVbG7PPPRJRzVEckxqbB+1vX0GalU=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [ "websockets" ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     construct
     websockets
@@ -47,7 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "vallox_websocket_api" ];
 
   meta = {
-    changelog = "https://github.com/yozik04/vallox_websocket_api/releases/tag/${version}";
+    changelog = "https://github.com/yozik04/vallox_websocket_api/releases/tag/${src.tag}";
     description = "Async API for Vallox ventilation units";
     homepage = "https://github.com/yozik04/vallox_websocket_api";
     license = lib.licenses.lgpl3Only;

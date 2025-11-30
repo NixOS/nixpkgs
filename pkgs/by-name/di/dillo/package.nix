@@ -3,39 +3,37 @@
   autoreconfHook,
   fetchFromGitHub,
   fltk,
-  giflib,
-  libXcursor,
-  libXi,
-  libXinerama,
   libjpeg,
   libpng,
+  libwebp,
   libressl,
   mbedtls,
   openssl,
-  perl,
   pkg-config,
   stdenv,
   which,
   # Configurable options
-  tlsLibrary? "libressl"
+  tlsLibrary ? "libressl",
 }:
 
 let
-  ssl = {
-    "libressl" = libressl;
-    "mbedtls" = mbedtls;
-    "openssl" = openssl;
-  }.${tlsLibrary} or (throw "Unrecognized tlsLibrary option: ${tlsLibrary}");
+  ssl =
+    {
+      "libressl" = libressl;
+      "mbedtls" = mbedtls;
+      "openssl" = openssl;
+    }
+    .${tlsLibrary} or (throw "Unrecognized tlsLibrary option: ${tlsLibrary}");
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dillo";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "dillo-browser";
     repo = "dillo";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AqffkUPLvVSGq9iYksyvHf3HQ3DLWNlB3CYw4GCAAEI=";
+    hash = "sha256-9nJq20iW8/UI3GgXWje+46WDSu3/omd1PN/uTlYCOac=";
   };
 
   nativeBuildInputs = [
@@ -46,24 +44,24 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    fltk
-    giflib
-    libXcursor
-    libXi
-    libXinerama
     libjpeg
     libpng
-    perl
+    libwebp
     ssl
+    fltk
   ];
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
 
   strictDeps = true;
 
   meta = {
     homepage = "https://dillo-browser.github.io/";
-    description = "A fast graphical web browser with a small footprint";
+    description = "Fast graphical web browser with a small footprint";
     longDescription = ''
       Dillo is a fast and small graphical web browser with the following
       features:
@@ -80,8 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
       - Helps authors to comply with web standards by using the bug meter.
     '';
     mainProgram = "dillo";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ fgaz ];
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
   };
 })

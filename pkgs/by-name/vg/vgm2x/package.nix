@@ -1,43 +1,47 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, unstableGitUpdater
-, libfmvoice
-, zlib
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  libarchive,
+  libzip,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vgm2x";
-  version = "0.0.0-unstable-2023-08-27";
+  version = "0-unstable-2024-12-13";
 
   src = fetchFromGitHub {
     owner = "vampirefrog";
     repo = "vgm2x";
-    rev = "5128055ab2b356e173b53e2afd31202a59505a39";
-    hash = "sha256-DwDcSUdfOsDlajYtzg5xM5P9QPOqLp8b0sEpE18kfzA=";
+    rev = "ae37e3a8a2d563733c89e00597a18b5deac80b4f";
+    fetchSubmodules = true;
+    hash = "sha256-wRwfRlABy5Ojyjohs68Uqvq0otMbvBCexLpGPmx6sds=";
   };
 
   postPatch = ''
-    rmdir libfmvoice
-    cp --no-preserve=all -r ${libfmvoice.src} libfmvoice
+    substituteInPlace Makefile \
+      --replace-fail 'pkg-config' "$PKG_CONFIG"
   '';
 
   strictDeps = true;
 
   enableParallelBuilding = true;
 
+  nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [
-    zlib
+    libarchive
+    libzip
   ];
 
-  buildFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 vgm2opm $out/bin/vgm2opm
+    install -Dm755 vgm2x $out/bin/vgm2x
 
     runHook postInstall
   '';
@@ -46,12 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "VGM file extraction tools";
     homepage = "https://github.com/vampirefrog/vgm2x";
-    license = licenses.gpl3Only;
-    mainProgram = "vgm2opm";
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Only;
+    mainProgram = "vgm2x";
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
   };
 })

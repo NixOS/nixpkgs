@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
@@ -67,10 +72,9 @@ in
 
   config = {
 
-    boot.uki.name = lib.mkOptionDefault (if config.system.image.id != null then
-      config.system.image.id
-    else
-      "nixos");
+    boot.uki.name = lib.mkOptionDefault (
+      if config.system.image.id != null then config.system.image.id else "nixos"
+    );
 
     boot.uki.settings = {
       UKI = {
@@ -82,9 +86,12 @@ in
         OSRelease = lib.mkOptionDefault "@${config.system.build.etc}/etc/os-release";
         # This is needed for cross compiling.
         EFIArch = lib.mkOptionDefault efiArch;
-      } // lib.optionalAttrs (config.hardware.deviceTree.enable && config.hardware.deviceTree.name != null) {
-        DeviceTree = lib.mkOptionDefault "${config.hardware.deviceTree.package}/${config.hardware.deviceTree.name}";
-      };
+      }
+      //
+        lib.optionalAttrs (config.hardware.deviceTree.enable && config.hardware.deviceTree.name != null)
+          {
+            DeviceTree = lib.mkOptionDefault "${config.hardware.deviceTree.package}/${config.hardware.deviceTree.name}";
+          };
     };
 
     boot.uki.configFile = lib.mkOptionDefault (format.generate "ukify.conf" cfg.settings);
@@ -104,8 +111,7 @@ in
         --config=${cfg.configFile} \
         --output="$out/${config.system.boot.loader.ukiFile}"
     '';
-
-    meta.maintainers = with lib.maintainers; [ nikstur ];
-
   };
+
+  meta.maintainers = with lib.maintainers; [ nikstur ];
 }

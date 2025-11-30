@@ -8,14 +8,13 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   redshift-connector,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "dbt-redshift";
-  version = "1.7.7";
+  version = "1.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -23,16 +22,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-redshift";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-DKqJ/8hEPe9O9YrAjrTL2Gh1lj6QrdtHtd7aarZ7GkQ=";
+    tag = "v${version}";
+    hash = "sha256-ayt5KRH3jAoi7k+0yfk1ZSqG4qsM+zny8tDnWOWO5oA=";
   };
 
   pythonRelaxDeps = [
     "boto3"
     "redshift-connector"
   ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [ setuptools ];
 
@@ -46,7 +43,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   pythonImportsCheck = [ "dbt.adapters.redshift" ];
 

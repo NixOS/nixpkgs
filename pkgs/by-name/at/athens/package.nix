@@ -1,24 +1,29 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, testers
-, athens
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  nix-update-script,
+  versionCheckHook,
 }:
-buildGoModule rec {
+
+buildGoModule (finalAttrs: {
   pname = "athens";
-  version = "0.14.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "gomods";
     repo = "athens";
-    rev = "v${version}";
-    hash = "sha256-5E9jBV+m19AUtSTpTlkCx8JUHwlcM2pgSGfo4zPqDNk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qF5sSpWtw1qTxfaZkQse882JjE5idP2Wk0RVsPmzIlY=";
   };
 
-  vendorHash = "sha256-LajNPzGbWqW+9aqiquk2LvSUjKwi1gbDY4cKXmn3PWk=";
+  vendorHash = "sha256-bn3He7ImXxrl+Or2pqzVpM8VxbfqDDupwtZbdSMd4HI=";
 
-  CGO_ENABLED = "0";
-  ldflags = [ "-s" "-w" "-X github.com/gomods/athens/pkg/build.version=${version}" ];
+  env.CGO_ENABLED = "0";
+  ldflags = [
+    "-s"
+    "-X github.com/gomods/athens/pkg/build.version=${finalAttrs.version}"
+  ];
 
   subPackages = [ "cmd/proxy" ];
 
@@ -26,19 +31,21 @@ buildGoModule rec {
     mv $out/bin/proxy $out/bin/athens
   '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = athens;
-    };
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  meta = with lib; {
-    description = "A Go module datastore and proxy";
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Go module datastore and proxy";
     homepage = "https://github.com/gomods/athens";
-    changelog = "https://github.com/gomods/athens/releases/tag/v${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/gomods/athens/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
     mainProgram = "athens";
-    maintainers = with maintainers; [ katexochen malt3 ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [
+      katexochen
+      malt3
+    ];
+    platforms = lib.platforms.unix;
   };
-}
+})

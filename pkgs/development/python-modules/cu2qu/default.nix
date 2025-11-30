@@ -39,7 +39,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     defcon
     fonttools
-  ] ++ fonttools.optional-dependencies.ufo;
+  ]
+  ++ fonttools.optional-dependencies.ufo;
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -49,6 +50,6 @@ buildPythonPackage rec {
     mainProgram = "cu2qu";
     homepage = "https://github.com/googlefonts/cu2qu";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

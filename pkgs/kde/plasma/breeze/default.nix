@@ -1,12 +1,33 @@
 {
   mkKdeDerivation,
   qtbase,
+  qtsvg,
   libsForQt5,
+  fetchpatch,
 }:
 mkKdeDerivation {
   pname = "breeze";
 
-  outputs = ["out" "dev" "qt5"];
+  # Fix extra thicc padding on menu items
+  # FIXME: remove in next update
+  patches = [
+    (fetchpatch {
+      url = "https://invent.kde.org/plasma/breeze/-/commit/4a8a46aba6b9e39bfb02c7f46933079b5a50eff5.diff";
+      hash = "sha256-ZzRMMwz3OihChywzQWBNv9rPcZI+IcXNVzoRuXTWt9c=";
+    })
+    (fetchpatch {
+      url = "https://invent.kde.org/plasma/breeze/-/commit/2cd5b37dad8f213aab4029b6d3b80ca7f159ea50.diff";
+      hash = "sha256-3pOJEH1H3o+U40K/mtKnruPsoA+vy+HrAa8vU5Oza6c=";
+    })
+  ];
+
+  outputs = [
+    "out"
+    "dev"
+    "qt5"
+  ];
+
+  extraBuildInputs = [ qtsvg ];
 
   # We can't add qt5 stuff to dependencies or the hooks blow up,
   # so manually point everything to everything. Oof.

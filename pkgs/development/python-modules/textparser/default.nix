@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/eerimoq/textparser";
-    description = "A text parser";
+    description = "Text parser";
     license = licenses.mit;
     maintainers = with maintainers; [ gray-heron ];
   };

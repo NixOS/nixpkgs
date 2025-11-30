@@ -16,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "quantile-forest";
-  version = "1.3.6";
+  version = "1.4.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "zillow";
     repo = "quantile-forest";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cYi4idA6gcUd/aVMlIwlCB/jdKpxZtc6xQEhxNSY08Y=";
+    tag = "v${version}";
+    hash = "sha256-KNHp6/TUy7Aof3P4TNGpsRlNVePrHEc4HFvMqyr4gPg=";
   };
 
   build-system = [

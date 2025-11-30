@@ -11,7 +11,7 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "django-rest-polymorphic";
   version = "0.1.10";
   format = "setuptools";
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     description = "Polymorphic serializers for Django REST Framework";
     homepage = "https://github.com/apirobot/django-rest-polymorphic";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

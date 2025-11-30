@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pythonOlder,
   # deps
+  setuptools,
   aiohttp,
   attrs,
   yarl,
@@ -18,29 +19,42 @@
   aiosqlite,
   asyncpg,
   ruamel-yaml,
+  fetchpatch,
+
+  withOlm ? false,
 }:
 
 buildPythonPackage rec {
   pname = "mautrix";
-  version = "0.20.4";
-  format = "setuptools";
+  version = "0.20.8";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-A9d/r4Caeo4tO82/MMXgU5xKvXRDnK0iQUm8AFhDPLM=";
+    tag = "v${version}";
+    hash = "sha256-giK8JZ6nzsA8SV6CzDNEbJmbwDju9t6fLJr/oXNjvKs=";
   };
 
-  propagatedBuildInputs = [
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/mautrix/python/commit/0349445bd6992ac8f294582e85c3f61ce5c863b3.patch";
+      hash = "sha256-JYuFuzdwnyOdnxWg094uVKcaGza6I6hNUXUp75msRTI=";
+    })
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     attrs
     yarl
-  ];
+  ]
+  ++ lib.optionals withOlm optional-dependencies.encryption;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     detect_mimetype = [ python-magic ];
     encryption = [
       python-olm
@@ -55,7 +69,9 @@ buildPythonPackage rec {
     aiosqlite
     asyncpg
     ruamel-yaml
-  ] ++ passthru.optional-dependencies.encryption;
+  ];
+
+  disabledTestPaths = lib.optionals (!withOlm) [ "mautrix/crypto/" ];
 
   pythonImportsCheck = [ "mautrix" ];
 

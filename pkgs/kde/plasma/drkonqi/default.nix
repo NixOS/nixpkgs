@@ -2,10 +2,12 @@
   mkKdeDerivation,
   pkg-config,
   systemd,
+  elfutils,
   gdb,
   python3,
-  substituteAll,
-}: let
+  replaceVars,
+}:
+let
   gdb' = gdb.override {
     hostCpuOnly = true;
     python3 = python3.withPackages (ps: [
@@ -15,21 +17,27 @@
     ]);
   };
 in
-  mkKdeDerivation {
-    pname = "drkonqi";
+mkKdeDerivation {
+  pname = "drkonqi";
 
-    patches = [
-      (substituteAll {
-        src = ./gdb-path.patch;
-        gdb = "${gdb'}/bin/gdb";
-      })
-    ];
+  patches = [
+    (replaceVars ./hardcode-paths.patch {
+      gdb = "${gdb'}/bin/gdb";
+      eu-unstrip = "${elfutils}/bin/eu-unstrip";
+    })
+  ];
 
-    extraNativeBuildInputs = [pkg-config];
-    extraBuildInputs = [systemd];
+  extraNativeBuildInputs = [ pkg-config ];
+  extraBuildInputs = [ systemd ];
 
-    extraCmakeFlags = [
-      "-DWITH_GDB12=1"
-      "-DWITH_PYTHON_VENDORING=0"
-    ];
-  }
+  extraCmakeFlags = [
+    "-DWITH_GDB12=1"
+    "-DWITH_PYTHON_VENDORING=0"
+  ];
+
+  # Hardcoded as QString, which is UTF-16 so Nix can't pick it up automatically
+  postFixup = ''
+    mkdir -p $out/nix-support
+    echo "${gdb'}" > $out/nix-support/depends
+  '';
+}

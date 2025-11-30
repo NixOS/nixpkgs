@@ -32,7 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     wayland-scanner
-  ] ++ lib.optional buildDocs scdoc;
+  ]
+  ++ lib.optional buildDocs scdoc;
 
   buildInputs = [
     cairo
@@ -52,9 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/emersion/slurp";
     license = lib.licenses.mit;
     mainProgram = "slurp";
-    maintainers = with lib.maintainers; [
-      buffet
-      nickcao
-    ];
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 })

@@ -3,7 +3,6 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
   pythonOlder,
   setuptools,
   setuptools-scm,
@@ -11,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "heatzypy";
-  version = "2.5.4";
+  version = "2.5.7";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -19,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Cyr-ius";
     repo = "heatzypy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-A01e3duNQmVv9vyOs6+gF/BdevLiYi/uXSq5bKmuRao=";
+    tag = version;
+    hash = "sha256-MPieUg5p8j1OTWDwV/IY3dKz8bKcPrRy9tK2iKleEoM=";
   };
 
   build-system = [

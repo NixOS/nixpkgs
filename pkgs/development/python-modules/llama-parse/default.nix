@@ -2,27 +2,24 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  llama-index-core,
-  poetry-core,
-  pythonOlder,
+  llama-cloud-services,
+  hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "llama-parse";
-  version = "0.4.3";
+  version = "0.6.79";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_parse";
     inherit version;
-    hash = "sha256-AYNhR7UjiHOySn3UHFq5QrAbCbktdVcPMM8oYcCEoOs=";
+    hash = "sha256-QT2tN24GUhkKPAzjx9IIBVnufW28yBKVw5cMZvE8B7g=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
-  dependencies = [ llama-index-core ];
+  dependencies = [ llama-cloud-services ];
 
   pythonImportsCheck = [ "llama_parse" ];
 

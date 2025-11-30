@@ -8,13 +8,13 @@
 
 buildLua {
   pname = "mpv-webm";
-  version = "0-unstable-2024-05-13";
+  version = "0-unstable-2025-07-14";
 
   src = fetchFromGitHub {
     owner = "ekisu";
     repo = "mpv-webm";
-    rev = "8d4902b2aec92f40e4595ec9a411ab90488dcf4e";
-    hash = "sha256-aPPVAZu9reDdyovSpDklYZYLaapKBclAx3lCYUMJt+w=";
+    rev = "e15234567d2064791319df1e6193fcb433602d08";
+    hash = "sha256-C1N+fY5Xv6Y6tG3mTdymSlLlLYaA7XUvM0PZtkBTS4k=";
   };
   passthru.updateScript = unstableGitUpdater {
     # only "latest" tag pointing at HEAD

@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-connect-box";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-zUvZRnxVzg9izvUbp7QVcyu6Bw3dUXHOr0kOQRWEZVc=";
   };
 
@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "connect_box" ];
 
-  pytestFlagsArray = [ "--vcr-record=none" ];
+  pytestFlags = [ "--vcr-record=none" ];
 
   meta = with lib; {
     description = "Interact with a Compal CH7465LG cable modem/router";

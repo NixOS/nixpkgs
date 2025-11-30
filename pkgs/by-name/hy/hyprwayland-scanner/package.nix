@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, pugixml
-,
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  pugixml,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprwayland-scanner";
-  version = "0.3.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprwayland-scanner";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-D0pg+ZRwrt4lavZ97Ca8clsgbPA3duLj8iEM7riaIFY=";
+    hash = "sha256-FnhBENxihITZldThvbO7883PdXC/2dzW4eiNvtoV5Ao=";
   };
 
   nativeBuildInputs = [
@@ -28,12 +29,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://github.com/hyprwm/hyprwayland-scanner";
-    description = "A Hyprland version of wayland-scanner in and for C++";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fufexan ];
+    description = "Hyprland version of wayland-scanner in and for C++";
+    changelog = "https://github.com/hyprwm/hyprwayland-scanner/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.hyprland ];
     mainProgram = "hyprwayland-scanner";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

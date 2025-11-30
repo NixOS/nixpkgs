@@ -1,50 +1,65 @@
-{ lib
-, buildNpmPackage
-, gettext
-, python3
-, fetchFromGitHub
-, plugins ? [ ]
-, nixosTests
+{
+  lib,
+  buildNpmPackage,
+  gettext,
+  python3,
+  fetchFromGitHub,
+  fetchPypi,
+  plugins ? [ ],
+  nixosTests,
 }:
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = final: prev: {
-      django-bootstrap4 = prev.django-bootstrap4.overridePythonAttrs (oldAttrs: rec {
-        version = "3.0.0";
-        src = oldAttrs.src.override {
-          rev = "v${version}";
-          hash = "sha256-a8BopUwZjmvxOzBVqs4fTo0SY8sEEloGUw90daYWfz8=";
+      django = prev.django_5_1;
+
+      django-csp = prev.django-csp.overridePythonAttrs rec {
+        version = "3.8";
+        src = fetchPypi {
+          inherit version;
+          pname = "django_csp";
+          hash = "sha256-7w8an32Nporm4WnALprGYcDs8E23Dg0dhWQFEqaEccA=";
         };
+      };
 
-        propagatedBuildInputs = with final; [
-          beautifulsoup4
-          django
-        ];
-
-        # fails with some assertions
+      django-extensions = prev.django-extensions.overridePythonAttrs {
+        # Compat issues with Django 5.1
+        # https://github.com/django-extensions/django-extensions/issues/1885
         doCheck = false;
-      });
+      };
+
+      django-hierarkey = prev.django-hierarkey.overridePythonAttrs rec {
+        version = "1.2.1";
+        src = fetchFromGitHub {
+          owner = "raphaelm";
+          repo = "django-hierarkey";
+          tag = version;
+          hash = "sha256-GkCNVovo2bDCp6m2GBvusXsaBhcmJkPNu97OdtsYROY=";
+        };
+      };
     };
   };
 
-  version = "2024.1.0";
+  version = "2025.1.0";
 
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx";
     rev = "v${version}";
-    hash = "sha256-rFOlovybaEZnv5wBx6Dv8bVkP1D+CgYAKRXuNb6hLKQ=";
+    hash = "sha256-BlPmrfHbpsLI8DCldzoRudpf7T4SUpJXQA5h9o4Thek=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Conference planning tool: CfP, scheduling, speaker management";
     mainProgram = "pretalx-manage";
     homepage = "https://github.com/pretalx/pretalx";
-    changelog = "https://docs.pretalx.org/en/latest/changelog.html";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa] ++ teams.c3d2.members;
-    platforms = platforms.linux;
+    changelog = "https://docs.pretalx.org/changelog/#${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
+    teams = [ lib.teams.c3d2 ];
+    platforms = lib.platforms.linux;
   };
 
   frontend = buildNpmPackage {
@@ -53,7 +68,7 @@ let
 
     sourceRoot = "${src.name}/src/pretalx/frontend/schedule-editor";
 
-    npmDepsHash = "sha256-B9R3Nn4tURNxzeyLDHscqHxYOQK9AcmDnyNq3k5WQQs=";
+    npmDepsHash = "sha256-8difCdoG7j75wqwuWA/VBRk9oTjsM0QqLnR0iLkd/FY=";
 
     npmBuildScript = "build";
 
@@ -73,73 +88,85 @@ python.pkgs.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace src/pretalx/common/management/commands/rebuild.py \
       --replace 'subprocess.check_call(["npm", "run", "build"], cwd=frontend_dir, env=env)' ""
-
-    substituteInPlace src/setup.cfg \
-      --replace "--cov=./ --cov-report=" ""
   '';
 
   nativeBuildInputs = [
     gettext
-  ] ++ (with python.pkgs; [
-    pythonRelaxDepsHook
-    setuptools
-  ]);
-
-  pythonRelaxDeps = [
-    "celery"
-    "css-inline"
-    "cssutils"
-    "django-csp"
-    "django-filter"
-    "django-hierarkey"
-    "markdown"
-    "pillow"
-    "python-dateutil"
-    "reportlab"
-    "rules"
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
-    beautifulsoup4
-    bleach
-    celery
-    css-inline
-    csscompressor
-    cssutils
-    defusedcsv
-    django
-    django-bootstrap4
-    django-compressor
-    django-context-decorator
-    django-countries
-    django-csp
-    django-filter
-    django-formset-js-improved
-    django-formtools
-    django-hierarkey
-    django-i18nfield
-    django-libsass
-    django-scopes
-    djangorestframework
-    libsass
-    markdown
-    pillow
-    publicsuffixlist
-    python-dateutil
-    qrcode
-    reportlab
-    requests
-    rules
-    urlman
-    vobject
-    whitenoise
-    zxcvbn
-  ] ++ beautifulsoup4.optional-dependencies.lxml ++ plugins;
+  build-system = with python.pkgs; [
+    setuptools
+  ];
 
-  passthru.optional-dependencies = {
-    mysql = with python.pkgs; [
-      mysqlclient
-    ];
+  pythonRelaxDeps = [
+    "beautifulsoup4"
+    "bleach"
+    "beautifulsoup4"
+    "celery"
+    "css_inline"
+    "cssutils"
+    "defusedcsv"
+    "defusedxml"
+    "django-compressor"
+    "django-csp"
+    "django-filter"
+    "django-i18nfield"
+    "djangorestframework"
+    "markdown"
+    "pillow"
+    "publicsuffixlist"
+    "python-dateutil"
+    "reportlab"
+    "requests"
+    "rules"
+    "whitenoise"
+  ];
+
+  dependencies =
+    with python.pkgs;
+    [
+      beautifulsoup4
+      bleach
+      celery
+      csscompressor
+      css-inline
+      cssutils
+      defusedcsv
+      defusedxml
+      django
+      django-compressor
+      django-context-decorator
+      django-countries
+      django-csp
+      django-filter
+      django-formset-js-improved
+      django-formtools
+      django-hierarkey
+      django-i18nfield
+      django-libsass
+      django-scopes
+      djangorestframework
+      drf-flex-fields
+      drf-spectacular
+      libsass
+      markdown
+      pillow
+      publicsuffixlist
+      python-dateutil
+      qrcode
+      reportlab
+      requests
+      rules
+      urlman
+      vobject
+      whitenoise
+      zxcvbn
+    ]
+    ++ beautifulsoup4.optional-dependencies.lxml
+    ++ django.optional-dependencies.argon2
+    ++ plugins;
+
+  optional-dependencies = {
     postgres = with python.pkgs; [
       psycopg2
     ];
@@ -180,16 +207,20 @@ python.pkgs.buildPythonApplication rec {
     cd src
   '';
 
-  nativeCheckInputs = with python.pkgs; [
-    faker
-    freezegun
-    jsonschema
-    pytest-django
-    pytest-mock
-    pytest-xdist
-    pytestCheckHook
-    responses
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      faker
+      freezegun
+      jsonschema
+      pytest-cov-stub
+      pytest-django
+      pytest-mock
+      pytest-xdist
+      pytestCheckHook
+      responses
+    ]
+    ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # tries to run npm run i18n:extract
@@ -205,6 +236,8 @@ python.pkgs.buildPythonApplication rec {
     "test_schedule_page_text_table"
     "test_schedule_page_text_wrong_format"
     "test_versioned_schedule_page"
+    # Test is racy
+    "test_can_reset_password_by_email"
   ];
 
   passthru = {

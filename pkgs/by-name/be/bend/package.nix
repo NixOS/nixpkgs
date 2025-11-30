@@ -1,6 +1,5 @@
 {
   rustPlatform,
-  fetchCrate,
   fetchFromGitHub,
   lib,
   makeWrapper,
@@ -9,18 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "Bend";
-  version = "0.2.9";
+  version = "0.2.37";
 
   src = fetchFromGitHub {
     owner = "HigherOrderCO";
     repo = "Bend";
-    rev = "refs/tags/${version}";
-    hash = "sha256-MEfB2SBJN7uEwfZGoEL7DQXsr1fccdZyGyzHtNv9wow=";
+    tag = version;
+    hash = "sha256-8uBEI9GKUETk8t6Oanb0OECe3MlJ486QnccOuhIxPuY=";
   };
 
-  cargoHash = "sha256-+i+Y3MgCBVN3REmPwAjm2SiF9FJ0i05czmPKB8JtAFM=";
-
-  RUSTC_BOOTSTRAP = true;
+  cargoHash = "sha256-xac5Gb0hcamT3vymq6SKaMiuEn8NU9Bfhu+t/dcjhTE=";
 
   nativeBuildInputs = [
     hvm
@@ -33,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    description = "Bend is a massively parallel, high-level programming language";
+    description = "Massively parallel, high-level programming language";
     homepage = "https://higherorderco.com/";
     license = lib.licenses.asl20;
     mainProgram = "bend";

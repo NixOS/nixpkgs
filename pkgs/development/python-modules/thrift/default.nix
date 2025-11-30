@@ -1,8 +1,8 @@
 {
   lib,
   buildPythonPackage,
+  distutils,
   fetchPypi,
-  pythonAtLeast,
   pythonOlder,
   setuptools,
   six,
@@ -10,18 +10,20 @@
 
 buildPythonPackage rec {
   pname = "thrift";
-  version = "0.20.0";
+  version = "0.22.0";
   pyproject = true;
 
-  # Still uses distutils
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TdZi6t9riuvopBcpUnvWmt9s6qKoaBy+9k0Sc7Po/ro=";
+    hash = "sha256-QugnavvV9U/h02SFi2h3vF5aSl7Wn2oAW5TKSRj+FGY=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    distutils
+    setuptools
+  ];
 
   dependencies = [ six ];
 

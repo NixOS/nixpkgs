@@ -1,6 +1,5 @@
 {
   lib,
-  python,
   buildPythonPackage,
   fetchFromGitHub,
   pillow,
@@ -36,6 +35,6 @@ buildPythonPackage rec {
     mainProgram = "image-diff";
     homepage = "https://github.com/simonw/image-diff";
     license = licenses.asl20;
-    maintainers = with maintainers; [ evils ];
+    maintainers = [ ];
   };
 }

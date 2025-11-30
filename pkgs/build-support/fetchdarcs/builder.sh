@@ -1,6 +1,3 @@
-if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; elif [ -f .attrs.sh ]; then . .attrs.sh; fi
-source $stdenv/setup
-
 tagtext=""
 tagflags=""
 # Darcs hashes are sha1 (120 bits, 40-character hex)
@@ -15,8 +12,8 @@ elif test -n "$context"; then
     tagflags="--context=$context"
 fi
 
-echo "getting $url $partial ${tagtext} into $out"
+echo "Cloning $url $partial ${tagtext} into $out"
 
-darcs get --lazy $tagflags "$url" "$out"
+darcs clone --lazy $tagflags "$url" "$out"
 # remove metadata, because it can change
 rm -rf "$out/_darcs"

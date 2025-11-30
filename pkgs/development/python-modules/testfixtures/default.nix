@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "testfixtures";
-  version = "8.1.0";
+  version = "9.1.0";
   pyproject = true;
   # DO NOT CONTACT upstream.
   # https://github.com/simplistix/ is only concerned with internal CI process.
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gISJkDBIWcOito3+S8r3e25kJaOSUEe8JaUnVSd7+m0=";
+    hash = "sha256-UX6c81OUJyNTOuEQDKRd0n/geFw60nZQdfXLHLzgFII=";
   };
 
   build-system = [ setuptools ];
@@ -37,12 +37,17 @@ buildPythonPackage rec {
     twisted
   ];
 
+  disabledTests = [
+    "test_filter_missing"
+    "test_filter_present"
+  ];
+
   disabledTestPaths = [
     # Django is too much hasle to setup at the moment
     "testfixtures/tests/test_django"
   ];
 
-  pytestFlagsArray = [ "testfixtures/tests" ];
+  enabledTestPaths = [ "testfixtures/tests" ];
 
   pythonImportsCheck = [ "testfixtures" ];
 

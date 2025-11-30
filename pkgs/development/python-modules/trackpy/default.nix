@@ -16,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "trackpy";
-  version = "0.6.2";
+  version = "0.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "soft-matter";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-HqInZkKvMM0T/HrDeZJcVHMxuRmhMvu0qAl5bAu3eQI=";
+    repo = "trackpy";
+    tag = "v${version}";
+    hash = "sha256-3e+gHdn/4n8T78eA3Gjz1TdSI4Hd935U2pqd8wG+U0M=";
   };
 
   propagatedBuildInputs = [
@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = lib.optionalString stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # specifically needed for darwin
     export HOME=$(mktemp -d)
     mkdir -p $HOME/.matplotlib
@@ -52,9 +52,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Particle-tracking toolkit";
     homepage = "https://github.com/soft-matter/trackpy";
-    changelog = "https://github.com/soft-matter/trackpy/releases/tag/v${version}";
+    changelog = "https://github.com/soft-matter/trackpy/releases/tag/${src.tag}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    maintainers = [ ];
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   };
 }

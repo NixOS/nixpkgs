@@ -6,6 +6,7 @@
   setuptools-scm,
   pillow,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -22,18 +23,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptools-scm ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     images = [ pillow ];
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=barcode" "" \
-      --replace "--cov-report=term-missing:skip-covered" "" \
-      --replace "--no-cov-on-fail" ""
-  '';
-
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.images;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ]
+  ++ optional-dependencies.images;
 
   pythonImportsCheck = [ "barcode" ];
 
@@ -43,6 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/WhyNotHugo/python-barcode";
     changelog = "https://github.com/WhyNotHugo/python-barcode/blob/v${version}/docs/changelog.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

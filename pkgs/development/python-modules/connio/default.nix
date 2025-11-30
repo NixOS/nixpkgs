@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
   pythonOlder,
   serialio,
   sockio,
@@ -17,8 +16,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "tiagocoutinho";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "connio";
+    tag = "v${version}";
     hash = "sha256-fPM7Ya69t0jpZhKM2MTk6BwjvoW3a8SV3k000LB9Ypo=";
   };
 

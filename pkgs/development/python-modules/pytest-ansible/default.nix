@@ -8,6 +8,9 @@
   fetchFromGitHub,
   packaging,
   pytest,
+  pytest-plus,
+  pytest-sugar,
+  pytest-xdist,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -16,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-ansible";
-  version = "24.1.3";
+  version = "25.11.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -24,26 +27,29 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ansible";
     repo = "pytest-ansible";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pQNm7Q9NAc/jLlR6f0132tpXyBoQaKpm7JoEgqOJL8U=";
+    tag = "v${version}";
+    hash = "sha256-8pTw67Nn7BTLaygL/HZyQidzOdrqmbBToOK6TxpRPVo=";
   };
 
   postPatch = ''
-    substituteInPlace tests/conftest.py inventory \
-      --replace '/usr/bin/env' '${coreutils}/bin/env'
+    substituteInPlace inventory \
+      --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ansible-core
     ansible-compat
     packaging
+    pytest-plus
+    pytest-sugar
+    pytest-xdist
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -52,45 +58,48 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
-  disabledTests =
-    [
-      # Host unreachable in the inventory
-      "test_become"
-      # [Errno -3] Temporary failure in name resolution
-      "test_connection_failure_v2"
-      "test_connection_failure_extra_inventory_v2"
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      # These tests fail in the Darwin sandbox
-      "test_ansible_facts"
-      "test_func"
-      "test_param_override_with_marker"
-    ];
+  disabledTests = [
+    # pytest unrecognized arguments in test_pool.py
+    "test_ansible_test"
+    # Host unreachable in the inventory
+    "test_become"
+    # [Errno -3] Temporary failure in name resolution
+    "test_connection_failure_v2"
+    "test_connection_failure_extra_inventory_v2"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # These tests fail in the Darwin sandbox
+    "test_ansible_facts"
+    "test_func"
+    "test_param_override_with_marker"
+  ];
 
-  disabledTestPaths =
-    [
-      # Test want s to execute pytest in a subprocess
-      "tests/integration/test_molecule.py"
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      # These tests fail in the Darwin sandbox
-      "tests/test_adhoc.py"
-      "tests/test_adhoc_result.py"
-    ]
-    ++ lib.optionals (lib.versionAtLeast ansible-core.version "2.16") [
-      # Test fail in the NixOS environment
-      "tests/test_adhoc.py"
-    ];
+  disabledTestPaths = [
+    # Test want s to execute pytest in a subprocess
+    "tests/integration/test_molecule.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # These tests fail in the Darwin sandbox
+    "tests/test_adhoc.py"
+    "tests/test_adhoc_result.py"
+  ]
+  ++ lib.optionals (lib.versionAtLeast ansible-core.version "2.16") [
+    # Test fail in the NixOS environment
+    "tests/test_adhoc.py"
+  ];
 
   pythonImportsCheck = [ "pytest_ansible" ];
 
   meta = with lib; {
     description = "Plugin for pytest to simplify calling ansible modules from tests or fixtures";
     homepage = "https://github.com/jlaska/pytest-ansible";
-    changelog = "https://github.com/ansible-community/pytest-ansible/releases/tag/v${version}";
+    changelog = "https://github.com/ansible-community/pytest-ansible/releases/tag/${src.tag}";
     license = licenses.mit;
-    maintainers = with maintainers; [ tjni ];
+    maintainers = with maintainers; [
+      tjni
+      robsliwi
+    ];
   };
 }

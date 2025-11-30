@@ -1,14 +1,16 @@
-import ./make-test-python.nix ({pkgs, lib, ...}:
+{ pkgs, lib, ... }:
 {
   name = "guacamole-server";
 
   nodes = {
-    machine = {pkgs, ...}: {
-      services.guacamole-server = {
-        enable = true;
-        host = "0.0.0.0";
+    machine =
+      { pkgs, ... }:
+      {
+        services.guacamole-server = {
+          enable = true;
+          host = "0.0.0.0";
+        };
       };
-    };
   };
 
   testScript = ''
@@ -17,5 +19,5 @@ import ./make-test-python.nix ({pkgs, lib, ...}:
     machine.wait_for_open_port(4822)
   '';
 
-  meta.maintainers = [ lib.maintainers.drupol ];
-})
+  meta.maintainers = [ ];
+}

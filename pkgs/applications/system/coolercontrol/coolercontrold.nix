@@ -1,13 +1,18 @@
-{ rustPlatform
-, buildNpmPackage
-, testers
-, coolercontrol
-, runtimeShell
+{
+  rustPlatform,
+  testers,
+  libdrm,
+  coolercontrol,
+  runtimeShell,
+  addDriverRunpath,
+  python3Packages,
+  liquidctl,
 }:
 
-{ version
-, src
-, meta
+{
+  version,
+  src,
+  meta,
 }:
 
 rustPlatform.buildRustPackage {
@@ -15,13 +20,21 @@ rustPlatform.buildRustPackage {
   inherit version src;
   sourceRoot = "${src.name}/coolercontrold";
 
-  cargoHash = "sha256-qXZ/LXbKkLvnEQibGyMvkkYhz2eEGUHsYxVF3EbCpFc=";
+  cargoHash = "sha256-teKMz6ruTSwQ76dMXoupS3D7n1ashfHPpxMGo3Qm6FI=";
+
+  buildInputs = [ libdrm ];
+
+  nativeBuildInputs = [
+    addDriverRunpath
+    python3Packages.wrapPython
+  ];
+
+  pythonPath = [ liquidctl ];
 
   postPatch = ''
     # copy the frontend static resources to a directory for embedding
     mkdir -p ui-build
-    cp -R ${coolercontrol.coolercontrol-ui-data}/* ui-build/
-    substituteInPlace build.rs --replace '"./resources/app"' '"./ui-build"'
+    cp -R ${coolercontrol.coolercontrol-ui-data}/* resources/app/
 
     # Hardcode a shell
     substituteInPlace src/repositories/utils.rs \
@@ -31,13 +44,20 @@ rustPlatform.buildRustPackage {
   postInstall = ''
     install -Dm444 "${src}/packaging/systemd/coolercontrold.service" -t "$out/lib/systemd/system"
     substituteInPlace "$out/lib/systemd/system/coolercontrold.service" \
-      --replace '/usr/bin' "$out/bin"
+      --replace-fail '/usr/bin' "$out/bin"
+  '';
+
+  postFixup = ''
+    addDriverRunpath "$out/bin/coolercontrold"
+
+    buildPythonPath "$pythonPath"
+    wrapProgram "$out/bin/coolercontrold" \
+      --prefix PATH : $program_PATH \
+      --prefix PYTHONPATH : $program_PYTHONPATH
   '';
 
   passthru.tests.version = testers.testVersion {
     package = coolercontrol.coolercontrold;
-    # coolercontrold prints its version with "v" prefix
-    version = "v${version}";
   };
 
   meta = meta // {

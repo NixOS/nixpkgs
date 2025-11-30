@@ -2,7 +2,6 @@
   buildPythonPackage,
   exempi,
   fetchFromGitHub,
-  mock,
   pytz,
   lib,
   stdenv,
@@ -36,7 +35,7 @@ buildPythonPackage {
   '';
 
   # hangs on darwin + sandbox
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   preCheck = ''
     rm test/{test_exempi,test_files}.py
@@ -46,6 +45,6 @@ buildPythonPackage {
     homepage = "https://github.com/python-xmp-toolkit/python-xmp-toolkit";
     description = "Python XMP Toolkit for working with metadata";
     license = licenses.bsd3;
-    maintainers = [ maintainers.kiwi ];
+    maintainers = [ ];
   };
 }

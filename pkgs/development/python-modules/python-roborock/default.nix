@@ -2,70 +2,70 @@
   lib,
   stdenv,
   aiohttp,
-  async-timeout,
+  aiomqtt,
+  aioresponses,
   buildPythonPackage,
   click,
   construct,
-  dacite,
   fetchFromGitHub,
+  freezegun,
+  hatchling,
   paho-mqtt,
-  poetry-core,
   pycryptodome,
   pycryptodomex,
+  pyrate-limiter,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
-  pythonRelaxDepsHook,
+  vacuum-map-parser-roborock,
+  click-shell,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "2.2.2";
+  version = "3.8.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
-    owner = "humbertogontijo";
+    owner = "Python-roborock";
     repo = "python-roborock";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-W/42NUs3fQKCxM6hlJTmNQ7E8FevxO3XJCOYyZHQsqs=";
+    tag = "v${version}";
+    hash = "sha256-ukFbD6RL6us3fSuTj52+PA5dkxeZNfxZCX/eeJL0aTc=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "poetry-core==1.8.0" "poetry-core"
-  '';
 
   pythonRelaxDeps = [ "pycryptodome" ];
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
-    async-timeout
+    aiomqtt
     click
     construct
-    dacite
     paho-mqtt
     pycryptodome
-  ] ++ lib.optionals stdenv.isDarwin [ pycryptodomex ];
+    pyrate-limiter
+    vacuum-map-parser-roborock
+    click-shell
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ pycryptodomex ];
 
   nativeCheckInputs = [
+    aioresponses
+    freezegun
     pytest-asyncio
     pytestCheckHook
+    syrupy
   ];
 
   pythonImportsCheck = [ "roborock" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library & console tool for controlling Roborock vacuum";
-    homepage = "https://github.com/humbertogontijo/python-roborock";
-    changelog = "https://github.com/humbertogontijo/python-roborock/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    homepage = "https://github.com/Python-roborock/python-roborock";
+    changelog = "https://github.com/Python-roborock/python-roborock/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "roborock";
   };
 }

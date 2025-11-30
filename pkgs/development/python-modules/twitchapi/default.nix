@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   aiohttp,
@@ -11,22 +10,27 @@
 
 buildPythonPackage rec {
   pname = "twitchapi";
-  version = "4.2.0";
-
-  disabled = pythonOlder "3.7";
-
+  version = "4.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Teekeks";
     repo = "pyTwitchAPI";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QAxLYujnsudaiz9UepwrBA835Pct5h4VcE9ZrbkwMmg=";
+    tag = "v${version}";
+    hash = "sha256-3kAR/9OS58sDRUiCcQAI7KCCPpnclBNR4SkwDNJs9mo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  postPatch = ''
+    sed -i "/document_enum/d" twitchAPI/type.py
+  '';
 
-  propagatedBuildInputs = [
+  pythonRemoveDeps = [
+    "enum-tools"
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     python-dateutil
     typing-extensions
@@ -36,21 +40,21 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [
+    "twitchAPI.chat"
     "twitchAPI.eventsub"
+    "twitchAPI.helper"
     "twitchAPI.oauth"
-    "twitchAPI.pubsub"
     "twitchAPI.twitch"
     "twitchAPI.type"
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/Teekeks/pyTwitchAPI/blob/${src.rev}/docs/changelog.rst";
-    description = "Python implementation of the Twitch Helix API, its Webhook, PubSub and EventSub";
+  meta = {
+    changelog = "https://github.com/Teekeks/pyTwitchAPI/blob/${src.tag}/docs/changelog.rst";
+    description = "Python implementation of the Twitch Helix API, EventSub and Chat";
     homepage = "https://github.com/Teekeks/pyTwitchAPI";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       dotlambda
-      wolfangaukang
     ];
   };
 }

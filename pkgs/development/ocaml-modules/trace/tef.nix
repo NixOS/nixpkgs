@@ -1,4 +1,8 @@
-{ buildDunePackage, trace, mtime }:
+{
+  buildDunePackage,
+  trace,
+  mtime,
+}:
 
 buildDunePackage {
   pname = "trace-tef";
@@ -13,12 +17,15 @@ buildDunePackage {
 
   minimalOCamlVersion = "4.12";
 
-  propagatedBuildInputs = [ mtime trace ];
+  propagatedBuildInputs = [
+    mtime
+    trace
+  ];
 
   doCheck = true;
 
   meta = trace.meta // {
-    description = "A simple backend for trace, emitting Catapult JSON into a file";
+    description = "Simple backend for trace, emitting Catapult JSON into a file";
   };
 
 }

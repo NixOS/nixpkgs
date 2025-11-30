@@ -21,7 +21,8 @@ let
 
   # Package files for a single shard
   # Type: String -> String -> AttrsOf Path
-  namesForShard = shard: type:
+  namesForShard =
+    shard: type:
     if type != "directory" then
       # Ignore all non-directories. Technically only README.md is allowed as a file in the base directory, so we could alternatively:
       # - Assume that README.md is the only file and change the condition to `shard == "README.md"` for a minor performance improvement.
@@ -31,19 +32,15 @@ let
       # Additionally in either of those alternatives, we would have to duplicate the hardcoding of "README.md"
       { }
     else
-      mapAttrs
-        (name: _: baseDirectory + "/${shard}/${name}/package.nix")
-        (readDir (baseDirectory + "/${shard}"));
+      mapAttrs (name: _: baseDirectory + "/${shard}/${name}/package.nix") (
+        readDir (baseDirectory + "/${shard}")
+      );
 
   # The attribute set mapping names to the package files defining them
   # This is defined up here in order to allow reuse of the value (it's kind of expensive to compute)
   # if the overlay has to be applied multiple times
   packageFiles = mergeAttrsList (mapAttrsToList namesForShard (readDir baseDirectory));
 in
-# TODO: Consider optimising this using `builtins.deepSeq packageFiles`,
-# which could free up the above thunks and reduce GC times.
-# Currently this would be hard to measure until we have more packages
-# and ideally https://github.com/NixOS/nix/pull/8895
 self: super:
 {
   # This attribute is necessary to allow CI to ensure that all packages defined in `pkgs/by-name`
@@ -54,6 +51,4 @@ self: super:
   # Because at that point the code in ./stage.nix can be changed to not allow definitions in `all-packages.nix` to override ones from `pkgs/by-name` anymore and throw an error if that happens instead.
   _internalCallByNamePackageFile = file: self.callPackage file { };
 }
-// mapAttrs
-  (name: self._internalCallByNamePackageFile)
-  packageFiles
+// mapAttrs (name: self._internalCallByNamePackageFile) packageFiles

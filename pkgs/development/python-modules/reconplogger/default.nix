@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "reconplogger";
-  version = "4.16.0";
+  version = "4.18.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "omni-us";
     repo = "reconplogger";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-jBWy5oHyZpRUWb8OW0dRFfpu3m3hTd5dpIOQCRO5swM=";
+    tag = "v${version}";
+    hash = "sha256-awUGDE9yuPhWMZ4osCJKw8v5V1leoFF3DeCbluHeN70=";
   };
 
   build-system = [ setuptools ];
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       flask
       requests
@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "reconplogger" ];
 
-  pytestFlagsArray = [ "reconplogger_tests.py" ];
+  enabledTestPaths = [ "reconplogger_tests.py" ];
 
   meta = with lib; {
     description = "Module to ease the standardization of logging within omni:us";

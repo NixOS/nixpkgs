@@ -1,28 +1,33 @@
 {
   buildPythonPackage,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   cirq-aqt,
   cirq-core,
-  cirq-ft,
   cirq-google,
   cirq-ionq,
   cirq-pasqal,
-  cirq-rigetti,
   cirq-web,
+
+  # tests
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "cirq";
-  format = "setuptools";
+  pyproject = true;
   inherit (cirq-core) version src meta;
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cirq-aqt
     cirq-core
-    cirq-ft
-    cirq-ionq
     cirq-google
-    cirq-rigetti
+    cirq-ionq
     cirq-pasqal
     cirq-web
   ];
@@ -34,11 +39,9 @@ buildPythonPackage rec {
   disabledTestPaths = [
     "cirq-aqt"
     "cirq-core"
-    "cirq-ft"
     "cirq-google"
     "cirq-ionq"
     "cirq-pasqal"
-    "cirq-rigetti"
     "cirq-web"
     "dev_tools"
   ];

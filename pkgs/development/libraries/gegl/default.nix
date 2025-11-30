@@ -1,48 +1,54 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, vala
-, gi-docgen
-, gobject-introspection
-, glib
-, babl
-, libpng
-, llvmPackages
-, cairo
-, libjpeg
-, librsvg
-, lensfun
-, libspiro
-, maxflow
-, netsurf
-, pango
-, poly2tri-c
-, poppler
-, bzip2
-, json-glib
-, gettext
-, meson
-, ninja
-, libraw
-, gexiv2
-, libwebp
-, luajit
-, openexr
-, OpenCL
-, suitesparse
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  vala,
+  gi-docgen,
+  gobject-introspection,
+  glib,
+  babl,
+  libpng,
+  llvmPackages,
+  cairo,
+  libjpeg,
+  librsvg,
+  lensfun,
+  libspiro,
+  maxflow,
+  libnsgif,
+  pango,
+  poly2tri-c,
+  poppler,
+  bzip2,
+  json-glib,
+  gettext,
+  meson,
+  ninja,
+  libraw,
+  gexiv2,
+  libwebp,
+  luajit,
+  openexr,
+  suitesparse,
+  withLuaJIT ? lib.meta.availableOn stdenv.hostPlatform luajit,
+  gimp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gegl";
-  version = "0.4.48";
+  version = "0.4.64";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
   outputBin = "dev";
 
   src = fetchurl {
-    url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor version}/gegl-${version}.tar.xz";
-    hash = "sha256-QYwm2UvogF19mPbeDGglyia9dPystsGI2kdTPZ7igkc=";
+    url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor finalAttrs.version}/gegl-${finalAttrs.version}.tar.xz";
+    hash = "sha256-DeHJ3SLBYNXkvfw4jSkvA0R8ymJYVBuaEv7Xg9DPfGA=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +69,7 @@ stdenv.mkDerivation rec {
     lensfun
     libspiro
     maxflow
-    netsurf.libnsgif
+    libnsgif
     pango
     poly2tri-c
     poppler
@@ -71,13 +77,14 @@ stdenv.mkDerivation rec {
     libraw
     libwebp
     gexiv2
-    luajit
     openexr
     suitesparse
-  ] ++ lib.optionals stdenv.isDarwin [
-    OpenCL
-  ] ++ lib.optionals stdenv.cc.isClang [
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp
+  ]
+  ++ lib.optionals withLuaJIT [
+    luajit
   ];
 
   # for gegl-4.0.pc
@@ -97,6 +104,9 @@ stdenv.mkDerivation rec {
     # Disabled due to multiple vulnerabilities, see
     # https://github.com/NixOS/nixpkgs/pull/73586
     "-Djasper=disabled"
+  ]
+  ++ lib.optionals (!withLuaJIT) [
+    "-Dlua=disabled"
   ];
 
   postPatch = ''
@@ -110,7 +120,13 @@ stdenv.mkDerivation rec {
   '';
 
   # tests fail to connect to the com.apple.fonts daemon in sandboxed mode
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  passthru = {
+    tests = {
+      inherit gimp;
+    };
+  };
 
   meta = with lib; {
     description = "Graph-based image processing framework";
@@ -119,4 +135,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;
   };
-}
+})

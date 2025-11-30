@@ -14,14 +14,15 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-compute";
-  version = "1.19.0";
+  version = "1.37.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-oHs0CLP3d4bcsZZmn/N2e8UQgHGKfC0/13ne/I2Be00=";
+    pname = "google_cloud_compute";
+    inherit version;
+    hash = "sha256-J/ApQytSkwN59YnPP6XjOs6WajOepUzWRLK1+eCkgeM=";
   };
 
   build-system = [ setuptools ];
@@ -30,7 +31,8 @@ buildPythonPackage rec {
     google-api-core
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock

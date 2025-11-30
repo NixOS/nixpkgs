@@ -1,53 +1,43 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, pkg-config
-, meson
-, python3
-, ninja
-, vala
-, desktop-file-utils
-, gettext
-, libxml2
-, gtk3
-, granite
-, libgee
-, bamf
-, libcanberra-gtk3
-, gnome-desktop
-, mesa
-, mutter
-, gnome-settings-daemon
-, wrapGAppsHook3
-, gexiv2
-, systemd
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  desktop-file-utils,
+  gettext,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  wayland-scanner,
+  wrapGAppsHook4,
+  at-spi2-core,
+  gnome-settings-daemon,
+  gnome-desktop,
+  granite,
+  granite7,
+  gtk3,
+  gtk4,
+  libgee,
+  libhandy,
+  mutter,
+  sqlite,
+  systemd,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gala";
-  version = "7.1.3";
+  version = "8.3.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-0fDbR28gh7F8Bcnofn48BBP1CTsYnfmY5kG72ookOXw=";
+    repo = "gala";
+    tag = version;
+    hash = "sha256-omsAOOZCQINLTZQg3Sew+p84jv8+R2cHSVtcHFIeUBI=";
   };
 
-  patches = [
-    # We look for plugins in `/run/current-system/sw/lib/` because
-    # there are multiple plugin providers (e.g. gala and wingpanel).
-    ./plugins-dir.patch
-
-    # Start gala-daemon internally (needed for systemd managed gnome-session)
-    # https://github.com/elementary/gala/pull/1844
-    (fetchpatch {
-      url = "https://github.com/elementary/gala/commit/351722c5a4fded46992b725e03dc94971c5bd31f.patch";
-      hash = "sha256-RvdVHQjCUNmLrROBZTF+m1vE2XudtQZjk/YW28P/vKc=";
-    })
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -56,40 +46,46 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
-    wrapGAppsHook3
+    wayland-scanner
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    bamf
+    at-spi2-core
     gnome-settings-daemon
-    gexiv2
     gnome-desktop
     granite
-    gtk3
-    libcanberra-gtk3
+    granite7
+    gtk3 # daemon-gtk3
+    gtk4
     libgee
-    mesa # for libEGL
+    libhandy
     mutter
+    sqlite
     systemd
   ];
 
   postPatch = ''
-    chmod +x build-aux/meson/post_install.py
-    patchShebangs build-aux/meson/post_install.py
+    substituteInPlace meson.build \
+      --replace-fail "conf.set('PLUGINDIR', plugins_dir)" "conf.set('PLUGINDIR','/run/current-system/sw/lib/gala/plugins')"
   '';
+
+  mesonFlags = [
+    # https://github.com/elementary/gala/commit/1e75d2a4b42e0d853fd474e90f1a52b0bcd0f690
+    "-Dold-icon-groups=true"
+  ];
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
   meta = with lib; {
-    description = "A window & compositing manager based on mutter and designed by elementary for use with Pantheon";
+    description = "Window & compositing manager based on mutter and designed by elementary for use with Pantheon";
     homepage = "https://github.com/elementary/gala";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     mainProgram = "gala";
   };
 }

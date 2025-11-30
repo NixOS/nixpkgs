@@ -6,6 +6,7 @@
   deprecated,
   etcd3,
   fetchFromGitHub,
+  flaky,
   hiro,
   importlib-resources,
   motor,
@@ -13,37 +14,41 @@
   pymemcache,
   pymongo,
   pytest-asyncio,
-  pytest-lazy-fixture,
+  pytest-benchmark,
+  pytest-cov-stub,
+  pytest-lazy-fixtures,
   pytestCheckHook,
   pythonOlder,
   redis,
   setuptools,
   typing-extensions,
+  valkey,
 }:
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "3.12.0";
+  version = "5.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "alisaifee";
     repo = "limits";
-    rev = "refs/tags/${version}";
+    tag = version;
     # Upstream uses versioneer, which relies on git attributes substitution.
     # This leads to non-reproducible archives on github. Remove the substituted
     # file here, and recreate it later based on our version info.
+    hash = "sha256-EHLqkd5Muazr52/oYaLklFVvF+AzJWGbFaaIG+T0ulE=";
     postFetch = ''
       rm "$out/limits/_version.py"
     '';
-    hash = "sha256-EH2/75tcKuS11XKuo4lCQrFe4/XJZpcWhuGlSuhIk18=";
   };
+
+  patches = [
+    ./only-test-in-memory.patch
+  ];
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace-fail "--cov=limits" "" \
       --replace-fail "-K" ""
 
     substituteInPlace setup.py \
@@ -53,16 +58,16 @@ buildPythonPackage rec {
     echo 'def get_versions(): return {"version": "${version}"}' > limits/_version.py
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     deprecated
     importlib-resources
     packaging
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     redis = [ redis ];
     rediscluster = [ redis ];
     memcached = [ pymemcache ];
@@ -74,31 +79,41 @@ buildPythonPackage rec {
     # ];
     async-mongodb = [ motor ];
     async-etcd = [ aetcd ];
+    valkey = [ valkey ];
   };
 
-  doCheck = pythonOlder "3.12"; # SystemError in protobuf
+  env = {
+    # make protobuf compatible with old versions
+    # https://developers.google.com/protocol-buffers/docs/news/2022-05-06#python-updates
+    PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
+  };
 
   nativeCheckInputs = [
+    flaky
     hiro
     pytest-asyncio
-    pytest-lazy-fixture
+    pytest-benchmark
+    pytest-cov-stub
+    pytest-lazy-fixtures
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  pytestFlags = [ "--benchmark-disable" ];
+
+  disabledTests = [
+    "test_moving_window_memcached"
+    # Flaky: compares time to magic value
+    "test_sliding_window_counter_previous_window"
+  ];
 
   pythonImportsCheck = [ "limits" ];
 
-  pytestFlagsArray = [
-    # All other tests require a running Docker instance
-    "tests/test_limits.py"
-    "tests/test_ratelimit_parser.py"
-    "tests/test_limit_granularities.py"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Rate limiting using various strategies and storage backends such as redis & memcached";
     homepage = "https://github.com/alisaifee/limits";
-    changelog = "https://github.com/alisaifee/limits/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/alisaifee/limits/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sarahec ];
   };
 }

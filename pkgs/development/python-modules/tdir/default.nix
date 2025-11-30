@@ -36,6 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/rec/tdir";
     changelog = "https://github.com/rec/tdir/blob/${src.rev}/CHANGELOG";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

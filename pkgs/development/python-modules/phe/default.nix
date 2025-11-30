@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "data61";
     repo = "python-paillier";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-P//4ZL4+2zcB5sWvujs2N0CHFz+EBLERWrPGLLHj6CY=";
   };
 
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A library for Partially Homomorphic Encryption in Python";
+    description = "Library for Partially Homomorphic Encryption in Python";
     mainProgram = "pheutil";
     homepage = "https://github.com/data61/python-paillier";
     license = licenses.gpl3;

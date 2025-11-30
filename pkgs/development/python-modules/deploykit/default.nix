@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  hatchling,
   bash,
   openssh,
   pytestCheckHook,
@@ -12,19 +12,19 @@
 
 buildPythonPackage rec {
   pname = "deploykit";
-  version = "1.1.1";
-  format = "setuptools";
+  version = "1.2.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "numtide";
-    repo = pname;
+    repo = "deploykit";
     rev = version;
-    hash = "sha256-7PiXq1bQJ1jswLHNqCDSYZabgfp8HRuRt5YPGzd5Ej0=";
+    hash = "sha256-RONE/oJdNmVjLYdJWDTzyXnmStkLIx92GsydaYYG5O4=";
   };
 
-  buildInputs = [ setuptools ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
     bash
@@ -32,10 +32,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [ "test_ssh" ];
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [ "test_ssh" ];
 
   # don't swallow stdout/stderr
-  pytestFlagsArray = [ "-s" ];
+  pytestFlags = [ "-s" ];
 
   pythonImportsCheck = [ "deploykit" ];
 

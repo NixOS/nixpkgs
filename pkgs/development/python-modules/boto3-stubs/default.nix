@@ -9,7 +9,6 @@
   mypy-boto3-account,
   mypy-boto3-acm,
   mypy-boto3-acm-pca,
-  mypy-boto3-alexaforbusiness,
   mypy-boto3-amp,
   mypy-boto3-amplify,
   mypy-boto3-amplifybackend,
@@ -36,7 +35,6 @@
   mypy-boto3-autoscaling-plans,
   mypy-boto3-backup,
   mypy-boto3-backup-gateway,
-  mypy-boto3-backupstorage,
   mypy-boto3-batch,
   mypy-boto3-billingconductor,
   mypy-boto3-braket,
@@ -137,7 +135,6 @@
   mypy-boto3-frauddetector,
   mypy-boto3-fsx,
   mypy-boto3-gamelift,
-  mypy-boto3-gamesparks,
   mypy-boto3-glacier,
   mypy-boto3-globalaccelerator,
   mypy-boto3-glue,
@@ -148,7 +145,6 @@
   mypy-boto3-guardduty,
   mypy-boto3-health,
   mypy-boto3-healthlake,
-  mypy-boto3-honeycode,
   mypy-boto3-iam,
   mypy-boto3-identitystore,
   mypy-boto3-imagebuilder,
@@ -159,7 +155,6 @@
   mypy-boto3-iot,
   mypy-boto3-iot-data,
   mypy-boto3-iot-jobs-data,
-  mypy-boto3-iot-roborunner,
   mypy-boto3-iot1click-devices,
   mypy-boto3-iot1click-projects,
   mypy-boto3-iotanalytics,
@@ -207,7 +202,6 @@
   mypy-boto3-lookoutvision,
   mypy-boto3-m2,
   mypy-boto3-machinelearning,
-  mypy-boto3-macie,
   mypy-boto3-macie2,
   mypy-boto3-managedblockchain,
   mypy-boto3-managedblockchain-query,
@@ -232,7 +226,6 @@
   mypy-boto3-migrationhub-config,
   mypy-boto3-migrationhuborchestrator,
   mypy-boto3-migrationhubstrategy,
-  mypy-boto3-mobile,
   mypy-boto3-mq,
   mypy-boto3-mturk,
   mypy-boto3-mwaa,
@@ -358,7 +351,6 @@
   mypy-boto3-workspaces,
   mypy-boto3-workspaces-web,
   mypy-boto3-xray,
-  pythonOlder,
   setuptools,
   types-s3transfer,
   typing-extensions,
@@ -366,15 +358,13 @@
 
 buildPythonPackage rec {
   pname = "boto3-stubs";
-  version = "1.34.113";
+  version = "1.41.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "boto3_stubs";
     inherit version;
-    hash = "sha256-Fqr40Jec/WX4UFNqLM9DRNAPEmOKo3emW3bAAzjzXFA=";
+    hash = "sha256-3hzThIpkfZpuj18QAKxWnncGZLAy2aplrY7Q5fKsfyI=";
   };
 
   build-system = [ setuptools ];
@@ -385,18 +375,16 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     accessanalyzer = [ mypy-boto3-accessanalyzer ];
     account = [ mypy-boto3-account ];
     acm = [ mypy-boto3-acm ];
     acm-pca = [ mypy-boto3-acm-pca ];
-    alexaforbusiness = [ mypy-boto3-alexaforbusiness ];
     all = [
       mypy-boto3-accessanalyzer
       mypy-boto3-account
       mypy-boto3-acm
       mypy-boto3-acm-pca
-      mypy-boto3-alexaforbusiness
       mypy-boto3-amp
       mypy-boto3-amplify
       mypy-boto3-amplifybackend
@@ -423,7 +411,6 @@ buildPythonPackage rec {
       mypy-boto3-autoscaling-plans
       mypy-boto3-backup
       mypy-boto3-backup-gateway
-      mypy-boto3-backupstorage
       mypy-boto3-batch
       mypy-boto3-billingconductor
       mypy-boto3-braket
@@ -524,7 +511,6 @@ buildPythonPackage rec {
       mypy-boto3-frauddetector
       mypy-boto3-fsx
       mypy-boto3-gamelift
-      mypy-boto3-gamesparks
       mypy-boto3-glacier
       mypy-boto3-globalaccelerator
       mypy-boto3-glue
@@ -535,7 +521,6 @@ buildPythonPackage rec {
       mypy-boto3-guardduty
       mypy-boto3-health
       mypy-boto3-healthlake
-      mypy-boto3-honeycode
       mypy-boto3-iam
       mypy-boto3-identitystore
       mypy-boto3-imagebuilder
@@ -546,7 +531,6 @@ buildPythonPackage rec {
       mypy-boto3-iot
       mypy-boto3-iot-data
       mypy-boto3-iot-jobs-data
-      mypy-boto3-iot-roborunner
       mypy-boto3-iot1click-devices
       mypy-boto3-iot1click-projects
       mypy-boto3-iotanalytics
@@ -594,7 +578,6 @@ buildPythonPackage rec {
       mypy-boto3-lookoutvision
       mypy-boto3-m2
       mypy-boto3-machinelearning
-      mypy-boto3-macie
       mypy-boto3-macie2
       mypy-boto3-managedblockchain
       mypy-boto3-managedblockchain-query
@@ -619,7 +602,6 @@ buildPythonPackage rec {
       mypy-boto3-migrationhub-config
       mypy-boto3-migrationhuborchestrator
       mypy-boto3-migrationhubstrategy
-      mypy-boto3-mobile
       mypy-boto3-mq
       mypy-boto3-mturk
       mypy-boto3-mwaa
@@ -772,7 +754,6 @@ buildPythonPackage rec {
     autoscaling-plans = [ mypy-boto3-autoscaling-plans ];
     backup = [ mypy-boto3-backup ];
     backup-gateway = [ mypy-boto3-backup-gateway ];
-    backupstorage = [ mypy-boto3-backupstorage ];
     batch = [ mypy-boto3-batch ];
     billingconductor = [ mypy-boto3-billingconductor ];
     boto3 = [
@@ -886,7 +867,6 @@ buildPythonPackage rec {
     frauddetector = [ mypy-boto3-frauddetector ];
     fsx = [ mypy-boto3-fsx ];
     gamelift = [ mypy-boto3-gamelift ];
-    gamesparks = [ mypy-boto3-gamesparks ];
     glacier = [ mypy-boto3-glacier ];
     globalaccelerator = [ mypy-boto3-globalaccelerator ];
     glue = [ mypy-boto3-glue ];
@@ -897,7 +877,6 @@ buildPythonPackage rec {
     guardduty = [ mypy-boto3-guardduty ];
     health = [ mypy-boto3-health ];
     healthlake = [ mypy-boto3-healthlake ];
-    honeycode = [ mypy-boto3-honeycode ];
     iam = [ mypy-boto3-iam ];
     identitystore = [ mypy-boto3-identitystore ];
     imagebuilder = [ mypy-boto3-imagebuilder ];
@@ -908,7 +887,6 @@ buildPythonPackage rec {
     iot = [ mypy-boto3-iot ];
     iot-data = [ mypy-boto3-iot-data ];
     iot-jobs-data = [ mypy-boto3-iot-jobs-data ];
-    iot-roborunner = [ mypy-boto3-iot-roborunner ];
     iot1click-devices = [ mypy-boto3-iot1click-devices ];
     iot1click-projects = [ mypy-boto3-iot1click-projects ];
     iotanalytics = [ mypy-boto3-iotanalytics ];
@@ -956,7 +934,6 @@ buildPythonPackage rec {
     lookoutvision = [ mypy-boto3-lookoutvision ];
     m2 = [ mypy-boto3-m2 ];
     machinelearning = [ mypy-boto3-machinelearning ];
-    macie = [ mypy-boto3-macie ];
     macie2 = [ mypy-boto3-macie2 ];
     managedblockchain = [ mypy-boto3-managedblockchain ];
     managedblockchain-query = [ mypy-boto3-managedblockchain-query ];
@@ -981,7 +958,6 @@ buildPythonPackage rec {
     migrationhub-config = [ mypy-boto3-migrationhub-config ];
     migrationhuborchestrator = [ mypy-boto3-migrationhuborchestrator ];
     migrationhubstrategy = [ mypy-boto3-migrationhubstrategy ];
-    mobile = [ mypy-boto3-mobile ];
     mq = [ mypy-boto3-mq ];
     mturk = [ mypy-boto3-mturk ];
     mwaa = [ mypy-boto3-mwaa ];

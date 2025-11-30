@@ -1,49 +1,46 @@
 {
-  backoff,
-  sparqlwrapper,
+  lib,
   boto3,
   buildPythonPackage,
   fetchFromGitHub,
   gremlinpython,
+  hatchling,
   jsonpath-ng,
-  lib,
   moto,
   openpyxl,
   opensearch-py,
   pandas,
   pg8000,
-  poetry-core,
   progressbar2,
   pyarrow,
   pymysql,
   pyodbc,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
-  pythonRelaxDepsHook,
   redshift-connector,
   requests-aws4auth,
+  setuptools,
+  sparqlwrapper,
 }:
 
 buildPythonPackage rec {
   pname = "awswrangler";
-  version = "3.7.3";
+  version = "3.14.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-pandas";
-    rev = "refs/tags/${version}";
-    hash = "sha256-gm6ieteW+NcY+AOLcMZLUPcSi2Z/Mo27rzd1i9imp5I=";
+    tag = version;
+    hash = "sha256-n2NJskgNzYPSwhy8ATYc8t6t2qRB9wh+7foegQG2GZs=";
   };
 
-  pythonRelaxDeps = [ "packaging" ];
+  pythonRelaxDeps = [
+    "packaging"
+    "pyarrow"
+  ];
 
-  build-system = [ poetry-core ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  build-system = [ hatchling ];
 
   dependencies = [
     boto3
@@ -58,9 +55,10 @@ buildPythonPackage rec {
     pymysql
     redshift-connector
     requests-aws4auth
+    setuptools
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     sqlserver = [ pyodbc ];
     sparql = [ sparqlwrapper ];
   };
@@ -73,7 +71,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "awswrangler" ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # Subset of tests that run in upstream CI (many others require credentials)
     # https://github.com/aws/aws-sdk-pandas/blob/20fec775515e9e256e8cee5aee12966516608840/.github/workflows/minimal-tests.yml#L36-L43
     "tests/unit/test_metadata.py"
@@ -85,7 +83,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pandas on AWS";
     homepage = "https://github.com/aws/aws-sdk-pandas";
-    changelog = "https://github.com/aws/aws-sdk-pandas/releases/tag/${version}";
+    changelog = "https://github.com/aws/aws-sdk-pandas/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ mcwitt ];
   };

@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, lldb
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  lldb,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "llef";
-  version = "unstable-2023-10-18";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "foundryzero";
     repo = "llef";
-    rev = "629bd75f44c356f7a3576a6436d3919ce111240d";
-    hash = "sha256-JtCHG89s436Di/6+V7Le4CZnkIPh/RYIllfXEO/B7+8";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-pAFjLaZi4Sjlq3evKT2IG+0/imf4Fp5bM2gknLKpRvs=";
   };
 
   dontBuild = true;
@@ -40,4 +41,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ nrabulinski ];
     mainProgram = "llef";
   };
-}
+})

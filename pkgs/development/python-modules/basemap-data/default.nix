@@ -1,17 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  pythonAtLeast,
   basemap,
-  cython,
-  geos,
-  numpy,
-  matplotlib,
-  pyproj,
-  pyshp,
-  python,
-  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +9,7 @@ buildPythonPackage rec {
   format = "setuptools";
   inherit (basemap) version src;
 
-  sourceRoot = "${src.name}/packages/basemap_data";
+  sourceRoot = "${src.name}/data/basemap_data";
 
   # no tests
   doCheck = false;
@@ -33,6 +23,6 @@ buildPythonPackage rec {
       mit
       lgpl3Plus
     ];
-    maintainers = with maintainers; [ ];
+    teams = [ teams.geospatial ];
   };
 }

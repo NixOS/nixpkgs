@@ -1,28 +1,45 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "pmtiles";
-  version = "1.19.1";
+  version = "1.28.2";
 
   src = fetchFromGitHub {
     owner = "protomaps";
     repo = "go-pmtiles";
-    rev = "v${version}";
-    hash = "sha256-JVx543uatVUWD1TmnjJBz4X/oHPKpbrGpGcxQd2IYiw=";
+    tag = "v${version}";
+    hash = "sha256-JGsbgBB2T+4SWKQmiSmuMqQ8gw0qhM5c5eFDF/+sndA=";
   };
 
-  vendorHash = "sha256-N/8n3NDHShcXjPvLSkLRacY4aqFzLYM/+/mJRGXQAVg=";
+  vendorHash = "sha256-6zsX7rU+D+RUHwXfFZzLQftQ6nSYJhvKIDdsO2vow4A=";
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=v${version}" ];
+  overrideModAttrs = old: {
+    # https://gitlab.com/cznic/libc/-/merge_requests/10
+    postBuild = ''
+      patch -p0 < ${./darwin-sandbox-fix.patch}
+    '';
+  };
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+    "-X main.commit=v${version}"
+  ];
 
   postInstall = ''
     mv $out/bin/go-pmtiles $out/bin/pmtiles
   '';
 
-  meta = with lib; {
-    description = "The single-file utility for creating and working with PMTiles archives";
+  meta = {
+    description = "Single-file utility for creating and working with PMTiles archives";
     homepage = "https://github.com/protomaps/go-pmtiles";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.theaninova ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ theaninova ];
+    teams = [ lib.teams.geospatial ];
     mainProgram = "pmtiles";
   };
 }

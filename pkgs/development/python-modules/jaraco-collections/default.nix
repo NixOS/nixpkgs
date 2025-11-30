@@ -10,26 +10,25 @@
 
 buildPythonPackage rec {
   pname = "jaraco-collections";
-  version = "5.0.1";
-  format = "pyproject";
+  version = "5.2.1";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "jaraco.collections";
+    pname = "jaraco_collections";
     inherit version;
-    hash = "sha256-gIYxsXS4Sk4qWSSQ1i9i38FdgEeg9xVyYJjcQ7gabPo=";
+    hash = "sha256-2rgZcLrW8KtTsgdF8bAdo3km5MD81CUEaqReDY76GO0=";
   };
 
   postPatch = ''
-    # break dependency cycle
-    sed -i "/'jaraco.text',/d" setup.cfg
+    sed -i "/coherent\.licensed/d" pyproject.toml
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jaraco-classes
     jaraco-text
   ];
@@ -45,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jaraco/jaraco.collections";
     changelog = "https://github.com/jaraco/jaraco.collections/blob/v${version}/NEWS.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "requests-cache";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "requests-cache";
     repo = "requests-cache";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-w1ptKi/MH3kGZxLMUNq/Gs6btGx+n2fG4nfQUXCXmiY=";
+    tag = "v${version}";
+    hash = "sha256-juRCcBUr+Ko6kVPpUapwRbUGqWLKaRiCqppOc3S5FMU=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     url-normalize
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     dynamodb = [
       boto3
       botocore
@@ -79,13 +79,15 @@ buildPythonPackage rec {
     tenacity
     time-machine
     timeout-decorator
-  ] ++ passthru.optional-dependencies.json ++ passthru.optional-dependencies.security;
+  ]
+  ++ optional-dependencies.json
+  ++ optional-dependencies.security;
 
   preCheck = ''
     export HOME=$(mktemp -d);
   '';
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # Integration tests require local DBs
     "tests/unit"
   ];

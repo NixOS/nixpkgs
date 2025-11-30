@@ -31,27 +31,27 @@ in
 
 lib.checkListOfEnum "where-is-my-sddm-theme: variant" validVariants variants
 
-stdenvNoCC.mkDerivation rec {
-  pname = "where-is-my-sddm-theme";
-  version = "1.9.1";
+  stdenvNoCC.mkDerivation
+  (finalAttrs: {
+    pname = "where-is-my-sddm-theme";
+    version = "1.12.0";
 
-  src = fetchFromGitHub {
-    owner = "stepanzubkov";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-o9SpzSmHygHix3BUaMQRwLvgy2BdDsBXmiLDU+9u/6Q=";
-  };
+    src = fetchFromGitHub {
+      owner = "stepanzubkov";
+      repo = "where-is-my-sddm-theme";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-+R0PX84SL2qH8rZMfk3tqkhGWPR6DpY1LgX9bifNYCg=";
+    };
 
-  propagatedUserEnvPkgs =
-    [ ]
-    ++ lib.optional (lib.elem "qt5" variants) [ libsForQt5.qtgraphicaleffects ]
-    ++ lib.optional (lib.elem "qt6" variants) [
-      qt6.qt5compat
-      qt6.qtsvg
-    ];
+    propagatedUserEnvPkgs =
+      [ ]
+      ++ lib.optionals (lib.elem "qt5" variants) [ libsForQt5.qtgraphicaleffects ]
+      ++ lib.optionals (lib.elem "qt6" variants) [
+        qt6.qt5compat
+        qt6.qtsvg
+      ];
 
-  installPhase =
-    ''
+    installPhase = ''
       mkdir -p $out/share/sddm/themes/
     ''
     + lib.optionalString (lib.elem "qt6" variants) (
@@ -71,11 +71,11 @@ stdenvNoCC.mkDerivation rec {
       ''
     );
 
-  meta = with lib; {
-    description = "The most minimalistic SDDM theme among all themes";
-    homepage = "https://github.com/stepanzubkov/where-is-my-sddm-theme";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ name-snrl ];
-  };
-}
+    meta = {
+      description = "Most minimalistic SDDM theme among all themes";
+      homepage = "https://github.com/stepanzubkov/where-is-my-sddm-theme";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [ name-snrl ];
+    };
+  })

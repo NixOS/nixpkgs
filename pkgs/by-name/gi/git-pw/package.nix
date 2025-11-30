@@ -1,14 +1,15 @@
-{ lib
-, git
-, python3
-, fetchFromGitHub
-, testers
-, git-pw
+{
+  lib,
+  git,
+  python3,
+  fetchFromGitHub,
+  testers,
+  git-pw,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "git-pw";
-  version = "2.6.0";
+  version = "2.7.1";
   format = "pyproject";
 
   PBR_VERSION = version;
@@ -16,14 +17,9 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "getpatchwork";
     repo = "git-pw";
-    rev = version;
-    hash = "sha256-3IiFU6qGI2MDTBOLQ2qyT5keUMNTNG3sxhtGR3bkIBc=";
+    tag = version;
+    hash = "sha256-Ce+Nc2NZ42dIpeLg8OutD8ONxj1XRiNodGbTWlkK9qw=";
   };
-
-  postPatch = ''
-    # We don't want to run the coverage.
-    substituteInPlace tox.ini --replace "--cov=git_pw --cov-report" ""
-  '';
 
   nativeBuildInputs = with python3.pkgs; [
     pbr
@@ -39,11 +35,12 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with python3.pkgs; [
-    pytest
+    pytest-cov-stub
+    pytestCheckHook
     git
   ];
 
-  # This is needed because `git-pw` always rely on an ambiant git.
+  # This is needed because `git-pw` always rely on an ambient git.
   # Furthermore, this doesn't really make sense to resholve git inside this derivation.
   # As `testVersion` does not offer the right knob, we can just `overrideAttrs`-it ourselves.
   passthru.tests.version = (testers.testVersion { package = git-pw; }).overrideAttrs (old: {
@@ -51,7 +48,7 @@ python3.pkgs.buildPythonApplication rec {
   });
 
   meta = with lib; {
-    description = "A tool for integrating Git with Patchwork, the web-based patch tracking system";
+    description = "Tool for integrating Git with Patchwork, the web-based patch tracking system";
     homepage = "https://github.com/getpatchwork/git-pw";
     license = licenses.mit;
     maintainers = with maintainers; [ raitobezarius ];

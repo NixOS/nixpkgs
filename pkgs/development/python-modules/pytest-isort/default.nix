@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "pytest-isort";
-  version = "3.1.0";
+  version = "4.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "stephrdev";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-1oCVIi0sXwac4AufScJJRsfvBwaBAwlMBRNqLcUXEh4=";
+    repo = "pytest-isort";
+    tag = version;
+    hash = "sha256-fMt2tYc+Ngb57T/VJYxI2UN25qvIrgIsEoImVIitDK4=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/moccu/pytest-isort/";
     changelog = "https://github.com/stephrdev/pytest-isort/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

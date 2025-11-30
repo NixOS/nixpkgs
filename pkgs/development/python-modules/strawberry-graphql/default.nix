@@ -5,16 +5,15 @@
   buildPythonPackage,
   chalice,
   channels,
-  click,
   daphne,
   django,
   email-validator,
   fastapi,
   fetchFromGitHub,
-  fetchpatch,
   flask,
   freezegun,
   graphql-core,
+  inline-snapshot,
   libcst,
   opentelemetry-api,
   opentelemetry-sdk,
@@ -39,11 +38,13 @@
   starlette,
   typing-extensions,
   uvicorn,
+  typer,
+  graphlib-backport,
 }:
 
 buildPythonPackage rec {
   pname = "strawberry-graphql";
-  version = "0.230.0";
+  version = "0.278.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -51,22 +52,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry";
-    rev = "refs/tags/${version}";
-    hash = "sha256-jhInHoOvPGIEoSddv8+30gY38L6XR5OEATUTdrHbNpA=";
+    tag = version;
+    hash = "sha256-GNjjSD40fhbMqfvuYSuP3tU8lfOqBGJIsoGWZCfj6C4=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/strawberry-graphql/strawberry/pull/2199
-      name = "switch-to-poetry-core.patch";
-      url = "https://github.com/strawberry-graphql/strawberry/commit/710bb96f47c244e78fc54c921802bcdb48f5f421.patch";
-      hash = "sha256-ekUZ2hDPCqwXp9n0YjBikwSkhCmVKUzQk7LrPECcD7Y=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "--emoji --mypy-ini-file=mypy.ini" "" \
+      --replace-fail "--emoji" "" \
   '';
 
   build-system = [ poetry-core ];
@@ -77,7 +69,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aiohttp = [
       aiohttp
       pytest-aiohttp
@@ -91,7 +83,7 @@ buildPythonPackage rec {
       libcst
     ];
     debug-server = [
-      click
+      typer
       libcst
       pygments
       python-multipart
@@ -124,10 +116,11 @@ buildPythonPackage rec {
     ];
     chalice = [ chalice ];
     cli = [
-      click
       pygments
       rich
       libcst
+      typer
+      graphlib-backport
     ];
     # starlite = [ starlite ];
     # litestar = [ litestar ];
@@ -138,13 +131,15 @@ buildPythonPackage rec {
     daphne
     email-validator
     freezegun
+    inline-snapshot
     pytest-asyncio
     pytest-emoji
     pytest-mock
     pytest-snapshot
     pytestCheckHook
     sanic-testing
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "strawberry" ];
 
@@ -153,12 +148,12 @@ buildPythonPackage rec {
     "tests/cli/"
     "tests/django/test_dataloaders.py"
     "tests/exceptions/"
+    "tests/experimental/pydantic/test_fields.py"
     "tests/http/"
-    "tests/mypy/test_plugin.py" # avoid dependency on mypy
     "tests/schema/extensions/"
     "tests/schema/test_dataloaders.py"
     "tests/schema/test_lazy/"
-    "tests/starlite/"
+    "tests/sanic/test_file_upload.py"
     "tests/test_dataloaders.py"
     "tests/utils/test_pretty_print.py"
     "tests/websockets/test_graphql_transport_ws.py"
@@ -168,9 +163,9 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "A GraphQL library for Python that leverages type annotations";
+    description = "GraphQL library for Python that leverages type annotations";
     homepage = "https://strawberry.rocks";
-    changelog = "https://github.com/strawberry-graphql/strawberry/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/strawberry-graphql/strawberry/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ izorkin ];
     mainProgram = "strawberry";

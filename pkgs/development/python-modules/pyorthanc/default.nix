@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  pythonRelaxDepsHook,
   poetry-core,
   httpx,
   pydicom,
@@ -11,39 +9,37 @@
 
 buildPythonPackage rec {
   pname = "pyorthanc";
-  version = "1.16.1";
-  disabled = pythonOlder "3.8";
+  version = "1.22.1";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gacou54";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6l3L0YUAqedyRjlQ6K3SaAMdGK2C0AeKpJj6MyXi4RA=";
+    repo = "pyorthanc";
+    tag = "v${version}";
+    hash = "sha256-vdrLWDDEMEh7hg+M4FdxiaCC3IJfvuh8fgq+aLPfVJc=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    poetry-core
+  build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [
+    "pydicom"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
     pydicom
   ];
-
-  pythonRelaxDeps = [ "httpx" ];
 
   doCheck = false; # requires orthanc server (not in Nixpkgs)
 
   pythonImportsCheck = [ "pyorthanc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library that wraps the Orthanc REST API";
     homepage = "https://github.com/gacou54/pyorthanc";
-    changelog = "https://github.com/gacou54/pyorthanc/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    changelog = "https://github.com/gacou54/pyorthanc/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

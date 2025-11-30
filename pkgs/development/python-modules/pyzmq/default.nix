@@ -5,44 +5,52 @@
   isPyPy,
 
   # build-system
-  cython,
-  setuptools,
-  setuptools-scm,
-  packaging,
   cffi,
+  cython,
+  cmake,
+  ninja,
+  packaging,
+  pathspec,
+  scikit-build-core,
 
-  # dependencies
-
-  py,
+  # checks
   pytestCheckHook,
-  python,
   pythonOlder,
   tornado,
+  libsodium,
   zeromq,
   pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "pyzmq";
-  version = "25.1.2";
+  version = "27.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k/GqMR6LuRLjTwBM8YZAek6Q7sTw7MDv0mBWv37aAiY=";
+    hash = "sha256-RcVJIEvCDnSE/9JVX2zwLlckQOzy873WDUQEsg/d9ks=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
+  build-system = [
+    cmake
+    ninja
     packaging
-  ] ++ (if isPyPy then [ cffi ] else [ cython ]);
+    pathspec
+    scikit-build-core
+  ]
+  ++ (if isPyPy then [ cffi ] else [ cython ]);
 
-  buildInputs = [ zeromq ];
+  dontUseCmakeConfigure = true;
 
-  propagatedBuildInputs = lib.optionals isPyPy [ cffi ];
+  buildInputs = [
+    libsodium
+    zeromq
+  ];
+
+  dependencies = lib.optionals isPyPy [ cffi ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -52,12 +60,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zmq" ];
 
-  pytestFlagsArray = [
-    "$out/${python.sitePackages}/zmq/tests/" # Folder with tests
-    # pytest.ini is missing in pypi's sdist
-    # https://github.com/zeromq/pyzmq/issues/1853#issuecomment-1592731986
-    "--asyncio-mode auto"
-    "--ignore=$out/lib/python3.12/site-packages/zmq/tests/test_mypy.py"
+  preCheck = ''
+    rm -r zmq
+  '';
+
+  disabledTestMarks = [
+    "flaky"
   ];
 
   disabledTests = [
@@ -84,6 +92,6 @@ buildPythonPackage rec {
       bsd3 # or
       lgpl3Only
     ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

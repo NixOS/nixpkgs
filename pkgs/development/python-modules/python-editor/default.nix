@@ -6,7 +6,7 @@
 
 buildPythonPackage {
   pname = "python-editor";
-  version = "1.0.4-unstable-2023-10-11";
+  version = "1.0.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
@@ -20,7 +20,7 @@ buildPythonPackage {
   doCheck = false;
 
   meta = with lib; {
-    description = "A library that provides the `editor` module for programmatically";
+    description = "Library that provides the `editor` module for programmatically";
     homepage = "https://github.com/fmoo/python-editor";
     license = licenses.asl20;
   };

@@ -1,37 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, python3
-, vala
-, wrapGAppsHook4
-, elementary-gtk-theme
-, elementary-icon-theme
-, glib
-, granite7
-, gst_all_1
-, gtk4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  wrapGAppsHook4,
+  elementary-gtk-theme,
+  elementary-icon-theme,
+  glib,
+  granite7,
+  gst_all_1,
+  gtk4,
+  libadwaita,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-music";
-  version = "7.1.0";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "music";
     rev = version;
-    sha256 = "sha256-L+E5gDtIgVkfmOIhzS7x8vtyMJYqx/UQpYMChrt2Tgo=";
+    sha256 = "sha256-ALAQh+iFhRhAMCwYDM0Bcww1K/xJ/AajZu/52baI3gQ=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook4
   ];
@@ -41,18 +41,15 @@ stdenv.mkDerivation rec {
     glib
     granite7
     gtk4
-  ] ++ (with gst_all_1; [
+    libadwaita
+  ]
+  ++ (with gst_all_1; [
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
     gstreamer
   ]);
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -72,7 +69,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/music";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     mainProgram = "io.elementary.music";
   };
 }

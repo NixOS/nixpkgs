@@ -7,9 +7,9 @@
   boost,
   eigen,
   gmp,
-  cgal, # see https://github.com/NixOS/nixpkgs/pull/94875 about cgal
+  cgal,
   mpfr,
-  tbb,
+  onetbb,
   numpy,
   cython,
   pybind11,
@@ -21,15 +21,15 @@
 
 buildPythonPackage rec {
   pname = "gudhi";
-  version = "3.9.0";
+  version = "3.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GUDHI";
     repo = "gudhi-devel";
-    rev = "tags/gudhi-release-${version}";
+    tag = "tags/gudhi-release-${version}";
     fetchSubmodules = true;
-    hash = "sha256-VL6RIPe8a2/cUHnHOql9e9EUMBB9QU311kMCaMZTbGI=";
+    hash = "sha256-EebPvmioTYBv3VR6SNEfiqi2GC4sZn8WEj0fu42B8yM=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,8 @@ buildPythonPackage rec {
     gmp
     cgal
     mpfr
-  ] ++ lib.optionals enableTBB [ tbb ];
+  ]
+  ++ lib.optionals enableTBB [ onetbb ];
   propagatedBuildInputs = [
     numpy
     scipy

@@ -1,0 +1,16 @@
+{
+  "version": "18.6.1",
+  "repo_hash": "0r12qlhngkdpn7arbjcj76hfhdwc1qz6p4dji88ga7qmcz5hglv9",
+  "yarn_hash": "1qrgi5zkjy3d74lfjhqwnlh9il572vjwcb63q0s1mcq7cpk8fwhs",
+  "frontend_islands_yarn_hash": "0m64xhlybjlax33k5rmj9kxcj1vzqqygybyz1yzzx9pd87570k2h",
+  "owner": "gitlab-org",
+  "repo": "gitlab",
+  "rev": "v18.6.1-ee",
+  "passthru": {
+    "GITALY_SERVER_VERSION": "18.6.1",
+    "GITLAB_PAGES_VERSION": "18.6.1",
+    "GITLAB_SHELL_VERSION": "14.45.3",
+    "GITLAB_ELASTICSEARCH_INDEXER_VERSION": "5.10.1",
+    "GITLAB_WORKHORSE_VERSION": "18.6.1"
+  }
+}

@@ -1,26 +1,32 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
 }:
-buildGoModule {
+
+buildGoModule (finalAttrs: {
   pname = "goat";
-  version = "unstable-2022-08-15"; # Upstream currently isn't doing tags/releases.
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "blampe";
     repo = "goat";
-    rev = "07bb911fe3106cc3c1d1097318a9fffe816b59fe";
-    hash = "sha256-gSSDp9Q2hGH85dkE7RoER5ig+Cz1oSOD0FNRBeTZM4U=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-/m9qRTVrak+C4Df5y+36Ff7E0TdwHVbQEyrP+qfNF6E=";
   };
 
   vendorHash = "sha256-24YllmSUzRcqWbJ8NLyhsJaoGG2+yE8/eXX6teJ1nV8=";
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Go ASCII Tool. Render ASCII art as SVG diagrams";
     homepage = "https://github.com/blampe/goat";
-    license = licenses.mit;
-    maintainers = with maintainers; [ katexochen ];
+    changelog = "https://github.com/blampe/goat/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ katexochen ];
     mainProgram = "goat";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

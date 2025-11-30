@@ -4,13 +4,14 @@
 
   lang,
   version,
-  format,
   src,
+  build-system,
 }:
 
 buildPythonPackage rec {
   pname = "gruut-lang-${lang}";
-  inherit version format src;
+  pyproject = true;
+  inherit version src build-system;
 
   prePatch = ''
     cd "${pname}"
@@ -24,6 +25,6 @@ buildPythonPackage rec {
     description = "Language files for gruut tokenizer/phonemizer";
     homepage = "https://github.com/rhasspy/gruut";
     license = licenses.mit;
-    maintainers = teams.tts.members;
+    teams = [ teams.tts ];
   };
 }

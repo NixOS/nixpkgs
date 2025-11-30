@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3Packages
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3Packages,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +18,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ python3Packages.python python3Packages.influxdb-client ];
+  buildInputs = [
+    python3Packages.python
+    python3Packages.influxdb-client
+  ];
 
   installPhase = ''
     install -Dm0555 influxdb2-provision.py $out/bin/influxdb2-provision
@@ -25,10 +29,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A small utility to help provisioning influxdb2";
+    description = "Small utility to help provisioning influxdb2";
     homepage = "https://github.com/oddlama/influxdb2-provision";
     license = licenses.mit;
-    maintainers = with maintainers; [oddlama];
+    maintainers = with maintainers; [ oddlama ];
     mainProgram = "influxdb2-provision";
   };
 }

@@ -1,26 +1,53 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  kyverno-chainsaw,
+  lib,
+  nix-update-script,
+  stdenv,
+  testers,
+}:
 
 buildGoModule rec {
   pname = "kyverno-chainsaw";
-  version = "0.2.2";
+  version = "0.2.13";
 
   src = fetchFromGitHub {
     owner = "kyverno";
     repo = "chainsaw";
     rev = "v${version}";
-    hash = "sha256-jTrASkIcvHQN8TcxyfAeYVN50L2cgZXrKJRI8BN9Muk=";
+    hash = "sha256-DbwqcHBmKAzq3xzUVGOdXjF8uaUWkEKRlz9m7tfyIdY=";
   };
 
-  vendorHash = "sha256-3x1HAt08Tbs56vaT2tBS//FPRn4JdFOI00XmlXMbs3w=";
+  vendorHash = "sha256-e4hSfmnROnfLRNvmfN0VFoIR0zVaqBhd0/c4lIyScvY=";
+
+  subPackages = [ "." ];
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/kyverno/chainsaw/pkg/version.BuildVersion=v${version}"
-    "-X github.com/kyverno/chainsaw/pkg/version.BuildHash=${version}"
-    "-X github.com/kyverno/chainsaw/pkg/version.BuildTime=1970-01-01_00:00:00"
   ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   doCheck = false; # requires running kubernetes
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd kyverno-chainsaw \
+        --$shell <($out/bin/chainsaw completion $shell)
+    done
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    package = kyverno-chainsaw;
+    command = "chainsaw version";
+    version = "v${version}";
+  };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/kyverno/chainsaw/releases/tag/v${version}";
@@ -33,6 +60,6 @@ buildGoModule rec {
       * Asserting operators react (or not) the way they should
     '';
     mainProgram = "chainsaw";
-    maintainers = with lib.maintainers; [ Sanskarzz ];
+    maintainers = [ ];
   };
 }

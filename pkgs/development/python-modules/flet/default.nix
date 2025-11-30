@@ -2,51 +2,61 @@
   lib,
   buildPythonPackage,
   flet-client-flutter,
-  pythonRelaxDepsHook,
 
   # build-system
   poetry-core,
+  pytestCheckHook,
 
   # propagates
   fastapi,
-  flet-core,
-  flet-runtime,
   httpx,
   oauthlib,
   packaging,
   qrcode,
+  repath,
   cookiecutter,
   uvicorn,
   watchdog,
   websocket-client,
   websockets,
-
 }:
 
 buildPythonPackage rec {
   pname = "flet";
   inherit (flet-client-flutter) version src;
-
   pyproject = true;
 
   sourceRoot = "${src.name}/sdk/python/packages/flet";
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
+  build-system = [ poetry-core ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  makeWrapperArgs = [
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "$PYTHONPATH"
   ];
 
-  pythonRelaxDeps = [
-    "cookiecutter"
-    "packaging"
-    "watchdog"
-    "websockets"
-  ];
+  _flet_version = ''
+    version = "${version}"
+    def update_version():
+      pass
+  '';
+  _flet_utils_pip = ''
+    def install_flet_package(name: str):
+      pass
+  '';
 
-  propagatedBuildInputs = [
+  postPatch = ''
+     # nerf out nagging about pip
+    echo "$_flet_version" > src/flet/version.py
+    echo "$_flet_utils_pip" >> src/flet/utils/pip.py
+  '';
+
+  dependencies = [
     fastapi
-    flet-core
-    flet-runtime
     uvicorn
     websocket-client
     watchdog
@@ -54,18 +64,17 @@ buildPythonPackage rec {
     websockets
     httpx
     packaging
+    repath
     qrcode
     cookiecutter
     fastapi
     uvicorn
   ];
 
-  doCheck = false;
-
   pythonImportsCheck = [ "flet" ];
 
   meta = {
-    description = "A framework that enables you to easily build realtime web, mobile, and desktop apps in Python";
+    description = "Framework that enables you to easily build realtime web, mobile, and desktop apps in Python";
     homepage = "https://flet.dev/";
     changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";
     license = lib.licenses.asl20;

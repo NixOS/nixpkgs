@@ -7,13 +7,15 @@
 }:
 
 mkDerivation {
-  isStatic = true;
+  noLibc = true;
   path = "include";
 
   extraPaths = [
     "contrib/libc-vis"
     "etc/mtree/BSD.include.dist"
     "sys"
+    # Used for aarch64-freebsd
+    "lib/msun/arm"
   ];
 
   extraNativeBuildInputs = [

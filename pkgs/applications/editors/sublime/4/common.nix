@@ -46,7 +46,7 @@ let
   downloadUrl =
     arch: "https://download.sublimetext.com/sublime_text_build_${buildVersion}_${arch}.tar.xz";
   versionUrl = "https://download.sublimetext.com/latest/${if dev then "dev" else "stable"}";
-  versionFile = builtins.toString ./packages.nix;
+  versionFile = toString ./packages.nix;
 
   neededLibraries = [
     xorg.libX11
@@ -58,11 +58,11 @@ let
     cairo
     pango
     curl
-  ] ++ lib.optionals (lib.versionAtLeast buildVersion "4145") [
+  ]
+  ++ lib.optionals (lib.versionAtLeast buildVersion "4145") [
     sqlite
   ];
-in
-let
+
   binaryPackage = stdenv.mkDerivation rec {
     pname = "${pnameBase}-bin";
     version = buildVersion;
@@ -89,7 +89,7 @@ let
       for binary in ${builtins.concatStringsSep " " binaries}; do
         patchelf \
           --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath ${lib.makeLibraryPath neededLibraries}:${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"} \
+          --set-rpath ${lib.makeLibraryPath neededLibraries}:${lib.getLib stdenv.cc.cc}/lib${lib.optionalString stdenv.hostPlatform.is64bit "64"} \
           $binary
       done
 
@@ -136,7 +136,7 @@ let
     };
   };
 in
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = pnameBase;
   version = buildVersion;
 
@@ -148,28 +148,27 @@ stdenv.mkDerivation (rec {
     makeWrapper
   ];
 
-  installPhase =
-    ''
-      mkdir -p "$out/bin"
-      makeWrapper "''$${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
-    ''
-    + builtins.concatStringsSep "" (
-      map (binaryAlias: "ln -s $out/bin/${primaryBinary} $out/bin/${binaryAlias}\n") primaryBinaryAliases
-    )
-    + ''
-      mkdir -p "$out/share/applications"
+  installPhase = ''
+    mkdir -p "$out/bin"
+    makeWrapper "''$${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
+  ''
+  + builtins.concatStringsSep "" (
+    map (binaryAlias: "ln -s $out/bin/${primaryBinary} $out/bin/${binaryAlias}\n") primaryBinaryAliases
+  )
+  + ''
+    mkdir -p "$out/share/applications"
 
-      substitute \
-        "''$${primaryBinary}/${primaryBinary}.desktop" \
-        "$out/share/applications/${primaryBinary}.desktop" \
-        --replace-fail "/opt/${primaryBinary}/${primaryBinary}" "${primaryBinary}"
+    substitute \
+      "''$${primaryBinary}/${primaryBinary}.desktop" \
+      "$out/share/applications/${primaryBinary}.desktop" \
+      --replace-fail "/opt/${primaryBinary}/${primaryBinary}" "${primaryBinary}"
 
-      for directory in ''$${primaryBinary}/Icon/*; do
-        size=$(basename $directory)
-        mkdir -p "$out/share/icons/hicolor/$size/apps"
-        ln -s ''$${primaryBinary}/Icon/$size/* $out/share/icons/hicolor/$size/apps
-      done
-    '';
+    for directory in ''$${primaryBinary}/Icon/*; do
+      size=$(basename $directory)
+      mkdir -p "$out/share/icons/hicolor/$size/apps"
+      ln -s ''$${primaryBinary}/Icon/$size/* $out/share/icons/hicolor/$size/apps
+    done
+  '';
 
   passthru = {
     updateScript =
@@ -192,10 +191,7 @@ stdenv.mkDerivation (rec {
           fi
 
           for platform in ${lib.escapeShellArgs meta.platforms}; do
-              # The script will not perform an update when the version attribute is up to date from previous platform run
-              # We need to clear it before each run
-              update-source-version "${packageAttribute}.${primaryBinary}" 0 "${lib.fakeSha256}" --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
-              update-source-version "${packageAttribute}.${primaryBinary}" "$latestVersion" --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
+              update-source-version "${packageAttribute}.${primaryBinary}" "$latestVersion" --ignore-same-version --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
           done
         '';
       in
@@ -221,4 +217,4 @@ stdenv.mkDerivation (rec {
       "x86_64-linux"
     ];
   };
-})
+}

@@ -1,62 +1,90 @@
-/* This function composes the Nix Packages collection. It:
+/*
+  This function composes the Nix Packages collection. It:
 
-     1. Elaborates `localSystem` and `crossSystem` with defaults as needed.
+    1. Elaborates `localSystem` and `crossSystem` with defaults as needed.
 
-     2. Applies the final stage to the given `config` if it is a function
+    2. Applies the final stage to the given `config` if it is a function
 
-     3. Defaults to no non-standard config and no cross-compilation target
+    3. Defaults to no non-standard config and no cross-compilation target
 
-     4. Uses the above to infer the default standard environment's (stdenv's)
-        stages if no stdenv's are provided
+    4. Uses the above to infer the default standard environment's (stdenv's)
+       stages if no stdenv's are provided
 
-     5. Folds the stages to yield the final fully booted package set for the
-        chosen stdenv
+    5. Folds the stages to yield the final fully booted package set for the
+       chosen stdenv
 
-   Use `impure.nix` to also infer the `system` based on the one on which
-   evaluation is taking place, and the configuration from environment variables
-   or dot-files. */
+  Use `impure.nix` to also infer the `system` based on the one on which
+  evaluation is taking place, and the configuration from environment variables
+  or dot-files.
+*/
 
-{ # The system packages will be built on. See the manual for the
+{
+  # The system packages will be built on. See the manual for the
   # subtle division of labor between these two `*System`s and the three
   # `*Platform`s.
-  localSystem
+  localSystem,
 
-, # The system packages will ultimately be run on.
-  crossSystem ? localSystem
+  # The system packages will ultimately be run on.
+  crossSystem ? localSystem,
 
-, # Allow a configuration attribute set to be passed in as an argument.
-  config ? {}
+  # Allow a configuration attribute set to be passed in as an argument.
+  config ? { },
 
-, # List of overlays layers used to extend Nixpkgs.
-  overlays ? []
+  # Temporary hack to let Nixpkgs forbid internal use of `lib.fileset`
+  # until <https://github.com/NixOS/nix/issues/11503> is fixed.
+  __allowFileset ? true,
 
-, # List of overlays to apply to target packages only.
-  crossOverlays ? []
+  # List of overlays layers used to extend Nixpkgs.
+  overlays ? [ ],
 
-, # A function booting the final package set for a specific standard
+  # List of overlays to apply to target packages only.
+  crossOverlays ? [ ],
+
+  # A function booting the final package set for a specific standard
   # environment. See below for the arguments given to that function, the type of
   # list it returns.
-  stdenvStages ? import ../stdenv
+  stdenvStages ? import ../stdenv,
 
-, # Ignore unexpected args.
+  # Ignore unexpected args.
   ...
-} @ args:
+}@args:
 
 let # Rename the function arguments
   config0 = config;
   crossSystem0 = crossSystem;
 
-in let
-  lib = import ../../lib;
+in
+let
+  pristineLib = import ../../lib;
+
+  lib =
+    if __allowFileset then
+      pristineLib
+    else
+      pristineLib.extend (
+        _: _: {
+          fileset = abort ''
+
+            The use of `lib.fileset` is currently forbidden in Nixpkgs due to the
+            upstream Nix bug <https://github.com/NixOS/nix/issues/11503>. This
+            causes difficult‐to‐debug errors when combined with chroot stores,
+            such as in the NixOS installer.
+
+            For packages that require source to be vendored inside Nixpkgs,
+            please use a subdirectory of the package instead.
+          '';
+        }
+      );
 
   inherit (lib) throwIfNot;
 
   checked =
-    throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list."
-    lib.foldr (x: throwIfNot (lib.isFunction x) "All overlays passed to nixpkgs must be functions.") (r: r) overlays
-    throwIfNot (lib.isList crossOverlays) "The crossOverlays argument to nixpkgs must be a list."
-    lib.foldr (x: throwIfNot (lib.isFunction x) "All crossOverlays passed to nixpkgs must be functions.") (r: r) crossOverlays
-    ;
+    (throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list.")
+      (throwIfNot (lib.all lib.isFunction overlays) "All overlays passed to nixpkgs must be functions.")
+      (throwIfNot (lib.isList crossOverlays) "The crossOverlays argument to nixpkgs must be a list.")
+      (
+        throwIfNot (lib.all lib.isFunction crossOverlays) "All crossOverlays passed to nixpkgs must be functions."
+      );
 
   localSystem = lib.systems.elaborate args.localSystem;
 
@@ -73,26 +101,26 @@ in let
   # Both systems are semantically equivalent as the same vendor and ABI are
   # inferred from the system double in `localSystem`.
   crossSystem =
-    let system = lib.systems.elaborate crossSystem0; in
-    if crossSystem0 == null || lib.systems.equals system localSystem
-    then localSystem
-    else system;
+    let
+      system = lib.systems.elaborate crossSystem0;
+    in
+    if crossSystem0 == null || lib.systems.equals system localSystem then localSystem else system;
 
   # Allow both:
   # { /* the config */ } and
   # { pkgs, ... } : { /* the config */ }
-  config1 =
-    if lib.isFunction config0
-    then config0 { inherit pkgs; }
-    else config0;
+  config1 = if lib.isFunction config0 then config0 { inherit pkgs; } else config0;
 
   configEval = lib.evalModules {
     modules = [
       ./config.nix
-      ({ options, ... }: {
-        _file = "nixpkgs.config";
-        config = config1;
-      })
+      (
+        { options, ... }:
+        {
+          _file = "nixpkgs.config";
+          config = config1;
+        }
+      )
     ];
     class = "nixpkgsConfig";
   };
@@ -127,18 +155,31 @@ in let
   # experience here.)
   nixpkgsFun = newArgs: import ./. (args // newArgs);
 
-  # Partially apply some arguments for building bootstraping stage pkgs
+  # Partially apply some arguments for building bootstrapping stage pkgs
   # sets. Only apply arguments which no stdenv would want to override.
-  allPackages = newArgs: import ./stage.nix ({
-    inherit lib nixpkgsFun;
-  } // newArgs);
+  allPackages =
+    newArgs:
+    import ./stage.nix (
+      {
+        inherit lib nixpkgsFun;
+      }
+      // newArgs
+    );
 
   boot = import ../stdenv/booter.nix { inherit lib allPackages; };
 
   stages = stdenvStages {
-    inherit lib localSystem crossSystem config overlays crossOverlays;
+    inherit
+      lib
+      localSystem
+      crossSystem
+      config
+      overlays
+      crossOverlays
+      ;
   };
 
   pkgs = boot stages;
 
-in checked pkgs
+in
+checked pkgs

@@ -1,33 +1,26 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, bzip2
-, openssl
-, zstd
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  bzip2,
+  openssl,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "symbolicator";
-  version = "23.11.2";
+  version = "25.10.0";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "symbolicator";
     rev = version;
-    hash = "sha256-pPzm57ZtsLLD7P0xIi+egKcQ3dcOGH6JV+C9u4uGGRM=";
+    hash = "sha256-bXoLhQVOzCic/n6/YlmFEpvN1lBD9sFDKzwi7VxW8iM=";
     fetchSubmodules = true;
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "cpp_demangle-0.4.1" = "sha256-9QopX2TOJc8bZ+UlSOFdjoe8NTJLVGrykyFL732tE3A=";
-      "reqwest-0.11.22" = "sha256-0IPpirvQSpwaF3bc5jh67UdJtKen3uumNgz5L4iqmYg=";
-    };
-  };
+  cargoHash = "sha256-r7HtHvizA/NoJI496db5ahQ/6Qwp+KwQRmYQ7S72cqQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -38,9 +31,6 @@ rustPlatform.buildRustPackage rec {
     bzip2
     openssl
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   env = {
@@ -57,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://getsentry.github.io/symbolicator/";
     changelog = "https://github.com/getsentry/symbolicator/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "symbolicator";
   };
 }

@@ -7,11 +7,12 @@
 buildPythonPackage rec {
   pname = "xstatic-font-awesome";
   version = "6.2.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "XStatic-Font-Awesome";
     inherit version;
-    sha256 = "sha256-8HWHEJYShjjy4VOQINgid1TD2IXdaOfubemgEjUHaCg=";
+    hash = "sha256-8HWHEJYShjjy4VOQINgid1TD2IXdaOfubemgEjUHaCg=";
   };
 
   # no tests implemented

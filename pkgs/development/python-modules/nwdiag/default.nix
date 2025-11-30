@@ -3,7 +3,6 @@
   blockdiag,
   fetchFromGitHub,
   buildPythonPackage,
-  pynose,
   pytestCheckHook,
   setuptools,
   pythonOlder,
@@ -19,20 +18,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "blockdiag";
     repo = "nwdiag";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-uKrdkXpL5YBr953sRsHknYg+2/WwrZmyDf8BMA2+0tU=";
   };
+
+  patches = [ ./fix_test_generate.patch ];
 
   build-system = [ setuptools ];
 
   dependencies = [ blockdiag ];
 
-  nativeCheckInputs = [
-    pynose
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "src/nwdiag/tests/" ];
+  enabledTestPaths = [ "src/nwdiag/tests/" ];
 
   disabledTests = [
     # AttributeError: 'TestRstDirectives' object has no attribute 'assertRegexpMatches'

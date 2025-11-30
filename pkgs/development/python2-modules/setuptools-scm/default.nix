@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, toml }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  toml,
+}:
 
 buildPythonPackage rec {
   pname = "setuptools_scm";
   version = "5.0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -19,6 +25,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pypa/setuptools_scm/";
     description = "Handles managing your python package versions in scm metadata";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

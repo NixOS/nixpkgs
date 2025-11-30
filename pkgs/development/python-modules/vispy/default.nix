@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  substituteAll,
+  replaceVars,
   fetchPypi,
   cython,
   fontconfig,
@@ -21,19 +21,18 @@
 
 buildPythonPackage rec {
   pname = "vispy";
-  version = "0.14.2";
+  version = "0.15.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7ti0TW9ch70pWySqmi4OTm3GqQXM7gGy1ByPvwp2ez0=";
+    hash = "sha256-1S0QwGl/SJkFVc6iorrT+fWncjkYVv2jZOpLvGn9B1w=";
   };
 
-  patches = [
-    (substituteAll {
-      src = ./library-paths.patch;
+  patches = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    (replaceVars ./library-paths.patch {
       fontconfig = "${fontconfig.lib}/lib/libfontconfig${stdenv.hostPlatform.extensions.sharedLibrary}";
       gl = "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";
     })

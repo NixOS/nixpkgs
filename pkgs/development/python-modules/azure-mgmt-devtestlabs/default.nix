@@ -26,7 +26,8 @@ buildPythonPackage rec {
     msrestazure
     azure-common
     azure-mgmt-core
-  ] ++ lib.optionals (!isPy3k) [ azure-mgmt-nspkg ];
+  ]
+  ++ lib.optionals (!isPy3k) [ azure-mgmt-nspkg ];
 
   pythonNamespaces = [ "azure.mgmt" ];
 
@@ -38,7 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [
-      jonringer
       maxwilson
     ];
   };

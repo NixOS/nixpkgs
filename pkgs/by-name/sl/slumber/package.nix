@@ -1,30 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
-,
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  versionCheckHook,
+  nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "slumber";
-  version = "1.3.1";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "LucasPickering";
     repo = "slumber";
-    rev = "v${version}";
-    hash = "sha256-BPOBIE/nAupBwjKYnEfrHQQ8EEA3ZbuU/D0fqio4Ir0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wEQPyp0J7p2TuJwH/fQv5fhenUY3MNIq0oazFJAj9lM=";
   };
 
-  cargoHash = "sha256-+GXLCxitYjNK9Eg93Do1q6DglJ5QQi1KSZ6GNmJ1jG8=";
+  cargoHash = "sha256-Nz/Z2KJ8jJAsTASwnvleRpJ88UHGe7dktO0FkCOPdu4=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Terminal-based HTTP/REST client";
     homepage = "https://slumber.lucaspickering.me";
-    license = licenses.mit;
+    changelog = "https://github.com/LucasPickering/slumber/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
     mainProgram = "slumber";
-    maintainers = with maintainers; [ javaes ];
+    maintainers = with lib.maintainers; [ javaes ];
   };
-}
+})

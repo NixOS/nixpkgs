@@ -1,8 +1,10 @@
-{ gtk3
+{
+  gtk3,
 }:
 
-{ buildInputs ? [ ]
-, ...
+{
+  buildInputs ? [ ],
+  ...
 }:
 
 {

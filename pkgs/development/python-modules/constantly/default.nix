@@ -23,14 +23,15 @@ let
     src = fetchFromGitHub {
       owner = "twisted";
       repo = "constantly";
-      rev = "refs/tags/${version}";
+      tag = version;
       hash = "sha256-yXPHQP4B83PuRNvDBnRTx/MaPaQxCl1g5Xrle+N/d7I=";
     };
 
     nativeBuildInputs = [
       setuptools
       versioneer
-    ] ++ versioneer.optional-dependencies.toml;
+    ]
+    ++ versioneer.optional-dependencies.toml;
 
     # would create dependency loop with twisted
     doCheck = false;
@@ -51,7 +52,7 @@ let
       description = "Module for symbolic constant support";
       homepage = "https://github.com/twisted/constantly";
       license = licenses.mit;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 in

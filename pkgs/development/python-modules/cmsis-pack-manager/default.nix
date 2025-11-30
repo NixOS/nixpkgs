@@ -4,8 +4,6 @@
   rustPlatform,
   cffi,
   libiconv,
-  stdenv,
-  darwin,
   buildPythonPackage,
   appdirs,
   pyyaml,
@@ -23,13 +21,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyocd";
     repo = "cmsis-pack-manager";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PeyJf3TGUxv8/MKIQUgWrenrK4Hb+4cvtDA2h3r6kGg=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-dO4qw5Jx0exwb4RuOhu6qvGxQZ+LayHtXDHZKADLTEI=";
+    hash = "sha256-OBh5WWSekrqdLLmxEXS0LfPIfy4QWKYgO+8o6PYWjN4=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +35,9 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
   ];
   propagatedNativeBuildInputs = [ cffi ];
-  buildInputs = [ libiconv ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+  buildInputs = [
+    libiconv
+  ];
   propagatedBuildInputs = [
     appdirs
     pyyaml
@@ -64,7 +64,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Rust and Python module for handling CMSIS Pack files";
+    description = "Rust and Python module for handling CMSIS Pack files";
     homepage = "https://github.com/pyocd/cmsis-pack-manager";
     license = licenses.asl20;
     maintainers = with maintainers; [

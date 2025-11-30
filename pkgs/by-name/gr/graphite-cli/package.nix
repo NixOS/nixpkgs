@@ -1,20 +1,22 @@
-{ lib
-, buildNpmPackage
-, fetchurl
-, git
-, installShellFiles
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  fetchurl,
+  git,
+  installShellFiles,
 }:
 
 buildNpmPackage rec {
   pname = "graphite-cli";
-  version = "1.3.4";
+  version = "1.7.2";
 
   src = fetchurl {
     url = "https://registry.npmjs.org/@withgraphite/graphite-cli/-/graphite-cli-${version}.tgz";
-    hash = "sha256-Rc/dj3r3EpMbxx9rYj4kXnstmUGLR46U+7v6n1jSaiQ=";
+    hash = "sha256-FoQvtywam4AXAavRtwfoTMaaMijW67hp317VLupCaCI=";
   };
 
-  npmDepsHash = "sha256-w9d96SMLISPua9LMZscDjL7L8mGPO1RGyNjg8eU40hw=";
+  npmDepsHash = "sha256-POWRxgrny27+7ymrhP5iFPBYzCmjCDWB8jGmOSieq0k=";
 
   postPatch = ''
     ln -s ${./package-lock.json} package-lock.json
@@ -27,7 +29,7 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd gt \
       --bash <($out/bin/gt completion) \
       --fish <(GT_PAGER= $out/bin/gt fish) \
@@ -37,11 +39,12 @@ buildNpmPackage rec {
   passthru.updateScript = ./update.sh;
 
   meta = {
+    changelog = "https://graphite.dev/docs/cli-changelog";
     description = "CLI that makes creating stacked git changes fast & intuitive";
     downloadPage = "https://www.npmjs.com/package/@withgraphite/graphite-cli";
     homepage = "https://graphite.dev/docs/graphite-cli";
     license = lib.licenses.unfree; # no license specified
     mainProgram = "gt";
-    maintainers = with lib.maintainers; [ diegs ];
+    maintainers = with lib.maintainers; [ joshheinrichs-shopify ];
   };
 }

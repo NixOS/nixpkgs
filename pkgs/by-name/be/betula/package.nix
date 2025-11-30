@@ -1,19 +1,21 @@
-{ lib
-, fetchFromSourcehut
-, buildGoModule
-}: buildGoModule rec {
+{
+  lib,
+  fetchFromSourcehut,
+  buildGoModule,
+}:
+buildGoModule rec {
   pname = "betula";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchFromSourcehut {
     owner = "~bouncepaw";
     repo = "betula";
     rev = "v${version}";
-    hash = "sha256-oxwOGpf305VDlY3Mwl0dRJRRhe0yolaMMlpNspZdKQk=";
+    hash = "sha256-f2F0YRhDnKdMqcUvpcRFNAI62gbusfzIUKQSZ65onMU=";
   };
-  vendorHash = "sha256-DjL2h6YKCJOWgmR/Gb0Eja38yJ4DymqW/SzmPG3+q9w=";
+  vendorHash = "sha256-3PS4fIyHbGGjnbMOy2VIQBXsnIyYDKR/ecl/i5jwSVM=";
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
   # These tests use internet, so are failing in Nix build.
   # See also: https://todo.sr.ht/~bouncepaw/betula/91
   checkFlags = "-skip=TestTitles|TestHEntries";

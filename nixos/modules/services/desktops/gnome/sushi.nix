@@ -1,6 +1,11 @@
 # GNOME Sushi daemon.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
 
@@ -26,14 +31,13 @@
 
   };
 
-
   ###### implementation
 
   config = lib.mkIf config.services.gnome.sushi.enable {
 
-    environment.systemPackages = [ pkgs.gnome.sushi ];
+    environment.systemPackages = [ pkgs.sushi ];
 
-    services.dbus.packages = [ pkgs.gnome.sushi ];
+    services.dbus.packages = [ pkgs.sushi ];
 
   };
 

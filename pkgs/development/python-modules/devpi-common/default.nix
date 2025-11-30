@@ -2,41 +2,47 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
-  setuptools,
-  setuptools-changelog-shortener,
-  requests,
-  tomli,
-  pytestCheckHook,
   lazy,
+  packaging-legacy,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools-changelog-shortener,
+  setuptools,
+  tomli,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "devpi-common";
-  version = "4.0.3";
+  version = "4.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+OAbT23wgPYihMzljFuxzh6GmwwjSqx60TVgl0X8Fz0=";
+    pname = "devpi-common";
+    inherit version;
+    hash = "sha256-WNf3YeP+f9/kScSmqeI1DU3fvrZssPbSCAJRQpQwMNM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-changelog-shortener
   ];
 
-  propagatedBuildInputs = [
-    requests
+  dependencies = [
     lazy
+    packaging-legacy
+    requests
     tomli
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "devpi_common" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/devpi/devpi";

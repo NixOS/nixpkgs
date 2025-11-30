@@ -18,8 +18,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "roy-ht";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "editdistance";
+    tag = "v${version}";
     hash = "sha256-Ncdg8S/UHYqJ1uFnHk9qhHMM3Lrop00woSu3PLKvuBI=";
   };
 

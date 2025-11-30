@@ -2,23 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "cronsim";
-  version = "2.5";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cuu508";
     repo = "cronsim";
-    rev = "refs/tags/${version}";
-    hash = "sha256-TSVFkMCMmrMXaPJPPNjIML+z98i1iIYuKH7hHiZnJkg=";
+    tag = version;
+    hash = "sha256-9TextQcZAX5Ri6cc+Qd4T+u8XjxriqoTsy/9/G8XDAM=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -1,8 +1,13 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 let
   version = "1.32b-3";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "quake3-pointrelease";
   inherit version;
 
@@ -24,6 +29,6 @@ in stdenv.mkDerivation {
     description = "Quake 3 Arena point release";
     license = licenses.unfreeRedistributable;
     platforms = platforms.all;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

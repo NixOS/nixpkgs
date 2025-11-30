@@ -9,7 +9,7 @@
   libiconv,
   libffi,
   libxml2,
-  llvm_14,
+  llvm,
   ncurses,
   zlib,
 }:
@@ -25,7 +25,7 @@ let
     }:
     buildPythonPackage rec {
       inherit pname;
-      version = "1.1.1";
+      version = "1.2.0";
       format = "pyproject";
 
       outputs = [ "out" ] ++ lib.optional (pname == "wasmer") "testsout";
@@ -37,10 +37,9 @@ let
         hash = "sha256-Iu28LMDNmtL2r7gJV5Vbb8HZj18dlkHe+mw/Y1L8YKE=";
       };
 
-      cargoDeps = rustPlatform.fetchCargoTarball {
-        inherit src;
-        name = "${pname}-${version}";
-        sha256 = cargoHash;
+      cargoDeps = rustPlatform.fetchCargoVendor {
+        inherit pname version src;
+        hash = cargoHash;
       };
 
       nativeBuildInputs =
@@ -56,7 +55,7 @@ let
           --replace "package.metadata.maturin" "broken"
       '';
 
-      buildInputs = lib.optionals stdenv.isDarwin [ libiconv ] ++ extraBuildInputs;
+      buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ] ++ extraBuildInputs;
 
       inherit buildAndTestSubdir;
 
@@ -87,20 +86,20 @@ in
   wasmer = common {
     pname = "wasmer";
     buildAndTestSubdir = "packages/api";
-    cargoHash = "sha256-vpbwU1HrIQmQkce9SK8UOHrX5tOLv/XKsfJHteqOteA=";
+    cargoHash = "sha256-oHyjzEqv88e2CHhWhKjUh6K0UflT9Y1JD//3oiE/UBQ=";
   };
 
   wasmer-compiler-cranelift = common {
     pname = "wasmer-compiler-cranelift";
     buildAndTestSubdir = "packages/compiler-cranelift";
-    cargoHash = "sha256-nv4cr52mUIuR3LWRT3eXU5b2LORwuN4iMbLX1efzovI=";
+    cargoHash = "sha256-oHyjzEqv88e2CHhWhKjUh6K0UflT9Y1JD//3oiE/UBQ=";
   };
 
   wasmer-compiler-llvm = common {
     pname = "wasmer-compiler-llvm";
     buildAndTestSubdir = "packages/compiler-llvm";
-    cargoHash = "sha256-FA/xXlPaK8NxZIw7MCm9Fyesgu72Dsxhmb5xzOIINhE=";
-    extraNativeBuildInputs = [ llvm_14 ];
+    cargoHash = "sha256-oHyjzEqv88e2CHhWhKjUh6K0UflT9Y1JD//3oiE/UBQ=";
+    extraNativeBuildInputs = [ llvm ];
     extraBuildInputs = [
       libffi
       libxml2.out
@@ -112,6 +111,6 @@ in
   wasmer-compiler-singlepass = common {
     pname = "wasmer-compiler-singlepass";
     buildAndTestSubdir = "packages/compiler-singlepass";
-    cargoHash = "sha256-yew7cB/7RLjW55jZmHFfIvaErgZ6XVxL1ucGGX2Cx18=";
+    cargoHash = "sha256-oHyjzEqv88e2CHhWhKjUh6K0UflT9Y1JD//3oiE/UBQ=";
   };
 }

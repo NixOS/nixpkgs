@@ -1,37 +1,52 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, wrapGAppsHook3
-, pkg-config
-, meson
-, ninja
-, vala
-, gala
-, gtk3
-, libgee
-, granite
-, gettext
-, mutter
-, mesa
-, json-glib
-, elementary-gtk-theme
-, elementary-icon-theme
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
+  wayland-scanner,
+  wrapGAppsHook3,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  gala,
+  glib,
+  gtk3,
+  libgee,
+  granite,
+  gettext,
+  mutter,
+  wayland,
+  json-glib,
+  elementary-gtk-theme,
+  elementary-icon-theme,
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
-  version = "3.0.5";
+  version = "8.0.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "wingpanel";
     rev = version;
-    sha256 = "sha256-xowGdaH0e6y0Q2xSl0kUa01rxxoEQ0qXB3sUol0YDBA=";
+    sha256 = "sha256-3UNtqfDqgclRE8Pe9N8rOt6i2FG6lKNfJAv5Q2OYXUU=";
   };
 
   patches = [
     ./indicators.patch
+
+    # Fix build with gala 8.3.0
+    # https://github.com/elementary/wingpanel/pull/642
+    (fetchpatch {
+      url = "https://github.com/elementary/wingpanel/commit/4476df2573797310e254695a66c099b32afe9736.patch";
+      hash = "sha256-99zzXbaeW/ijqPXN7tQexMPWsUW4pX7e0tcxASBVbvI=";
+    })
+  ];
+
+  depsBuildBuild = [
+    pkg-config
   ];
 
   nativeBuildInputs = [
@@ -40,6 +55,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
+    wayland-scanner
     wrapGAppsHook3
   ];
 
@@ -47,11 +63,15 @@ stdenv.mkDerivation rec {
     elementary-icon-theme
     gala
     granite
-    gtk3
     json-glib
     libgee
     mutter
-    mesa # for libEGL
+    wayland
+  ];
+
+  propagatedBuildInputs = [
+    glib
+    gtk3
   ];
 
   preFixup = ''
@@ -69,7 +89,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "The extensible top panel for Pantheon";
+    description = "Extensible top panel for Pantheon";
     longDescription = ''
       Wingpanel is an empty container that accepts indicators as extensions,
       including the applications menu.
@@ -77,7 +97,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/wingpanel";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     mainProgram = "io.elementary.wingpanel";
   };
 }

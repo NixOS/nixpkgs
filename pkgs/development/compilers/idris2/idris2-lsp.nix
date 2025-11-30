@@ -1,41 +1,52 @@
-{ lib, fetchFromGitHub, idris2Packages, makeWrapper }:
+{
+  lib,
+  fetchFromGitHub,
+  idris2Packages,
+  makeWrapper,
+}:
 
 let
-  globalLibraries = let
-    idrName = "idris2-${idris2Packages.idris2.version}";
-    libSuffix = "lib/${idrName}";
-  in [
-    "\\$HOME/.nix-profile/lib/${idrName}"
-    "/run/current-system/sw/lib/${idrName}"
-    "${idris2Packages.idris2}/${idrName}"
-  ];
-  globalLibrariesPath = builtins.concatStringsSep ":" globalLibraries;
+  globalLibrariesPath =
+    let
+      idrName = "idris2-${idris2Packages.idris2.version}";
+    in
+    lib.makeSearchPath idrName (
+      [
+        "\\$HOME/.nix-profile/lib/"
+        "/run/current-system/sw/lib/"
+        "${idris2Packages.idris2}"
+      ]
+      ++ idris2Packages.idris2.prelude
+    );
 
-  idris2Api = idris2Packages.idris2Api { };
-  lspLib = (idris2Packages.buildIdris {
+  inherit (idris2Packages) idris2Api;
+  lspLib = idris2Packages.buildIdris {
     ipkgName = "lsp-lib";
-    version = "2024-01-21";
+    version = "2025-08-14";
     src = fetchFromGitHub {
-     owner = "idris-community";
-     repo = "LSP-lib";
-     rev = "03851daae0c0274a02d94663d8f53143a94640da";
-     hash = "sha256-ICW9oOOP70hXneJFYInuPY68SZTDw10dSxSPTW4WwWM=";
+      owner = "idris-community";
+      repo = "LSP-lib";
+      rev = "ca77e80a392b8cfeee3aaeb150069957699cdb82";
+      hash = "sha256-maXHx/OrflIdV7XPfDCRShUGZekLbLOSFQPHnL6DxnI=";
     };
     idrisLibraries = [ ];
-  }).library { };
+  };
 
   lspPkg = idris2Packages.buildIdris {
     ipkgName = "idris2-lsp";
-    version = "2024-01-21";
+    version = "2025-09-10";
     src = fetchFromGitHub {
-       owner = "idris-community";
-       repo = "idris2-lsp";
-       rev = "a77ef2d563418925aa274fa29f06880dde43f4ec";
-       hash = "sha256-zjfVfkpiQS9AdmTfq0hYRSelJq5Caa9VGTuFLtSvl5o=";
+      owner = "idris-community";
+      repo = "idris2-lsp";
+      rev = "81344545c134c8e7105ecf1fdd7a1caae6647035";
+      hash = "sha256-uYmg9Jd98RiO5SpRFox2xNAxY4nocPuK//zxuaIi/DM=";
     };
-    idrisLibraries = [idris2Api lspLib];
+    idrisLibraries = [
+      idris2Api
+      lspLib
+    ];
 
-    buildInputs = [makeWrapper];
+    nativeBuildInputs = [ makeWrapper ];
     postInstall = ''
       wrapProgram $out/bin/idris2-lsp \
         --suffix IDRIS2_PACKAGE_PATH ':' "${globalLibrariesPath}"
@@ -49,4 +60,5 @@ let
       maintainers = with maintainers; [ mattpolzin ];
     };
   };
-in lspPkg.executable
+in
+lspPkg.executable

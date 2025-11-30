@@ -1,20 +1,30 @@
 {
   lib,
+  attrs,
   buildPythonPackage,
   fetchPypi,
+  hatchling,
+  pydantic,
   pythonOlder,
+  scrapy,
 }:
 
 buildPythonPackage rec {
   pname = "itemadapter";
-  version = "0.8.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.12.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-d3WEhfsKwQcw1LExNj431ly42yRQv+x6V8PzJx9KSKk=";
+    hash = "sha256-pQiCQ+iO/jCY8XIIVecHF25zVa2H0dIOKwMpf10V0b4=";
+  };
+
+  build-system = [ hatchling ];
+
+  optional-dependencies = {
+    attrs = [ attrs ];
+    pydantic = [ pydantic ];
+    scrapy = [ scrapy ];
   };
 
   # Infinite recursion with Scrapy
@@ -27,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/scrapy/itemadapter";
     changelog = "https://github.com/scrapy/itemadapter/raw/v${version}/Changelog.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

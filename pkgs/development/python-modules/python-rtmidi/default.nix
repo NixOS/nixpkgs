@@ -4,10 +4,6 @@
   alabaster,
   alsa-lib,
   buildPythonPackage,
-  CoreAudio,
-  CoreMIDI,
-  CoreServices,
-  Foundation,
   cython,
   fetchPypi,
   flake8,
@@ -43,15 +39,9 @@ buildPythonPackage rec {
 
   buildInputs =
     [ ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       libjack2
       alsa-lib
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      CoreAudio
-      CoreMIDI
-      CoreServices
-      Foundation
     ];
 
   nativeCheckInputs = [
@@ -63,10 +53,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "rtmidi" ];
 
   meta = with lib; {
-    description = "A Python binding for the RtMidi C++ library implemented using Cython";
+    description = "Python binding for the RtMidi C++ library implemented using Cython";
     homepage = "https://github.com/SpotlightKid/python-rtmidi";
     changelog = "https://github.com/SpotlightKid/python-rtmidi/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

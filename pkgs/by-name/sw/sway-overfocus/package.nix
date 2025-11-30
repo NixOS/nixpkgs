@@ -1,17 +1,22 @@
-{ fetchFromGitHub, lib, nix-update-script, rustPlatform }:
+{
+  fetchFromGitHub,
+  lib,
+  nix-update-script,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "sway-overfocus";
-  version = "0.2.3-fix";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "korreman";
-    repo = pname;
+    repo = "sway-overfocus";
     rev = "v${version}";
-    hash = "sha256-KHbYlxgrrZdNKJ7R9iVflbbP1c6qohM/NHBSYuzxEt4=";
+    hash = "sha256-Ik1YkEtmnMdm5bQb5PtqzZZdJxCnGu4Bzt000iV7tc4=";
   };
 
-  cargoHash = "sha256-zp6PSu8P+ZUhrqi5Vxpe+z9zBaSkdVQBMGNP0FVOviQ=";
+  cargoHash = "sha256-sMciCYeuvgY6K7u9HHxIL9EaCUAWGqtbcSjhfcbjdXI=";
 
   # Crate without tests.
   doCheck = false;
@@ -19,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = ''"Better" focus navigation for sway and i3.'';
+    description = "Better focus navigation for sway and i3";
     homepage = "https://github.com/korreman/sway-overfocus";
     changelog = "https://github.com/korreman/sway-overfocus/releases/tag/${src.rev}";
     license = licenses.mit;
@@ -27,4 +32,3 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "sway-overfocus";
   };
 }
-

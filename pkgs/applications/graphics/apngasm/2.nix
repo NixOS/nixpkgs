@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchzip, libpng, zlib, zopfli }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  libpng,
+  zlib,
+  zopfli,
+}:
 
 stdenv.mkDerivation rec {
   pname = "apngasm";
@@ -10,7 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "0qhljqql159xkn1l83vz0q8wvzr7rjz4jnhiy0zn36pgvacg0zn1";
   };
 
-  buildInputs = [ libpng zlib zopfli ];
+  buildInputs = [
+    libpng
+    zlib
+    zopfli
+  ];
 
   postPatch = ''
     rm -rf libpng zlib zopfli
@@ -29,7 +40,7 @@ stdenv.mkDerivation rec {
     mainProgram = "apngasm";
     homepage = "https://apngasm.sourceforge.net/";
     license = licenses.zlib;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 

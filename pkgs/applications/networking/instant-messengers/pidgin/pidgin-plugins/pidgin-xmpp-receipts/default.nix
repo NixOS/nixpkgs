@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, pidgin } :
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pidgin,
+}:
 
 let
   version = "0.8";
@@ -26,6 +31,6 @@ stdenv.mkDerivation {
     description = "Message delivery receipts (XEP-0184) Pidgin plugin";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
   };
 }

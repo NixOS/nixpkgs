@@ -5,7 +5,6 @@
   pbkdf2,
   pytestCheckHook,
   pythonOlder,
-  substituteAll,
   wirelesstools,
 }:
 
@@ -16,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "rockymeza";
-    repo = pname;
+    repo = "wifi";
     rev = "v${version}";
     hash = "sha256-scg/DvApvyQZtzDgkHFJzf9gCRfJgBvZ64CG/c2Cx8E=";
   };

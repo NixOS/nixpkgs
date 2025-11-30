@@ -1,17 +1,16 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
   fetchPypi,
   llama-index-core,
-  poetry-core,
+  hatchling,
   pythonOlder,
   tweepy,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-readers-twitter";
-  version = "0.1.3";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,10 +18,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_readers_twitter";
     inherit version;
-    hash = "sha256-ZPwluiPdSkwMZ3JQy/HHhR7erYhUE9BWtplkfHk+TK8=";
+    hash = "sha256-e4zYwopM7b1WiNINHU3DhnY1DPo7nMcIM/BymS1j0qQ=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     llama-index-core

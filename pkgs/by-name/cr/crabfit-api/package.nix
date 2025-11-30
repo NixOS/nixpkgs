@@ -8,12 +8,10 @@
   protobuf,
   openssl,
   sqlite,
-  stdenv,
-  darwin,
   adaptor ? "sql",
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "crabfit-api";
   version = "0-unstable-2023-08-02";
 
@@ -24,7 +22,7 @@ rustPlatform.buildRustPackage {
     hash = "sha256-jy8BrJSHukRenPbZHw4nPx3cSi7E2GSg//WOXDh90mY=";
   };
 
-  sourceRoot = "source/api";
+  sourceRoot = "${src.name}/api";
 
   patches = [
     (fetchpatch {
@@ -34,6 +32,12 @@ rustPlatform.buildRustPackage {
       hash = "sha256-7bmBndS3ow9P9EKmoQrQWcTpS4B3qAnSpeTUF6ox+BM=";
     })
   ];
+
+  # FIXME: Remove this after https://github.com/GRA0007/crab.fit/pull/341 is merged,
+  # or upstream bumps their locked version of 0.3 time to 0.3.36 or later
+  postPatch = ''
+    cp ${./Cargo.lock} Cargo.lock
+  '';
 
   cargoLock = {
     lockFile = ./Cargo.lock;
@@ -47,28 +51,24 @@ rustPlatform.buildRustPackage {
     protobuf
   ];
 
-  buildInputs =
-    [
-      openssl
-      sqlite
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+    sqlite
+  ];
 
   buildFeatures = [ "${adaptor}-adaptor" ];
 
   PROTOC = "${protobuf}/bin/protoc";
 
-  passthru.tests = [ nixosTests.crabfit ];
+  passthru.tests = {
+    inherit (nixosTests) crabfit;
+  };
 
   meta = {
     description = "Enter your availability to find a time that works for everyone";
     homepage = "https://github.com/GRA0007/crab.fit";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ thubrecht ];
+    maintainers = [ ];
     mainProgram = "crabfit-api";
   };
 }

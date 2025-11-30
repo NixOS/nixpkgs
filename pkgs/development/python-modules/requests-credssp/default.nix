@@ -3,8 +3,6 @@
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
-  gssapi,
-  krb5,
   pyspnego,
   pytestCheckHook,
   pythonOlder,
@@ -20,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "jborean93";
-    repo = pname;
+    repo = "requests-credssp";
     rev = "v${version}";
     hash = "sha256-HHLEmQ+mNjMjpR6J+emrKFM+2PiYq32o7Gnoo0gUrNA=";
   };
@@ -33,12 +31,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  passthru.optional-dependencies = {
-    kerberos = [
-      # pyspnego[kerberos] will have those two dependencies
-      gssapi
-      krb5
-    ];
+  optional-dependencies = {
+    kerberos = pyspnego.optional-dependencies.kerberos;
   };
 
   pythonImportsCheck = [ "requests_credssp" ];

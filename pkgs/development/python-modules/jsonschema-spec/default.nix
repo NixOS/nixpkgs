@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pythonRelaxDepsHook,
 
   # build
   poetry-core,
@@ -16,33 +15,31 @@
 
   # tests
   pytestCheckHook,
+  pytest-cov-stub,
   responses,
 }:
 
 buildPythonPackage rec {
   pname = "jsonschema-spec";
-  version = "0.2.4";
+  version = "0.3.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "p1c2u";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-1Flb3XQCGhrAYzTvriSVhHDb/Z/uvCyZdbav2u7f3sg=";
+    repo = "jsonschema-spec";
+    tag = version;
+    hash = "sha256-rCepDnVAOEsokKjWCuqDYbGIq6/wn4rsQRx5dXTUsYo=";
   };
 
   postPatch = ''
-    sed -i "/^--cov/d" pyproject.toml
-
     substituteInPlace pyproject.toml \
       --replace 'referencing = ">=0.28.0,<0.30.0"' 'referencing = ">=0.28.0"'
   '';
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "referencing" ];
@@ -56,6 +53,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     responses
   ];
 

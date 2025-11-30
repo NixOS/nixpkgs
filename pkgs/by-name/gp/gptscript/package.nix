@@ -1,20 +1,20 @@
 {
   lib,
-  buildGo122Module,
+  buildGoModule,
   fetchFromGitHub,
 }:
-buildGo122Module rec {
+buildGoModule rec {
   pname = "gptscript";
-  version = "0.5.0";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
     owner = "gptscript-ai";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-teZQhGYKJ5Ma5by3Wug5B1hAV1tox94MF586ZeEXp6o=";
+    repo = "gptscript";
+    tag = "v${version}";
+    hash = "sha256-eZvNW3VKhqgOOkkIFFHeWXowgxLV/05iQtR0XgH8Ghw=";
   };
 
-  vendorHash = "sha256-0irUcEomQzo9+vFJEk28apLNuJdsX1RHEqB7T88X7Ks=";
+  vendorHash = "sha256-BUOIIXFfd8p8tXH2tNLM897j5CkI2EqNU3V8pojrxFI=";
 
   ldflags = [
     "-s"
@@ -25,12 +25,12 @@ buildGo122Module rec {
   # Requires network access
   doCheck = false;
 
-  meta = with lib; {
-    homepage = "https://gptscript.ai";
-    changelog = "https://github.com/gptscript-ai/gptscript/releases/tag/v{version}";
-    description = "Natural Language Programming";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ jamiemagee ];
+  meta = {
+    homepage = "https://github.com/gptscript-ai/gptscript";
+    changelog = "https://github.com/gptscript-ai/gptscript/releases/tag/v${version}";
+    description = "Build AI assistants that interact with your systems";
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ jamiemagee ];
     mainProgram = "gptscript";
   };
 }

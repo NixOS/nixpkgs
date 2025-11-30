@@ -1,30 +1,36 @@
-{ pkgsBuildBuild
-, go
-, buildGoModule
-, stdenv
-, lib
-, procps
-, fetchFromGitHub
-, nixosTests
-, autoSignDarwinBinariesHook
+{
+  pkgsBuildBuild,
+  go,
+  buildGoModule,
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  nixosTests,
+  autoSignDarwinBinariesHook,
+  nix-update-script,
 }:
 
 let
-  common = { stname, target, postInstall ? "" }:
+  common =
+    {
+      stname,
+      target,
+      postInstall ? "",
+    }:
     buildGoModule rec {
       pname = stname;
-      version = "1.27.7";
+      version = "2.0.10";
 
       src = fetchFromGitHub {
         owner = "syncthing";
         repo = "syncthing";
-        rev = "v${version}";
-        hash = "sha256-Y/gwQfb3ShOsXsNLomtqUlmYaw7FQQ6IUN1fHSYOouQ=";
+        tag = "v${version}";
+        hash = "sha256-N0+i5sj/cTPDv6q428b3Y0hsPRxIl96+RIuS1AyeTbc=";
       };
 
-      vendorHash = "sha256-xVSSFFTqU7jww8YTeXKfa3096c2FmEgkcXvuqFHb12E=";
+      vendorHash = "sha256-iYTAnEy0MqJaTz/cdpteealyviwVrpwDzVigo8nnXqs=";
 
-      nativeBuildInputs = lib.optionals stdenv.isDarwin [
+      nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
         # Recent versions of macOS seem to require binaries to be signed when
         # run from Launch Agents/Daemons, even on x86 devices where it has a
         # more lax code signing policy compared to Apple Silicon. So just sign
@@ -43,7 +49,7 @@ let
         (
           export GOOS="${pkgsBuildBuild.go.GOOS}" GOARCH="${pkgsBuildBuild.go.GOARCH}" CC=$CC_FOR_BUILD
           go build build.go
-          go generate github.com/syncthing/syncthing/lib/api/auto github.com/syncthing/syncthing/cmd/strelaypoolsrv/auto
+          go generate github.com/syncthing/syncthing/lib/api/auto github.com/syncthing/syncthing/cmd/infra/strelaypoolsrv/auto
         )
         ./build -goos ${go.GOOS} -goarch ${go.GOARCH} -no-upgrade -version v${version} build ${target}
         runHook postBuild
@@ -57,18 +63,32 @@ let
 
       inherit postInstall;
 
-      passthru.tests = {
-        inherit (nixosTests) syncthing syncthing-init syncthing-relay;
+      passthru = {
+        tests = {
+          inherit (nixosTests)
+            syncthing
+            syncthing-folders
+            syncthing-guiPassword
+            syncthing-guiPasswordFile
+            syncthing-init
+            syncthing-no-settings
+            syncthing-relay
+            ;
+        };
+        updateScript = nix-update-script { };
       };
 
-      meta = with lib; {
+      meta = {
         homepage = "https://syncthing.net/";
         description = "Open Source Continuous File Synchronization";
         changelog = "https://github.com/syncthing/syncthing/releases/tag/v${version}";
-        license = licenses.mpl20;
-        maintainers = with maintainers; [ joko peterhoeg ];
+        license = lib.licenses.mpl20;
+        maintainers = with lib.maintainers; [
+          joko
+          peterhoeg
+        ];
         mainProgram = target;
-        platforms = platforms.unix;
+        platforms = lib.platforms.unix;
       };
     };
 
@@ -87,20 +107,25 @@ in
         install -Dm644 "$mf" "$mandir/$(basename "$mf")"
       done
 
-    '' + lib.optionalString (stdenv.isLinux) ''
-      mkdir -p $out/lib/systemd/{system,user}
+      install -Dm644 etc/linux-desktop/syncthing-ui.desktop $out/share/applications/syncthing-ui.desktop
+      install -Dm644 assets/logo-32.png   $out/share/icons/hicolor/32x32/apps/syncthing.png
+      install -Dm644 assets/logo-64.png   $out/share/icons/hicolor/64x64/apps/syncthing.png
+      install -Dm644 assets/logo-128.png  $out/share/icons/hicolor/128x128/apps/syncthing.png
+      install -Dm644 assets/logo-256.png  $out/share/icons/hicolor/256x256/apps/syncthing.png
+      install -Dm644 assets/logo-512.png  $out/share/icons/hicolor/512x512/apps/syncthing.png
+      install -Dm644 assets/logo-only.svg $out/share/icons/hicolor/scalable/apps/syncthing.svg
 
-      substitute etc/linux-systemd/system/syncthing-resume.service \
-                 $out/lib/systemd/system/syncthing-resume.service \
-                 --replace /usr/bin/pkill ${procps}/bin/pkill
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+      mkdir -p $out/lib/systemd/{system,user}
 
       substitute etc/linux-systemd/system/syncthing@.service \
                  $out/lib/systemd/system/syncthing@.service \
-                 --replace /usr/bin/syncthing $out/bin/syncthing
+                 --replace-fail /usr/bin/syncthing $out/bin/syncthing
 
       substitute etc/linux-systemd/user/syncthing.service \
                  $out/lib/systemd/user/syncthing.service \
-                 --replace /usr/bin/syncthing $out/bin/syncthing
+                 --replace-fail /usr/bin/syncthing $out/bin/syncthing
     '';
   };
 
@@ -113,12 +138,12 @@ in
     stname = "syncthing-relay";
     target = "strelaysrv";
 
-    postInstall = lib.optionalString (stdenv.isLinux) ''
+    postInstall = lib.optionalString (stdenv.hostPlatform.isLinux) ''
       mkdir -p $out/lib/systemd/system
 
       substitute cmd/strelaysrv/etc/linux-systemd/strelaysrv.service \
                  $out/lib/systemd/system/strelaysrv.service \
-                 --replace /usr/bin/strelaysrv $out/bin/strelaysrv
+                 --replace-fail /usr/bin/strelaysrv $out/bin/strelaysrv
     '';
   };
 }

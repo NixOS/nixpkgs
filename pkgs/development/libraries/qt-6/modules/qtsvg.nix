@@ -1,12 +1,13 @@
-{ qtModule
-, qtbase
-, libwebp
-, jasper
-, libmng
-, zlib
-, pkg-config
-, lib
-, stdenv
+{
+  qtModule,
+  qtbase,
+  libwebp,
+  jasper,
+  libmng,
+  zlib,
+  pkg-config,
+  lib,
+  stdenv,
 }:
 
 qtModule {
@@ -14,9 +15,11 @@ qtModule {
   propagatedBuildInputs = [ qtbase ];
   buildInputs = [
     libwebp
-  ] ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ]
+  ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     jasper
-  ] ++ [
+  ]
+  ++ [
     libmng
     zlib
   ];

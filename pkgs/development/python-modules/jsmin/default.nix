@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "jsmin/test.py" ];
+  enabledTestPaths = [ "jsmin/test.py" ];
 
   pythonImportsCheck = [ "jsmin" ];
 
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "JavaScript minifier";
     homepage = "https://github.com/tikitu/jsmin/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

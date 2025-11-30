@@ -1,33 +1,27 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, darwin
-, stdenv
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dummyhttp";
-  version = "1.0.3";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "dummyhttp";
     rev = "v${version}";
-    hash = "sha256-MDkyJAVNpCaAomAEweYrQeQWtil8bYo34ko9rAu+VBU=";
+    hash = "sha256-J8TOOLTNvm6udkPdYTrjrCX/3D35lXeFDc0H5kki+Uk=";
   };
 
-  cargoHash = "sha256-JkA0qW/MQH+XmiD9eiT0s70HxNNYyk9ecBo4k5nUF10=";
-
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  cargoHash = "sha256-566hk79oXApJm5p+gEgikV08n19hH1Tk36DvgPuQKLI=";
 
   meta = with lib; {
     description = "Super simple HTTP server that replies a fixed body with a fixed response code";
     homepage = "https://github.com/svenstaro/dummyhttp";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ GuillaumeDesforges ];
+    maintainers = [ ];
     mainProgram = "dummyhttp";
   };
 }
-

@@ -3,6 +3,7 @@
   jdk8,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   six,
   py4j,
   pythonOlder,
@@ -10,19 +11,21 @@
 
 buildPythonPackage rec {
   pname = "databricks-connect";
-  version = "11.3.33";
-  format = "setuptools";
+  version = "11.3.40";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KcqJ2B2df85H/VIx4ToX0pJ7rYbjDRp3eR7jAFW67do=";
+    hash = "sha256-rSuW/6fSro1pAxDj2tZ+EYvO0zf0yCWXNaS9Ls7xJfw=";
   };
 
   sourceRoot = ".";
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     py4j
     six
     jdk8
@@ -31,14 +34,11 @@ buildPythonPackage rec {
   # requires network access
   doCheck = false;
 
-  prePatch = ''
-    substituteInPlace setup.py \
-      --replace "py4j==0.10.9" "py4j"
-  '';
+  pythonRelaxDeps = [ "py4j" ];
 
   preFixup = ''
     substituteInPlace "$out/bin/find-spark-home" \
-      --replace find_spark_home.py .find_spark_home.py-wrapped
+      --replace-fail find_spark_home.py .find_spark_home.py-wrapped
   '';
 
   pythonImportsCheck = [

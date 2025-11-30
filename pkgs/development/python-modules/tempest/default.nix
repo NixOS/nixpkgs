@@ -1,76 +1,78 @@
 {
   lib,
+  bash,
   buildPythonPackage,
+  cliff,
+  debtcollector,
   defusedxml,
   fetchPypi,
-  pbr,
-  cliff,
+  fixtures,
+  hacking,
   jsonschema,
-  testtools,
-  paramiko,
   netaddr,
   oslo-concurrency,
   oslo-config,
   oslo-log,
-  stestr,
   oslo-serialization,
   oslo-utils,
-  fixtures,
+  oslotest,
+  paramiko,
+  pbr,
+  prettytable,
+  python,
   pythonOlder,
   pyyaml,
-  subunit,
-  stevedore,
-  prettytable,
-  urllib3,
-  debtcollector,
-  hacking,
-  oslotest,
-  bash,
-  python,
   setuptools,
+  stestr,
+  stevedore,
+  subunit,
+  testscenarios,
+  testtools,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "tempest";
-  version = "38.0.0";
+  version = "46.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2WmSN4NrH5/y5iAuYaaVuZkuh1ym14jFj7OXw8Jfxtc=";
+    hash = "sha256-ddm1OE7BDwDM4T9GIB0+qK8WvU/+aC+FBIGWDm3ObHM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  pythonRelaxDeps = [ "defusedxml" ];
 
-  propagatedBuildInputs = [
-    pbr
+  build-system = [ setuptools ];
+
+  dependencies = [
     cliff
+    debtcollector
     defusedxml
+    fixtures
     jsonschema
-    testtools
-    paramiko
     netaddr
     oslo-concurrency
     oslo-config
     oslo-log
-    stestr
     oslo-serialization
     oslo-utils
-    fixtures
-    pyyaml
-    subunit
-    stevedore
+    paramiko
+    pbr
     prettytable
+    pyyaml
+    stestr
+    stevedore
+    subunit
+    testscenarios
+    testtools
     urllib3
-    debtcollector
   ];
 
   nativeCheckInputs = [
-    stestr
     hacking
     oslotest
+    stestr
   ];
 
   checkPhase = ''
@@ -82,6 +84,9 @@ buildPythonPackage rec {
     chmod +x bin/*
 
     stestr --test-path tempest/tests run -e <(echo "
+      tempest.tests.cmd.test_cleanup.TestTempestCleanup.test_load_json_resource_list
+      tempest.tests.cmd.test_cleanup.TestTempestCleanup.test_load_json_saved_state
+      tempest.tests.cmd.test_cleanup.TestTempestCleanup.test_take_action_got_exception
       tempest.tests.lib.cli.test_execute.TestExecute.test_execute_with_prefix
     ")
   '';
@@ -89,9 +94,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tempest" ];
 
   meta = with lib; {
-    description = "An OpenStack integration test suite that runs against live OpenStack cluster and validates an OpenStack deployment";
+    description = "OpenStack integration test suite that runs against live OpenStack cluster and validates an OpenStack deployment";
     homepage = "https://github.com/openstack/tempest";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    mainProgram = "tempest";
+    teams = [ teams.openstack ];
   };
 }

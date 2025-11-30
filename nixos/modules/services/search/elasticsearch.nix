@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -67,7 +72,7 @@ in
     tcp_port = mkOption {
       description = "Elasticsearch port for the node to node communication.";
       default = 9300;
-      type = types.int;
+      type = types.port;
     };
 
     cluster_name = mkOption {
@@ -138,7 +143,7 @@ in
       example = lib.literalExpression "[ pkgs.elasticsearchPlugins.discovery-ec2 ]";
     };
 
-    restartIfChanged  = mkOption {
+    restartIfChanged = mkOption {
       type = types.bool;
       description = ''
         Automatically restart the service on config change.

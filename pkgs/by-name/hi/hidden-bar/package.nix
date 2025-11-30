@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, undmg
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  undmg,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -27,10 +28,10 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ undmg ];
 
   meta = {
-    description = "An ultra-light MacOS utility that helps hide menu bar icons";
+    description = "Ultra-light MacOS utility that helps hide menu bar icons";
     homepage = "https://github.com/dwarvesf/hidden";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ donteatoreo ];
+    maintainers = with lib.maintainers; [ FlameFlag ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

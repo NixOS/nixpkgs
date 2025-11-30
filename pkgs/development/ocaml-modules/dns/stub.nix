@@ -1,13 +1,24 @@
-{ buildDunePackage, dns, dns-client-mirage, dns-mirage, dns-resolver, dns-tsig
-, dns-server, duration, randomconv, lwt, mirage-time, mirage-clock
-, mirage-random, tcpip, metrics
+{
+  buildDunePackage,
+  dns,
+  dns-client-mirage,
+  dns-mirage,
+  dns-resolver,
+  dns-tsig,
+  dns-server,
+  duration,
+  randomconv,
+  lwt,
+  mirage-ptime,
+  mirage-crypto-rng,
+  tcpip,
+  metrics,
 }:
 
 buildDunePackage {
   pname = "dns-stub";
 
   inherit (dns) version src;
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     dns
@@ -19,9 +30,8 @@ buildDunePackage {
     duration
     randomconv
     lwt
-    mirage-time
-    mirage-clock
-    mirage-random
+    mirage-ptime
+    mirage-crypto-rng
     tcpip
     metrics
   ];

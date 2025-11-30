@@ -24,7 +24,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
 
   meta = with lib; {
-    description = "A simple wrapper around fribidi";
+    description = "Simple wrapper around fribidi";
     homepage = "https://github.com/pediapress/pyfribidi";
     license = licenses.gpl2;
   };

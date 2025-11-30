@@ -1,49 +1,73 @@
-{ lib, stdenv, fetchFromGitHub
-, llvmPackages, elfutils, bcc
-, libbpf, libbfd, libopcodes
-, cereal, asciidoctor
-, cmake, pkg-config, flex, bison
-, util-linux
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  llvmPackages,
+  elfutils,
+  bcc,
+  libbpf,
+  libbfd,
+  libopcodes,
+  glibc,
+  cereal,
+  asciidoctor,
+  cmake,
+  pkg-config,
+  flex,
+  bison,
+  util-linux,
+  xxd,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
-  version = "0.20.4";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
-    owner = "iovisor";
-    repo  = "bpftrace";
-    rev   = "v${version}";
-    hash  = "sha256-GJSUHMOp3vCWj8C+1mBHcnUgxLUWUz8Jd8wpq7u0q3s=";
+    owner = "bpftrace";
+    repo = "bpftrace";
+    rev = "v${version}";
+    hash = "sha256-Wt1MXKOg48477HMszq1GAjs+ZELbfAfp+P2AYa+dg+Q=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "attach_tracepoint_with_enums.patch";
+      url = "https://github.com/bpftrace/bpftrace/pull/4714.patch";
+      includes = [ "src/ast/passes/clang_parser.cpp" ];
+      hash = "sha256-xk+/eBNJJJSUqNTs0HFr0BAaqRB5B7CNWRSmnoBMTs0=";
+    })
+  ];
 
   buildInputs = with llvmPackages; [
-    llvm libclang
-    elfutils bcc
-    libbpf libbfd libopcodes
-    cereal asciidoctor
+    llvm
+    libclang
+    elfutils
+    bcc
+    libbpf
+    libbfd
+    libopcodes
+    cereal
+    asciidoctor
   ];
 
   nativeBuildInputs = [
-    cmake pkg-config flex bison
+    cmake
+    pkg-config
+    flex
+    bison
     llvmPackages.llvm.dev
     util-linux
+    xxd
   ];
 
-  # tests aren't built, due to gtest shenanigans. see:
-  #
-  #     https://github.com/iovisor/bpftrace/issues/161#issuecomment-453606728
-  #     https://github.com/iovisor/bpftrace/pull/363
-  #
   cmakeFlags = [
-    "-DBUILD_TESTING=FALSE"
     "-DLIBBCC_INCLUDE_DIRS=${bcc}/include"
-    "-DINSTALL_TOOL_DOCS=OFF"
-    "-DUSE_SYSTEM_BPF_BCC=ON"
+    "-DUSE_SYSTEM_LIBBPF=ON"
+    "-DSYSTEM_INCLUDE_PATHS=${glibc.dev}/include"
   ];
-
 
   # Pull BPF scripts into $PATH (next to their bcc program equivalents), but do
   # not move them to keep `${pkgs.bpftrace}/share/bpftrace/tools/...` working.
@@ -54,19 +78,28 @@ stdenv.mkDerivation rec {
     sed -i -e "1s:#!/usr/bin/env bpftrace:#!$out/bin/bpftrace:" $out/share/bpftrace/tools/*.bt
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   passthru.tests = {
-    bpf = nixosTests.bpf;
+    inherit (nixosTests) bpf;
   };
 
-  meta = with lib; {
+  meta = {
     description = "High-level tracing language for Linux eBPF";
-    homepage    = "https://github.com/iovisor/bpftrace";
-    changelog   = "https://github.com/iovisor/bpftrace/releases/tag/v${version}";
+    homepage = "https://github.com/bpftrace/bpftrace";
+    changelog = "https://github.com/bpftrace/bpftrace/releases/tag/v${version}";
     mainProgram = "bpftrace";
-    license     = licenses.asl20;
-    maintainers = with maintainers; [ rvl thoughtpolice martinetd mfrw ];
-    platforms   = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      rvl
+      thoughtpolice
+      martinetd
+      mfrw
+      illustris
+    ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,6 +1,7 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -14,6 +15,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-++16WAs2K9BKk8384yaSI/YD1CdtdyXVBIjGhqi4JIk=";
   };
 
+  # Fix the cmake_minimum_required version constraint in CMakeRC.cmake.
+  patches = [
+    ./0001-Fix-minimum-required-CMake-version-to-be-compatible-.patch
+  ];
+
   installPhase = ''
     runHook preInstall
 
@@ -23,7 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A Resource Compiler in a Single CMake Script";
+    description = "Resource Compiler in a Single CMake Script";
     homepage = "https://github.com/vector-of-bool/cmrc";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ guekka ];

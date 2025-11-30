@@ -6,8 +6,8 @@
   poetry-core,
   jsonpatch,
   jsonschema,
-  six,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -19,14 +19,10 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "bcwaldon";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "warlock";
+    tag = version;
     hash = "sha256-HOCLzFYmOL/tCXT+NO/tCZuVXVowNEPP3g33ZYg4+6Q=";
   };
-
-  postPatch = ''
-    sed -i '/--cov/d' pytest.ini
-  '';
 
   nativeBuildInputs = [ poetry-core ];
 
@@ -35,7 +31,10 @@ buildPythonPackage rec {
     jsonschema
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   disabledTests = [
     # https://github.com/bcwaldon/warlock/issues/64
@@ -48,6 +47,6 @@ buildPythonPackage rec {
     description = "Python object model built on JSON schema and JSON patch";
     homepage = "https://github.com/bcwaldon/warlock";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

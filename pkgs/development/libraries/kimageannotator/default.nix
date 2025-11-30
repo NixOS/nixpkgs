@@ -1,20 +1,36 @@
-{ lib, stdenv, fetchFromGitHub, cmake, qttools, qtbase, qtsvg, kcolorpicker }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qttools,
+  qtbase,
+  qtsvg,
+  kcolorpicker,
+}:
 
 let
   isQt6 = lib.versions.major qtbase.version == "6";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "kimageannotator";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "ksnip";
     repo = "kImageAnnotator";
     rev = "v${version}";
-    hash = "sha256-LFou8gTF/XDBLNQbA4uurYJHQl7yOTKe2OGklUsmPrg=";
+    hash = "sha256-SKNNsBXmaS0ZnbMP7cKSfr+MM+ICdvYQ0k2h5s9SDcE=";
   };
 
-  nativeBuildInputs = [ cmake qttools ];
-  buildInputs = [ qtbase qtsvg ];
+  nativeBuildInputs = [
+    cmake
+    qttools
+  ];
+  buildInputs = [
+    qtbase
+    qtsvg
+  ];
   propagatedBuildInputs = [ kcolorpicker ];
 
   cmakeFlags = [

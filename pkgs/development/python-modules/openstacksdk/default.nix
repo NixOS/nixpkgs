@@ -10,27 +10,47 @@
   jsonpatch,
   keystoneauth1,
   munch,
-  netifaces,
+  openstackdocstheme,
   os-service-types,
   pbr,
-  pythonOlder,
+  psutil,
   pyyaml,
   requestsexceptions,
+  setuptools,
+  sphinxHook,
 }:
 
 buildPythonPackage rec {
   pname = "openstacksdk";
-  version = "3.1.0";
-  format = "setuptools";
+  version = "4.8.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cH8V1+wHSrJDS5peGYT6yrAPgi0nL0wqXeDSKgnrec0=";
+    hash = "sha256-TcA44cF9iTAF86ColRRWr9nRSPP2XUSPlK3M6yeNfzE=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    # Disable rsvgconverter not needed to build manpage
+    substituteInPlace doc/source/conf.py \
+      --replace-fail "'sphinxcontrib.rsvgconverter'," "#'sphinxcontrib.rsvgconverter',"
+  '';
+
+  nativeBuildInputs = [
+    openstackdocstheme
+    sphinxHook
+  ];
+
+  sphinxBuilders = [ "man" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     platformdirs
     cryptography
     dogpile-cache
@@ -38,9 +58,9 @@ buildPythonPackage rec {
     jsonpatch
     keystoneauth1
     munch
-    netifaces
     os-service-types
     pbr
+    psutil
     requestsexceptions
     pyyaml
   ];
@@ -55,10 +75,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "openstack" ];
 
   meta = with lib; {
-    description = "An SDK for building applications to work with OpenStack";
+    description = "SDK for building applications to work with OpenStack";
     mainProgram = "openstack-inventory";
     homepage = "https://github.com/openstack/openstacksdk";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

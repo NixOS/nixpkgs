@@ -11,11 +11,10 @@
   poetry-core,
   prometheus-api-client,
   pydantic,
-  pythonRelaxDepsHook,
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "prometrix";
   version = "0.1.18-unstable-2024-04-30";
   pyproject = true;
@@ -34,8 +33,6 @@ buildPythonPackage rec {
   ];
 
   build-system = [ poetry-core ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     boto3
@@ -63,7 +60,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/robusta-dev/prometrix";
     license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
     # prometheus-api-client 0.5.5 is not working
     # https://github.com/robusta-dev/prometrix/issues/14
     broken = versionAtLeast prometheus-api-client.version "0.5.3";

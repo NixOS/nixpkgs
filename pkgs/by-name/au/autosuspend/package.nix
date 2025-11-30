@@ -1,27 +1,27 @@
-{ lib
-, dbus
-, fetchFromGitHub
-, fetchPypi
-, python3
+{
+  lib,
+  dbus,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "autosuspend";
-  version = "7.0.0";
+  version = "9.0.0";
+  pyproject = true;
 
-  disabled = python3.pythonOlder "3.10";
+  disabled = python3.pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "languitar";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AJ0ZWRxqhBJEics6XnIVWyf7pJI8MphQU4LRqSYYNSQ=";
+    repo = "autosuspend";
+    tag = "v${version}";
+    hash = "sha256-JOH4QzoiLR1Pp/RVz0nrLxjQw92pDxXTu414jbpCMqk=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail '--cov-config=setup.cfg' ""
-  '';
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
 
   dependencies = with python3.pkgs; [
     dbus-python
@@ -32,15 +32,16 @@ python3.pkgs.buildPythonApplication rec {
     portalocker
     psutil
     python-dateutil
-    pytz
     requests
     requests-file
+    tzdata
     tzlocal
   ];
 
   nativeCheckInputs = with python3.pkgs; [
     dbus
     freezegun
+    pytest-cov-stub
     pytest-datadir
     pytest-httpserver
     pytest-mock
@@ -54,15 +55,16 @@ python3.pkgs.buildPythonApplication rec {
     "test_multiple_sessions"
   ];
 
-  doCheck = true;
-
-  meta = with lib; {
-    description = "A daemon to automatically suspend and wake up a system";
+  meta = {
+    description = "Daemon to automatically suspend and wake up a system";
     homepage = "https://autosuspend.readthedocs.io";
-    changelog = "https://github.com/languitar/autosuspend/releases/tag/v${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ bzizou anthonyroussel ];
+    changelog = "https://github.com/languitar/autosuspend/releases/tag/${src.tag}";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
+      bzizou
+      anthonyroussel
+    ];
     mainProgram = "autosuspend";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

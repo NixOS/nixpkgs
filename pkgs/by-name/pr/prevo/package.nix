@@ -1,4 +1,11 @@
-{ lib, symlinkJoin, man, prevo-tools, prevo-data, makeWrapper }:
+{
+  lib,
+  symlinkJoin,
+  man,
+  prevo-tools,
+  prevo-data,
+  makeWrapper,
+}:
 
 symlinkJoin rec {
   name = "prevo-${version}";
@@ -16,7 +23,7 @@ symlinkJoin rec {
   '';
 
   meta = {
-    description = "offline version of the Esperanto dictionary Reta Vortaro";
+    description = "Offline version of the Esperanto dictionary Reta Vortaro";
     longDescription = ''
       PReVo is the "portable" ReVo, i.e., the offline version
       of the Esperanto dictionary Reta Vortaro.
@@ -24,6 +31,8 @@ symlinkJoin rec {
     homepage = "https://github.com/bpeel/prevodb";
     license = lib.licenses.gpl2Only;
     mainProgram = "prevo";
-    maintainers = with lib.maintainers; [ das-g ehmry ];
+    maintainers = with lib.maintainers; [
+      das-g
+    ];
   };
 }

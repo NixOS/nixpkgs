@@ -7,20 +7,18 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-org-policy";
-  version = "1.11.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.15.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-3BJDTwbIDhscHDR8rcjLQP/JYZrktcW+tcK9WFyV2X8=";
+    pname = "google_cloud_org_policy";
+    inherit version;
+    hash = "sha256-Jx0WoQ51NH6s5g0CzeMisrG2E7zJmRcQng6/KkECJTo=";
   };
 
   build-system = [ setuptools ];
@@ -29,7 +27,8 @@ buildPythonPackage rec {
     google-api-core
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     pytest-asyncio

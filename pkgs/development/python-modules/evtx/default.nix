@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "evtx";
-  version = "0.8.2";
+  version = "0.8.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,14 +19,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "omerbenamram";
     repo = "pyevtx-rs";
-    rev = "refs/tags/${version}";
-    hash = "sha256-t//oNvD+7wnv5KkriKBX4xgGS8pQpZgCsKxAEXsj0X8=";
+    tag = version;
+    hash = "sha256-rxE3Srm+5L9r6uNIeOPBnpQAbS89WCel/U7xgLc2ZDU=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-DPEL36cYNV5v4iW3+Fg1eEeuBuK9S7Qe78xOzZs8aJw=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-IqV4BsLE+5Dk3ey4M+h5wxR/SToZTLf8vU0BlWU5e8c=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -34,7 +33,7 @@ buildPythonPackage rec {
     maturinBuildHook
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

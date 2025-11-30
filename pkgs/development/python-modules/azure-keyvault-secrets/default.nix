@@ -11,14 +11,15 @@
 
 buildPythonPackage rec {
   pname = "azure-keyvault-secrets";
-  version = "4.8.0";
+  version = "4.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-VjbAodiiDjxXmcs8z/1Ovz8NGst8rpUmhhgzr4sP6BQ=";
+    pname = "azure_keyvault_secrets";
+    inherit version;
+    hash = "sha256-Zm+kKJL5zudJVj5VGpDwYENauHiXfJUmUXOoJG1UajY=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -39,6 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/keyvault/azure-keyvault-secrets";
     changelog = "https://github.com/Azure/azure-sdk-for-python/tree/azure-keyvault-secrets_${version}/sdk/keyvault/azure-keyvault-secrets";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

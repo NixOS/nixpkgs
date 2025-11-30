@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "ksirk";
 
-  extraBuildInputs = [qtmultimedia];
+  extraBuildInputs = [ qtmultimedia ];
 }

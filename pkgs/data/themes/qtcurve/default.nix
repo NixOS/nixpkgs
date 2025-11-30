@@ -1,10 +1,31 @@
-{ lib, fetchFromGitHub, cmake, extra-cmake-modules, pkg-config, mkDerivation
-, gtk2Support ? true, gtk2
-, qtbase, qtsvg, qtx11extras # Toolkit dependencies
-, karchive, kconfig, kconfigwidgets, kio, frameworkintegration
-, kguiaddons, ki18n, kwindowsystem, kdelibs4support, kiconthemes
-, libpthreadstubs, pcre, libXdmcp, libX11, libXau # X11 dependencies
-, fetchpatch
+{
+  lib,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  mkDerivation,
+  gtk2Support ? true,
+  gtk2,
+  qtbase,
+  qtsvg,
+  qtx11extras, # Toolkit dependencies
+  karchive,
+  kconfig,
+  kconfigwidgets,
+  kio,
+  frameworkintegration,
+  kguiaddons,
+  ki18n,
+  kwindowsystem,
+  kdelibs4support,
+  kiconthemes,
+  libpthreadstubs,
+  pcre,
+  libXdmcp,
+  libX11,
+  libXau, # X11 dependencies
+  fetchpatch,
 }:
 
 mkDerivation rec {
@@ -18,6 +39,11 @@ mkDerivation rec {
   };
 
   patches = [
+    # Fix build with CMake 4
+    (fetchpatch {
+      url = "https://github.com/KDE/qtcurve/commit/d2c84577505641e647fbb64bce825b3e0a4129f5.patch";
+      sha256 = "sha256-WBmzlVDxRNXZmi6c03cR1MuIr+hBaeFXgNLzhsv0bZo=";
+    })
     # Remove unnecessary constexpr, this is not allowed in C++14
     (fetchpatch {
       url = "https://github.com/KDE/qtcurve/commit/ee2228ea2f18ac5da9b434ee6089381df815aa94.patch";
@@ -30,16 +56,33 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    pkg-config
+  ];
 
   buildInputs = [
-    qtbase qtsvg qtx11extras
-    karchive kconfig kconfigwidgets kio kiconthemes kguiaddons ki18n
-    kwindowsystem kdelibs4support frameworkintegration
+    qtbase
+    qtsvg
+    qtx11extras
+    karchive
+    kconfig
+    kconfigwidgets
+    kio
+    kiconthemes
+    kguiaddons
+    ki18n
+    kwindowsystem
+    kdelibs4support
+    frameworkintegration
     libpthreadstubs
     pcre
-    libXdmcp libX11 libXau
-  ] ++ lib.optional gtk2Support gtk2;
+    libXdmcp
+    libX11
+    libXau
+  ]
+  ++ lib.optional gtk2Support gtk2;
 
   preConfigure = ''
     for i in qt5/CMakeLists.txt qt5/config/CMakeLists.txt

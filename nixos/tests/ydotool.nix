@@ -1,37 +1,66 @@
-import ./make-test-python.nix (
-  { pkgs, lib, ... }:
-  let
-    textInput = "This works.";
-    inputBoxText = "Enter input";
-    inputBox = pkgs.writeShellScript "zenity-input" ''
-      ${lib.getExe pkgs.gnome.zenity} --entry --text '${inputBoxText}:' > /tmp/output &
+{ runTest, lib }:
+let
+  textInput = "This works.";
+  inputBoxText = "Enter input";
+  inputBox =
+    pkgs:
+    pkgs.writeShellScript "zenity-input" ''
+      ${lib.getExe pkgs.zenity} --entry --text '${inputBoxText}:' > /tmp/output &
     '';
-  in
-  {
-    name = "ydotool";
+  asUser = ''
+    def as_user(cmd: str):
+        """
+        Return a shell command for running a shell command as a specific user.
+        """
+        return f"sudo -u alice -i {cmd}"
+  '';
+in
+{
+  headless = runTest (
+    { lib, ... }:
+    {
+      name = "headless";
 
-    meta = {
-      maintainers = with lib.maintainers; [
+      enableOCR = true;
+
+      nodes.machine = {
+        imports = [ ./common/user-account.nix ];
+
+        users.users.alice.extraGroups = [ "ydotool" ];
+
+        programs.ydotool.enable = true;
+
+        services.getty.autologinUser = "alice";
+      };
+
+      testScript = asUser + ''
+        start_all()
+
+        machine.wait_for_unit("multi-user.target")
+        machine.wait_for_text("alice")
+        machine.succeed(as_user("ydotool type 'echo ${textInput} > /tmp/output'")) # text input
+        machine.succeed(as_user("ydotool key 28:1 28:0")) # text input
+        machine.screenshot("headless_input")
+        machine.wait_for_file("/tmp/output")
+        machine.wait_until_succeeds("grep '${textInput}' /tmp/output") # text input
+      '';
+
+      meta.maintainers = with lib.maintainers; [
         OPNA2608
         quantenzitrone
       ];
-    };
+    }
+  );
 
-    nodes = {
-      headless =
-        { config, ... }:
-        {
-          imports = [ ./common/user-account.nix ];
+  x11 = runTest (
+    { config, lib, ... }:
+    {
+      name = "x11";
 
-          users.users.alice.extraGroups = [ "ydotool" ];
+      enableOCR = true;
 
-          programs.ydotool.enable = true;
-
-          services.getty.autologinUser = "alice";
-        };
-
-      x11 =
-        { config, ... }:
+      nodes.machine =
+        { lib, ... }:
         {
           imports = [
             ./common/user-account.nix
@@ -52,8 +81,36 @@ import ./make-test-python.nix (
           services.displayManager.defaultSession = lib.mkForce "none+dwm";
         };
 
-      wayland =
-        { config, ... }:
+      testScript = asUser + ''
+        start_all()
+
+        machine.wait_for_x()
+        machine.execute(as_user("${inputBox config.node.pkgs}"))
+        machine.wait_for_text("${inputBoxText}")
+        machine.succeed(as_user("ydotool type '${textInput}'")) # text input
+        machine.screenshot("x11_input")
+        machine.succeed(as_user("ydotool mousemove -a 400 110")) # mouse input
+        machine.succeed(as_user("ydotool click 0xC0")) # mouse input
+        machine.wait_for_file("/tmp/output")
+        machine.wait_until_succeeds("grep '${textInput}' /tmp/output") # text input
+      '';
+
+      meta.maintainers = with lib.maintainers; [
+        OPNA2608
+        quantenzitrone
+      ];
+    }
+  );
+
+  wayland = runTest (
+    { lib, ... }:
+    {
+      name = "wayland";
+
+      enableOCR = true;
+
+      nodes.machine =
+        { pkgs, ... }:
         {
           imports = [ ./common/user-account.nix ];
 
@@ -64,52 +121,72 @@ import ./make-test-python.nix (
 
           programs.ydotool.enable = true;
 
-          services.cage.program = inputBox;
+          services.cage.program = inputBox pkgs;
         };
-    };
 
-    enableOCR = true;
-
-    testScript =
-      { nodes, ... }:
-      ''
-        def as_user(cmd: str):
-          """
-          Return a shell command for running a shell command as a specific user.
-          """
-          return f"sudo -u alice -i {cmd}"
-
+      testScript = ''
         start_all()
 
-        # Headless
-        headless.wait_for_unit("multi-user.target")
-        headless.wait_for_text("alice")
-        headless.succeed(as_user("ydotool type 'echo ${textInput} > /tmp/output'")) # text input
-        headless.succeed(as_user("ydotool key 28:1 28:0")) # text input
-        headless.screenshot("headless_input")
-        headless.wait_for_file("/tmp/output")
-        headless.wait_until_succeeds("grep '${textInput}' /tmp/output") # text input
-
-        # X11
-        x11.wait_for_x()
-        x11.execute(as_user("${inputBox}"))
-        x11.wait_for_text("${inputBoxText}")
-        x11.succeed(as_user("ydotool type '${textInput}'")) # text input
-        x11.screenshot("x11_input")
-        x11.succeed(as_user("ydotool mousemove -a 400 110")) # mouse input
-        x11.succeed(as_user("ydotool click 0xC0")) # mouse input
-        x11.wait_for_file("/tmp/output")
-        x11.wait_until_succeeds("grep '${textInput}' /tmp/output") # text input
-
-        # Wayland
-        wayland.wait_for_unit("graphical.target")
-        wayland.wait_for_text("${inputBoxText}")
-        wayland.succeed("ydotool type '${textInput}'") # text input
-        wayland.screenshot("wayland_input")
-        wayland.succeed("ydotool mousemove -a 100 100") # mouse input
-        wayland.succeed("ydotool click 0xC0") # mouse input
-        wayland.wait_for_file("/tmp/output")
-        wayland.wait_until_succeeds("grep '${textInput}' /tmp/output") # text input
+        machine.wait_for_unit("graphical.target")
+        machine.wait_for_text("${inputBoxText}")
+        machine.succeed("ydotool type '${textInput}'") # text input
+        machine.screenshot("wayland_input")
+        machine.succeed("ydotool mousemove -a 100 100") # mouse input
+        machine.succeed("ydotool click 0xC0") # mouse input
+        machine.wait_for_file("/tmp/output")
+        machine.wait_until_succeeds("grep '${textInput}' /tmp/output") # text input
       '';
-  }
-)
+
+      meta.maintainers = with lib.maintainers; [
+        OPNA2608
+        quantenzitrone
+      ];
+    }
+  );
+
+  customGroup =
+    let
+      name = "customGroup";
+      nodeName = "${name}Node";
+      insideGroupUsername = "ydotool-user";
+      outsideGroupUsername = "other-user";
+      groupName = "custom-group";
+    in
+    runTest (
+      { lib, ... }:
+      {
+        inherit name;
+
+        nodes."${nodeName}" = {
+          programs.ydotool = {
+            enable = true;
+            group = groupName;
+          };
+
+          users.users = {
+            "${insideGroupUsername}" = {
+              isNormalUser = true;
+              extraGroups = [ groupName ];
+            };
+            "${outsideGroupUsername}".isNormalUser = true;
+          };
+        };
+
+        testScript = ''
+          start_all()
+
+          # Wait for service to start
+          ${nodeName}.wait_for_unit("multi-user.target")
+          ${nodeName}.wait_for_unit("ydotoold.service")
+
+          # Verify that user with the configured group can use the service
+          ${nodeName}.succeed("sudo --login --user=${insideGroupUsername} ydotool type 'Hello, World!'")
+
+          # Verify that user without the configured group can't use the service
+          ${nodeName}.fail("sudo --login --user=${outsideGroupUsername} ydotool type 'Hello, World!'")
+        '';
+
+        meta.maintainers = with lib.maintainers; [ l0b0 ];
+      }
+    );
+}
