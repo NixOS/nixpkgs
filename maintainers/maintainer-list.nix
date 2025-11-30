@@ -20240,6 +20240,13 @@
     githubId = 121009904;
     name = "penalty1083";
   };
+  pengwius = {
+    email = "pengwius@proton.me";
+    matrix = "@pengwius:matrix.org";
+    github = "pengwius";
+    githubId = 55411338;
+    name = "pengwius";
+  };
   pentane = {
     email = "cyclopentane@aidoskyneen.eu";
     github = "cyclic-pentane";
