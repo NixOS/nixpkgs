@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prek";
-  version = "0.2.18";
+  version = "0.2.19";
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = "prek";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-ddLtXIBf6WrjN+gxm0g3Wkmyps2resWsd1cH0F99Ii8=";
+    sha256 = "sha256-/B7Z4d4GEJKhEDRznVzeqeB2Qrsz/dAVV3Syo8EhfvM=";
   };
 
-  cargoHash = "sha256-E+t7bwKDnuZO/4WJEBaN+e5+P/Nbo14WWxgTLxDE7Jw=";
+  cargoHash = "sha256-quWyPdFEBYylhi1gugdew9KXhHldTkIAbea7GmVhH5g=";
 
   preBuild = ''
     version312_str=$(${python312}/bin/python -c 'import sys; print(sys.version_info[:3])')
