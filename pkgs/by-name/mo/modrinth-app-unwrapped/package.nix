@@ -6,7 +6,7 @@
   desktop-file-utils,
   fetchFromGitHub,
   gradle_8,
-  jdk11,
+  jdk17,
   makeBinaryWrapper,
   makeShellWrapper,
   nix-update-script,
@@ -23,19 +23,19 @@
 
 let
   gradle = gradle_8.override { java = jdk; };
-  jdk = jdk11;
+  jdk = jdk17;
   pnpm = pnpm_9;
 in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "modrinth-app-unwrapped";
-  version = "0.10.3";
+  version = "0.10.21";
 
   src = fetchFromGitHub {
     owner = "modrinth";
     repo = "code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XfJbjbVcP9N3exAhXQoMGpoHORpKAlb0dPhQq195roY=";
+    hash = "sha256-qZKDb22cv334Jq5JHLDKeivrboCwFHVbvKvFC/azd0U=";
   };
 
   patches = [
@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '1.0.0-local' '${finalAttrs.version}'
   '';
 
-  cargoHash = "sha256-jWMHii65hTnTmiBFHxZ4xO5V+Qt/MPCy75eJvnlyE4c=";
+  cargoHash = "sha256-4tQ1So90/cGdT9IH/+B0SDQEqX0edhtxfNrceuxYdKk=";
 
   mitmCache = gradle.fetchDeps {
     inherit (finalAttrs) pname;
@@ -75,7 +75,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
-    hash = "sha256-7iqXuIQPbP2p26vrWDjMoyZBPpbVQpigYAylhIg8+ZY=";
+    hash = "sha256-mett1Ui26kEU4EET99Six0lp7ojPBxmF+qNZTQOq1eE=";
   };
 
   nativeBuildInputs = [
@@ -121,6 +121,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     local nixGradleFlags=()
     concatTo nixGradleFlags gradleFlags gradleFlagsArray
     export NIX_GRADLEFLAGS_COMPILE="''${nixGradleFlags[@]}"
+
+    cp packages/app-lib/.env.prod packages/app-lib/.env
   '';
 
   postInstall =
