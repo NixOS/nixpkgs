@@ -3,7 +3,8 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
+  gitUpdater,
+  python,
 
   # build-system
   hatchling,
@@ -31,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "gradio-client";
-  version = "1.12.1";
+  version = "2.0.0";
   pyproject = true;
 
   # no tests on pypi
@@ -39,9 +40,14 @@ buildPythonPackage rec {
     owner = "gradio-app";
     repo = "gradio";
     # not to be confused with @gradio/client@${version}
-    tag = "gradio_client@${version}";
-    sparseCheckout = [ "client/python" ];
-    hash = "sha256-Q0sEn7trWVVWh2XNZam10axuQBiPZvq//qTIR5WJn+4=";
+    # tag = "gradio_client@${version}";
+    # TODO: switch back to a tag next release, if they tag it.
+    rev = "dce4714914ee2a3fa35c59a9c18187bf2c321cab"; # 2.0.0
+    sparseCheckout = [
+      "client/python"
+      "gradio/media_assets"
+    ];
+    hash = "sha256-wJhEmB3quxRYI/BSLPbqFqJYLp7BdOq8znctOEa+7UI=";
   };
 
   sourceRoot = "${src.name}/client/python";
@@ -81,6 +87,11 @@ buildPythonPackage rec {
   # ensuring we don't propagate this intermediate build
   disallowedReferences = [ gradio.sans-reverse-dependencies ];
 
+  postInstall = ''
+    mkdir -p $out/lib/gradio
+    cp -r ../../gradio/media_assets $out/lib/gradio
+  '';
+
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
   preCheck = ''
     cat ${./conftest-skip-network-errors.py} >> test/conftest.py
@@ -110,11 +121,9 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "gradio_client@(.*)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "gradio_client@";
+    ignoredVersions = ".*-(beta|dev).*";
   };
 
   meta = {
