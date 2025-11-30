@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "hatch";
-  version = "1.14.2";
+  version = "1.16.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "hatch";
     tag = "hatch-v${version}";
-    hash = "sha256-LrfPDgpb9AQsaiYVb2MNdOfoIBbStZMKmESCbVhfn+s=";
+    hash = "sha256-HreVb+RZzQV3p9TaoHDZLHBQFifyH+hocP01u5yU+ms=";
   };
 
   patches = [ (replaceVars ./paths.patch { uv = lib.getExe python3Packages.uv; }) ];
@@ -33,28 +33,34 @@ python3Packages.buildPythonApplication rec {
 
   pythonRemoveDeps = [ "uv" ];
 
-  dependencies = with python3Packages; [
-    click
-    hatchling
-    httpx
-    hyperlink
-    keyring
-    packaging
-    pexpect
-    platformdirs
-    rich
-    shellingham
-    tomli-w
-    tomlkit
-    userpath
-    virtualenv
-    zstandard
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      click
+      hatchling
+      httpx
+      hyperlink
+      keyring
+      packaging
+      pexpect
+      platformdirs
+      pyproject-hooks
+      rich
+      shellingham
+      tomli-w
+      tomlkit
+      userpath
+      virtualenv
+    ]
+    ++ lib.optionals (pythonOlder "3.14") [
+      backports-zstd
+    ];
 
   nativeCheckInputs =
     with python3Packages;
     [
       binary
+      flit-core
       git
       pytestCheckHook
       pytest-mock
@@ -123,10 +129,23 @@ python3Packages.buildPythonApplication rec {
   ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_resolve" ];
 
   disabledTestPaths = [
-    # ModuleNotFoundError: No module named 'hatchling.licenses.parse'
-    # https://github.com/pypa/hatch/issues/1850
-    "tests/backend/licenses/test_parse.py"
-    "tests/backend/licenses/test_supported.py"
+    # httpx.ConnectError: [Errno -3] Temporary failure in name resolution
+    "tests/workspaces/test_config.py"
+
+    # additional comment `-*- coding: utf-8 -*-` in output
+    "tests/backend/builders/test_sdist.py"
+
+    # missing output `Syncing dependencies`
+    "tests/cli/build/test_build.py"
+    "tests/cli/project/test_metadata.py"
+    "tests/cli/version/test_version.py"
+
+    # AttributeError: 'WheelBuilderConfig' object has no attribute 'sbom_files'
+    "tests/backend/builders/test_wheel.py::TestSBOMFiles"
+
+    # some issue with the version of `binary`
+    "tests/dep/test_sync.py::test_dependency_not_found"
+    "tests/dep/test_sync.py::test_marker_unmet"
 
     # AssertionError on the version metadata
     # https://github.com/pypa/hatch/issues/1877
