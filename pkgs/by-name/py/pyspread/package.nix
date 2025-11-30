@@ -2,8 +2,9 @@
   lib,
   python3,
   fetchPypi,
+  qt6,
+  R,
   copyDesktopItems,
-  libsForQt5,
   makeDesktopItem,
 }:
 
@@ -15,7 +16,7 @@ let
     inherit pname version;
     hash = "sha256-MZlR2Rap5oMRfCmswg9W//FYFkSEki7eyMNhLoGZgJM=";
   };
-  inherit (libsForQt5)
+  inherit (qt6)
     qtsvg
     wrapQtAppsHook
     ;
@@ -25,6 +26,7 @@ python3.pkgs.buildPythonApplication {
   inherit pname version src;
 
   nativeBuildInputs = [
+    R
     copyDesktopItems
     wrapQtAppsHook
   ];
@@ -34,18 +36,26 @@ python3.pkgs.buildPythonApplication {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    python-dateutil
-    markdown2
-    matplotlib
+    pyqt6
     numpy
-    pyenchant
-    pyqt5
     setuptools
+    markdown2
+
+    # Optional
+    matplotlib # data visualization
+    pyenchant # spellchecker bindings
+    pip # python package installer
+    python-dateutil # extensions to standard datetime module
+    #py-moneyed  # currency & money classes  # not in nixpkgs
+    rpy2 # interface to R
+    plotnine # data visualization
+    #pycel  # compile Excel spreadsheets to Python code  # not in nixpkgs
+    openpyxl # r/w Excel 2010 xlsx/xlsm files
   ];
 
   strictDeps = true;
 
-  doCheck = false; # it fails miserably with a core dump
+  doCheck = true;
 
   pythonImportsCheck = [ "pyspread" ];
 
@@ -56,7 +66,7 @@ python3.pkgs.buildPythonApplication {
       icon = "pyspread";
       desktopName = "Pyspread";
       genericName = "Spreadsheet";
-      comment = "A Python-oriented spreadsheet application";
+      comment = "Python-oriented spreadsheet application";
       categories = [
         "Office"
         "Development"
@@ -64,6 +74,8 @@ python3.pkgs.buildPythonApplication {
       ];
     })
   ];
+
+  makeWrapperArgs = [ "--set R_HOME ${R}/lib/R" ];
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
@@ -84,6 +96,7 @@ python3.pkgs.buildPythonApplication {
     '';
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "pyspread";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ Merikei ];
+    platforms = lib.platforms.linux;
   };
 }
