@@ -184,7 +184,7 @@ checkout_hash(){
     if [[ -z "$deepClone" ]]; then
         clean_git fetch ${builder:+--progress} --depth=1 origin "$hash" || return 1
     else
-        clean_git fetch -t ${builder:+--progress} origin || return 1
+        clean_git fetch --no-tags ${builder:+--progress} origin || return 1
     fi
 
     local object_type=$(git cat-file -t "$hash")
@@ -255,7 +255,12 @@ clone(){
     )
 
     # Fetch all tags if requested
-    if test -n "$fetchTags"; then
+    # The fetched tags are potentially non-reproducible, as tags are mutable parts of the Git tree.
+    #
+    # `deepClone` used to effectively imply `fetchTags`.
+    # We avoid such behaviour to enhance the `postCheckout` reproducibility,
+    # while keeping the old behaviour for `.git` for backward compatibility purposes.
+    if [[ -n "$fetchTags" ]] || [[ -n "$deepClone" ]] && [[ -z "$leaveDotGit" ]]; then
         echo "fetching all tags..." >&2
         clean_git fetch origin 'refs/tags/*:refs/tags/*' || echo "warning: failed to fetch some tags" >&2
     fi
