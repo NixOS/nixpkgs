@@ -6,22 +6,24 @@
   installShellFiles,
   git,
   jq,
+  fzf,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "git-worktree-switcher";
-  version = "0.2.6";
+  version = "0.2.8";
 
   src = fetchFromGitHub {
     owner = "mateusauler";
     repo = "git-worktree-switcher";
     tag = "${finalAttrs.version}-fork";
-    hash = "sha256-vPnAXiizCU5nXce+aE2x2G5ei+7A+eBTUpxcGleSSa8=";
+    hash = "sha256-OXUVIL4bIqqxnLLwdO0+8gxCDMqA4TPvjIc2i8BeBmw=";
   };
 
   buildInputs = [
-    jq
+    fzf
     git
+    jq
   ];
 
   nativeBuildInputs = [
@@ -39,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp wt $out/bin
     wrapProgram $out/bin/wt --prefix PATH : ${
       lib.makeBinPath [
+        fzf
         git
         jq
       ]
