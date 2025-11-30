@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "oauth2c";
-  version = "1.17.2";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "cloudentity";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-axCzPCYPn6T8AGqE92Yf/aVJ78Wl004Ts4YebSWYa6U=";
+    hash = "sha256-1l7NtRKOCUuVsGC7K/TmSbzwGGybJ3owMDn2b4b/BeU=";
   };
 
-  vendorHash = "sha256-ZQFIETfiNKyeZuskwNfoTXBy3MSWmG0tDztz0Mm7xJY=";
+  vendorHash = "sha256-I2pOyjKghvHHGEuVqODhysD++f2hD+BF7WJxWbrLcWA=";
 
   doCheck = false; # tests want to talk to oauth2c.us.authz.cloudentity.io
 
