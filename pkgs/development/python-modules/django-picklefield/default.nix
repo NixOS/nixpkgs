@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "django-picklefield";
-  version = "3.3.0";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gintas";
     repo = "django-picklefield";
     tag = "v${version}";
-    hash = "sha256-/H6spsf2fmJdg5RphD8a4YADggr+5d+twuLoFMfyEac=";
+    hash = "sha256-SvKJGOSsTZhAYJkGO+slL81EjcJtXmaFN7YWCGSX6Ac=";
   };
 
   build-system = [ setuptools ];
