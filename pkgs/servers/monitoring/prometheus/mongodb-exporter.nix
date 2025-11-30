@@ -2,6 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  krb5,
+  withGssapi ? true,
 }:
 
 buildGoModule rec {
@@ -16,6 +18,10 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-SsvoEVrwdiasH7uNjQ6fsrpzNqA6AZOELuaZkWTcf6I=";
+
+  buildInputs = lib.optionals withGssapi [ krb5 ];
+
+  tags = lib.optionals withGssapi [ "gssapi" ];
 
   ldflags = [
     "-s"
