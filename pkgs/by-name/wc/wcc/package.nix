@@ -82,5 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
       orivej
       DieracDelta
     ];
+    mainProgram = "wcc";
   };
 })
