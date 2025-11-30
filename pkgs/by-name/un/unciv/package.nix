@@ -12,7 +12,7 @@
   nix-update-script,
 }:
 let
-  version = "4.18.12";
+  version = "4.18.16";
 
   desktopItem = makeDesktopItem {
     name = "unciv";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/yairm210/Unciv/releases/download/${version}/Unciv.jar";
-    hash = "sha256-h0Y7a/wvmYOwr+AhVjY+P7uQQQbofpqkX5/Nd8tL3Cg=";
+    hash = "sha256-k5EtkuVnL7kZS1EKyP7y86/vm70ij191BFAkVxxG6BY=";
   };
 
   dontUnpack = true;
