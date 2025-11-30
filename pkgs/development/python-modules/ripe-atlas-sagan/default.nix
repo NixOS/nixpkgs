@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "ripe-atlas-sagan";
-  version = "1.3.1";
+  version = "2.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "RIPE-NCC";
     repo = "ripe-atlas-sagan";
     rev = "v${version}";
-    hash = "sha256-xIBIKsQvDmVBa/C8/7Wr3WKeepHaGhoXlgatXSUtWLA=";
+    hash = "sha256-L42YnGG7S4HzZQGF1pftC7dKu0VOwE3DV1JzPqQ03Tk=";
   };
 
   propagatedBuildInputs = [
