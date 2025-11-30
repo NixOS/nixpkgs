@@ -104,6 +104,20 @@
     postFetch = "rm -r $out/.git";
   };
 
+  submodule-revision-count = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "submodule-revision-count-source";
+    url = "https://github.com/pineapplehunter/nix-test-repo-with-submodule";
+    rev = "26473335b84ead88ee0a3b649b1c7fa4a91cfd4a";
+    hash = "sha256-ok1e6Pb0fII5TF8HXF8DXaRGSoq7kgRCoXqSEauh1wk=";
+    fetchSubmodules = true;
+    deepClone = true;
+    leaveDotGit = false;
+    postCheckout = ''
+      { git -C "$out" rev-list --count HEAD || echo "git rev-list failed"; } | tee "$out/revision_count.txt"
+      { git -C "$out/nix-test-repo-submodule" rev-list --count HEAD || echo "git rev-list failed"; } | tee "$out/nix-test-repo-submodule/revision_count.txt"
+    '';
+  };
+
   submodule-leave-git-deep = testers.invalidateFetcherByDrvHash fetchgit {
     name = "submodule-leave-git-deep-source";
     url = "https://github.com/pineapplehunter/nix-test-repo-with-submodule";
