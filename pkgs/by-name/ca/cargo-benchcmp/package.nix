@@ -39,6 +39,6 @@ rustPlatform.buildRustPackage rec {
       mit
       unlicense
     ];
-    maintainers = [ ];
+    maintainers = [ maintainers.progrm_jarvis ];
   };
 }
