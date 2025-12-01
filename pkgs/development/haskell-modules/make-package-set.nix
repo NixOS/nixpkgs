@@ -175,7 +175,7 @@ let
     buildPackages.runCommand "cabal2nix-${name}"
       {
         nativeBuildInputs = [ buildPackages.cabal2nix-unwrapped ];
-        preferLocalBuild = true;
+
         LANG = "en_US.UTF-8";
         LOCALE_ARCHIVE = pkgs.lib.optionalString (
           buildPlatform.libc == "glibc"

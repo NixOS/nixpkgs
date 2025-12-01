@@ -29,8 +29,6 @@ stdenv.mkDerivation {
       --set HOME /homeless-shelter
   '';
 
-  preferLocalBuild = true;
-
   meta = with lib; {
     description = "Script used to obtain source hashes for dockerTools.pullImage";
     mainProgram = "nix-prefetch-docker";

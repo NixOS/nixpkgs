@@ -68,7 +68,7 @@ in
           stdenvNoCC.mkDerivation {
             name = "androidenv-repo-json";
             buildInputs = [ mkRepoRuby ];
-            preferLocalBuild = true;
+
             unpackPhase = "true";
             buildPhase = ''
               env ruby -e 'load "${./update.rb}"' -- ${lib.escapeShellArgs mkRepoRubyArguments} --input /dev/null --output repo.json

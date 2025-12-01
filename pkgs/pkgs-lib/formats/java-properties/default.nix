@@ -99,7 +99,6 @@ in
             #    libraries, but we can't rely on this in
             #    general.
 
-            preferLocalBuild = true;
             passAsFile = [ "value" ];
             value = builtins.toJSON value;
             nativeBuildInputs = [

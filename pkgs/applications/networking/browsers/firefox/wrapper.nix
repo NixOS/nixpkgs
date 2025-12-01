@@ -561,8 +561,6 @@ let
           #############################
         '';
 
-      preferLocalBuild = true;
-
       libs = lib.makeLibraryPath libs + ":" + lib.makeSearchPathOutput "lib" "lib64" libs;
       gtk_modules = map (x: x + x.gtkModule) gtk_modules;
 

@@ -32,8 +32,6 @@ in
 
     exportReferencesGraph.closure = [ machine.toplevel ];
 
-    preferLocalBuild = true;
-
     nativeBuildInputs = [
       jq
     ];
@@ -54,8 +52,6 @@ in
 
   initrd = stdenvNoCC.mkDerivation {
     name = "bashless-closure-initrd";
-
-    preferLocalBuild = true;
 
     nativeBuildInputs = [
       zstd

@@ -25,7 +25,6 @@ symlinkJoin {
   ];
   buildInputs = [ gdk-pixbuf ];
 
-  preferLocalBuild = true;
   passthru.unwrapped = rofi-unwrapped;
 
   dontWrapGApps = true;

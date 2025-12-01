@@ -534,7 +534,7 @@ let
     mapAttrsToList (name: { description, ... }: ''- `"${name}"` to ${description};'') tempaddrValues
   );
 
-  hostidFile = pkgs.runCommand "gen-hostid" { preferLocalBuild = true; } ''
+  hostidFile = pkgs.runCommand "gen-hostid" { } ''
     hi="${cfg.hostId}"
     ${
       if pkgs.stdenv.hostPlatform.isBigEndian then

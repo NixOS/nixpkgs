@@ -7,7 +7,7 @@
 }:
 
 let
-  rubiesEnv = runCommand "chruby-env" { preferLocalBuild = true; } ''
+  rubiesEnv = runCommand "chruby-env" { } ''
     mkdir $out
     ${lib.concatStrings (lib.mapAttrsToList (name: path: "ln -s ${path} $out/${name}\n") rubies)}
   '';

@@ -445,16 +445,12 @@ let
         '';
       };
     in
-    pkgs.runCommand "akkoma-env"
-      {
-        preferLocalBuild = true;
-      }
-      ''
-        mkdir -p "$out/bin"
+    pkgs.runCommand "akkoma-env" { } ''
+      mkdir -p "$out/bin"
 
-        ln -r -s ${escapeShellArg script} "$out/bin/pleroma"
-        ln -r -s ${escapeShellArg script} "$out/bin/pleroma_ctl"
-      '';
+      ln -r -s ${escapeShellArg script} "$out/bin/pleroma"
+      ln -r -s ${escapeShellArg script} "$out/bin/pleroma_ctl"
+    '';
 
   userWrapper = pkgs.writeShellApplication {
     name = "pleroma_ctl";
@@ -497,28 +493,23 @@ let
   staticDir = ex.":pleroma".":instance".static_dir;
   uploadDir = ex.":pleroma".":instance".upload_dir;
 
-  staticFiles =
-    pkgs.runCommand "akkoma-static"
-      {
-        preferLocalBuild = true;
-      }
-      ''
-        ${concatStringsSep "\n" (
-          mapAttrsToList (key: val: ''
-            mkdir -p $out/frontends/${escapeShellArg val.name}/
-            ln -s ${escapeShellArg val.package} $out/frontends/${escapeShellArg val.name}/${escapeShellArg val.ref}
-          '') cfg.frontends
-        )}
+  staticFiles = pkgs.runCommand "akkoma-static" { } ''
+    ${concatStringsSep "\n" (
+      mapAttrsToList (key: val: ''
+        mkdir -p $out/frontends/${escapeShellArg val.name}/
+        ln -s ${escapeShellArg val.package} $out/frontends/${escapeShellArg val.name}/${escapeShellArg val.ref}
+      '') cfg.frontends
+    )}
 
-        ${optionalString (cfg.extraStatic != null) (
-          concatStringsSep "\n" (
-            mapAttrsToList (key: val: ''
-              mkdir -p "$out/$(dirname ${escapeShellArg key})"
-              ln -s ${escapeShellArg val} $out/${escapeShellArg key}
-            '') cfg.extraStatic
-          )
-        )}
-      '';
+    ${optionalString (cfg.extraStatic != null) (
+      concatStringsSep "\n" (
+        mapAttrsToList (key: val: ''
+          mkdir -p "$out/$(dirname ${escapeShellArg key})"
+          ln -s ${escapeShellArg val} $out/${escapeShellArg key}
+        '') cfg.extraStatic
+      )
+    )}
+  '';
 in
 {
   options = {

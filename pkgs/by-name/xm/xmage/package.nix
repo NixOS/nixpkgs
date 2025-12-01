@@ -15,8 +15,6 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-EeaUd81fqiPDqHiMP86E9gtdFi545PIBfCgb1i5Z5i0=";
   };
 
-  preferLocalBuild = true;
-
   nativeBuildInputs = [ unzrip ];
 
   sourceRoot = "source";

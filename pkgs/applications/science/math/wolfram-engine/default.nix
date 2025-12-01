@@ -140,9 +140,6 @@ stdenv.mkDerivation rec {
     installManPage $out/libexec/${dirName}/SystemFiles/SystemDocumentation/Unix/*
   '';
 
-  # This is primarily an IO bound build; there's little benefit to building remotely.
-  preferLocalBuild = true;
-
   # Stripping causes the program to core dump.
   dontStrip = true;
 

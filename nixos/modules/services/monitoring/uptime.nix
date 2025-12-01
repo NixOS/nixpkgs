@@ -19,7 +19,7 @@ let
   cfg = config.services.uptime;
   opt = options.services.uptime;
 
-  configDir = pkgs.runCommand "config" { preferLocalBuild = true; } (
+  configDir = pkgs.runCommand "config" { } (
     if cfg.configFile != null then
       ''
         mkdir $out

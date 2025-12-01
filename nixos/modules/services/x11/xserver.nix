@@ -130,7 +130,7 @@ let
       {
         fontpath = optionalString (cfg.fontPath != null) ''FontPath "${cfg.fontPath}"'';
         inherit (cfg) config;
-        preferLocalBuild = true;
+
       }
       ''
         echo 'Section "Files"' >> $out
@@ -909,7 +909,7 @@ in
             options
             ;
           nativeBuildInputs = with pkgs.buildPackages; [ xkbvalidate ];
-          preferLocalBuild = true;
+
         }
         ''
           ${optionalString (

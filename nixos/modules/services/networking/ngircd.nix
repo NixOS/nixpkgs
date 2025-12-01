@@ -15,8 +15,6 @@ let
 
     text = cfg.config;
 
-    preferLocalBuild = true;
-
     buildCommand = ''
       echo -n "$text" > $out
       ${cfg.package}/sbin/ngircd --config $out --configtest

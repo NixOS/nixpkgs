@@ -61,8 +61,6 @@ stdenv.mkDerivation (
     # Fixes https://github.com/commercialhaskell/stack/issues/2358 krank:ignore-line
     LANG = "en_US.UTF-8";
 
-    preferLocalBuild = true;
-
     preConfigure = ''
       export STACK_ROOT=$NIX_BUILD_TOP/.stack
     '';

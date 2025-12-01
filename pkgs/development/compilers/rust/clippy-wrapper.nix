@@ -8,7 +8,7 @@
 
 runCommand "${clippy-unwrapped.pname}-wrapper-${clippy-unwrapped.version}"
   {
-    preferLocalBuild = true;
+
     strictDeps = true;
     inherit (clippy-unwrapped) outputs;
 

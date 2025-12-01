@@ -23,10 +23,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  # we just move two files into $out,
-  # this shouldn't bother Hydra.
-  preferLocalBuild = true;
-
   dontBuild = true;
 
   installPhase = ''

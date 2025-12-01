@@ -26,7 +26,7 @@ let
       name = "mirrors-list";
       strictDeps = true;
       builder = ./write-mirror-list.sh;
-      preferLocalBuild = true;
+
     }
     // mirrors
   );

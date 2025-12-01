@@ -38,8 +38,6 @@ lib.fetchers.withNormalizedHash { } (
         inherit outputHash outputHashAlgo;
         outputHashMode = if recursiveHash then "recursive" else "flat";
 
-        preferLocalBuild = true;
-
         AWS_DEFAULT_REGION = region;
       }
       // credentialAttrs

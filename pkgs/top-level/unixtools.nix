@@ -49,7 +49,7 @@ let
         // lib.optionalAttrs (builtins.hasAttr "binlore" providers) {
           binlore.out = (binlore.synthesize (getBin bins.${cmd}) providers.binlore);
         };
-        preferLocalBuild = true;
+
       }
       ''
         if ! [ -x ${bin} ]; then

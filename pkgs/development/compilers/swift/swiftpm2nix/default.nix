@@ -25,8 +25,6 @@ stdenv.mkDerivation {
       } \
   '';
 
-  preferLocalBuild = true;
-
   passthru = callPackage ./support.nix { };
 
   meta = {

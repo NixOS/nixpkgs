@@ -335,8 +335,6 @@ let
           runHook postBuild
         '';
 
-        preferLocalBuild = true;
-
         nativeBuildInputs = [
           makeWrapper
           lndir

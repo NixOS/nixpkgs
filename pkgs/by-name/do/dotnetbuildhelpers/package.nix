@@ -3,7 +3,7 @@
   mono,
   pkg-config,
 }:
-runCommand "dotnetbuildhelpers" { preferLocalBuild = true; } ''
+runCommand "dotnetbuildhelpers" { } ''
   target="$out/bin"
   mkdir -p "$target"
 

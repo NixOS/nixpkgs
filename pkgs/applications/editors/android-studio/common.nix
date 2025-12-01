@@ -285,7 +285,7 @@ let
             ''}
             exec ${fhsEnv}/bin/${drvName}-fhs-env ${lib.getExe androidStudio} "$@"
           '';
-        preferLocalBuild = true;
+
         passthru =
           let
             withSdk = androidSdk: mkAndroidStudioWrapper { inherit androidStudio androidSdk; };

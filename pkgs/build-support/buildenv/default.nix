@@ -108,7 +108,7 @@ lib.makeOverridable (
         pathsToLinkJSON = builtins.toJSON pathsToLink;
         pkgs = builtins.toJSON chosenOutputs;
         extraPathsFrom = lib.optional includeClosures (writeClosure pathsForClosure);
-        preferLocalBuild = true;
+
         # XXX: The size is somewhat arbitrary
         passAsFile = if builtins.stringLength pkgs >= 128 * 1024 then [ "pkgs" ] else [ ];
       }

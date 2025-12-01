@@ -42,8 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $src $out/baseq3/pak0.pk3
   '';
 
-  preferLocalBuild = true;
-
   meta = {
     description = "Quake 3 Arena content";
     longDescription = ''

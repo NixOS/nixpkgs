@@ -21,7 +21,4 @@ stdenv.mkDerivation {
       --set XMONAD_GHC "${xmonadEnv}/bin/ghc" \
       --set XMONAD_XMESSAGE "${xmessage}/bin/xmessage"
   '';
-
-  # trivial derivation
-  preferLocalBuild = true;
 }

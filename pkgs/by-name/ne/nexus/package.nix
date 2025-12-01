@@ -17,8 +17,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-oBappm8WRcgyD5HWqJKPbMHjlwCUo9y5+FtB2Kq1PCE=";
   };
 
-  preferLocalBuild = true;
-
   sourceRoot = "${pname}-${version}";
 
   nativeBuildInputs = [ makeWrapper ];

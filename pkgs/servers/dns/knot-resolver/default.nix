@@ -166,7 +166,7 @@ let
           # used by policy.slice_randomize_psl()
           psl
         ];
-        preferLocalBuild = true;
+
         inherit (unwrapped) meta;
       }
       (

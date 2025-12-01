@@ -21,9 +21,6 @@ stdenv.mkDerivation {
       --set NIX_GHC "${termonadEnv}/bin/ghc"
   '';
 
-  # trivial derivation
-  preferLocalBuild = true;
-
   passthru.tests.test = nixosTests.terminal-emulators.termonad;
 
   meta = haskellPackages.termonad.meta // {

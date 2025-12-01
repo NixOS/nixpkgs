@@ -326,7 +326,7 @@ in
     environment.etc.sudoers = {
       source = pkgs.runCommand "sudoers" {
         src = pkgs.writeText "sudoers-in" cfg.configFile;
-        preferLocalBuild = true;
+
       } "${pkgs.buildPackages.sudo-rs}/bin/visudo -f $src -c && cp $src $out";
       mode = "0440";
     };

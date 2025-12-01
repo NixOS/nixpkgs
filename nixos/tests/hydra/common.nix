@@ -8,7 +8,6 @@
             system = "${pkgs.stdenv.hostPlatform.system}";
             builder = "/bin/sh";
             allowSubstitutes = false;
-            preferLocalBuild = true;
             args = ["-c" "echo success > $out; exit 0"];
           };
         }

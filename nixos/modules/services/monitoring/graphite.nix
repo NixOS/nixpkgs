@@ -17,7 +17,7 @@ let
     pkgs.runCommand "graphite_local_settings"
       {
         inherit graphiteLocalSettings;
-        preferLocalBuild = true;
+
       }
       ''
         mkdir -p $out

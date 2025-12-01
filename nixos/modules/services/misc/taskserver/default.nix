@@ -140,7 +140,7 @@ let
       format = "setuptools";
       name = "nixos-taskserver";
 
-      src = pkgs.runCommand "nixos-taskserver-src" { preferLocalBuild = true; } ''
+      src = pkgs.runCommand "nixos-taskserver-src" { } ''
         mkdir -p "$out"
         cat "${
           pkgs.replaceVars ./helper-tool.py {

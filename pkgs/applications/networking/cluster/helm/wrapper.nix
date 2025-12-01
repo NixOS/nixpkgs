@@ -37,8 +37,6 @@ let
         pluginsDir
       ];
 
-      preferLocalBuild = true;
-
       nativeBuildInputs = [ makeWrapper ];
       passthru = {
         inherit pluginsDir;

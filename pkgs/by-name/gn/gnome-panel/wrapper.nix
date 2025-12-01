@@ -42,8 +42,6 @@ stdenv.mkDerivation {
   # $output/lib/systemd/user is already a symlink
   dontMoveSystemdUserUnits = true;
 
-  preferLocalBuild = true;
-
   installPhase = ''
     runHook preInstall
 

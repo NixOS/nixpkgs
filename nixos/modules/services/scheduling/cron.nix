@@ -108,7 +108,7 @@ in
           pkgs.runCommand "crontabs"
             {
               inherit allFiles;
-              preferLocalBuild = true;
+
             }
             ''
               touch $out

@@ -222,7 +222,6 @@ let
                   builder = "/bin/sh";
                   args = ["-c" "echo nixos-enter build > $out"];
                   system = builtins.currentSystem;
-                  preferLocalBuild = true;
               }'
               """
           )

@@ -94,6 +94,6 @@ buildPythonPackage (
     nativeBuildInputs = (derivationArgs.nativeBuildInputs or [ ]) ++ [ tomli-w ];
     pyprojectContents = builtins.toJSON pyproject;
     passAsFile = [ "pyprojectContents" ];
-    preferLocalBuild = true;
+
   }
 )

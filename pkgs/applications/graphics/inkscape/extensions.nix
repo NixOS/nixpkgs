@@ -22,8 +22,6 @@
       hash = "sha256-pSPAupp3xLlbODE2BGu1Xiiiu1Y6D4gG4HhZwccAZ2E=";
     };
 
-    preferLocalBuild = true;
-
     installPhase = ''
       runHook preInstall
 

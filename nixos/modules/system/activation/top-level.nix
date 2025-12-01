@@ -63,7 +63,7 @@ let
   baseSystem = pkgs.stdenvNoCC.mkDerivation (
     {
       name = "nixos-system-${config.system.name}-${config.system.nixos.label}";
-      preferLocalBuild = true;
+
       passAsFile = [ "extraDependencies" ];
       buildCommand = systemBuilder;
 

@@ -49,8 +49,6 @@ stdenv.mkDerivation {
       patchelf --set-rpath ${rpath} {} \;
   '';
 
-  preferLocalBuild = true;
-
   meta = with lib; {
     description = "Sundtek MediaTV driver";
     maintainers = [ maintainers.simonvandel ];

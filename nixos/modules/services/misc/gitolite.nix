@@ -124,7 +124,7 @@ in
   config = lib.mkIf cfg.enable (
     let
       manageGitoliteRc = cfg.extraGitoliteRc != "";
-      rcDir = pkgs.runCommand "gitolite-rc" { preferLocalBuild = true; } rcDirScript;
+      rcDir = pkgs.runCommand "gitolite-rc" { } rcDirScript;
       rcDirScript = ''
         mkdir "$out"
         export HOME=temp-home

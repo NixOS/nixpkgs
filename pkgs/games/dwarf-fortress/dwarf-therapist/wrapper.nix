@@ -132,5 +132,4 @@ stdenv.mkDerivation {
       fi
     '';
 
-  preferLocalBuild = true;
 }

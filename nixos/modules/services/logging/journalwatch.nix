@@ -45,16 +45,11 @@ let
   # can't use joinSymlinks directly, because when we point $XDG_CONFIG_HOME
   # to the /nix/store path, we still need the subdirectory "journalwatch" inside that
   # to match journalwatch's expectations
-  journalwatchConfigDir =
-    pkgs.runCommand "journalwatch-config"
-      {
-        preferLocalBuild = true;
-      }
-      ''
-        mkdir -p $out/journalwatch
-        ln -sf ${journalwatchConfig} $out/journalwatch/config
-        ln -sf ${journalwatchPatterns} $out/journalwatch/patterns
-      '';
+  journalwatchConfigDir = pkgs.runCommand "journalwatch-config" { } ''
+    mkdir -p $out/journalwatch
+    ln -sf ${journalwatchConfig} $out/journalwatch/config
+    ln -sf ${journalwatchPatterns} $out/journalwatch/patterns
+  '';
 
 in
 {

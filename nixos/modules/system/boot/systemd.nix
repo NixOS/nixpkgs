@@ -575,7 +575,7 @@ in
           dir: links:
           pkgs.runCommand "${dir}"
             {
-              preferLocalBuild = true;
+
               packages = cfg.packages;
             }
             ''

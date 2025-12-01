@@ -22,7 +22,6 @@ let
         inherit sha256;
       };
 
-      preferLocalBuild = true;
       dontBuild = true;
       dontConfigure = true;
 

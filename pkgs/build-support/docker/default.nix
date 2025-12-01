@@ -670,7 +670,7 @@ rec {
           pure = writeText "${baseName}-config.json" (
             builtins.toJSON {
               inherit created config architecture;
-              preferLocalBuild = true;
+
               os = "linux";
             }
           );
@@ -678,7 +678,7 @@ rec {
             runCommand "${baseName}-config.json"
               {
                 nativeBuildInputs = [ jq ];
-                preferLocalBuild = true;
+
               }
               ''
                 jq ".created = \"$(TZ=utc date --iso-8601="seconds")\"" ${pure} > $out
@@ -1165,7 +1165,7 @@ rec {
               layersJsonFile
               ;
             imageName = lib.toLower name;
-            preferLocalBuild = true;
+
             passthru.imageTag =
               if tag != null then
                 tag
@@ -1233,7 +1233,7 @@ rec {
             inherit conf;
             inherit (conf) imageName;
             inherit streamScript;
-            preferLocalBuild = true;
+
             passthru = passthru // {
               inherit (conf) imageTag;
               inherit conf;

@@ -46,7 +46,6 @@ buildPackages.stdenv.mkDerivation (finalAttrs: {
 
   # compiling databases takes less time than copying the results
   # between machines.
-  preferLocalBuild = true;
 
   # we still allow substitutes because a database is relatively small and if it
   # is already built downloading is probably faster.  The substitution will only

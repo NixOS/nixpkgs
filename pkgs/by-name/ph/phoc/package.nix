@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
       (stdenvNoCC.mkDerivation {
         name = "0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch";
         inherit (finalAttrs) src;
-        preferLocalBuild = true;
+
         installPhase = "cp subprojects/packagefiles/wlroots/$name $out";
       })
     ];

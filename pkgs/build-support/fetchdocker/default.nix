@@ -59,7 +59,6 @@ in
 stdenv.mkDerivation {
   builder = ./fetchdocker-builder.sh;
   buildInputs = [ coreutils ];
-  preferLocalBuild = true;
 
   inherit
     name

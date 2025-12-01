@@ -67,7 +67,6 @@ lib.fetchers.withNormalizedHash { } (
     inherit outputHash outputHashAlgo;
     outputHashMode = "recursive";
 
-    preferLocalBuild = true;
     enableParallelBuilding = true;
 
     impureEnvVars = fetchers.proxyImpureEnvVars ++ [

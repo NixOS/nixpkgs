@@ -17,7 +17,6 @@
 runCommand "dbus-1"
   {
     inherit serviceDirectories suidHelper apparmor;
-    preferLocalBuild = true;
 
     nativeBuildInputs = [
       libxslt.bin

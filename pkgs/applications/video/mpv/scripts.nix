@@ -30,7 +30,7 @@ let
                 runCommand "mpvScripts.${name}.passthru.tests.scriptName-is-valid"
                   {
                     meta.maintainers = with lib.maintainers; [ nicoo ];
-                    preferLocalBuild = true;
+
                   }
                   ''
                     if [ -e "${fullScriptPath}" ]; then
@@ -56,7 +56,7 @@ let
                   runCommand "mpvScripts.${name}.passthru.tests.single-main-in-script-dir"
                     {
                       meta.maintainers = with lib.maintainers; [ nicoo ];
-                      preferLocalBuild = true;
+
                     }
                     ''
                       die() {

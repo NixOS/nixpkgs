@@ -7,7 +7,7 @@
 
 runCommand "${rustc-unwrapped.pname}-wrapper-${rustc-unwrapped.version}"
   {
-    preferLocalBuild = true;
+
     strictDeps = true;
     inherit (rustc-unwrapped) outputs;
 

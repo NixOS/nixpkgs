@@ -21,7 +21,7 @@ let
         stdenv = stdenv';
         derivationArgs = {
           inherit codePath;
-          preferLocalBuild = true;
+
         }
         // env;
       }

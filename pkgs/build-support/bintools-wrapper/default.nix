@@ -167,8 +167,6 @@ stdenvNoCC.mkDerivation {
   pname = targetPrefix + (if name != "" then name else "${bintoolsName}-wrapper");
   version = optionalString (bintools != null) bintoolsVersion;
 
-  preferLocalBuild = true;
-
   outputs = [ "out" ] ++ optionals propagateDoc ([ "man" ] ++ optional (bintools ? info) "info");
 
   passthru = {

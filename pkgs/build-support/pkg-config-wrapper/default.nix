@@ -44,8 +44,6 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  preferLocalBuild = true;
-
   outputs = [ "out" ] ++ optionals propagateDoc ([ "man" ] ++ optional (pkg-config ? doc) "doc");
 
   passthru = {

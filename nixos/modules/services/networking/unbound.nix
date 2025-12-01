@@ -47,22 +47,18 @@ let
   '';
   confFile =
     if cfg.checkconf then
-      pkgs.runCommand "unbound-checkconf"
-        {
-          preferLocalBuild = true;
-        }
-        ''
-          cp ${confFileUnchecked} unbound.conf
+      pkgs.runCommand "unbound-checkconf" { } ''
+        cp ${confFileUnchecked} unbound.conf
 
-          # fake stateDir which is not accessible in the sandbox
-          mkdir -p $PWD/state
-          sed -i unbound.conf \
-            -e '/auto-trust-anchor-file/d' \
-            -e "s|${cfg.stateDir}|$PWD/state|"
-          ${cfg.package}/bin/unbound-checkconf unbound.conf
+        # fake stateDir which is not accessible in the sandbox
+        mkdir -p $PWD/state
+        sed -i unbound.conf \
+          -e '/auto-trust-anchor-file/d' \
+          -e "s|${cfg.stateDir}|$PWD/state|"
+        ${cfg.package}/bin/unbound-checkconf unbound.conf
 
-          cp ${confFileUnchecked} $out
-        ''
+        cp ${confFileUnchecked} $out
+      ''
     else
       confFileUnchecked;
 

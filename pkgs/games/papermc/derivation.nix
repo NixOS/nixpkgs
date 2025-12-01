@@ -41,7 +41,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   dontUnpack = true;
-  preferLocalBuild = true;
 
   passthru = {
     updateScript = ./update.py;

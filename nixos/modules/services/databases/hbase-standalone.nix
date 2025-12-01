@@ -26,7 +26,7 @@ let
           </configuration>
   '';
 
-  configDir = pkgs.runCommand "hbase-config-dir" { preferLocalBuild = true; } ''
+  configDir = pkgs.runCommand "hbase-config-dir" { } ''
     mkdir -p $out
     cp ${cfg.package}/conf/* $out/
     rm $out/hbase-site.xml

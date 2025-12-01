@@ -41,7 +41,7 @@ let
     in
     pkgs.runCommand "xmonad"
       {
-        preferLocalBuild = true;
+
         nativeBuildInputs = [ pkgs.makeWrapper ];
       }
       (

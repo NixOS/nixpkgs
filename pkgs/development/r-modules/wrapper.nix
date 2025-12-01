@@ -8,7 +8,6 @@
 }:
 symlinkJoin {
   name = R.name + "-wrapper";
-  preferLocalBuild = true;
 
   outputs = [
     "out"

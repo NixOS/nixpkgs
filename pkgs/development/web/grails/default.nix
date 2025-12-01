@@ -49,8 +49,6 @@ stdenv.mkDerivation rec {
     sed -i -e '2iJAVA_HOME=${jdk.home}' "$out"/bin/grails
   '';
 
-  preferLocalBuild = true;
-
   meta = with lib; {
     description = "Full stack, web application framework for the JVM";
     mainProgram = "grails";

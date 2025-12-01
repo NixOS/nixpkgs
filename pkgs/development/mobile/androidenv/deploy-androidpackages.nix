@@ -94,7 +94,6 @@ stdenv.mkDerivation (
     src = lib.flatten (map (package: package.archives) packages);
     inherit os arch;
     nativeBuildInputs = [ unzip ] ++ nativeBuildInputs;
-    preferLocalBuild = true;
 
     unpackPhase = ''
       runHook preUnpack

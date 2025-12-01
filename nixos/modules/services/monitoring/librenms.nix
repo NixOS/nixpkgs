@@ -31,7 +31,7 @@ let
       {
         inherit (package) phpPackage;
         phpOptions = toKeyValue cfg.phpOptions;
-        preferLocalBuild = true;
+
         passAsFile = [ "phpOptions" ];
       }
       ''

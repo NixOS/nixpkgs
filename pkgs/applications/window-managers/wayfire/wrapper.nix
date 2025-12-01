@@ -24,8 +24,6 @@ symlinkJoin {
     done
   '';
 
-  preferLocalBuild = true;
-
   passthru = wayfire.passthru // {
     unwrapped = wayfire;
   };

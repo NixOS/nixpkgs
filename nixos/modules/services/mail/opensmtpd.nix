@@ -10,7 +10,7 @@ let
   conf = pkgs.writeText "smtpd.conf" cfg.serverConfiguration;
   args = lib.concatStringsSep " " cfg.extraServerArgs;
 
-  sendmail = pkgs.runCommand "opensmtpd-sendmail" { preferLocalBuild = true; } ''
+  sendmail = pkgs.runCommand "opensmtpd-sendmail" { } ''
     mkdir -p $out/bin
     ln -s ${cfg.package}/sbin/smtpctl $out/bin/sendmail
   '';

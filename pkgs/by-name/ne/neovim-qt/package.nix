@@ -32,8 +32,6 @@ stdenvNoCC.mkDerivation {
         ln -s ${unwrapped}/share/icons $out/share/icons
       '';
 
-  preferLocalBuild = true;
-
   nativeBuildInputs = [
     makeWrapper
   ];

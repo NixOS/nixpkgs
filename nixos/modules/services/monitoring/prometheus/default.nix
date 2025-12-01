@@ -45,7 +45,7 @@ let
     if checkConfigEnabled then
       pkgs.runCommand "${name}-${replaceStrings [ " " ] [ "" ] what}-checked"
         {
-          preferLocalBuild = true;
+
           nativeBuildInputs = [ cfg.package.cli ];
         }
         ''

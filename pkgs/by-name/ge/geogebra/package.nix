@@ -71,8 +71,6 @@ let
       desktopItem
       ;
 
-    preferLocalBuild = true;
-
     src = fetchurl {
       urls = [
         "https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
@@ -110,8 +108,6 @@ let
 
   darwinPkg = stdenv.mkDerivation {
     inherit pname version meta;
-
-    preferLocalBuild = true;
 
     src = fetchurl {
       urls = [

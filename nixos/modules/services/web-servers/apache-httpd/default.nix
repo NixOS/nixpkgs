@@ -433,7 +433,7 @@ let
     pkgs.runCommand "php.ini"
       {
         options = cfg.phpOptions;
-        preferLocalBuild = true;
+
       }
       ''
         cat ${php}/etc/php.ini > $out

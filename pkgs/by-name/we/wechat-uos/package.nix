@@ -60,7 +60,7 @@ let
 
       ln -s ${wechat}/opt/* $out/opt/
     '';
-    preferLocalBuild = true;
+
   };
 
   wechat-uos-runtime = with xorg; [

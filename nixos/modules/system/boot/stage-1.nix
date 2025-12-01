@@ -228,7 +228,7 @@ let
     pkgs.runCommand "link-units"
       {
         allowedReferences = [ extraUtils ];
-        preferLocalBuild = true;
+
       }
       (
         ''
@@ -248,7 +248,7 @@ let
     pkgs.runCommand "udev-rules"
       {
         allowedReferences = [ extraUtils ];
-        preferLocalBuild = true;
+
       }
       ''
         mkdir -p $out
@@ -396,7 +396,7 @@ let
           pkgs.runCommand "multipath.conf"
             {
               src = config.environment.etc."multipath.conf".text;
-              preferLocalBuild = true;
+
             }
             ''
               target=$out

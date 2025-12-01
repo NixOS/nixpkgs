@@ -25,8 +25,6 @@ stdenv.mkDerivation {
     sed -e "s|Exec=.\\+gnvim\\>|Exec=gnvim|" -i $out/share/applications/*.desktop
   '';
 
-  preferLocalBuild = true;
-
   nativeBuildInputs = [
     makeWrapper
   ];

@@ -53,7 +53,7 @@ let
         ++ lib.optionals (!config.skipTypeCheck) [ hostPkgs.mypy ];
         buildInputs = [ testDriver ];
         testScript = config.testScriptString;
-        preferLocalBuild = true;
+
         passthru = config.passthru;
         meta = config.meta // {
           mainProgram = "nixos-test-driver";

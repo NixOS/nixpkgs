@@ -16,7 +16,7 @@ let
 
   nagiosObjectDefsDir = pkgs.runCommand "nagios-objects" {
     inherit nagiosObjectDefs;
-    preferLocalBuild = true;
+
   } "mkdir -p $out; ln -s $nagiosObjectDefs $out/";
 
   nagiosCfgFile =
@@ -41,7 +41,7 @@ let
       lines = lib.mapAttrsToList (key: value: "${key}=${value}") (default // cfg.extraConfig);
       content = lib.concatStringsSep "\n" lines;
       file = pkgs.writeText "nagios.cfg" content;
-      validated = pkgs.runCommand "nagios-checked.cfg" { preferLocalBuild = true; } ''
+      validated = pkgs.runCommand "nagios-checked.cfg" { } ''
         cp ${file} nagios.cfg
         # nagios checks the existence of /var/lib/nagios, but
         # it does not exist in the build sandbox, so we fake it

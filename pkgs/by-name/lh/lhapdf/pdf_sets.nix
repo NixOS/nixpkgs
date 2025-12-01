@@ -15,8 +15,6 @@ let
         inherit sha256;
       };
 
-      preferLocalBuild = true;
-
       installPhase = ''
         mkdir -p $out/${name}/
         cp * $out/${name}/

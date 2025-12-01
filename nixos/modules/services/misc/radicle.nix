@@ -173,7 +173,7 @@ in
         type = lib.types.package;
         internal = true;
         default = (json.generate "config.json" cfg.settings).overrideAttrs (previousAttrs: {
-          preferLocalBuild = true;
+
           # None of the usual phases are run here because runCommandWith uses buildCommand,
           # so just append to buildCommand what would usually be a checkPhase.
           buildCommand =

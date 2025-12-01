@@ -7,7 +7,7 @@
 let
   cfg = config.services.logcheck;
 
-  defaultRules = pkgs.runCommand "logcheck-default-rules" { preferLocalBuild = true; } ''
+  defaultRules = pkgs.runCommand "logcheck-default-rules" { } ''
     cp -prd ${pkgs.logcheck}/etc/logcheck $out
     chmod u+w $out
     rm -r $out/logcheck.*

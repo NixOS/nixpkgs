@@ -173,7 +173,7 @@ optionalAttrs allowAliases aliases
               nativeBuildInputs = [ jq ];
               value = builtins.toJSON value;
               passAsFile = [ "value" ];
-              preferLocalBuild = true;
+
             }
             ''
               jq . "$valuePath" > $out
@@ -196,7 +196,7 @@ optionalAttrs allowAliases aliases
               nativeBuildInputs = [ remarshal_0_17 ];
               value = builtins.toJSON value;
               passAsFile = [ "value" ];
-              preferLocalBuild = true;
+
             }
             ''
               json2yaml "$valuePath" "$out"
@@ -219,7 +219,7 @@ optionalAttrs allowAliases aliases
               nativeBuildInputs = [ remarshal ];
               value = builtins.toJSON value;
               passAsFile = [ "value" ];
-              preferLocalBuild = true;
+
             }
             ''
               json2yaml "$valuePath" "$out"
@@ -498,7 +498,7 @@ optionalAttrs allowAliases aliases
               nativeBuildInputs = [ remarshal ];
               value = builtins.toJSON value;
               passAsFile = [ "value" ];
-              preferLocalBuild = true;
+
             }
             ''
               json2toml "$valuePath" "$out"
@@ -531,7 +531,7 @@ optionalAttrs allowAliases aliases
               nativeBuildInputs = [ json2cdn ];
               value = builtins.toJSON value;
               passAsFile = [ "value" ];
-              preferLocalBuild = true;
+
             }
             ''
               json2cdn "$valuePath" > $out
@@ -767,7 +767,7 @@ optionalAttrs allowAliases aliases
             value = toConf value;
             passAsFile = [ "value" ];
             nativeBuildInputs = [ elixir ];
-            preferLocalBuild = true;
+
           }
           ''
             cp "$valuePath" "$out"
@@ -815,7 +815,7 @@ optionalAttrs allowAliases aliases
               indentType = if indentUsingTabs then "Tabs" else "Spaces";
               value = toLua { inherit asBindings multiline; } value;
               passAsFile = [ "value" ];
-              preferLocalBuild = true;
+
             }
             ''
               ${optionalString (!asBindings) ''
@@ -1000,7 +1000,7 @@ optionalAttrs allowAliases aliases
                 "value"
                 "pythonGen"
               ];
-              preferLocalBuild = true;
+
             }
             ''
               cat "$valuePath"
@@ -1048,7 +1048,7 @@ optionalAttrs allowAliases aliases
                   "value"
                   "pythonGen"
                 ];
-                preferLocalBuild = true;
+
               }
               ''
                 python3 "$pythonGenPath" > $out

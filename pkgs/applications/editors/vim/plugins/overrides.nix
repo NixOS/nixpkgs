@@ -3321,7 +3321,7 @@ assertNoAdditions {
             ]
           ))
         ];
-        preferLocalBuild = true;
+
         installPhase = ''
           install -Dt $out/bin ftplugin/evinceSync.py
         '';
@@ -3337,7 +3337,7 @@ assertNoAdditions {
           '';
     in
     super.sved.overrideAttrs (old: {
-      preferLocalBuild = true;
+
       postPatch = ''
         rm ftplugin/evinceSync.py
         install -m 544 ${pythonWrapper} ftplugin/evinceSync.py

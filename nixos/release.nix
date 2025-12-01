@@ -192,7 +192,7 @@ let
         echo "file initrd ${build.netbootRamdisk}/initrd" >> $out/nix-support/hydra-build-products
         echo "file ipxe ${build.netbootIpxeScript}/netboot.ipxe" >> $out/nix-support/hydra-build-products
       '';
-      preferLocalBuild = true;
+
     };
 
 in
@@ -472,7 +472,7 @@ rec {
             }
           );
         }).config.system.build.toplevel;
-      preferLocalBuild = true;
+
     } "mkdir $out; ln -s $toplevel $out/dummy"
   );
 

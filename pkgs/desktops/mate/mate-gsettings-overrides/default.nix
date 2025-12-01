@@ -12,7 +12,7 @@ let
     mate-wayland-session
   ];
 in
-runCommand "mate-gsettings-overrides" { preferLocalBuild = true; } ''
+runCommand "mate-gsettings-overrides" { } ''
   data_dir="$out/share/gsettings-schemas/nixos-gsettings-overrides"
   schema_dir="$data_dir/glib-2.0/schemas"
   mkdir -p "$schema_dir"

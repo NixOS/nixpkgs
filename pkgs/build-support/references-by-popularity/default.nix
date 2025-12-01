@@ -10,7 +10,7 @@ runCommand "closure-paths"
   {
     exportReferencesGraph.graph = path;
     __structuredAttrs = true;
-    preferLocalBuild = true;
+
     nativeBuildInputs = [
       coreutils
       python3

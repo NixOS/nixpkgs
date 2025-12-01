@@ -191,7 +191,6 @@ let
     pname = "factorio-${if releaseType == "expansion" then "space-age" else releaseType}";
     inherit version src;
 
-    preferLocalBuild = true;
     dontBuild = true;
 
     installPhase = ''
