@@ -1,0 +1,13 @@
+diff --git a/src/Makevars b/src/Makevars
+index d147226..a79380e 100755
+--- a/src/Makevars
++++ b/src/Makevars
+@@ -19,7 +19,7 @@ PKG_LIBS = $(SHLIB_OPENMP_CXXFLAGS) $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
+ 
+ # strip debug symbols for smaller Linux binaries
+ strippedLib: $(SHLIB)
+-		if test -e "/usr/bin/strip" & test -e "/bin/uname" & [[ `uname` == "Linux" ]] ; \
++		@if [[ -e "/usr/bin/strip" && -e "/bin/uname" && $(shell uname) == "Linux" ]] ; \
+         then /usr/bin/strip --strip-debug $(SHLIB); fi
+ .phony: strippedLib
+ 
