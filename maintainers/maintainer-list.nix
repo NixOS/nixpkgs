@@ -24749,6 +24749,12 @@
     githubId = 96517350;
     keys = [ { fingerprint = "652F FAAD 5CB8 AF1D 3F96  9521 929E D6C4 0414 D3F5"; } ];
   };
+  spiwocoal = {
+    name = "Bruno Pacheco";
+    email = "spiwocoal@gmail.com";
+    github = "spiwocoal";
+    githubId = 30442253;
+  };
   spk = {
     email = "laurent@spkdev.net";
     github = "spk";
