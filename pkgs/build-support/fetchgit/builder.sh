@@ -20,7 +20,7 @@ $SHELL $fetcher --builder --url "$url" --out "$out" --rev "$rev" --name "$name" 
   ${fetchLFS:+--fetch-lfs} \
   ${deepClone:+--deepClone} \
   ${fetchSubmodules:+--fetch-submodules} \
-  ${fetchTags:+--fetch-tags} \
+  "${fetchTagFlags[@]}" \
   ${sparseCheckoutText:+--sparse-checkout "$sparseCheckoutText"} \
   ${nonConeMode:+--non-cone-mode} \
   ${branchName:+--branch-name "$branchName"} \
