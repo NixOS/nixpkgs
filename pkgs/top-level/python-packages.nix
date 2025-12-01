@@ -15131,6 +15131,8 @@ self: super: with self; {
 
   python-glanceclient = callPackage ../development/python-modules/python-glanceclient { };
 
+  python-gnocchiclient = callPackage ../development/python-modules/python-gnocchiclient { };
+
   python-gnupg = callPackage ../development/python-modules/python-gnupg { };
 
   python-google-drive-api = callPackage ../development/python-modules/python-google-drive-api { };

@@ -8133,6 +8133,7 @@ with pkgs;
   });
   barbicanclient = with python313Packages; toPythonApplication python-barbicanclient;
   glanceclient = with python313Packages; toPythonApplication python-glanceclient;
+  gnocchiclient = with python313Packages; toPythonApplication python-gnocchiclient;
   heatclient = with python313Packages; toPythonApplication python-heatclient;
   ironicclient = with python313Packages; toPythonApplication python-ironicclient;
   magnumclient = with python313Packages; toPythonApplication python-magnumclient;
