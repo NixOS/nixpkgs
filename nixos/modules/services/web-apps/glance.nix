@@ -210,5 +210,7 @@ in
   };
 
   meta.doc = ./glance.md;
-  meta.maintainers = [ ];
+  meta.maintainers = with lib.maintainers; [
+    gepbird
+  ];
 }
