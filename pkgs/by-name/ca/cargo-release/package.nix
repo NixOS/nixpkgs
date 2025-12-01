@@ -10,14 +10,14 @@
   git,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-release";
   version = "0.25.22";
 
   src = fetchFromGitHub {
     owner = "crate-ci";
     repo = "cargo-release";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NFI7UIHbo1xcH+pXim3ar8hvkn2EdIFpI2rpsivhVHg=";
   };
 
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     description = ''Cargo subcommand "release": everything about releasing a rust crate'';
     mainProgram = "cargo-release";
     homepage = "https://github.com/crate-ci/cargo-release";
-    changelog = "https://github.com/crate-ci/cargo-release/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/crate-ci/cargo-release/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -56,4 +56,4 @@ rustPlatform.buildRustPackage rec {
       progrm_jarvis
     ];
   };
-}
+})
