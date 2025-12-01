@@ -26,12 +26,10 @@ let
       rev ? null,
       tag ? null,
     }:
-    if tag != null && rev != null then
-      throw "fetchgit requires one of either `rev` or `tag` to be provided (not both)."
+    if rev != null then
+      rev
     else if tag != null then
       "refs/tags/${tag}"
-    else if rev != null then
-      rev
     else
       # FIXME fetching HEAD if no rev or tag is provided is problematic at best
       "HEAD";
@@ -184,7 +182,20 @@ lib.makeOverridable (
             rootDir
             gitConfigFile
             ;
-          fetchTags = if fetchTags == false then { } else fetchTags;
+          fetchTags =
+            let
+              addAdditionalTag = finalAttrs.revCustom != null && finalAttrs.tag != null;
+              additionalTags = [ finalAttrs.tag ];
+            in
+            if lib.isAttrs fetchTags then
+              fetchTags
+              // {
+                ${if addAdditionalTag then "" else null} = fetchTags."" or [ ] ++ additionalTags;
+              }
+            else if fetchTags == false then
+              { ${if addAdditionalTag then "" else null} = additionalTags; }
+            else
+              fetchTags;
           fetchTagFlags =
             if lib.isAttrs finalAttrs.fetchTags then
               lib.concatLists (
