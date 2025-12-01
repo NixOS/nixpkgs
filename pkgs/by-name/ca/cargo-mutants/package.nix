@@ -26,6 +26,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/sourcefrog/cargo-mutants";
     changelog = "https://github.com/sourcefrog/cargo-mutants/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = [ maintainers.progrm_jarvis ];
   };
 }
