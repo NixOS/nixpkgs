@@ -1100,6 +1100,7 @@ let
     blosc = [ pkgs.c-blosc ];
     EHRmuse = [ pkgs.gsl.dev ];
     island = [ pkgs.gsl.dev ];
+    islify = [ pkgs.bftools ];
     knowYourCG = with pkgs; [
       zlib.dev
       ncurses.dev
@@ -1159,6 +1160,7 @@ let
     webp = [ pkgs.libwebp ];
     RMark = [ pkgs.which ];
     RPushbullet = [ pkgs.which ];
+    SpatialOmicsOverlay = [ pkgs.bftools ];
     stpphawkes = [ pkgs.gsl ];
     registr = with pkgs; [
       icu.dev
@@ -1758,7 +1760,6 @@ let
     "Rmpi" # tries to run MPI processes
     "ReactomeContentService4R" # tries to connect to Reactome
     "PhIPData" # tries to download something from a DB
-    "RBioFormats" # tries to download jar during load test
     "pbdMPI" # tries to run MPI processes
     "CTdata" # tries to connect to ExperimentHub
     "rfaRm" # tries to connect to Ebi
@@ -2018,6 +2019,20 @@ let
         substituteInPlace "src/xCNV.c" \
         --replace-fail "Calloc" "R_Calloc" \
         --replace-fail "Free" "R_Free"
+      '';
+    });
+
+    RBioFormats = old.RBioFormats.overrideAttrs (attrs: {
+      # 1. Never download the jar file
+      # 2. Use jar from pkgs.bftools instead
+      # 3. Break the build if versions don't match
+      postPatch = ''
+        substituteInPlace "R/zzz.R" \
+          --replace-fail '!file.exists(bf_jar)' 'FALSE' \
+          --replace-fail \
+          '.jpackage(pkg, lib.loc = lib, morePaths = c(jars, bf_jar))' \
+          '.jpackage(pkg, lib.loc = lib, morePaths = union(jars, "${lib.getBin pkgs.bftools}/share/java/bioformats_package.jar"))' \
+          --replace-fail 'bf_jar <-' 'stopifnot(bf_ver == "${pkgs.bftools.version}");bf_jar <-'
       '';
     });
 

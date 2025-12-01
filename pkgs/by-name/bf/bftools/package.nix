@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bftools";
-  version = "6.3.0";
+  version = "7.3.0";
 
   src = fetchzip {
     url = "http://downloads.openmicroscopy.org/bio-formats/${version}/artifacts/bftools.zip";
-    sha256 = "02nvvmpfglpah1ihd08aw65g1794w588c988cdar1hfl4s80qwhb";
+    hash = "sha256-EQ7P07d53e6Q/9Wt2Pa1h0TfuYblOZeByGW30oE3i6M=";
   };
 
   installPhase = ''
