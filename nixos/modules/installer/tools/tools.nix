@@ -68,7 +68,6 @@ let
   };
 
   nixos-install = pkgs.nixos-install.override { };
-  nixos-rebuild = pkgs.nixos-rebuild.override { nix = config.nix.package; };
   nixos-rebuild-ng = pkgs.nixos-rebuild-ng.override {
     nix = config.nix.package;
     withNgSuffix = false;
@@ -279,14 +278,6 @@ in
     '';
   };
 
-  options.system.rebuild.enableNg = lib.mkEnableOption "" // {
-    default = true;
-    description = ''
-      Whether to use ‘nixos-rebuild-ng’ in place of ‘nixos-rebuild’, the
-      Python-based re-implementation of the original in Bash.
-    '';
-  };
-
   imports =
     let
       mkToolModule =
@@ -326,21 +317,19 @@ in
         name = "nixos-version";
         package = nixos-version;
       })
+      (lib.mkRemovedOptionModule [ "system" "rebuild" "enableNg" ] ''
+        The Bash implementation of nixos-rebuild has been removed in favor of the new Python implementation.
+        If you have any issues with the new implementation, please create an issue in GitHub and tag the maintainers of 'nixos-rebuild-ng'.
+      '')
     ];
 
   config = {
     documentation.man.man-db.skipPackages = [ nixos-version ];
 
-    warnings = lib.optional (!config.system.disableInstallerTools && !config.system.rebuild.enableNg) ''
-      The Bash implementation of nixos-rebuild will be deprecated and removed in the 26.05 release of NixOS.
-      Please migrate to the newer implementation by removing 'system.rebuild.enableNg = false' from your configuration.
-      If you are unable to migrate due to any issues with the new implementation, please create an issue and tag the maintainers of 'nixos-rebuild-ng'.
-    '';
-
     # These may be used in auxiliary scripts (ie not part of toplevel), so they are defined unconditionally.
     system.build = {
       inherit nixos-generate-config nixos-install;
-      nixos-rebuild = if config.system.rebuild.enableNg then nixos-rebuild-ng else nixos-rebuild;
+      nixos-rebuild = nixos-rebuild-ng;
     };
   };
 }
