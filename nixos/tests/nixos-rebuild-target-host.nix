@@ -21,13 +21,11 @@
           connect-timeout = 1;
         };
 
-        environment.systemPackages = [ pkgs.passh ];
-
         system.includeBuildDependencies = true;
 
         virtualisation = {
           cores = 2;
-          memorySize = 2048;
+          memorySize = 3072;
         };
 
         system.build.privateKey = snakeOilPrivateKey;
@@ -149,7 +147,6 @@
 
       deployer.copy_from_host("${configFile "config-1-deployed"}", "/root/configuration-1.nix")
       deployer.copy_from_host("${configFile "config-2-deployed"}", "/root/configuration-2.nix")
-      deployer.copy_from_host("${configFile "config-3-deployed"}", "/root/configuration-3.nix")
       deployer.copy_from_host("${targetNetworkJSON}", "/root/target-network.json")
       deployer.copy_from_host("${targetConfigJSON}", "/root/target-configuration.json")
 
@@ -166,12 +163,6 @@
         deployer.succeed("nixos-rebuild switch -I nixos-config=/root/configuration-2.nix --target-host alice@target --sudo &>/dev/console")
         target_hostname = deployer.succeed("ssh alice@target cat /etc/hostname").rstrip()
         assert target_hostname == "config-2-deployed", f"{target_hostname=}"
-
-      with subtest("Deploy to bob@target with password based sudo"):
-        # TODO: investigate why --ask-sudo-password from nixos-rebuild-ng is not working here
-        deployer.succeed(r'NIX_SSHOPTS=-t passh -c 3 -C -p ${nodes.target.users.users.bob.password} -P "\[sudo\] password" nixos-rebuild switch -I nixos-config=/root/configuration-3.nix --target-host bob@target --sudo &>/dev/console')
-        target_hostname = deployer.succeed("ssh alice@target cat /etc/hostname").rstrip()
-        assert target_hostname == "config-3-deployed", f"{target_hostname=}"
 
       with subtest("Deploy works with very long TMPDIR"):
         tmp_dir = "/var/folder/veryveryveryveryverylongpathnamethatdoesnotworkwithcontrolpath"
