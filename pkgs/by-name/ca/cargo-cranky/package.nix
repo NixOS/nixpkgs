@@ -26,6 +26,6 @@ rustPlatform.buildRustPackage rec {
       asl20
       mit
     ];
-    maintainers = [ ];
+    maintainers = [ maintainers.progrm_jarvis ];
   };
 }
