@@ -346,10 +346,7 @@ Write a text file to the Nix store.
 
   Passed through to [`preferLocalBuild`](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-preferLocalBuild) of the underlying call to `derivation`.
 
-  It defaults to `true`, as running the derivation's simple `builder` executable locally is assumed to be faster than network operations.
-  Set it to false if the `checkPhase` step is expensive.
-
-  Default: `true`
+  Default: `false`
 
 `derivationArgs` (Attribute set, _optional_)
 
@@ -381,7 +378,7 @@ writeTextFile {
     license = pkgs.lib.licenses.cc0;
   };
   allowSubstitutes = false;
-  preferLocalBuild = false;
+  preferLocalBuild = true;
 }
 ```
 :::

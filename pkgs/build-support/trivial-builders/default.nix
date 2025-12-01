@@ -108,7 +108,7 @@ rec {
       meta ? { },
       passthru ? { },
       allowSubstitutes ? true,
-      preferLocalBuild ? true,
+      preferLocalBuild ? false,
       derivationArgs ? { },
     }:
     assert lib.assertMsg (destination != "" -> (lib.hasPrefix "/" destination && destination != "/")) ''
@@ -398,8 +398,6 @@ rec {
         inherit pname code;
         executable = true;
         passAsFile = [ "code" ];
-        # Pointless to do this on a remote machine.
-        preferLocalBuild = true;
         meta = {
           mainProgram = pname;
         };
@@ -577,7 +575,7 @@ rec {
         "${args_.pname}-${args_.version}",
       paths,
       stripPrefix ? "",
-      preferLocalBuild ? true,
+      preferLocalBuild ? false,
       allowSubstitutes ? true,
       postBuild ? "",
       failOnMissing ? stripPrefix == "",
@@ -672,7 +670,6 @@ rec {
     in
     runCommand name
       {
-        preferLocalBuild = true;
         passthru.entries = entries';
       }
       ''
@@ -1045,7 +1042,6 @@ rec {
             prePatch
             postPatch
             ;
-          preferLocalBuild = true;
           phases = "unpackPhase patchPhase installPhase";
           installPhase = "cp -R ./ $out";
         }
