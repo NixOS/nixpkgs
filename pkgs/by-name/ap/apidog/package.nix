@@ -51,7 +51,6 @@ appimageTools.wrapType2 {
     ];
 
   extraInstallCommands = ''
-
     install -Dm444 ${appimageContents}/apidog.png \
       $out/share/icons/hicolor/512x512/apps/apidog.png
   '';
