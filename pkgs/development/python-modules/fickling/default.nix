@@ -55,6 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/trailofbits/fickling";
     changelog = "https://github.com/trailofbits/fickling/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sarahec ];
   };
 }
