@@ -15,15 +15,15 @@ let
     concatMapStrings
     concatMapStringsSep
     concatStrings
+    filter
     findFirst
+    getName
     isDerivation
     length
     concatMap
     mutuallyExclusive
     optional
-    optionalAttrs
     optionalString
-    optionals
     isAttrs
     isString
     mapAttrs
@@ -47,6 +47,11 @@ let
     toPretty
     ;
 
+  inherit (builtins)
+    getEnv
+    trace
+    ;
+
   # If we're in hydra, we can dispense with the more verbose error
   # messages and make problems easier to spot.
   inHydra = config.inHydra or false;
@@ -57,11 +62,11 @@ let
   getNameWithVersion =
     attrs: attrs.name or "${attrs.pname or "«name-missing»"}-${attrs.version or "«version-missing»"}";
 
-  allowUnfree = config.allowUnfree || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
+  allowUnfree = config.allowUnfree || getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
   allowNonSource =
     let
-      envVar = builtins.getEnv "NIXPKGS_ALLOW_NONSOURCE";
+      envVar = getEnv "NIXPKGS_ALLOW_NONSOURCE";
     in
     if envVar != "" then envVar != "0" else config.allowNonSource or true;
 
@@ -92,10 +97,10 @@ let
 
   hasBlocklistedLicense = attrs: hasListedLicense blocklist attrs;
 
-  allowBroken = config.allowBroken || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
+  allowBroken = config.allowBroken || getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
 
   allowUnsupportedSystem =
-    config.allowUnsupportedSystem || builtins.getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1";
+    config.allowUnsupportedSystem || getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1";
 
   isUnfree =
     licenses:
@@ -161,14 +166,12 @@ let
     attrs: hasUnfreeLicense attrs && !allowUnfree && !allowUnfreePredicate attrs;
 
   allowInsecureDefaultPredicate =
-    x: builtins.elem (getNameWithVersion x) (config.permittedInsecurePackages or [ ]);
-  allowInsecurePredicate = x: (config.allowInsecurePredicate or allowInsecureDefaultPredicate) x;
+    x: elem (getNameWithVersion x) (config.permittedInsecurePackages or [ ]);
+  allowInsecurePredicate = config.allowInsecurePredicate or allowInsecureDefaultPredicate;
 
   hasAllowedInsecure =
     attrs:
-    !(isMarkedInsecure attrs)
-    || allowInsecurePredicate attrs
-    || builtins.getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
+    !(isMarkedInsecure attrs) || allowInsecurePredicate attrs || getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
 
   isNonSource = sourceTypes: any (t: !t.isSource) sourceTypes;
 
@@ -219,7 +222,7 @@ let
 
     Alternatively you can configure a predicate to allow specific packages:
       { nixpkgs.config.${predicateConfigAttr} = pkg: builtins.elem (lib.getName pkg) [
-          "${lib.getName attrs}"
+          "${getName attrs}"
         ];
       }
   '';
@@ -289,7 +292,7 @@ let
     let
       expectedOutputs = attrs.meta.outputsToInstall or [ ];
       actualOutputs = attrs.outputs or [ "out" ];
-      missingOutputs = builtins.filter (output: !builtins.elem output actualOutputs) expectedOutputs;
+      missingOutputs = filter (output: !elem output actualOutputs) expectedOutputs;
     in
     ''
       The package ${getNameWithVersion attrs} has set meta.outputsToInstall to: ${builtins.concatStringsSep ", " expectedOutputs}
@@ -332,16 +335,18 @@ let
       errormsg ? "",
       remediation,
     }:
-    let
-      msg =
-        if inHydra then
-          "Warning while evaluating ${getNameWithVersion attrs}: «${reason}»: ${errormsg}"
-        else
-          "Package ${getNameWithVersion attrs} in ${pos_str meta} ${errormsg}, continuing anyway."
-          + (optionalString (remediation != "") "\n${remediation}");
-      isEnabled = findFirst (x: x == reason) null showWarnings;
-    in
-    if isEnabled != null then builtins.trace msg true else true;
+    if elem reason showWarnings then
+      let
+        msg =
+          if inHydra then
+            "Warning while evaluating ${getNameWithVersion attrs}: «${reason}»: ${errormsg}"
+          else
+            "Package ${getNameWithVersion attrs} in ${pos_str meta} ${errormsg}, continuing anyway."
+            + (optionalString (remediation != "") "\n${remediation}");
+      in
+      trace msg true
+    else
+      true;
 
   metaTypes =
     let
@@ -460,17 +465,19 @@ let
         }]"
       ];
   checkMeta =
-    meta:
-    optionals config.checkMeta (concatMap (attr: checkMetaAttr attr meta.${attr}) (attrNames meta));
+    if config.checkMeta then
+      meta: concatMap (attr: checkMetaAttr attr meta.${attr}) (attrNames meta)
+    else
+      meta: [ ];
 
   checkOutputsToInstall =
     attrs:
     let
       expectedOutputs = attrs.meta.outputsToInstall or [ ];
       actualOutputs = attrs.outputs or [ "out" ];
-      missingOutputs = builtins.filter (output: !builtins.elem output actualOutputs) expectedOutputs;
+      missingOutputs = filter (output: !elem output actualOutputs) expectedOutputs;
     in
-    if config.checkMeta then builtins.length missingOutputs > 0 else false;
+    if config.checkMeta then length missingOutputs > 0 else false;
 
   # Check if a derivation is valid, that is whether it passes checks for
   # e.g brokenness or license.
@@ -731,9 +738,7 @@ let
 
       available =
         validity.valid != "no"
-        && (
-          if config.checkMetaRecursively or false then all (d: d.meta.available or true) references else true
-        );
+        && ((config.checkMetaRecursively or false) -> all (d: d.meta.available or true) references);
     };
 
   assertValidity =
