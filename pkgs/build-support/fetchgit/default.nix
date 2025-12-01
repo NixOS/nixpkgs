@@ -66,7 +66,7 @@ lib.makeOverridable (
             # when rootDir is specified, avoid invalidating the result when rev changes
             append = if rootDir != "" then "-${lib.strings.sanitizeDerivationName rootDir}" else "";
           },
-          # When null, will default to: `deepClone || fetchTags`
+          # When null, will default to: `deepClone || fetchTags == true` for backward compatibility.
           leaveDotGit ? null,
           outputHash ? lib.fakeHash,
           outputHashAlgo ? null,
@@ -98,8 +98,9 @@ lib.makeOverridable (
           passthru ? { },
           meta ? { },
           allowedRequisites ? null,
-          # fetch all tags after tree (useful for git describe)
-          fetchTags ? false,
+          # Additional tags to fetch after tree (useful for git describe)
+          # If specified as `true`, fetch all tags (with potential non-reproducibility).
+          fetchTags ? [ ],
           # make this subdirectory the root of the result
           rootDir ? "",
           # GIT_CONFIG_GLOBAL (as a file)
@@ -173,17 +174,16 @@ lib.makeOverridable (
             preFetch
             postCheckout
             postFetch
-            fetchTags
             rootDir
             gitConfigFile
             ;
+          fetchTags = if fetchTags == false then [ ] else fetchTags;
           leaveDotGit =
             if leaveDotGit != null then
-              assert fetchTags -> leaveDotGit;
               assert rootDir != "" -> !leaveDotGit;
               leaveDotGit
             else
-              finalAttrs.deepClone || finalAttrs.fetchTags;
+              finalAttrs.deepClone || finalAttrs.fetchTags == true;
           nonConeMode = lib.defaultTo (rootDir != "") nonConeMode;
           inherit tag;
           revCustom = rev;
