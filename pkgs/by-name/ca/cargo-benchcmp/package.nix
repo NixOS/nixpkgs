@@ -4,6 +4,7 @@
   fetchFromGitHub,
   replaceVars,
   stdenv,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -30,6 +31,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # thread 'different_input_colored' panicked at 'assertion failed: `(left == right)`
     "--skip=different_input_colored"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Small utility to compare Rust micro-benchmarks";
