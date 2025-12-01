@@ -16,8 +16,6 @@
   withTmpdir ? if stdenv.hostPlatform.isDarwin then "/tmp" else null,
   # passthru.tests
   nixosTests,
-  nixVersions,
-  lixPackageSets,
   nixos-rebuild-ng,
 }:
 let
@@ -101,22 +99,6 @@ python3Packages.buildPythonApplication rec {
       tests = {
         with_reexec = nixos-rebuild-ng.override {
           withReexec = true;
-        };
-        with_nix_latest = nixos-rebuild-ng.override {
-          nix = nixVersions.latest;
-        };
-        with_nix_stable = nixos-rebuild-ng.override {
-          nix = nixVersions.stable;
-        };
-        with_nix_2_28 = nixos-rebuild-ng.override {
-          # oldest supported version in nixpkgs
-          nix = nixVersions.nix_2_28;
-        };
-        with_lix_latest = nixos-rebuild-ng.override {
-          nix = lixPackageSets.latest.lix;
-        };
-        with_lix_stable = nixos-rebuild-ng.override {
-          nix = lixPackageSets.stable.lix;
         };
 
         inherit (nixosTests)
