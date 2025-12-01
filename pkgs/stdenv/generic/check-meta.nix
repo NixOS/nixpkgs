@@ -302,8 +302,9 @@ let
     '';
 
   handleEvalIssue =
-    { meta, attrs }:
     {
+      meta,
+      attrs,
       reason,
       errormsg ? "",
       remediation,
@@ -324,8 +325,9 @@ let
     handler msg;
 
   handleEvalWarning =
-    { meta, attrs }:
     {
+      meta,
+      attrs,
       reason,
       errormsg ? "",
       remediation,
@@ -751,9 +753,15 @@ let
           if valid == "yes" then
             true
           else if valid == "no" then
-            (handleEvalIssue { inherit meta attrs; } { inherit (validity) reason errormsg remediation; })
+            (handleEvalIssue {
+              inherit meta attrs;
+              inherit (validity) reason errormsg remediation;
+            })
           else if valid == "warn" then
-            (handleEvalWarning { inherit meta attrs; } { inherit (validity) reason errormsg remediation; })
+            (handleEvalWarning {
+              inherit meta attrs;
+              inherit (validity) reason errormsg remediation;
+            })
           else
             throw "Unknown validity: '${valid}'"
         );
