@@ -17,15 +17,15 @@ let
     ;
 in
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "opam-publish";
-  version = "2.7.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "ocaml-opam";
     repo = "opam-publish";
-    rev = version;
-    hash = "sha256-Li7Js8mrxOrRNNuu8z4X+VXbuECfk7Gsgpy4d6R3RwU=";
+    tag = finalAttrs.version;
+    hash = "sha256-yaFkR+MxkN6/skXx9euKVjTGXk9DraxDj+/2XQuHK4I=";
   };
 
   buildInputs = [
@@ -48,4 +48,4 @@ buildDunePackage rec {
     ];
     maintainers = with lib.maintainers; [ niols ];
   };
-}
+})
