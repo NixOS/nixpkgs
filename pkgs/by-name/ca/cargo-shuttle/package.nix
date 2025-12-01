@@ -43,6 +43,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://shuttle.rs";
     changelog = "https://github.com/shuttle-hq/shuttle/releases/tag/${src.rev}";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = [ maintainers.progrm_jarvis ];
   };
 }
