@@ -82,7 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "MPD client with delusions of grandeur, made with Rust, GTK and Libadwaita";
     homepage = "https://github.com/htkhiem/euphonica";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ paperdigits ];
+    maintainers = with lib.maintainers; [
+      paperdigits
+      aaravrav
+    ];
     mainProgram = "euphonica";
     platforms = with lib.platforms; linux;
   };
