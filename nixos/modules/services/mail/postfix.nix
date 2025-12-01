@@ -1279,7 +1279,7 @@ in
       [ "services" "postfix" "settings" "main" "recipient_delimiter" ]
     )
     (lib.mkRenamedOptionModule
-      [ "services" "postfix" "tlsTrustedAuthoriies" ]
+      [ "services" "postfix" "tlsTrustedAuthorities" ]
       [ "services" "postfix" "settings" "main" "smtp_tls_CAfile" ]
     )
     (lib.mkRenamedOptionModule
