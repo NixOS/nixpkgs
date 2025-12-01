@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pytapo";
-  version = "3.3.51";
+  version = "3.3.54";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Pog5q/tXNz+RRZXJdb2/qG3BeaHUTYtlzOkM5Twr6js=";
+    hash = "sha256-B31PTYqXFzLkn/YuFbq0G7SDA1wMqAcwGOaj3xfmxYA=";
   };
 
   build-system = [ setuptools ];
