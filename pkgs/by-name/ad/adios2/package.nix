@@ -105,11 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform ucx) ucx
   ++ lib.optional (stdenv.hostPlatform.isLoongArch64) libffi
-  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform zfp) zfp
-  # openmp required by zfp
-  ++ lib.optional (
-    lib.meta.availableOn stdenv.hostPlatform zfp && stdenv.cc.isClang
-  ) llvmPackages.openmp;
+  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform zfp) zfp;
 
   propagatedBuildInputs =
     lib.optional mpiSupport mpi
