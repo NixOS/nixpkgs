@@ -24,10 +24,7 @@ let
     lib.filterAttrs (
       device: _:
       lib.any (
-        e:
-        e.fsType == "zfs"
-        && (utils.fsNeededForBoot e)
-        && (e.device == device || lib.hasPrefix "${device}/" e.device)
+        e: e.fsType == "zfs" && (e.device == device || lib.hasPrefix "${device}/" e.device)
       ) config.system.build.fileSystems
     ) config.boot.initrd.clevis.devices
   );
@@ -217,7 +214,7 @@ let
           if poolImported "${pool}"; then
           ${lib.optionalString config.boot.initrd.clevis.enable (
             lib.concatMapStringsSep "\n" (
-              elem: "clevis decrypt < /etc/clevis/${elem}.jwe | zfs load-key ${elem} || true "
+              elem: "clevis decrypt < /etc/clevis/${elem}.jwe | zfs load-key -L prompt ${elem} || true "
             ) (lib.filter (p: (lib.elemAt (lib.splitString "/" p) 0) == pool) clevisDatasets)
           )}
 
