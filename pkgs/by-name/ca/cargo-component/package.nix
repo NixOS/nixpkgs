@@ -4,16 +4,17 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-component";
   version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "cargo-component";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Tlx14q/2k/0jZZ1nECX7zF/xNTeMCZg/fN+fhRM4uhc=";
   };
 
@@ -30,12 +31,16 @@ rustPlatform.buildRustPackage rec {
   # requires the wasm32-wasi target
   doCheck = false;
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
+  meta = {
     description = "Cargo subcommand for creating WebAssembly components based on the component model proposal";
     homepage = "https://github.com/bytecodealliance/cargo-component";
-    changelog = "https://github.com/bytecodealliance/cargo-component/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = [ maintainers.progrm_jarvis ];
+    changelog = "https://github.com/bytecodealliance/cargo-component/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "cargo-component";
   };
-}
+})
