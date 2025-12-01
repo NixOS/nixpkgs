@@ -1,8 +1,8 @@
 diff --git a/build_llvm.py b/build_llvm.py
-index aee0a9f1..20cfe8f3 100644
+index 1aa8631a..2304ce1f 100644
 --- a/build_llvm.py
 +++ b/build_llvm.py
-@@ -350,33 +350,23 @@ def build_warp_clang_for_arch(args, lib_name: str, arch: str) -> None:
+@@ -346,34 +346,24 @@ def build_warp_clang_for_arch(args, lib_name: str, arch: str) -> None:
  
          clang_dll_path = os.path.join(build_path, f"bin/{lib_name}")
  
@@ -27,6 +27,7 @@ index aee0a9f1..20cfe8f3 100644
          if os.name == "nt":
              libs.append("Version.lib")
              libs.append("Ws2_32.lib")
+             libs.append("ntdll.lib")
 -            libs.append(f'/LIBPATH:"{libpath}"')
 +            libs.extend(f'/LIBPATH:"{libpath}"' for libpath in libpaths)
          else:

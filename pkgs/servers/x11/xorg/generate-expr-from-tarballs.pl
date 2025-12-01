@@ -334,6 +334,8 @@ print OUT <<EOF;
   lib,
   appres,
   bdftopcf,
+  bitmap,
+  editres,
   font-adobe-100dpi,
   font-adobe-75dpi,
   font-adobe-utopia-100dpi,
@@ -368,10 +370,12 @@ print OUT <<EOF;
   font-screen-cyrillic,
   font-sony-misc,
   font-sun-misc,
+  fonttosfnt,
   font-util,
   font-winitzki-cyrillic,
   font-xfree86-type1,
   gccmakedep,
+  iceauth,
   ico,
   imake,
   libapplewm,
@@ -428,8 +432,10 @@ print OUT <<EOF;
   luit,
   makedepend,
   mkfontscale,
+  oclock,
   pixman,
   sessreg,
+  setxkbmap,
   smproxy,
   tab-window-manager,
   transset,
@@ -486,7 +492,11 @@ self: with self; {
   inherit
     appres
     bdftopcf
+    bitmap
+    editres
+    fonttosfnt
     gccmakedep
+    iceauth
     ico
     imake
     libdmx
@@ -501,8 +511,10 @@ self: with self; {
     luit
     makedepend
     mkfontscale
+    oclock
     pixman
     sessreg
+    setxkbmap
     smproxy
     transset
     viewres
