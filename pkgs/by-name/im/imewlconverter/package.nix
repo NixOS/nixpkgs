@@ -7,12 +7,12 @@
 
 buildDotnetModule {
   pname = "imewlconverter";
-  version = "3.2.0";
+  version = "3.3.0";
   src = fetchFromGitHub {
     owner = "studyzy";
     repo = "imewlconverter";
-    rev = "v3.2.0";
-    hash = "sha256-7rKWbLbRCnMmJ9pwqMYZZZujyxbX84g4rFQ/Ms/R+uE=";
+    rev = "v3.3.0";
+    hash = "sha256-4O25M91zOGK8nTxT0s7QlIcYYV0erWBErNlc2+BMpGk=";
   };
 
   projectFile = "src/ImeWlConverterCmd/ImeWlConverterCmd.csproj";

@@ -23,16 +23,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lact";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "ilya-zlobintsev";
     repo = "LACT";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZfUzsSdMLv6IaSbLkz9LBvdB4cS4oBE+R5toi9T7vR0=";
+    hash = "sha256-CbpUg+PB4Kx8AJavXY1GorNb3KfyKl8ovY2y2658UXI=";
   };
 
-  cargoHash = "sha256-K1/D5vi88Wjcvu/KZOkVr4q2MdMHTkhtyV8k8bvcGwg=";
+  cargoHash = "sha256-+3r3FXol7FzgpaasNT3uVT+PhfoRrRNS4z1iYPiwHRM=";
 
   nativeBuildInputs = [
     pkg-config

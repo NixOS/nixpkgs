@@ -10,13 +10,13 @@
 buildHomeAssistantComponent rec {
   owner = "robinostlund";
   domain = "volkswagencarnet";
-  version = "5.0.3";
+  version = "5.1.7";
 
   src = fetchFromGitHub {
     owner = "robinostlund";
     repo = "homeassistant-volkswagencarnet";
     tag = "v${version}";
-    hash = "sha256-3wykS2TYjr9hoQSPc1F3m5aDiLW1tzvQfjfjnr4N2Y0=";
+    hash = "sha256-c3fj15TUboX/HRBLb3EENBkZIwluza8Q6MKbU4+BB/E=";
   };
 
   dependencies = [ volkswagencarnet ];
@@ -30,6 +30,7 @@ buildHomeAssistantComponent rec {
   doCheck = false;
 
   meta = {
+    changelog = "https://github.com/robinostlund/homeassistant-volkswagencarnet/releases/tag/${src.tag}";
     description = "Volkswagen Connect component for Home Assistant";
     homepage = "https://github.com/robinostlund/homeassistant-volkswagencarnet";
     license = lib.licenses.gpl3Only;

@@ -53,6 +53,6 @@ stdenv.mkDerivation {
     description = "SDL2 MPEG Player Library";
     license = licenses.lgpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
   };
 }

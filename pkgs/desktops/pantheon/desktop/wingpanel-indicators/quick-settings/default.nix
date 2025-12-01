@@ -32,6 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-82XlZDnXuUB0PPmInrSQh1vrwnOYt9RplKWwYxIirVo=";
   };
 
+  patches = [
+    # We no longer ship Pantheon X11 session in NixOS.
+    # https://github.com/elementary/session-settings/issues/91
+    # https://github.com/elementary/session-settings/issues/82
+    ./hide-onscreen-keyboard-settings.patch
+  ];
+
   nativeBuildInputs = [
     glib # glib-compile-resources
     meson

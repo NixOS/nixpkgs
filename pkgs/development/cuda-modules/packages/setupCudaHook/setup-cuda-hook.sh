@@ -92,8 +92,6 @@ setupCUDAToolkitCompilers() {
     export CUDAHOSTCXX="@ccFullPath@"
   fi
 
-  appendToVar NVCC_PREPEND_FLAGS "--compiler-bindir=@ccRoot@/bin"
-
   # NOTE: We set -Xfatbin=-compress-all, which reduces the size of the compiled
   #   binaries. If binaries grow over 2GB, they will fail to link. This is a problem for us, as
   #   the default set of CUDA capabilities we build can regularly cause this to occur (for

@@ -1,5 +1,6 @@
 {
   buildGoModule,
+  bun,
   cairo,
   cargo-tauri,
   cargo,
@@ -17,13 +18,13 @@
   openssl,
   pango,
   pkg-config,
-  pnpm_9,
   rustc,
   rustPlatform,
   stdenv,
+  typescript,
   webkitgtk_4_1,
+  writableTmpDirAsHomeHook,
 }:
-
 let
   esbuild_21-5 =
     let
@@ -46,31 +47,64 @@ let
           }
         );
     };
-
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "surrealist";
-  version = "3.2.4";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "surrealdb";
     repo = "surrealist";
     rev = "surrealist-v${finalAttrs.version}";
-    hash = "sha256-FWNGC0QoEUu1h3e3sfgWmbvqcNNvfWXU7PEjTXxu9Qo=";
+    hash = "sha256-L2O3iMoNptNgzEy7gXptAaHXhv4J5ED/72GLrH43/kQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-Su9ZOPIskV5poeS8pgtri+sZANBpdgnuCsQqE4WKFdA=";
+    hash = "sha256-NhgSfiBb4FGEnirpDFWI3MIMElen8frKDFKmCBJlSBY=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-oreeV9g16/F7JGLApi0Uq+vTqNhIg7Lg1Z4k00RUOYI=";
+  node_modules = stdenv.mkDerivation {
+    inherit (finalAttrs) src version;
+    pname = "surrealist-node_modules";
+    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+      "GIT_PROXY_COMMAND"
+      "SOCKS_SERVER"
+    ];
+    nativeBuildInputs = [
+      bun
+      writableTmpDirAsHomeHook
+    ];
+    dontConfigure = true;
+    buildPhase = ''
+      runHook preBuild
+
+      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+
+      bun install --no-progress --frozen-lockfile --no-cache
+
+      runHook postBuild
+    '';
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/node_modules
+      cp -R ./node_modules $out
+
+      runHook postInstall
+    '';
+    outputHash =
+      {
+        x86_64-linux = "sha256-tZYIiWHaeryV/f9AFNknRZp8om0y8QH8RCxoqgmbR5g=";
+        aarch64-linux = "sha256-6nB8wcXIYR1WcYqZrNFl0Jfdz/Z3PttULQHsQcfAsOk=";
+      }
+      .${stdenv.hostPlatform.system}
+        or (throw "${finalAttrs.pname}: Platform ${stdenv.hostPlatform.system} is not packaged yet. Supported platforms: x86_64-linux, aarch64-linux.");
+    outputHashMode = "recursive";
   };
 
   nativeBuildInputs = [
+    bun
     cargo
     cargo-tauri.hook
     gobject-introspection
@@ -79,9 +113,9 @@ stdenv.mkDerivation (finalAttrs: {
     moreutils
     nodejs
     pkg-config
-    pnpm_9.configHook
     rustc
     rustPlatform.cargoSetupHook
+    typescript
   ];
 
   buildInputs = [
@@ -116,12 +150,31 @@ stdenv.mkDerivation (finalAttrs: {
       --set WEBKIT_DISABLE_COMPOSITING_MODE 1
   '';
 
+  configurePhase = ''
+    runHook preConfigure
+
+    cp -R ${finalAttrs.node_modules}/node_modules .
+
+    # Bun takes executables from this folder
+    chmod -R u+rw node_modules
+    chmod -R u+x node_modules/.bin
+    patchShebangs node_modules
+
+    export HOME=$TMPDIR
+    export PATH="$PWD/node_modules/.bin:$PATH"
+
+    runHook postConfigure
+  '';
+
   meta = with lib; {
     description = "Visual management of your SurrealDB database";
     homepage = "https://surrealdb.com/surrealist";
     license = licenses.mit;
     mainProgram = "surrealist";
-    maintainers = with maintainers; [ frankp ];
+    maintainers = with maintainers; [
+      frankp
+      dmitriiStepanidenko
+    ];
     platforms = platforms.linux;
   };
 })

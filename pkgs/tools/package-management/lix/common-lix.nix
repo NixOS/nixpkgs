@@ -67,6 +67,7 @@ assert lib.assertMsg (
   removeReferencesTo,
   xz,
   yq,
+  zstd,
   nixosTests,
   rustPlatform,
   # Only used for versions before 2.92.
@@ -185,7 +186,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals pastaFod [ passt ]
   ++ lib.optionals parseToYAML [ yq ]
   ++ lib.optionals usesCapnp [ capnproto ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linuxMinimal ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linuxMinimal ]
+  ++ lib.optionals (lib.versionAtLeast version "2.94") [ zstd ];
 
   buildInputs = [
     boost

@@ -4,7 +4,6 @@
   stdenv,
 
   # Build-time dependencies:
-  addDriverRunpath,
   autoAddDriverRunpath,
   bazel_7,
   binutils,

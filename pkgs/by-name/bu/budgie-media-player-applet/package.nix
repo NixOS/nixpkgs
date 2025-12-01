@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-media-player-applet";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "zalesyc";
     repo = "budgie-media-player-applet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FTc/cl4qjVYx45SuZPizOGC09JERIuifCo86+Tqu5hk=";
+    hash = "sha256-Ekt6OXSjqKF4d6a9lmZyUa06pqz1uYkCHbzvLM7Z+W8=";
   };
 
   strictDeps = true;
@@ -44,17 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    # The meson option actually enables libpeas2 support
-    # https://github.com/BuddiesOfBudgie/budgie-desktop/issues/749
-    "-Dfor-wayland=true"
+    "-Dbudgie-api-v2=true"
   ];
 
   postPatch = ''
     substituteInPlace meson.build --replace-fail "/usr" "$out"
-
-    # https://github.com/zalesyc/budgie-media-player-applet/issues/25
-    substituteInPlace src/{applet,testWin,Popover,BudgieMediaPlayer}.py \
-      --replace-fail "gi.require_version('Budgie', '1.0')" "gi.require_version('Budgie', '2.0')"
   '';
 
   postFixup = ''

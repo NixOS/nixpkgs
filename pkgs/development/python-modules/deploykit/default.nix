@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  hatchling,
   bash,
   openssh,
   pytestCheckHook,
@@ -12,8 +12,8 @@
 
 buildPythonPackage rec {
   pname = "deploykit";
-  version = "1.1.1";
-  format = "setuptools";
+  version = "1.2.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -21,10 +21,10 @@ buildPythonPackage rec {
     owner = "numtide";
     repo = "deploykit";
     rev = version;
-    hash = "sha256-7PiXq1bQJ1jswLHNqCDSYZabgfp8HRuRt5YPGzd5Ej0=";
+    hash = "sha256-RONE/oJdNmVjLYdJWDTzyXnmStkLIx92GsydaYYG5O4=";
   };
 
-  buildInputs = [ setuptools ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
     bash

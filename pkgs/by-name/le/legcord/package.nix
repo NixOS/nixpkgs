@@ -15,13 +15,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "legcord";
-  version = "1.1.5";
+  version = "1.1.6";
 
   src = fetchFromGitHub {
     owner = "Legcord";
     repo = "Legcord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6egqI1JhnRc8YwzAvyy4Xg9Z9dEfG7wIbMfUgQ+4IBA=";
+    hash = "sha256-AHqaC0N+5grBDixP+wXAzKdOTgohgwP4HbAPEZEVXKQ=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
-    hash = "sha256-nobOORfhwlGEvNt+MfDKd3rXor6tJHDulz5oD1BGY4I=";
+    hash = "sha256-D+GPJn3qpIax+YNcLqLX71bobDdfQXyGiJ6b5PiJqC4=";
   };
 
   buildPhase = ''
@@ -57,6 +57,14 @@ stdenv.mkDerivation (finalAttrs: {
     # since the install script does not do this for whatever reason
     cp ./node_modules/@vencord/venmic/prebuilds/venmic-addon-linux-x64/node-napi-v7.node ./dist/venmic-x64.node
     cp ./node_modules/@vencord/venmic/prebuilds/venmic-addon-linux-arm64/node-napi-v7.node ./dist/venmic-arm64.node
+
+    # Remove unnecessary koffi prebuilds, otherwise unsupported platforms
+    # (OpenBSD, FreeBSD, Linux musl builds) will cause autoPatchelf to not
+    # be able to find the required libraries and fail.
+    find ./node_modules/koffi/build/koffi -mindepth 1 -maxdepth 1 \
+      ! -name linux_x64 \
+      ! -name linux_arm64 \
+      -type d -exec rm -rf {} +
 
     # Patch venmic before putting it into the ASAR archive
     autoPatchelf ./dist

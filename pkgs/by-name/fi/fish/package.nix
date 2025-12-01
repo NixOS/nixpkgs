@@ -331,7 +331,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) man-db;
 
-  doCheck = true;
+  # disable darwin pending https://github.com/NixOS/nixpkgs/pull/462090 getting through staging
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     coreutils

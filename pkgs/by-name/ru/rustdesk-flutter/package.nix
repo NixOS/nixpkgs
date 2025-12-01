@@ -5,7 +5,7 @@
   copyDesktopItems,
   fetchFromGitHub,
   flutter329,
-  ffmpeg,
+  ffmpeg_7,
   gst_all_1,
   fuse3,
   libXtst,
@@ -81,7 +81,7 @@ flutter329.buildFlutterApplication rec {
   sourceRoot = "${src.name}/flutter";
   # curl https://raw.githubusercontent.com/rustdesk/rustdesk/1.4.1/flutter/pubspec.lock | yq > pubspec.lock.json
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-  gitHashes = lib.importJSON ./gitHashes.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   # Configure the Rust build
   cargoRoot = "..";
@@ -119,7 +119,7 @@ flutter329.buildFlutterApplication rec {
   ];
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_7
     fuse3
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer

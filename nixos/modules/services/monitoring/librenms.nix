@@ -11,22 +11,26 @@ let
   configJson = settingsFormat.generate "librenms-config.json" cfg.settings;
 
   package = cfg.package.override {
-    logDir = cfg.logDir;
-    dataDir = cfg.dataDir;
+    inherit (cfg) logDir dataDir;
   };
 
-  phpOptions = ''
-    log_errors = on
-    post_max_size = 100M
-    upload_max_filesize = 100M
-    memory_limit = ${toString cfg.settings.php_memory_limit}M
-    date.timezone = "${config.time.timeZone}"
-  '';
+  toKeyValue = lib.generators.toKeyValue {
+    mkKeyValue = lib.generators.mkKeyValueDefault { } " = ";
+  };
+
+  defaultPHPSettings = {
+    log_errors = "on";
+    post_max_size = "100M";
+    upload_max_filesize = "100M";
+    memory_limit = "${toString cfg.settings.php_memory_limit}M";
+    "date.timezone" = config.time.timeZone;
+  };
+
   phpIni =
     pkgs.runCommand "php.ini"
       {
         inherit (package) phpPackage;
-        inherit phpOptions;
+        phpOptions = toKeyValue cfg.phpOptions;
         preferLocalBuild = true;
         passAsFile = [ "phpOptions" ];
       }
@@ -210,6 +214,51 @@ in
           Port of the `memcached` server.
         '';
       };
+    };
+
+    phpOptions = mkOption {
+      type =
+        with types;
+        attrsOf (oneOf [
+          str
+          int
+        ]);
+      defaultText = literalExpression (
+        generators.toPretty { } (
+          defaultPHPSettings
+          // {
+            "zend_extension" = lib.literalExpression "opcache";
+            "opcache.enable" = lib.literalExpression "1";
+            "opcache.memory_consumption" = lib.literalExpression "256";
+            "date.timezone" = lib.literalExpression "config.time.timeZone";
+            memory_limit = lib.literalExpression "\${toString cfg.settings.php_memory_limit}M";
+          }
+        )
+      );
+      description = ''
+        Options for PHP's php.ini file for librenms.
+
+        Please note that this option is _additive_ on purpose while the
+        attribute values inside the default are option defaults: that means that
+
+        ```nix
+        {
+          services.librenms.phpOptions."opcache.enable" = 1;
+        }
+        ```
+
+        will override the `php.ini` option `opcache.enable` without discarding the rest of the defaults.
+
+        Overriding all of `phpOptions` can be done like this:
+
+        ```nix
+        {
+          services.librenms.phpOptions = lib.mkForce {
+            /* ... */
+          };
+        }
+        ```
+      '';
     };
 
     poolConfig = mkOption {
@@ -399,6 +448,8 @@ in
 
     users.groups.${cfg.group} = { };
 
+    services.librenms.phpOptions = lib.mapAttrs (lib.const lib.mkOptionDefault) defaultPHPSettings;
+
     services.librenms.settings = {
       # basic configs
       "user" = cfg.user;
@@ -511,7 +562,7 @@ in
       user = cfg.user;
       group = cfg.group;
       inherit (package) phpPackage;
-      inherit phpOptions;
+      phpOptions = toKeyValue cfg.phpOptions;
       settings = {
         "listen.mode" = "0660";
         "listen.owner" = config.services.nginx.user;
@@ -587,91 +638,101 @@ in
           }"
         ];
       };
-      script = ''
-        set -euo pipefail
+      script =
+        let
+          nginxHasSSL =
+            with config.services.nginx.virtualHosts."${cfg.hostname}";
+            onlySSL || enableSSL || addSSL || forceSSL;
+        in
+        ''
+          set -euo pipefail
 
-        # config setup
-        ln -sf ${configFile} ${cfg.dataDir}/config.php
-        ${pkgs.envsubst}/bin/envsubst -i ${configJson} -o ${cfg.dataDir}/config.json
-        export PHPRC=${phpIni}
+          PATH=$PATH:${lib.makeBinPath (with pkgs; [ gnused ])}
 
-        INIT=false
-        if [[ ! -s ${cfg.dataDir}/.env ]]; then
-          INIT=true
-          # init .env file
-          echo "APP_KEY=" > ${cfg.dataDir}/.env
-          ${artisanWrapper}/bin/librenms-artisan key:generate --ansi
-          ${artisanWrapper}/bin/librenms-artisan webpush:vapid
-          echo "" >> ${cfg.dataDir}/.env
-          echo -n "NODE_ID=" >> ${cfg.dataDir}/.env
-          ${package.phpPackage}/bin/php -r "echo uniqid();" >> ${cfg.dataDir}/.env
-          echo "" >> ${cfg.dataDir}/.env
-        else
-          # .env file already exists --> only update database and cache config
-          ${pkgs.gnused}/bin/sed -i /^DB_/d ${cfg.dataDir}/.env
-          ${pkgs.gnused}/bin/sed -i /^CACHE_DRIVER/d ${cfg.dataDir}/.env
-        fi
-        ${lib.optionalString (cfg.useDistributedPollers || cfg.distributedPoller.enable) ''
-          echo "CACHE_DRIVER=memcached" >> ${cfg.dataDir}/.env
-        ''}
-        echo "DB_DATABASE=${cfg.database.database}" >> ${cfg.dataDir}/.env
-      ''
-      + (
-        if !isNull cfg.database.socket then
-          ''
-            # use socket connection
-            echo "DB_SOCKET=${cfg.database.socket}" >> ${cfg.dataDir}/.env
-            echo "DB_PASSWORD=null" >> ${cfg.dataDir}/.env
-          ''
-        else
-          ''
-            # use TCP connection
-            echo "DB_HOST=${cfg.database.host}" >> ${cfg.dataDir}/.env
-            echo "DB_PORT=${toString cfg.database.port}" >> ${cfg.dataDir}/.env
-            echo "DB_USERNAME=${cfg.database.username}" >> ${cfg.dataDir}/.env
-            echo -n "DB_PASSWORD=" >> ${cfg.dataDir}/.env
-            cat ${cfg.database.passwordFile} >> ${cfg.dataDir}/.env
-          ''
-      )
-      + ''
-        # clear cache if package has changed (cache may contain cached paths
-        # to the old package)
-        OLD_PACKAGE=$(cat ${cfg.dataDir}/package)
-        if [[ $OLD_PACKAGE != "${package}" ]]; then
-          rm -r ${cfg.dataDir}/cache/*
-        fi
+          # config setup
+          ln -sf ${configFile} ${cfg.dataDir}/config.php
+          ${pkgs.envsubst}/bin/envsubst -i ${configJson} -o ${cfg.dataDir}/config.json
+          export PHPRC=${phpIni}
 
-        # convert rrd files when the oneMinutePolling option is changed
-        OLD_ENABLED=$(cat ${cfg.dataDir}/one_minute_enabled)
-        if [[ $OLD_ENABLED != "${lib.boolToString cfg.enableOneMinutePolling}" ]]; then
-          ${package}/scripts/rrdstep.php -h all
-          echo "${lib.boolToString cfg.enableOneMinutePolling}" > ${cfg.dataDir}/one_minute_enabled
-        fi
+          INIT=false
+          if [[ ! -s ${cfg.dataDir}/.env ]]; then
+            INIT=true
+            # init .env file
+            echo "APP_KEY=" > ${cfg.dataDir}/.env
+            ${artisanWrapper}/bin/librenms-artisan key:generate --ansi
+            ${artisanWrapper}/bin/librenms-artisan webpush:vapid
+            echo "" >> ${cfg.dataDir}/.env
+            echo -n "NODE_ID=" >> ${cfg.dataDir}/.env
+            ${package.phpPackage}/bin/php -r "echo uniqid();" >> ${cfg.dataDir}/.env
+            echo "" >> ${cfg.dataDir}/.env
+          else
+            # .env file already exists --> only update database and cache config
+            sed -i /^APP_URL=/d ${cfg.dataDir}/.env
+            sed -i /^DB_/d ${cfg.dataDir}/.env
+            sed -i /^CACHE_DRIVER=/d ${cfg.dataDir}/.env
+          fi
+          ${lib.optionalString (cfg.useDistributedPollers || cfg.distributedPoller.enable) ''
+            echo "CACHE_DRIVER=memcached" >> ${cfg.dataDir}/.env
+          ''}
+          echo "APP_URL=http${lib.optionalString nginxHasSSL "s"}://${cfg.hostname}/" >> ${cfg.dataDir}/.env
+          echo "DB_DATABASE=${cfg.database.database}" >> ${cfg.dataDir}/.env
+        ''
+        + (
+          if !isNull cfg.database.socket then
+            ''
+              # use socket connection
+              echo "DB_SOCKET=${cfg.database.socket}" >> ${cfg.dataDir}/.env
+              echo "DB_PASSWORD=null" >> ${cfg.dataDir}/.env
+            ''
+          else
+            ''
+              # use TCP connection
+              echo "DB_HOST=${cfg.database.host}" >> ${cfg.dataDir}/.env
+              echo "DB_PORT=${toString cfg.database.port}" >> ${cfg.dataDir}/.env
+              echo "DB_USERNAME=${cfg.database.username}" >> ${cfg.dataDir}/.env
+              echo -n "DB_PASSWORD=" >> ${cfg.dataDir}/.env
+              cat ${cfg.database.passwordFile} >> ${cfg.dataDir}/.env
+            ''
+        )
+        + ''
+          # clear cache if package has changed (cache may contain cached paths
+          # to the old package)
+          OLD_PACKAGE=$(cat ${cfg.dataDir}/package)
+          if [[ $OLD_PACKAGE != "${package}" ]]; then
+            rm -r ${cfg.dataDir}/cache/*
+          fi
 
-        # migrate db if package version has changed
-        # not necessary for every package change
-        OLD_VERSION=$(cat ${cfg.dataDir}/version)
-        if [[ $OLD_VERSION != "${package.version}" ]]; then
-          ${artisanWrapper}/bin/librenms-artisan migrate --force --no-interaction
-          echo "${package.version}" > ${cfg.dataDir}/version
-        fi
+          # convert rrd files when the oneMinutePolling option is changed
+          OLD_ENABLED=$(cat ${cfg.dataDir}/one_minute_enabled)
+          if [[ $OLD_ENABLED != "${lib.boolToString cfg.enableOneMinutePolling}" ]]; then
+            ${package}/scripts/rrdstep.php -h all
+            echo "${lib.boolToString cfg.enableOneMinutePolling}" > ${cfg.dataDir}/one_minute_enabled
+          fi
 
-        if [[ $INIT == "true" ]]; then
-          ${artisanWrapper}/bin/librenms-artisan db:seed --force --no-interaction
-        fi
+          # migrate db if package version has changed
+          # not necessary for every package change
+          OLD_VERSION=$(cat ${cfg.dataDir}/version)
+          if [[ $OLD_VERSION != "${package.version}" ]]; then
+            ${artisanWrapper}/bin/librenms-artisan migrate --force --no-interaction
+            echo "${package.version}" > ${cfg.dataDir}/version
+          fi
 
-        # regenerate cache if package has changed
-        if [[ $OLD_PACKAGE != "${package}" ]]; then
-          ${artisanWrapper}/bin/librenms-artisan view:clear
-          ${artisanWrapper}/bin/librenms-artisan optimize:clear
-          ${artisanWrapper}/bin/librenms-artisan view:cache
-          ${artisanWrapper}/bin/librenms-artisan optimize
-          echo "${package}" > ${cfg.dataDir}/package
-        fi
+          if [[ $INIT == "true" ]]; then
+            ${artisanWrapper}/bin/librenms-artisan db:seed --force --no-interaction
+          fi
 
-        # to make sure to not read an outdated .env file
-        ${artisanWrapper}/bin/librenms-artisan config:cache
-      '';
+          # regenerate cache if package has changed
+          if [[ $OLD_PACKAGE != "${package}" ]]; then
+            ${artisanWrapper}/bin/librenms-artisan view:clear
+            ${artisanWrapper}/bin/librenms-artisan optimize:clear
+            ${artisanWrapper}/bin/librenms-artisan view:cache
+            ${artisanWrapper}/bin/librenms-artisan optimize
+            echo "${package}" > ${cfg.dataDir}/package
+          fi
+
+          # to make sure to not read an outdated .env file
+          ${artisanWrapper}/bin/librenms-artisan config:cache
+        '';
     };
 
     programs.mtr.enable = true;

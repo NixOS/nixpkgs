@@ -68,13 +68,5 @@ mirror://xorg/individual/driver/xf86-video-vesa-2.6.0.tar.xz
 mirror://xorg/individual/driver/xf86-video-vmware-13.4.0.tar.xz
 mirror://xorg/individual/driver/xf86-video-voodoo-1.2.6.tar.xz
 mirror://xorg/individual/driver/xf86-video-wsfb-0.4.0.tar.bz2
-mirror://xorg/individual/font/font-arabic-misc-1.0.4.tar.xz
-mirror://xorg/individual/font/font-cursor-misc-1.0.4.tar.xz
-mirror://xorg/individual/font/font-daewoo-misc-1.0.4.tar.xz
-mirror://xorg/individual/font/font-dec-misc-1.0.4.tar.xz
-mirror://xorg/individual/font/font-ibm-type1-1.0.4.tar.xz
-mirror://xorg/individual/font/font-jis-misc-1.0.4.tar.xz
-mirror://xorg/individual/font/font-misc-meltho-1.0.4.tar.xz
-mirror://xorg/individual/font/font-misc-misc-1.1.3.tar.xz
 mirror://xorg/individual/lib/libXTrap-1.0.1.tar.bz2
 mirror://xorg/individual/xserver/xorg-server-21.1.20.tar.xz

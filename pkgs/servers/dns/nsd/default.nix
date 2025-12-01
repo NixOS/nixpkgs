@@ -19,7 +19,6 @@
   rrtypes ? false,
   zoneStats ? false,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
-
   configFile ? "/etc/nsd/nsd.conf",
 }:
 
@@ -36,13 +35,16 @@ stdenv.mkDerivation rec {
     substituteInPlace nsd-control-setup.sh.in --replace openssl ${openssl}/bin/openssl
   '';
 
+  nativeBuildInputs = lib.optionals withSystemd [
+    pkg-config
+  ];
+
   buildInputs = [
     libevent
     openssl
   ]
   ++ lib.optionals withSystemd [
     systemdMinimal
-    pkg-config
   ];
 
   enableParallelBuilding = true;

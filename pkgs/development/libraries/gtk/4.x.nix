@@ -4,6 +4,7 @@
   buildPackages,
   replaceVars,
   fetchurl,
+  fetchpatch,
   pkg-config,
   docutils,
   gettext,
@@ -69,7 +70,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4";
-  version = "4.20.2";
+  version = "4.20.3";
 
   outputs = [
     "out"
@@ -85,8 +86,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor finalAttrs.version}/gtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-XoJA7eyvr/K4uvRmO9zqpmjvEKIHvuTX+Q4BDhC93Fw=";
+    hash = "sha256-KHPykDCIpmxxFz6i7YX/riZqZrlyw6SEK7svbxh+wVM=";
   };
+
+  # TODO: make it unconditional on rebuild, drop on version >= 4.20.4
+  patches = lib.optional stdenv.hostPlatform.is32bit (fetchpatch {
+    url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/3b7ed49f26700c65fa9c6f41cf40d4fd5f921756.diff";
+    hash = "sha256-P6cE7fnR5W+H0EWQWJ3hYSu4MwMygPIfS6e0IiXlQv8=";
+  });
 
   depsBuildBuild = [
     pkg-config

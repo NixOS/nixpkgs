@@ -108,10 +108,10 @@
   withFido2 ? true,
   withFirstboot ? true,
   withGcrypt ? true,
-  withHomed ? !stdenv.hostPlatform.isMusl,
+  withHomed ? true,
   withHostnamed ? true,
   withHwdb ? true,
-  withImportd ? !stdenv.hostPlatform.isMusl,
+  withImportd ? true,
   withKmod ? true,
   withLibBPF ?
     lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
@@ -143,9 +143,9 @@
   withPasswordQuality ? true,
   withPCRE2 ? true,
   withPolkit ? true,
-  withPortabled ? !stdenv.hostPlatform.isMusl,
+  withPortabled ? true,
   withQrencode ? true,
-  withRemote ? !stdenv.hostPlatform.isMusl,
+  withRemote ? true,
   withResolved ? true,
   withShellCompletions ? true,
   withSysusers ? true,
@@ -156,6 +156,10 @@
   # adds python to closure which is too much by default
   withUkify ? false,
   withUserDb ? true,
+  # utmp does not exist on musl, so it would be implicitly disabled
+  # It is important to document the lack of utmp in nix,
+  # otherwise the condition for systemd-update-utmp.service will
+  # attempt to load a service which does not exist, resulting in errors.
   withUtmp ? !stdenv.hostPlatform.isMusl,
   withVmspawn ? true,
   # kernel-install shouldn't usually be used on NixOS, but can be useful, e.g. for
@@ -203,13 +207,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "258.1";
+  version = "258.2";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LA+6/d9W3CxK0G2sXsPHM4BVLf8IzsWW6IxJFby6/JU=";
+    hash = "sha256-1iWeuNefDOIEUSTzxzvt+jfcs6sSMPhxQfdwp0mqUjQ=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -221,16 +225,6 @@ stdenv.mkDerivation (finalAttrs: {
   # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all
   # patches
   patches = [
-    # https://github.com/systemd/systemd/pull/39094
-    (fetchpatch {
-      url = "https://github.com/systemd/systemd/commit/8b4ee3d68d2e70d9a396b74d155eab3b11763311.patch";
-      hash = "sha256-JJDaSHQjd1QZ18CQHq40viB0AF/0MiescmZUcc/6LDg=";
-    })
-    (fetchpatch {
-      url = "https://github.com/systemd/systemd/commit/13b0e7fc6d2623800ba04b104f3b628388c9f5e6.patch";
-      hash = "sha256-X+tY3NjfRJpF6wvd++xEps0DIFTbX/6Zw9oO4Y9FmNI=";
-    })
-
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0003-Fix-NixOS-containers.patch
@@ -444,6 +438,10 @@ stdenv.mkDerivation (finalAttrs: {
     # /bin/sh is also the upstream default. Explicitly set this so that we're
     # independent of upstream changes to the default.
     (lib.mesonOption "debug-shell" "/bin/sh")
+
+    # Use the correct path for Bash for user shells (e.g. used in nspawn and
+    # homed), which otherwise defaults to /bin/bash.
+    (lib.mesonOption "default-user-shell" "/run/current-system/sw/bin/bash")
 
     # Attempts to check /usr/sbin and that fails in macOS sandbox because
     # permission is denied. If /usr/sbin is not a symlink, it defaults to true.

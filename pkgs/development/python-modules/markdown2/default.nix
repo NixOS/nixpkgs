@@ -34,7 +34,7 @@ buildPythonPackage rec {
     code_syntax_highlighting = [ pygments ];
     wavedrom = [ wavedrom ];
     latex = [ latex2mathml ];
-    all = lib.flatten (lib.attrValues (lib.removeAttrs optional-dependencies [ "all" ]));
+    all = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "all" ]);
   };
 
   meta = {

@@ -474,5 +474,6 @@ stdenv.mkDerivation {
     platforms = builtins.attrNames ghcBinDists.${distSetName};
     maintainers = lib.teams.haskell.members;
     broken = !(import ./common-have-ncg.nix { inherit lib stdenv version; });
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

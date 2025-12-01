@@ -49,7 +49,6 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [
     p11-kit.bin
     opensc
-    softhsm
     kryoptic
     nss.tools
     gnutls
@@ -57,6 +56,13 @@ stdenv.mkDerivation rec {
     expect
     valgrind
     pkcs11ProviderPython3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    # softokn and kryoptic are OK; softhsm is pretty flaky.
+    # This fails with a `pkcs11-provider:softhsm / tls - FAIL - exit status 1`.
+    # Considering that kryoptic is the Rust replacement, we can rely on it instead:
+    # https://github.com/softhsm/SoftHSMv2/issues/803
+    softhsm
   ];
 
   env = {

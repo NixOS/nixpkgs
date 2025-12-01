@@ -19,7 +19,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "2.20.3";
+  version = "2.22.2";
 
   # See the repository for expected versions:
   # <https://github.com/intel/intel-graphics-compiler/blob/v2.16.0/documentation/build_ubuntu.md#revision-table>
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       owner = "intel";
       repo = "intel-graphics-compiler";
       tag = "v${version}";
-      hash = "sha256-OCou4yhx9rY1JznrzGMLhsjj/3CvqQXfXWFAPDxA8Ds=";
+      hash = "sha256-4Tp9kY+Sbirf4kN/C5Q1ClcoUI/fhfUJpqL+/eO8a/o=";
     })
     (fetchFromGitHub {
       name = "llvm-project";
@@ -56,8 +56,8 @@ stdenv.mkDerivation rec {
       name = "llvm-spirv";
       owner = "KhronosGroup";
       repo = "SPIRV-LLVM-Translator";
-      tag = "v16.0.17";
-      hash = "sha256-ta5QbVady9/cwBbAwF1r4ft/ESMnLgcmGMrFhv1PCH0=";
+      tag = "v16.0.18";
+      hash = "sha256-JwFwjHUv1tBC7KDWAhkse557R6QCaVjOekhndQlVetM=";
     })
   ];
 
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
 
     # match default LLVM version with our provided version to apply correct patches
     substituteInPlace igc/external/llvm/llvm_preferred_version.cmake \
-      --replace-fail "15.0.7" "${llvmVersion}"
+      --replace-fail "16.0.6" "${llvmVersion}"
   '';
 
   nativeBuildInputs = [

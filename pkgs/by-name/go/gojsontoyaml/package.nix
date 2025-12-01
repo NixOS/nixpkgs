@@ -22,6 +22,6 @@ buildGoModule rec {
     mainProgram = "gojsontoyaml";
     homepage = "https://github.com/brancz/gojsontoyaml";
     license = licenses.mit;
-    maintainers = [ maintainers.bryanasdev000 ];
+    maintainers = [ ];
   };
 }

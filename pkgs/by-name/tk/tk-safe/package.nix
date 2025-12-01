@@ -15,17 +15,18 @@
   makeDesktopItem,
   makeWrapper,
   wrapGAppsHook3,
+  writeScript,
   udev,
 }:
 
 stdenv.mkDerivation rec {
   pname = "tk-safe";
-  version = "25.8.2";
+  version = "25.10.1";
+  revision = "22";
 
-  # To update, check https://search.apps.ubuntu.com/api/v1/package/tk-safe and copy the anon_download_url and version.
   src = fetchurl {
-    url = "https://api.snapcraft.io/api/v1/snaps/download/rLNeIGEaag0TKFQLO0TxF3ARXg3rcTNx_19.snap";
-    hash = "sha256-bjlkLCTHkGH2LdeGd3LIp7L8f7SzZetpEpvGpPEzjcA=";
+    url = "https://api.snapcraft.io/api/v1/snaps/download/rLNeIGEaag0TKFQLO0TxF3ARXg3rcTNx_${revision}.snap";
+    hash = "sha512-pRPtOF/+L8FVCvnB+CKCJvzxbCAVxN5EAn7SzNDFIrm+Ar9Xl03Lup+a8SmIdAN2t9Mfd1YxqZHpixH3EMPTdA==";
   };
 
   desktopItems = [
@@ -88,6 +89,28 @@ stdenv.mkDerivation rec {
   preFixup = ''
     wrapProgram $out/opt/tk-safe/app/tk-safe \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}"
+  '';
+
+  passthru.updateScript = writeScript "update-tk-safe" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p common-updater-scripts curl jq
+
+    set -eu -o pipefail
+
+    data=$(curl -H 'X-Ubuntu-Series: 16' \
+    'https://api.snapcraft.io/api/v1/snaps/details/tk-safe?fields=download_sha512,revision,version')
+
+    version=$(jq -r .version <<<"$data")
+
+    if [[ "x$UPDATE_NIX_OLD_VERSION" != "x$version" ]]; then
+
+        revision=$(jq -r .revision <<<"$data")
+        hash=$(nix --extra-experimental-features nix-command hash to-sri "sha512:$(jq -r .download_sha512 <<<"$data")")
+
+        update-source-version "$UPDATE_NIX_ATTR_PATH" "$version" "$hash"
+        update-source-version --ignore-same-hash --version-key=revision "$UPDATE_NIX_ATTR_PATH" "$revision" "$hash"
+
+    fi
   '';
 
   meta = {

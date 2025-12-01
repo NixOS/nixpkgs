@@ -125,7 +125,7 @@ llvmStdenv.mkDerivation (finalAttrs: {
     lib.optional (lib.versions.majorMinor version == "25.8") (fetchpatch {
       # Disable building WASM lexer
       url = "https://github.com/ClickHouse/ClickHouse/commit/67a42b78cdf1c793e78c1adbcc34162f67044032.patch";
-      sha256 = "7VF+JSztqTWD+aunCS3UVNxlRdwHc2W5fNqzDyeo3Fc=";
+      hash = "sha256-7VF+JSztqTWD+aunCS3UVNxlRdwHc2W5fNqzDyeo3Fc=";
     })
     ++
 
@@ -133,8 +133,13 @@ llvmStdenv.mkDerivation (finalAttrs: {
         (fetchpatch {
           # Do not intercept memalign on darwin
           url = "https://github.com/ClickHouse/ClickHouse/commit/0cfd2dbe981727fb650f3b9935f5e7e7e843180f.patch";
-          sha256 = "1iNYZbugX2g2dxNR1ZiUthzPnhLUR8g118aG23yhgUo=";
-        });
+          hash = "sha256-1iNYZbugX2g2dxNR1ZiUthzPnhLUR8g118aG23yhgUo=";
+        })
+    ++ lib.optional (!lib.versionAtLeast version "25.11" && stdenv.hostPlatform.isDarwin) (fetchpatch {
+      # Remove flaky macOS SDK version detection
+      url = "https://github.com/ClickHouse/ClickHouse/commit/11e172a37bd0507d595d27007170090127273b33.patch";
+      hash = "sha256-oI7MrjMgJpIPTsci2IqEOs05dUGEMnjI/WqGp2N+rps=";
+    });
 
   postPatch = ''
     patchShebangs src/ utils/

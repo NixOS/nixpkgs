@@ -42,14 +42,14 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
-  version = "1.13.1";
+  version = "1.13.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = "python-lsp-server";
     tag = "v${version}";
-    hash = "sha256-wxouTbqkieH3fxnXY0PIKDtDV97AbGWujisS2JmjBkE=";
+    hash = "sha256-uW4q/uwEkKASZBPQ994s5+t5Urg7/nZIaIv4hqyIffM=";
   };
 
   pythonRelaxDeps = [
@@ -114,7 +114,6 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ]
   ++ optional-dependencies.all;
-  versionCheckProgram = "${placeholder "out"}/bin/pylsp";
   versionCheckProgramArg = "--version";
 
   disabledTests = [

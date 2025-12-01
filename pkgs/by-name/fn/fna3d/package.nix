@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
   cmake,
   SDL2,
   sdl3,
@@ -25,6 +26,8 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = if useSDL3 then [ sdl3 ] else [ SDL2 ];
   nativeBuildInputs = [ cmake ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Accuracy-focused XNA4 reimplementation for open platforms";

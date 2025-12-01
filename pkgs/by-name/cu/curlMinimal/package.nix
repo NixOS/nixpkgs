@@ -86,7 +86,7 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.16.0";
+  version = "8.17.0";
 
   src = fetchurl {
     urls = [
@@ -95,16 +95,8 @@ stdenv.mkDerivation (finalAttrs: {
         builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
       }/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-QMjN28tsxiUcA96kI6Ryps6kA3vmVLpc9d7G6y0i/x0=";
+    hash = "sha256-lV9ucprWs1ZiYOj+9oYg52ujwxrPChhSRBahhaz3eZI=";
   };
-
-  patches = [
-    # Bug introduced in curl@fa915b (8.16.0) https://github.com/curl/curl/issues/19334 Paused
-    # HTTP/2 transfers will return the wrong errors and trash the whole
-    # transfer. Remove this patch once curl is updated to 8.17.0 which will be
-    # released on the 5th November 2025.
-    ./fix-h2-paused-transfers.patch
-  ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure

@@ -41,7 +41,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "papers";
-  version = "49.1";
+  version = "49.2";
 
   outputs = [
     "out"
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/papers/${lib.versions.major finalAttrs.version}/papers-${finalAttrs.version}.tar.xz";
-    hash = "sha256-SrI6Z4l73da+LWKYIQ//YCz+wPNWiLxb/ycDYLB4TCk=";
+    hash = "sha256-SanKL2LFWY+ObKTmfIf09ZxewN5wTTspnVFkyR0fakE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
       pname
       version
       ;
-    hash = "sha256-Pjhpo44Zau2z6aWEQEcIPy3aUYplwdF/XIkO/1Zl+kg=";
+    hash = "sha256-aOVPknBqBV7AWO9LxvWRjiL2H2UQHAcpGpKY5YeoQrc=";
   };
 
   nativeBuildInputs = [

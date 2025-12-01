@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "os-service-types";
-  version = "1.8.1";
+  version = "1.8.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "os_service_types";
     inherit version;
-    hash = "sha256-w9YBNO5QnPVUUsc/+L1BiRvLbPQkIaFZwBOIJOEmQCs=";
+    hash = "sha256-q3ZI1yMoSZQxluG7AKMOLiXmAPo7V7skHRW39SG1tXU=";
   };
 
   postPatch = ''

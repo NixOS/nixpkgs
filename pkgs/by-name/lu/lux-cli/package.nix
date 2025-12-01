@@ -18,18 +18,18 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lux-cli";
 
-  version = "0.20.1";
+  version = "0.20.2";
 
   src = fetchFromGitHub {
     owner = "lumen-oss";
     repo = "lux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-L676xx3TL2HTJsnYVUcVAeFUt9s6U0KVTL2FHASlZno=";
+    hash = "sha256-fhEYHtGrEK/6T/vf5evlOmFTtepkuX/i9Xf6SzxwFOg=";
   };
 
   buildAndTestSubdir = "lux-cli";
 
-  cargoHash = "sha256-dRQ8ICNOupY7GZdQGtHVd1OCXzgBHloptYgizW8Xf5M=";
+  cargoHash = "sha256-yhJOm7vzDSMQtxCMJXXe4Q0DUV4agXSZ/XbcFxVgTCE=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

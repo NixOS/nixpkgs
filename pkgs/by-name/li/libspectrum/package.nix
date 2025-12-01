@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     description = "ZX Spectrum input and output support library";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
   };
 }

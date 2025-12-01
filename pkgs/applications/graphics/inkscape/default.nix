@@ -75,6 +75,10 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "inkscape";
   version = "1.4.2";
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchurl {
     url = "https://inkscape.org/release/inkscape-${finalAttrs.version}/source/archive/xz/dl/inkscape-${finalAttrs.version}.tar.xz";

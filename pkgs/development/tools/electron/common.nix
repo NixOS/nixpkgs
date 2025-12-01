@@ -106,6 +106,34 @@ in
         url = "https://github.com/chromium/chromium/commit/23d818d3c7fba4658248f17fd7b8993199242aa9.patch";
         hash = "sha256-JVv36PgU/rr34jrhgCyf4Pp8o5j2T8fD1xBVH1avT48=";
       })
+      # Fix build with Rust 1.91.0
+      # https://chromium-review.googlesource.com/c/chromium/src/+/6949745
+      (fetchpatch {
+        name = "Remove-unicode_width-from-rust-dependencies.patch";
+        url = "https://github.com/chromium/chromium/commit/0420449584e2afb7473393f536379efe194ba23c.patch";
+        hash = "sha256-2x1QoKkZEBfJw0hBjaErN/E47WrVfZvDngAXSIDzJs4=";
+      })
+      (fetchpatch {
+        name = "CrabbyAvif-Switch-from-no_sanitize-cfi-to-sanitize-cfi-off-1.patch";
+        url = "https://github.com/webmproject/CrabbyAvif/commit/4c70b98d1ebc8a210f2919be7ccabbcf23061cb5.patch";
+        extraPrefix = "third_party/crabbyavif/src/";
+        stripLen = 1;
+        hash = "sha256-E8/PmL+8+ZSoDO6L0/YOygIsliCDmcaBptXsi2L6ETQ=";
+      })
+      # backport of https://github.com/webmproject/CrabbyAvif/commit/3ba05863e84fd3acb4f4af2b4545221b317a2e55
+      ./CrabbyAvif-Switch-from-no_sanitize-cfi-to-sanitize-cfi-off-2.patch
+      # https://chromium-review.googlesource.com/c/chromium/src/+/6879484
+      (fetchpatch {
+        name = "crabbyavif-BUILD-gn-Temporarily-remove-disable_cfi-feature.patch";
+        url = "https://github.com/chromium/chromium/commit/e46275404d8f8a65ed84b3e583e9b78e4298acc7.patch";
+        hash = "sha256-2Dths53ervzCPKFbAVxeBHxtPHckxYhesJhaYZbxGSA=";
+      })
+      # https://chromium-review.googlesource.com/c/chromium/src/+/6960510
+      (fetchpatch {
+        name = "crabbyavif-BUILD-gn-Enable-disable_cfi-feature.patch";
+        url = "https://github.com/chromium/chromium/commit/9415f40bc6f853547f791e633be638c71368ce56.patch";
+        hash = "sha256-+M4gI77SoQ4dYIe/iGFgIwF1fS/6KQ8s16vj8ht/rik=";
+      })
     ];
 
   npmRoot = "third_party/node";

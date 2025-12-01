@@ -24,7 +24,7 @@
 
 let
   pname = "ansible";
-  version = "12.2.0";
+  version = "13.0.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -32,7 +32,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BWPf0z69KMr2zNx6bSKn/a+9nJxC/vyuUXlhalOjUhE=";
+    hash = "sha256-/Q9KKcPndhcBG5jYDkV5wx4dWPQJKNPo/V5DRpZnZ5c=";
   };
 
   # we make ansible-core depend on ansible, not the other way around,

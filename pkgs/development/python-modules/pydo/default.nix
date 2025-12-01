@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pydo";
-  version = "0.19.0";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "digitalocean";
     repo = "pydo";
     tag = "v${version}";
-    hash = "sha256-TF7fbOjmK1bGCftS0l54FX/Cunp4nWdBj5+IWlTg8dE=";
+    hash = "sha256-pCvJ8UY5hvmlUAQ3oMdnDVhK0x/5iFBpaw3/W9RV8Z0=";
   };
 
   build-system = [ poetry-core ];

@@ -5,7 +5,6 @@
   fetchFromGitLab,
   rustPlatform,
   symlinkJoin,
-
   # nativeBuildInputs
   blueprint-compiler,
   cargo,
@@ -18,7 +17,6 @@
   python3,
   rustc,
   wrapGAppsHook4,
-
   # buildInputs
   appstream-glib,
   cairo,
@@ -37,12 +35,10 @@
   sqlite,
   udev,
   wayland,
-
   # magpie wrapper
   addDriverRunpath,
   libGL,
   vulkan-loader,
-
   versionCheckHook,
 }:
 
@@ -129,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    cmake
     addDriverRunpath
     blueprint-compiler
     cargo
@@ -149,7 +146,6 @@ stdenv.mkDerivation (finalAttrs: {
     appstream-glib
     blueprint-compiler
     cairo
-    cmake
     dbus
     desktop-file-utils
     gdk-pixbuf

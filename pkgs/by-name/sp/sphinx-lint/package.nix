@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sphinx-lint";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sphinx-contrib";
     repo = "sphinx-lint";
     tag = "v${version}";
-    hash = "sha256-9xqGb/RdaySTys3gjIU0GJSqGOWXQQ/NeSRS8dmx5lg=";
+    hash = "sha256-Cg/14asXB1ivKSoGuLghne7kmQiXuimYTUqmdVqba6M=";
   };
 
   build-system = [

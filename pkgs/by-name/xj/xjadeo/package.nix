@@ -15,15 +15,15 @@
   xorg,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xjadeo";
-  version = "0.8.14-unstable-2025-09-30";
+  version = "0.8.15";
 
   src = fetchFromGitHub {
     owner = "x42";
     repo = "xjadeo";
-    rev = "88dbd570148f05956ce9dcc49d4957250d516c7c";
-    hash = "sha256-SFP1uYaPEN9eqB4xaN6V17OGQrOF4ZyBM8NiZ+tSuYY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/8CxOPDbtr82XuJwBH+Yta6SJB7bsujOPBGwbxrmjZc=";
   };
 
   nativeBuildInputs = [
@@ -62,4 +62,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ mitchmindtree ];
   };
-}
+})

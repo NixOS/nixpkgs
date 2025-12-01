@@ -33,7 +33,7 @@ buildPythonPackage rec {
     pytestCheckHook
     responses
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "upcloud_api" ];
 

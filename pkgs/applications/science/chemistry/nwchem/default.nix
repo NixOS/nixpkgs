@@ -23,6 +23,7 @@
 }:
 
 assert blas.isILP64 == lapack.isILP64;
+assert blas.isILP64 == scalapack.isILP64;
 
 let
   versionGA = "5.8.2"; # Fixed by nwchem
@@ -138,7 +139,7 @@ stdenv.mkDerivation rec {
     export BLAS_SIZE=${if blas.isILP64 then "8" else "4"}
     export USE_SCALAPACK="y"
     export SCALAPACK="-L${scalapack}/lib -lscalapack"
-    export SCALAPACK_SIZE="4"
+    export SCALAPACK_SIZE=${if scalapack.isILP64 then "8" else "4"}
 
     export LIBXC_INCLUDE="${lib.getDev libxc}/include"
     export LIBXC_MODDIR="${lib.getDev libxc}/include"

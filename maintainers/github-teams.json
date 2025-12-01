@@ -244,7 +244,6 @@
       "ofalvai": 1694986,
       "pasqui23": 6931743,
       "prusnak": 42201,
-      "pupbrained": 33522919,
       "reckenrode": 7413633,
       "ryand56": 22267679,
       "samrose": 115821,
@@ -253,6 +252,7 @@
       "sikmir": 688044,
       "siraben": 8219659,
       "siriobalmelli": 23038812,
+      "skulldogged": 33522919,
       "starcraft66": 1858154,
       "stepbrobd": 81826728,
       "stephank": 89950,
@@ -631,8 +631,7 @@
     "description": "Marketing team [leader=@djacu]",
     "id": 7709512,
     "maintainers": {
-      "djacu": 7043297,
-      "tomberek": 178444
+      "djacu": 7043297
     },
     "members": {
       "flyfloh": 74379,
@@ -695,11 +694,12 @@
     "description": "",
     "id": 174820,
     "maintainers": {
+      "Ericson2314": 1055245,
       "tomberek": 178444
     },
     "members": {
-      "Ericson2314": 1055245,
       "Mic92": 96200,
+      "Radvendii": 1239929,
       "edolstra": 1148549,
       "xokdvium": 145775305
     },

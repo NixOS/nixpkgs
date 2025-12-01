@@ -12,18 +12,19 @@
   libapparmor,
   libselinux,
   libseccomp,
+  writableTmpDirAsHomeHook,
   versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "buildah";
-  version = "1.42.0";
+  version = "1.42.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-40SYqPo4BUer0Mvw8ts8uPNAlfec8ma/TYRkvyFQczw=";
+    hash = "sha256-ABZe+Ei30o7vy156Fiux9r+B5PBSW8ECYpdwnwCn66k=";
   };
 
   outputs = [
@@ -69,8 +70,12 @@ buildGoModule (finalAttrs: {
   '';
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
   versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   meta = {
     description = "Tool which facilitates building OCI images";

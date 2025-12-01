@@ -214,11 +214,11 @@
       "dependency": "direct main",
       "description": {
         "name": "canvas_danmaku",
-        "sha256": "98fd90f257ffe93bd6a0bd857d92f40172767fc77ffb48b2379ac692e62150eb",
+        "sha256": "59018315feefe497dd6b5a5c8059a1c40a4849b985f273704acc2faf20cd0d98",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.2.7"
+      "version": "0.3.1"
     },
     "card_settings_ui": {
       "dependency": "direct main",
@@ -969,8 +969,8 @@
       "dependency": "direct main",
       "description": {
         "path": "media_kit",
-        "ref": "8c4b795d373243d1d64fea932ba497696fd89925",
-        "resolved-ref": "8c4b795d373243d1d64fea932ba497696fd89925",
+        "ref": "13a209a0af921d117be7f1aac6f9066949e39db9",
+        "resolved-ref": "13a209a0af921d117be7f1aac6f9066949e39db9",
         "url": "https://github.com/Predidit/media-kit.git"
       },
       "source": "git",
@@ -980,8 +980,8 @@
       "dependency": "direct overridden",
       "description": {
         "path": "libs/android/media_kit_libs_android_video",
-        "ref": "8c4b795d373243d1d64fea932ba497696fd89925",
-        "resolved-ref": "8c4b795d373243d1d64fea932ba497696fd89925",
+        "ref": "13a209a0af921d117be7f1aac6f9066949e39db9",
+        "resolved-ref": "13a209a0af921d117be7f1aac6f9066949e39db9",
         "url": "https://github.com/Predidit/media-kit.git"
       },
       "source": "git",
@@ -991,8 +991,8 @@
       "dependency": "direct overridden",
       "description": {
         "path": "libs/ios/media_kit_libs_ios_video",
-        "ref": "8c4b795d373243d1d64fea932ba497696fd89925",
-        "resolved-ref": "8c4b795d373243d1d64fea932ba497696fd89925",
+        "ref": "13a209a0af921d117be7f1aac6f9066949e39db9",
+        "resolved-ref": "13a209a0af921d117be7f1aac6f9066949e39db9",
         "url": "https://github.com/Predidit/media-kit.git"
       },
       "source": "git",
@@ -1002,8 +1002,8 @@
       "dependency": "direct overridden",
       "description": {
         "path": "libs/linux/media_kit_libs_linux",
-        "ref": "8c4b795d373243d1d64fea932ba497696fd89925",
-        "resolved-ref": "8c4b795d373243d1d64fea932ba497696fd89925",
+        "ref": "13a209a0af921d117be7f1aac6f9066949e39db9",
+        "resolved-ref": "13a209a0af921d117be7f1aac6f9066949e39db9",
         "url": "https://github.com/Predidit/media-kit.git"
       },
       "source": "git",
@@ -1013,8 +1013,8 @@
       "dependency": "direct overridden",
       "description": {
         "path": "libs/macos/media_kit_libs_macos_video",
-        "ref": "8c4b795d373243d1d64fea932ba497696fd89925",
-        "resolved-ref": "8c4b795d373243d1d64fea932ba497696fd89925",
+        "ref": "13a209a0af921d117be7f1aac6f9066949e39db9",
+        "resolved-ref": "13a209a0af921d117be7f1aac6f9066949e39db9",
         "url": "https://github.com/Predidit/media-kit.git"
       },
       "source": "git",
@@ -1024,8 +1024,8 @@
       "dependency": "direct main",
       "description": {
         "path": "libs/universal/media_kit_libs_video",
-        "ref": "8c4b795d373243d1d64fea932ba497696fd89925",
-        "resolved-ref": "8c4b795d373243d1d64fea932ba497696fd89925",
+        "ref": "13a209a0af921d117be7f1aac6f9066949e39db9",
+        "resolved-ref": "13a209a0af921d117be7f1aac6f9066949e39db9",
         "url": "https://github.com/Predidit/media-kit.git"
       },
       "source": "git",
@@ -1035,8 +1035,8 @@
       "dependency": "direct overridden",
       "description": {
         "path": "libs/windows/media_kit_libs_windows_video",
-        "ref": "8c4b795d373243d1d64fea932ba497696fd89925",
-        "resolved-ref": "8c4b795d373243d1d64fea932ba497696fd89925",
+        "ref": "13a209a0af921d117be7f1aac6f9066949e39db9",
+        "resolved-ref": "13a209a0af921d117be7f1aac6f9066949e39db9",
         "url": "https://github.com/Predidit/media-kit.git"
       },
       "source": "git",
@@ -1046,8 +1046,8 @@
       "dependency": "direct main",
       "description": {
         "path": "media_kit_video",
-        "ref": "8c4b795d373243d1d64fea932ba497696fd89925",
-        "resolved-ref": "8c4b795d373243d1d64fea932ba497696fd89925",
+        "ref": "13a209a0af921d117be7f1aac6f9066949e39db9",
+        "resolved-ref": "13a209a0af921d117be7f1aac6f9066949e39db9",
         "url": "https://github.com/Predidit/media-kit.git"
       },
       "source": "git",
@@ -1067,11 +1067,11 @@
       "dependency": "transitive",
       "description": {
         "name": "meta",
-        "sha256": "e3641ec5d63ebf0d9b41bd43201a66e3fc79a65db5f61fc181f04cd27aab950c",
+        "sha256": "23f08335362185a5ea2ad3a4e597f1375e78bce8a040df5c600c8d3552ef2394",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.16.0"
+      "version": "1.17.0"
     },
     "mime": {
       "dependency": "transitive",
@@ -1117,11 +1117,11 @@
       "dependency": "direct dev",
       "description": {
         "name": "msix",
-        "sha256": "bbb9b3ff4a9f8e7e7507b2a22dc0517fd1fe3db44e72de7ab052cb6b362406ee",
+        "sha256": "f88033fcb9e0dd8de5b18897cbebbd28ea30596810f4a7c86b12b0c03ace87e5",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.16.10"
+      "version": "3.16.12"
     },
     "nested": {
       "dependency": "transitive",
@@ -1414,7 +1414,7 @@
       "version": "4.0.1"
     },
     "screen_brightness_android": {
-      "dependency": "transitive",
+      "dependency": "direct main",
       "description": {
         "name": "screen_brightness_android",
         "sha256": "d34f5321abd03bc3474f4c381f53d189117eba0b039eac1916aa92cca5fd0a96",
@@ -1424,7 +1424,7 @@
       "version": "2.1.3"
     },
     "screen_brightness_ios": {
-      "dependency": "transitive",
+      "dependency": "direct main",
       "description": {
         "name": "screen_brightness_ios",
         "sha256": "2493953340ecfe8f4f13f61db50ce72533a55b0bbd58ba1402893feecf3727f5",
@@ -1442,16 +1442,6 @@
       },
       "source": "hosted",
       "version": "2.1.0"
-    },
-    "screen_pixel": {
-      "dependency": "direct main",
-      "description": {
-        "name": "screen_pixel",
-        "sha256": "b7310d81d98289ba1d6fb381ec95094b30b43ee1e901fefb65a3cf4de7d77e6b",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "0.0.3"
     },
     "screen_retriever": {
       "dependency": "transitive",
@@ -1783,11 +1773,11 @@
       "dependency": "transitive",
       "description": {
         "name": "test_api",
-        "sha256": "522f00f556e73044315fa4585ec3270f1808a4b186c936e612cab0b565ff1e00",
+        "sha256": "ab2726c1a94d3176a45960b6234466ec367179b87dd74f1611adb1f3b5fb9d55",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.7.6"
+      "version": "0.7.7"
     },
     "timing": {
       "dependency": "transitive",
@@ -2009,16 +1999,6 @@
       "source": "hosted",
       "version": "15.0.0"
     },
-    "volume_controller": {
-      "dependency": "transitive",
-      "description": {
-        "name": "volume_controller",
-        "sha256": "d75039e69c0d90e7810bfd47e3eedf29ff8543ea7a10392792e81f9bded7edf5",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "3.4.0"
-    },
     "wakelock_plus": {
       "dependency": "transitive",
       "description": {
@@ -2223,6 +2203,6 @@
   },
   "sdks": {
     "dart": ">=3.8.0 <4.0.0",
-    "flutter": ">=3.35.7"
+    "flutter": ">=3.38.1"
   }
 }

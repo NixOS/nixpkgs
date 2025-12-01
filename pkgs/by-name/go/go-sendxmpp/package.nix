@@ -3,7 +3,7 @@
   fetchFromGitLab,
   lib,
   nix-update-script,
-  testers,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -21,15 +21,19 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-fnaOgc8RPDQnxTWOLQx1kw0+qj1iaff+UkjnoJYdEG4=";
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
     updateScript = nix-update-script { };
   };
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Tool to send messages or files to an XMPP contact or MUC";
     homepage = "https://salsa.debian.org/mdosch/go-sendxmpp";
+    changelog = "https://salsa.debian.org/mdosch/go-sendxmpp/-/releases/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
       jpds

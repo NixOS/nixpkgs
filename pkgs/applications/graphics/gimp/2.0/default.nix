@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
+    "man"
   ];
 
   src = fetchurl {

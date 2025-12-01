@@ -22,6 +22,10 @@ stdenv.mkDerivation {
     hash = "sha256-9lZ7eBwmxZ33XNDJXQ2lbCcH5JyH0KoY1mj/g+2HOJs=";
   };
 
+  patches = [
+    ./cmake-minimum-required.patch
+  ];
+
   strictDeps = true;
 
   nativeBuildInputs = [

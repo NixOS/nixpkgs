@@ -21,7 +21,6 @@
 
   # tests
   bitsandbytes,
-  coverage,
   dvclive,
   lion-pytorch,
   lmdb,
@@ -89,7 +88,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     bitsandbytes
-    coverage
     dvclive
     lion-pytorch
     lmdb

@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "oberon-risc-emu";
-  version = "unstable-2020-08-18";
+  version = "2016.1-unstable-2020-08-18";
 
   src = fetchFromGitHub {
     owner = "pdewacht";

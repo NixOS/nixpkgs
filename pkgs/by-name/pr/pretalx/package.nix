@@ -4,7 +4,6 @@
   gettext,
   python3,
   fetchFromGitHub,
-  fetchPypi,
   plugins ? [ ],
   nixosTests,
 }:
@@ -13,42 +12,38 @@ let
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
-      django = prev.django_5_1;
+      django = prev.django_5_2;
 
-      django-csp = prev.django-csp.overridePythonAttrs rec {
-        version = "3.8";
-        src = fetchPypi {
-          inherit version;
-          pname = "django_csp";
-          hash = "sha256-7w8an32Nporm4WnALprGYcDs8E23Dg0dhWQFEqaEccA=";
-        };
-      };
-
-      django-extensions = prev.django-extensions.overridePythonAttrs {
-        # Compat issues with Django 5.1
-        # https://github.com/django-extensions/django-extensions/issues/1885
-        doCheck = false;
-      };
-
-      django-hierarkey = prev.django-hierarkey.overridePythonAttrs rec {
-        version = "1.2.1";
+      django-countries = prev.django-countries.overridePythonAttrs (oldAttrs: rec {
+        version = "8.1.0";
         src = fetchFromGitHub {
-          owner = "raphaelm";
-          repo = "django-hierarkey";
-          tag = version;
-          hash = "sha256-GkCNVovo2bDCp6m2GBvusXsaBhcmJkPNu97OdtsYROY=";
+          owner = "SmileyChris";
+          repo = "django-countries";
+          tag = "v${version}";
+          hash = "sha256-KtBFSkYNKwivCFlqlWm4idiMybqsqiV0SNZx3egLl6c=";
         };
-      };
+        build-system = with final; [ uv-build ];
+      });
+
+      django-tables2 = prev.django-tables2.overridePythonAttrs (oldAttrs: rec {
+        version = "2.7.0";
+        src = fetchFromGitHub {
+          owner = "jieter";
+          repo = "django-tables2";
+          tag = "v${version}";
+          hash = "sha256-Cb8XhCLqhc2Dx/5uAHnN9zTVL6/1+WekC4qTloBurzM=";
+        };
+      });
     };
   };
 
-  version = "2025.1.0";
+  version = "2025.2.0";
 
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx";
-    rev = "v${version}";
-    hash = "sha256-BlPmrfHbpsLI8DCldzoRudpf7T4SUpJXQA5h9o4Thek=";
+    tag = "v${version}";
+    hash = "sha256-em5bPKKlT3qUAv4zGGjOkjDPY7U8vbuqMZ8NQXwZg4k=";
   };
 
   meta = {
@@ -68,7 +63,7 @@ let
 
     sourceRoot = "${src.name}/src/pretalx/frontend/schedule-editor";
 
-    npmDepsHash = "sha256-8difCdoG7j75wqwuWA/VBRk9oTjsM0QqLnR0iLkd/FY=";
+    npmDepsHash = "sha256-voHiml0nFWZIST39D5ErB0xTiWAOHN9OZinYutuQcdg=";
 
     npmBuildScript = "build";
 
@@ -101,15 +96,14 @@ python.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = [
     "beautifulsoup4"
     "bleach"
-    "beautifulsoup4"
     "celery"
     "css_inline"
     "cssutils"
     "defusedcsv"
     "defusedxml"
-    "django-compressor"
     "django-csp"
     "django-filter"
+    "django-formset-js-improved"
     "django-i18nfield"
     "djangorestframework"
     "markdown"
@@ -128,13 +122,12 @@ python.pkgs.buildPythonApplication rec {
       beautifulsoup4
       bleach
       celery
-      csscompressor
       css-inline
       cssutils
       defusedcsv
       defusedxml
+      diff-match-patch
       django
-      django-compressor
       django-context-decorator
       django-countries
       django-csp
@@ -143,12 +136,12 @@ python.pkgs.buildPythonApplication rec {
       django-formtools
       django-hierarkey
       django-i18nfield
-      django-libsass
+      django-minify-html
       django-scopes
+      django-tables2
       djangorestframework
       drf-flex-fields
       drf-spectacular
-      libsass
       markdown
       pillow
       publicsuffixlist
@@ -220,7 +213,7 @@ python.pkgs.buildPythonApplication rec {
       pytestCheckHook
       responses
     ]
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+    ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # tries to run npm run i18n:extract

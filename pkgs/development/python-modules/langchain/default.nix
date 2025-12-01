@@ -21,6 +21,9 @@
   sqlalchemy,
   tenacity,
 
+  # runtime
+  runtimeShell,
+
   # tests
   blockbuster,
   freezegun,
@@ -53,6 +56,11 @@ buildPythonPackage rec {
   };
 
   sourceRoot = "${src.name}/libs/langchain_v1";
+
+  postPatch = ''
+    substituteInPlace langchain/agents/middleware/shell_tool.py \
+      --replace-fail '"/bin/bash"' '"${runtimeShell}"'
+  '';
 
   build-system = [ hatchling ];
 

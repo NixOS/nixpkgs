@@ -3,25 +3,21 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  wheel,
   cryptography,
   paho-mqtt,
   psutil,
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-cov,
 }:
 
 buildPythonPackage rec {
   pname = "pysrdaligateway";
-  version = "0.15.1";
+  version = "0.17.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maginawin";
     repo = "PySrDaliGateway";
     tag = "v${version}";
-    hash = "sha256-qPZxcGDSToFkkXBJKxo9OkcTBr4TZ9cFrcQwBTwKfy8=";
+    hash = "sha256-wqZ1lb0W5tTBiMxe5Yt9+tCMOH15QP8LDB2OlJRHtng=";
   };
 
   build-system = [ setuptools ];
@@ -34,9 +30,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "PySrDaliGateway" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  # upstream "relies on manual integration testing with physical DALI hardware"
+  doCheck = false;
 
   meta = {
     changelog = "https://github.com/maginawin/PySrDaliGateway/releases/tag/${src.tag}";

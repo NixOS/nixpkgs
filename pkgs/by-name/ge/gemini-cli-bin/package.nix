@@ -8,11 +8,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gemini-cli-bin";
-  version = "0.15.0";
+  version = "0.18.4";
 
   src = fetchurl {
     url = "https://github.com/google-gemini/gemini-cli/releases/download/v${finalAttrs.version}/gemini.js";
-    hash = "sha256-gtbG+KuVKiSwHPP4Mcpe2uK1twJGsyIzpdqoiJiPVzc=";
+    hash = "sha256-hKtmIGysnJ2zlpfpd6W2yA2OqPwQW2xdaND6jMe7lgs=";
   };
 
   dontUnpack = true;
@@ -25,6 +25,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -D "$src" "$out/bin/gemini"
+
+    # ideal method to disable auto-update
+    sed -i '/disableautoupdate: {/,/}/ s/default: false/default: true/' "$out/bin/gemini"
+
+    # disable auto-update for real because the default value in settingsschema isn't cleanly applied
+    # https://github.com/google-gemini/gemini-cli/issues/13569
+    substituteInPlace $out/bin/gemini \
+      --replace-fail "settings.merged.general?.disableUpdateNag" "(settings.merged.general?.disableUpdateNag ?? true)" \
+      --replace-fail "settings.merged.general?.disableAutoUpdate ?? false" "settings.merged.general?.disableAutoUpdate ?? true" \
+      --replace-fail "settings.merged.general?.disableAutoUpdate" "(settings.merged.general?.disableAutoUpdate ?? true)"
 
     runHook postInstall
   '';

@@ -9,6 +9,7 @@
   yq-go,
   _experimental-update-script-combinators,
   nix-update-script,
+  dart,
 }:
 
 let
@@ -27,7 +28,7 @@ flutter329.buildFlutterApplication {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = lib.importJSON ./gitHashes.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -74,7 +75,13 @@ flutter329.buildFlutterApplication {
         }
       )
       {
-        command = [ ./update-gitHashes.py ];
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
         supportedFeatures = [ ];
       }
     ];

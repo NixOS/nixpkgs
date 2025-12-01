@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgedit-gfls";
-  version = "0.3.0";
+  version = "0.3.1";
 
   outputs = [
     "out"
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gedit";
     repo = "libgedit-gfls";
     tag = finalAttrs.version;
-    hash = "sha256-X56QPcmNB0Ey+kzSqDnb6/j6/w7IU7MFSAxW8mX8I3w=";
+    hash = "sha256-HBXOphDvFwXea0mlfPqPtaXgNpAZyHYwuHBn5f7hPso=";
   };
 
   nativeBuildInputs = [

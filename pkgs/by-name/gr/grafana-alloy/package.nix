@@ -15,14 +15,14 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "grafana-alloy";
   version = "1.11.3";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "alloy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yO1r7GLXlD7f5Fpooit7SwkB7EB1hDO42o3BLvWY8Qo=";
   };
 
@@ -44,9 +44,9 @@ buildGoModule rec {
       "-s"
       "-w"
       # https://github.com/grafana/alloy/blob/3201389252d2c011bee15ace0c9f4cdbcb978f9f/Makefile#L110
-      "-X ${prefix}.Branch=v${version}"
-      "-X ${prefix}.Version=${version}"
-      "-X ${prefix}.Revision=v${version}"
+      "-X ${prefix}.Branch=v${finalAttrs.version}"
+      "-X ${prefix}.Version=${finalAttrs.version}"
+      "-X ${prefix}.Revision=v${finalAttrs.version}"
       "-X ${prefix}.BuildUser=nix"
       "-X ${prefix}.BuildDate=1970-01-01T00:00:00Z"
     ];
@@ -69,7 +69,7 @@ buildGoModule rec {
   );
 
   yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${src}/internal/web/ui/yarn.lock";
+    yarnLock = "${finalAttrs.src}/internal/web/ui/yarn.lock";
     hash = "sha256-oCDP2XJczLXgzEjyvFEIFBanlnzjrj0So09izG5vufs=";
   };
 
@@ -80,7 +80,7 @@ buildGoModule rec {
     export HOME=$NIX_BUILD_TOP/fake_home
 
     fixup-yarn-lock yarn.lock
-    yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+    yarn config --offline set yarn-offline-mirror ${finalAttrs.yarnOfflineCache}
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
 
     patchShebangs node_modules/
@@ -123,7 +123,7 @@ buildGoModule rec {
     tests = {
       inherit (nixosTests) alloy;
       version = testers.testVersion {
-        version = "v${version}";
+        version = "v${finalAttrs.version}";
         package = grafana-alloy;
       };
     };
@@ -134,7 +134,7 @@ buildGoModule rec {
       ];
     };
     # alias for nix-update to be able to find and update this attribute
-    offlineCache = yarnOfflineCache;
+    offlineCache = finalAttrs.yarnOfflineCache;
   };
 
   meta = with lib; {
@@ -142,7 +142,7 @@ buildGoModule rec {
     mainProgram = "alloy";
     license = licenses.asl20;
     homepage = "https://grafana.com/oss/alloy";
-    changelog = "https://github.com/grafana/alloy/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/grafana/alloy/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     maintainers = with maintainers; [
       azahi
       flokli
@@ -150,4 +150,4 @@ buildGoModule rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

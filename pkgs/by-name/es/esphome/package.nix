@@ -33,14 +33,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2025.10.5";
+  version = "2025.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = version;
-    hash = "sha256-o40zMoqgjBpkn80dUvr7mJQ/EtmIHEI/cf/E+wbBPOw=";
+    hash = "sha256-nu5sJkihCptZ3KSBE/8xR31yl7gnFQQdT+auLQ2qEw0=";
   };
 
   patches = [
@@ -64,10 +64,6 @@ python.pkgs.buildPythonApplication rec {
   pythonRemoveDeps = [
     "esptool"
     "platformio"
-    # esp-idf v5.1 uses esp-idf-kconfig instead:
-    # https://github.com/espressif/esp-idf/blob/release/v5.1/tools/requirements/requirements.core.txt#L15
-    # Can be removed once this pr is released: https://github.com/esphome/esphome/pull/11210
-    "kconfiglib"
   ];
 
   postPatch = ''
@@ -82,6 +78,7 @@ python.pkgs.buildPythonApplication rec {
   dependencies = with python.pkgs; [
     aioesphomeapi
     argcomplete
+    bleak
     cairosvg
     click
     colorama
@@ -137,7 +134,10 @@ python.pkgs.buildPythonApplication rec {
       pytest-mock
       pytestCheckHook
     ]
-    ++ [ versionCheckHook ];
+    ++ [
+      git
+      versionCheckHook
+    ];
 
   disabledTestPaths = [
     # platformio builds; requires networking for dependency resolution
@@ -172,6 +172,9 @@ python.pkgs.buildPythonApplication rec {
     "test_upload_using_esptool_with_file_path"
     # AssertionError: Expected 'run_external_command' to have been called once. Called 0 times.
     "test_run_platformio_cli_sets_environment_variables"
+    # Expects a full git clone
+    "test_clang_tidy_mode_full_scan"
+    "test_clang_tidy_mode_targeted_scan"
   ];
 
   versionCheckProgramArg = "--version";

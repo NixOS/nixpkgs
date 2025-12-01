@@ -7,6 +7,8 @@
   tzdata,
   wire,
   yarn-berry_4,
+  yarn-berry_4-fetcher,
+  buildPackages,
   python3,
   jq,
   moreutils,
@@ -19,7 +21,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "grafana";
-  version = "12.2.1";
+  version = "12.3.0";
 
   subPackages = [
     "pkg/cmd/grafana"
@@ -31,7 +33,7 @@ buildGoModule (finalAttrs: {
     owner = "grafana";
     repo = "grafana";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-fOlf+NTV1DIotC0JyG+PCMe8uPr+mfe/CLQP7dmRtkg=";
+    hash = "sha256-5DfPxsP8Lo8y8S44S/OkxOxWFL0JfAxPF7ZmT8FRPbw=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
@@ -44,14 +46,15 @@ buildGoModule (finalAttrs: {
   };
 
   missingHashes = ./missing-hashes.json;
-  offlineCache = yarn-berry_4.fetchYarnBerryDeps {
+  # Since this is not a dependency attribute the buildPackages has to be specified.
+  offlineCache = buildPackages.yarn-berry_4-fetcher.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-aXWi2hriPHm1Gsmd6Zg8eTR//KuI6SrvJAYhTeRZTug=";
+    hash = "sha256-CAEhdKsFMUuIs8DsJ9xSr2FRdBp4fPUWyvjC6FuiyG8=";
   };
 
   disallowedRequisites = [ finalAttrs.offlineCache ];
 
-  vendorHash = "sha256-TvKG/fUBure2wiZDVFD7dHGVDBl8gqWRkv2YBYNcIDQ=";
+  vendorHash = "sha256-qoku03G6lQlwTzm/UpnrEpPqIxJmPZAy8VJ/KfYXhHM=";
 
   # Grafana seems to just set it to the latest version available
   # nowadays.
@@ -69,17 +72,19 @@ buildGoModule (finalAttrs: {
 
   proxyVendor = true;
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   nativeBuildInputs = [
     wire
     jq
     moreutils
     removeReferencesTo
     # required to run old node-gyp
-    (python3.withPackages (ps: [ ps.distutils ]))
+    (python3.pythonOnBuildForHost.withPackages (ps: [ ps.distutils ]))
     faketty
     nodejs
     yarn-berry_4
-    yarn-berry_4.yarnBerryConfigHook
+    yarn-berry_4-fetcher.yarnBerryConfigHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
 
@@ -88,7 +93,7 @@ buildGoModule (finalAttrs: {
   overrideModAttrs = (
     old: {
       nativeBuildInputs = lib.filter (
-        x: lib.getName x != (lib.getName yarn-berry_4.yarnBerryConfigHook)
+        x: lib.getName x != (lib.getName buildPackages.yarn-berry_4-fetcher.yarnBerryConfigHook)
       ) old.nativeBuildInputs;
     }
   );
@@ -99,9 +104,14 @@ buildGoModule (finalAttrs: {
     wire gen -tags oss ./pkg/server
     wire gen -tags oss ./pkg/cmd/grafana-cli/runner
 
-    GOARCH= CGO_ENABLED=0 go generate ./kinds/gen.go
-    GOARCH= CGO_ENABLED=0 go generate ./public/app/plugins/gen.go
-
+    # ```
+    # go-1.25.4/share/go/pkg/tool/linux_amd64/link: running aarch64-unknown-linux-gnu-gcc failed: exit status 1
+    # aarch64-unknown-linux-gnu-gcc -m64 -s -o $WORK/b001/exe/gen -rdynamic /build/go-link-507658645/go.o
+    # aarch64-unknown-linux-gnu-gcc: error: unrecognized command-line option '-m64'
+    # ```
+    # Above log is due to https://github.com/golang/go/blob/b194f5d24a71e34f147c90e4351d80ac75be55de/src/cmd/cgo/gcc.go#L1763
+    CC="$CC_FOR_BUILD" LD="$CC_FOR_BUILD" GOOS= GOARCH= CGO_ENABLED=0 go generate ./kinds/gen.go
+    CC="$CC_FOR_BUILD" LD="$LD_FOR_BUILD" GOOS= GOARCH= CGO_ENABLED=0 go generate ./public/app/plugins/gen.go
   '';
 
   postBuild = ''

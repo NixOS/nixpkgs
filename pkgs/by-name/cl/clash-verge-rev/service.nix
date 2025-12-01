@@ -1,47 +1,47 @@
 {
-  version,
   rustPlatform,
-  src-service,
-  pkg-config,
-  openssl,
-  pname,
-  service-cargo-hash,
+  fetchFromGitHub,
   meta,
+  procps,
 }:
-rustPlatform.buildRustPackage {
-  pname = "${pname}-service";
-  inherit version meta;
 
-  src = src-service;
-  sourceRoot = "${src-service.name}";
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "clash-verge-service-ipc";
+  version = "2.0.21";
 
-  patches = [
-    # I want to keep these patches because it's not harmful.
-
-    # Patch: Restrict bin_path in spawn_process to be under the clash-verge-service directory.
-    # This prevents arbitrary code execution by ensuring only trusted binaries from the Nix store are allowed to run.
-    ./0001-core-validate-bin_path-to-prevent-RCE-in-start_clash.patch
-
-    # Patch: Add validation to prevent overwriting existing files.
-    # This mitigates arbitrary file overwrite risks by ensuring a file does not already exist before writing.
-    ./0002-core-prevent-overwriting-existing-file-by-validating.patch
-
-    # Patch: move IPC directory from /tmp to /run/clash-verge-rev/service.lock
-    # This allows we enable ProtectSystem="strict" and PrivateTmp
-    ./0003-IPC-move-path-to-run-clash-verge-rev-service.sock.patch
-  ];
-
-  nativeBuildInputs = [
-    pkg-config
-  ];
-
-  buildInputs = [
-    openssl
-  ];
-
-  env = {
-    OPENSSL_NO_VENDOR = 1;
+  src = fetchFromGitHub {
+    owner = "clash-verge-rev";
+    repo = "clash-verge-service-ipc";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-9c9fM1l31NbY//Ri50Ql60BWWgISjMWj72ABixRaXvM=";
   };
 
-  cargoHash = service-cargo-hash;
-}
+  postPatch = ''
+    # set socket path for service and test respectively
+    substituteInPlace src/lib.rs \
+      --replace-fail "/tmp/verge/clash-verge-service.sock" "/run/clash-verge-rev/service.sock" \
+      --replace-fail "/tmp/verge/clash-verge-service-test.sock" "$sourceRoot/clash-verge-service-test.sock"
+    substituteInPlace tests/test_start_permissions.rs \
+      --replace-fail "owner_perm | group_perm | other_perm" "0o0755"
+  '';
+
+  cargoHash = "sha256-UbNN3uFu5anQV+3KMFPNnGrCDQTGb4uC9K83YghfQgY=";
+
+  buildFeatures = [
+    "standalone"
+  ];
+
+  nativeCheckInputs = [
+    procps
+  ];
+  # build mock_binary for tests
+  preCheck = ''
+    cargo build --features=test
+  '';
+  checkFeatures = [
+    "standalone"
+    "test"
+    "client"
+  ];
+  inherit meta;
+})

@@ -73,25 +73,6 @@ let
     '';
   });
 
-  # local revert of 58daf511687f191829238fc7f571e08dc9dedf56,
-  # working around https://github.com/google/or-tools/issues/4911
-  highs' = highs.overrideAttrs (old: rec {
-    version = "1.10.0";
-    src = fetchFromGitHub {
-      owner = "ERGO-Code";
-      repo = "HiGHS";
-      rev = "v${version}";
-      hash = "sha256-CzHE2d0CtScexdIw95zHKY1Ao8xFodtfSNNkM6dNCac=";
-    };
-    # CMake Error in CMakeLists.txt:
-    #   Imported target "highs::highs" includes non-existent path
-    #     "/include"
-    #   in its INTERFACE_INCLUDE_DIRECTORIES.
-    postPatch = ''
-      sed -i "/CMAKE_CUDA_PATH/d" src/CMakeLists.txt
-    '';
-  });
-
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "or-tools";
@@ -123,6 +104,13 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       url = "https://github.com/google/or-tools/commit/8442c7b1c219b0c8d58ee96d266d81b7c3a19ad2.patch";
       hash = "sha256-HrV9wU3PFMdb3feGt8i5UJNgHuitMRBF9cNrH5RRENQ=";
+    })
+    # Fix compatibility with highs 1.12.0
+    # https://github.com/google/or-tools/issues/4911
+    (fetchpatch {
+      url = "https://github.com/google/or-tools/commit/6c7c1e7cb5bab2701e5b3b00c0f8397273654d2b.patch";
+      includes = [ "ortools/math_opt/solvers/highs_solver_test.cc" ];
+      hash = "sha256-/dFk/F/3/BwH5IwIwNU4Ua+4sROPXYCjO8R6jpoZpgo=";
     })
   ];
 
@@ -185,7 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
     glpk
     gbenchmark
     gtest
-    highs'
+    highs
     python3.pkgs.absl-py
     pybind11'
     pybind11-abseil'
@@ -199,7 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   propagatedBuildInputs = [
     abseil-cpp'
-    highs'
+    highs
     protobuf'
     python-protobuf'
     python3.pkgs.immutabledict

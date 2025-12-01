@@ -139,7 +139,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/modules/system/boot/loader/systemd-boot      @JulienMalka
 
 # Limine
-/nixos/modules/system/boot/loader/limine        @lzcunt @phip1611 @programmerlexi @johnrtitor
+/nixos/modules/system/boot/loader/limine        @lzcunt @programmerlexi @johnrtitor
 /nixos/tests/limine                             @johnrtitor
 
 # Images and installer media

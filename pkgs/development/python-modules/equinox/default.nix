@@ -57,6 +57,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlags = [
+    # DeprecationWarning: The default axis_types will change in JAX v0.9.0 to jax.sharding.AxisType.Explicit.
+    "-Wignore::DeprecationWarning"
+  ];
+
   disabledTests = [
     # Failed: DID NOT WARN. No warnings of type (<class 'Warning'>,) were emitted.
     "test_jax_transform_warn"

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyais";
-  version = "2.13.2";
+  version = "2.13.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "M0r13n";
     repo = "pyais";
     tag = "v${version}";
-    hash = "sha256-CLsUVARpyxOshvrHY+NoVi0HSvn1R02jDnMqn0sRGgM=";
+    hash = "sha256-GtM4jUtGZ49NlfZZ8Ji6fErtuFBlnOKXvN8OIshUOBM=";
   };
 
   __darwinAllowLocalNetworking = true;

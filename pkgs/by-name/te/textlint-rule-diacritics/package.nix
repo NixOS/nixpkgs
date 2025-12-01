@@ -21,6 +21,8 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
+  dontCheckForBrokenSymlinks = true;
+
   passthru.tests = textlint.testPackages {
     rule = textlint-rule-diacritics;
     testFile = ./test.md;

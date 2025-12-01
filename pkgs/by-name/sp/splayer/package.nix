@@ -12,14 +12,14 @@
 }:
 stdenv.mkDerivation (final: {
   pname = "splayer";
-  version = "3.0.0-beta.4";
+  version = "3.0.0-beta.5";
 
   src = fetchFromGitHub {
     owner = "imsyy";
     repo = "SPlayer";
     tag = "v${final.version}";
     fetchSubmodules = false;
-    hash = "sha256-q8Iy8jkLvxOs5ejjORL20cJ51QCYBS4cfX+6DZbIdEM=";
+    hash = "sha256-glYq0rHEV2xWoKznpMIU6klUxk1lXYOq4TBRuyTQgOM=";
   };
 
   pnpm = pnpm_10;

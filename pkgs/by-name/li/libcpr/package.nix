@@ -4,11 +4,12 @@
   fetchFromGitHub,
   cmake,
   curl,
+  pkg-config,
   staticOnly ? stdenv.hostPlatform.isStatic,
 }:
 
 let
-  version = "1.12.0";
+  version = "1.14.1";
 in
 stdenv.mkDerivation {
   pname = "libcpr";
@@ -23,16 +24,19 @@ stdenv.mkDerivation {
     owner = "libcpr";
     repo = "cpr";
     rev = version;
-    hash = "sha256-OkOyh2ibt/jX/Dc+TB1uSlWtzEhdSQwHVN96oCOh2yM=";
+    hash = "sha256-kwbkdAeTpkEJbzvqpUQx007ZIBtwqOPG8n41TvFxeiM=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   propagatedBuildInputs = [ curl ];
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=${if staticOnly then "OFF" else "ON"}"
-    "-DCPR_USE_SYSTEM_CURL=ON"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!staticOnly))
+    (lib.cmakeBool "CPR_USE_SYSTEM_CURL" true)
   ];
 
   postPatch = ''
@@ -42,15 +46,18 @@ stdenv.mkDerivation {
 
   postInstall = ''
     substituteInPlace "$out/lib/cmake/cpr/cprTargets.cmake" \
-      --replace "_IMPORT_PREFIX \"$out\"" \
-                "_IMPORT_PREFIX \"$dev\""
+      --replace-fail "_IMPORT_PREFIX \"$out\"" \
+                     "_IMPORT_PREFIX \"$dev\""
   '';
 
   meta = with lib; {
     description = "C++ wrapper around libcurl";
     homepage = "https://docs.libcpr.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ rycee ];
+    maintainers = with maintainers; [
+      phodina
+      rycee
+    ];
     platforms = platforms.all;
   };
 }

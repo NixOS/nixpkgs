@@ -12,6 +12,7 @@
   django,
   django-filter,
   django-modelcluster,
+  django-modelsearch,
   django-taggit,
   django-tasks,
   django-treebeard,
@@ -31,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "wagtail";
-  version = "7.1.1";
+  version = "7.2";
   pyproject = true;
 
   # The GitHub source requires some assets to be compiled, which in turn
@@ -39,7 +40,7 @@ buildPythonPackage rec {
   # until https://github.com/wagtail/wagtail/pull/13136 gets merged.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-e90eWww0VDeYXAHwp/YKYX5114jzfH2DlVj05qElGvk=";
+    hash = "sha256-ijnfkIvWSrAp4IvxkfR19UzJFPhKpB6a55tBv0HVXsM=";
   };
 
   build-system = [
@@ -54,6 +55,7 @@ buildPythonPackage rec {
     django
     django-filter
     django-modelcluster
+    django-modelsearch
     django-taggit
     django-tasks
     django-treebeard

@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "2.7.4";
+  version = "2.7.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meshtastic";
     repo = "python";
     tag = version;
-    hash = "sha256-fIr80k++BwA3UFgeS9Fgq6fpOOIcK4jj7bjfjqkc6ug=";
+    hash = "sha256-Vc8m5qc2vKQ4ZwP/TQWJhottBANqEaSUNFCbCNPmQnI=";
   };
 
   pythonRelaxDeps = [
@@ -91,7 +91,7 @@ buildPythonPackage rec {
     hypothesis
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     export PATH="$PATH:$out/bin";

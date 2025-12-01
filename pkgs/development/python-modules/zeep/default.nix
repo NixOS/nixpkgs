@@ -76,7 +76,7 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-mock
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Failed: External connections not allowed during tests.

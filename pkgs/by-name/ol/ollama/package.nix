@@ -32,6 +32,7 @@
   ollama,
   ollama-rocm,
   ollama-cuda,
+  ollama-vulkan,
 
   config,
   # one of `[ null false "rocm" "cuda" "vulkan" ]`
@@ -119,6 +120,7 @@ let
   ]
   ++ lib.optionals enableVulkan [
     "--suffix LD_LIBRARY_PATH : '${lib.makeLibraryPath (map lib.getLib vulkanLibs)}'"
+    "--set-default OLLAMA_VULKAN : '1'"
   ];
   wrapperArgs = builtins.concatStringsSep " " wrapperOptions;
 
@@ -136,16 +138,16 @@ in
 goBuild (finalAttrs: {
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.12.9";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D61jCyOUYXyPgztgEAFHd2oL5IXsO5TnE2AGEHOnows=";
+    hash = "sha256-VhBPYf/beWkeFCdBTC2UpxqQUgEX8TCkbiWBPg8gDb4=";
   };
 
-  vendorHash = "sha256-SlaDsu001TUW+t9WRp7LqxUSQSGDF1Lqu9M1bgILoX4=";
+  vendorHash = "sha256-rKRRcwmon/3K2bN7iQaMap5yNYKMCZ7P0M1C2hv4IlQ=";
 
   env =
     lib.optionalAttrs enableRocm {
@@ -228,12 +230,8 @@ goBuild (finalAttrs: {
   '';
 
   postFixup =
-    # the app doesn't appear functional at the moment, so hide it
-    ''
-      mv "$out/bin/app" "$out/bin/.ollama-app"
-    ''
     # expose runtime libraries necessary to use the gpu
-    + lib.optionalString (enableRocm || enableCuda) ''
+    lib.optionalString (enableRocm || enableCuda) ''
       wrapProgram "$out/bin/ollama" ${wrapperArgs}
     '';
 
@@ -272,10 +270,11 @@ goBuild (finalAttrs: {
       inherit ollama;
     }
     // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      inherit ollama-rocm ollama-cuda;
+      inherit ollama-rocm ollama-cuda ollama-vulkan;
       service = nixosTests.ollama;
       service-cuda = nixosTests.ollama-cuda;
       service-rocm = nixosTests.ollama-rocm;
+      service-vulkan = nixosTests.ollama-vulkan;
     };
   }
   // lib.optionalAttrs (!enableRocm && !enableCuda) { updateScript = nix-update-script { }; };

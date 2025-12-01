@@ -2,12 +2,16 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  nix-update-script,
 
   # buildInputs
   buildbox,
   fuse3,
   lzip,
   patch,
+
+  # nativeBuildInputs
+  installShellFiles,
 
   # tests
   addBinToPathHook,
@@ -61,6 +65,10 @@ python3Packages.buildPythonApplication rec {
     python3Packages.buildstream-plugins
   ];
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   buildInputs = [
     fuse3
     lzip
@@ -84,9 +92,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   disabledTests = [
-    # ValueError: Unexpected comparison between all and ''
-    "test_help"
-
     # Error loading project: project.conf [line 37 column 2]: Failed to load source-mirror plugin 'mirror': No package metadata was found for sample-plugins
     "test_source_mirror_plugin"
 
@@ -109,8 +114,16 @@ python3Packages.buildPythonApplication rec {
     "tests/internals/cascache.py"
   ];
 
+  postInstall = ''
+    installShellCompletion --cmd bst \
+      --bash src/buildstream/data/bst \
+      --zsh src/buildstream/data/zsh/_bst
+  '';
+
   versionCheckProgram = "${placeholder "out"}/bin/bst";
   versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Powerful software integration tool";

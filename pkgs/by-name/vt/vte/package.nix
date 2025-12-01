@@ -34,11 +34,12 @@
   nixosTests,
   blackbox-terminal,
   darwinMinVersionHook,
+  withApp ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vte";
-  version = "0.82.1";
+  version = "0.82.2";
 
   outputs = [
     "out"
@@ -48,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/vte/${lib.versions.majorMinor finalAttrs.version}/vte-${finalAttrs.version}.tar.xz";
-    hash = "sha256-eTdtcEAtJx4tOEJEGOGupyNXk00nLjIeOQa3Fwanjjo=";
+    hash = "sha256-4Slar8RoKztVDxI13CZ5uqD3FXDY7VQ8ABwSg9UwvpE=";
   };
 
   patches = [
@@ -59,6 +60,18 @@ stdenv.mkDerivation (finalAttrs: {
       name = "0001-Add-W_EXITCODE-macro-for-non-glibc-systems.patch";
       url = "https://git.alpinelinux.org/aports/plain/community/vte3/fix-W_EXITCODE.patch?id=4d35c076ce77bfac7655f60c4c3e4c86933ab7dd";
       hash = "sha256-FkVyhsM0mRUzZmS2Gh172oqwcfXv6PyD6IEgjBhy2uU=";
+    })
+
+    # https://gitlab.gnome.org/GNOME/vte/-/merge_requests/11
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/vte/-/commit/f672ed15a88dd3e25c33aa0a5ef6f6d291a6d5c7.patch";
+      hash = "sha256-JdLDild5j7marvR5n2heW9YD00+bwzJIoxDlzO5r/6w=";
+    })
+
+    (fetchpatch {
+      name = "qemu-backspace.patch";
+      url = "https://gitlab.gnome.org/GNOME/vte/-/commit/79d5fea437185e52a740130d5a276b83dfdcd558.patch";
+      hash = "sha256-28Cehw5uJuGG7maLGUl1TBwfIwuXpkLKSQ2lXauLlz0=";
     })
   ];
 
@@ -107,11 +120,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Ddocs=true"
+    (lib.mesonBool "app" withApp)
     (lib.mesonBool "gtk3" (gtkVersion == "3"))
     (lib.mesonBool "gtk4" (gtkVersion == "4"))
-  ]
-  ++ lib.optionals (!systemdSupport) [
-    "-D_systemd=false"
+    (lib.mesonBool "_systemd" (!systemdSupport))
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # -Bsymbolic-functions is not supported on darwin
@@ -125,11 +137,11 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   postPatch = ''
-    patchShebangs perf/*
-    patchShebangs src/app/meson_desktopfile.py
-    patchShebangs src/parser-seq.py
-    patchShebangs src/minifont-coverage.py
-    patchShebangs src/modes.py
+    patchShebangs perf/* \
+      src/app/meson_desktopfile.py \
+      src/parser-seq.py \
+      src/minifont-coverage.py \
+      src/modes.py
   '';
 
   postFixup = ''
@@ -154,7 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
         termite
         xfce4-terminal
         ;
-      blackbox-terminal = blackbox-terminal.override { sixelSupport = true; };
+      inherit blackbox-terminal;
     };
   };
 

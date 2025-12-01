@@ -2,6 +2,7 @@
   cmake,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   ninja,
   sdl3,
   stdenv,
@@ -71,7 +72,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  patches = [ ./find-headers.patch ];
+  patches = [
+    ./find-headers.patch
+
+    # https://github.com/libsdl-org/sdl2-compat/pull/545
+    (fetchpatch2 {
+      url = "https://github.com/libsdl-org/sdl2-compat/commit/b799076c72c2492224e81544f58f92b737cccbd3.patch?full_index=1";
+      hash = "sha256-fAc8yBlT+XFHDKcF4MFgBAz2WtXGmhYzNNrjaGSr+do=";
+    })
+  ];
   setupHook = ./setup-hook.sh;
 
   postFixup = ''

@@ -93,6 +93,7 @@ python.pkgs.buildPythonApplication rec {
     "mashumaro"
     "orjson"
     "pillow"
+    "podcastparser"
     "xmltodict"
     "zeroconf"
   ];
@@ -153,7 +154,7 @@ python.pkgs.buildPythonApplication rec {
       syrupy
       pytest-timeout
     ]
-    ++ lib.flatten (lib.attrValues optional-dependencies)
+    ++ lib.concatAttrValues optional-dependencies
     ++ (providerPackages.jellyfin python.pkgs)
     ++ (providerPackages.opensubsonic python.pkgs);
 

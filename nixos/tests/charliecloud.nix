@@ -15,6 +15,7 @@ in
   name = "charliecloud";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ bzizou ];
+    broken = true;
   };
 
   nodes = {

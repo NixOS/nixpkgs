@@ -33,25 +33,19 @@
 
 buildPythonPackage rec {
   pname = "langchain-openai";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-openai==${version}";
-    hash = "sha256-lKZZw9kMV3oM7fNpVvofZJfOcyoUdqByWQmBV5MTFZo=";
+    hash = "sha256-dmuDgKQW1yAz/8tjQx7LaUiuz5Sh4cAyd9nt33mCPbI=";
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
 
   build-system = [ hatchling ];
-
-  pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
-  ];
 
   dependencies = [
     langchain-core
@@ -85,11 +79,7 @@ buildPythonPackage rec {
     "test_embed_documents_with_custom_chunk_size"
     "test_get_num_tokens_from_messages"
     "test_get_token_ids"
-    "test_init_o1"
-
-    # TypeError: exceptions must be derived from Warning, not <class 'NoneType'>
-    # https://github.com/langchain-ai/langchain/issues/33705
-    "test_init_minimal_reasoning_effort"
+    "test_embeddings_respects_token_limit"
   ];
 
   pythonImportsCheck = [ "langchain_openai" ];

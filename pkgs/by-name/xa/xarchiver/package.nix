@@ -17,6 +17,8 @@
   bzip2,
   gzip,
   lhasa,
+  xz,
+  zstd,
   wrapGAppsHook3,
   desktopToDarwinBundle,
 }:
@@ -58,6 +60,8 @@ stdenv.mkDerivation rec {
         bzip2
         gzip
         lhasa
+        xz
+        zstd
         coreutils
       ]
     }

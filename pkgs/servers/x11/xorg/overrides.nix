@@ -122,14 +122,6 @@ self: super:
     };
   });
 
-  fontmiscmisc = super.fontmiscmisc.overrideAttrs (attrs: {
-    postInstall = ''
-      ALIASFILE=${xorg.fontalias}/share/fonts/X11/misc/fonts.alias
-      test -f $ALIASFILE
-      cp $ALIASFILE $out/lib/X11/fonts/misc/fonts.alias
-    '';
-  });
-
   fonttosfnt = super.fonttosfnt.overrideAttrs (attrs: {
     meta = attrs.meta // {
       license = lib.licenses.mit;
@@ -789,38 +781,6 @@ self: super:
 
   xwd = addMainProgram super.xwd { };
 }
-
-# mark some packages as unfree
-// (
-  let
-    # unfree but redistributable
-    redist = [
-      "fontibmtype1"
-    ];
-
-    # unfree, possibly not redistributable
-    unfree = [
-      # no license, just a copyright notice
-      "fontdaewoomisc"
-
-      # unclear license, "permission to use"?
-      "fontjismisc"
-    ];
-
-    setLicense =
-      license: name:
-      super.${name}.overrideAttrs (attrs: {
-        meta = attrs.meta // {
-          inherit license;
-        };
-      });
-    mapNamesToAttrs =
-      f: names: lib.listToAttrs (lib.zipListsWith lib.nameValuePair names (map f names));
-
-  in
-  mapNamesToAttrs (setLicense lib.licenses.unfreeRedistributable) redist
-  // mapNamesToAttrs (setLicense lib.licenses.unfree) unfree
-)
 
 # deprecate some packages
 // lib.optionalAttrs config.allowAliases {

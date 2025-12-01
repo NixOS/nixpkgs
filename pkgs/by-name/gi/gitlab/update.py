@@ -112,7 +112,7 @@ class GitLabRepo:
             version=self.rev2version(rev),
             repo_hash=self.get_git_hash(rev),
             yarn_hash=self.get_yarn_hash(rev),
-            frontend_islands_yarn_hash=self.get_yarn_hash(rev, "/ee/frontend_islands/apps/duo_next/yarn.lock"),
+            frontend_islands_yarn_hash=self.get_yarn_hash(rev, "/ee/frontend_islands/yarn.lock"),
             owner=self.owner,
             repo=self.repo,
             rev=rev,

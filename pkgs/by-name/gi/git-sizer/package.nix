@@ -35,7 +35,7 @@ buildGoModule rec {
     description = "Compute various size metrics for a Git repository";
     homepage = "https://github.com/github/git-sizer";
     license = licenses.mit;
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = [ ];
     mainProgram = "git-sizer";
   };
 }

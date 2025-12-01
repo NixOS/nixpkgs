@@ -210,7 +210,7 @@ in
               root * ${cfg.ui.package}/dist
               file_server
             }
-            handle_path /static/${cfg.ui.package.passthru.commit_sha}/* {
+            handle_path /static/${cfg.ui.package.version}/* {
               root * ${cfg.ui.package}/dist
               file_server
             }

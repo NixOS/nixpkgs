@@ -67,7 +67,7 @@ buildPythonPackage rec {
       ratelimit
     ];
     avro = [ fastavro ];
-    all = lib.flatten (lib.attrValues (lib.removeAttrs optional-dependencies [ "all" ]));
+    all = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "all" ]);
   };
 
   nativeCheckInputs = [

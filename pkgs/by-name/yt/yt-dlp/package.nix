@@ -1,14 +1,16 @@
 {
   lib,
   python3Packages,
+  atomicparsley,
+  deno,
   fetchFromGitHub,
   ffmpeg-headless,
-  rtmpdump,
-  atomicparsley,
-  pandoc,
   installShellFiles,
+  pandoc,
+  rtmpdump,
   atomicparsleySupport ? true,
   ffmpegSupport ? true,
+  javascriptSupport ? true,
   rtmpSupport ? true,
   withAlias ? false, # Provides bin/youtube-dl for backcompat
   nix-update-script,
@@ -19,14 +21,14 @@ python3Packages.buildPythonApplication rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2025.10.22";
+  version = "2025.11.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yt-dlp";
     repo = "yt-dlp";
     tag = version;
-    hash = "sha256-jQaENEflaF9HzY/EiMXIHgUehAJ3nnDT9IbaN6bDcac=";
+    hash = "sha256-Em8FLcCizSfvucg+KPuJyhFZ5MJ8STTjSpqaTD5xeKI=";
   };
 
   postPatch = ''
@@ -46,7 +48,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   # expose optional-dependencies, but provide all features
-  dependencies = lib.flatten (lib.attrValues optional-dependencies);
+  dependencies = lib.concatAttrValues optional-dependencies;
 
   optional-dependencies = {
     default = with python3Packages; [
@@ -57,6 +59,7 @@ python3Packages.buildPythonApplication rec {
       requests
       urllib3
       websockets
+      yt-dlp-ejs # keep pinned version in sync!
     ];
     curl-cffi = [ python3Packages.curl-cffi ];
     secretstorage = with python3Packages; [
@@ -84,14 +87,15 @@ python3Packages.buildPythonApplication rec {
 
   # Ensure these utilities are available in $PATH:
   # - ffmpeg: post-processing & transcoding support
+  # - deno: required for full YouTube support (since 2025.11.12)
   # - rtmpdump: download files over RTMP
   # - atomicparsley: embedding thumbnails
   makeWrapperArgs =
     let
       packagesToBinPath =
-        [ ]
-        ++ lib.optional atomicparsleySupport atomicparsley
+        lib.optional atomicparsleySupport atomicparsley
         ++ lib.optional ffmpegSupport ffmpeg-headless
+        ++ lib.optional javascriptSupport deno
         ++ lib.optional rtmpSupport rtmpdump;
     in
     lib.optionals (packagesToBinPath != [ ]) [
@@ -121,11 +125,13 @@ python3Packages.buildPythonApplication rec {
     ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://github.com/yt-dlp/yt-dlp/blob/${version}/Changelog.md";
-    description = "Command-line tool to download videos from YouTube.com and other sites (youtube-dl fork)";
+    description = "Feature-rich command-line audio/video downloader";
     homepage = "https://github.com/yt-dlp/yt-dlp/";
     license = lib.licenses.unlicense;
     longDescription = ''

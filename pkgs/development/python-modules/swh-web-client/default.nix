@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "swh-web-client";
-  version = "0.9.1";
+  version = "0.9.2";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -29,12 +29,17 @@ buildPythonPackage rec {
     owner = "devel";
     repo = "swh-web-client";
     tag = "v${version}";
-    hash = "sha256-JTVu3fCYEDMWAqGwK+0a2AVyJv5DSGfItEss9CbzsRg=";
+    hash = "sha256-ZZptYLC1os2i0NtBD3mp4QaQQRoKxnr9k8gJuqmpizE=";
   };
 
   build-system = [
     setuptools
     setuptools-scm
+  ];
+
+  pythonRelaxDeps = [
+    # we patched click 8.2.1
+    "click"
   ];
 
   dependencies = [

@@ -37,7 +37,7 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   meta = with lib; {
     description = "Python helpers for common CLI tasks";

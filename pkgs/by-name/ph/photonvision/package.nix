@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/PhotonVision/photonvision/releases/download/v${version}/photonvision-v${version}-linuxarm64.jar";
-        hash = "sha256-mNQk8gaTASsmyJUpLLIbG7QRMjbdSN2LMCXx6j3gbCU=";
+        hash = "sha256-YG9wyh+MCsv/RBdiFvgrF6Fw/6AnN7OEi4ofkMptfT0=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");

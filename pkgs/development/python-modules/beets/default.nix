@@ -484,9 +484,9 @@ buildPythonPackage rec {
     homepage = "https://beets.io";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      astratagem
       doronbehar
       lovesegfault
-      montchr
       pjones
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
