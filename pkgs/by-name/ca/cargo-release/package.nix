@@ -53,6 +53,7 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [
       gerschtli
+      progrm_jarvis
     ];
   };
 }
