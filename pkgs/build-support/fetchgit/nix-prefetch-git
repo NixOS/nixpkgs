@@ -12,6 +12,7 @@ fetchSubmodules=
 fetchLFS=
 builder=
 fetchTags=
+declare -A tagsToFetch=()
 branchName=$NIX_PREFETCH_GIT_BRANCH_NAME
 
 # ENV params
@@ -57,7 +58,10 @@ Options:
       --leave-dotGit  Keep the .git directories.
       --fetch-lfs     Fetch git Large File Storage (LFS) files.
       --fetch-submodules Fetch submodules.
-      --fetch-tags    Fetch all tags (useful for git describe).
+      --fetch-submodule-tag subpath tag
+          Fetch a tag for a submodule or the main repo, useful for reproducible \`git describe'.
+      --fetch-tag     Fetch the specified tag for the main repo, equivalent to \`--fetch-submodule-tag "" tag'.
+      --fetch-tags    Fetch all tags. This option is less reproducible than \`--fetch-submodule-tag'.
       --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
       --no-add-path   Do not actually add the contents of the git repo to the store.
       --root-dir dir  Directory in the repository that will be copied to the output instead of the full repository.
@@ -73,6 +77,7 @@ clean_git(){
 
 argi=0
 argfun=""
+preserve_argfun=""
 for arg; do
     if test -z "$argfun"; then
         case $arg in
@@ -90,6 +95,8 @@ for arg; do
             --leave-dotGit) leaveDotGit=true;;
             --fetch-lfs) fetchLFS=true;;
             --fetch-submodules) fetchSubmodules=true;;
+            --fetch-submodule-tag) argfun=add_submodule_tag_key;;
+            --fetch-tag) argfun=add_main_tag;;
             --fetch-tags) fetchTags=true;;
             --builder) builder=true;;
             --no-add-path) noAddPath=true;;
@@ -111,8 +118,24 @@ for arg; do
                 var=${argfun#set_}
                 eval "$var=$(printf %q "$arg")"
                 ;;
+            add_submodule_tag_key)
+                argfun=add_submodule_tag_value_$arg
+                preserve_argfun=1
+                ;;
+            add_submodule_tag_value_*)
+                key=${argfun#add_submodule_tag_value_}
+                key="/${key#/}"
+                tagsToFetch[$key]="${tagsToFetch[$key]-}${tagsToFetch[$key]:+ } $arg"
+                ;;
+            add_main_tag)
+                key="/"
+                tagsToFetch[$key]="${tagsToFetch[$key]-}${tagsToFetch[$key]:+ } $arg"
+                ;;
         esac
-        argfun=""
+        if [[ -z "$preserve_argfun" ]]; then
+            argfun=""
+        fi
+        preserve_argfun=""
     fi
 done
 
@@ -293,6 +316,14 @@ clone(){
         init_submodules
     fi
 
+    for key in "${!tagsToFetch[@]}"; do
+        subpath="${key#/}"
+        echo "fetching specified tags${subpath:+ at submodule $subpath}..." >&2
+        for tagToFetch in ${tagsToFetch[$key]}; do
+            clean_git -C "$subpath" fetch origin "refs/tags/$tagToFetch:refs/tags/$tagToFetch" || echo "warning: failed to fetch tag $tagToFetch" >&2
+        done
+    done
+
     if [ -z "$builder" ] && [ -f .topdeps ]; then
         if tg help &>/dev/null; then
             echo "populating TopGit branches..."
@@ -448,6 +479,21 @@ json_escape() {
     echo "$s"
 }
 
+json_list() {
+    local result=
+    local arg
+    for arg; do
+        if [[ -n "$isFirst" ]]; then
+            result="$result, "
+        else
+            result="["
+        fi
+        result="$result\"$(json_escape "$arg")\""
+    done
+    result="$result]"
+    echo "$result"
+}
+
 print_results() {
     hash="$1"
     if ! test -n "$QUIET"; then
@@ -474,7 +520,23 @@ print_results() {
   "fetchLFS": $([[ -n "$fetchLFS" ]] && echo true || echo false),
   "fetchSubmodules": $([[ -n "$fetchSubmodules" ]] && echo true || echo false),
   "deepClone": $([[ -n "$deepClone" ]] && echo true || echo false),
-  "fetchTags": $([[ -n "$fetchTags" ]] && echo true || echo false),
+  "fetchTags": $(
+    if [[ -n "$fetchTags" ]]; then
+        echo true
+    elif ((${#tagsToFetch[@]})); then
+        keys=("${!tagsToFetch[@]}")
+        keysWithComma=("${keys[@]:0:${#keys[@]-1}}")
+        keyLast="${keys[@]:${#keys[@]-1}:1}"
+        echo "{"
+        for key in "${keysWithComma[@]}"; do
+            echo "    \"$(json_escape "${key#/}")\": $(json_list ${tagsToFetch[$key]}),"
+        done
+        echo "    \"$(json_escape "${key#/}")\": $(json_list ${tagsToFetch[$keyLast]})"
+        echo "  }"
+    else
+        echo "{}"
+    fi
+  ),
   "leaveDotGit": $([[ -n "$leaveDotGit" ]] && echo true || echo false),
   "rootDir": "$(json_escape "$rootDir")"
 }

@@ -66,7 +66,7 @@ lib.makeOverridable (
             # when rootDir is specified, avoid invalidating the result when rev changes
             append = if rootDir != "" then "-${lib.strings.sanitizeDerivationName rootDir}" else "";
           },
-          # When null, will default to: `deepClone || fetchTags`
+          # When null, will default to: `deepClone || fetchTags == true` for backward compatibility.
           leaveDotGit ? null,
           outputHash ? lib.fakeHash,
           outputHashAlgo ? null,
@@ -98,8 +98,12 @@ lib.makeOverridable (
           passthru ? { },
           meta ? { },
           allowedRequisites ? null,
-          # fetch all tags after tree (useful for git describe)
-          fetchTags ? false,
+          # Additional tags to fetch after tree (useful for git describe)
+          # Specify as `{ ${"<subPath>"} = [ "<tag1>" "<tag2>" ]; }`,
+          # where subpath begins with "/" and is relative to the fetching project root.
+          # The `subPath` of the main module is `"/"`.
+          # If specified as `true`, fetch all tags (with potential non-reproducibility).
+          fetchTags ? { },
           # make this subdirectory the root of the result
           rootDir ? "",
           # GIT_CONFIG_GLOBAL (as a file)
@@ -177,17 +181,36 @@ lib.makeOverridable (
             preFetch
             postCheckout
             postFetch
-            fetchTags
             rootDir
             gitConfigFile
             ;
+          fetchTags = if fetchTags == false then { } else fetchTags;
+          fetchTagFlags =
+            if lib.isAttrs finalAttrs.fetchTags then
+              lib.concatLists (
+                lib.attrValues (
+                  lib.mapAttrs (
+                    subPath:
+                    lib.concatMap (tag: [
+                      "--fetch-submodule-tag"
+                      subPath
+                      tag
+                    ])
+                  ) finalAttrs.fetchTags
+                )
+              )
+            else if finalAttrs.fetchTags == true then
+              [ "--fetch-tags" ]
+            else if finalAttrs.fetchTags == false then
+              [ ]
+            else
+              throw "fetchgit: unsupported fetchTags value, expecting either attribute sets of subpaths and tags, or boolean `true'";
           leaveDotGit =
             if leaveDotGit != null then
-              assert fetchTags -> leaveDotGit;
               assert rootDir != "" -> !leaveDotGit;
               leaveDotGit
             else
-              deepClone || fetchTags;
+              deepClone || fetchTags == true;
           nonConeMode = lib.defaultTo (finalAttrs.rootDir != "") nonConeMode;
           inherit tag;
           revCustom = rev;
