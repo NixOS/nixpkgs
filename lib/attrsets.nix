@@ -1628,26 +1628,29 @@ rec {
       binaryMerge 0 (length list);
 
   /**
-    Does the same as the update operator '//' except that attributes are
-    merged until the given predicate is verified.  The predicate should
-    accept 3 arguments which are the path to reach the attribute, a part of
-    the first attribute set and a part of the second attribute set.  When
-    the predicate is satisfied, the value of the first attribute set is
-    replaced by the value of the second attribute set.
+    Recursively updates attributes from `lhs` with attributes from `rhs`.
+
+    Returns a new attribute set containing all attributes from `lhs` and `rhs` recursively
+    In case of conflicts the value from `rhs` takes precedence over the value from `lhs`.
+
+    If the given predicate (`pred`) returns `true`, the recursion stops
+    and the value from `rhs` replaces the value from `lhs`.
 
     # Inputs
 
     `pred`
 
-    : Predicate, taking the path to the current attribute as a list of strings for attribute names, and the two values at that path from the original arguments.
+    : Predicate function (`path -> lhs -> rhs -> Bool`)
+
+      taking the path to the current attribute as a list of strings for attribute names, and the two values at that path from the original arguments.
 
     `lhs`
 
-    : Left attribute set of the merge.
+    : Left attribute set of the update.
 
     `rhs`
 
-    : Right attribute set of the merge.
+    : Right attribute set of the update.
 
     # Type
 
@@ -1660,23 +1663,23 @@ rec {
     ## `lib.attrsets.recursiveUpdateUntil` usage example
 
     ```nix
-    recursiveUpdateUntil (path: l: r: path == ["foo"]) {
-      # first attribute set
+    recursiveUpdateUntil (path: lhs: rhs: path == ["foo"]) {
+      # left attribute set
       foo.bar = 1;
       foo.baz = 2;
       bar = 3;
     } {
-      #second attribute set
+      # right attribute set
       foo.bar = 1;
       foo.quz = 2;
       baz = 4;
     }
 
     => {
-      foo.bar = 1; # 'foo.*' from the second set
+      foo.bar = 1; # 'foo.*' from the 'right' set
       foo.quz = 2; #
-      bar = 3;     # 'bar' from the first set
-      baz = 4;     # 'baz' from the second set
+      bar = 3;     # 'bar' from the 'left' set
+      baz = 4;     # 'baz' from the 'right' set
     }
     ```
 
@@ -1688,9 +1691,9 @@ rec {
       f =
         attrPath:
         zipAttrsWith (
-          n: values:
+          name: values:
           let
-            here = attrPath ++ [ n ];
+            here = attrPath ++ [ name ];
           in
           if length values == 1 || pred here (elemAt values 1) (head values) then
             head values
