@@ -983,7 +983,6 @@ in
   mpd = runTest ./mpd.nix;
   mpv = runTest ./mpv.nix;
   mtp = runTest ./mtp.nix;
-  multipass = runTest ./multipass.nix;
   mumble = runTest ./mumble.nix;
   munge = runTest ./munge.nix;
   munin = runTest ./munin.nix;

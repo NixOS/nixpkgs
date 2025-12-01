@@ -19,6 +19,10 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail 'cmake_minimum_required(VERSION 3.0)' 'cmake_minimum_required(VERSION 3.10)'
+  '';
+
   cmakeFlags = [
     "-DQT5_BUILD=1"
     "-DQt5Core_DIR=${qtbase.dev}/lib/cmake/Qt5Core"

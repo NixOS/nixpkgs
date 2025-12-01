@@ -497,6 +497,7 @@ mapAliases {
   deltachat-cursed = throw "'deltachat-cursed' has been renamed to/replaced by 'arcanechat-tui'"; # Converted to throw 2025-10-27
   devdocs-desktop = throw "'devdocs-desktop' has been removed as it is unmaintained upstream and vendors insecure dependencies"; # Added 2025-06-11
   dfilemanager = throw "'dfilemanager' has been dropped as it was unmaintained"; # Added 2025-06-03
+  discord-screenaudio = throw "discord-screenaudio has been removed because it was archived upstream. Use vesktop instead."; # added 2025-11-29
   dleyna-connector-dbus = throw "'dleyna-connector-dbus' has been renamed to/replaced by 'dleyna'"; # Converted to throw 2025-10-27
   dleyna-core = throw "'dleyna-core' has been renamed to/replaced by 'dleyna'"; # Converted to throw 2025-10-27
   dleyna-renderer = throw "'dleyna-renderer' has been renamed to/replaced by 'dleyna'"; # Converted to throw 2025-10-27
@@ -1079,6 +1080,7 @@ mapAliases {
   mrxvt = throw "'mrxvt' has been removed due to lack of maintainence upstream"; # Added 2025-09-25
   msgpack = throw "msgpack has been split into msgpack-c and msgpack-cxx"; # Added 2025-09-14
   msp430NewlibCross = throw "'msp430NewlibCross' has been renamed to/replaced by 'msp430Newlib'"; # Converted to throw 2025-10-27
+  multipass = throw "multipass was dropped since it was unmaintained."; # Added 2025-11-29
   mumps_par = throw "'mumps_par' has been renamed to/replaced by 'mumps-mpi'"; # Converted to throw 2025-10-27
   mustache-tcl = throw "'mustache-tcl' has been renamed to/replaced by 'tclPackages.mustache-tcl'"; # Converted to throw 2025-10-27
   mutt-with-sidebar = throw "'mutt-with-sidebar' has been renamed to/replaced by 'mutt'"; # Converted to throw 2025-10-27
