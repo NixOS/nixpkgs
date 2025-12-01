@@ -2,14 +2,13 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 let
   cfg = config.services.glance;
 
   inherit (lib)
-    catAttrs
-    concatMapStrings
     getExe
     mkEnableOption
     mkIf
@@ -18,17 +17,8 @@ let
     types
     ;
 
-  inherit (builtins)
-    concatLists
-    isAttrs
-    isList
-    attrNames
-    getAttr
-    ;
-
   settingsFormat = pkgs.formats.yaml { };
-  settingsFile = settingsFormat.generate "glance.yaml" cfg.settings;
-  mergedSettingsFile = "/run/glance/glance.yaml";
+  settingsFile = "/run/glance/glance.yaml";
 in
 {
   options.services.glance = {
@@ -180,41 +170,16 @@ in
       requires = [
         "nss-user-lookup.target"
       ];
-      path = [ pkgs.replace-secret ];
 
       serviceConfig = {
         ExecStartPre =
-          let
-            findSecrets =
-              data:
-              if isAttrs data then
-                if data ? _secret then
-                  [ data ]
-                else
-                  concatLists (map (attr: findSecrets (getAttr attr data)) (attrNames data))
-              else if isList data then
-                concatLists (map findSecrets data)
-              else
-                [ ];
-            secretPaths = catAttrs "_secret" (findSecrets cfg.settings);
-            mkSecretReplacement = secretPath: ''
-              replace-secret ${
-                lib.escapeShellArgs [
-                  "_secret: ${secretPath}"
-                  secretPath
-                  mergedSettingsFile
-                ]
-              }
-            '';
-            secretReplacements = concatMapStrings mkSecretReplacement secretPaths;
-          in
           # Use "+" to run as root because the secrets may not be accessible to glance
           "+"
           + pkgs.writeShellScript "glance-start-pre" ''
-            install -m 600 -o $USER ${settingsFile} ${mergedSettingsFile}
-            ${secretReplacements}
+            ${utils.genJqSecretsReplacementSnippet cfg.settings settingsFile}
+            chown $USER ${settingsFile}
           '';
-        ExecStart = "${getExe cfg.package} --config ${mergedSettingsFile}";
+        ExecStart = "${getExe cfg.package} --config ${settingsFile}";
         Restart = "on-failure";
         WorkingDirectory = "/var/lib/glance";
         EnvironmentFile = cfg.environmentFile;
