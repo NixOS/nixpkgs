@@ -23,13 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
   # 24.08.0-edge is compatible with Java 21. The current (as of 2024-09-19)
   # nextflow release (24.04.4) does not yet support java21, but java19. The
   # latter is not in nixpkgs(-unstable) anymore.
-  version = "24.08.0-edge";
+  version = "25.04.8";
 
   src = fetchFromGitHub {
     owner = "nextflow-io";
     repo = "nextflow";
-    rev = "6e866ae81ff3bf8a9729e9dbaa9dd89afcb81a4b";
-    hash = "sha256-SA27cuP3iO5kD6u0uTeEaydyqbyJzOkVtPrb++m3Tv0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-a67gpNjncxX1o8rPee+TpvoKk3hLwA8j5mD0RUsBDwI=";
   };
 
   nativeBuildInputs = [
@@ -44,8 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     # to be reverted for this specific use case.
     substituteInPlace modules/nextflow/src/main/groovy/nextflow/executor/BashWrapperBuilder.groovy \
       --replace-fail "['/bin/bash'," "['${bash}/bin/bash'," \
-      --replace-fail "if( containerBuilder ) {" "if( containerBuilder ) {
-                launcher = launcher.replaceFirst(\"/nix/store/.*/bin/bash\", \"/bin/bash\")"
+      --replace-fail '? "/bin/bash"' '? "'${bash}'/bin/bash"' \
+      --replace-fail "if( containerBuilder ) {" \
+                     "if( containerBuilder ) {
+              launcher = launcher.replaceFirst(\"/nix/store/.*/bin/bash\", \"/bin/bash\")"
   '';
 
   mitmCache = gradle.fetchDeps {
@@ -114,6 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       Etjean
       edmundmiller
+      mulatta
     ];
     mainProgram = "nextflow";
     platforms = platforms.unix;
