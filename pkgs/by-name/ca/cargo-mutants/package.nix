@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -19,6 +20,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # too many tests require internet access
   doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Mutation testing tool for Rust";
