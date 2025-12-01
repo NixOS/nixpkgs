@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "1.13.0";
+  version = "1.14.1";
 in
 stdenv.mkDerivation {
   pname = "libcpr";
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     owner = "libcpr";
     repo = "cpr";
     rev = version;
-    hash = "sha256-qoNA88GL9Yv3r/7UsZduYXuyrQVxfFY/0P6RfLqT5Uw=";
+    hash = "sha256-kwbkdAeTpkEJbzvqpUQx007ZIBtwqOPG8n41TvFxeiM=";
   };
 
   nativeBuildInputs = [

@@ -76,7 +76,7 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "datamodel_code_generator" ];
 

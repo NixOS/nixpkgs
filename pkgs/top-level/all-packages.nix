@@ -2192,8 +2192,6 @@ with pkgs;
     rainloop-standard
     ;
 
-  razergenie = callPackage ../applications/misc/razergenie { };
-
   roundcube = callPackage ../servers/roundcube { };
 
   roundcubePlugins = recurseIntoAttrs (callPackage ../servers/roundcube/plugins { });
@@ -2628,8 +2626,6 @@ with pkgs;
   );
 
   emborg = python3Packages.callPackage ../development/python-modules/emborg { };
-
-  encfs = callPackage ../tools/filesystems/encfs { };
 
   ethercalc = callPackage ../servers/web-apps/ethercalc { };
 
@@ -3465,7 +3461,7 @@ with pkgs;
     toPythonApplication (
       nvchecker.overridePythonAttrs (oldAttrs: {
         propagatedBuildInputs =
-          oldAttrs.dependencies ++ lib.flatten (builtins.attrValues oldAttrs.optional-dependencies);
+          oldAttrs.dependencies ++ lib.concatAttrValues oldAttrs.optional-dependencies;
       })
     );
 
@@ -6712,8 +6708,6 @@ with pkgs;
   # pandoc takes long to build and documentation isn't needed for just running the cli
   shellcheck-minimal = haskell.lib.compose.justStaticExecutables shellcheck.unwrapped;
 
-  sloc = nodePackages.sloc;
-
   speedtest-cli = with python3Packages; toPythonApplication speedtest-cli;
 
   splint = callPackage ../development/tools/analysis/splint {
@@ -6745,8 +6739,6 @@ with pkgs;
     withGui = true;
     withTeensyduino = true;
   };
-
-  tytools = callPackage ../development/embedded/tytools { };
 
   texinfoPackages = callPackages ../development/tools/misc/texinfo/packages.nix { };
   inherit (texinfoPackages)
@@ -8600,8 +8592,6 @@ with pkgs;
     };
   };
 
-  vc = callPackage ../development/libraries/vc { };
-
   vencord-web-extension = callPackage ../by-name/ve/vencord/package.nix { buildWebExtension = true; };
 
   vid-stab = callPackage ../development/libraries/vid-stab {
@@ -10309,12 +10299,6 @@ with pkgs;
 
   andromeda-gtk-theme = libsForQt5.callPackage ../data/themes/andromeda-gtk-theme { };
 
-  ant-theme = callPackage ../data/themes/ant-theme/ant.nix { };
-
-  ant-bloody-theme = callPackage ../data/themes/ant-theme/ant-bloody.nix { };
-
-  ant-nebula-theme = callPackage ../data/themes/ant-theme/ant-nebula.nix { };
-
   bibata-cursors-translucent = callPackage ../data/icons/bibata-cursors/translucent.nix { };
 
   dejavu_fonts = lowPrio (callPackage ../data/fonts/dejavu-fonts { });
@@ -10476,10 +10460,6 @@ with pkgs;
   };
 
   papis = with python3Packages; toPythonApplication papis;
-
-  plata-theme = callPackage ../data/themes/plata {
-    inherit (mate) marco;
-  };
 
   polychromatic = qt6Packages.callPackage ../applications/misc/polychromatic { };
 
@@ -11752,8 +11732,6 @@ with pkgs;
     lua = lua5;
   };
 
-  pdfsam-basic = callPackage ../applications/misc/pdfsam-basic { };
-
   mupdf-headless = mupdf.override {
     enableX11 = false;
     enableGL = false;
@@ -11900,8 +11878,6 @@ with pkgs;
     }
     // (config.profanity or { })
   );
-
-  protonvpn-gui = python3Packages.callPackage ../applications/networking/protonvpn-gui { };
 
   psi = libsForQt5.callPackage ../applications/networking/instant-messengers/psi { };
 
@@ -14286,10 +14262,6 @@ with pkgs;
     discord-canary
     discord-development
     ;
-
-  discord-screenaudio =
-    qt6Packages.callPackage ../applications/networking/instant-messengers/discord-screenaudio
-      { };
 
   tomb = callPackage ../by-name/to/tomb/package.nix {
     pinentry = pinentry-curses;

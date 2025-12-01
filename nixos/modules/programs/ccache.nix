@@ -38,6 +38,11 @@ in
       default = "nixbld";
       description = "Group owner of CCache directory";
     };
+    trace = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Trace ccache usage to see which derivations use ccache";
+    };
   };
 
   config = lib.mkMerge [
@@ -73,7 +78,11 @@ in
         (
           self: super:
           lib.genAttrs cfg.packageNames (
-            pn: super.${pn}.override { stdenv = builtins.trace "with ccache: ${pn}" self.ccacheStdenv; }
+            pn:
+            super.${pn}.override {
+              stdenv =
+                if cfg.trace then builtins.trace "with ccache: ${pn}" self.ccacheStdenv else self.ccacheStdenv;
+            }
           )
         )
 

@@ -75,7 +75,7 @@ buildPythonPackage rec {
     pytest-timeout
     writableTmpDirAsHomeHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     export MNE_SKIP_TESTING_DATASET_TESTS=true

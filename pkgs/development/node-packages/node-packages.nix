@@ -22834,32 +22834,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  sloc = nodeEnv.buildNodePackage {
-    name = "sloc";
-    packageName = "sloc";
-    version = "0.3.2";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/sloc/-/sloc-0.3.2.tgz";
-      sha512 = "tnB+gi6TiFpt3qmCGfaV+78dfKwLiH5HRohkW+PnJYHNAcEdk408uxWG+F/3pu4w1eyCO2NC5CpZKuiyMac5GQ==";
-    };
-    dependencies = [
-      sources."async-3.2.6"
-      sources."cli-table-0.3.11"
-      sources."colors-1.0.3"
-      sources."commander-11.1.0"
-      sources."picomatch-2.3.1"
-      sources."readdirp-3.6.0"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "sloc is a simple tool to count SLOC (source lines of code)";
-      homepage = "https://github.com/flosse/sloc#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   vega-cli = nodeEnv.buildNodePackage {
     name = "vega-cli";
     packageName = "vega-cli";

@@ -115,7 +115,8 @@ mapAliases {
   django-crispy-bootstrap3 = crispy-bootstrap3; # added 2025-06-11
   django-crispy-bootstrap4 = crispy-bootstrap4; # added 2025-06-11
   django-crispy-bootstrap5 = crispy-bootstrap5; # added 2025-06-11
-  django_3 = throw "Django 3 has reached it#s EOL in 2024-04 and has therefore been removed."; # added 2025-01-25
+  django_3 = throw "Django 3 has reached it's EOL in 2024-04 and has therefore been removed."; # added 2025-01-25
+  django_5_1 = throw "Django 5.1 has reached it's EOL in 2025-12 and has therefore been removed."; # added 2025-11-30"
   django_appconf = throw "'django_appconf' has been renamed to/replaced by 'django-appconf'"; # Converted to throw 2025-10-29
   django_classytags = throw "'django_classytags' has been renamed to/replaced by 'django-classy-tags'"; # Converted to throw 2025-10-29
   django_colorful = throw "'django_colorful' has been renamed to/replaced by 'django-colorful'"; # Converted to throw 2025-10-29

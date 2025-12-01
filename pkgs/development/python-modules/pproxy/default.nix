@@ -37,7 +37,7 @@ buildPythonPackage rec {
     daemon = [ python-daemon ];
   };
 
-  nativeCheckInputs = lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "pproxy" ];
 

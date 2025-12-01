@@ -54,7 +54,7 @@ buildPythonPackage rec {
     safer-xml-parserig = [ defusedxml ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     # don't test against pure python version in the source tree

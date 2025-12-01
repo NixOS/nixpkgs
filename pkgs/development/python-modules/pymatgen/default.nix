@@ -127,7 +127,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-xdist
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck =
     # ensure tests can find these

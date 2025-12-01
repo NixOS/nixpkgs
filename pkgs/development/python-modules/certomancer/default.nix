@@ -72,7 +72,7 @@ buildPythonPackage rec {
     pytz
     requests
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "certomancer" ];
 
