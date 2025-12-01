@@ -7,16 +7,17 @@
   libgit2,
   openssl,
   zlib,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-local-registry";
   version = "0.2.9";
 
   src = fetchFromGitHub {
     owner = "dhovart";
     repo = "cargo-local-registry";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DzBD7N7GQZ9nhF22DnxRse0P8MUGReOcXHQ56KOqW6I=";
   };
 
@@ -37,15 +38,19 @@ rustPlatform.buildRustPackage rec {
   # tests require internet access
   doCheck = false;
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
+  meta = {
     description = "Cargo subcommand to manage local registries";
     mainProgram = "cargo-local-registry";
     homepage = "https://github.com/dhovart/cargo-local-registry";
-    changelog = "https://github.com/dhovart/cargo-local-registry/releases/tag/${src.rev}";
-    license = with licenses; [
+    changelog = "https://github.com/dhovart/cargo-local-registry/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = [ maintainers.progrm_jarvis ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
   };
-}
+})
