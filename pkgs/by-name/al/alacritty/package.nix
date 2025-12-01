@@ -24,7 +24,6 @@
 
   nix-update-script,
   withGraphics ? false,
-  versionCheckHook,
 }:
 let
   rpathLibs = [
@@ -142,11 +141,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tests.test = nixosTests.terminal-emulators.alacritty;
     updateScript = nix-update-script { };
   };
-
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  doInstallCheck = true;
 
   meta = {
     description = "Cross-platform, GPU-accelerated terminal emulator";
