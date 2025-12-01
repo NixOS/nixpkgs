@@ -79,23 +79,24 @@ let
     else
       throw "allowlistedLicenses and blocklistedLicenses are not mutually exclusive.";
 
-  hasLicense = attrs: attrs ? meta.license;
-
   hasListedLicense =
     assert areLicenseListsValid;
-    list: attrs:
-    length list > 0
-    && hasLicense attrs
-    && (
-      if isList attrs.meta.license then
-        any (l: elem l list) attrs.meta.license
-      else
-        elem attrs.meta.license list
-    );
+    list:
+    if list == [ ] then
+      attrs: false
+    else
+      attrs:
+      attrs ? meta.license
+      && (
+        if isList attrs.meta.license then
+          any (l: elem l list) attrs.meta.license
+        else
+          elem attrs.meta.license list
+      );
 
-  hasAllowlistedLicense = attrs: hasListedLicense allowlist attrs;
+  hasAllowlistedLicense = hasListedLicense allowlist;
 
-  hasBlocklistedLicense = attrs: hasListedLicense blocklist attrs;
+  hasBlocklistedLicense = hasListedLicense blocklist;
 
   allowBroken = config.allowBroken || getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
 
@@ -115,7 +116,7 @@ let
     else
       any (l: !(l.free or true)) licenses;
 
-  hasUnfreeLicense = attrs: hasLicense attrs && isUnfree attrs.meta.license;
+  hasUnfreeLicense = attrs: attrs ? meta.license && isUnfree attrs.meta.license;
 
   hasNoMaintainers =
     # To get usable output, we want to avoid flagging "internal" derivations.
@@ -169,14 +170,10 @@ let
     x: elem (getNameWithVersion x) (config.permittedInsecurePackages or [ ]);
   allowInsecurePredicate = config.allowInsecurePredicate or allowInsecureDefaultPredicate;
 
-  hasAllowedInsecure =
-    attrs:
-    !(isMarkedInsecure attrs) || allowInsecurePredicate attrs || getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
+  allowInsecure = getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
 
-  isNonSource = sourceTypes: any (t: !t.isSource) sourceTypes;
-
-  hasNonSourceProvenance =
-    attrs: attrs ? meta.sourceProvenance && isNonSource attrs.meta.sourceProvenance;
+  hasDisallowedInsecure =
+    attrs: isMarkedInsecure attrs && !allowInsecure && !allowInsecurePredicate attrs;
 
   # Allow granular checks to allow only some non-source-built packages
   # Example:
@@ -191,7 +188,11 @@ let
   # package has non-source provenance and is not explicitly allowed by the
   # `allowNonSourcePredicate` function.
   hasDeniedNonSourceProvenance =
-    attrs: hasNonSourceProvenance attrs && !allowNonSource && !allowNonSourcePredicate attrs;
+    attrs:
+    attrs ? meta.sourceProvenance
+    && any (t: !t.isSource) attrs.meta.sourceProvenance
+    && !allowNonSource
+    && !allowNonSourcePredicate attrs;
 
   showLicenseOrSourceType =
     value: toString (map (v: v.shortName or v.fullName or "unknown") (toList value));
@@ -471,13 +472,14 @@ let
       meta: [ ];
 
   checkOutputsToInstall =
-    attrs:
-    let
-      expectedOutputs = attrs.meta.outputsToInstall or [ ];
-      actualOutputs = attrs.outputs or [ "out" ];
-      missingOutputs = filter (output: !elem output actualOutputs) expectedOutputs;
-    in
-    if config.checkMeta then length missingOutputs > 0 else false;
+    if config.checkMeta then
+      attrs:
+      let
+        actualOutputs = attrs.outputs or [ "out" ];
+      in
+      any (output: !elem output actualOutputs) (attrs.meta.outputsToInstall or [ ])
+    else
+      attrs: false;
 
   # Check if a derivation is valid, that is whether it passes checks for
   # e.g brokenness or license.
@@ -546,7 +548,7 @@ let
         errormsg = "is marked as broken";
         remediation = remediate_allowlist "Broken" (x: "");
       }
-    else if !allowUnsupportedSystem && hasUnsupportedPlatform attrs then
+    else if hasUnsupportedPlatform attrs && !allowUnsupportedSystem then
       let
         toPretty' = toPretty {
           allowPrettyValues = true;
@@ -564,7 +566,7 @@ let
         '';
         remediation = remediate_allowlist "UnsupportedSystem" (x: "") attrs;
       }
-    else if !(hasAllowedInsecure attrs) then
+    else if hasDisallowedInsecure attrs then
       {
         valid = "no";
         reason = "insecure";
