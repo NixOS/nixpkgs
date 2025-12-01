@@ -305,50 +305,6 @@ let
       ${concatStrings (map (output: "  - ${output}\n") missingOutputs)}
     '';
 
-  handleEvalIssue =
-    {
-      meta,
-      attrs,
-      reason,
-      errormsg ? "",
-      remediation,
-    }:
-    let
-      msg =
-        if inHydra then
-          "Failed to evaluate ${getNameWithVersion attrs}: «${reason}»: ${errormsg}"
-        else
-          ''
-            Package ‘${getNameWithVersion attrs}’ in ${pos_str meta} ${errormsg}, refusing to evaluate.
-
-          ''
-          + remediation;
-
-      handler = if config ? handleEvalIssue then config.handleEvalIssue reason else throw;
-    in
-    handler msg;
-
-  handleEvalWarning =
-    {
-      meta,
-      attrs,
-      reason,
-      errormsg ? "",
-      remediation,
-    }:
-    if elem reason showWarnings then
-      let
-        msg =
-          if inHydra then
-            "Warning while evaluating ${getNameWithVersion attrs}: «${reason}»: ${errormsg}"
-          else
-            "Package ${getNameWithVersion attrs} in ${pos_str meta} ${errormsg}, continuing anyway."
-            + (optionalString (remediation != "") "\n${remediation}");
-      in
-      trace msg true
-    else
-      true;
-
   metaTypes =
     let
       types = import ./meta-types.nix { inherit lib; };
@@ -444,11 +400,10 @@ let
       identifiers = attrs;
     };
 
+  # Map attrs directly to the verify function for performance
+  metaTypes' = mapAttrs (_: t: t.verify) metaTypes;
+
   checkMetaAttr =
-    let
-      # Map attrs directly to the verify function for performance
-      metaTypes' = mapAttrs (_: t: t.verify) metaTypes;
-    in
     k: v:
     if metaTypes ? ${k} then
       if metaTypes'.${k} v then
@@ -465,11 +420,14 @@ let
           concatMapStringsSep ", " (x: "'${x}'") (attrNames metaTypes)
         }]"
       ];
-  checkMeta =
+
+  checkMeta = meta: concatMap (attr: checkMetaAttr attr meta.${attr}) (attrNames meta);
+
+  metaInvalid =
     if config.checkMeta then
-      meta: concatMap (attr: checkMetaAttr attr meta.${attr}) (attrNames meta)
+      meta: !all (attr: metaTypes ? ${attr} && metaTypes'.${attr} meta.${attr}) (attrNames meta)
     else
-      meta: [ ];
+      meta: false;
 
   checkOutputsToInstall =
     if config.checkMeta then
@@ -490,30 +448,21 @@ let
   # !!! reason strings are hardcoded into OfBorg, make sure to keep them in sync
   # Along with a boolean flag for each reason
   checkValidity =
-    let
-      validYes = {
-        valid = "yes";
-        handled = true;
-      };
-    in
     attrs:
     # Check meta attribute types first, to make sure it is always called even when there are other issues
     # Note that this is not a full type check and functions below still need to by careful about their inputs!
-    let
-      res = checkMeta (attrs.meta or { });
-    in
-    if res != [ ] then
+    if metaInvalid (attrs.meta or { }) then
       {
-        valid = "no";
         reason = "unknown-meta";
-        errormsg = "has an invalid meta attrset:${concatMapStrings (x: "\n  - " + x) res}\n";
+        errormsg = "has an invalid meta attrset:${
+          concatMapStrings (x: "\n  - " + x) (checkMeta attrs.meta)
+        }\n";
         remediation = "";
       }
 
     # --- Put checks that cannot be ignored here ---
     else if checkOutputsToInstall attrs then
       {
-        valid = "no";
         reason = "broken-outputs";
         errormsg = "has invalid meta.outputsToInstall";
         remediation = remediateOutputsToInstall attrs;
@@ -522,28 +471,24 @@ let
     # --- Put checks that can be ignored here ---
     else if hasDeniedUnfreeLicense attrs && !(hasAllowlistedLicense attrs) then
       {
-        valid = "no";
         reason = "unfree";
         errormsg = "has an unfree license (‘${showLicense attrs.meta.license}’)";
         remediation = remediate_allowlist "Unfree" (remediate_predicate "allowUnfreePredicate") attrs;
       }
     else if hasBlocklistedLicense attrs then
       {
-        valid = "no";
         reason = "blocklisted";
         errormsg = "has a blocklisted license (‘${showLicense attrs.meta.license}’)";
         remediation = "";
       }
     else if hasDeniedNonSourceProvenance attrs then
       {
-        valid = "no";
         reason = "non-source";
         errormsg = "contains elements not built from source (‘${showSourceType attrs.meta.sourceProvenance}’)";
         remediation = remediate_allowlist "NonSource" (remediate_predicate "allowNonSourcePredicate") attrs;
       }
     else if hasDeniedBroken attrs then
       {
-        valid = "no";
         reason = "broken";
         errormsg = "is marked as broken";
         remediation = remediate_allowlist "Broken" (x: "");
@@ -556,7 +501,6 @@ let
         };
       in
       {
-        valid = "no";
         reason = "unsupported";
         errormsg = ''
           is not available on the requested hostPlatform:
@@ -568,24 +512,24 @@ let
       }
     else if hasDisallowedInsecure attrs then
       {
-        valid = "no";
         reason = "insecure";
         errormsg = "is marked as insecure";
         remediation = remediate_insecure attrs;
       }
+    else
+      null;
 
-    # --- warnings ---
-    # Please also update the type in /pkgs/top-level/config.nix alongside this.
-    else if hasNoMaintainers attrs then
+  # Please also update the type in /pkgs/top-level/config.nix alongside this.
+  checkWarnings =
+    attrs:
+    if hasNoMaintainers attrs then
       {
-        valid = "warn";
         reason = "maintainerless";
         errormsg = "has no maintainers or teams";
         remediation = "";
       }
-    # -----
     else
-      validYes;
+      null;
 
   # Helper functions and declarations to handle identifiers, extracted to reduce allocations
   hasAllCPEParts =
@@ -743,35 +687,54 @@ let
         && ((config.checkMetaRecursively or false) -> all (d: d.meta.available or true) references);
     };
 
+  validYes = {
+    valid = "yes";
+    handled = true;
+  };
+
   assertValidity =
     { meta, attrs }:
     let
-      validity = checkValidity attrs;
-      inherit (validity) valid;
+      invalid = checkValidity attrs;
+      warning = checkWarnings attrs;
     in
-    if validity ? handled then
-      validity
+    if isNull invalid then
+      if isNull warning then
+        validYes
+      else
+        let
+          msg =
+            if inHydra then
+              "Warning while evaluating ${getNameWithVersion attrs}: «${warning.reason}»: ${warning.errormsg}"
+            else
+              "Package ${getNameWithVersion attrs} in ${pos_str meta} ${warning.errormsg}, continuing anyway."
+              + (optionalString (warning.remediation != "") "\n${warning.remediation}");
+
+          handled = if elem warning.reason showWarnings then trace msg true else true;
+        in
+        warning
+        // {
+          valid = "warn";
+          handled = handled;
+        }
     else
-      validity
-      // {
-        # Throw an error if trying to evaluate a non-valid derivation
-        # or, alternatively, just output a warning message.
-        handled = (
-          if valid == "yes" then
-            true
-          else if valid == "no" then
-            handleEvalIssue {
-              inherit meta attrs;
-              inherit (validity) reason errormsg remediation;
-            }
-          else if valid == "warn" then
-            handleEvalWarning {
-              inherit meta attrs;
-              inherit (validity) reason errormsg remediation;
-            }
+      let
+        msg =
+          if inHydra then
+            "Failed to evaluate ${getNameWithVersion attrs}: «${invalid.reason}»: ${invalid.errormsg}"
           else
-            throw "Unknown validity: '${valid}'"
-        );
+            ''
+              Package ‘${getNameWithVersion attrs}’ in ${pos_str meta} ${invalid.errormsg}, refusing to evaluate.
+
+            ''
+            + invalid.remediation;
+
+        handled = if config ? handleEvalIssue then config.handleEvalIssue invalid.reason msg else throw msg;
+      in
+      invalid
+      // {
+        valid = "no";
+        handled = handled;
       };
 
 in
