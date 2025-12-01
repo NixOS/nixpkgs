@@ -28,6 +28,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cargo-play";
     homepage = "https://github.com/fanzeyi/cargo-play";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = [ maintainers.progrm_jarvis ];
   };
 }
