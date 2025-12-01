@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/bytecodealliance/cargo-component";
     changelog = "https://github.com/bytecodealliance/cargo-component/releases/tag/${src.rev}";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = [ maintainers.progrm_jarvis ];
     mainProgram = "cargo-component";
   };
 }
