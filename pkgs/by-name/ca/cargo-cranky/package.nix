@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -16,6 +17,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-m9n2YyrMpuz/X/kvHgn+g4w9/Pg+n6VnnfwjaOnyPvY=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Easy to configure wrapper for Rust's clippy";
