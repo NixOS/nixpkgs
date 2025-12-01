@@ -70,7 +70,6 @@ let
   nixos-install = pkgs.nixos-install.override { };
   nixos-rebuild-ng = pkgs.nixos-rebuild-ng.override {
     nix = config.nix.package;
-    withReexec = true;
   };
 
   defaultFlakeTemplate = ''
