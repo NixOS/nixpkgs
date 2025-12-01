@@ -38,6 +38,12 @@
   numpy,
   pillow,
   six,
+
+  # checks
+  py,
+  pytest,
+  pytest-forked,
+  xvfb-run,
 }:
 
 buildPythonPackage rec {
@@ -64,7 +70,8 @@ buildPythonPackage rec {
   postPatch = ''
     ln -s ${lib.getExe buildPackages.waf} bin/waf
     substituteInPlace build.py \
-      --replace-fail "distutils.dep_util" "setuptools.modified"
+      --replace-fail "distutils.dep_util" "setuptools.modified" \
+      --replace-fail "runcmd(cmd, fatal=False)" "runcmd(cmd, fatal=True)" # fail when pytest reports errors
   '';
 
   nativeBuildInputs = [
@@ -102,6 +109,13 @@ buildPythonPackage rec {
     six
   ];
 
+  nativeCheckInputs = [
+    py # py must be ordered before pytest (see https://github.com/pytest-dev/pytest-forked/issues/88)
+    pytest
+    pytest-forked
+    xvfb-run
+  ];
+
   wafPath = "bin/waf";
 
   buildPhase = ''
@@ -124,13 +138,35 @@ buildPythonPackage rec {
     runHook postInstall
   '';
 
-  checkPhase = ''
-    runHook preCheck
+  # The majority of the tests require a graphical environment, but xvfb-run is available only on Linux.
+  # Tests on aarch64-linux fail randomly on OfBorg.
+  doCheck = stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux;
 
-    ${python.interpreter} build.py -v test
+  checkPhase =
+    let
+      # Some tests appear to be incompatible with xvfb-run.
+      skippedTests = [
+        "dirdlg"
+        "display"
+        "filectrl"
+        "filedlg"
+        "filedlgcustomize"
+        "frame"
+        "glcanvas"
+        "pickers"
+        "windowid"
+      ];
+      testArguments = lib.concatMapStringsSep " " (
+        test: "--ignore unittests/test_${test}.py"
+      ) skippedTests;
+    in
+    ''
+      runHook preCheck
 
-    runHook postCheck
-  '';
+      HOME=$(mktemp -d) xvfb-run ${python.interpreter} build.py -v --extra_pytest='${testArguments}' test
+
+      runHook postCheck
+    '';
 
   meta = with lib; {
     changelog = "https://github.com/wxWidgets/Phoenix/blob/wxPython-${version}/CHANGES.rst";
