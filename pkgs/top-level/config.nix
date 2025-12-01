@@ -53,6 +53,15 @@ let
 
     # Config options
 
+    derivationMeta = mkOption {
+      description = ''
+        Whether to store `meta` information in the derivations.
+
+        This requires a Nix evaluator and builder(s) with [`derivation-meta`](https://nix.dev/manual/nix/latest/development/experimental-features.html#xp-feature-derivation-meta) enabled.
+      '';
+      default = false;
+    };
+
     warnUndeclaredOptions = mkOption {
       description = "Whether to warn when `config` contains an unrecognized attribute.";
       type = types.bool;
