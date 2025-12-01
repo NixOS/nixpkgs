@@ -96,9 +96,9 @@ python3Packages.buildPythonApplication rec {
       tests = {
         inherit (nixosTests)
           # FIXME: this test is disabled since it times out in @ofborg
-          # nixos-rebuild-install-bootloader-ng
-          nixos-rebuild-specialisations-ng
-          nixos-rebuild-target-host-ng
+          # nixos-rebuild-install-bootloader
+          nixos-rebuild-specialisations
+          nixos-rebuild-target-host
           ;
         repl = callPackage ./tests/repl.nix { };
         # NOTE: this is a passthru test rather than a build-time test because we
