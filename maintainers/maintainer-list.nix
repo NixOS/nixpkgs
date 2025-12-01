@@ -18554,6 +18554,12 @@
     githubId = 50854675;
     name = "Nelson Jeppesen";
   };
+  nemith = {
+    email = "nix@brbe.me";
+    github = "nemith";
+    githubId = 349360;
+    name = "Brandon Bennett";
+  };
   neosimsim = {
     email = "me@abn.sh";
     github = "neosimsim";
