@@ -18,14 +18,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "cobang";
-  version = "1.9.1";
+  version = "2.2.0";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "hongquan";
     repo = "CoBang";
     tag = "v${version}";
-    hash = "sha256-jF6hWpOPbJKRyUWRyZdp4OziCdJupyFpNdrsiOdjByA=";
+    hash = "sha256-0Bs05A4SImBnXYStB+fWGQtdvY7zsR5XVlPkQgwrEUI=";
   };
 
   nativeBuildInputs = [
