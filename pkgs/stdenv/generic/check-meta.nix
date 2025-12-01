@@ -197,17 +197,6 @@ let
 
   pos_str = meta: meta.position or "«unknown-file»";
 
-  remediation = {
-    unfree = remediate_allowlist "Unfree" (remediate_predicate "allowUnfreePredicate");
-    non-source = remediate_allowlist "NonSource" (remediate_predicate "allowNonSourcePredicate");
-    broken = remediate_allowlist "Broken" (x: "");
-    unsupported = remediate_allowlist "UnsupportedSystem" (x: "");
-    blocklisted = x: "";
-    insecure = remediate_insecure;
-    broken-outputs = remediateOutputsToInstall;
-    unknown-meta = x: "";
-    maintainerless = x: "";
-  };
   remediation_env_var =
     allow_attr:
     {
@@ -317,6 +306,7 @@ let
     {
       reason,
       errormsg ? "",
+      remediation,
     }:
     let
       msg =
@@ -327,7 +317,7 @@ let
             Package ‘${getNameWithVersion attrs}’ in ${pos_str meta} ${errormsg}, refusing to evaluate.
 
           ''
-          + (builtins.getAttr reason remediation) attrs;
+          + remediation;
 
       handler = if config ? handleEvalIssue then config.handleEvalIssue reason else throw;
     in
@@ -338,15 +328,15 @@ let
     {
       reason,
       errormsg ? "",
+      remediation,
     }:
     let
-      remediationMsg = (builtins.getAttr reason remediation) attrs;
       msg =
         if inHydra then
           "Warning while evaluating ${getNameWithVersion attrs}: «${reason}»: ${errormsg}"
         else
           "Package ${getNameWithVersion attrs} in ${pos_str meta} ${errormsg}, continuing anyway."
-          + (optionalString (remediationMsg != "") "\n${remediationMsg}");
+          + (optionalString (remediation != "") "\n${remediation}");
       isEnabled = findFirst (x: x == reason) null showWarnings;
     in
     if isEnabled != null then builtins.trace msg true else true;
@@ -484,7 +474,7 @@ let
   # e.g brokenness or license.
   #
   # Return { valid: "yes", "warn" or "no" } and additionally
-  # { reason: String; errormsg: String } if it is not valid, where
+  # { reason: String; errormsg: String, remediation: String } if it is not valid, where
   # reason is one of "unfree", "blocklisted", "broken", "insecure", ...
   # !!! reason strings are hardcoded into OfBorg, make sure to keep them in sync
   # Along with a boolean flag for each reason
@@ -506,6 +496,7 @@ let
         valid = "no";
         reason = "unknown-meta";
         errormsg = "has an invalid meta attrset:${concatMapStrings (x: "\n  - " + x) res}\n";
+        remediation = "";
       }
 
     # --- Put checks that cannot be ignored here ---
@@ -514,6 +505,7 @@ let
         valid = "no";
         reason = "broken-outputs";
         errormsg = "has invalid meta.outputsToInstall";
+        remediation = remediateOutputsToInstall attrs;
       }
 
     # --- Put checks that can be ignored here ---
@@ -522,24 +514,28 @@ let
         valid = "no";
         reason = "unfree";
         errormsg = "has an unfree license (‘${showLicense attrs.meta.license}’)";
+        remediation = remediate_allowlist "Unfree" (remediate_predicate "allowUnfreePredicate") attrs;
       }
     else if hasBlocklistedLicense attrs then
       {
         valid = "no";
         reason = "blocklisted";
         errormsg = "has a blocklisted license (‘${showLicense attrs.meta.license}’)";
+        remediation = "";
       }
     else if hasDeniedNonSourceProvenance attrs then
       {
         valid = "no";
         reason = "non-source";
         errormsg = "contains elements not built from source (‘${showSourceType attrs.meta.sourceProvenance}’)";
+        remediation = remediate_allowlist "NonSource" (remediate_predicate "allowNonSourcePredicate") attrs;
       }
     else if hasDeniedBroken attrs then
       {
         valid = "no";
         reason = "broken";
         errormsg = "is marked as broken";
+        remediation = remediate_allowlist "Broken" (x: "");
       }
     else if !allowUnsupportedSystem && hasUnsupportedPlatform attrs then
       let
@@ -557,12 +553,14 @@ let
             package.meta.platforms = ${toPretty' (attrs.meta.platforms or [ ])}
             package.meta.badPlatforms = ${toPretty' (attrs.meta.badPlatforms or [ ])}
         '';
+        remediation = remediate_allowlist "UnsupportedSystem" (x: "") attrs;
       }
     else if !(hasAllowedInsecure attrs) then
       {
         valid = "no";
         reason = "insecure";
         errormsg = "is marked as insecure";
+        remediation = remediate_insecure attrs;
       }
 
     # --- warnings ---
@@ -572,6 +570,7 @@ let
         valid = "warn";
         reason = "maintainerless";
         errormsg = "has no maintainers or teams";
+        remediation = "";
       }
     # -----
     else
@@ -752,9 +751,9 @@ let
           if valid == "yes" then
             true
           else if valid == "no" then
-            (handleEvalIssue { inherit meta attrs; } { inherit (validity) reason errormsg; })
+            (handleEvalIssue { inherit meta attrs; } { inherit (validity) reason errormsg remediation; })
           else if valid == "warn" then
-            (handleEvalWarning { inherit meta attrs; } { inherit (validity) reason errormsg; })
+            (handleEvalWarning { inherit meta attrs; } { inherit (validity) reason errormsg remediation; })
           else
             throw "Unknown validity: '${valid}'"
         );
