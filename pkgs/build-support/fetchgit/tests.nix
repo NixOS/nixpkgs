@@ -44,6 +44,18 @@
     '';
   };
 
+  describe-tag-unstable-version = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "describe-tag-nix-source";
+    url = "https://github.com/NixOS/nix";
+    rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
+    # for `git describe`
+    tag = "2.3.15";
+    hash = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
+    postCheckout = ''
+      { git -C "$out" describe || echo "git describe failed"; } | tee describe-output.txt
+    '';
+  };
+
   sparseCheckout = testers.invalidateFetcherByDrvHash fetchgit {
     name = "sparse-checkout-nix-source";
     url = "https://github.com/NixOS/nix";
