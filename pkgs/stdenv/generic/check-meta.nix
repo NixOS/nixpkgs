@@ -100,7 +100,7 @@ let
   isUnfree =
     licenses:
     if isAttrs licenses then
-      !licenses.free or true
+      !(licenses.free or true)
     # TODO: Returning false in the case of a string is a bug that should be fixed.
     # In a previous implementation of this function the function body
     # was `licenses: lib.lists.any (l: !l.free or true) licenses;`
@@ -108,7 +108,7 @@ let
     else if isString licenses then
       false
     else
-      any (l: !l.free or true) licenses;
+      any (l: !(l.free or true)) licenses;
 
   hasUnfreeLicense = attrs: hasLicense attrs && isUnfree attrs.meta.license;
 
@@ -173,7 +173,7 @@ let
   isNonSource = sourceTypes: any (t: !t.isSource) sourceTypes;
 
   hasNonSourceProvenance =
-    attrs: (attrs ? meta.sourceProvenance) && isNonSource attrs.meta.sourceProvenance;
+    attrs: attrs ? meta.sourceProvenance && isNonSource attrs.meta.sourceProvenance;
 
   # Allow granular checks to allow only some non-source-built packages
   # Example:
@@ -753,15 +753,15 @@ let
           if valid == "yes" then
             true
           else if valid == "no" then
-            (handleEvalIssue {
+            handleEvalIssue {
               inherit meta attrs;
               inherit (validity) reason errormsg remediation;
-            })
+            }
           else if valid == "warn" then
-            (handleEvalWarning {
+            handleEvalWarning {
               inherit meta attrs;
               inherit (validity) reason errormsg remediation;
-            })
+            }
           else
             throw "Unknown validity: '${valid}'"
         );
