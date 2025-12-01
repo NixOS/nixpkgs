@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Universal WHOIS proxy server";
     homepage = "https://github.com/kgaughan/uwhoisd";
-    changelog = "https://github.com/kgaughan/uwhoisd/blob/${src.tag}/ChangeLog";
+    changelog = "https://github.com/kgaughan/uwhoisd/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
