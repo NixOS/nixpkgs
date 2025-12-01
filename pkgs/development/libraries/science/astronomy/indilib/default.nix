@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "indilib";
-  version = "2.1.6";
+  version = "2.1.7";
 
   src = fetchFromGitHub {
     owner = "indilib";
     repo = "indi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WfVC5CLzwyO40Kpv/SZaYiPGDvWLUydQaA8FvTVhHqg=";
+    hash = "sha256-deWYF6qx2i46ckPh/QMiX6zXMMo1iRjuMeWJMk4kR2k=";
   };
 
   nativeBuildInputs = [
