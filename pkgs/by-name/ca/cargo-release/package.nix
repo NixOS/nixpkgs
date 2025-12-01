@@ -8,6 +8,7 @@
   stdenv,
   curl,
   git,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -41,6 +42,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # disable vendored-libgit2 and vendored-openssl
   buildNoDefaultFeatures = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = ''Cargo subcommand "release": everything about releasing a rust crate'';
