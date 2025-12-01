@@ -727,7 +727,6 @@ let
                   libxslt.bin
                   nixos-artwork.wallpapers.simple-dark-gray-bottom
                   (nixos-rebuild-ng.override {
-                    withNgSuffix = false;
                     withReexec = true;
                   })
                   ntp

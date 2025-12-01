@@ -9,7 +9,6 @@
   python3Packages,
   runCommand,
   scdoc,
-  withNgSuffix ? true,
   withReexec ? false,
   withShellFiles ? true,
   # Very long tmp dirs lead to "too long for Unix domain socket"
@@ -22,7 +21,7 @@
   nixos-rebuild-ng,
 }:
 let
-  executable = if withNgSuffix then "nixos-rebuild-ng" else "nixos-rebuild";
+  executable = "nixos-rebuild";
 in
 python3Packages.buildPythonApplication rec {
   pname = "nixos-rebuild-ng";
@@ -57,9 +56,6 @@ python3Packages.buildPythonApplication rec {
       --subst-var-by executable ${executable} \
       --subst-var-by withReexec ${lib.boolToString withReexec} \
       --subst-var-by withShellFiles ${lib.boolToString withShellFiles}
-
-    substituteInPlace pyproject.toml \
-      --replace-fail nixos-rebuild ${executable}
   '';
 
   postInstall = lib.optionalString withShellFiles ''
@@ -105,7 +101,6 @@ python3Packages.buildPythonApplication rec {
       tests = {
         with_reexec = nixos-rebuild-ng.override {
           withReexec = true;
-          withNgSuffix = false;
         };
         with_nix_latest = nixos-rebuild-ng.override {
           nix = nixVersions.latest;
