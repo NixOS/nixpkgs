@@ -2273,8 +2273,6 @@ self: super: with self; {
 
   bugsnag = callPackage ../development/python-modules/bugsnag { };
 
-  bugwarrior = callPackage ../development/python-modules/bugwarrior { };
-
   buienradar = callPackage ../development/python-modules/buienradar { };
 
   build = callPackage ../development/python-modules/build { };
