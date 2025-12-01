@@ -549,7 +549,10 @@ let
           # Telega has a server portion for it's network protocol
           # elisp error
           telega = (ignoreCompilationError super.telega).overrideAttrs (old: {
-            buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
+            buildInputs = old.buildInputs ++ [
+              pkgs.tdlib
+              pkgs.zlib
+            ];
             nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkg-config ];
 
             postPatch = ''

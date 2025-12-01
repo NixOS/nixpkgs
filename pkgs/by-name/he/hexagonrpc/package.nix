@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/linux-msm/hexagonrpc";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ matthewcroughan ];
-    mainProgram = "hexagonrpc";
+    mainProgram = "hexagonrpcd";
     platforms = lib.platforms.all;
   };
 })
