@@ -1,4 +1,15 @@
 {
+  addressable = {
+    dependencies = [ "public_suffix" ];
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "0mxhjgihzsx45l9wh2n0ywl9w0c6k70igm5r0d63dxkcagwvh4vw";
+      type = "gem";
+    };
+    version = "2.8.8";
+  };
   adts = {
     source = {
       remotes = [ "https://rubygems.org" ];
@@ -8,38 +19,63 @@
     version = "0.1.2";
   };
   commander = {
+    dependencies = [ "highline" ];
+    groups = [ "default" ];
+    platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "01qx76y05v29kgyjsfkai73gwfnqhypp1k8v024m9w7qzpv4mpxf";
+      sha256 = "1n8k547hqq9hvbyqbx2qi08g0bky20bbjca1df8cqq5frhzxq7bx";
       type = "gem";
     };
-    version = "4.4.3";
+    version = "4.6.0";
   };
   contracts = {
+    groups = [ "default" ];
+    platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "119f5p1n6r5svbx8h09za6a4vrsnj5i1pzr9cqdn9hj3wrxvyl3a";
+      sha256 = "0rld0n4k9iimrgbi38yfwdjgql6wiaqvmddyggsvvvrw1bcdrz99";
       type = "gem";
     };
-    version = "0.16.0";
+    version = "0.16.1";
   };
   elm_install = {
+    dependencies = [
+      "adts"
+      "commander"
+      "contracts"
+      "git"
+      "git_clone_url"
+      "indentation"
+      "molinillo"
+      "smart_colored"
+      "solve"
+    ];
+    groups = [ "default" ];
+    platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0d3fwhj54madabmzamss865kj8czicgaq5fbdll9kpapqvy6a2j5";
+      sha256 = "0vw4xllqjzkl6v6mpma6cw4mb57v73alxnnhjxf3wyi55aznv75k";
       type = "gem";
     };
-    version = "1.0.1";
+    version = "1.6.1";
   };
   git = {
+    dependencies = [
+      "addressable"
+      "rchardet"
+    ];
+    groups = [ "default" ];
+    platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1waikaggw7a1d24nw0sh8fd419gbf7awh000qhsf411valycj6q3";
+      sha256 = "0w3xhay1z7qx9ab04wmy5p4f1fadvqa6239kib256wsiyvcj595h";
       type = "gem";
     };
-    version = "1.3.0";
+    version = "1.19.1";
   };
   git_clone_url = {
+    dependencies = [ "uri-ssh_git" ];
     source = {
       remotes = [ "https://rubygems.org" ];
       sha256 = "0qgq7pjl461si3m2gr28vwbx47dcbpyy682mcwra5y1klpkbcvr5";
@@ -47,21 +83,15 @@
     };
     version = "2.0.0";
   };
-  hashdiff = {
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "1n6hj7k7b9hazac0j48ypbak2nqi5wy4nh5cjra6xl3a92r8db0a";
-      type = "gem";
-    };
-    version = "0.3.4";
-  };
   highline = {
+    groups = [ "default" ];
+    platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1nf5lgdn6ni2lpfdn4gk3gi47fmnca2bdirabbjbz1fk9w4p8lkr";
+      sha256 = "0yclf57n2j3cw8144ania99h1zinf8q3f5zrhqa754j6gl95rp9d";
       type = "gem";
     };
-    version = "1.7.8";
+    version = "2.0.3";
   };
   indentation = {
     source = {
@@ -78,6 +108,26 @@
       type = "gem";
     };
     version = "0.5.7";
+  };
+  public_suffix = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "15dhl6k4gbax0xz8frfs4nsb6lg5zgax9vkr1pqzjmhfxddhn2gp";
+      type = "gem";
+    };
+    version = "7.0.0";
+  };
+  rchardet = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "03rr05qam5d6gcsnsjs85bnwg80qww484xql347j42kj3bb2xsnm";
+      type = "gem";
+    };
+    version = "1.10.0";
   };
   semverse = {
     source = {
@@ -96,12 +146,18 @@
     version = "1.1.1";
   };
   solve = {
+    dependencies = [
+      "molinillo"
+      "semverse"
+    ];
+    groups = [ "default" ];
+    platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0bbzny2bl94mv1xwcfrxbi3fjhxxawlz6la7mip2wwz9kkaf376h";
+      sha256 = "0w7bk0128azqr42ad51ix3wfa385yxwvi6iw9v5qv4ps6ldpzk99";
       type = "gem";
     };
-    version = "3.1.0";
+    version = "3.1.1";
   };
   uri-ssh_git = {
     source = {
