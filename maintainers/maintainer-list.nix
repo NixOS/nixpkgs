@@ -8715,6 +8715,12 @@
     githubId = 12560461;
     name = "Arne Keller";
   };
+  flokkq = {
+    email = "weberclemens07@gmail.com";
+    github = "flokkq";
+    githubId = 98653095;
+    name = "Clemens Weber";
+  };
   flokli = {
     email = "flokli@flokli.de";
     github = "flokli";
