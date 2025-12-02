@@ -1,0 +1,39 @@
+Per https://bodhi.fedoraproject.org/updates/FEDORA-2022-dc47174c36:
+
+This update fixes a failure to build with source with bash 5.2. Bash's
+`patsub_replacement` feature makes ampersand a special character when doing
+variable substitution, which was not previously the case. This update instructs
+bash to turn off the new behavior.
+
+The patch itself is adapted from
+https://src.fedoraproject.org/rpms/cvc4/blob/f7c24c6ad72a8812d244313f13032fa23d393315/f/cvc4-bash-patsub-replacement.patch.
+--- a/src/expr/mkexpr	2020-06-19 10:59:27.000000000 -0600
++++ b/src/expr/mkexpr	2022-10-11 14:28:31.120453409 -0600
+@@ -16,6 +16,7 @@
+ #
+ 
+ copyright=2010-2014
++shopt -u patsub_replacement
+ 
+ filename=`basename "$1" | sed 's,_template,,'`
+ 
+--- a/src/expr/mkkind	2020-06-19 10:59:27.000000000 -0600
++++ b/src/expr/mkkind	2022-10-11 14:34:17.008996126 -0600
+@@ -15,6 +15,7 @@
+ #
+ 
+ copyright=2010-2014
++shopt -u patsub_replacement
+ 
+ filename=`basename "$1" | sed 's,_template,,'`
+ 
+--- a/src/expr/mkmetakind	2020-06-19 10:59:27.000000000 -0600
++++ b/src/expr/mkmetakind	2022-10-11 14:34:32.248020036 -0600
+@@ -18,6 +18,7 @@
+ #
+ 
+ copyright=2010-2014
++shopt -u patsub_replacement
+ 
+ cat <<EOF
+ /*********************                                                        */

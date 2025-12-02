@@ -1,0 +1,13 @@
+diff --git a/components/editor/gtkhtml-editor.c b/components/editor/gtkhtml-editor.c
+index 902baf94..d885df8c 100644
+--- a/components/editor/gtkhtml-editor.c
++++ b/components/editor/gtkhtml-editor.c
+@@ -455,7 +455,7 @@ editor_set_html (GtkhtmlEditor *editor,
+ 	gtk_html_load_empty (html);
+ 	gtk_html_set_editable (html, TRUE);
+ 
+-	editor->priv->edit_area = g_object_ref_sink (html);
++	editor->priv->edit_area = (GtkWidget *) g_object_ref_sink (html);
+ }
+ 
+ static GObject *

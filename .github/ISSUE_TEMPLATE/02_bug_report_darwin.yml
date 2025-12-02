@@ -1,0 +1,158 @@
+name: "Bug report (macOS)"
+description: "Create a bug report against a package where the issue only occurs on macOS."
+title: "PACKAGENAME: BUG TITLE"
+labels: ["0.kind: bug", "6.topic: darwin"]
+body:
+  - type: "markdown"
+    attributes:
+      value: |
+        <p align="center">
+          <a href="https://nixos.org">
+            <picture>
+              <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos.svg">
+              <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos-white.svg">
+              <img src="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos.svg" width="400px" alt="NixOS logo">
+            </picture>
+          </a>
+        </p>
+
+        Welcome to Nixpkgs. Please replace the **`PACKAGENAME: BUG TITLE`** template above with the correct package name (As seen in the [NixOS Package Search](https://search.nixos.org/packages)) and a short title summarising what the bug entails.
+
+        > [!TIP]
+        > For instance, if you were filing a bug against the [`hello`](https://search.nixos.org/packages?channel=unstable&from=0&size=1&buckets=%7B%22package_attr_set%22%3A%5B%22No%20package%20set%22%5D%2C%22package_license_set%22%3A%5B%22GNU%20General%20Public%20License%20v3.0%20or%20later%22%5D%2C%22package_maintainers_set%22%3A%5B%5D%2C%22package_platforms%22%3A%5B%5D%7D&sort=relevance&type=packages&query=hello) package about it failing to launch on Apple Silicon, your title would be as follows:
+        > ```
+        > hello: fails to launch on aarch64-darwin
+        > ```
+
+        ---
+  - type: "dropdown"
+    id: "version"
+    attributes:
+      label: "Nixpkgs version"
+      description: |
+        What version of Nixpkgs are you using?
+
+        If you are using an older version, please update to the latest stable version and check if the issue persists before continuing this bug report.
+      options:
+        - "Please select a version."
+        - "- Unstable (26.05)"
+        - "- Stable (25.11)"
+        - "- Old Stable (25.05)"
+      default: 0
+    validations:
+      required: true
+  - type: "textarea"
+    id: "description"
+    attributes:
+      label: "Describe the bug"
+      description: "Please include a clear and concise description of what the issue is."
+    validations:
+      required: true
+  - type: "textarea"
+    id: "how-to-reproduce"
+    attributes:
+      label: "Steps to reproduce"
+      description: "Please include a step-by-step guide for reproducing this issue. Consider writing in concise, numbered bullet points to ensure that Nixpkgs developers can retrace your steps."
+    validations:
+      required: true
+  - type: "input"
+    id: "expected-behaviour"
+    attributes:
+      label: "Expected behaviour"
+      description: "Please write a concise description of what was supposed to happen."
+    validations:
+      required: true
+  - type: "textarea"
+    id: "screenshots"
+    attributes:
+      label: "Screenshots"
+      description: |
+        If applicable, add screenshots to help explain your problem.
+        If you need help uploading images to GitHub, please review the [relevant documentation](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#uploading-assets).
+    validations:
+      required: false
+  - type: "textarea"
+    id: "logs"
+    attributes:
+      label: "Relevant log output"
+      description: |
+        If applicable, copy and paste any relevant log output.
+        This will be automatically formatted into code, so no need for backticks.
+      render: "console"
+    validations:
+      required: false
+  - type: "textarea"
+    id: "additional-context"
+    attributes:
+      label: "Additional context"
+      description: "Add any other context about the problem here."
+    validations:
+      required: false
+  - type: "textarea"
+    id: "metadata"
+    attributes:
+      label: "System metadata"
+      description: "Please run `nix-shell -p nix-info --run \"nix-info -m\"` on a terminal and paste the output of that command here."
+    validations:
+      required: true
+  - type: "dropdown"
+    id: "nix-darwin"
+    attributes:
+      label: "Are you using nix-darwin?"
+      description: |
+        [`nix-darwin`](https://github.com/LnL7/nix-darwin) is a set of NixOS-like modules for macOS systems. Depending on your issue, this information may be relevant.
+      options:
+        - "Yes, I am using nix-darwin."
+        - "No, I am not using nix-darwin."
+      default: 1
+    validations:
+      required: true
+  - type: "textarea"
+    id: "maintainers"
+    attributes:
+      label: "Notify maintainers"
+      description: |
+        Please mention the people who are in the **Maintainers** list of the offending package. This is done by by searching for the package on the [NixOS Package Search](https://search.nixos.org/packages) and mentioning the people listed under **Maintainers** by prefixing their GitHub usernames with an '@' character. Please add the mentions above the `---` characters in the template below.
+
+        If this issue is related to the Darwin packaging architecture as a whole, or is related to the core Darwin frameworks, consider mentioning the `@NixOS/darwin-core` team.
+      value: |2
+
+
+        ---
+
+        **Note for maintainers:** Please tag this issue in your pull request description. (i.e. `Resolves #ISSUE`.)
+    validations:
+      required: false
+  - type: "checkboxes"
+    id: "sanity-check"
+    attributes:
+      label: "I assert that this issue is relevant for Nixpkgs"
+      description: |
+        This bug tracker is for actionable issues that are not the result of user error. If you need help using your system and are unsure if this is a bug with Nixpkgs/NixOS, please consider asking for help on the [NixOS Discourse](https://discourse.nixos.org/) or the [NixOS Matrix Space](https://matrix.to/#/#community:nixos.org) before opening an issue.
+      options:
+        - label: "I assert that this is a bug and not a support request."
+          required: true
+        - label: "I assert that this is not a [duplicate of an existing issue](https://github.com/NixOS/nixpkgs/issues?q=is%3Aopen+is%3Aissue+label%3A%220.kind%3A+bug%22+label%3A%226.topic%3A+darwin%22). "
+          required: true
+        - label: "I assert that I have read the [NixOS Code of Conduct](https://github.com/NixOS/.github/blob/master/CODE_OF_CONDUCT.md) and agree to abide by it."
+          required: true
+  - type: "markdown"
+    attributes:
+      value: |
+        # Thank you for helping improve Nixpkgs!
+
+        ---
+  - type: "textarea"
+    id: "prioritisation"
+    attributes:
+      label: "Is this issue important to you?"
+      description: |
+        **Please do not modify this text area!**
+
+        This template helps Nixpkgs developers know which issues should be prioritised by allowing users to vote with a :+1: reaction.
+        This is not a guarantee that highly-requested issues will be fixed first, but it helps us to figure out what's important to users. Please react on other users' issues if you find them important.
+      value: |
+        Add a :+1: [reaction] to [issues you find important].
+
+        [reaction]: https://github.blog/2016-03-10-add-reactions-to-pull-requests-issues-and-comments/
+        [issues you find important]: https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc

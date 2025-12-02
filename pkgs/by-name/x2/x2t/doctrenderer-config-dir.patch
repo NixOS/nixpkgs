@@ -1,0 +1,13 @@
+diff --git a/DesktopEditor/doctrenderer/doctrenderer.cpp b/DesktopEditor/doctrenderer/doctrenderer.cpp
+index ac24efa8b2..f6de72cc2a 100644
+--- a/DesktopEditor/doctrenderer/doctrenderer.cpp
++++ b/DesktopEditor/doctrenderer/doctrenderer.cpp
+@@ -238,7 +238,7 @@ namespace NSDoctRenderer
+ 	public:
+ 		CDoctRenderer_Private(const std::wstring& sAllFontsPath = L"") : CDoctRendererConfig()
+ 		{
+-			LoadConfig(NSFile::GetProcessDirectory(), sAllFontsPath);
++			LoadConfig(NSFile::GetProcessDirectory() + L"/../etc", sAllFontsPath);
+ 			m_pDrawingFile = NULL;
+ 		}
+ 		~CDoctRenderer_Private()

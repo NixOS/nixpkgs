@@ -1,0 +1,14 @@
+{
+  "url": "https://github.com/kaermorchen/tree-sitter-twig",
+  "rev": "40d17f0eb990215e12531abe29ee7691d7ca99a5",
+  "date": "2024-12-06T17:47:37+03:00",
+  "path": "/nix/store/q05mc4lj16wirwm724m1q39sblb5yq5q-tree-sitter-twig",
+  "sha256": "06a6rfgh9mmzqvs7bp8y92axa4fni4c72s82bdin7j3a0x5mxwi6",
+  "hash": "sha256-JvJeSwdqyGNjWwJpcRiJ1hHVlUge3XX0xr/WBJ/LRhk=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "fetchTags": false,
+  "leaveDotGit": false,
+  "rootDir": ""
+}

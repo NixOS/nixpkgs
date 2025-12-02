@@ -1,0 +1,67 @@
+--- a/CMakeLists.txt	2017-01-22 19:51:41.000000000 +0000
++++ b/CMakeLists.txt	2025-10-04 14:08:24.934041902 +0100
+@@ -83,57 +83,21 @@
+ 
+ # rapidjson
+ 
+-set(RAPIDJSON_FILE "rapidjson-${RAPIDJSON_COMMIT}.tar.gz")
+-set(RAPIDJSON_DIR "${CONTRIB_DIR}/rapidjson-${RAPIDJSON_COMMIT}")
+-set(RAPIDJSON_URL "https://github.com/miloyip/rapidjson/archive/${RAPIDJSON_COMMIT}.tar.gz")
+-
+-if(EXISTS "${CMAKE_SOURCE_DIR}/contrib/${RAPIDJSON_FILE}")
+-    message(STATUS "Found package: ${RAPIDJSON_FILE}")
+-else()
+-    message(STATUS "Downloading: ${RAPIDJSON_FILE}")
+-    file(DOWNLOAD ${RAPIDJSON_URL} "${CMAKE_SOURCE_DIR}/contrib/${RAPIDJSON_FILE}")
+-    if(NOT EXISTS "${CMAKE_SOURCE_DIR}/contrib/${RAPIDJSON_FILE}")
+-        message(FATAL_ERROR "\nFailed to download source file: ${RAPIDJSON_FILE}\nFrom: ${RAPIDJSON_URL}")
+-    endif()
+-endif()
+-
+-execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_SOURCE_DIR}/contrib/${RAPIDJSON_FILE} WORKING_DIRECTORY ${CONTRIB_DIR})
+-
+-include_directories(SYSTEM ${RAPIDJSON_DIR}/include)
++include_directories(SYSTEM @rapidjson@/include)
+ 
+ 
+ # libb64
+ 
+-set(LIBB64_FILE "libb64-${LIBB64_VERSION}.zip")
+-set(LIBB64_DIR "${CONTRIB_DIR}/libb64-${LIBB64_VERSION}")
+-set(LIBB64_URL "http://downloads.sourceforge.net/project/libb64/libb64/libb64/${LIBB64_FILE}?use_mirror=autoselect")
+-
+-if(EXISTS "${CMAKE_SOURCE_DIR}/contrib/${LIBB64_FILE}")
+-    message(STATUS "Found package: ${LIBB64_FILE}")
+-else()
+-    message(STATUS "Downloading: ${LIBB64_FILE}")
+-    file(DOWNLOAD ${LIBB64_URL} "${CMAKE_SOURCE_DIR}/contrib/${LIBB64_FILE}")
+-    if(NOT EXISTS "${CMAKE_SOURCE_DIR}/contrib/${LIBB64_FILE}")
+-        message(FATAL_ERROR "\nFailed to download source file: ${LIBB64_FILE}\nFrom: ${LIBB64_URL}")
+-    endif()
+-endif()
+-
+-execute_process(COMMAND ${CMAKE_COMMAND} -E tar xf "${CMAKE_SOURCE_DIR}/contrib/${LIBB64_FILE}" WORKING_DIRECTORY "${CONTRIB_DIR}")
+-
+-# Remove libb64's newlines
+-set(LIBB64_CENCODE_FILE ${LIBB64_DIR}/src/cencode.c)
+-file(READ ${LIBB64_CENCODE_FILE} LIBB64_CENCODE)
+-string(REPLACE "*codechar++ = '\\n';" "/* *codechar++ = '\\n'; */" LIBB64_CENCODE "${LIBB64_CENCODE}")
+-file(WRITE ${LIBB64_CENCODE_FILE} "${LIBB64_CENCODE}")
+-
+-file(GLOB_RECURSE LIBB64_SRCS ${LIBB64_DIR}/src/*.c)
+-include_directories(SYSTEM ${LIBB64_DIR}/include)
++include_directories(SYSTEM @libb64@/include)
+ 
+ 
+ # executable targets
+ 
+-add_executable(msgpack2json src/msgpack2json.cpp ${MPACK_SRCS} ${LIBB64_SRCS})
+-add_executable(json2msgpack src/json2msgpack.cpp ${MPACK_SRCS} ${LIBB64_SRCS})
++add_executable(msgpack2json src/msgpack2json.cpp ${MPACK_SRCS})
++add_executable(json2msgpack src/json2msgpack.cpp ${MPACK_SRCS})
++
++target_link_libraries(msgpack2json b64)
++target_link_libraries(json2msgpack b64)
+ 
+ install(TARGETS msgpack2json json2msgpack DESTINATION bin)
+ 

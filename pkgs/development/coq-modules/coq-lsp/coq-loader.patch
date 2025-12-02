@@ -1,0 +1,11 @@
+--- a/coq/loader.ml	2024-11-14 17:54:36.562137810 +0100
++++ b/coq/loader.ml	2024-11-14 17:55:01.485154767 +0100
+@@ -81,7 +81,7 @@
+     Exninfo.iraise iexn
+ 
+ let plugin_handler user_loader =
+-  let loader = Option.default (Fl_dynload.load_packages ~debug:false) user_loader in
++  let loader = Option.default (Fl_dynload.load_packages ?loadfile:None ~debug:false) user_loader in
+   let safe_loader = safe_loader loader in
+   fun fl_pkg ->
+     let _, fl_pkg = Mltop.PluginSpec.repr fl_pkg in

@@ -1,0 +1,13 @@
+diff --git a/flux/src/cffi.rs b/flux/src/cffi.rs
+index ba18e3d5..0c1badf8 100644
+--- a/flux/src/cffi.rs
++++ b/flux/src/cffi.rs
+@@ -1149,7 +1149,7 @@ from(bucket: v.bucket)
+     fn parse_with_invalid_utf8() {
+         let cfname = CString::new("foo.flux").unwrap();
+         let cfname_ptr: *const c_char = cfname.as_ptr();
+-        let v: Vec<c_char> = vec![-61, 0];
++        let v: Vec<c_char> = vec![-61i8 as c_char, 0];
+         let csrc: *const c_char = &v[0];
+         // Safety: both pointers are valid
+         let pkg = unsafe { flux_parse(cfname_ptr, csrc) };

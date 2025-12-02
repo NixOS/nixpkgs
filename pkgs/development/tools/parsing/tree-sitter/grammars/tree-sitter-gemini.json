@@ -1,0 +1,14 @@
+{
+  "url": "https://github.com/blessanabraham/tree-sitter-gemini",
+  "rev": "3cc5e4bdf572d5df4277fc2e54d6299bd59a54b3",
+  "date": "2023-08-26T22:20:36+03:00",
+  "path": "/nix/store/ywwyjjaps1swpzy0hndllwka4rg8hbdb-tree-sitter-gemini",
+  "sha256": "1r965z6cls7ahipf9bpvcvpv4xda7k1j64lvnwf2bkb83qpakdc2",
+  "hash": "sha256-grWpLh5ozSUct5sSI8M8qnWy72b7ruRuhOpoyswvJuU=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "fetchTags": false,
+  "leaveDotGit": false,
+  "rootDir": ""
+}

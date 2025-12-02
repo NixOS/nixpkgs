@@ -1,0 +1,36 @@
+diff --git a/helix-cli/src/main.rs b/helix-cli/src/main.rs
+index 18e279fd..a3ec271c 100644
+--- a/helix-cli/src/main.rs
++++ b/helix-cli/src/main.rs
+@@ -121,13 +121,6 @@ enum Commands {
+         action: MetricsAction,
+     },
+ 
+-    /// Update to the latest version
+-    Update {
+-        /// Force update even if already on latest version
+-        #[clap(long)]
+-        force: bool,
+-    },
+-
+     /// Migrate v1 project to v2 format
+     Migrate {
+         /// Project directory to migrate (defaults to current directory)
+@@ -253,9 +246,6 @@ async fn main() -> Result<()> {
+     // Send CLI install event (only first time)
+     metrics_sender.send_cli_install_event_if_first_time();
+ 
+-    // Check for updates before processing commands
+-    update::check_for_updates().await?;
+-
+     let cli = Cli::parse();
+ 
+     let result = match cli.command {
+@@ -280,7 +270,6 @@ async fn main() -> Result<()> {
+         Commands::Prune { instance, all } => commands::prune::run(instance, all).await,
+         Commands::Delete { instance } => commands::delete::run(instance).await,
+         Commands::Metrics { action } => commands::metrics::run(action).await,
+-        Commands::Update { force } => commands::update::run(force).await,
+         Commands::Migrate {
+             path,
+             queries_dir,

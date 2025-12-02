@@ -1,0 +1,126 @@
+name: Lint
+
+on:
+  workflow_call:
+    inputs:
+      mergedSha:
+        required: true
+        type: string
+      targetSha:
+        required: true
+        type: string
+    secrets:
+      # Should only be provided in the merge queue, not in pull requests,
+      # where we're evaluating untrusted code.
+      CACHIX_AUTH_TOKEN_GHA:
+        required: false
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  treefmt:
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          persist-credentials: false
+          sparse-checkout: .github/actions
+      - name: Checkout the merge commit
+        uses: ./.github/actions/checkout
+        with:
+          merged-as-untrusted-at: ${{ inputs.mergedSha }}
+
+      - uses: cachix/install-nix-action@0b0e072294b088b73964f1d72dfdac0951439dbd # v31
+
+      # TODO: Figure out how to best enable caching for the treefmt job. Cachix won't work well,
+      # because the cache would be invalidated on every commit - treefmt checks every file.
+      # Maybe we can cache treefmt's eval-cache somehow.
+
+      - name: Check that files are formatted
+        run: |
+          # Note that it's fine to run this on untrusted code because:
+          # - There's no secrets accessible here
+          # - The build is sandboxed
+          if ! nix-build nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A fmt.check; then
+            echo "Some files are not properly formatted"
+            echo "Please format them by going to the Nixpkgs root directory and running one of:"
+            echo "  nix-shell --run treefmt"
+            echo "  nix develop --command treefmt"
+            echo "  nix fmt"
+            echo "Make sure your branch is up to date with master; rebase if not."
+            echo "If you're having trouble, please ping @NixOS/nix-formatting"
+            exit 1
+          fi
+
+  parse:
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          persist-credentials: false
+          sparse-checkout: .github/actions
+      - name: Checkout the merge commit
+        uses: ./.github/actions/checkout
+        with:
+          merged-as-untrusted-at: ${{ inputs.mergedSha }}
+
+      - uses: cachix/install-nix-action@0b0e072294b088b73964f1d72dfdac0951439dbd # v31
+
+      - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
+        continue-on-error: true
+        with:
+          # The nixpkgs-gha cache should not be trusted or used outside of Nixpkgs and its forks' CI.
+          name: ${{ vars.CACHIX_NAME || 'nixpkgs-gha' }}
+          extraPullNames: nixpkgs-gha
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
+          pushFilter: -source$
+
+      - name: Parse all nix files
+        run: |
+          # Tests multiple versions at once, let's make sure all of them run, so keep-going.
+          nix-build nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A parse --keep-going
+
+  nixpkgs-vet:
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          persist-credentials: false
+          sparse-checkout: .github/actions
+      - name: Checkout merge and target commits
+        uses: ./.github/actions/checkout
+        with:
+          merged-as-untrusted-at: ${{ inputs.mergedSha }}
+          target-as-trusted-at: ${{ inputs.targetSha }}
+
+      - uses: cachix/install-nix-action@0b0e072294b088b73964f1d72dfdac0951439dbd # v31
+
+      - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
+        continue-on-error: true
+        with:
+          # The nixpkgs-gha cache should not be trusted or used outside of Nixpkgs and its forks' CI.
+          name: ${{ vars.CACHIX_NAME || 'nixpkgs-gha' }}
+          extraPullNames: nixpkgs-gha
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
+          pushFilter: -source$
+
+      - name: Running nixpkgs-vet
+        env:
+          # Force terminal colors to be enabled. The library that `nixpkgs-vet` uses respects https://bixense.com/clicolors/
+          CLICOLOR_FORCE: 1
+        run: |
+          if nix-build nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A nixpkgs-vet --arg base "./nixpkgs/trusted" --arg head "./nixpkgs/untrusted"; then
+            exit 0
+          else
+            exitCode=$?
+            echo "To run locally: ./ci/nixpkgs-vet.sh $GITHUB_BASE_REF https://github.com/$GITHUB_REPOSITORY.git"
+            echo "If you're having trouble, ping @NixOS/nixpkgs-vet"
+            exit "$exitCode"
+          fi

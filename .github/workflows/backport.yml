@@ -1,0 +1,80 @@
+# WARNING:
+# When extending this action, be aware that $GITHUB_TOKEN allows write access to
+# the GitHub repository. This means that it should not evaluate user input in a
+# way that allows code injection.
+
+name: Backport
+
+on:
+  pull_request_target:
+    types: [closed, labeled]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  backport:
+    name: Backport Pull Request
+    if: vars.NIXPKGS_CI_APP_ID && github.event.pull_request.merged == true && (github.event.action != 'labeled' || startsWith(github.event.label.name, 'backport'))
+    runs-on: ubuntu-slim
+    timeout-minutes: 3
+    steps:
+      # Use a GitHub App to create the PR so that CI gets triggered
+      # The App is scoped to Repository > Contents and Pull Requests: write for Nixpkgs
+      - uses: actions/create-github-app-token@7e473efe3cb98aa54f8d4bac15400b15fad77d94 # v2.2.0
+        id: app-token
+        with:
+          app-id: ${{ vars.NIXPKGS_CI_APP_ID }}
+          private-key: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+          permission-workflows: write
+
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          token: ${{ steps.app-token.outputs.token }}
+          persist-credentials: true
+
+      - name: Log current API rate limits
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh api /rate_limit | jq
+
+      - name: Create backport PRs
+        id: backport
+        uses: korthout/backport-action@d07416681cab29bf2661702f925f020aaa962997 # v3.4.1
+        with:
+          # Config README: https://github.com/korthout/backport-action#backport-action
+          copy_labels_pattern: 'severity:\ssecurity'
+          github_token: ${{ steps.app-token.outputs.token }}
+          pull_description: |-
+            Bot-based backport to `${target_branch}`, triggered by a label in #${pull_number}.
+
+            **Before merging, ensure that this backport is [acceptable for the release](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#changes-acceptable-for-releases).**
+
+            Even as a non-committer, if you find that it is not acceptable, leave a comment.
+
+      - name: Log current API rate limits
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh api /rate_limit | jq
+
+      - name: "Add 'has: port to stable' label"
+        if: steps.backport.outputs.created_pull_numbers != ''
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        with:
+          # Not using the app on purpose to avoid triggering another workflow run after adding this label.
+          script: |
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              labels: [ '8.has: port to stable' ]
+            })

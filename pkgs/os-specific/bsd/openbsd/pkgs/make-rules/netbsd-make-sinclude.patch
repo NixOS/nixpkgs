@@ -1,0 +1,15 @@
+NetBSD make prefers `.-include` to `sinclude` (without a dot)
+
+diff --git a/share/mk/bsd.dep.mk b/share/mk/bsd.dep.mk
+index 7019adb57f7..277064eb5c2 100644
+--- a/share/mk/bsd.dep.mk
++++ b/share/mk/bsd.dep.mk
+@@ -11,7 +11,7 @@ depend:
+ # catch22: don't include potentially bogus files we are going to clean
+ .  if !(make(clean) || make(cleandir) || make(obj))
+ .    for o in ${DEPS}
+-       sinclude $o
++.      -include "$o"
+ .    endfor
+ .  endif
+ .endif

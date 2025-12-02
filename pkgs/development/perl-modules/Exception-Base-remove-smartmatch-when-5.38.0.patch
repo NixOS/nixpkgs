@@ -1,0 +1,20 @@
+smartmatch deprecated in perl-5.37.10
+
+Patch by @pghmcfc from
+https://github.com/dex4er/perl-Exception-Base/issues/5#issuecomment-1637075218
+
+diff --git a/t/tlib/Exception/BaseTest.pm b/t/tlib/Exception/BaseTest.pm
+index d590d12..e531ed7 100644
+--- a/t/tlib/Exception/BaseTest.pm
++++ b/t/tlib/Exception/BaseTest.pm
+@@ -569,8 +569,9 @@ sub test_overload {
+     $self->assert_matches(qr/String at /, $obj);
+ 
+     # smart matching for Perl 5.10
+-    if ($] >= 5.010) {
++    # Deprecation warning added in 5.37.10
++    if ($] >= 5.010 && $] < 5.037010) {
+         no if $] >= 5.018, warnings => 'experimental::smartmatch';
+         eval q{
+             $self->assert_num_equals(1, 'String' ~~ $obj);
+

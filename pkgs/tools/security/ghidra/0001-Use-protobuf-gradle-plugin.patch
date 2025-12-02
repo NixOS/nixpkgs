@@ -1,0 +1,185 @@
+diff --git a/Ghidra/Debug/Debugger-isf/build.gradle b/Ghidra/Debug/Debugger-isf/build.gradle
+index 2db94ed67e..925f394cf0 100644
+--- a/Ghidra/Debug/Debugger-isf/build.gradle
++++ b/Ghidra/Debug/Debugger-isf/build.gradle
+@@ -18,11 +18,17 @@ apply from: "${rootProject.projectDir}/gradle/javaProject.gradle"
+ apply from: "${rootProject.projectDir}/gradle/jacocoProject.gradle"
+ apply from: "${rootProject.projectDir}/gradle/javaTestProject.gradle"
+ apply from: "${rootProject.projectDir}/gradle/distributableGhidraModule.gradle"
+-apply from: "${rootProject.projectDir}/gradle/hasProtobuf.gradle"
+ 
++apply plugin: 'com.google.protobuf'
+ apply plugin: 'eclipse'
+ eclipse.project.name = 'Debug Debugger-isf'
+ 
++buildscript {
++	dependencies {
++		classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.18'
++	}
++}
++
+ dependencies {
+ 	api project(':ProposedUtils')
+ }
+diff --git a/Ghidra/Debug/Debugger-rmi-trace/build.gradle b/Ghidra/Debug/Debugger-rmi-trace/build.gradle
+index 4fa3b9a539..2663aeaeb0 100644
+--- a/Ghidra/Debug/Debugger-rmi-trace/build.gradle
++++ b/Ghidra/Debug/Debugger-rmi-trace/build.gradle
+@@ -19,12 +19,17 @@ apply from: "${rootProject.projectDir}/gradle/helpProject.gradle"
+ apply from: "${rootProject.projectDir}/gradle/jacocoProject.gradle"
+ apply from: "${rootProject.projectDir}/gradle/javaTestProject.gradle"
+ apply from: "${rootProject.projectDir}/gradle/distributableGhidraModule.gradle"
+-apply from: "${rootProject.projectDir}/gradle/hasProtobuf.gradle"
+ apply from: "${rootProject.projectDir}/gradle/hasPythonPackage.gradle"
+-
++apply plugin: 'com.google.protobuf'
+ apply plugin: 'eclipse'
+ eclipse.project.name = 'Debug Debugger-rmi-trace'
+ 
++buildscript {
++	dependencies {
++		classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.18'
++	}
++}
++
+ dependencies {
+ 	api project(':ProposedUtils')
+ 	api project(':Pty')
+@@ -37,13 +42,10 @@ dependencies {
+ }
+ 
+ task configureGenerateProtoPy {
+-	dependsOn(configurations.protocArtifact)
++	dependsOn(protobuf.generateProtoTasks.all())
+ 
+-	doLast {
+-		def exe = configurations.protocArtifact.first()
+-		if (!isCurrentWindows()) {
+-			exe.setExecutable(true)
+-		}
++ 	doLast {
++		def exe = protobuf.tools.protoc.path
+ 		generateProtoPy.commandLine exe
+ 		generateProtoPy.args "--python_out=${generateProtoPy.outdir}"
+ 		generateProtoPy.args "--pyi_out=${generateProtoPy.stubsOutdir}"
+diff --git a/build.gradle b/build.gradle
+index 159eb7dd7b..ef4add1ad8 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -80,6 +80,12 @@ if (flatRepo.isDirectory()) {
+ 			mavenCentral()
+ 			flatDir name: "flat", dirs:["$flatRepo"]
+ 		}
++		buildscript {
++			repositories {
++				mavenLocal()
++				mavenCentral()
++			}
++		}
+ 	}
+ }
+ else {	
+diff --git a/gradle/hasProtobuf.gradle b/gradle/hasProtobuf.gradle
+deleted file mode 100644
+index a8c176bcbe..0000000000
+--- a/gradle/hasProtobuf.gradle
++++ /dev/null
+@@ -1,98 +0,0 @@
+-/* ###
+- * IP: GHIDRA
+- *
+- * Licensed under the Apache License, Version 2.0 (the "License");
+- * you may not use this file except in compliance with the License.
+- * You may obtain a copy of the License at
+- *
+- *      http://www.apache.org/licenses/LICENSE-2.0
+- *
+- * Unless required by applicable law or agreed to in writing, software
+- * distributed under the License is distributed on an "AS IS" BASIS,
+- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+- * See the License for the specific language governing permissions and
+- * limitations under the License.
+- */
+-/*plugins {
+-	id 'com.google.protobuf' version '0.8.10'
+-}*/
+-
+-configurations {
+-	allProtocArtifacts
+-	protocArtifact
+-}
+-
+-def platform = getCurrentPlatformName()
+-
+-
+-dependencies {
+-	allProtocArtifacts 'com.google.protobuf:protoc:3.21.8:windows-x86_64@exe'
+-	allProtocArtifacts 'com.google.protobuf:protoc:3.21.8:linux-x86_64@exe'
+-	allProtocArtifacts 'com.google.protobuf:protoc:3.21.8:linux-aarch_64@exe'
+-	allProtocArtifacts 'com.google.protobuf:protoc:3.21.8:osx-x86_64@exe'
+-	allProtocArtifacts 'com.google.protobuf:protoc:3.21.8:osx-aarch_64@exe'
+-
+-	if (isCurrentWindows()) {
+-		protocArtifact 'com.google.protobuf:protoc:3.21.8:windows-x86_64@exe'
+-	}
+-	if (isCurrentLinux()) {
+-		if (platform.endsWith("x86_64")) {
+-			protocArtifact 'com.google.protobuf:protoc:3.21.8:linux-x86_64@exe'
+-		}
+-		else {
+-			protocArtifact 'com.google.protobuf:protoc:3.21.8:linux-aarch_64@exe'
+-		}
+-	}
+-	if (isCurrentMac()) {
+-		if (platform.endsWith("x86_64")) {
+-			protocArtifact 'com.google.protobuf:protoc:3.21.8:osx-x86_64@exe'
+-		}
+-		else {
+-			protocArtifact 'com.google.protobuf:protoc:3.21.8:osx-aarch_64@exe'
+-		}
+-	}
+-}
+-
+-/*protobuf {
+-	protoc {
+-		artifact = 'com.google.protobuf:protoc:3.21.8'
+-	}
+-}*/
+-
+-task configureGenerateProto {
+-	dependsOn(configurations.protocArtifact)
+-
+-	doLast {
+-		def exe = configurations.protocArtifact.first()
+-		if (!isCurrentWindows()) {
+-			exe.setExecutable(true)
+-		}
+-		generateProto.commandLine exe, "--java_out=${generateProto.outdir}", "-I${generateProto.srcdir}"
+-		generateProto.args generateProto.src
+-	}
+-}
+-
+-// Can't use providers.exec, or else we see no output
+-task generateProto(type:Exec) {
+-	dependsOn(configureGenerateProto)
+-	ext.srcdir = file("src/main/proto")
+-	ext.src = fileTree(srcdir) {
+-		include "**/*.proto"
+-	}
+-	ext.outdir = file("build/generated/source/proto/main/java")
+-	outputs.dir(outdir)
+-	inputs.files(src)
+-}
+-
+-tasks.compileJava.dependsOn(tasks.generateProto)
+-tasks.eclipse.dependsOn(tasks.generateProto)
+-rootProject.tasks.prepDev.dependsOn(tasks.generateProto)
+-
+-sourceSets {
+-	main {
+-		java {
+-			srcDir tasks.generateProto.outdir
+-		}
+-	}
+-}
+-zipSourceSubproject.dependsOn generateProto

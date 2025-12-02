@@ -1,0 +1,12 @@
+diff --git a/nqptp.service.in b/nqptp.service.in
+index 6f1eb0c..53e6a2e 100644
+--- a/nqptp.service.in
++++ b/nqptp.service.in
+@@ -8,6 +8,7 @@ Before=shairport-sync.service
+ ExecStart=@prefix@/bin/nqptp
+ User=nqptp
+ Group=nqptp
++AmbientCapabilities=CAP_NET_BIND_SERVICE
+ 
+ [Install]
+ WantedBy=multi-user.target

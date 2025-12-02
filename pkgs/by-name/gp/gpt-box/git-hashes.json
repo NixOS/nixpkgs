@@ -1,0 +1,7 @@
+{
+  "computer": "sha256-qaD6jn78zDyZBktwJ4WTQa8oCvCWQJOBDaozBVsXNb8=",
+  "fl_build": "sha256-CSKe2yEIisftM0q79HbDTghShirWg02zi9v+hD5R57g=",
+  "fl_lib": "sha256-GFgDSkAI5alBxngm8y8A5oXfWgyuleNjnM4bsgYUlSs=",
+  "flutter_highlight": "sha256-jSATD4Ww5FHEscGNiTN/FE1+iQHzg/XMbsC9f5XcNGw=",
+  "openai_dart": "sha256-FP8J8ul8F68vrEdEZAmzNS921evtRfCIOlV2Aubifaw="
+}

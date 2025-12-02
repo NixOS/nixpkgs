@@ -1,0 +1,13 @@
+diff --git a/plugins/php/uwsgiplugin.py b/plugins/php/uwsgiplugin.py
+index d930c44e..2fcbc22a 100644
+--- a/plugins/php/uwsgiplugin.py
++++ b/plugins/php/uwsgiplugin.py
+@@ -17,6 +17,8 @@ php_version = os.popen(PHPPATH + ' --version').read().rstrip().split('.')[0]
+ CFLAGS = [os.popen(PHPPATH + ' --includes').read().rstrip(), '-Wno-sign-compare']
+ LDFLAGS = os.popen(PHPPATH + ' --ldflags').read().rstrip().split()
+ 
++LDFLAGS.append(os.environ.get('UWSGICONFIG_PHP_LDFLAGS', []))
++
+ if ld_run_path:
+     LDFLAGS.append('-L%s' % ld_run_path)
+     os.environ['LD_RUN_PATH'] = ld_run_path

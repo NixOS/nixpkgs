@@ -1,0 +1,40 @@
+{
+  lib,
+  gccStdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  fuse,
+}:
+
+gccStdenv.mkDerivation rec {
+  pname = "romdirfs";
+  version = "1.2";
+
+  src = fetchFromGitHub {
+    owner = "mlafeldt";
+    repo = "romdirfs";
+    rev = "v${version}";
+    sha256 = "1jbsmpklrycz5q86qmzvbz4iz2g5fvd7p9nca160aw2izwpws0g7";
+  };
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [ fuse ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = with lib; {
+    description = "FUSE for access Playstation 2 IOP IOPRP images and BIOS dumps";
+    homepage = "https://github.com/mlafeldt/romdirfs";
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+    maintainers = [ ];
+    mainProgram = "romdirfs";
+  };
+}

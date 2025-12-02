@@ -1,0 +1,173 @@
+diff --git a/tests/test_inputs.py b/tests/test_inputs.py
+index 7c30d45..645b728 100644
+--- a/tests/test_inputs.py
++++ b/tests/test_inputs.py
+@@ -5,6 +5,7 @@ import re
+ 
+ #noinspection PyUnresolvedReferences
+ import six
++import pytest
+ 
+ from flask_restful import inputs
+ 
+@@ -17,7 +18,7 @@ def test_reverse_rfc822_datetime():
+     ]
+ 
+     for date_string, expected in dates:
+-        yield assert_equal, inputs.datetime_from_rfc822(date_string), expected
++        assert inputs.datetime_from_rfc822(date_string) == expected
+ 
+ 
+ def test_reverse_iso8601_datetime():
+@@ -29,7 +30,7 @@ def test_reverse_iso8601_datetime():
+     ]
+ 
+     for date_string, expected in dates:
+-        yield assert_equal, inputs.datetime_from_iso8601(date_string), expected
++        assert inputs.datetime_from_iso8601(date_string) == expected
+ 
+ 
+ def test_urls():
+@@ -53,7 +54,7 @@ def test_urls():
+     ]
+ 
+     for value in urls:
+-        yield assert_equal, inputs.url(value), value
++        assert inputs.url(value) == value
+ 
+ 
+ def check_bad_url_raises(value):
+@@ -118,7 +119,8 @@ def test_regex_bad_input():
+     num_only = inputs.regex(r'^[0-9]+$')
+ 
+     for value in cases:
+-        yield assert_raises, ValueError, lambda: num_only(value)
++        with pytest.raises(ValueError):
++            num_only(value)
+ 
+ 
+ def test_regex_good_input():
+@@ -131,12 +133,13 @@ def test_regex_good_input():
+     num_only = inputs.regex(r'^[0-9]+$')
+ 
+     for value in cases:
+-        yield assert_equal, num_only(value), value
++        assert num_only(value) == value
+ 
+ 
+ def test_regex_bad_pattern():
+     """Regex error raised immediately when regex input parser is created."""
+-    assert_raises(re.error, inputs.regex, '[')
++    with pytest.raises(re.error):
++        inputs.regex('[')
+ 
+ 
+ def test_regex_flags_good_input():
+@@ -149,7 +152,7 @@ def test_regex_flags_good_input():
+     case_insensitive = inputs.regex(r'^[A-Z]+$', re.IGNORECASE)
+ 
+     for value in cases:
+-        yield assert_equal, case_insensitive(value), value
++        assert case_insensitive(value) == value
+ 
+ 
+ def test_regex_flags_bad_input():
+@@ -161,7 +164,8 @@ def test_regex_flags_bad_input():
+     case_sensitive = inputs.regex(r'^[A-Z]+$')
+ 
+     for value in cases:
+-        yield assert_raises, ValueError, lambda: case_sensitive(value)
++        with pytest.raises(ValueError):
++            case_sensitive(value)
+ 
+ 
+ class TypesTestCase(unittest.TestCase):
+@@ -191,35 +195,41 @@ class TypesTestCase(unittest.TestCase):
+         assert inputs.boolean(False) == False
+ 
+     def test_bad_boolean(self):
+-        assert_raises(ValueError, lambda: inputs.boolean("blah"))
++        with pytest.raises(ValueError):
++            inputs.boolean("blah")
+ 
+     def test_date_later_than_1900(self):
+         assert inputs.date("1900-01-01") == datetime(1900, 1, 1)
+ 
+     def test_date_input_error(self):
+-        assert_raises(ValueError, lambda: inputs.date("2008-13-13"))
++        with pytest.raises(ValueError):
++            inputs.date("2008-13-13")
+ 
+     def test_date_input(self):
+         assert inputs.date("2008-08-01") == datetime(2008, 8, 1)
+ 
+     def test_natual_negative(self):
+-        assert_raises(ValueError, lambda: inputs.natural(-1))
++        with pytest.raises(ValueError):
++            inputs.natural(-1)
+ 
+     def test_natural(self):
+         assert 3 == inputs.natural(3)
+ 
+     def test_natual_string(self):
+-        assert_raises(ValueError, lambda: inputs.natural('foo'))
++        with pytest.raises(ValueError):
++            inputs.natural('foo')
+ 
+     def test_positive(self):
+         assert 1 == inputs.positive(1)
+         assert 10000 == inputs.positive(10000)
+ 
+     def test_positive_zero(self):
+-        assert_raises(ValueError, lambda: inputs.positive(0))
++        with pytest.raises(ValueError):
++            inputs.positive(0)
+ 
+     def test_positive_negative_input(self):
+-        assert_raises(ValueError, lambda: inputs.positive(-1))
++        with pytest.raises(ValueError):
++            inputs.positive(-1)
+ 
+     def test_int_range_good(self):
+         int_range = inputs.int_range(1, 5)
+@@ -231,11 +241,13 @@ class TypesTestCase(unittest.TestCase):
+ 
+     def test_int_range_low(self):
+         int_range = inputs.int_range(0, 5)
+-        assert_raises(ValueError, lambda: int_range(-1))
++        with pytest.raises(ValueError):
++            int_range(-1)
+ 
+     def test_int_range_high(self):
+         int_range = inputs.int_range(0, 5)
+-        assert_raises(ValueError, lambda: int_range(6))
++        with pytest.raises(ValueError):
++            int_range(6)
+ 
+ 
+ def test_isointerval():
+@@ -389,7 +401,7 @@ def test_isointerval():
+     ]
+ 
+     for value, expected in intervals:
+-        yield assert_equal, inputs.iso8601interval(value), expected
++        assert inputs.iso8601interval(value) == expected
+ 
+ 
+ def test_invalid_isointerval_error():
+@@ -413,12 +425,9 @@ def test_bad_isointervals():
+     ]
+ 
+     for bad_interval in bad_intervals:
+-        yield (
+-            assert_raises,
+-            Exception,
+-            inputs.iso8601interval,
+-            bad_interval,
+-        )
++        with pytest.raises(Exception):
++            inputs.iso8601interval(bad_interval)
++
+ 
+ if __name__ == '__main__':
+     unittest.main()

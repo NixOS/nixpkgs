@@ -1,0 +1,25 @@
+diff --git a/src/VBox/HostDrivers/linux/Makefile b/src/VBox/HostDrivers/linux/Makefile
+index 8ba33952..3b8abe60 100644
+--- a/src/VBox/HostDrivers/linux/Makefile
++++ b/src/VBox/HostDrivers/linux/Makefile
+@@ -99,17 +99,17 @@ install-vboxdrv:
+ 
+ install-vboxnetflt:
+ 	+@if [ -d vboxnetflt ]; then \
+-	    $(MAKE) KBUILD_VERBOSE=$(KBUILD_VERBOSE) -C vboxnetflt install; \
++	    $(MAKE) KBUILD_VERBOSE=$(KBUILD_VERBOSE) KBUILD_EXTRA_SYMBOLS=$(abspath vboxnetflt/Module.symvers) -C vboxnetflt install; \
+ 	fi
+ 
+ install-vboxnetadp:
+ 	+@if [ -d vboxnetadp ]; then \
+-	    $(MAKE) KBUILD_VERBOSE=$(KBUILD_VERBOSE) -C vboxnetadp install; \
++	    $(MAKE) KBUILD_VERBOSE=$(KBUILD_VERBOSE) KBUILD_EXTRA_SYMBOLS=$(abspath vboxnetadp/Module.symvers) -C vboxnetadp install; \
+ 	fi
+ 
+ install-vboxpci:
+ 	+@if [ -d vboxpci ]; then \
+-	    $(MAKE) KBUILD_VERBOSE=$(KBUILD_VERBOSE) -C vboxpci install; \
++	    $(MAKE) KBUILD_VERBOSE=$(KBUILD_VERBOSE) KBUILD_EXTRA_SYMBOLS=$(abspath vboxpci/Module.symvers) -C vboxpci install; \
+ 	fi
+ 
+ install: install-vboxdrv install-vboxnetflt install-vboxnetadp install-vboxpci
