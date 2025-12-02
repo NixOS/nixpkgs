@@ -1,5 +1,8 @@
 {
-  python3,
-}:
+  python3Packages,
+  ...
+}@args:
 
-python3.pkgs.toPythonApplication python3.pkgs.beets-minimal
+python3Packages.toPythonApplication (
+  python3Packages.beets-minimal.override (builtins.removeAttrs args [ "python3Packages" ])
+)
