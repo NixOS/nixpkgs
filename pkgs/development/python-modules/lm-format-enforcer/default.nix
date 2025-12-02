@@ -37,6 +37,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/noamgat/lm-format-enforcer/releases/tag/${src.tag}";
     homepage = "https://github.com/noamgat/lm-format-enforcer";
     license = licenses.mit;
-    maintainers = with maintainers; [ cfhammill ];
   };
 }

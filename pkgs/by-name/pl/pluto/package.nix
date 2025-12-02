@@ -31,7 +31,6 @@ buildGoModule rec {
     mainProgram = "pluto";
     license = licenses.asl20;
     maintainers = with maintainers; [
-      peterromfeldhk
       kashw2
     ];
   };
