@@ -11087,7 +11087,11 @@ self: super: with self; {
 
   onlykey-solo-python = callPackage ../development/python-modules/onlykey-solo-python { };
 
-  onnx = callPackage ../development/python-modules/onnx { };
+  onnx = callPackage ../development/python-modules/onnx {
+    onnx = pkgs.onnx.override {
+      python3Packages = self;
+    };
+  };
 
   onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common { };
 
