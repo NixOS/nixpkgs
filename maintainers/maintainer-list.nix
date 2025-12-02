@@ -27176,12 +27176,6 @@
     githubId = 771193;
     name = "Matej Urbas";
   };
-  uri-canva = {
-    email = "uri@canva.com";
-    github = "uri-canva";
-    githubId = 33242106;
-    name = "Uri Baghin";
-  };
   urlordjames = {
     email = "urlordjames@gmail.com";
     github = "urlordjames";
