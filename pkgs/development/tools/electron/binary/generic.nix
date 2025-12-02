@@ -58,7 +58,7 @@ let
     ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     # https://www.electronjs.org/docs/latest/tutorial/electron-timelines
-    knownVulnerabilities = optional (versionOlder version "36.0.0") "Electron version ${version} is EOL";
+    knownVulnerabilities = optional (versionOlder version "37.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher =
