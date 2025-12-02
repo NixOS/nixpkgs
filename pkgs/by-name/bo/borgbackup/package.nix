@@ -14,6 +14,7 @@
   installShellFiles,
   nixosTests,
   nix-update-script,
+  versionCheckHook,
 }:
 
 let
@@ -99,6 +100,7 @@ python.pkgs.buildPythonApplication rec {
     pytest-benchmark
     pytest-xdist
     pytestCheckHook
+    versionCheckHook
   ];
 
   pytestFlags = [
