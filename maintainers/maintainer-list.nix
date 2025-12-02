@@ -23692,6 +23692,11 @@
     githubId = 56278796;
     name = "Sergio Ribera";
   };
+  serhao = {
+    github = "shobu13";
+    githubId = 21972673;
+    name = "Sin Ser'Hao";
+  };
   servalcatty = {
     email = "servalcat@pm.me";
     github = "servalcatty";
