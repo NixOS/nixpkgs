@@ -29047,12 +29047,6 @@
     githubId = 62440012;
     name = "Zain Kergaye";
   };
-  zakame = {
-    email = "zakame@zakame.net";
-    github = "zakame";
-    githubId = 110625;
-    name = "Zak B. Elep";
-  };
   zakkor = {
     email = "edward.dalbon@gmail.com";
     github = "zakkor";

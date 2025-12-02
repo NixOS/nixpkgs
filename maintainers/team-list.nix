@@ -786,7 +786,6 @@ with lib.maintainers;
     members = [
       sgo
       marcusramberg
-      zakame
     ];
     scope = "Maintain the Perl interpreter and Perl packages.";
     shortName = "Perl";
