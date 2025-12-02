@@ -1969,7 +1969,7 @@ in
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart =
-          "${cfg.package}/bin/prometheus"
+          "${lib.getExe cfg.package}"
           + optionalString (length cmdlineArgs != 0) (" \\\n  " + concatStringsSep " \\\n  " cmdlineArgs);
         ExecReload = mkIf cfg.enableReload "+${reload}/bin/reload-prometheus";
         User = "prometheus";
