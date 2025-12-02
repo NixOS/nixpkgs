@@ -79,7 +79,6 @@ with lib.maintainers;
   bazel = {
     members = [
       mboes
-      uri-canva
       cbley
       olebedev
       groodt
