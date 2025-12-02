@@ -40,6 +40,6 @@ python3Packages.buildPythonPackage rec {
     homepage = "https://github.com/bieniu/accuweather";
     changelog = "https://github.com/bieniu/accuweather/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jamiemagee ];
+    maintainers = [ lib.maintainers.jamiemagee ];
   };
 }
