@@ -16831,6 +16831,8 @@ self: super: with self; {
 
   satel-integra = callPackage ../development/python-modules/satel-integra { };
 
+  saxonche = callPackage ../development/python-modules/saxonche { };
+
   sbom2dot = callPackage ../development/python-modules/sbom2dot { };
 
   sbom4files = callPackage ../development/python-modules/sbom4files { };
