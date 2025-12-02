@@ -39,6 +39,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/nucleic/atom";
     changelog = "https://github.com/nucleic/atom/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ bhipple ];
   };
 }

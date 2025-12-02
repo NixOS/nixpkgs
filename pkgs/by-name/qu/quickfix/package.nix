@@ -54,7 +54,6 @@ stdenv.mkDerivation rec {
     description = "C++ Fix Engine Library";
     homepage = "http://www.quickfixengine.org";
     license = licenses.free; # similar to BSD 4-clause
-    maintainers = with maintainers; [ bhipple ];
     broken = stdenv.hostPlatform.isAarch64;
   };
 }

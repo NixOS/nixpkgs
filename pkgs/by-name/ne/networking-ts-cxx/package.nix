@@ -27,6 +27,5 @@ stdenv.mkDerivation {
     description = "Experimental implementation of the C++ Networking Technical Specification";
     homepage = "https://github.com/chriskohlhoff/networking-ts-impl";
     license = licenses.boost;
-    maintainers = with maintainers; [ bhipple ];
   };
 }
