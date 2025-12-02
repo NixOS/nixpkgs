@@ -22,3 +22,8 @@ sha2 = "0.10.8"
 tempfile = "3.10.1"
 url = { version = "2.5.0", features = ["serde"] }
 walkdir = "2.5.0"
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = 3
