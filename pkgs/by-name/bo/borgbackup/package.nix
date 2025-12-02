@@ -21,14 +21,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.4.2";
+  version = "1.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "borgbackup";
     repo = "borg";
     tag = version;
-    hash = "sha256-KoOulgOkMgnkN3I0Gw9z0YKZvqvPJ0A9sIAxRLOlchU=";
+    hash = "sha256-v42Mv2wz34w2VYu2mPT/K7VtGSYsUDr+NUM99AzpSB0=";
   };
 
   postPatch = ''
@@ -141,8 +141,6 @@ python.pkgs.buildPythonApplication rec {
     "doc"
     "man"
   ];
-
-  disabled = python.pythonOlder "3.9";
 
   passthru.updateScript = nix-update-script {
     # Only match tags formatted as x.y.z (e.g., 1.2.3)
