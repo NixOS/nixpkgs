@@ -23,6 +23,7 @@
   pyserial,
   pytap2,
   pytestCheckHook,
+  addBinToPathHook,
   pyyaml,
   requests,
   riden,
@@ -90,12 +91,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
+    addBinToPathHook
   ]
   ++ lib.concatAttrValues optional-dependencies;
-
-  preCheck = ''
-    export PATH="$PATH:$out/bin";
-  '';
 
   pythonImportsCheck = [ "meshtastic" ];
 
@@ -120,11 +118,14 @@ buildPythonPackage rec {
     "test_TCPInterface"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for talking to Meshtastic devices";
     homepage = "https://github.com/meshtastic/python";
     changelog = "https://github.com/meshtastic/python/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      drupol
+      fab
+    ];
   };
 }
