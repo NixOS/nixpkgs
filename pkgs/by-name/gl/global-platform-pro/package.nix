@@ -84,7 +84,6 @@ maven.buildMavenPackage rec {
       binaryBytecode # deps
     ];
     license = with licenses; [ lgpl3 ];
-    maintainers = with maintainers; [ ekleog ];
     mainProgram = "gp";
   };
 }

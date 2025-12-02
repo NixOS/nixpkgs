@@ -34,6 +34,5 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cargo-bolero";
     homepage = "https://github.com/camshaft/bolero";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ekleog ];
   };
 }

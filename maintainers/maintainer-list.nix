@@ -7471,13 +7471,6 @@
     github = "eklairs";
     githubId = 142717667;
   };
-  ekleog = {
-    email = "leo@gaspard.io";
-    matrix = "@leo:gaspard.ninja";
-    github = "Ekleog";
-    githubId = 411447;
-    name = "Leo Gaspard";
-  };
   elasticdog = {
     email = "aaron@elasticdog.com";
     github = "elasticdog";
