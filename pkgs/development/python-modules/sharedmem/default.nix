@@ -21,7 +21,6 @@ buildPythonPackage rec {
   meta = {
     homepage = "http://rainwoodman.github.io/sharedmem/";
     description = "Easier parallel programming on shared memory computers";
-    maintainers = with lib.maintainers; [ edwtjo ];
     license = lib.licenses.gpl3;
   };
 }
