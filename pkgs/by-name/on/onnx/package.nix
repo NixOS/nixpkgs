@@ -27,13 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "onnx";
-  version = "1.19.1";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lIw65HAaNE+pOiHPpbOxzX+gk8ueJfuAHxs+DV99Jh0=";
+    hash = "sha256-oWbrBx1jWznzeT2N+VrFH8LIqdzY/aXH5N0kb/vbg2M=";
   };
 
   outputs = [
@@ -50,44 +50,16 @@ stdenv.mkDerivation (finalAttrs: {
     setuptools
   ];
 
-  # NOTE: Most of these can be removed after bumping to 1.20.
-  # See:
-  # - https://github.com/onnx/onnx/issues/7472
-  # - https://github.com/pytorch/pytorch/issues/167525
   # NOTE: Darwin requires a static build, so this patch is unnecessary on that platform.
   prePatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    nixLog "patching $PWD/CMakeLists.txt to allow tests to build with shared libraries"
-    substituteInPlace "$PWD/CMakeLists.txt" \
-      --replace-fail \
-        'message(FATAL_ERROR "Tests requires static build")' \
-        ""
-
-    nixLog "patching $PWD/CMakeLists.txt to correctly link onnx_cpp2py_export with shared libraries"
-    substituteInPlace "$PWD/CMakeLists.txt" \
-      --replace-fail \
-        'target_link_libraries(onnx_cpp2py_export PRIVATE $<LINK_LIBRARY:WHOLE_ARCHIVE,onnx>)' \
-        'target_link_libraries(onnx_cpp2py_export PRIVATE $<BUILD_INTERFACE:onnx> $<BUILD_INTERFACE:onnx_proto>)'
-
     nixLog "patching $PWD/CMakeLists.txt to fix symbol visibility"
     substituteInPlace "$PWD/CMakeLists.txt" \
       --replace-fail \
-        'set_target_properties(onnx_proto PROPERTIES CXX_VISIBILITY_PRESET hidden)' \
-        '# set_target_properties(onnx_proto PROPERTIES CXX_VISIBILITY_PRESET hidden)' \
+        'set_target_properties(onnx_object PROPERTIES CXX_VISIBILITY_PRESET hidden)' \
+        '# set_target_properties(onnx_object PROPERTIES CXX_VISIBILITY_PRESET hidden)' \
       --replace-fail \
-        'set_target_properties(onnx_proto PROPERTIES VISIBILITY_INLINES_HIDDEN 1)' \
-        '# set_target_properties(onnx_proto PROPERTIES VISIBILITY_INLINES_HIDDEN 1)' \
-      --replace-fail \
-        'set_target_properties(onnx PROPERTIES CXX_VISIBILITY_PRESET hidden)' \
-        '# set_target_properties(onnx PROPERTIES CXX_VISIBILITY_PRESET hidden)' \
-      --replace-fail \
-        'set_target_properties(onnx PROPERTIES VISIBILITY_INLINES_HIDDEN ON)' \
-        '# set_target_properties(onnx PROPERTIES VISIBILITY_INLINES_HIDDEN ON)'
-
-    nixLog "patching $PWD/cmake/ONNXConfig.cmake.in to fix CMake discovery"
-    substituteInPlace "$PWD/cmake/ONNXConfig.cmake.in" \
-      --replace-fail \
-        'if((NOT @@ONNX_USE_PROTOBUF_SHARED_LIBS@@) AND @@Build_Protobuf@@)' \
-        'if(NOT @ONNX_USE_PROTOBUF_SHARED_LIBS@)'
+        'set_target_properties(onnx_object PROPERTIES VISIBILITY_INLINES_HIDDEN ON)' \
+        '# set_target_properties(onnx_object PROPERTIES VISIBILITY_INLINES_HIDDEN ON)'
   '';
 
   # NOTE: python3Packages.protobuf does not propagate a dependency on protobuf's dev output, so we must bring it in
@@ -112,6 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
     ONNX_ML = "0";
     ONNX_NAMESPACE = "onnx";
     ONNX_USE_PROTOBUF_SHARED_LIBS = "1";
+
+    nanobind_DIR = "${python3Packages.nanobind}/${python.sitePackages}/nanobind/cmake";
   };
 
   cmakeFlags = mapAttrsToList cmakeFeature finalAttrs.env;
