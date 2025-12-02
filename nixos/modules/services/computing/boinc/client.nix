@@ -2,11 +2,11 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 let
   cfg = config.services.boinc;
-  allowRemoteGuiRpcFlag = lib.optionalString cfg.allowRemoteGuiRpc "--allow_remote_gui_rpc";
 
   fhsEnv = pkgs.buildFHSEnv {
     name = "boinc-fhs-env";
@@ -77,6 +77,20 @@ in
           {var}`pkgs.ocl-icd` is also needed in this case.
       '';
     };
+
+    extraArgs = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [
+        "--gui_rpc_port"
+        "31417"
+      ];
+      description = ''
+        Additional arguments to pass to BOINC client instance.
+
+        See also: <https://boinc.berkeley.edu/wiki/Client_configuration#Command-line_optionss>
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -99,11 +113,17 @@ in
       description = "BOINC Client";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      script = ''
-        exec ${fhsEnvExecutable} --dir ${cfg.dataDir} ${allowRemoteGuiRpcFlag}
-      '';
       serviceConfig = {
         User = "boinc";
+        ExecStart = utils.escapeSystemdExecArgs (
+          [
+            fhsEnvExecutable
+            "--dir"
+            cfg.dataDir
+          ]
+          ++ lib.optional cfg.allowRemoteGuiRpc "--allow_remote_gui_rpc"
+          ++ cfg.extraArgs
+        );
         Nice = 10;
       };
     };
