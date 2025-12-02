@@ -4,14 +4,14 @@
   fetchFromGitHub,
   pytestCheckHook,
   setuptools,
-  pytest-cov,
+  pytest-cov-stub,
   attrs,
 }:
 
 buildPythonPackage rec {
   pname = "price-parser";
   version = "0.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scrapinghub";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
   ];
 
   pythonImportsCheck = [ "price_parser" ];
