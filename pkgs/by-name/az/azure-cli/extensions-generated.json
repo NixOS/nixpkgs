@@ -405,6 +405,13 @@
     "hash": "sha256-gS+82UbXH2fh7TrIsAxDqyaeM0iMwebt4v0ImJIs07Y=",
     "description": "Microsoft Azure Command-Line Tools Dynatrace Extension"
   },
+  "edge-action": {
+    "pname": "edge-action",
+    "version": "1.0.0b2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/edge_action-1.0.0b2-py3-none-any.whl",
+    "hash": "sha256-wtIkeQPRlEAEL/PXTVuPaUoQbabFKDKLc/RML+qaBGM=",
+    "description": "Microsoft Azure Command-Line Tools Extension for Azure Front Door Edge Actions"
+  },
   "edgeorder": {
     "pname": "edgeorder",
     "version": "0.1.0",
