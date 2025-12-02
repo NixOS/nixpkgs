@@ -2,6 +2,7 @@
   lib,
   bundlerApp,
   bundlerUpdateScript,
+  ruby_3_4,
   withPostgresql ? true,
   libpq,
   withSqlite ? false,
@@ -13,6 +14,9 @@ bundlerApp {
   gemdir = ./.;
   exes = [ "ledger_web" ];
 
+  # "Source locally installed gems is ignoring... because it is missing extensions"
+  ruby = ruby_3_4;
+
   buildInputs = lib.optional withPostgresql libpq ++ lib.optional withSqlite sqlite;
 
   passthru.updateScript = bundlerUpdateScript "ledger-web";
@@ -22,7 +26,6 @@ bundlerApp {
     homepage = "https://github.com/peterkeen/ledger-web";
     license = licenses.mit;
     maintainers = with maintainers; [
-      peterhoeg
       manveru
       nicknovitski
     ];

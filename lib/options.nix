@@ -77,7 +77,7 @@ rec {
   isOption = lib.isType "option";
 
   /**
-    Creates an Option attribute set. mkOption accepts an attribute set with the following keys:
+    Creates an Option attribute set. `mkOption` accepts an attribute set with the following keys:
 
     # Inputs
 
@@ -152,7 +152,7 @@ rec {
     attrs // { _type = "option"; };
 
   /**
-    Creates an option declaration with a default value of ´false´, and can be defined to ´true´.
+    Creates an option declaration with a default value of `false`, and can be defined to `true`.
 
     # Inputs
 
@@ -444,14 +444,18 @@ rec {
   /**
     Require a single definition.
 
-    WARNING: Does not perform nested checks, as this does not run the merge function!
+    ::: {.warning}
+    Does not perform nested checks, as this does not run the merge function!
+    :::
   */
   mergeOneOption = mergeUniqueOption { message = ""; };
 
   /**
     Require a single definition.
 
-    NOTE: When the type is not checked completely by check, pass a merge function for further checking (of sub-attributes, etc).
+    ::: {.note}
+    When the type is not checked completely by check, pass a merge function for further checking (of sub-attributes, etc).
+    :::
 
     # Inputs
 
@@ -516,7 +520,7 @@ rec {
       ) (head defs) (tail defs)).value;
 
   /**
-    Extracts values of all "value" keys of the given list.
+    Extracts values of all `value` keys of the given list.
 
     # Type
 
@@ -538,7 +542,7 @@ rec {
   getValues = map (x: x.value);
 
   /**
-    Extracts values of all "file" keys of the given list
+    Extracts values of all `file` keys of the given list
 
     # Type
 
@@ -615,7 +619,7 @@ rec {
     (on the order of megabytes) and is not actually used by the
     manual generator.
 
-    This function was made obsolete by renderOptionValue and is kept for
+    This function was made obsolete by `renderOptionValue` and is kept for
     compatibility with out-of-tree code.
 
     # Inputs
