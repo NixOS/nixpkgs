@@ -70,8 +70,101 @@ let
 
   extensionNames = map getName cfg.finalPackage.installedExtensions;
   extensionInstalled = extension: elem extension extensionNames;
-in
 
+  generateClauseSqlStatements =
+    user:
+    let
+      filteredClauses = filterAttrs (name: value: value != null) user.ensureClauses;
+    in
+    mapAttrsToList (
+      n: v:
+      let
+        directive = lib.toUpper (lib.replaceStrings [ "_" ] [ " " ] n);
+      in
+      if builtins.isBool v then
+        (if v then directive else "NO${directive}")
+      else if builtins.isString v then
+        "${directive} '${v}'"
+      else
+        "${directive} ${builtins.toString v}"
+    ) filteredClauses;
+
+  generateAlterRoleSQL =
+    user:
+    let
+      clauseSqlStatements = generateClauseSqlStatements user;
+    in
+    if clauseSqlStatements == [ ] then
+      ""
+    else
+      ''ALTER ROLE "${user.name}" ${concatStringsSep " " clauseSqlStatements};'';
+
+  generateUserSetupScript =
+    user:
+    let
+      dbOwnershipStmt = optionalString user.ensureDBOwnership ''
+        psql -tAc 'ALTER DATABASE "${user.name}" OWNER TO "${user.name}";'
+      '';
+
+      alterRoleSQL = generateAlterRoleSQL user;
+
+      userClauses = optionalString (alterRoleSQL != "") ''
+        psql -tAc ${lib.escapeShellArg alterRoleSQL}
+      '';
+    in
+    ''
+      psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || psql -tAc 'CREATE USER "${user.name}"'
+      ${userClauses}
+      ${dbOwnershipStmt}
+    '';
+
+  validateUserClauses =
+    let
+      validationScript =
+        pkgs.writers.writePython3 "validate-postgresql-clauses"
+          {
+            libraries = [ pkgs.python3Packages.pglast ];
+          }
+          ''
+            import sys
+            from pglast import parse_sql
+
+
+            def validate_sql(username, sql):
+                if not sql:
+                    return True
+
+                try:
+                    parse_sql(sql)
+                    print(f"Valid SQL for user {username}")
+                    return True
+                except Exception as e:
+                    print(f"Invalid SQL for user {username}:", file=sys.stderr)
+                    print(f"  {sql}", file=sys.stderr)
+                    print(f"  Error: {e}", file=sys.stderr)
+                    return False
+
+
+            if __name__ == "__main__":
+                username = sys.argv[1]
+                sql = sys.argv[2]
+                sys.exit(0 if validate_sql(username, sql) else 1)
+          '';
+    in
+    pkgs.runCommand "postgresql-user-clauses-check" { } ''
+      ${concatMapStrings (
+        user:
+        let
+          sql = generateAlterRoleSQL user;
+        in
+        optionalString (sql != "") ''
+          ${validationScript} ${lib.escapeShellArg user.name} ${lib.escapeShellArg sql}
+        ''
+      ) cfg.ensureUsers}
+
+      touch $out
+    '';
+in
 {
   imports = [
     (mkRemovedOptionModule [
@@ -374,6 +467,11 @@ in
                     superuser = true;
                     createrole = true;
                     createdb = true;
+                    connection_limit = 5;
+
+                    # SCRAM-SHA-256 hashed password for "password"
+                    # Generate hashes using PostgreSQL or a dedicated script rather than storing passwords in plain text.
+                    password = "SCRAM-SHA-256$4096:SZEJF5Si4QZ6l4fedrZZWQ==$6u3PWVcz+dts+NdpByPIjKa4CaSnoXGG3M2vpo76bVU=:WSZ0iGUCmVtKYVvNX0pFOp/60IgsdJ+90Y67Eun+QE0=";
                   }
                 '';
                 default = { };
@@ -381,6 +479,14 @@ in
                   The default, `null`, means that the user created will have the default permissions assigned by PostgreSQL. Subsequent server starts will not set or unset the clause, so imperative changes are preserved.
                 '';
                 type = types.submodule {
+                  freeformType = types.attrsOf (
+                    types.oneOf [
+                      types.str
+                      types.int
+                      types.bool
+                    ]
+                  );
+
                   options =
                     let
                       defaultText = lib.literalMD ''
@@ -760,9 +866,13 @@ in
       "/share/postgresql"
     ];
 
-    system.checks = lib.optional (
-      cfg.checkConfig && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform
-    ) configFileCheck;
+    system.checks =
+      lib.optional (
+        cfg.checkConfig && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform
+      ) configFileCheck
+      ++ lib.optional (
+        cfg.ensureUsers != [ ] && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform
+      ) validateUserClauses;
 
     systemd.targets.postgresql = {
       description = "PostgreSQL";
@@ -943,24 +1053,7 @@ in
         '') cfg.ensureDatabases}
       ''
       + ''
-        ${concatMapStrings (
-          user:
-          let
-            dbOwnershipStmt = optionalString user.ensureDBOwnership ''psql -tAc 'ALTER DATABASE "${user.name}" OWNER TO "${user.name}";' '';
-
-            filteredClauses = filterAttrs (name: value: value != null) user.ensureClauses;
-
-            clauseSqlStatements = attrValues (mapAttrs (n: v: if v then n else "no${n}") filteredClauses);
-
-            userClauses = ''psql -tAc 'ALTER ROLE "${user.name}" ${concatStringsSep " " clauseSqlStatements}' '';
-          in
-          ''
-            psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || psql -tAc 'CREATE USER "${user.name}"'
-            ${userClauses}
-
-            ${dbOwnershipStmt}
-          ''
-        ) cfg.ensureUsers}
+        ${concatMapStrings generateUserSetupScript cfg.ensureUsers}
       '';
     };
   };
