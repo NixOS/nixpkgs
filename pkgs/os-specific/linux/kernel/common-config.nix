@@ -562,19 +562,24 @@ let
         DRM_DP_CEC = whenOlder "6.10" yes;
         DRM_DISPLAY_DP_AUX_CEC = whenAtLeast "6.10" yes;
       }
+      //
+        lib.optionalAttrs
+          (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux")
+          {
+            # Enable Hyper-V guest stuff
+            HYPERV = lib.mkMerge [
+              (whenOlder "6.18" module)
+              (whenAtLeast "6.18" yes)
+            ];
+            # Enable Hyper-V Synthetic DRM Driver
+            DRM_HYPERV = whenAtLeast "5.14" module;
+            # And disable the legacy framebuffer driver when we have the new one
+            FB_HYPERV = whenAtLeast "5.14" no;
+          }
       // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
         # Intel GVT-g graphics virtualization supports 64-bit only
         DRM_I915_GVT = yes;
         DRM_I915_GVT_KVMGT = module;
-        # Enable Hyper-V guest stuff
-        HYPERV = lib.mkMerge [
-          (whenOlder "6.18" module)
-          (whenAtLeast "6.18" yes)
-        ];
-        # Enable Hyper-V Synthetic DRM Driver
-        DRM_HYPERV = whenAtLeast "5.14" module;
-        # And disable the legacy framebuffer driver when we have the new one
-        FB_HYPERV = whenAtLeast "5.14" no;
       }
       // lib.optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
         # enable HDMI-CEC on RPi boards
