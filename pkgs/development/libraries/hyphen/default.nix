@@ -50,6 +50,5 @@ stdenv.mkDerivation rec {
       lgpl21
       mpl11
     ];
-    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

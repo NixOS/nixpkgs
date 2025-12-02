@@ -79,7 +79,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       anderslundstedt
-      Br1ght0ne
       getchoo
     ];
     platforms = lib.platforms.unix;
