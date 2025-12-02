@@ -50,6 +50,10 @@ in
     services.desktopManager.cosmic = {
       enable = lib.mkEnableOption "COSMIC desktop environment";
 
+      extraSessions.niri.enable = lib.mkEnableOption "niri support for the COSMIC session" // {
+        default = false;
+      };
+
       showExcludedPkgsWarning = lib.mkEnableOption "the warning for excluding core packages" // {
         default = true;
       };
@@ -102,6 +106,10 @@ in
           # User may have Flatpaks enabled but might not want the `cosmic-store` package.
           cosmic-store
         ]
+        ++ lib.optionals cfg.extraSessions.niri.enable [
+          # User may be passing `cosmic-ext-alternative-startup` store path directly in their compositor config rather than relying on it being in $PATH
+          cosmic-ext-alternative-startup
+        ]
       )
     ) config.environment.cosmic.excludePackages;
 
@@ -148,7 +156,10 @@ in
     security.polkit.enable = true;
     security.rtkit.enable = true;
     services.accounts-daemon.enable = true;
-    services.displayManager.sessionPackages = [ pkgs.cosmic-session ];
+    services.displayManager.sessionPackages = [
+      pkgs.cosmic-session
+    ]
+    ++ lib.optional cfg.extraSessions.niri.enable pkgs.cosmic-ext-extra-sessions;
     services.libinput.enable = true;
     services.upower.enable = true;
     # Required for screen locker
