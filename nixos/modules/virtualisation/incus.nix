@@ -288,7 +288,7 @@ in
         assertion =
           !(
             config.networking.firewall.enable
-            && !config.networking.nftables.enable
+            && !(config.networking.nftables.enable || config.networking.firewall.backend == "nftables")
             && config.virtualisation.incus.enable
           );
         message = "Incus on NixOS is unsupported using iptables. Set `networking.nftables.enable = true;`";

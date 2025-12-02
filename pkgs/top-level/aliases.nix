@@ -890,6 +890,7 @@ mapAliases {
   linux_6_15 = throw "linux 6.15 was removed because it has reached its end of life upstream"; # Added 2025-08-30
   linux_6_16 = throw "linux 6.16 was removed because it has reached its end of life upstream"; # Added 2025-10-22
   linux_6_17 = linuxKernel.kernels.linux_6_17;
+  linux_6_18 = linuxKernel.kernels.linux_6_18;
   linux_ham = throw "linux_ham has been removed in favour of the standard kernel packages"; # Added 2025-06-24
   linux_hardened = linuxPackages_hardened.kernel; # Added 2025-08-10
   linux_latest-libre = throw "linux_latest_libre has been removed due to lack of maintenance"; # Added 2025-10-01
@@ -919,6 +920,7 @@ mapAliases {
   linuxPackages_6_15 = throw "linux 6.15 was removed because it has reached its end of life upstream"; # Added 2025-08-30
   linuxPackages_6_16 = throw "linux 6.16 was removed because it has reached its end of life upstream"; # Added 2025-10-22
   linuxPackages_6_17 = linuxKernel.packages.linux_6_17;
+  linuxPackages_6_18 = linuxKernel.packages.linux_6_18;
   linuxPackages_ham = throw "linux_ham has been removed in favour of the standard kernel packages"; # Added 2025-06-24
   linuxPackages_hardened = linuxKernel.packages.linux_hardened; # Added 2025-08-10
   linuxPackages_latest-libre = throw "linux_latest_libre has been removed due to lack of maintenance"; # Added 2025-10-01

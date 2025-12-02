@@ -309,8 +309,7 @@
     "description": "",
     "id": 2516946,
     "maintainers": {
-      "jian-lin": 75130626,
-      "matthewbauer": 19036
+      "jian-lin": 75130626
     },
     "members": {
       "AndersonTorres": 5954806,
@@ -346,6 +345,18 @@
       "sternenseemann": 3154475
     },
     "name": "exotic-platform-maintainers"
+  },
+  "feel-co": {
+    "description": "Managing packages related to https://github.com/feel-co",
+    "id": 15169000,
+    "maintainers": {
+      "NotAShelf": 62766066,
+      "eclairevoyant": 848000
+    },
+    "members": {
+      "Gerg-L": 88247690
+    },
+    "name": "feel-co"
   },
   "flutter": {
     "description": "Maintain Flutter and Dart-related packages and build tools",
@@ -687,7 +698,8 @@
       "0x4A6F": 9675338,
       "MattSturgeon": 5046562,
       "Sereja313": 112060595,
-      "dasJ": 4971975
+      "dasJ": 4971975,
+      "dyegoaurelio": 42411160
     },
     "name": "nix-formatting"
   },
