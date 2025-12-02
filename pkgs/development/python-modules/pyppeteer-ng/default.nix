@@ -4,6 +4,7 @@
   aiohttp,
   appdirs,
   buildPythonPackage,
+  gitUpdater,
   certifi,
   diff-match-patch,
   fetchFromGitHub,
@@ -146,6 +147,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "pyppeteer" ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Headless chrome/chromium automation library (unofficial port of puppeteer)";
