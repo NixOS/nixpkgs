@@ -106,7 +106,16 @@
   runCommand,
 }:
 
-buildPythonPackage rec {
+let
+  # Avoid using `rec`, so that using e.g `passthru` or any other attributes
+  # defined inside, will have to be done via the beets argument, which can be
+  # overriden. Until `finalAttrs` support reaches `buildPythonPackage`, there
+  # is no way to avoid this. See:
+  #
+  # https://github.com/NixOS/nixpkgs/issues/258246
+  version = "2.5.1";
+in
+buildPythonPackage {
   pname = "beets";
   version = "2.5.1";
   src = fetchFromGitHub {
