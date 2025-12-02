@@ -4,8 +4,8 @@
   meta.maintainers = with lib.maintainers; [ doronbehar ];
 
   nodes = {
-    # Nothing to run on this node, a bug (TODO: where?) is causing a builder of
-    # the configuration to fail. See:
+    # Nothing to run on this node. Only verify that this configuration doesn't
+    # produce the bugs described here:
     #
     # - https://github.com/NixOS/nixpkgs/issues/445666
     # - https://github.com/NixOS/nixpkgs/issues/411374
