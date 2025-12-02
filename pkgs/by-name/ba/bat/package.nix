@@ -7,6 +7,7 @@
   installShellFiles,
   makeWrapper,
   zlib,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -62,6 +63,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=file_with_invalid_utf8_filename"
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
