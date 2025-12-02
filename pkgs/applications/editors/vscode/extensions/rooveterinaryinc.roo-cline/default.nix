@@ -8,8 +8,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     publisher = "RooVeterinaryInc";
     name = "roo-cline";
-    version = "3.28.16";
-    hash = "sha256-Ot7Rrb9tbnXEsVGpJXULq+8o3UhPA2rwtawSbop7wHg=";
+    version = "3.35.1";
+    hash = "sha256-8KnUpKcBN1C7FyHBRDwvgi4TZGUltm4LS9XwF/9WaYc=";
   };
 
   passthru.updateScript = vscode-extension-update-script { };
