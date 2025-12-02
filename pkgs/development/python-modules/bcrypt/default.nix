@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   cargo,
   rustPlatform,
@@ -8,6 +9,7 @@
   setuptools-rust,
   fetchFromGitHub,
   pytestCheckHook,
+  checkBinaryArchHook,
   # for passthru.tests
   asyncssh,
   django_4,
@@ -48,6 +50,9 @@ buildPythonPackage rec {
     rustPlatform.cargoSetupHook
     cargo
     rustc
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    checkBinaryArchHook
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
