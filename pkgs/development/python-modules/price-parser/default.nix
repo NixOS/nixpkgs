@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
   pytestCheckHook,
   setuptools,
   pytest-cov-stub,
@@ -28,6 +29,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "price_parser" ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Extract price amount and currency symbol from a raw text string";
