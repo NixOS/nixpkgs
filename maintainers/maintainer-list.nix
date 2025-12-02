@@ -9243,12 +9243,6 @@
     githubId = 57430880;
     name = "Gustavo Araiza";
   };
-  garbas = {
-    email = "rok@garbas.si";
-    github = "garbas";
-    githubId = 20208;
-    name = "Rok Garbas";
-  };
   gardspirito = {
     name = "gardspirito";
     email = "nyxoroso@gmail.com";
