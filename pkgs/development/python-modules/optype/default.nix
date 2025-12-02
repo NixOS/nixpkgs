@@ -13,7 +13,7 @@
 
 buildPythonPackage {
   pname = "optype";
-  version = "0.14.0-unstable-2025-11-10";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
