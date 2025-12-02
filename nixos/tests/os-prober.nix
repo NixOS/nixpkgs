@@ -35,6 +35,7 @@ import ./make-test-python.nix (
           update-grub
       '';
     };
+    zfsSupport = false;
 
     # a part of the configuration of the test vm
     simpleConfig = {
@@ -52,6 +53,8 @@ import ./make-test-python.nix (
       };
       # save some memory
       documentation.enable = false;
+      # this option is only there to enable more direct copy paste from the installer test
+      boot.supportedFilesystems.zfs = zfsSupport;
     };
     # /etc/nixos/configuration.nix for the vm
     configFile = pkgs.writeText "configuration.nix" ''
@@ -84,6 +87,11 @@ import ./make-test-python.nix (
           # The test cannot access the network, so any packages
           # nixos-rebuild needs must be included in the VM.
           system.extraDependencies = with pkgs; [
+            os-prober
+
+            # list copied from installer test nixos/tests/installer.nix
+            stdenv
+
             bintools
             brotli
             brotli.dev
@@ -91,25 +99,22 @@ import ./make-test-python.nix (
             desktop-file-utils
             docbook5
             docbook_xsl_ns
-            grub2
-            nixos-artwork.wallpapers.simple-dark-gray-bootloader
-            perlPackages.FileCopyRecursive
-            perlPackages.XMLSAX
-            perlPackages.XMLSAXBase
-            kbd
             kbd.dev
             kmod.dev
-            libarchive
             libarchive.dev
             libxml2.bin
             libxslt.bin
             nixos-artwork.wallpapers.simple-dark-gray-bottom
+            (nixos-rebuild-ng.override {
+              withNgSuffix = false;
+              withReexec = true;
+            })
+            ntp
             perlPackages.ConfigIniFiles
             perlPackages.FileSlurp
             perlPackages.JSON
             perlPackages.ListCompare
             perlPackages.XMLLibXML
-            # make-options-doc/default.nix
             (python3.withPackages (p: [ p.mistune ]))
             shared-mime-info
             sudo
@@ -117,11 +122,23 @@ import ./make-test-python.nix (
             texinfo
             unionfs-fuse
             xorg.lndir
-            os-prober
+            shellcheck-minimal
+
+            # Only the out output is included here, which is what is
+            # required to build the NixOS udev rules
+            # See the comment in services/hardware/udev.nix
+            systemdMinimal.out
 
             # add curl so that rather than seeing the test attempt to download
             # curl's tarball, we see what it's trying to download
             curl
+
+            (pkgs.grub2.override { inherit zfsSupport; })
+            (pkgs.grub2_efi.override { inherit zfsSupport; })
+            pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader
+            pkgs.perlPackages.FileCopyRecursive
+            pkgs.perlPackages.XMLSAX
+            pkgs.perlPackages.XMLSAXBase
           ];
         }
       );
