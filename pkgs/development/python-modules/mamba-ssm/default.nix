@@ -70,7 +70,6 @@ buildPythonPackage rec {
     description = "Linear-Time Sequence Modeling with Selective State Spaces";
     homepage = "https://github.com/state-spaces/mamba";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cfhammill ];
     # The package requires CUDA or ROCm, the ROCm build hasn't
     # been completed or tested, so broken if not using cuda.
     broken = !cudaSupport;

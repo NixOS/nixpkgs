@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "wagtail";
-  version = "7.2";
+  version = "7.2.1";
   pyproject = true;
 
   # The GitHub source requires some assets to be compiled, which in turn
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   # until https://github.com/wagtail/wagtail/pull/13136 gets merged.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ijnfkIvWSrAp4IvxkfR19UzJFPhKpB6a55tBv0HVXsM=";
+    hash = "sha256-OIu0LEgYwIGk3fNub0Upv7xU7SYqkbZbDl+VFHbyz3Q=";
   };
 
   build-system = [

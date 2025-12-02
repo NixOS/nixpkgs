@@ -41,7 +41,6 @@ buildGoModule rec {
     description = "Modifies Open Container images";
     homepage = "https://umo.ci";
     license = licenses.asl20;
-    maintainers = with maintainers; [ zokrezyl ];
     mainProgram = "umoci";
   };
 }

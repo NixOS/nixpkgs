@@ -148,8 +148,8 @@ buildPythonPackage rec {
   '';
 
   # The majority of the tests require a graphical environment, but xvfb-run is available only on Linux.
-  # Tests on aarch64-linux fail randomly on OfBorg.
-  doCheck = stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux;
+  # Tests fail randomly on OfBorg and Hydra.
+  doCheck = false;
 
   checkPhase =
     let

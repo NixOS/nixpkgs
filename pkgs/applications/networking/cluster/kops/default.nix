@@ -62,7 +62,6 @@ let
         maintainers = with maintainers; [
           offline
           zimbatm
-          diegolelis
           yurrriq
         ];
       };
