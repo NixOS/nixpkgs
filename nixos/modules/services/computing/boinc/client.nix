@@ -10,7 +10,8 @@ let
 
   fhsEnv = pkgs.buildFHSEnv {
     name = "boinc-fhs-env";
-    targetPkgs = pkgs': [ cfg.package ] ++ cfg.extraEnvPackages;
+    targetPkgs =
+      pkgs': [ cfg.package ] ++ cfg.extraEnvPackages ++ lib.optional cfg.enablePodman pkgs.podman;
     runScript = "/bin/boinc_client";
   };
   fhsEnvExecutable = "${fhsEnv}/bin/${fhsEnv.name}";
@@ -38,6 +39,20 @@ in
       default = "/var/lib/boinc";
       description = ''
         The directory in which to store BOINC's configuration and data files.
+      '';
+    };
+
+    enablePodman = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      example = true;
+      description = ''
+        Whether to enable support for running Podman based workloads.
+
+        BOINC recommends to always enable Docker/Podman in deployments to make
+        it easier for BOINC projects to develop new cross-platform workloads.
+
+        See also: <https://github.com/BOINC/boinc/wiki/Installing-Docker>
       '';
     };
 
@@ -102,8 +117,13 @@ in
       description = "BOINC Client";
       home = cfg.dataDir;
       isSystemUser = true;
+      autoSubUidGidRange = cfg.enablePodman;
     };
     users.groups.boinc = { };
+
+    virtualisation = lib.mkIf cfg.enablePodman {
+      podman.enable = true;
+    };
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' - boinc boinc - -"
