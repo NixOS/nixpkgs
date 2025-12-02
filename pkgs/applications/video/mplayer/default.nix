@@ -202,7 +202,12 @@ stdenv.mkDerivation {
     (if x264Support then "--enable-x264 --disable-x264-lavc" else "--disable-x264 --enable-x264-lavc")
     (if jackaudioSupport then "" else "--disable-jack")
     (if pulseSupport then "--enable-pulse" else "--disable-pulse")
-    (if v4lSupport then "--enable-v4l2 --enable-tv-v4l2" else "--disable-v4l2 --disable-tv-v4l2")
+    (
+      if v4lSupport then
+        "--enable-v4l2 --enable-tv-v4l2 --enable-radio --enable-radio-v4l2 --enable-radio-capture"
+      else
+        "--disable-v4l2 --disable-tv-v4l2 --disable-radio --disable-radio-v4l2 --disable-radio-capture"
+    )
     "--disable-xanim"
     "--disable-xvid --disable-xvid-lavc"
     "--disable-ossaudio"
