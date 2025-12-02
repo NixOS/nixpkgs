@@ -26411,14 +26411,6 @@
     githubId = 36288711;
     name = "Tim Keller";
   };
-  tjni = {
-    email = "43ngvg@masqt.com";
-    matrix = "@tni:matrix.org";
-    name = "Theodore Ni";
-    github = "tjni";
-    githubId = 3806110;
-    keys = [ { fingerprint = "4384 B8E1 299F C028 1641  7B8F EC30 EFBE FA7E 84A4"; } ];
-  };
   tkerber = {
     email = "tk@drwx.org";
     github = "tkerber";
