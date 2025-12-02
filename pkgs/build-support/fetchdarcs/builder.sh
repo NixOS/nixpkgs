@@ -1,3 +1,5 @@
+set -u
+
 tagtext=""
 tagflags=""
 # Darcs hashes are sha1 (120 bits, 40-character hex)
@@ -12,7 +14,7 @@ elif test -n "$context"; then
     tagflags="--context=$context"
 fi
 
-echo "Cloning $url $partial ${tagtext} into $out"
+echo "Cloning $url ${tagtext} into $out"
 
 darcs clone --lazy $tagflags "$url" "$out"
 # remove metadata, because it can change
