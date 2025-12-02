@@ -6,7 +6,7 @@
   karabiner-dk,
   fetchFromGitHub,
   versionCheckHook,
-  common-updater-scripts,
+  nix-update,
   yq,
   curl,
   jq,
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         gnused
         yq
         jq
-        common-updater-scripts
+        nix-update
       ];
       text = builtins.readFile ./update.sh;
     });
