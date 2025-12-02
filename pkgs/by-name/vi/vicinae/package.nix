@@ -20,23 +20,23 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vicinae";
-  version = "0.16.10";
+  version = "0.16.11";
 
   src = fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4t0AscBe+TMhQ5SuzkBSgKrMXGs/2BvlRv8ke3pg+yo=";
+    hash = "sha256-gX7bUoIP4PU0wUOW3ciyjYAInX/6VLVcEBKdQIQyzDk=";
   };
 
   apiDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/typescript/api";
-    hash = "sha256-4OgVCnw5th2TcXszVY5G9ENr3/Y/eR2Kd45DbUhQRNk=";
+    hash = "sha256-UsTpMR23UQBRseRo33nbT6z/UCjZByryWfn2AQSgm6U=";
   };
 
   extensionManagerDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/typescript/extension-manager";
-    hash = "sha256-krDFHTG8irgVk4a79LMz148drLgy2oxEoHCKRpur1R4=";
+    hash = "sha256-wl8FDFB6Vl1zD0/s2EbU6l1KX4rwUW6dOZof4ebMMO8=";
   };
 
   cmakeFlags = lib.mapAttrsToList lib.cmakeFeature {
