@@ -1128,9 +1128,9 @@
   },
   "workload-orchestration": {
     "pname": "workload-orchestration",
-    "version": "4.1.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/workload_orchestration-4.1.0-py3-none-any.whl",
-    "hash": "sha256-9+pQFtpZzIEk4971hNJuB6gxu7WtRtDO69zt6jgq60A=",
+    "version": "4.2.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/workload_orchestration-4.2.0-py3-none-any.whl",
+    "hash": "sha256-gl+8YfetxLgAKUzvehihHGGWTLpi0T57LKRzmuwvWww=",
     "description": "Microsoft Azure Command-Line Tools WorkloadOperations Extension"
   },
   "workloads": {
