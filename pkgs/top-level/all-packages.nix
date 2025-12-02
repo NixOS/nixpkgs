@@ -1706,6 +1706,10 @@ with pkgs;
 
   bat-extras = recurseIntoAttrs (lib.makeScope newScope (import ../tools/misc/bat-extras));
 
+  beam-book = callPackage ../tools/misc/beam-book {
+    inherit (rubyPackages) rouge;
+  };
+
   beauty-line-icon-theme = callPackage ../data/icons/beauty-line-icon-theme {
     inherit (plasma5Packages) breeze-icons;
   };
