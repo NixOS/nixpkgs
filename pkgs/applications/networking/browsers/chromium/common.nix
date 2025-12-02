@@ -556,7 +556,7 @@ let
       # exact version or even running a newer version.
       ./patches/chromium-136-nodejs-assert-minimal-version-instead-of-exact-match.patch
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "140") [
+    ++ lib.optionals (chromiumVersionAtLeast "140" && lib.versionOlder rustcVersion "1.89.0") [
       # Fix building with too old Rust (< 1.89)
       # ld.lld: error: undefined symbol: __rust_no_alloc_shim_is_unstable
       (fetchpatch {
