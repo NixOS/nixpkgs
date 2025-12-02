@@ -79,7 +79,6 @@ stdenv.mkDerivation {
     mainProgram = "communi";
     homepage = "https://github.com/communi/communi-desktop";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ hrdinka ];
     platforms = platforms.all;
   };
 }

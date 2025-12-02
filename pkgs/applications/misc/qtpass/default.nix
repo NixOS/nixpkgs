@@ -81,7 +81,6 @@ stdenv.mkDerivation rec {
     mainProgram = "qtpass";
     homepage = "https://qtpass.org";
     license = licenses.gpl3;
-    maintainers = [ maintainers.hrdinka ];
     platforms = platforms.all;
   };
 }
