@@ -21,6 +21,11 @@ buildHomeAssistantComponent rec {
     rctclient
   ];
 
+  ignoreVersionRequirement = [
+    # rctclient 0.0.4 was never published on PyPI
+    "rctclient"
+  ];
+
   doCheck = false; # no tests
 
   meta = with lib; {
