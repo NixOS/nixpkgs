@@ -1,5 +1,5 @@
 /*
- TODO some sort of basic test
+ TODO a basic test
  - comprehensive tests later if there's time
 */
 { pkgs, ... }:
@@ -27,7 +27,7 @@
 
     # Wait for everything to be ready.
     machine.wait_for_unit("multi-user.target")
-    machine.wait_for_unit("fail2ban")
+    machine.wait_for_unit("reaction")
     machine.wait_for_unit("sshd")
     client.wait_for_unit("multi-user.target")
 
