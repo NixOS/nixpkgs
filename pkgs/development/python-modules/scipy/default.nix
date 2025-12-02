@@ -159,6 +159,15 @@ buildPythonPackage {
       "test_uint64_max"
       "test_large_m4" # https://github.com/scipy/scipy/issues/22466
     ]
+    ++ lib.optionals (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian) [
+      # https://github.com/scipy/scipy/issues/24090
+      "test_cython_api"
+      "test_distance_transform_cdt05"
+      "test_eval_chebyt_gh20129"
+      "test_hyp0f1"
+      "test_hyp0f1_gh5764"
+      "test_simple_det_shapes_real_complex"
+    ]
     ++ lib.optionals (python.isPy311) [
       # https://github.com/scipy/scipy/issues/22789 Observed only with Python 3.11
       "test_funcs"

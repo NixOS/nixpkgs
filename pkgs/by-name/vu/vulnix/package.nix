@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "vulnix";
-  version = "1.12.1";
+  version = "1.12.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "vulnix";
     tag = version;
-    hash = "sha256-Nxhv3K/wF7AYi5kTJxL2pjiDWgWN+27wKsMXf0yaXrk=";
+    hash = "sha256-RHYiwIWV7gf4Ty70ECY3RLouNZAEG5uxjq0+K4LK5QU=";
   };
 
   __darwinAllowLocalNetworking = true;
