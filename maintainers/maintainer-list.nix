@@ -3409,12 +3409,6 @@
     githubId = 45831883;
     name = "Brieuc Dubois";
   };
-  bhipple = {
-    email = "bhipple@protonmail.com";
-    github = "bhipple";
-    githubId = 2071583;
-    name = "Benjamin Hipple";
-  };
   bhougland = {
     email = "benjamin.hougland@gmail.com";
     github = "bhougland18";
