@@ -6,7 +6,7 @@
   karabiner-dk,
   fetchFromGitHub,
   versionCheckHook,
-  common-updater-scripts,
+  nix-update,
   yq,
   curl,
   jq,
@@ -16,16 +16,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kanata";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "jtroo";
     repo = "kanata";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-xxAIwiwCQugDXpWga9bQ9ZGfem46rwDlmf64dX/tw7g=";
+    sha256 = "sha256-IicVuJZBHzBv9SNGQuWIIaLq2qpWfn/jMFh9KPvAThs=";
   };
 
-  cargoHash = "sha256-LfjuQHR3vVUr2e0efVymnfCnyYkFRx7ZiNdSIjBZc5s=";
+  cargoHash = "sha256-2DTL1u17jUFiRoVe7973L5/352GtKte/vakk01SSRwY=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     (writeShellScriptBin "sw_vers" ''
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   passthru = {
-    darwinDriverVersion = "5.0.0"; # needs to be updated if karabiner-driverkit changes
+    darwinDriverVersion = "6.2.0"; # needs to be updated if karabiner-driverkit changes
     updateScript = lib.getExe (writeShellApplication {
       name = "update-script-kanata";
       runtimeInputs = [
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         gnused
         yq
         jq
-        common-updater-scripts
+        nix-update
       ];
       text = builtins.readFile ./update.sh;
     });
