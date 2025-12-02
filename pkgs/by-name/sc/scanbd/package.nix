@@ -10,6 +10,14 @@
   systemd,
 }:
 
+let
+  # Logical FHS directory paths (without $out prefix)
+  systemdSystemUnitDir = "/lib/systemd/system";
+  dbusSystemConfigDir = "/share/dbus-1/system.d";
+  dbusSystemServicesDir = "/share/dbus-1/system-services";
+  udevRulesDir = "/lib/udev/rules.d";
+in
+
 stdenv.mkDerivation rec {
   pname = "scanbd";
   version = "1.5.1";
@@ -31,8 +39,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-Werror"
     "--enable-udev"
-    "--with-scanbdconfdir=/etc/scanbd"
-    "--with-systemdsystemunitdir=$out/lib/systemd/system"
+    "--with-systemdsystemunitdir=$out${systemdSystemUnitDir}"
   ]
   ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # AC_FUNC_MALLOC is broken on cross builds.
@@ -42,10 +49,29 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  installFlags = [
-    "scanbdconfdir=$(out)/etc/scanbd"
-    "scannerconfdir=$(scanbdconfdir)/scanner.d"
-  ];
+  postInstall = ''
+    # Install DBUS configuration for scanbm network scanning support
+    mkdir -p $out${dbusSystemConfigDir} $out${dbusSystemServicesDir}
+    cp integration/scanbd_dbus.conf $out${dbusSystemConfigDir}/
+    cp integration/systemd/de.kmux.scanbd.server.service $out${dbusSystemServicesDir}/
+
+    # Install udev rules for automatic scanner detection
+    mkdir -p $out${udevRulesDir}
+    cp integration/98-snapscan.rules $out${udevRulesDir}/
+    cp integration/99-saned.rules $out${udevRulesDir}/
+  '';
+
+  postFixup = ''
+    # NixOS uses 'scanner' user/group, not 'saned'
+    substituteInPlace $out${dbusSystemConfigDir}/scanbd_dbus.conf \
+      --replace-fail "saned" "scanner"
+    substituteInPlace $out${udevRulesDir}/99-saned.rules \
+      --replace-fail "saned" "scanner"
+
+    # Fix logger path in snapscan rules
+    substituteInPlace $out${udevRulesDir}/98-snapscan.rules \
+      --replace-fail "/usr/bin/logger" "/run/current-system/sw/bin/logger"
+  '';
 
   doCheck = true;
 
@@ -72,5 +98,6 @@ stdenv.mkDerivation rec {
     downloadPage = "https://sourceforge.net/projects/scanbd/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ csingley ];
   };
 }
