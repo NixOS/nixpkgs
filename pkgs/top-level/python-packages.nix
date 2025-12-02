@@ -47,8 +47,6 @@ self: super: with self; {
 
   accupy = callPackage ../development/python-modules/accupy { };
 
-  accuweather = callPackage ../development/python-modules/accuweather { };
-
   acme = callPackage ../development/python-modules/acme { };
 
   acme-tiny = callPackage ../development/python-modules/acme-tiny { };

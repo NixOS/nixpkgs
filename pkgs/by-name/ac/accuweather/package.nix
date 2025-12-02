@@ -1,24 +1,15 @@
 {
   lib,
-  aiohttp,
-  aioresponses,
-  buildPythonPackage,
+  python3Packages,
   fetchFromGitHub,
-  orjson,
-  pytest-asyncio,
-  pytest-error-for-skips,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  syrupy,
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonPackage rec {
   pname = "accuweather";
   version = "4.2.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.12";
+  disabled = python3Packages.pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "bieniu";
@@ -27,19 +18,19 @@ buildPythonPackage rec {
     hash = "sha256-ORxo92nfLGNRC+eWX4NrpoMgiCLbtfR5JA+23OT/L3Y=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ python3Packages.setuptools ];
 
   dependencies = [
-    aiohttp
-    orjson
+    python3Packages.aiohttp
+    python3Packages.orjson
   ];
 
   nativeCheckInputs = [
-    aioresponses
-    pytest-asyncio
-    pytest-error-for-skips
-    pytestCheckHook
-    syrupy
+    python3Packages.aioresponses
+    python3Packages.pytest-asyncio
+    python3Packages.pytest-error-for-skips
+    python3Packages.pytestCheckHook
+    python3Packages.syrupy
   ];
 
   pythonImportsCheck = [ "accuweather" ];
