@@ -35,6 +35,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/romis2012/tiny-proxy";
     changelog = "https://github.com/romis2012/tiny-proxy/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ tjni ];
   };
 }
