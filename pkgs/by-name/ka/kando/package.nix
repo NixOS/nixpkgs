@@ -23,16 +23,16 @@
 
 buildNpmPackage rec {
   pname = "kando";
-  version = "2.0.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "kando-menu";
     repo = "kando";
     tag = "v${version}";
-    hash = "sha256-pgHhMzObj8Fh6pw1wjJXjghjKzKiM64lXS4Xlwh3omY=";
+    hash = "sha256-QQqVMYVSeFs7sIft/a30nGqIo5yn2+koYerqfAJ+/S4=";
   };
 
-  npmDepsHash = "sha256-vytwJdVnkm1AlDoM86xh5Vx5lsaDRcNdwjhP43A6KF8=";
+  npmDepsHash = "sha256-/DQWyHQ8Po004yLQ7g77aew2hrIXY+r+KkwUmf7r06M=";
 
   npmFlags = [ "--ignore-scripts" ];
 
