@@ -11,14 +11,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "chipsec";
-  version = "1.13.17";
+  version = "1.13.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chipsec";
     repo = "chipsec";
     tag = version;
-    hash = "sha256-8QiFIk9bq/yX26jw9aOd6wtt+WDUwfLBUVD5hL30RKE=";
+    hash = "sha256-mBLXegL384q172yCJGe5cKMIcC1CXm1wFxMZhb6Ys2E=";
   };
 
   patches = [
