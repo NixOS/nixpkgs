@@ -200,7 +200,6 @@ buildDotnetModule {
     homepage = "https://sonarr.tv";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      fadenb
       purcell
       tie
       niklaskorz

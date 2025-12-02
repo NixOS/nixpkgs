@@ -36,7 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ KSJ2000 ];
     mainProgram = "lzfse";
   };
 })

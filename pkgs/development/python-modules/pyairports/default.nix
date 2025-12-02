@@ -25,6 +25,5 @@ buildPythonPackage rec {
     description = "Package which enables airport lookup by 3-letter IATA code";
     homepage = "https://github.com/ozeliger/pyairports";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cfhammill ];
   };
 }
