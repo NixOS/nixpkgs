@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (sslLibrary == "aws-lc") [
     "USE_OPENSSL_AWSLC=true"
   ]
-  ++ lib.optionals (sslLibrary == "openssl") [
+  ++ lib.optionals (sslLibrary == "openssl" && lib.versionOlder openssl.version "3.5.2") [
     "USE_QUIC_OPENSSL_COMPAT=yes"
   ]
   ++ lib.optionals (sslLibrary == "wolfssl") [
