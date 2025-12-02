@@ -24,9 +24,7 @@ stdenv.mkDerivation rec {
     description = "Multi-paradigm automated test framework for C++ and Objective-C (and, maybe, C)";
     homepage = "http://catch-lib.net";
     license = licenses.boost;
-    maintainers = with maintainers; [
-      edwtjo
-    ];
+    maintainers = [ ];
     platforms = with platforms; unix ++ windows;
   };
 }

@@ -7447,12 +7447,6 @@
     githubId = 494483;
     name = "Michael Francis";
   };
-  edwtjo = {
-    email = "ed@cflags.cc";
-    github = "edwtjo";
-    githubId = 54799;
-    name = "Edward Tjörnhammar";
-  };
   eeedean = {
     github = "eeedean";
     githubId = 8173116;

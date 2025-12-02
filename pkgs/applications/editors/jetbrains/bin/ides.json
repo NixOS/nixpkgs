@@ -16,7 +16,7 @@
     "meta": {
       "isOpenSource": false,
       "description": "C/C++ IDE from JetBrains",
-      "maintainers": [ "edwtjo", "mic92", "tymscar" ],
+      "maintainers": [ "mic92", "tymscar" ],
       "longDescription": "Enhancing productivity for every C and C++ developer on Linux, macOS and Windows.",
       "homepage": "https://www.jetbrains.com/clion/"
     }
@@ -73,7 +73,7 @@
     "meta": {
       "isOpenSource": true,
       "description": "Free Java, Kotlin, Groovy and Scala IDE from jetbrains",
-      "maintainers": [ "edwtjo", "gytis-ivaskevicius", "tymscar" ],
+      "maintainers": [ "gytis-ivaskevicius", "tymscar" ],
       "longDescription": "IDE for Java SE, Groovy & Scala development Powerful environment for building Google Android apps Integration with JUnit, TestNG, popular SCMs, Ant & Maven. Also known as IntelliJ.",
       "homepage": "https://www.jetbrains.com/idea/"
     }
@@ -85,7 +85,7 @@
     "meta": {
       "isOpenSource": false,
       "description": "Paid-for Java, Kotlin, Groovy and Scala IDE from jetbrains",
-      "maintainers": [ "edwtjo", "gytis-ivaskevicius", "tymscar" ],
+      "maintainers": [ "gytis-ivaskevicius", "tymscar" ],
       "longDescription": "IDE for Java SE, Groovy & Scala development Powerful environment for building Google Android apps Integration with JUnit, TestNG, popular SCMs, Ant & Maven. Also known as IntelliJ.",
       "homepage": "https://www.jetbrains.com/idea/"
     }
@@ -153,7 +153,7 @@
     "meta": {
       "isOpenSource": false,
       "description": "Ruby IDE from JetBrains",
-      "maintainers": [ "edwtjo", "tymscar"],
+      "maintainers": [ "tymscar"],
       "longDescription": "Ruby IDE from JetBrains",
       "homepage": "https://www.jetbrains.com/ruby/"
     }

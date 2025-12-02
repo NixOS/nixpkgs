@@ -83,7 +83,6 @@ buildPythonPackage rec {
       standard library and on the strengths of Python as a high-level
       programming language.
     '';
-    maintainers = with maintainers; [ edwtjo ];
     license = licenses.gpl3Plus;
   };
 }

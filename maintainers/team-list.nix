@@ -494,7 +494,6 @@ with lib.maintainers;
 
   jetbrains = {
     members = [
-      edwtjo
       leona
       theCapypara
       thiagokokada
@@ -534,7 +533,6 @@ with lib.maintainers;
       aanderse
       cpages
       dschrempf
-      edwtjo
       kazenyuk
       minijackson
       peterhoeg
@@ -550,7 +548,6 @@ with lib.maintainers;
   libretro = {
     members = [
       aanderse
-      edwtjo
       hrdinka
       thiagokokada
     ];
