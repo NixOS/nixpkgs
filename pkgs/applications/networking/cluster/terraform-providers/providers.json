@@ -1075,11 +1075,11 @@
     "vendorHash": "sha256-F1AuO/dkldEDRvkwrbq2EjByxjg3K2rohZAM4DzKPUw="
   },
   "pagerduty_pagerduty": {
-    "hash": "sha256-SH3nsy8viGrHJTQzOc5kvEvM0+K8xNQjyrnexOfxFTk=",
+    "hash": "sha256-3SqhkSed8aO7CP4ONj02ahm5V9xV3xyRBPn03A7xlMA=",
     "homepage": "https://registry.terraform.io/providers/PagerDuty/pagerduty",
     "owner": "PagerDuty",
     "repo": "terraform-provider-pagerduty",
-    "rev": "v3.30.6",
+    "rev": "v3.30.7",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
