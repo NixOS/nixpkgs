@@ -12116,8 +12116,6 @@ self: super: with self; {
 
   pixelmatch = callPackage ../development/python-modules/pixelmatch { };
 
-  pizzapi = callPackage ../development/python-modules/pizzapi { };
-
   pjsua2 =
     (toPythonModule (
       pkgs.pjsip.override {
