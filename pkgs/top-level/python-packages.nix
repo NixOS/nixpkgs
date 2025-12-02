@@ -11922,6 +11922,8 @@ self: super: with self; {
 
   pdfrw2 = callPackage ../development/python-modules/pdfrw2 { };
 
+  pdfservices-sdk = callPackage ../development/python-modules/pdfservices-sdk { };
+
   pdftotext = callPackage ../development/python-modules/pdftotext { };
 
   pdm-backend = callPackage ../development/python-modules/pdm-backend { };
