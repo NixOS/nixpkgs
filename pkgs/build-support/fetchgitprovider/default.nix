@@ -227,6 +227,7 @@ lib.extendMkDerivation {
         # so we don't need to do it again.
         fetchgitDerivationArgs = choices.fetchgit.extendDrvArgs finalAttrs args;
         fetchzipDerivationArgs = choices.fetchzip.extendDrvArgs finalAttrs args;
+        fetchgitSpecialArgs = fetchgit.resolveSpecialArgs finalAttrs args;
         useFetchGitFinal = if enableUseFetchGitFinal then finalAttrs.useFetchGit else useFetchGitCurrent;
         newDerivationArgsChosen =
           if useFetchGitFinal then fetchgitDerivationArgs else fetchzipDerivationArgs;
@@ -265,7 +266,7 @@ lib.extendMkDerivation {
             n: _:
             if useFetchGitArgsDefault ? ${n} then
               # The final useFetchGitArgs produced by fetchgit.
-              fetchgitDerivationArgs.${n}
+              fetchgitSpecialArgs.${n} or useFetchGitArgsDefaultNonNull.${n}
             else
               newDerivationArgsChosen.${n} or null
           ) expectDrvArgs

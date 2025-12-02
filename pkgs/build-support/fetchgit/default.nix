@@ -224,6 +224,34 @@ let
           // passthru;
         }
       );
+
+  resolveSpecialArgs =
+    finalAttrs:
+    {
+      deepClone ? false,
+      fetchTags ? false,
+      leaveDotGit ? null,
+      nonConeMode ? null,
+      rootDir ? "",
+      sparseCheckout ? null,
+      ...
+    }:
+    {
+      inherit
+        deepClone
+        fetchTags
+        rootDir
+        ;
+      leaveDotGit =
+        if leaveDotGit != null then
+          assert fetchTags -> leaveDotGit;
+          assert rootDir != "" -> !leaveDotGit;
+          leaveDotGit
+        else
+          deepClone || fetchTags;
+      nonConeMode = lib.defaultTo (finalAttrs.rootDir != "") nonConeMode;
+      sparseCheckout = lib.defaultTo (lib.optional (finalAttrs.rootDir != "") finalAttrs.rootDir) sparseCheckout;
+    };
 in
 
 lib.makeOverridable (
@@ -237,7 +265,10 @@ lib.makeOverridable (
   }
 )
 // {
-  inherit getRevWithTag;
+  inherit
+    getRevWithTag
+    resolveSpecialArgs
+    ;
   expectDrvArgs =
     let
       faRaw = lib.functionArgs (extendDrvArgs { });
