@@ -34,6 +34,5 @@ buildPythonPackage rec {
     description = "Port of the most excellent TimeCop Ruby Gem for Python";
     homepage = "https://github.com/bluekelp/pytimecop";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ zakame ];
   };
 }
