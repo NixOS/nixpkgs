@@ -19,6 +19,10 @@ buildHomeAssistantComponent rec {
     hash = "sha256-qXtZwiQRPNtxAsdp2gOoToqT4CHXS+76EWrzqp+9udk=";
   };
 
+  postPatch = ''
+    python3 manage/update_manifest.py --version '${version}'
+  '';
+
   dependencies = [ volkswagencarnet ];
 
   nativeCheckInputs = [
