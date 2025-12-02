@@ -9,14 +9,14 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bat";
   version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "bat";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-IbTvFT37BFo0tKOiApDL9sT+/nMD33MO3TXuho+lF2c=";
   };
 
@@ -78,7 +78,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Cat(1) clone with syntax highlighting and Git integration";
     homepage = "https://github.com/sharkdp/bat";
-    changelog = "https://github.com/sharkdp/bat/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/sharkdp/bat/raw/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -91,4 +91,4 @@ rustPlatform.buildRustPackage rec {
       sigmasquadron
     ];
   };
-}
+})
