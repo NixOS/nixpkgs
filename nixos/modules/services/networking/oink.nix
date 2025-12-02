@@ -12,7 +12,10 @@ let
       lib.mapAttrs' (k: v: lib.nameValuePair (lib.toLower k) v) attrs
     );
   oinkConfig = makeOinkConfig {
-    global = cfg.settings;
+    global = removeAttrs cfg.settings [
+      "apiKey"
+      "secretApiKey"
+    ];
     domains = cfg.domains;
   };
 in
@@ -20,15 +23,17 @@ in
   options.services.oink = {
     enable = lib.mkEnableOption "Oink, a dynamic DNS client for Porkbun";
     package = lib.mkPackageOption pkgs "oink" { };
+    apiKeyFile = lib.mkOption {
+      type = lib.types.path;
+      example = "/run/keys/oink-api-key";
+      description = "Path to a file containing the API key to use when modifying DNS records.";
+    };
+    secretApiKeyFile = lib.mkOption {
+      type = lib.types.path;
+      example = "/run/keys/oink-secret-api-key";
+      description = "Path to a file containing the secret API key to use when modifying DNS records.";
+    };
     settings = {
-      apiKey = lib.mkOption {
-        type = lib.types.str;
-        description = "API key to use when modifying DNS records.";
-      };
-      secretApiKey = lib.mkOption {
-        type = lib.types.str;
-        description = "Secret API key to use when modifying DNS records.";
-      };
       interval = lib.mkOption {
         # https://github.com/rlado/oink/blob/v1.1.1/src/main.go#L364
         type = lib.types.ints.between 60 172800; # 48 hours
@@ -79,12 +84,29 @@ in
     };
   };
 
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "oink" "settings" "apiKey" ] ''
+      This option has been removed because it would make the API key world-readable.
+      Use {option}`apiKeyFile` instead.
+      If you insist on keeping the API key world-readable, you can use `oink.apiKeyFile = pkgs.writeText "api-key" "secret";`.
+    '')
+    (lib.mkRemovedOptionModule [ "services" "oink" "settings" "secretApiKey" ] ''
+      This option has been removed because it would make the API key world-readable.
+      Use {option}`secretApiKeyFile` instead.
+      If you insist on keeping the API key world-readable, you can use `oink.secretApiKeyFile = pkgs.writeText "secret-api-key" "secret";`.
+    '')
+  ];
   config = lib.mkIf cfg.enable {
     systemd.services.oink = {
       description = "Dynamic DNS client for Porkbun";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      script = "${cfg.package}/bin/oink -c ${oinkConfig}";
+      script =
+        lib.optionalString (cfg.apiKeyFile != null) "OINK_OVERRIDE_APIKEY=\"$(cat ${cfg.apiKeyFile})\" "
+        + lib.optionalString (
+          cfg.secretApiKeyFile != null
+        ) "OINK_OVERRIDE_SECRETAPIKEY=\"$(cat ${cfg.secretApiKeyFile})\" "
+        + "${cfg.package}/bin/oink -c ${oinkConfig}";
       serviceConfig = {
         Restart = "on-failure";
         RestartSec = "10";

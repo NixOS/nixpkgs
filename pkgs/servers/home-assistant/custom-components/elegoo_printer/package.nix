@@ -4,6 +4,7 @@
   buildHomeAssistantComponent,
 
   # dependencies
+  aiomqtt,
   colorlog,
   loguru,
   websocket-client,
@@ -18,16 +19,17 @@
 buildHomeAssistantComponent rec {
   owner = "danielcherubini";
   domain = "elegoo_printer";
-  version = "2.3.5";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "danielcherubini";
     repo = "elegoo-homeassistant";
     tag = "v${version}";
-    hash = "sha256-Ekt19lfn0DdedMFhJDDUkqsv7vjS96+lAhWveag6EeE=";
+    hash = "sha256-zjVii3ipkjSiF6ELujH+JSRSyIWfpeNFFzdQKasUsfo=";
   };
 
   dependencies = [
+    aiomqtt
     colorlog
     loguru
     websocket-client

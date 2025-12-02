@@ -2,17 +2,17 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   llvmPackages,
   openssl,
   emacs,
   pkg-config,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rtags";
-  version = "2.38";
+  version = "2.41-unstable-2025-11-19";
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -22,15 +22,15 @@ stdenv.mkDerivation rec {
     llvmPackages.llvm
     llvmPackages.libclang
     openssl
-    emacs
+    (emacs.override { withNativeCompilation = false; })
   ]
   ++ lib.optionals stdenv.cc.isGNU [ llvmPackages.clang-unwrapped ];
 
   src = fetchFromGitHub {
     owner = "andersbakken";
     repo = "rtags";
-    tag = "v${version}";
-    hash = "sha256-EJ5pC53S36Uu7lM6KuLvLN6MAyrQW/Yk5kPqZNS5m8c=";
+    rev = "7fcfacb5b4f9da43b99c8e9938d1d145ac241458";
+    hash = "sha256-97np2vDg3jdzDP9+Gq+HtBo2m7Wbkvf2f/TTmf0ryjo=";
     fetchSubmodules = true;
     # unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation
@@ -39,25 +39,19 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  # This should be fixed with the next version bump
-  # https://github.com/Andersbakken/rtags/issues/1411
-  patches = [
-    (fetchpatch {
-      name = "define-obsolete-function-alias.patch";
-      url = "https://github.com/Andersbakken/rtags/commit/63f18acb21e664fd92fbc19465f0b5df085b5e93.patch";
-      sha256 = "sha256-dmEPtnk8Pylmf5479ovHKItRZ+tJuOWuYOQbWB/si/Y=";
-    })
-  ];
-
   preConfigure = ''
     export LIBCLANG_CXXFLAGS="-isystem ${llvmPackages.clang.cc}/include $(llvm-config --cxxflags) -fexceptions" \
            LIBCLANG_LIBDIR="${llvmPackages.clang.cc}/lib"
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
+
   meta = {
     description = "C/C++ client-server indexer based on clang";
     homepage = "https://github.com/andersbakken/rtags";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     platforms = with lib.platforms; x86_64 ++ aarch64;
   };
-}
+})

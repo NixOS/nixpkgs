@@ -26,14 +26,14 @@
 }:
 
 let
-  version = "2.78.0";
+  version = "2.80.0";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     tag = "azure-cli-${version}";
-    hash = "sha256-kSZ9nFKEXDQtExSuGxyym5xHKVDnOB4QmDG3AZjGGEI=";
+    hash = "sha256-PIsOBltX2WBFCV4kdHkGPefBe/FGF9GQ5otXznE87aA=";
   };
 
   # put packages that needs to be overridden in the py package scope
@@ -160,6 +160,7 @@ py.pkgs.toPythonApplication (
       with py.pkgs;
       [
         antlr4-python3-runtime
+        azure-ai-projects
         azure-appconfiguration
         azure-batch
         azure-cli-core

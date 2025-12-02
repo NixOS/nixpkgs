@@ -139,7 +139,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/modules/system/boot/loader/systemd-boot      @JulienMalka
 
 # Limine
-/nixos/modules/system/boot/loader/limine        @lzcunt @phip1611 @programmerlexi @johnrtitor
+/nixos/modules/system/boot/loader/limine        @lzcunt @programmerlexi @johnrtitor
 /nixos/tests/limine                             @johnrtitor
 
 # Images and installer media
@@ -507,8 +507,14 @@ pkgs/servers/authelia/ @06kellyjac @dit7ya @nicomem
 pkgs/by-name/oc/octodns/ @anthonyroussel
 
 # Teleport
-/pkgs/build-support/teleport  @arianvp @justinas @sigma @tomberek @freezeboy @techknowlogick @JuliusFreudenberger
-pkgs/by-name/te/teleport*     @arianvp @justinas @sigma @tomberek @freezeboy @techknowlogick @JuliusFreudenberger
+/pkgs/build-support/teleport  @arianvp @justinas @sigma @tomberek @techknowlogick @JuliusFreudenberger
+pkgs/by-name/te/teleport*     @arianvp @justinas @sigma @tomberek @techknowlogick @JuliusFreudenberger
 
 # Warp-terminal
 pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @FlameFlag @johnrtitor
+
+# Nim
+/doc/languages-frameworks/nim.section.md  @NixOS/nim
+/pkgs/build-support/build-nim-package.nix @NixOS/nim
+/pkgs/build-support/build-nim-sbom.nix    @NixOS/nim
+/pkgs/top-level/nim-overrides.nix         @NixOS/nim

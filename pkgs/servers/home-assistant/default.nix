@@ -4,9 +4,11 @@
   callPackage,
   fetchFromGitHub,
   fetchPypi,
+  fetchpatch,
   python313,
   replaceVars,
   ffmpeg-headless,
+  ffmpeg_7-headless,
   inetutils,
   nixosTests,
   home-assistant,
@@ -85,15 +87,7 @@ let
         ];
       });
 
-      av = super.av.overridePythonAttrs rec {
-        version = "13.1.0";
-        src = fetchFromGitHub {
-          owner = "PyAV-Org";
-          repo = "PyAV";
-          tag = "v${version}";
-          hash = "sha256-x2a9SC4uRplC6p0cD7fZcepFpRidbr6JJEEOaGSWl60=";
-        };
-      };
+      av = self.av_13;
 
       imageio = super.imageio.overridePythonAttrs (oldAttrs: {
         disabledTests = oldAttrs.disabledTests or [ ] ++ [
@@ -259,37 +253,6 @@ let
         doCheck = false;
       });
 
-      python-telegram-bot = super.python-telegram-bot.overridePythonAttrs (oldAttrs: rec {
-        version = "21.5";
-
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          tag = version;
-          hash = "sha256-i1YEcN615xeI4HcygXV9kzuXpT2yDSnlNU6bZqu1dPM=";
-        };
-      });
-
-      pytraccar = super.pytraccar.overridePythonAttrs (oldAttrs: rec {
-        version = "2.1.1";
-
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          tag = version;
-          hash = "sha256-WTRqYw66iD4bbb1aWJfBI67+DtE1FE4oiuUKpfVqypE=";
-        };
-      });
-
-      # Pinned due to API changes ~1.0
-      vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
-        version = "0.1.2";
-        src = fetchFromGitHub {
-          owner = "spry-group";
-          repo = "python-vultr";
-          rev = version;
-          hash = "sha256-sHCZ8Csxs5rwg1ZG++hP3MfK7ldeAdqm5ta9tEXeW+I=";
-        };
-      });
-
       wolf-comm = super.wolf-comm.overridePythonAttrs rec {
         version = "0.0.23";
         src = fetchFromGitHub {
@@ -330,7 +293,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.10.4";
+  hassVersion = "2025.11.3";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -351,13 +314,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-CaS/37Pastpoeb6fXLiChVcQXNqVJMaXV04HGnNFlL0=";
+    hash = "sha256-Wd+q2ooNguJMKnQ1uzLJtglAyBFXjBSj5hjEgY4bgzY=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ue1Aat8aSEXHUSIl2ji1cQaZEnVRgY7+PBHB9mQBJ6I=";
+    hash = "sha256-KxpjOPlusEHT+bRtgs/9EsIksTd4pRMKsXb7e5q+b2Q=";
   };
 
   build-system = with python.pkgs; [
@@ -383,6 +346,12 @@ python.pkgs.buildPythonApplication rec {
     (replaceVars ./patches/ffmpeg-path.patch {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
     })
+
+    (fetchpatch {
+      # [2025.11.2] fix matter snapshots
+      url = "https://github.com/home-assistant/core/commit/04458e01be0748c3f6c980e126d5238d1ca915b6.patch";
+      hash = "sha256-gzc0KmSZhOfHVRhIVmOTFTJMI+pAX+8LcOit4JUypyA=";
+    })
   ];
 
   postPatch = ''
@@ -392,10 +361,13 @@ python.pkgs.buildPythonApplication rec {
       --replace-fail "setuptools==78.1.1" setuptools
   '';
 
+  pythonRemoveDeps = [
+    "uv"
+  ];
+
   dependencies = with python.pkgs; [
     # Only packages required in pyproject.toml
     aiodns
-    aiofiles
     aiohasupervisor
     aiohttp
     aiohttp-asyncmdnsresolver
@@ -415,28 +387,20 @@ python.pkgs.buildPythonApplication rec {
     cronsim
     cryptography
     fnv-hash-fast
-    ha-ffmpeg
     hass-nabucasa
-    hassil
     home-assistant-bluetooth
-    home-assistant-intents
     httpx
     ifaddr
     jinja2
     lru-dict
-    mutagen
-    numpy
     orjson
     packaging
     pillow
     propcache
     psutil-home-assistant
     pyjwt
-    pymicro-vad
     pyopenssl
-    pyspeex-noise
     python-slugify
-    pyturbojpeg
     pyyaml
     requests
     securetar
@@ -446,7 +410,6 @@ python.pkgs.buildPythonApplication rec {
     typing-extensions
     ulid-transform
     urllib3
-    uv
     voluptuous
     voluptuous-openapi
     voluptuous-serialize
@@ -463,33 +426,36 @@ python.pkgs.buildPythonApplication rec {
   # upstream only tests on Linux, so do we.
   doCheck = stdenv.hostPlatform.isLinux;
 
+  requirementsTest = with python.pkgs; [
+    # test infrastructure (selectively from requirement_test.txt)
+    freezegun
+    pytest-asyncio
+    pytest-aiohttp
+    pytest-freezer
+    pytest-socket
+    pytest-timeout
+    pytest-unordered
+    pytest-xdist
+    pytestCheckHook
+    requests-mock
+    respx
+    syrupy
+  ];
+
   nativeCheckInputs =
-    with python.pkgs;
-    [
-      # test infrastructure (selectively from requirement_test.txt)
-      freezegun
-      pytest-asyncio
-      pytest-aiohttp
-      pytest-freezer
-      pytest-mock
-      pytest-socket
-      pytest-timeout
-      pytest-unordered
-      pytest-xdist
-      pytestCheckHook
-      requests-mock
-      respx
-      syrupy
-      tomli
-      # Sneakily imported in tests/conftest.py
-      paho-mqtt
+    requirementsTest
+    ++ (with python.pkgs; [
       # Used in tests/non_packaged_scripts/test_alexa_locales.py
       beautifulsoup4
-    ]
+      # Used in tests/scripts/test_check_config.py
+      colorlog
+    ])
     ++ lib.concatMap (component: getPackages component python.pkgs) [
       # some components are needed even if tests in tests/components are disabled
-      "default_config"
+      "assist_pipeline"
+      "frontend"
       "hue"
+      "mobile_app"
     ];
 
   pytestFlags = [
@@ -521,12 +487,7 @@ python.pkgs.buildPythonApplication rec {
     "tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
     "tests/test_test_fixtures.py::test_evict_faked_translations"
     "tests/helpers/test_backup.py::test_async_get_manager"
-    # (2025.9.0) Extra argument (demo platform) in list that is expected to be empty
-    "tests/scripts/test_check_config.py::test_config_platform_valid"
-    # (2025.9.0) Schema mismatch, diff shows a required field that needs to be removed
-    "tests/test_data_entry_flow.py::test_section_in_serializer"
-    # (2025.9.0) unique id collision in async_update_entry
-    "tests/test_config_entries.py::test_async_update_entry_unique_id_collision"
+    "tests/helpers/test_trigger.py::test_platform_multiple_triggers[sync_action]"
   ];
 
   preCheck = ''

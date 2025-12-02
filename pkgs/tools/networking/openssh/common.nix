@@ -52,6 +52,12 @@ assert withFIDO -> withSecurityKey;
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
 
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
+
   patches = [
     # Making openssh pass the LOCALE_ARCHIVE variable to the forked session processes,
     # so the session 'bash' will receive the proper locale archive, and thus process
@@ -60,6 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
     ./dont_create_privsep_path.patch
+
+    # See discussion in https://github.com/NixOS/nixpkgs/issues/453782 and
+    # https://github.com/openssh/openssh-portable/pull/602
+    ./fix_pkcs11_tests.patch
   ]
   ++ extraPatches;
 
@@ -67,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     # On Hydra this makes installation fail (sometimes?),
     # and nix store doesn't allow such fancy permission bits anyway.
     ''
-      substituteInPlace Makefile.in --replace '$(INSTALL) -m 4711' '$(INSTALL) -m 0711'
+      substituteInPlace Makefile.in --replace-fail '$(INSTALL) -m 4711' '$(INSTALL) -m 0711'
     '';
 
   strictDeps = true;
@@ -138,16 +148,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  hardeningEnable = [ "pie" ];
-
   doCheck = false;
   enableParallelChecking = false;
   nativeCheckInputs = [
     openssl
   ]
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) hostname
-  # TODO: softhsm is currently breaking the tests; see #453782
-  ++ lib.optional (false && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl) softhsm;
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl) softhsm;
 
   preCheck = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
     ''
@@ -182,27 +189,23 @@ stdenv.mkDerivation (finalAttrs: {
 
       # explicitly enable the PermitUserEnvironment feature
       substituteInPlace regress/test-exec.sh \
-        --replace \
+        --replace-fail \
           'cat << EOF > $OBJ/sshd_config' \
           $'cat << EOF > $OBJ/sshd_config\n\tPermitUserEnvironment yes'
 
       # some tests want to use files under /bin as example files
       for f in regress/sftp-cmds.sh regress/forwarding.sh; do
-        substituteInPlace $f --replace '/bin' "$(dirname $(type -p ls))"
+        substituteInPlace $f --replace-fail '/bin' "$(dirname $(type -p ls))"
       done
 
       # set up NIX_REDIRECTS for direct invocations
       set -a; source ~/.ssh/environment.base; set +a
     ''
-    # See softhsm in nativeCheckInputs above.
-    +
-      lib.optionalString
-        (!finalAttrs.doCheck && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl)
-        ''
-          # The extra tests check PKCS#11 interactions, which softhsm emulates with software only
-          substituteInPlace regress/test-exec.sh \
-            --replace /usr/local/lib/softhsm/libsofthsm2.so ${lib.getLib softhsm}/lib/softhsm/libsofthsm2.so
-        ''
+    + lib.optionalString (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl) ''
+      # The extra tests check PKCS#11 interactions, which softhsm emulates with software only
+      substituteInPlace regress/test-exec.sh \
+        --replace-fail /usr/local/lib/softhsm/libsofthsm2.so ${lib.getLib softhsm}/lib/softhsm/libsofthsm2.so
+    ''
   );
   # integration tests hard to get working on darwin with its shaky
   # sandbox
@@ -223,7 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Install ssh-copy-id, it's very useful.
     cp contrib/ssh-copy-id $out/bin/
     chmod +x $out/bin/ssh-copy-id
-    cp contrib/ssh-copy-id.1 $out/share/man/man1/
+    cp contrib/ssh-copy-id.1 $man/share/man/man1/
   '';
 
   installTargets = [ "install-nokeys" ];

@@ -7,13 +7,13 @@
   xorg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "terminus-font";
   version = "4.49.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/${pname}-${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
-    sha256 = "0yggffiplk22lgqklfmd2c0rw8gwchynjh5kz4bz8yv2h6vw2qfr";
+    url = "mirror://sourceforge/project/terminus-font/terminus-font-${lib.versions.majorMinor finalAttrs.version}/terminus-font-${finalAttrs.version}.tar.gz";
+    hash = "sha256-2WHBt4Fie/QX+bNAaT1k/CGeAROtOjrxo0JMeqNz73k=";
   };
 
   patches = [ ./SOURCE_DATE_EPOCH-for-otb.patch ];
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     bdftopcf
     xorg.mkfontscale
   ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
   # to make, so we need to disable parallelism:
   enableParallelInstalling = false;
 
-  meta = with lib; {
+  meta = {
     description = "Clean fixed width font";
     longDescription = ''
       Terminus Font is designed for long (8 and more hours per day) work
@@ -55,6 +57,7 @@ stdenv.mkDerivation rec {
       EGA/VGA-bold for 8x14 and 8x16.
     '';
     homepage = "https://terminus-font.sourceforge.net/";
-    license = licenses.ofl;
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ azey7f ];
   };
-}
+})

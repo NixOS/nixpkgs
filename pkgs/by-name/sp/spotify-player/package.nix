@@ -2,7 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   openssl,
   cmake,
@@ -23,7 +22,7 @@
   # build options
   withStreaming ? true,
   withDaemon ? true,
-  withAudioBackend ? "rodio", # alsa, pulseaudio, rodio, portaudio, jackaudio, rodiojack, sdl
+  withAudioBackend ? "rodio", # alsa, pulseaudio, rodio, portaudio, jackaudio, rodiojack, sdl, gstreamer
   withMediaControl ? true,
   withImage ? true,
   withNotify ? true,
@@ -50,24 +49,16 @@ assert lib.assertOneOf "withAudioBackend" withAudioBackend [
 
 rustPlatform.buildRustPackage rec {
   pname = "spotify-player";
-  version = "0.21.0";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "aome510";
     repo = "spotify-player";
     tag = "v${version}";
-    hash = "sha256-nOswrYt9NrzJV6CFBWZCpj/wIJnIgmr3i2TreAKGGPI=";
+    hash = "sha256-2LOsFcFZRdgH4TqtmVDqf8dxsPwZVQKsQbjyuDHwP/4=";
   };
 
-  cargoHash = "sha256-YarKRApcQHom3AQIirqGdmUOuy5B+BRehLijvF/GRPc=";
-
-  patches = [
-    (fetchpatch {
-      name = "fix-build-failure.patch";
-      url = "https://github.com/aome510/spotify-player/commit/77af13b48b2a03e61fef1cffea899929057551dc.patch";
-      hash = "sha256-5q8W0X49iZLYdwrBiZJTESb628VPamrm0zEYwDm8CVk=";
-    })
-  ];
+  cargoHash = "sha256-JgPf68KpRE8z+2webU99cR0+6xmaplcVwgFcgvHiwrs=";
 
   nativeBuildInputs = [
     pkg-config

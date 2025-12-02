@@ -8,13 +8,8 @@ on:
         required: true
         type: string
     secrets:
-      CACHIX_AUTH_TOKEN:
-        required: true
       NIXPKGS_CI_APP_PRIVATE_KEY:
         required: true
-      OWNER_APP_PRIVATE_KEY:
-        # The Test workflow should not actually request reviews from owners.
-        required: false
 
 concurrency:
   group: pr-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
@@ -24,7 +19,7 @@ permissions: {}
 
 jobs:
   prepare:
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-slim
     permissions:
       # wrong branch review comment
       pull-requests: write
@@ -36,7 +31,7 @@ jobs:
       systems: ${{ steps.prepare.outputs.systems }}
       touched: ${{ steps.prepare.outputs.touched }}
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
           persist-credentials: false
           sparse-checkout-cone-mode: true # default, for clarity
@@ -66,8 +61,6 @@ jobs:
     permissions:
       # cherry-picks
       pull-requests: write
-    secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     with:
       baseBranch: ${{ needs.prepare.outputs.baseBranch }}
       headBranch: ${{ needs.prepare.outputs.headBranch }}
@@ -78,8 +71,6 @@ jobs:
     name: Lint
     needs: [prepare]
     uses: ./.github/workflows/lint.yml
-    secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     with:
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
       targetSha: ${{ needs.prepare.outputs.targetSha }}
@@ -91,8 +82,6 @@ jobs:
     permissions:
       # compare
       statuses: write
-    secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     with:
       artifact-prefix: ${{ inputs.artifact-prefix }}
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
@@ -112,28 +101,15 @@ jobs:
     with:
       headBranch: ${{ needs.prepare.outputs.headBranch }}
 
-  reviewers:
-    name: Reviewers
-    needs: [prepare, eval]
-    if: |
-      needs.prepare.outputs.targetSha &&
-      !contains(fromJSON(needs.prepare.outputs.headBranch).type, 'development')
-    uses: ./.github/workflows/reviewers.yml
-    secrets:
-      OWNER_APP_PRIVATE_KEY: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
-    with:
-      artifact-prefix: ${{ inputs.artifact-prefix }}
-
   build:
     name: Build
     needs: [prepare]
     uses: ./.github/workflows/build.yml
-    secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     with:
       artifact-prefix: ${{ inputs.artifact-prefix }}
       baseBranch: ${{ needs.prepare.outputs.baseBranch }}
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
+      targetSha: ${{ needs.prepare.outputs.targetSha }}
 
   # This job's only purpose is to create the target for the "Required Status Checks" branch ruleset.
   # It "needs" all the jobs that should block merging a PR.
@@ -145,7 +121,7 @@ jobs:
       - lint
       - eval
       - build
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-slim
     permissions:
       statuses: write
     steps:

@@ -16,7 +16,7 @@
 
 buildGoModule rec {
   pname = "containerd";
-  version = "2.1.4";
+  version = "2.2.0";
 
   outputs = [
     "out"
@@ -28,10 +28,18 @@ buildGoModule rec {
     owner = "containerd";
     repo = "containerd";
     tag = "v${version}";
-    hash = "sha256-eC9mfB/FWDxOGucNizHBiRkhkEFDdSxu9vRnXZp5Tug=";
+    hash = "sha256-LXBGA03FTrrbxlH+DxPBFtp3/AYQf096YE2rpe6A+WM=";
   };
 
-  postPatch = "patchShebangs .";
+  postPatch = ''
+    patchShebangs .
+  ''
+  + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    # When cross-compiling with CGO_ENABLED=0, we can't use -extldflags "-static"
+    # Remove it from SHIM_GO_LDFLAGS to avoid linking errors
+    substituteInPlace Makefile \
+      --replace-fail '-extldflags "-static"' ""
+  '';
 
   vendorHash = null;
 

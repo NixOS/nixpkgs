@@ -1,9 +1,3 @@
-mirror://xorg/individual/app/bitmap-1.1.1.tar.xz
-mirror://xorg/individual/app/editres-1.0.9.tar.xz
-mirror://xorg/individual/app/fonttosfnt-1.2.4.tar.xz
-mirror://xorg/individual/app/iceauth-1.0.10.tar.xz
-mirror://xorg/individual/app/oclock-1.0.6.tar.xz
-mirror://xorg/individual/app/setxkbmap-1.3.4.tar.xz
 mirror://xorg/individual/app/xclock-1.1.1.tar.xz
 mirror://xorg/individual/app/xdm-1.1.17.tar.xz
 mirror://xorg/individual/app/xdpyinfo-1.3.4.tar.xz
@@ -68,13 +62,5 @@ mirror://xorg/individual/driver/xf86-video-vesa-2.6.0.tar.xz
 mirror://xorg/individual/driver/xf86-video-vmware-13.4.0.tar.xz
 mirror://xorg/individual/driver/xf86-video-voodoo-1.2.6.tar.xz
 mirror://xorg/individual/driver/xf86-video-wsfb-0.4.0.tar.bz2
-mirror://xorg/individual/font/font-arabic-misc-1.0.4.tar.xz
-mirror://xorg/individual/font/font-cursor-misc-1.0.4.tar.xz
-mirror://xorg/individual/font/font-daewoo-misc-1.0.4.tar.xz
-mirror://xorg/individual/font/font-dec-misc-1.0.4.tar.xz
-mirror://xorg/individual/font/font-ibm-type1-1.0.4.tar.xz
-mirror://xorg/individual/font/font-jis-misc-1.0.4.tar.xz
-mirror://xorg/individual/font/font-misc-meltho-1.0.4.tar.xz
-mirror://xorg/individual/font/font-misc-misc-1.1.3.tar.xz
 mirror://xorg/individual/lib/libXTrap-1.0.1.tar.bz2
-mirror://xorg/individual/xserver/xorg-server-21.1.18.tar.xz
+mirror://xorg/individual/xserver/xorg-server-21.1.20.tar.xz

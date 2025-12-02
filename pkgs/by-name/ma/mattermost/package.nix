@@ -19,8 +19,8 @@
     #
     # Ensure you also check ../mattermostLatest/package.nix.
     regex = "^v(10\\.11\\.[0-9]+)$";
-    version = "10.11.5";
-    srcHash = "sha256-X0YjyRrFSYI7A+VINLV3NwAmsxgTkdUdHChyl1L+iWY=";
+    version = "10.11.8";
+    srcHash = "sha256-OlP5fO85YXP09H9jClSHNGC0/Gvq4h0+VgHTBKsbUWA=";
     vendorHash = "sha256-Lsw/cvl98JdVmzWr85lAv/JMcTmZZZ4ALLunFLNcrro=";
     npmDepsHash = "sha256-p9dq31qw0EZDQIl2ysKE38JgDyLA6XvSv+VtHuRh+8A=";
     lockfileOverlay = ''

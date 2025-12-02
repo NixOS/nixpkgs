@@ -8,6 +8,7 @@
   librsvg,
   gdk-pixbuf,
   glib,
+  gobject-introspection,
   borgbackup,
   writeText,
   nixosTests,
@@ -22,7 +23,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "weblate";
-  version = "5.14";
+  version = "5.14.3";
 
   pyproject = true;
 
@@ -35,7 +36,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "WeblateOrg";
     repo = "weblate";
     tag = "weblate-${version}";
-    hash = "sha256-XIaVM9bsgv6qJ1Q/6wzfO7D04WsUEkxNnJlyLd5+bY4=";
+    hash = "sha256-DwoJ24yGLJt+bItN/9SW0ruf+Lz3A9JxvD4QjlKaqzw=";
   };
 
   build-system = with python.pkgs; [ setuptools ];
@@ -154,6 +155,7 @@ python.pkgs.buildPythonApplication rec {
     librsvg
     gdk-pixbuf
     glib
+    gobject-introspection
   ];
   makeWrapperArgs = [ "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\"" ];
 
@@ -176,5 +178,6 @@ python.pkgs.buildPythonApplication rec {
     ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ erictapen ];
+    mainProgram = "weblate";
   };
 }

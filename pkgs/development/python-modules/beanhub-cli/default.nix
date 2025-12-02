@@ -72,7 +72,7 @@ buildPythonPackage rec {
     starlette-wtf
     uvicorn
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   optional-dependencies = {
     login = [
@@ -100,7 +100,7 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "beanhub_cli" ];
 

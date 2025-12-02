@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_image";
-  version = "1.2.12-unstable-2025-06-15";
+  version = "1.2.12-unstable-2025-11-06";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL_image";
-    rev = "bb266d29e19493fa48bda9bbc56c26363099372f";
-    hash = "sha256-I8TqZX3249/bcZtfwrJd545E5h9d9HmRy8GGDH9S+kU=";
+    rev = "7c6ea40bb75262740cd07f7658bc543f13c65b3c";
+    hash = "sha256-V8d9En6fJArslFLIaeCdfVD5YoHPbKjOpR79Va8w8js=";
   };
 
   configureFlags = [
@@ -48,10 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
     libwebp
   ];
-
-  env = lib.optionalAttrs stdenv.cc.isGNU {
-    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
-  };
 
   outputs = [
     "out"

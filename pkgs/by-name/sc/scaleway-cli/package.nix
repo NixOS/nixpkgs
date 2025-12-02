@@ -1,69 +1,70 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
   buildGoModule,
+  installShellFiles,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "scaleway-cli";
-  version = "2.42.0";
+  version = "2.46.0";
 
   src = fetchFromGitHub {
     owner = "scaleway";
     repo = "scaleway-cli";
-    rev = "v${version}";
-    sha256 = "sha256-bLttAE8IXTeIZ70wxBGxwozI2DVrdFnHdrCS3PL9UHA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kmLXChIzz3VRnD6zw0JrPMIRpkVsderd2CC0ytwx47k=";
   };
 
-  vendorHash = "sha256-ivjTL/eiQmj8228VYlgoRzjw9pt6QiwnsXKyjIXfc3M=";
+  vendorHash = "sha256-PBHsVMWamtAdojBicxshwilrETrP9hyy9Vq8YRMVzyM=";
+
+  env.CGO_ENABLED = 0;
 
   ldflags = [
+    "-s"
     "-w"
-    "-extldflags"
-    "-static"
-    "-X main.Version=${version}"
-    "-X main.GitCommit=ref/tags/${version}"
+    "-X main.Version=${finalAttrs.src.tag}"
+    "-X main.GitCommit=${finalAttrs.src.rev}"
     "-X main.GitBranch=HEAD"
-    "-X main.BuildDate=unknown"
+    "-X main.BuildDate=1970-01-01T00:00:00Z"
   ];
 
-  doCheck = true;
+  subPackages = [
+    "cmd/scw"
+    "commands/..."
+    "core/..."
+    "internal/..."
+  ];
 
-  # Some tests require access to scaleway's API, failing when sandboxed
-  preCheck = ''
-    substituteInPlace core/bootstrap_test.go \
-      --replace-warn "TestInterruptError" "SkipInterruptError"
-    substituteInPlace internal/e2e/errors_test.go \
-      --replace-warn "TestStandardErrors" "SkipStandardErrors"
-    substituteInPlace internal/e2e/human_test.go \
-      --replace-warn "TestTestCommand" "SkipTestCommand" \
-      --replace-warn "TestHumanCreate" "SkipHumanCreate" \
-      --replace-warn "TestHumanList" "SkipHumanList" \
-      --replace-warn "TestHumanUpdate" "SkipHumanUpdate" \
-      --replace-warn "TestHumanGet" "SkipHumanGet" \
-      --replace-warn "TestHumanDelete" "SkipHumanDelete"
-    substituteInPlace internal/e2e/sdk_errors_test.go \
-      --replace-warn "TestSdkStandardErrors" "SkipSdkStandardErrors"
+  nativeBuildInputs = [ installShellFiles ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    $out/bin/scw autocomplete script basename=scw shell=bash >scw.bash
+    $out/bin/scw autocomplete script basename=scw shell=fish >scw.fish
+    echo '#compdef scw' >scw.zsh
+    $out/bin/scw autocomplete script basename=scw shell=zsh >>scw.zsh
+    installShellCompletion scw.{bash,fish,zsh}
   '';
 
   doInstallCheck = true;
+  versionCheckProgramArg = "version";
 
-  installCheckPhase = ''
-    runHook preInstallCheck
+  __darwinAllowLocalNetworking = true;
 
-    $out/bin/scw --help
-
-    runHook postInstallCheck
-  '';
-
-  meta = with lib; {
-    description = "Interact with Scaleway API from the command line";
+  meta = {
+    description = "Command Line Interface for Scaleway";
     homepage = "https://github.com/scaleway/scaleway-cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       nickhu
       techknowlogick
       kashw2
     ];
+    mainProgram = "scw";
   };
-}
+})

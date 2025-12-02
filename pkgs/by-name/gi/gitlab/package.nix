@@ -83,7 +83,7 @@ let
               cp Cargo.lock $out
             '';
           };
-          hash = "sha256-IPVpUj0ixYKQg8ZUKLGcS9RcR2zOWCrqkwJFUF1cmdI=";
+          hash = "sha256-f2a6/xPNGfiT4bbKAlHYYcqc0PkEkW+cpH7QbJMCY7c=";
         };
 
         dontBuild = false;
@@ -147,7 +147,7 @@ let
       sha256 = data.yarn_hash;
     };
     frontendIslandsYarnOfflineCache = fetchYarnDeps {
-      yarnLock = src + "/ee/frontend_islands/apps/duo_next/yarn.lock";
+      yarnLock = src + "/ee/frontend_islands/yarn.lock";
       sha256 = data.frontend_islands_yarn_hash;
     };
 
@@ -194,7 +194,7 @@ let
     + lib.optionalString gitlabEnterprise ''
       # Get node modules for frontend islands
       export HOME=$(mktemp -d)
-      pushd ee/frontend_islands/apps/duo_next
+      pushd ee/frontend_islands
       yarn config --offline set yarn-offline-mirror "$frontendIslandsYarnOfflineCache"
       fixup-yarn-lock yarn.lock
       yarn install \

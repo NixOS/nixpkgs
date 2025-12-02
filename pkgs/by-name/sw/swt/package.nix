@@ -17,10 +17,21 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "format" ];
 
   passthru.srcMetadataByPlatform = {
+    # Note: This may look like an error but the content of the src.zip is in fact
+    # equal on all linux systems as well as all darwin systems. Even though each
+    # of these zip archives themselves contains a different hash.
     x86_64-linux.platform = "gtk-linux-x86_64";
     x86_64-linux.hash = "sha256-lKAB2aCI3dZdt3pE7uSvSfxc8vc3oMSTCx5R+71Aqdk=";
+    aarch64-linux.platform = "gtk-linux-aarch64";
+    aarch64-linux.hash = "sha256-lKAB2aCI3dZdt3pE7uSvSfxc8vc3oMSTCx5R+71Aqdk=";
+    ppc64le-linux.platform = "gtk-linux-ppc64le";
+    ppc64le-linux.hash = "sha256-lKAB2aCI3dZdt3pE7uSvSfxc8vc3oMSTCx5R+71Aqdk=";
+    riscv64-linux.platform = "gtk-linux-riscv64";
+    riscv64-linux.hash = "sha256-lKAB2aCI3dZdt3pE7uSvSfxc8vc3oMSTCx5R+71Aqdk=";
     x86_64-darwin.platform = "cocoa-macosx-x86_64";
     x86_64-darwin.hash = "sha256-Uns3fMoetbZAIrL/N0eVd42/3uygXakDdxpaxf5SWDI=";
+    aarch64-darwin.platform = "cocoa-macosx-aarch64";
+    aarch64-darwin.hash = "sha256-Uns3fMoetbZAIrL/N0eVd42/3uygXakDdxpaxf5SWDI";
   };
   passthru.srcMetadata =
     finalAttrs.passthru.srcMetadataByPlatform.${stdenv.hostPlatform.system} or null;

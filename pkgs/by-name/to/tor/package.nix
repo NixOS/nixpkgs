@@ -46,11 +46,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tor";
-  version = "0.4.8.19";
+  version = "0.4.8.21";
 
   src = fetchurl {
     url = "https://dist.torproject.org/tor-${finalAttrs.version}.tar.gz";
-    hash = "sha256-PLZJodM7pqZfEJ0iRTTpOq8KbehKWxy0sFS/oGu3T1o=";
+    hash = "sha256-6vb1tzCRuVV2lF6t6YgW3f980AW+/k2UcYpvdmuECQM=";
   };
 
   outputs = [
@@ -89,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace contrib/client-tools/torify \
+      --replace-fail 'command -v torsocks' 'true' \
       --replace-fail 'exec torsocks' 'exec ${torsocks}/bin/torsocks'
 
     patchShebangs ./scripts/maint/checkShellScripts.sh

@@ -1,9 +1,9 @@
 {
+  abseil-cpp,
   cmake,
   cmark-gfm,
   fetchFromGitHub,
   fetchNpmDeps,
-  grpc-tools,
   kdePackages,
   lib,
   libqalculate,
@@ -20,23 +20,23 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vicinae";
-  version = "0.16.1";
+  version = "0.16.11";
 
   src = fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PWfgR7wyQINl0Xy/AJAaaUo1WtrkznGcaL1aCACqI7U=";
+    hash = "sha256-gX7bUoIP4PU0wUOW3ciyjYAInX/6VLVcEBKdQIQyzDk=";
   };
 
   apiDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/typescript/api";
-    hash = "sha256-VrtxQG1wQGcRHbJWPPt6aS7x1hAHc4Z1+0l+cKv3YdI=";
+    hash = "sha256-UsTpMR23UQBRseRo33nbT6z/UCjZByryWfn2AQSgm6U=";
   };
 
   extensionManagerDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/typescript/extension-manager";
-    hash = "sha256-krDFHTG8irgVk4a79LMz148drLgy2oxEoHCKRpur1R4=";
+    hash = "sha256-wl8FDFB6Vl1zD0/s2EbU6l1KX4rwUW6dOZof4ebMMO8=";
   };
 
   cmakeFlags = lib.mapAttrsToList lib.cmakeFeature {
@@ -49,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
     "CMAKE_INSTALL_LIBDIR" = "lib";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     ninja
@@ -59,8 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    abseil-cpp
     cmark-gfm
-    grpc-tools
     kdePackages.layer-shell-qt
     kdePackages.qtkeychain
     libqalculate
@@ -89,6 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     }"
   ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "A focused launcher for your desktop — native, fast, extensible";

@@ -7,21 +7,18 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-xfs";
-  version = "3.12";
+  version = "3.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.xfs";
     tag = version;
-    hash = "sha256-DKM6z5lasvy2Is64W2lvClgpXslTgNehrfBpa/KtkT0=";
+    hash = "sha256-dFM/xYJR3wBvOe/8rLJz4AK2jmp67T5vo/4TCMRSXzw=";
   };
 
   build-system = [

@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "v\\d+\\.\\d+\\.\\d+(?:-\\d+)?$"
+      "v(\\d+\\.\\d+\\.\\d+(?:-\\d+)?)$"
     ];
   };
 

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "google-re2";
-  version = "1.1.20250722";
+  version = "1.1.20250805";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_re2";
     inherit version;
-    hash = "sha256-XipGTfddvO+f4Nrxinj3PD8KUbgc24ZUYKBXmyJvLvM=";
+    hash = "sha256-xV2ffJKoFOtTkYp7OOW6XqocmVSDIay4JtqVMnga9bU=";
   };
 
   build-system = [ setuptools ];

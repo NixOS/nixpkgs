@@ -1,12 +1,13 @@
 {
   stdenv,
-  fetchzip,
+  fetchFromGitHub,
   lib,
+  nix-update-script,
   makeWrapper,
-  unzip,
   glib,
   gtk2,
   gtk3,
+  ant,
   jdk,
   libXtst,
   coreutils,
@@ -17,34 +18,45 @@
 }:
 
 let
-  rev = 3755;
   jre' = (if preferZulu then zulu else jdk).override { enableJavaFX = true; };
   gtk' = if preferGtk3 then gtk3 else gtk2;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "davmail";
   version = "6.4.0";
 
-  src = fetchzip {
-    url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}-${toString rev}.zip";
-    hash = "sha256-cGuAxSIkhkcpRXlv5f3utH/1zZ1aYbLQN/OLuN80JdM=";
-    stripRoot = false;
+  src = fetchFromGitHub {
+    owner = "mguessan";
+    repo = "davmail";
+    tag = finalAttrs.version;
+    hash = "sha256-dj+7e0b8GcyoDzEWGG1SEMijqRBo1IJUFtgxkt9XNRU=";
   };
 
-  postPatch = ''
+  buildPhase = ''
+    runHook preBuild
+
+    ant compile prepare-dist
+    cp -Rv dist/{lib,davmail{,.jar}} .
     sed -i -e '/^JAVA_OPTS/d' davmail
+
+    runHook postBuild
   '';
 
   nativeBuildInputs = [
     makeWrapper
-    unzip
+    ant
+  ];
+
+  buildInputs = [
+    jre'
   ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/share/davmail
-    cp -vR ./* $out/share/davmail
+    cp -vR ./{lib,davmail{,.jar}} $out/share/davmail
+    chmod +x $out/share/davmail/davmail
     makeWrapper $out/share/davmail/davmail $out/bin/davmail \
       --set-default JAVA_OPTS "-Xmx512M -Dsun.net.inetaddr.ttl=60 -Djdk.gtk.version=${lib.versions.major gtk'.version}" \
       --prefix PATH : ${
@@ -65,6 +77,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Java application which presents a Microsoft Exchange server as local CALDAV, IMAP and SMTP servers";
     homepage = "https://davmail.sourceforge.net/";
@@ -73,4 +87,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     mainProgram = "davmail";
   };
-}
+})

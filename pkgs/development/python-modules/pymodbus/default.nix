@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "3.11.3";
+  version = "3.11.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
     repo = "pymodbus";
     tag = "v${version}";
-    hash = "sha256-2wOeghoi8FSk1II/0rid+ddRq7ceerH7ZeLcb+SSXKY=";
+    hash = "sha256-Le/TJfDSvro9eMLOfY/il/0LSJ8orHSSjI7jaYdXaLs=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     sqlalchemy
     twisted
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     pushd test

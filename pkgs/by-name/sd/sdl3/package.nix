@@ -3,7 +3,6 @@
   stdenv,
   config,
   alsa-lib,
-  apple-sdk_11,
   cmake,
   darwinMinVersionHook,
   dbus,
@@ -62,7 +61,7 @@ assert lib.assertMsg (ibusSupport -> dbusSupport) "SDL3 requires dbus support to
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
-  version = "3.2.24";
+  version = "3.2.26";
 
   outputs = [
     "lib"
@@ -75,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-LUkj9Rrf+zOW0IdV7aGccb/5bKh3TWf1IGtQkCDHd4k=";
+    hash = "sha256-edcub/zeho4mB3tItp+PSD5l+H6jUPm3seiBP6ppT0k=";
   };
 
   postPatch =
@@ -144,12 +143,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional (openglSupport && !stdenv.hostPlatform.isDarwin) libGL
     ++ lib.optional x11Support xorg.libX11
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # error: 'MTLPixelFormatASTC_4x4_LDR' is unavailable: not available on macOS
-      (darwinMinVersionHook "11.0")
-
-      apple-sdk_11
-    ]
     ++ lib.optionals ibusSupport [
       # sdl3 only uses some constants of the ibus headers
       # it never actually loads the library
@@ -178,7 +171,17 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SDL_TESTS" true)
     (lib.cmakeBool "SDL_INSTALL_TESTS" true)
     (lib.cmakeBool "SDL_DEPS_SHARED" false)
-  ];
+  ]
+  ++
+    lib.optionals
+      (
+        stdenv.hostPlatform.isUnix
+        && !(stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAndroid)
+        && !(x11Support || waylandSupport)
+      )
+      [
+        (lib.cmakeBool "SDL_UNIX_CONSOLE_BUILD" true)
+      ];
 
   doCheck = true;
 

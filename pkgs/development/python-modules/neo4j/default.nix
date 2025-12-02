@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "neo4j";
-  version = "6.0.2";
+  version = "6.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "neo4j";
     repo = "neo4j-python-driver";
     tag = version;
-    hash = "sha256-0Idfa7hFrLSD26PpA/lJcVtYpAPcX+AF3wab092Sbzw=";
+    hash = "sha256-KhPxwj5MmhNpd4d64dN0d1wOP6nAac/DsRQ8zoT03/A=";
   };
 
   postPatch = ''

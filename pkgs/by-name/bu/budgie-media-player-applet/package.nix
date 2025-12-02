@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-media-player-applet";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "zalesyc";
     repo = "budgie-media-player-applet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FTc/cl4qjVYx45SuZPizOGC09JERIuifCo86+Tqu5hk=";
+    hash = "sha256-Ekt6OXSjqKF4d6a9lmZyUa06pqz1uYkCHbzvLM7Z+W8=";
   };
 
   strictDeps = true;
@@ -41,6 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   pythonPath = with python3Packages; [
     requests
+  ];
+
+  mesonFlags = [
+    "-Dbudgie-api-v2=true"
   ];
 
   postPatch = ''

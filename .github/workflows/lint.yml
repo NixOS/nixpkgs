@@ -10,8 +10,10 @@ on:
         required: true
         type: string
     secrets:
-      CACHIX_AUTH_TOKEN:
-        required: true
+      # Should only be provided in the merge queue, not in pull requests,
+      # where we're evaluating untrusted code.
+      CACHIX_AUTH_TOKEN_GHA:
+        required: false
 
 permissions: {}
 
@@ -24,7 +26,7 @@ jobs:
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
           persist-credentials: false
           sparse-checkout: .github/actions
@@ -33,7 +35,7 @@ jobs:
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
-      - uses: cachix/install-nix-action@456688f15bc354bef6d396e4a35f4f89d40bf2b7 # v31
+      - uses: cachix/install-nix-action@0b0e072294b088b73964f1d72dfdac0951439dbd # v31
 
       # TODO: Figure out how to best enable caching for the treefmt job. Cachix won't work well,
       # because the cache would be invalidated on every commit - treefmt checks every file.
@@ -59,7 +61,7 @@ jobs:
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
           persist-credentials: false
           sparse-checkout: .github/actions
@@ -68,14 +70,15 @@ jobs:
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
-      - uses: cachix/install-nix-action@456688f15bc354bef6d396e4a35f4f89d40bf2b7 # v31
+      - uses: cachix/install-nix-action@0b0e072294b088b73964f1d72dfdac0951439dbd # v31
 
       - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
+        continue-on-error: true
         with:
-          # The nixpkgs-ci cache should not be trusted or used outside of Nixpkgs and its forks' CI.
-          name: ${{ vars.CACHIX_NAME || 'nixpkgs-ci' }}
-          extraPullNames: nixpkgs-ci
-          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          # The nixpkgs-gha cache should not be trusted or used outside of Nixpkgs and its forks' CI.
+          name: ${{ vars.CACHIX_NAME || 'nixpkgs-gha' }}
+          extraPullNames: nixpkgs-gha
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
           pushFilter: -source$
 
       - name: Parse all nix files
@@ -87,7 +90,7 @@ jobs:
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
           persist-credentials: false
           sparse-checkout: .github/actions
@@ -97,14 +100,15 @@ jobs:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
           target-as-trusted-at: ${{ inputs.targetSha }}
 
-      - uses: cachix/install-nix-action@456688f15bc354bef6d396e4a35f4f89d40bf2b7 # v31
+      - uses: cachix/install-nix-action@0b0e072294b088b73964f1d72dfdac0951439dbd # v31
 
       - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
+        continue-on-error: true
         with:
-          # The nixpkgs-ci cache should not be trusted or used outside of Nixpkgs and its forks' CI.
-          name: ${{ vars.CACHIX_NAME || 'nixpkgs-ci' }}
-          extraPullNames: nixpkgs-ci
-          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          # The nixpkgs-gha cache should not be trusted or used outside of Nixpkgs and its forks' CI.
+          name: ${{ vars.CACHIX_NAME || 'nixpkgs-gha' }}
+          extraPullNames: nixpkgs-gha
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
           pushFilter: -source$
 
       - name: Running nixpkgs-vet

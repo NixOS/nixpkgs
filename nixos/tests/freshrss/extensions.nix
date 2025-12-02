@@ -16,9 +16,8 @@
     };
   extraPythonPackages = p: [
     p.lxml
-    p.lxml-stubs
+    p.types-lxml
   ];
-  skipTypeCheck = true;
 
   testScript = ''
     machine.wait_for_unit("multi-user.target")

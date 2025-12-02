@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "playwrightcapture";
-  version = "1.34.1";
+  version = "1.35.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lookyloo";
     repo = "PlaywrightCapture";
     tag = "v${version}";
-    hash = "sha256-cywGV1hlxdZ9xU5adHKiZr2npdUpNkdF9sk9pykPFE8=";
+    hash = "sha256-P2d2RY4A5Yxug1Rj5UmXBW5esEdk0M1wZyOBPKtJslA=";
   };
 
   pythonRelaxDeps = [

@@ -1,90 +1,209 @@
 {
   lib,
   stdenvNoCC,
-  fetchurl,
-  autoPatchelfHook,
-  common-updater-scripts,
-  curl,
-  installShellFiles,
-  jq,
-  unzip,
+  bun,
+  fetchFromGitHub,
+  fzf,
+  makeBinaryWrapper,
+  models-dev,
+  nix-update-script,
+  ripgrep,
   testers,
-  writeShellScript,
+  writableTmpDirAsHomeHook,
 }:
-stdenvNoCC.mkDerivation (finalAttrs: {
+let
   pname = "opencode";
-  version = "1.0.10";
+  version = "1.0.126";
+  src = fetchFromGitHub {
+    owner = "sst";
+    repo = "opencode";
+    tag = "v${version}";
+    hash = "sha256-eW/+MoGh5V1t+4m+EDAm7dhTwJ+yqYmbLkZ9blYeXqQ=";
+  };
 
-  src =
-    finalAttrs.passthru.sources.${stdenvNoCC.hostPlatform.system}
-      or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
-  sourceRoot = ".";
+  node_modules = stdenvNoCC.mkDerivation {
+    pname = "${pname}-node_modules";
+    inherit version src;
 
-  strictDeps = true;
+    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+      "GIT_PROXY_COMMAND"
+      "SOCKS_SERVER"
+    ];
+
+    nativeBuildInputs = [
+      bun
+      writableTmpDirAsHomeHook
+    ];
+
+    dontConfigure = true;
+
+    buildPhase = ''
+      runHook preBuild
+
+      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+
+      bun install \
+        --cpu="*" \
+        --filter=./packages/opencode \
+        --force \
+        --frozen-lockfile \
+        --ignore-scripts \
+        --no-progress \
+        --os="*" \
+        --production
+
+      bun run ./nix/scripts/canonicalize-node-modules.ts
+      bun run ./nix/scripts/normalize-bun-binaries.ts
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      find . -type d -name node_modules -exec cp -R --parents {} $out \;
+
+      runHook postInstall
+    '';
+
+    # NOTE: Required else we get errors that our fixed-output derivation references store paths
+    dontFixup = true;
+
+    outputHash = "sha256-/AP7wVUGO/LlYaQPglYIZ3/w0WKuO25PZNWEV7lKjGM=";
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+  };
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
+  inherit
+    pname
+    version
+    src
+    node_modules
+    ;
+
   nativeBuildInputs = [
-    unzip
-    installShellFiles
-  ]
-  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
+    bun
+    makeBinaryWrapper
+    models-dev
+  ];
 
-  dontConfigure = true;
-  dontBuild = true;
+  patches = [
+    # NOTE: Relax Bun version check to be a warning instead of an error
+    ./relax-bun-version-check.patch
+  ];
+
+  configurePhase = ''
+    runHook preConfigure
+
+    cp -R ${node_modules}/. .
+
+    runHook postConfigure
+  '';
+
+  env.MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
+  env.OPENCODE_VERSION = finalAttrs.version;
+  env.OPENCODE_CHANNEL = "stable";
+
+  preBuild = ''
+    chmod -R u+w ./packages/opencode/node_modules
+    pushd ./packages/opencode/node_modules/@parcel/
+      for pkg in ../../../../node_modules/.bun/@parcel+watcher-*; do
+        linkName=$(basename "$pkg" | sed 's/@.*+\(.*\)@.*/\1/')
+        ln -sf "$pkg/node_modules/@parcel/$linkName" "$linkName"
+      done
+    popd
+
+    pushd ./packages/opencode/node_modules/@opentui/
+      for pkg in ../../../../node_modules/.bun/@opentui+core-*; do
+        linkName=$(basename "$pkg" | sed 's/@.*+\(.*\)@.*/\1/')
+        ln -sf "$pkg/node_modules/@opentui/$linkName" "$linkName"
+      done
+    popd
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+
+    cd ./packages/opencode
+    cp ${./bundle.ts} ./bundle.ts
+    bun run ./bundle.ts
+
+    runHook postBuild
+  '';
+
+  dontStrip = true;
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm 755 ./opencode $out/bin/opencode
+    mkdir -p $out/lib/opencode
+    # Copy the bundled dist directory
+    cp -r dist $out/lib/opencode/
+
+    # Fix WASM paths in worker.ts - use absolute paths to the installed location
+    # Main wasm is tree-sitter-<hash>.wasm, language wasms are tree-sitter-<lang>-<hash>.wasm
+    main_wasm=$(find "$out/lib/opencode/dist" -maxdepth 1 -name 'tree-sitter-[a-z0-9]*.wasm' -print -quit)
+
+    substituteInPlace $out/lib/opencode/dist/worker.ts \
+      --replace-fail 'module2.exports = "../../../tree-sitter-' 'module2.exports = "'"$out"'/lib/opencode/dist/tree-sitter-' \
+      --replace-fail 'new URL("tree-sitter.wasm", import.meta.url).href' "\"$main_wasm\""
+
+    # Copy only the native modules we need (marked as external in bundle.ts)
+    mkdir -p $out/lib/opencode/node_modules/.bun
+    mkdir -p $out/lib/opencode/node_modules/@opentui
+
+    # Copy @opentui/core platform-specific packages
+    for pkg in ../../node_modules/.bun/@opentui+core-*; do
+      if [ -d "$pkg" ]; then
+        cp -r "$pkg" $out/lib/opencode/node_modules/.bun/$(basename "$pkg")
+      fi
+    done
+
+    mkdir -p $out/bin
+    makeWrapper ${lib.getExe bun} $out/bin/opencode \
+      --add-flags "run" \
+      --add-flags "$out/lib/opencode/dist/index.js" \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          fzf
+          ripgrep
+        ]
+      } \
+      --argv0 opencode
 
     runHook postInstall
   '';
 
+  postInstall = ''
+    # Add symlinks for platform-specific native modules
+    for pkg in $out/lib/opencode/node_modules/.bun/@opentui+core-*; do
+      if [ -d "$pkg" ]; then
+        pkgName=$(basename "$pkg" | sed 's/@opentui+\(core-[^@]*\)@.*/\1/')
+        ln -sf ../.bun/$(basename "$pkg")/node_modules/@opentui/$pkgName \
+               $out/lib/opencode/node_modules/@opentui/$pkgName
+      fi
+    done
+  '';
+
   passthru = {
-    sources = {
-      "aarch64-darwin" = fetchurl {
-        url = "https://github.com/sst/opencode/releases/download/v${finalAttrs.version}/opencode-darwin-arm64.zip";
-        hash = "sha256-D34OcJgIXVkqDOf5Vyce30v5/avDKKYbOAcMWD8HmXM=";
-      };
-      "aarch64-linux" = fetchurl {
-        url = "https://github.com/sst/opencode/releases/download/v${finalAttrs.version}/opencode-linux-arm64.zip";
-        hash = "sha256-v3j0oL2WL4DezOxdEKgOq4f8BkdR01zlYHUzbUUjgtE=";
-      };
-      "x86_64-darwin" = fetchurl {
-        url = "https://github.com/sst/opencode/releases/download/v${finalAttrs.version}/opencode-darwin-x64.zip";
-        hash = "sha256-+kycX2mbCy7p6VOKO9HequCoJi/5nT8Pf09obZEuj1E=";
-      };
-      "x86_64-linux" = fetchurl {
-        url = "https://github.com/sst/opencode/releases/download/v${finalAttrs.version}/opencode-linux-x64.zip";
-        hash = "sha256-MO8IeCnrTUyNroY7T7XY4WCXP8wgI3r4PxhfGwprh9I=";
-      };
-    };
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
       command = "HOME=$(mktemp -d) opencode --version";
       inherit (finalAttrs) version;
     };
-    updateScript = writeShellScript "update-opencode" ''
-      set -o errexit
-      export PATH="${
-        lib.makeBinPath [
-          curl
-          jq
-          common-updater-scripts
-        ]
-      }"
-      NEW_VERSION=$(curl --silent https://api.github.com/repos/sst/opencode/releases/latest | jq '.tag_name | ltrimstr("v")' --raw-output)
-      if [[ "${finalAttrs.version}" = "$NEW_VERSION" ]]; then
-          echo "No update available."
-          exit 0
-      fi
-      for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
-        update-source-version "opencode" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
-      done
-    '';
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "node_modules"
+      ];
+    };
   };
 
   meta = {
     description = "AI coding agent built for the terminal";
-    changelog = "https://github.com/sst/opencode/releases/tag/v${finalAttrs.version}";
     longDescription = ''
       OpenCode is a terminal-based agent that can build anything.
       It combines a TypeScript/JavaScript core with a Go-based TUI
@@ -92,10 +211,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/sst/opencode";
     license = lib.licenses.mit;
-    platforms = builtins.attrNames finalAttrs.passthru.sources;
-    maintainers = with lib.maintainers; [
-      zestsystem
-      delafthi
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+      "aarch64-darwin"
+      "x86_64-darwin"
     ];
     mainProgram = "opencode";
   };

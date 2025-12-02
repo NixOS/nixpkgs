@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "kornia";
-  version = "0.8.1";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kornia";
     repo = "kornia";
     tag = "v${version}";
-    hash = "sha256-LT+F/tskySvSmaBufIaQhI4+wK5DZBNanQbnYj4ywGo=";
+    hash = "sha256-jNwqWgmILbSrISepuGZZSUnB9GlgwU5J0zqYwN54ul0=";
   };
 
   build-system = [ setuptools ];

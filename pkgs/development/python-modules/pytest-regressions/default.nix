@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -57,10 +58,17 @@ buildPythonPackage rec {
     pandas
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pytestFlags = [
     "-Wignore::DeprecationWarning"
+  ];
+
+  disabledTests = lib.optionals (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isBigEndian) [
+    # https://github.com/ESSS/pytest-regressions/issues/156
+    # i686-linux not listed in the report, but seems to have this issue as well
+    "test_different_data_types"
+    "test_common_case" # not listed in the issue, but fails after the above is skipped
   ];
 
   pythonImportsCheck = [

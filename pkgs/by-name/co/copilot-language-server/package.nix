@@ -10,11 +10,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "copilot-language-server";
-  version = "1.389.0";
+  version = "1.399.0";
 
   src = fetchzip {
     url = "https://github.com/github/copilot-language-server-release/releases/download/${finalAttrs.version}/copilot-language-server-js-${finalAttrs.version}.zip";
-    hash = "sha256-QX3gSKV/FABXbeu1KzrSEyxFJU/xptSVvuxqTjTI9Go=";
+    hash = "sha256-K+3G7ldtU3kBtqfPB9d3MqvguQSZB1BoQdlx2almwGE=";
     stripRoot = false;
   };
 

@@ -45,13 +45,17 @@ lib.fix (
     ### buildEnv with custom attributes
     buildEnv' =
       args:
-      (
-        buildEnv { inherit (args) name paths; }
+      (buildEnv (
+        {
+          inherit (args) name paths;
+        }
         // lib.optionalAttrs (args ? extraOutputsToInstall) { inherit (args) extraOutputsToInstall; }
-      ).overrideAttrs
+        // lib.optionalAttrs (args ? pathsToLink) { inherit (args) pathsToLink; }
+      )).overrideAttrs
         (
           removeAttrs args [
             "extraOutputsToInstall"
+            "pathsToLink"
             "name"
             "paths"
             "pkgs"
@@ -220,11 +224,14 @@ lib.fix (
       paths = builtins.catAttrs "outPath" pkgList.nonbin;
 
       # mktexlsr
-      nativeBuildInputs = [ tl."texlive.infra" ];
+      nativeBuildInputs = [
+        tl.texlive-scripts # for mktexlsr.pl with --sort support
+        perl
+      ];
 
       postBuild = # generate ls-R database
         ''
-          mktexlsr "$out"
+          perl ${tl.texlive-scripts.tex}/scripts/texlive/mktexlsr.pl --sort "$out"
         '';
     };
 

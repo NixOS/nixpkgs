@@ -43,14 +43,14 @@ in
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.37.1";
+  version = "2.37.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "imageio";
     repo = "imageio";
     tag = "v${version}";
-    hash = "sha256-eNS++8pD+m51IxRR23E98K0f3rwNez/UiByA+PSfUH8=";
+    hash = "sha256-8wKTcmnep67zBMYgd6Gpr3wRCIrzYaqfytL1o7iBNAk=";
   };
 
   postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
@@ -94,7 +94,7 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ]
   ++ fsspec.optional-dependencies.github
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pytestFlags = [ "--test-images=file://${test_images}" ];
 

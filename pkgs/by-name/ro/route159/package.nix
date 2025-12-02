@@ -31,7 +31,6 @@ stdenvNoCC.mkDerivation {
     description = "Weighted sans serif font";
     platforms = platforms.all;
     maintainers = with maintainers; [
-      leenaars
       minijackson
     ];
     license = licenses.ofl;

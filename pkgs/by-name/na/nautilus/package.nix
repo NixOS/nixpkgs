@@ -18,6 +18,7 @@
   adwaita-icon-theme,
   gnome-autoar,
   glib-networking,
+  icu,
   shared-mime-info,
   libnotify,
   libexif,
@@ -40,7 +41,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nautilus";
-  version = "48.3";
+  version = "49.2";
 
   outputs = [
     "out"
@@ -50,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/nautilus/${lib.versions.major finalAttrs.version}/nautilus-${finalAttrs.version}.tar.xz";
-    hash = "sha256-IaKuoAUWDbCDx6HU0sCYm4RcxyLATvnrtgElp+xbOT0=";
+    hash = "sha256-JXazS+0ngaifCQUeyfyuOuF+txcs175nj1kqoU5MJrE=";
   };
 
   patches = [
@@ -74,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gexiv2
     glib-networking
+    icu
     gnome-desktop
     adwaita-icon-theme
     gsettings-desktop-schemas

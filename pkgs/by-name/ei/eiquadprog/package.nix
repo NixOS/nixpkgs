@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eiquadprog";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = "eiquadprog";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8CwyTREHzTtgXTnzAIcRAlKm3fBEUEeMxNwzzEMADqk=";
+    hash = "sha256-FV6A3cMaY7+eDip9YjuX0cYz0X6tdpDRV57eXOb9bKQ=";
   };
 
   outputs = [

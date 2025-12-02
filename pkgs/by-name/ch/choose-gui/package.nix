@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   xcbuild,
-  apple-sdk_11,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,8 +17,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ xcbuild ];
-
-  buildInputs = [ apple-sdk_11 ];
 
   buildPhase = ''
     runHook preBuild

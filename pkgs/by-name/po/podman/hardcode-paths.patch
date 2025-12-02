@@ -1,8 +1,8 @@
-diff --git a/vendor/github.com/containers/common/pkg/config/default.go b/vendor/github.com/containers/common/pkg/config/default.go
-index 02ff128..d3254ba 100644
---- a/vendor/github.com/containers/common/pkg/config/default.go
-+++ b/vendor/github.com/containers/common/pkg/config/default.go
-@@ -378,75 +378,34 @@ func defaultEngineConfig() (*EngineConfig, error) {
+diff --git a/vendor/go.podman.io/common/pkg/config/default.go b/vendor/go.podman.io/common/pkg/config/default.go
+index 3bf0bc1..05496ae 100644
+--- a/vendor/go.podman.io/common/pkg/config/default.go
++++ b/vendor/go.podman.io/common/pkg/config/default.go
+@@ -389,75 +389,34 @@ func defaultEngineConfig() (*EngineConfig, error) {
  	c.Retry = 3
  	c.OCIRuntimes = map[string][]string{
  		"crun": {
@@ -87,11 +87,11 @@ index 02ff128..d3254ba 100644
 +			"@bin_path@/bin/ocijail",
  		},
  	}
- 	c.PlatformToOCIRuntime = map[string]string{
-@@ -457,26 +416,12 @@ func defaultEngineConfig() (*EngineConfig, error) {
+ 	c.OCIRuntimesFlags = map[string][]string{}
+@@ -469,26 +428,12 @@ func defaultEngineConfig() (*EngineConfig, error) {
  	// Needs to be called after populating c.OCIRuntimes.
  	c.OCIRuntime = c.findRuntime()
- 
+
 -	c.ConmonEnvVars.Set([]string{"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"})
 +	c.ConmonEnvVars.Set([]string{})
  	c.ConmonPath.Set([]string{

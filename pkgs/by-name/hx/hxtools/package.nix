@@ -1,12 +1,14 @@
 {
   lib,
-  stdenv,
+  bash,
   fetchurl,
+  libHX,
+  makeWrapper,
+  perl,
+  perlPackages,
+  stdenv,
   pkg-config,
   zstd,
-  libHX,
-  perl,
-  bash,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,6 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    makeWrapper
     pkg-config
     zstd
   ];
@@ -29,6 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
     bash
     libHX
   ];
+
+  postInstall = ''
+    wrapProgram $out/bin/man2html \
+      --prefix PERL5LIB : "${with perlPackages; makePerlPath [ TextCSV_XS ]}"
+  '';
 
   strictDeps = true;
 

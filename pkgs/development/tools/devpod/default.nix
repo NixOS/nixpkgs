@@ -87,7 +87,9 @@ let
     cargoRoot = "src-tauri";
     buildAndTestSubdir = "src-tauri";
 
-    cargoHash = "sha256-BwuV5nAQcTAtdfK4+NKEt8Cj7gqnatRwHh/BYJJrIPo=";
+    cargoHash = "sha256-PSgBwa8sZ85W2kBrXkFVvnoYn5l1r3Jvn/LG8tITjbU=";
+
+    cargoPatches = [ ./cargo-lock.patch ];
 
     patches = [
       # don't create a .desktop file automatically registered to open the devpod:// URI scheme

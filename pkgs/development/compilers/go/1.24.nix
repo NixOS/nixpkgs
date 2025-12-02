@@ -9,15 +9,12 @@
   buildPackages,
   pkgsBuildTarget,
   targetPackages,
-  testers,
-  skopeo,
   buildGo124Module,
+  callPackage,
 }:
 
 let
   goBootstrap = buildPackages.callPackage ./bootstrap122.nix { };
-
-  skopeoTest = skopeo.override { buildGoModule = buildGo124Module; };
 
   # We need a target compiler which is still runnable at build time,
   # to handle the cross-building case where build != host == target
@@ -27,11 +24,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.24.9";
+  version = "1.24.10";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-xy+BulT+AO/n8+dJnUAJeSRogbE7d16am7hVQcEb5pU=";
+    hash = "sha256-NAANzEelF7ePzyZX7n0DMyilcHn+YMTti3uEJg0dGdM=";
   };
 
   strictDeps = true;
@@ -64,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
     ./remove-tools-1.11.patch
     ./go_no_vendor_checks-1.23.patch
+    ./go-env-go_ldso.patch
   ];
 
   inherit (stdenv.targetPlatform.go) GOOS GOARCH GOARM;
@@ -99,6 +97,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
     export GOCACHE=$TMPDIR/go-cache
+    if [ -f "$NIX_CC/nix-support/dynamic-linker" ]; then
+      export GO_LDSO=$(cat $NIX_CC/nix-support/dynamic-linker)
+    fi
 
     export PATH=$(pwd)/bin:$PATH
 
@@ -106,6 +107,12 @@ stdenv.mkDerivation (finalAttrs: {
       # Independent from host/target, CC should produce code for the building system.
       # We only set it when cross-compiling.
       export CC=${buildPackages.stdenv.cc}/bin/cc
+      # Prefer external linker for cross when CGO is supported, since
+      # we haven't taught go's internal linker to pick the correct ELF
+      # interpreter for cross
+      # When CGO is not supported we rely on static binaries being built
+      # since they don't need an ELF interpreter
+      export GO_EXTLINK_ENABLED=${toString finalAttrs.CGO_ENABLED}
     ''}
     ulimit -a
 
@@ -156,14 +163,10 @@ stdenv.mkDerivation (finalAttrs: {
   disallowedReferences = [ goBootstrap ];
 
   passthru = {
-    inherit goBootstrap skopeoTest;
-    tests = {
-      skopeo = testers.testVersion { package = skopeoTest; };
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        command = "go version";
-        version = "go${finalAttrs.version}";
-      };
+    inherit goBootstrap;
+    tests = callPackage ./tests.nix {
+      go = finalAttrs.finalPackage;
+      buildGoModule = buildGo124Module;
     };
   };
 

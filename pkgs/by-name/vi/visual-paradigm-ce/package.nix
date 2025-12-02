@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "visual-paradigm-ce";
-  version = "17.3.20250906";
+  version = "17.3.20251201";
 
   src =
     let
@@ -18,10 +18,10 @@ stdenv.mkDerivation (finalAttrs: {
       suffix = lib.last splitted;
     in
     fetchurl {
-      url = "https://eu8.dl.visual-paradigm.com/visual-paradigm/vpce${majorMinor}/${suffix}/Visual_Paradigm_CE_${
+      url = "https://eu10-dl.visual-paradigm.com/visual-paradigm/vpce${majorMinor}/${suffix}/Visual_Paradigm_CE_${
         builtins.replaceStrings [ "." ] [ "_" ] majorMinor
       }_${suffix}_Linux64_InstallFree.tar.gz";
-      hash = "sha256-9BaAJKzK8jjQ1W+eSyJFI2NfizNCwY7PpSZoje2Zd38=";
+      hash = "sha256-qHatD+W2SP9bLrOoIDXDNGdNKYoL52XdC6mVdelMFdc=";
     };
 
   nativeBuildInputs = [
@@ -72,7 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "All-in-one UML CASE tool for software development";
     homepage = "https://www.visual-paradigm.com/";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [
+      drupol
+      dvdznf
+    ];
     platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [
       binaryBytecode

@@ -464,23 +464,9 @@ let
 
         dum = callPackage ../development/ocaml-modules/dum { };
 
-        dune_1 = callPackage ../development/tools/ocaml/dune/1.nix { };
+        dune_2 = callPackage ../development/tools/ocaml/dune/2.nix { };
 
-        dune_2 =
-          if lib.versionAtLeast ocaml.version "4.08" then
-            callPackage ../development/tools/ocaml/dune/2.nix { }
-          else if lib.versionAtLeast ocaml.version "4.02" then
-            pkgs.dune_2
-          else
-            throw "dune_2 is not available for OCaml ${ocaml.version}";
-
-        dune_3 =
-          if lib.versionAtLeast ocaml.version "4.08" then
-            callPackage ../development/tools/ocaml/dune/3.nix { }
-          else if lib.versionAtLeast ocaml.version "4.02" then
-            pkgs.dune_3
-          else
-            throw "dune_3 is not available for OCaml ${ocaml.version}";
+        dune_3 = callPackage ../development/tools/ocaml/dune/3.nix { };
 
         dune-action-plugin = callPackage ../development/ocaml-modules/dune-action-plugin { };
 
@@ -1114,8 +1100,6 @@ let
 
         lwt-canceler = callPackage ../development/ocaml-modules/lwt-canceler { };
 
-        lwt_camlp4 = callPackage ../development/ocaml-modules/lwt/camlp4.nix { };
-
         lwt-dllist = callPackage ../development/ocaml-modules/lwt-dllist { };
 
         lwt_eio = callPackage ../development/ocaml-modules/lwt_eio { };
@@ -1370,8 +1354,6 @@ let
 
         ninja_utils = callPackage ../development/ocaml-modules/ninja_utils { };
 
-        nonstd = callPackage ../development/ocaml-modules/nonstd { };
-
         note = callPackage ../development/ocaml-modules/note { };
 
         nottui = callPackage ../development/ocaml-modules/lwd/nottui.nix { };
@@ -1503,6 +1485,8 @@ let
         ocamlnet = callPackage ../development/ocaml-modules/ocamlnet { };
 
         ocamlscript = callPackage ../development/tools/ocaml/ocamlscript { };
+
+        ocb = callPackage ../development/ocaml-modules/ocb { };
 
         ocb-stubblr = callPackage ../development/ocaml-modules/ocb-stubblr { };
 

@@ -14,13 +14,13 @@ let
   iconame = "STM32CubeMX";
   package = stdenvNoCC.mkDerivation rec {
     pname = "stm32cubemx";
-    version = "6.14.0";
+    version = "6.15.0";
 
     src = fetchzip {
       url = "https://sw-center.st.com/packs/resource/library/stm32cube_mx_v${
         builtins.replaceStrings [ "." ] [ "" ] version
       }-lin.zip";
-      hash = "sha256-GOvoPyfPdQV/gjveuFpZjueTZD/BYuEWSHgQKBm3o3A=";
+      hash = "sha256-50P+/uvNH3NN1UN+T3RxGgR8QYBIgBDA56mAEU4BipI=";
       stripRoot = false;
     };
 
@@ -61,16 +61,15 @@ let
       EOF
       chmod +x $out/bin/${pname}
 
-      icotool --extract $out/opt/STM32CubeMX/help/${iconame}.ico
       fdupes -dN . > /dev/null
       ls
       for size in 16 24 32 48 64 128 256; do
         mkdir -pv $out/share/icons/hicolor/"$size"x"$size"/apps
         if [ $size -eq 256 ]; then
-          mv ${iconame}_*_"$size"x"$size"x32.png \
+          cp $out/opt/STM32CubeMX/help/${iconame}.png \
             $out/share/icons/hicolor/"$size"x"$size"/apps/${pname}.png
         else
-          convert -resize "$size"x"$size" ${iconame}_*_256x256x32.png \
+          magick $out/opt/STM32CubeMX/help/${iconame}.png -resize "$size"x"$size" \
             $out/share/icons/hicolor/"$size"x"$size"/apps/${pname}.png
         fi
       done;

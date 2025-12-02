@@ -8,22 +8,19 @@
   home-assistant-bluetooth,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sensor-state-data,
 }:
 
 buildPythonPackage rec {
   pname = "ruuvitag-ble";
-  version = "0.2.1";
+  version = "0.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "ruuvitag-ble";
     tag = "v${version}";
-    hash = "sha256-9aaAKb5Av2OMDGaSM9+tT0s++YYE0g1D01Le6RrMoMk=";
+    hash = "sha256-5hlO2/YCTc65ImwjJVyWhFe2PTPlQ33aNdqEIxH/lms=";
   };
 
   build-system = [ hatchling ];
@@ -42,10 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ruuvitag_ble" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/Bluetooth-Devices/ruuvitag-ble/releases/tag/${src.tag}";
     description = "Library for Ruuvitag BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/ruuvitag-ble";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

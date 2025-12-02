@@ -15,13 +15,14 @@
   pytestCheckHook,
   pythonOlder,
   rustPlatform,
+  syrupy,
   testfixtures,
   xz,
 }:
 
 buildPythonPackage rec {
   pname = "deebot-client";
-  version = "15.1.0";
+  version = "16.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -30,18 +31,16 @@ buildPythonPackage rec {
     owner = "DeebotUniverse";
     repo = "client.py";
     tag = version;
-    hash = "sha256-ey7xr9ejDFwfSNwhNBmI2/oJ6zoeAmyTsByxLQ3MQe4=";
+    hash = "sha256-R62z102kvdsZVdRcE0lBtwgynl3SECOXCoyaj0xXv2s=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-28Rkm5doYRtrH+Rc64gYxzNwVjBaGzLTynej8OwBqVg=";
+    hash = "sha256-ir3HZ3DiHcL34kGtyUwyKQZA6fiSj45eXBKL/71eqCs=";
   };
 
   pythonRelaxDeps = [
     "aiohttp"
-    "defusedxml"
-    "orjson"
   ];
 
   nativeBuildInputs = [
@@ -66,6 +65,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-codspeed
     pytestCheckHook
+    syrupy
     testfixtures
   ];
 

@@ -94,6 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
                       --replace '"which "' '"${which}/bin/which "'
     substituteInPlace lib/exceptionhandler/exceptionhandler.cpp \
                       --replace "which %s" "${which}/bin/which %s"
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CONFIGURE_WZ_COMPILER_WARNINGS()" ""
   '';
 
   cmakeFlags = [

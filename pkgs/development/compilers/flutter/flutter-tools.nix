@@ -37,11 +37,13 @@ buildDartApplication.override { inherit dart; } {
 
   src = flutterSrc;
   sourceRoot = "${flutterSrc.name}/packages/flutter_tools";
-  postUnpack = ''chmod -R u+w "$NIX_BUILD_TOP/source"'';
 
   inherit patches;
   # The given patches are made for the entire SDK source tree.
-  prePatch = ''pushd "$NIX_BUILD_TOP/source"'';
+  prePatch = ''
+    chmod --recursive u+w "../.."
+    pushd "../.."
+  '';
   postPatch = ''
     popd
   ''
@@ -66,9 +68,9 @@ buildDartApplication.override { inherit dart; } {
   ];
   preConfigure = ''
     export HOME=.
-    export FLUTTER_ROOT="$NIX_BUILD_TOP/source"
-    mkdir -p "$FLUTTER_ROOT/bin/cache"
-    ln -s '${dart}' "$FLUTTER_ROOT/bin/cache/dart-sdk"
+    export FLUTTER_ROOT="$(realpath ../../)"
+    mkdir --parents "$FLUTTER_ROOT/bin/cache"
+    ln --symbolic '${dart}' "$FLUTTER_ROOT/bin/cache/dart-sdk"
   '';
 
   dartCompileFlags = [ "--define=NIX_FLUTTER_HOST_PLATFORM=${systemPlatform}" ];

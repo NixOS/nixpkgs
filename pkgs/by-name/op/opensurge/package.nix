@@ -51,6 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = {
     mainProgram = "opensurge";
     description = "Fun 2D retro platformer inspired by Sonic games and a game creation system";

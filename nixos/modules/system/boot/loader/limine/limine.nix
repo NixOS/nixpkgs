@@ -229,10 +229,10 @@ in
       };
 
       wallpaperStyle = lib.mkOption {
-        default = "streched";
+        default = "stretched";
         type = lib.types.enum [
           "centered"
-          "streched"
+          "stretched"
           "tiled"
         ];
         description = ''
@@ -375,7 +375,7 @@ in
     }
     (lib.mkIf (cfg.style.wallpapers == [ defaultWallpaper ]) {
       boot.loader.limine.style.backdrop = lib.mkDefault "2F302F";
-      boot.loader.limine.style.wallpaperStyle = lib.mkDefault "streched";
+      boot.loader.limine.style.wallpaperStyle = lib.mkDefault "stretched";
     })
     (lib.mkIf cfg.enable {
       assertions = [

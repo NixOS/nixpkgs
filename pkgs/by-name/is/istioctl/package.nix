@@ -7,15 +7,15 @@
 
 buildGoModule rec {
   pname = "istioctl";
-  version = "1.27.3";
+  version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "istio";
     repo = "istio";
     rev = version;
-    hash = "sha256-MgicdVRYHdp38lHY7VjAH+4xKD9sgEroEIwNkSmbfjU=";
+    hash = "sha256-NLARp5Gw04UosyLw3TkEmtvSLKa+tYp4s60UKvcJOgw=";
   };
-  vendorHash = "sha256-AJzEAFZZe4QtuYRcIJ8GwosbBi5gWn+DAOpVS8JnAdQ=";
+  vendorHash = "sha256-ge9aR3ZYOJaYp0D1UWzzg40nXlwM/Sl1Ep+u1CmdSV8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -32,8 +32,8 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "${lib.concatMapStringsSep " " (attr: "-X ${attr}") attrs}"
-    ];
+    ]
+    ++ map (attr: "-X ${attr}") attrs;
 
   subPackages = [ "istioctl/cmd/istioctl" ];
 
@@ -55,7 +55,6 @@ buildGoModule rec {
     homepage = "https://istio.io/latest/docs/reference/commands/istioctl";
     license = licenses.asl20;
     maintainers = with maintainers; [
-      bryanasdev000
       veehaitch
       ryan4yin
     ];

@@ -290,6 +290,12 @@ stdenv.mkDerivation (finalAttrs: {
         "arrow-flight-integration-test"
         # File already exists in database: orc_proto.proto
         "arrow-orc-adapter-test"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # https://github.com/NixOS/nixpkgs/issues/460687
+        # Failing with "run-test.sh: line 88: 63682 Abort trap: 6"
+        "arrow-flight-internals-test"
+        "arrow-flight-sql-test"
       ];
     in
     ''

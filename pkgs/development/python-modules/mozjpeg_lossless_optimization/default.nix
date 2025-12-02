@@ -12,7 +12,7 @@
 }:
 buildPythonPackage rec {
   pname = "mozjpeg_lossless_optimization";
-  version = "1.3.1";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     repo = "mozjpeg-lossless-optimization";
     # https://github.com/NixOS/nixpkgs/issues/26302
     tag = "v${version}";
-    hash = "sha256-HAOmD87oazwlGx1O+tAV5qzSn4EHbzeYQ5e8kmegwbo=";
+    hash = "sha256-0w0e7QbYi3W6MahY8fnI+dYkQHqheOXQn3mJN/UfHlk=";
     fetchSubmodules = true;
   };
 

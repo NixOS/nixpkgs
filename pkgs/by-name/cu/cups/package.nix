@@ -10,8 +10,8 @@
   libtiff,
   pam,
   dbus,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   acl,
   gmp,
   darwin,
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     dbus
     acl
   ]
-  ++ lib.optional enableSystemd systemd;
+  ++ lib.optional enableSystemd systemdLibs;
 
   propagatedBuildInputs = [ gmp ];
 
@@ -180,7 +180,7 @@ stdenv.mkDerivation rec {
     homepage = "https://openprinting.github.io/cups/";
     description = "Standards-based printing system for UNIX";
     license = licenses.asl20;
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

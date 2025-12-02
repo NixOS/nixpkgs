@@ -120,7 +120,8 @@ let
     ++ (lib.optional (
       cfg.config.objectstore.s3.sseCKeyFile != null
     ) "s3_sse_c_key:${cfg.config.objectstore.s3.sseCKeyFile}")
-    ++ (lib.optional (cfg.secretFile != null) "secret_file:${cfg.secretFile}");
+    ++ (lib.optional (cfg.secretFile != null) "secret_file:${cfg.secretFile}")
+    ++ (lib.mapAttrsToList (credential: file: "${credential}:${file}") cfg.secrets);
 
   requiresRuntimeSystemdCredentials = (lib.length runtimeSystemdCredentials) != 0;
 
@@ -296,6 +297,9 @@ let
         ) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
         ${lib.optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_secret('dbpass'),"}
         'dbtype' => '${c.dbtype}',
+        ${lib.concatStringsSep "\n" (
+          lib.mapAttrsToList (name: credential: "'${name}' => nix_read_secret('${name}'),") cfg.secrets
+        )}
         ${objectstoreConfig}
       ];
 
@@ -389,6 +393,24 @@ in
         This folder will be populated with a config.php file and a data folder which contains the state of the instance (excluding the database).";
       '';
       example = "/mnt/nextcloud-file";
+    };
+    secrets = lib.mkOption {
+      type = lib.types.attrsOf (
+        lib.types.pathWith {
+          inStore = false;
+          absolute = true;
+        }
+      );
+      default = { };
+      description = ''
+        Secret files to read into entries in `config.php`.
+        This uses `nix_read_secret` and LoadCredential to read the contents of the file into the entry in `config.php`.
+      '';
+      example = lib.literalExpression ''
+        {
+          oidc_login_client_secret = "/run/secrets/nextcloud_oidc_secret";
+        }
+      '';
     };
     extraApps = lib.mkOption {
       type = lib.types.attrsOf lib.types.package;
@@ -550,6 +572,7 @@ in
         "pm.min_spare_servers" = "6";
         "pm.max_spare_servers" = "18";
         "pm.max_requests" = "500";
+        "pm.status_path" = "/status";
       };
       description = ''
         Options for nextcloud's PHP pool. See the documentation on `php-fpm.conf` for details on
@@ -956,6 +979,144 @@ in
               Only has an effect in Nextcloud 23 and later.
             '';
           };
+          enabledPreviewProviders = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [
+              "OC\\Preview\\PNG"
+              "OC\\Preview\\JPEG"
+              "OC\\Preview\\GIF"
+              "OC\\Preview\\BMP"
+              "OC\\Preview\\XBitmap"
+              "OC\\Preview\\Krita"
+              "OC\\Preview\\WebP"
+              "OC\\Preview\\MarkDown"
+              "OC\\Preview\\TXT"
+              "OC\\Preview\\OpenDocument"
+            ];
+            description = ''
+              The preview providers that should be explicitly enabled.
+            '';
+          };
+          mail_domain = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            description = ''
+              The return address that you want to appear on emails sent by the Nextcloud server, for example `nc-admin@example.com`, substituting your own domain, of course.
+            '';
+          };
+          mail_from_address = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            description = ''
+              FROM address that overrides the built-in `sharing-noreply` and `lostpassword-noreply` FROM addresses.
+              Defaults to different FROM addresses depending on the feature.
+            '';
+          };
+          mail_smtpdebug = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = ''
+              Enable SMTP class debugging.
+              `loglevel` will likely need to be adjusted too.
+              [See docs](https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/email_configuration.html#enabling-debug-mode).
+            '';
+          };
+          mail_smtpmode = lib.mkOption {
+            type = lib.types.enum [
+              "sendmail"
+              "smtp"
+              "qmail"
+              "null" # Yes, this is really a string null and not null.
+            ];
+            default = "smtp";
+            description = ''
+              Which mode to use for sending mail.
+              If you are using local or remote SMTP, set this to `smtp`.
+              For the `sendmail` option, you need an installed and working email system on the server, with your local `sendmail` installation.
+              For `qmail`, the binary is /var/qmail/bin/sendmail, and it must be installed on your Unix system.
+              Use the string null to send no mails (disable mail delivery). This can be useful if mails should be sent via APIs and rendering messages is not necessary.
+            '';
+          };
+          mail_smtphost = lib.mkOption {
+            type = lib.types.str;
+            default = "127.0.0.1";
+            description = ''
+              This depends on `mail_smtpmode`. Specify the IP address of your mail server host. This may contain multiple hosts separated by a semicolon. If you need to specify the port number, append it to the IP address separated by a colon, like this: `127.0.0.1:24`.
+            '';
+          };
+          mail_smtpport = lib.mkOption {
+            type = lib.types.port;
+            default = 25;
+            description = ''
+              This depends on `mail_smtpmode`. Specify the port for sending mail.
+            '';
+          };
+          mail_smtptimeout = lib.mkOption {
+            type = lib.types.int;
+            default = 10;
+            description = ''
+              This depends on `mail_smtpmode`. This sets the SMTP server timeout, in seconds. You may need to increase this if you are running an anti-malware or spam scanner.
+            '';
+          };
+          mail_smtpsecure = lib.mkOption {
+            type = lib.types.enum [
+              ""
+              "ssl"
+            ];
+            default = "";
+            description = ''
+              This depends on `mail_smtpmode`. Specify `ssl` when you are using SSL/TLS. Any other value will be ignored.
+              If the server advertises STARTTLS capabilities, they might be used, but they cannot be enforced by this config option.
+            '';
+          };
+          mail_smtpauth = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = ''
+              This depends on `mail_smtpmode`. Change this to `true` if your mail server requires authentication.
+            '';
+          };
+          mail_smtpname = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+            description = ''
+              This depends on `mail_smtpauth`. Specify the username for authenticating to the SMTP server.
+            '';
+          };
+          # mail_smtppassword is skipped as it must be set through services.nextcloud.secrets
+          mail_template_class = lib.mkOption {
+            type = lib.types.str;
+            default = "\\OC\\Mail\\EMailTemplate";
+            description = ''
+              Replaces the default mail template layout. This can be utilized if the options to modify the mail texts with the theming app are not enough.
+              The class must extend `\OC\Mail\EMailTemplate`
+            '';
+          };
+          mail_send_plaintext_only = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = ''
+              Email will be sent by default with an HTML and a plain text body. This option allows sending only plain text emails.
+            '';
+          };
+          mail_smtpstreamoptions = lib.mkOption {
+            type = lib.types.attrsOf (lib.types.attrsOf lib.types.anything);
+            default = { };
+            description = ''
+              This depends on `mail_smtpmode`. Array of additional streams options that will be passed to underlying Swift mailer implementation.
+            '';
+          };
+          mail_sendmailmode = lib.mkOption {
+            type = lib.types.enum [
+              "smtp"
+              "pipe"
+            ];
+            default = "smtp";
+            description = ''
+              For `smtp`, the sendmail binary is started with the parameter `-bs`: Use the SMTP protocol on standard input and output.
+              For `pipe`, the binary is started with the parameters `-t`: Read message from STDIN and extract recipients.
+            '';
+          };
         };
       };
       default = { };
@@ -1025,6 +1186,8 @@ in
         The value can be customized for `nextcloud-cron.service` using this option.
       '';
     };
+
+    imaginary.enable = lib.mkEnableOption "Imaginary";
   };
 
   config = lib.mkIf cfg.enable (
@@ -1144,6 +1307,13 @@ in
               If `services.nextcloud.config.adminpassFile` is null, `services.nextcloud.config.adminuser` must be null as well in order to disable initial admin user creation.
             '';
           }
+          {
+            assertion = !(cfg.settings ? mail_smtppassword);
+            message = ''
+              The option `services.nextcloud.settings.mail_smtppassword` must not be used, as it puts the password into the world-readable nix store.
+              Use `services.nextcloud.secrets.mail_smtppassword` instead and set it to a file containing the password.
+            '';
+          }
         ];
       }
 
@@ -1235,6 +1405,8 @@ in
               path = [ occ ];
               restartTriggers = [ overrideConfig ];
               script = ''
+                export OCC_BIN="${lib.getExe occ}"
+
                 ${lib.optionalString (c.dbpassFile != null) ''
                   if [ -z "$(<"$CREDENTIALS_DIRECTORY/dbpass")" ]; then
                     echo "dbpassFile ${c.dbpassFile} is empty!"
@@ -1275,13 +1447,13 @@ in
                   ${occInstallCmd}
                 fi
 
-                ${lib.getExe occ} upgrade
+                $OCC_BIN upgrade
 
-                ${lib.getExe occ} config:system:delete trusted_domains
+                $OCC_BIN config:system:delete trusted_domains
 
                 ${lib.optionalString (cfg.extraAppsEnable && cfg.extraApps != { }) ''
                   # Try to enable apps
-                  ${lib.getExe occ} app:enable ${lib.concatStringsSep " " (lib.attrNames cfg.extraApps)}
+                  $OCC_BIN app:enable ${lib.concatStringsSep " " (lib.attrNames cfg.extraApps)}
                 ''}
 
                 ${occSetTrustedDomainsCmd}
@@ -1459,6 +1631,20 @@ in
                 port = 0;
               };
             })
+            # https://docs.nextcloud.com/server/latest/admin_manual/installation/server_tuning.html#previews
+            (lib.mkIf cfg.imaginary.enable {
+              preview_imaginary_url = "http://${config.services.imaginary.address}:${toString config.services.imaginary.port}";
+
+              # Imaginary replaces a few of the built-in providers, so the default value has to be adjusted.
+              enabledPreviewProviders = lib.mkDefault [
+                "OC\\Preview\\Imaginary"
+                "OC\\Preview\\ImaginaryPDF"
+                "OC\\Preview\\Krita"
+                "OC\\Preview\\MarkDown"
+                "OC\\Preview\\TXT"
+                "OC\\Preview\\OpenDocument"
+              ];
+            })
           ];
         };
 
@@ -1590,6 +1776,13 @@ in
               rewrite ^/.well-known/host-meta.json /public.php?service=host-meta-json last;
             ''}
           '';
+        };
+
+        services.imaginary = lib.mkIf cfg.imaginary.enable {
+          enable = true;
+          # add -return-size flag recommend by Nextcloud
+          # https://github.com/h2non/imaginary/pull/382
+          settings.return-size = true;
         };
       }
     ]

@@ -34,6 +34,9 @@ buildGoModule rec {
     mainProgram = "feed2imap-go";
     homepage = "https://github.com/Necoro/feed2imap-go";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ nomeata ];
+    maintainers = with maintainers; [
+      nomeata
+      Necoro
+    ];
   };
 }

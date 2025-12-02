@@ -55,6 +55,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-5tT9LYUskUGhwqGKE9FGoM1+RRlfcik6TkwETsbMyhU=";
   };
 
+  patches = [
+    # Extremely bad bug where `tail` prints fewer lines than it should.
+    # https://github.com/coreutils/coreutils/commit/914972e80dbf82aac9ffe3ff1f67f1028e1a788b
+    ./tail.patch
+    # Fix performance regression in cp.
+    # https://github.com/coreutils/coreutils/commit/231cc20195294c9774ab68f523dd06059f4b0a5c
+    # https://github.com/coreutils/coreutils/commit/64b8fdb5b4767e0f833486507c3eae46ed1b40f8
+    # https://github.com/coreutils/coreutils/commit/2c5754649e08a664f3d43f7bc1df08f498bc1554
+    ./cp-1.patch
+    ./cp-2.patch
+    ./cp-3.patch
+  ];
+
   postPatch = ''
     # The test tends to fail on btrfs, f2fs and maybe other unusual filesystems.
     sed '2i echo Skipping dd sparse test && exit 77' -i ./tests/dd/sparse.sh

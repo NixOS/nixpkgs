@@ -8,7 +8,6 @@
 
   nodes.outline = {
     virtualisation.memorySize = 2 * 1024;
-    nixpkgs.config.allowUnfree = true;
     services.outline = {
       enable = true;
       forceHttps = false;

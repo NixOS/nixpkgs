@@ -9,6 +9,7 @@
   libevdev,
   mtdev,
   udev,
+  wacomSupport ? true,
   libwacom,
   documentationSupport ? false,
   doxygen,
@@ -50,7 +51,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libinput";
-  version = "1.29.1";
+  version = "1.29.2";
 
   outputs = [
     "bin"
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
     owner = "libinput";
     repo = "libinput";
     rev = version;
-    hash = "sha256-wNiI6QPwuK0gUJRadSJx+FOx84kpVC4bXhuQ3ybewoY=";
+    hash = "sha256-oxDGUbZebxAmBd2j51qV9Jn8SXBjUX2NPRgkxbDz7Dk=";
   };
 
   patches = [
@@ -85,7 +86,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libevdev
     mtdev
-    libwacom
     (python3.withPackages (
       pp: with pp; [
         pp.libevdev # already in scope
@@ -94,6 +94,9 @@ stdenv.mkDerivation rec {
         setuptools
       ]
     ))
+  ]
+  ++ lib.optionals wacomSupport [
+    libwacom
   ]
   ++ lib.optionals eventGUISupport [
     # GUI event viewer
@@ -116,6 +119,7 @@ stdenv.mkDerivation rec {
     (mkFlag documentationSupport "documentation")
     (mkFlag eventGUISupport "debug-gui")
     (mkFlag testsSupport "tests")
+    (mkFlag wacomSupport "libwacom")
     "--sysconfdir=/etc"
     "--libexecdir=${placeholder "bin"}/libexec"
   ];

@@ -26,7 +26,7 @@
     lib.switch
       [ coq.coq-version mathcomp-boot.version ]
       [
-        (case (range "8.17" "9.1") (range "2.0.0" "2.4.0") "0.5.0")
+        (case (range "8.17" "9.1") (range "2.0.0" "2.5.0") "0.5.0")
         (case (range "8.17" "8.20") (range "2.0.0" "2.3.0") "0.4.0")
         (case (range "8.11" "8.20") (range "1.12.0" "1.19.0") "0.3.1")
         (case (range "8.11" "8.14") (isLe "1.12.0") "0.3.0")

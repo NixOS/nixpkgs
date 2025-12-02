@@ -31,12 +31,7 @@ in
     enable = lib.mkEnableOption "postgres-websockets";
 
     pgpassFile = lib.mkOption {
-      type =
-        with lib.types;
-        nullOr (pathWith {
-          inStore = false;
-          absolute = true;
-        });
+      type = with lib.types; nullOr externalPath;
       default = null;
       example = "/run/keys/db_password";
       description = ''
@@ -54,12 +49,7 @@ in
     };
 
     jwtSecretFile = lib.mkOption {
-      type =
-        with lib.types;
-        nullOr (pathWith {
-          inStore = false;
-          absolute = true;
-        });
+      type = with lib.types; nullOr externalPath;
       example = "/run/keys/jwt_secret";
       description = ''
         Secret used to sign JWT tokens used to open communications channels.

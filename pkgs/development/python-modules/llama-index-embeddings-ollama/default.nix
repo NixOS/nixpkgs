@@ -2,23 +2,21 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  hatchling,
   llama-index-core,
   ollama,
-  hatchling,
-  pythonOlder,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-embeddings-ollama";
-  version = "0.7.0";
+  version = "0.8.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "llama_index_embeddings_ollama";
     inherit version;
-    hash = "sha256-StV3rCFInL4oi/YEytu9s1a9rx9qdC7MG6uN855pOvQ=";
+    hash = "sha256-bahglDEI13W04ZFFCND2Vnht0BcKakU+CX7iuMKf6yA=";
   };
 
   pythonRelaxDeps = [ "ollama" ];
@@ -28,6 +26,7 @@ buildPythonPackage rec {
   dependencies = [
     llama-index-core
     ollama
+    pytest-asyncio
   ];
 
   # Tests are only available in the mono repo

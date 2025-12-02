@@ -57,5 +57,7 @@ stdenv.mkDerivation {
     license = lib.licenses.zlib;
     description = "Open source high performance realtime 3D engine written in C++";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    # The last successful Darwin Hydra build was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

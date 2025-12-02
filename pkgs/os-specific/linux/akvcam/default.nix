@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Virtual camera driver for Linux";
     homepage = "https://github.com/webcamoid/akvcam";
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = [ ];
     platforms = platforms.linux;
     license = licenses.gpl2Only;
   };

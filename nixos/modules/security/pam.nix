@@ -1011,6 +1011,7 @@ let
                       modulePath = "${config.boot.zfs.package}/lib/security/pam_zfs_key.so";
                       settings = {
                         inherit (config.security.pam.zfs) homes;
+                        mount_recursively = config.security.pam.zfs.mountRecursively;
                       };
                     }
                     {
@@ -1202,6 +1203,7 @@ let
                 modulePath = "${config.boot.zfs.package}/lib/security/pam_zfs_key.so";
                 settings = {
                   inherit (config.security.pam.zfs) homes;
+                  mount_recursively = config.security.pam.zfs.mountRecursively;
                 };
               }
               {
@@ -1362,6 +1364,7 @@ let
                 settings = {
                   inherit (config.security.pam.zfs) homes;
                   nounmount = config.security.pam.zfs.noUnmount;
+                  mount_recursively = config.security.pam.zfs.mountRecursively;
                 };
               }
               {
@@ -2195,6 +2198,14 @@ in
           Do not unmount home dataset on logout.
         '';
       };
+
+      mountRecursively = lib.mkOption {
+        default = false;
+        type = lib.types.bool;
+        description = ''
+          Mount child datasets of home dataset.
+        '';
+      };
     };
 
     security.pam.enableEcryptfs = lib.mkEnableOption "eCryptfs PAM module (mounting ecryptfs home directory on login)";
@@ -2312,8 +2323,7 @@ in
     environment.etc = lib.mapAttrs' makePAMService enabledServices;
 
     systemd =
-      lib.optionalAttrs
-        (lib.any (service: service.updateWtmp) (lib.attrValues config.security.pam.services))
+      lib.mkIf (lib.any (service: service.updateWtmp) (lib.attrValues config.security.pam.services))
         {
           tmpfiles.packages = [ pkgs.util-linux.lastlog ]; # /lib/tmpfiles.d/lastlog2-tmpfiles.conf
           services.lastlog2-import = {

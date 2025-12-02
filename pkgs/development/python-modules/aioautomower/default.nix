@@ -7,6 +7,7 @@
   freezegun,
   ical,
   mashumaro,
+  orjson,
   poetry-core,
   poetry-dynamic-versioning,
   pyjwt,
@@ -22,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "aioautomower";
-  version = "2.3.1";
+  version = "2.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -31,7 +32,7 @@ buildPythonPackage rec {
     owner = "Thomas55555";
     repo = "aioautomower";
     tag = "v${version}";
-    hash = "sha256-M0BAErX5S3BjP+YSv+j2m453T4+U4uHV6N0kWmc42ls=";
+    hash = "sha256-+OzCs+yNU7ni+Lua2gAhaqYdb8dQz3lhtEdhdDgvMxo=";
   };
 
   postPatch = ''
@@ -49,6 +50,7 @@ buildPythonPackage rec {
     aiohttp
     ical
     mashumaro
+    orjson
     pyjwt
     python-dateutil
     tzlocal
@@ -67,23 +69,17 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aioautomower" ];
 
   disabledTests = [
-    # File is missing
-    "test_standard_mower"
-    # Call no found
-    "test_post_commands"
     # Timezone mismatches
-    "test_full_planner_event"
-    "test_sinlge_planner_event"
     "test_set_datetime"
     "test_message_event"
     "test_async_get_messages"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to communicate with the Automower Connect API";
     homepage = "https://github.com/Thomas55555/aioautomower";
     changelog = "https://github.com/Thomas55555/aioautomower/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -29,9 +29,7 @@ buildGoModule rec {
     homepage = "https://github.com/charmbracelet/skate";
     changelog = "https://github.com/charmbracelet/skate/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      penguwin
-    ];
+    maintainers = [ ];
     mainProgram = "skate";
   };
 }

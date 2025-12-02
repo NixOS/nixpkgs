@@ -18,20 +18,9 @@
   withSixel ? true,
 }:
 
-let
-
-  bashCompletion = fetchFromGitHub {
-    owner = "imomaliev";
-    repo = "tmux-bash-completion";
-    rev = "f5d53239f7658f8e8fbaf02535cc369009c436d6";
-    sha256 = "0sq2g3w0h3mkfa6qwqdw93chb5f1hgkz5vdl8yw8mxwdqwhsdprr";
-  };
-
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "tmux";
-  version = "3.5a";
+  version = "3.6";
 
   outputs = [
     "out"
@@ -42,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tmux";
     repo = "tmux";
     rev = finalAttrs.version;
-    hash = "sha256-Z9XHpyh4Y6iBI4+SfFBCGA8huFJpRFZy9nEB7+WQVJE=";
+    hash = "sha256-jIHnwidzqt+uDDFz8UVHihTgHJybbVg3pQvzlMzOXPE=";
   };
 
   nativeBuildInputs = [
@@ -70,11 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  postInstall = ''
-    mkdir -p $out/share/bash-completion/completions
-    cp -v ${bashCompletion}/completions/tmux $out/share/bash-completion/completions/tmux
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/nix-support
     echo "${finalAttrs.passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
   '';

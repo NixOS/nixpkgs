@@ -39,12 +39,18 @@
 
 stdenv.mkDerivation rec {
   pname = "rhythmbox";
-  version = "3.4.8";
+  version = "3.4.9";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "IBaoqNKpWcB6RnrJaCxu1gW6iIP7dgQQ1otoq4ON+fI=";
+    sha256 = "5CKRoY33oh/+azUr9z8F1+KYu04FvOWWf5jujO5ECPE=";
   };
+
+  postPatch = ''
+    # We backported girepository-2.0 support to libpeas 1.36
+    substituteInPlace meson.build \
+      --replace-fail "and libpeas.version() > '1.36'" ""
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -121,6 +127,6 @@ stdenv.mkDerivation rec {
     description = "Music playing application for GNOME";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.rasendubi ];
+    maintainers = [ ];
   };
 }

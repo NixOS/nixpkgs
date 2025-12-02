@@ -4,18 +4,18 @@
   fetchFromGitHub,
   pkg-config,
   portaudio,
-  testers,
-  catnip,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "catnip";
   version = "1.8.7";
 
   src = fetchFromGitHub {
     owner = "noriah";
     repo = "catnip";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-M9VGpDsBambe9kXyEgDg53pKOSL2zH1ugfSbRgAiaCo=";
   };
 
@@ -31,22 +31,25 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = catnip;
-    };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Terminal audio visualizer for linux/unix/macOS/windows";
     homepage = "https://github.com/noriah/catnip";
-    changelog = "https://github.com/noriah/catnip/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = [ ];
+    changelog = "https://github.com/noriah/catnip/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ liberodark ];
     mainProgram = "catnip";
   };
-}
+})

@@ -43,7 +43,7 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # too narrow time comparison issues

@@ -68,6 +68,7 @@ rec {
   nix-prefetch-darcs = mkPrefetchScript "darcs" ../../../build-support/fetchdarcs/nix-prefetch-darcs [
     darcs
     cacert
+    gawk
     jq
   ];
   nix-prefetch-git = mkPrefetchScript "git" ../../../build-support/fetchgit/nix-prefetch-git [
@@ -83,6 +84,7 @@ rec {
     subversion
   ];
   nix-prefetch-pijul = mkPrefetchScript "pijul" ../../../build-support/fetchpijul/nix-prefetch-pijul [
+    gawk
     pijul
     cacert
     jq

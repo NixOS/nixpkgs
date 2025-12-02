@@ -35,6 +35,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "taxi" ];
 
+  # Broken by the update of `click` from version 8.1.8 -> 8.2.1 in
+  # https://github.com/NixOS/nixpkgs/pull/448189.
+  disabledTests = [
+    "test_ignore_date_error_week_day"
+    "test_ignore_date_error_previous_day"
+  ];
+
   meta = with lib; {
     homepage = "https://github.com/sephii/taxi/";
     description = "Timesheeting made easy";

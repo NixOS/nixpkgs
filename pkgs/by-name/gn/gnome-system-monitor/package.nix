@@ -5,7 +5,6 @@
   fetchurl,
   pkg-config,
   gtkmm4,
-  libxml2,
   bash,
   catch2_3,
   gtk4,
@@ -26,11 +25,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-system-monitor";
-  version = "48.1";
+  version = "49.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-system-monitor/${lib.versions.major finalAttrs.version}/gnome-system-monitor-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Ezw6bihjZuZZ/S2AWCQJp71e2uRW5jxPacz2btb8Zjg=";
+    hash = "sha256-kVtqMhraEuunv1eMIMn+XkH1XVMoR8vRJLvdquwR1w8=";
   };
 
   patches = [
@@ -54,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     libadwaita
     glib
-    libxml2
     gtkmm4
     libgtop
     gdk-pixbuf
@@ -62,6 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     gsettings-desktop-schemas
     systemd
+  ];
+
+  mesonFlags = [
+    # <artificial>:(.text.startup+0x56): undefined reference to `GsmApplication::get()'
+    "-Db_lto=false"
   ];
 
   doCheck = true;

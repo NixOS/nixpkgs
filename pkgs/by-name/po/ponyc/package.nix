@@ -3,10 +3,9 @@
   nix-update-script,
   stdenv,
   fetchFromGitHub,
-  apple-sdk_13,
+  apple-sdk,
   cmake,
   coreutils,
-  darwinMinVersionHook,
   libxml2,
   lto ? true,
   makeWrapper,
@@ -25,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ponyc";
-  version = "0.60.3";
+  version = "0.60.4";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = "ponyc";
     tag = version;
-    hash = "sha256-VlmIy2i7BZ8jK96KVnTzdjyXWTyOuWE5M3yNp7gcVCA=";
+    hash = "sha256-L5qqAu0OozsN6zxC3iwdYTLdd1ux4Dl3bFx6XDD3ZbY=";
     fetchSubmodules = true;
   };
 
@@ -59,9 +58,6 @@ stdenv.mkDerivation rec {
     git
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Keep in sync with `PONY_OSX_PLATFORM`.
-    apple-sdk_13
-    (darwinMinVersionHook "13.0")
     cctools.libtool
   ];
 
@@ -77,7 +73,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (replaceVars ./fix-darwin-build.patch {
-      apple-sdk = apple-sdk_13;
+      inherit apple-sdk;
     })
   ];
 

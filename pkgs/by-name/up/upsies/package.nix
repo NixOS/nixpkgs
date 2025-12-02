@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitea,
   fetchpatch,
   ffmpeg-headless,
@@ -17,7 +18,7 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "upsies";
-  version = "2025.10.09";
+  version = "2025.11.23";
   pyproject = true;
 
   src = fetchFromGitea {
@@ -25,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     owner = "plotski";
     repo = "upsies";
     tag = "v${version}";
-    hash = "sha256-mFGeN1ic0jTuamKG1QK30rz5OklwEN5Gykk93IOvUco=";
+    hash = "sha256-79ZC3DwoORlbsuD6lunIGaZVDHVuUGBkPloTBM097Lc=";
   };
 
   patches = [
@@ -72,10 +73,32 @@ python3Packages.buildPythonApplication rec {
     ]
     ++ runtimeDeps;
 
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fail during object comparisons on Darwin
+    "test_group"
+    "test_has_commentary"
+    "test_special_case"
+    "test_set_release_info"
+    "test_Query_from_release"
+    # Depend on directory format
+    "test_home_directory_property"
+    # Depends on specific cocdecs not available on Darwin
+    "test_generate_episode_queries"
+    # Assert false == true
+    "test_is_mixed_scene_release"
+    # Fails due to expecting a non-darwin path format
+    "test_search"
+  ];
+
   disabledTestPaths = [
     # DNS resolution errors in the sandbox on some of the tests
     "tests/utils_test/http_test/http_test.py"
     "tests/utils_test/http_test/http_tls_test.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fail due to the different set of codecs on Darwin
+    "tests/utils_test/predbs_test/predbs_integration_test.py"
+    "tests/utils_test/release_info_test.py"
   ];
 
   preCheck = ''
@@ -90,11 +113,13 @@ python3Packages.buildPythonApplication rec {
     (lib.makeBinPath runtimeDeps)
   ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Toolkit for collecting, generating, normalizing and sharing video metadata";
     homepage = "https://upsies.readthedocs.io/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "upsies";
-    maintainers = with maintainers; [ ambroisie ];
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
 }

@@ -1,23 +1,24 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
 
   # dependencies
-  calmjs,
+  django,
   django-appconf,
-  jinja2,
   rcssmin,
   rjsmin,
 
   # tests
   beautifulsoup4,
   brotli,
+  calmjs,
   csscompressor,
   django-sekizai,
+  jinja2,
   pytestCheckHook,
   pytest-django,
 
@@ -25,35 +26,23 @@
 
 buildPythonPackage rec {
   pname = "django-compressor";
-  version = "4.5.1";
+  version = "4.6";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "django_compressor";
-    inherit version;
-    hash = "sha256-wdikii7k2LfyPEEeucl+LYjbGKGLocnoF41fW4NmqCI=";
+  src = fetchFromGitHub {
+    owner = "django-compressor";
+    repo = "django-compressor";
+    tag = version;
+    hash = "sha256-ymht/nl3UUFXLc54aqDADXArVG6jUNQppBJCNKp2P68=";
   };
-
-  patches = [
-    # https://github.com/django-compressor/django-compressor/issues/1279
-    # https://github.com/django-compressor/django-compressor/pull/1296
-    ./bs4-4.13-compat.patch
-  ];
 
   build-system = [
     setuptools
   ];
 
-  pythonRelaxDeps = [
-    "rcssmin"
-    "rjsmin"
-  ];
-
   dependencies = [
-    beautifulsoup4
-    calmjs
+    django
     django-appconf
-    jinja2
     rcssmin
     rjsmin
   ];
@@ -63,8 +52,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     beautifulsoup4
     brotli
+    calmjs
     csscompressor
     django-sekizai
+    jinja2
     pytestCheckHook
     pytest-django
   ];
@@ -73,6 +64,11 @@ buildPythonPackage rec {
   # offline compression enabled but key "..." is missing from offline manifest.
   # You may need to run "python manage.py compress"
   disabledTestPaths = [ "compressor/tests/test_offline.py" ];
+
+  disabledTests = [
+    # we set mtime to 1980-01-02
+    "test_css_mtimes"
+  ];
 
   pythonImportsCheck = [ "compressor" ];
 

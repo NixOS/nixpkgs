@@ -17,13 +17,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
-  version = "4.38.0";
+  version = "4.51.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "wrangler@${finalAttrs.version}";
-    hash = "sha256-4avSdp68ecDnY5ZhtVCjq9+u8bmNRpq2XTbnapmY+S0=";
+    hash = "sha256-NYYw4/Yx4wVn7snXQsGxtppLNvqzAjg6fqQIFeKc9L4=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
       postPatch
       ;
     fetcherVersion = 2;
-    hash = "sha256-oavyEIDsGCsX0cZu0fI3vpjFc/BwHNre9hNantu/wCk=";
+    hash = "sha256-utRo6lI8YgVJItqa/433HWNTp2AAHgiA3xWdJn2IELg=";
   };
   # pnpm packageManager version in workers-sdk root package.json may not match nixpkgs
   postPatch = ''
@@ -71,6 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
   # so I simply removed it
   postBuild = ''
     mv packages/vitest-pool-workers packages/~vitest-pool-workers
+
+    NODE_ENV="production" pnpm --filter unenv-preset run build
+    NODE_ENV="production" pnpm --filter workers-utils run build
     NODE_ENV="production" pnpm --filter workers-shared run build
     NODE_ENV="production" pnpm --filter miniflare run build
     NODE_ENV="production" pnpm --filter wrangler run build
@@ -87,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
     mkdir -p $out/{bin,lib}
     mv packages/~vitest-pool-workers packages/vitest-pool-workers
-    cp -r {fixtures,packages,node_modules,vendor} $out/lib
+    cp -r {fixtures,packages,node_modules} $out/lib
     cp -r tools $out/lib/tools
     rm -rf node_modules/typescript node_modules/eslint node_modules/prettier node_modules/bin node_modules/.bin node_modules/**/bin node_modules/**/.bin
     rm -rf $out/lib/**/bin $out/lib/**/.bin

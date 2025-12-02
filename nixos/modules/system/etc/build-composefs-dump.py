@@ -61,7 +61,15 @@ class ComposefsPath:
         self.path = path
         self.size = size
         self.filetype = filetype
-        self.mode = mode
+
+        match len(mode):
+            case 3 | 4:
+                # We need to pad the mode, because we will later use the concatentation
+                # filetype|mode, which assumes that the mode has a length of 4.
+                self.mode = f"{mode:0>4}"
+            case _:
+                raise ValueError(f"mode should be 3 or 4 octal digits, got: {mode}")
+
         self.uid = attrs["uid"]
         self.gid = attrs["gid"]
         self.payload = payload

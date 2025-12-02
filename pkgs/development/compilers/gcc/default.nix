@@ -234,7 +234,6 @@ pipe
 
       hardeningDisable = [
         "format"
-        "pie"
         "stackclashprotection"
       ];
 

@@ -2,8 +2,6 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  google-api-python-client,
-  google-auth,
   lib,
   mashumaro,
   pytest-aiohttp,
@@ -13,22 +11,20 @@
 
 buildPythonPackage rec {
   pname = "google-photos-library-api";
-  version = "0.12.1";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "python-google-photos-library-api";
     tag = version;
-    hash = "sha256-xSwUzVwC7RPpmC9M1x/WYIaoiUlcF2h2fwiP6FYA6sw=";
+    hash = "sha256-BtVnFQ0MtxQBvT0xff59hBED89rtg8xfuv31T13qL8w=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
-    google-api-python-client
-    google-auth
     mashumaro
   ];
 

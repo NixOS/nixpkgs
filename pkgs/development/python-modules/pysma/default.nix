@@ -1,40 +1,56 @@
 {
   lib,
   aiohttp,
+  aioresponses,
   attrs,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   jmespath,
-  pythonOlder,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "pysma";
-  version = "0.7.5";
-  format = "setuptools";
+  version = "1.0.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-zlCGEcG5tmgEXhSMDLKj0/imT1iHBqlp1O1QhmPrJcA=";
+  src = fetchFromGitHub {
+    owner = "kellerza";
+    repo = "pysma";
+    tag = "v${version}";
+    hash = "sha256-T9QBIuKgbKmMUN2G+sZRW4DtgIk3H9rYMTxLtkXfEBI=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv-build>=0.9,<0.10" uv-build
+  '';
+
+  build-system = [ uv-build ];
+
+  dependencies = [
     aiohttp
     attrs
     jmespath
   ];
 
-  # pypi does not contain tests and GitHub archive not available
-  doCheck = false;
+  nativeCheckInputs = [
+    aioresponses
+    pytest-asyncio
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "pysma" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/kellerza/pysma/blob/${src.tag}/CHANGELOG.md";
     description = "Python library for interacting with SMA Solar's WebConnect";
     homepage = "https://github.com/kellerza/pysma";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -6,14 +6,14 @@
   tailer,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tailer";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "hionay";
     repo = "tailer";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gPezz2ksqdCffgdAHwU2NMTar2glp5YGfA5C+tMYPtE=";
   };
 
@@ -21,8 +21,7 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
   passthru.tests = {
@@ -31,11 +30,11 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool to insert lines when command output stops";
     homepage = "https://github.com/hionay/tailer";
-    license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ liberodark ];
+    license = lib.licenses.mit;
     mainProgram = "tailer";
   };
-}
+})

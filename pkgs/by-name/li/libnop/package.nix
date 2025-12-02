@@ -29,7 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ gtest ];
 
   # Add optimization flags to address _FORTIFY_SOURCE warning
-  NIX_CFLAGS_COMPILE = [ "-O1" ];
+  NIX_CFLAGS_COMPILE = [
+    "-O1"
+    "-std=c++17"
+  ];
 
   installPhase = ''
     runHook preInstall

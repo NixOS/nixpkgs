@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-binstall";
-  version = "1.15.9";
+  version = "1.16.2";
 
   src = fetchFromGitHub {
     owner = "cargo-bins";
     repo = "cargo-binstall";
     tag = "v${version}";
-    hash = "sha256-v/tilaoDLZDV0VbMTT/DfqSNO4Ezyu3AWGzMftMubqc=";
+    hash = "sha256-jaBIVR8N1UXihRDjQVdJtx5ErlrOHXBVs68SzD0bbPc=";
   };
 
-  cargoHash = "sha256-itYqZi1tSWVwqGfNFSBh4/+PoLrQZQTnla4lOCjoX8Q=";
+  cargoHash = "sha256-Qn/eRQ1GDFPepwgrnZObz7Bgxm9UzFNAZsdwP36A+dM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -68,6 +68,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/cargo-bins/cargo-binstall";
     changelog = "https://github.com/cargo-bins/cargo-binstall/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
 }

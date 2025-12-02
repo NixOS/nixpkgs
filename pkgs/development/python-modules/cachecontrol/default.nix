@@ -3,18 +3,17 @@
   buildPythonPackage,
   cherrypy,
   fetchFromGitHub,
-  flit-core,
   filelock,
-  mock,
   msgpack,
   pytestCheckHook,
   redis,
   requests,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "cachecontrol";
-  version = "0.14.3";
+  version = "0.14.4";
   pyproject = true;
 
   __darwinAllowLocalNetworking = true;
@@ -23,10 +22,10 @@ buildPythonPackage rec {
     owner = "ionrock";
     repo = "cachecontrol";
     tag = "v${version}";
-    hash = "sha256-V8RWTDxhKCvf5bz2j6anp8bkCzkicTRY+Kd6eHu1peg=";
+    hash = "sha256-627SqJocVOO0AfI8vswPqOr15MA/Lx7RLAdRAXzWu84=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ uv-build ];
 
   dependencies = [
     msgpack
@@ -40,11 +39,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     cherrypy
-    mock
     pytestCheckHook
-    requests
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "cachecontrol" ];
 

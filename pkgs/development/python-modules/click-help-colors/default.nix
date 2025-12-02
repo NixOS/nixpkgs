@@ -30,6 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/click-contrib/click-help-colors";
     changelog = "https://github.com/click-contrib/click-help-colors/blob/${version}/CHANGES.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = [ ];
   };
 }

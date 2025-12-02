@@ -9,7 +9,6 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 
 let
   packages = with pkgs; {
-    "16" = teleport_16;
     "17" = teleport_17;
     "18" = teleport_18;
   };

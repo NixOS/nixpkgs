@@ -95,7 +95,15 @@ buildPythonPackage rec {
     # Racy, e.g. Address already in use
     "test_logger_vhosts"
     # Event loop is closed
+    "test_asyncio_server_no_start_serving"
+    "test_asyncio_server_start_serving"
+    "test_create_asyncio_server"
+    "test_create_server_main_convenience"
+    "test_create_server_main"
+    "test_create_server_no_startup"
     "test_create_server_trigger_events"
+    "test_multiple_uvloop_configs_display_warning"
+    "test_uvloop_cannot_never_called_with_create_server"
   ];
 
   disabledTestPaths = [

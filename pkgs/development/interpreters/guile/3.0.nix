@@ -126,6 +126,9 @@ builder rec {
   #  https://github.com/NixOS/nixpkgs/pull/160051#issuecomment-1046193028
   ++ lib.optional (stdenv.hostPlatform.isDarwin) "--disable-lto";
 
+  # Fix build with gcc15
+  env.NIX_CFLAGS_COMPILE = toString [ "-std=gnu17" ];
+
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
   ''

@@ -18,17 +18,18 @@
   linkFarm,
   lightdm-slick-greeter,
   numlockx,
+  xapp-symbolic-icons,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lightdm-slick-greeter";
-  version = "2.2.2";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "slick-greeter";
     rev = version;
-    hash = "sha256-32H2Q/JdT5v0xrdsZfSJobJ4Dxx63LPgbiB9OKIyc1U=";
+    hash = "sha256-htyFH1Q8RFyvkW75NMpjajNJDzv/87k/Dr8+R5beT2w=";
   };
 
   nativeBuildInputs = [
@@ -85,6 +86,7 @@ stdenv.mkDerivation rec {
     buildPythonPath "$out $pythonPath"
     gappsWrapperArgs+=(
       --prefix PYTHONPATH : "$program_PYTHONPATH"
+      --prefix XDG_DATA_DIRS : "${lib.makeSearchPath "share" [ xapp-symbolic-icons ]}"
     )
   '';
 

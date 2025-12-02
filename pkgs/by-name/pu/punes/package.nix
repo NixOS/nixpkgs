@@ -47,7 +47,22 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/punesemu/puNES/commit/ff906e0a79eeac9a2d16783e0accf65748bb275e.patch";
       hash = "sha256-+s7AdaUBgCseQs6Mxat/cDmQ77s6K6J0fUfyihP82jM=";
     })
+
+    # Fix compat with FFmpeg 8, part 1
+    # Remove when version > 0.111
+    (fetchpatch {
+      name = "0003-punes-Dont-use-deprecated-avcodec_close.patch";
+      url = "https://github.com/punesemu/puNES/commit/49f86fcf0fab37d4761b713b0a9e7dc342b8f594.patch";
+      hash = "sha256-l71n+c7W2vJKOJKLgfMfDJtof+UBzcVUgXMTn6ap1XI=";
+    })
   ];
+
+  # Fix compat with FFmpeg 8, part 2
+  # Remove when https://github.com/punesemu/puNES/pull/444 merged & in release
+  postPatch = ''
+    substituteInPlace src/core/recording.c \
+      --replace-fail 'FF_PROFILE_H264_HIGH' 'AV_PROFILE_H264_HIGH'
+  '';
 
   nativeBuildInputs = [
     cmake

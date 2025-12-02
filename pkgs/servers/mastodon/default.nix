@@ -80,9 +80,9 @@ stdenv.mkDerivation rec {
       find public/assets -type f -regextype posix-extended -iregex '.*\.(css|html|js|json|svg)' \
         -exec gzip --best --keep --force {} ';' \
         -exec brotli --best --keep {} ';'
-
+      find public/packs -type f -regextype posix-extended -iregex '.*\.(css|js|json|svg)' \
+        -exec brotli --best --keep {} ';'
       gzip --best --keep public/packs/sw.js
-      brotli --best --keep public/packs/sw.js
 
       runHook postBuild
     '';
@@ -123,6 +123,8 @@ stdenv.mkDerivation rec {
 
     # Remove execute permissions
     find public/emoji -type f ! -perm 0555 \
+      -exec chmod 0444 {} ';'
+    find public -maxdepth 1 -type f ! -perm 0555 \
       -exec chmod 0444 {} ';'
 
     # Create missing static gzip and brotli files

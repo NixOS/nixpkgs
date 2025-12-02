@@ -5,6 +5,7 @@
   nodejs,
   makeWrapper,
   stdenv,
+  versionCheckHook,
 }:
 
 let
@@ -12,7 +13,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "immich-cli";
-  version = "2.2.100";
+  version = "2.2.103";
   inherit (immich) src pnpmDeps;
 
   postPatch = ''
@@ -50,6 +51,12 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   meta = {
     description = "Self-hosted photo and video backup solution (command line interface)";

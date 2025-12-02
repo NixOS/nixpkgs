@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   version = "0.27.1";
 
   src = fetchurl {
-    url = "http://releases.wildfiregames.com/0ad-${version}-unix-build.tar.xz";
+    url = "https://releases.wildfiregames.com/0ad-${version}-unix-build.tar.xz";
     hash = "sha256-oKU1XutZaNJPKDdwc2FQ2XTa/sugd1TUZicH3BcBa/s=";
   };
 

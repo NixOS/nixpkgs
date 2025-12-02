@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "rtl88x2bu";
-  version = "${kernel.version}-unstable-2024-06-09";
+  version = "${kernel.version}-unstable-2025-05-29";
 
   src = fetchFromGitHub {
     owner = "morrownr";
     repo = "88x2bu-20210702";
-    rev = "62f3a86a2687fe98bd441e0aff5adf87d95c238a";
-    hash = "sha256-gQWk1nhtT0W2dY5uQitWabBGEDfZpmJAoJg+j2ndO00=";
+    rev = "fe48647496798cac77976e310ee95da000b436c9";
+    hash = "sha256-h20vwCgLOiNh0LN3MGwPl3F/PSWGc2XS4t1sdeFAOko=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -42,5 +42,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ otavio ];
+    broken = kernel.kernelAtLeast "6.17";
   };
 }

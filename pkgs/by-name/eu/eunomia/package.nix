@@ -31,7 +31,6 @@ stdenvNoCC.mkDerivation {
     description = "Futuristic decorative font";
     platforms = platforms.all;
     maintainers = with maintainers; [
-      leenaars
       minijackson
     ];
     license = licenses.ofl;

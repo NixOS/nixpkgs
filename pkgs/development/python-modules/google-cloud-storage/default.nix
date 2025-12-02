@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "3.3.0";
+  version = "3.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-storage";
     tag = "v${version}";
-    hash = "sha256-I0wC/BV8fJr3JW1nyq2TPJZlZaT4+h2lJBdGTttSzRo=";
+    hash = "sha256-fLS1rrblNKm8dTG/Srg6IfcEjeZCS2QGNwW6ZXIo7UQ=";
   };
 
   pythonRelaxDeps = [ "google-auth" ];

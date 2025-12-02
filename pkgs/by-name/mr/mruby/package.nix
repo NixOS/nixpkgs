@@ -4,6 +4,7 @@
   ruby,
   rake,
   fetchFromGitHub,
+  fetchpatch,
   testers,
 }:
 
@@ -17,6 +18,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     sha256 = "sha256-rCoEC1ioX6bOocPoPi+Lsn4PM8gY0DjKja1/MJvJ1n8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2025-7207.patch";
+      url = "https://github.com/mruby/mruby/commit/1fdd96104180cc0fb5d3cb086b05ab6458911bb9.patch";
+      hash = "sha256-wtSlLydofkp2brk/pRiJqt4NhkGRdzsx7JpTmWu2B7I=";
+    })
+  ];
 
   nativeBuildInputs = [ rake ];
 

@@ -4,11 +4,10 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
+  python3Packages,
   staticOnly ? stdenv.hostPlatform.isStatic,
   testers,
 }:
-
-# ?TODO: there's also python lib in there
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "brotli";
@@ -54,7 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
     cp ../docs/*.3 $out/share/man/man3/
   '';
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru.tests = {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    python = python3Packages.brotli;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/google/brotli";
@@ -72,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       https://datatracker.ietf.org/doc/html/rfc7932
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = [ ];
     pkgConfigModules = [
       "libbrotlidec"
       "libbrotlienc"

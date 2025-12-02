@@ -5,7 +5,9 @@
   fetchFromGitHub,
   importlib-metadata,
   lingva,
+  numpy,
   polib,
+  pytest-cov-stub,
   pytestCheckHook,
   python-dateutil,
   setuptools,
@@ -13,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "holidays";
-  version = "0.83";
+  version = "0.85";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vacanza";
     repo = "python-holidays";
     tag = "v${version}";
-    hash = "sha256-GlOydhDSg03uZUxLXDoaT/Jq3DMk+HsSxBtPQE9DQ3U=";
+    hash = "sha256-ExleK66foB2Q/KK7zcPJ16q4ucz3gOkntB2SQETfHqk=";
   };
 
   build-system = [
@@ -44,11 +46,11 @@ buildPythonPackage rec {
 
   dependencies = [ python-dateutil ];
 
-  doCheck = false;
-
   nativeCheckInputs = [
     importlib-metadata
+    numpy
     polib
+    pytest-cov-stub
     pytestCheckHook
   ];
 
@@ -57,7 +59,7 @@ buildPythonPackage rec {
   meta = {
     description = "Generate and work with holidays in Python";
     homepage = "https://github.com/vacanza/python-holidays";
-    changelog = "https://github.com/vacanza/python-holidays/releases/tag/${src.tag}";
+    changelog = "https://github.com/vacanza/holidays/blob/${src.tag}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab

@@ -105,13 +105,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "z88dk";
-  version = "2.3-unstable-2025-01-08";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "z88dk";
     repo = "z88dk";
-    rev = "e223137af42ed0332b11fa6185268246293245c4";
-    hash = "sha256-m0ZEAfKISEqzsh4VNXwRSceBC4uWmIIdi5cw+7lEC9o=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-RrPu1UcTyin/aiGrV87PZI8f6dazuojJLalyEaFT/kY=";
     fetchSubmodules = true;
   };
 

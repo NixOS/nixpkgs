@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "nicegui-highcharts";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zauberzeug";
     repo = "nicegui-highcharts";
     tag = "v${version}";
-    hash = "sha256-HFLlT2TOS7actGxSBQ9ivWS2fVQwt1UWiK/JZlj8Zo8=";
+    hash = "sha256-xfZtEAwHIbSI55V9GR9E1c2bbC+RQFiBW9zZ1f3e+vk=";
   };
 
   postPatch = ''

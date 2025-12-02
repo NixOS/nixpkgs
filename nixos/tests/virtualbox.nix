@@ -162,7 +162,7 @@ let
           cp "${cfg.system.build.kernel}/bzImage" /mnt/linux
           cp "${cfg.system.build.initialRamdisk}/initrd" /mnt/initrd
 
-          ${pkgs.grub2}/bin/grub-install --boot-directory=/mnt /dev/vda
+          ${pkgs.grub2}/bin/grub-install --target=i386-pc --boot-directory=/mnt /dev/vda
 
           cat > /mnt/grub/grub.cfg <<GRUB
           set root=hd0,1
@@ -426,8 +426,6 @@ let
             enable = true;
           }
           // vboxHostConfig;
-
-          nixpkgs.config.allowUnfree = config.virtualisation.virtualbox.host.enableExtensionPack;
         };
 
       testScript = ''

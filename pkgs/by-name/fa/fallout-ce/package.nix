@@ -94,10 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/alexbatalov/fallout1-ce";
     license = lib.licenses.sustainableUse;
-    maintainers = with lib.maintainers; [
-      hughobrien
-      iedame
-    ];
+    maintainers = with lib.maintainers; [ hughobrien ];
     platforms = lib.platforms.linux;
     mainProgram = "fallout-ce";
   };

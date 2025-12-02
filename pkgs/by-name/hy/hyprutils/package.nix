@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprutils";
-  version = "0.10.0";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprutils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r1ed7AR2ZEb2U8gy321/Xcp1ho2tzn+gG1te/Wxsj1A=";
+    hash = "sha256-XQLlR/QJWiRRWY+ohtOqfe0fDMMPl/UyQCcypfUtZiE=";
   };
 
   nativeBuildInputs = [

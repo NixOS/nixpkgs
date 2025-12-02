@@ -38,17 +38,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "reaper";
-  version = "7.47";
+  version = "7.54";
 
   src = fetchurl {
     url = url_for_platform version stdenv.hostPlatform.qemuArch;
     hash =
       if stdenv.hostPlatform.isDarwin then
-        "sha256-exVal9bXNNRaAVTz+c+cugs9TZ8GB8yyCA6jkeW8ipQ="
+        "sha256-1C7FfFULm7ZYdKHU/x5BcoiISRoySvFDqRjJZ+OiqLc="
       else
         {
-          x86_64-linux = "sha256-sbkUEGecqw5Fbl5Ev8pwlE5nMxNz8bf90d641S3cT8Y=";
-          aarch64-linux = "sha256-8VNmIUa4c/cGVlegx9joD6tX1cTDBWnM2GklCINsJa0=";
+          x86_64-linux = "sha256-DOhWauKjIv5cah+6yO/ZkHQ6X0qcyxxWD6B2xH/zm4c=";
+          aarch64-linux = "sha256-TD6kHAzNBSDQxmT23VJwCUcfblp4DffOaKhKVPSAg6w=";
         }
         .${stdenv.hostPlatform.system};
   };
@@ -127,6 +127,10 @@ stdenv.mkDerivation rec {
         mkdir $out/bin
         ln -s $out/opt/REAPER/reaper $out/bin/
 
+        # Avoid store path in Exec, since we already link to $out/bin
+        substituteInPlace $out/share/applications/cockos-reaper.desktop \
+          --replace-fail "Exec=\"$out/opt/REAPER/reaper\"" "Exec=reaper"
+
         runHook postInstall
       '';
 
@@ -146,8 +150,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       atinba
       ilian
-      orivej
-      uniquepointer
       viraptor
     ];
   };

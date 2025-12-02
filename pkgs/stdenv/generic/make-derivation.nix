@@ -99,7 +99,8 @@ let
                 prev = f final;
                 thisOverlay = overlay final prev;
                 warnForBadVersionOverride = (
-                  thisOverlay ? version
+                  prev ? src
+                  && thisOverlay ? version
                   && prev ? version
                   # We could check that the version is actually distinct, but that
                   # would probably just delay the inevitable, or preserve tech debt.
@@ -151,10 +152,11 @@ let
     "nostrictaliasing"
     "pacret"
     "pic"
-    "pie"
     "relro"
     "stackprotector"
     "glibcxxassertions"
+    "libcxxhardeningfast"
+    "libcxxhardeningextensive"
     "stackclashprotection"
     "strictoverflow"
     "trivialautovarinit"
@@ -227,14 +229,7 @@ let
 
   canExecuteHostOnBuild = buildPlatform.canExecute hostPlatform;
   defaultHardeningFlags =
-    (if stdenvHasCC then stdenv.cc else { }).defaultHardeningFlags or
-    # fallback safe-ish set of flags
-    (
-      if isOpenBSD && isStatic then
-        knownHardeningFlags # Need pie, in fact
-      else
-        remove "pie" knownHardeningFlags
-    );
+    (if stdenvHasCC then stdenv.cc else { }).defaultHardeningFlags or knownHardeningFlags;
   stdenvHostSuffix = optionalString (hostPlatform != buildPlatform) "-${hostPlatform.config}";
   stdenvStaticMarker = optionalString isStatic "-static";
   userHook = config.stdenv.userHook or null;
@@ -434,6 +429,8 @@ let
           (concretizeFlagImplications "fortify" [ "fortify3" ])
           # disabling strictflexarrays1 implies strictflexarrays3 should also be disabled
           (concretizeFlagImplications "strictflexarrays1" [ "strictflexarrays3" ])
+          # disabling libcxxhardeningfast implies libcxxhardeningextensive should also be disabled
+          (concretizeFlagImplications "libcxxhardeningfast" [ "libcxxhardeningextensive" ])
         ]
       );
       enabledHardeningOptions =
@@ -442,7 +439,7 @@ let
         else
           subtractLists hardeningDisable' (defaultHardeningFlags ++ hardeningEnable);
       # hardeningDisable additionally supports "all".
-      erroneousHardeningFlags = subtractLists knownHardeningFlags (
+      erroneousHardeningFlags = subtractLists (knownHardeningFlags ++ [ "pie" ]) (
         hardeningEnable ++ remove "all" hardeningDisable
       );
 
@@ -640,7 +637,9 @@ let
               else
                 null
             } =
-              builtins.concatStringsSep " " enabledHardeningOptions;
+              lib.warnIf ((builtins.elem "pie" hardeningEnable) || (builtins.elem "pie" hardeningDisable))
+                "The 'pie' hardening flag has been removed in favor of enabling PIE by default in compilers and should no longer be used. PIE can be disabled with the -no-pie compiler flag, but this is usually not necessary as most build systems pass this if needed. Usage of the 'pie' hardening flag will become an error in future."
+                (builtins.concatStringsSep " " enabledHardeningOptions);
 
             # TODO: remove platform condition
             # Enabling this check could be a breaking change as it requires to edit nix.conf

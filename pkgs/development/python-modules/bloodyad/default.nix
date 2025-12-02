@@ -1,49 +1,61 @@
 {
   lib,
-  asn1crypto,
+  stdenv,
   buildPythonPackage,
-  certipy,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  asn1crypto,
+  badldap,
   cryptography,
   dnspython,
-  fetchFromGitHub,
-  hatchling,
-  minikerberos-bad,
-  msldap-bad,
-  pyasn1,
-  pytestCheckHook,
-  pythonOlder,
+  kerbad,
   winacl,
+
+  # test
+  certipy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "bloodyad";
-  version = "2.1.21";
+  version = "2.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "CravateRouge";
     repo = "bloodyAD";
     tag = "v${version}";
-    hash = "sha256-9yzKYSEmaPMv6AWhgr4UPPEx8s75Pg/hwqJnV29WocM=";
+    hash = "sha256-WKD8R1pH1dIAxMIM2SLPV+AoFi3z1O96U8XK2QyVYxQ=";
   };
 
   pythonRelaxDeps = [ "cryptography" ];
 
   pythonRemoveDeps = [
-    "minikerberos-bad"
-    "msldap-bad"
+    "kerbad"
+    "badldap"
   ];
 
   build-system = [ hatchling ];
 
+  # Upstream provides two package scripts: bloodyad and bloodyAD,
+  # but this causes a FileAlreadyExists error during installation
+  # on Darwin (case-insensitive filesystem).
+  # https://github.com/CravateRouge/bloodyAD/issues/99
+  postPatch = lib.optionals stdenv.hostPlatform.isDarwin ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "bloodyAD = \"bloodyAD.main:main\"" ""
+  '';
+
   dependencies = [
     asn1crypto
+    badldap
     cryptography
     dnspython
-    minikerberos-bad
-    msldap-bad
+    kerbad
     winacl
   ];
 
@@ -63,13 +75,20 @@ buildPythonPackage rec {
     "test_04ComputerRbcdGetSetAttribute"
     "test_06AddRemoveGetDnsRecord"
     "test_certificate_authentications"
+    "test_04ComputerRbcdRestoreGetSetAttribute"
   ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # TypeError: applyFormatters() takes 1 positional argument but 2 were given
+    # https://github.com/CravateRouge/bloodyAD/issues/98
+    "tests/test_formatters.py"
+  ];
+
+  meta = {
     description = "Module for Active Directory Privilege Escalations";
     homepage = "https://github.com/CravateRouge/bloodyAD";
     changelog = "https://github.com/CravateRouge/bloodyAD/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

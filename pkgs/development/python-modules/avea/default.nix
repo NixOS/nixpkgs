@@ -1,32 +1,41 @@
 {
   lib,
+  bleak-retry-connector,
+  bleak,
   buildPythonPackage,
   fetchFromGitHub,
-  bluepy,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "avea";
-  version = "1.5.2";
-  format = "setuptools";
+  version = "1.6.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "k0rventen";
     repo = "avea";
-    rev = "v${version}";
-    sha256 = "1dirf0zdf4hb941w1dvh97vsvcy4h3w9r8jwdgr1ggmhdf9kfx4v";
+    tag = "v${version}";
+    hash = "sha256-IfD74nsuHYBrwXebpRE9tzPIwp+i3jdZjh49gz8NRz4=";
   };
 
-  propagatedBuildInputs = [ bluepy ];
+  build-system = [ setuptools ];
 
-  # no tests are present
+  dependencies = [
+    bleak
+    bleak-retry-connector
+  ];
+
+  # Module has no tests
   doCheck = false;
+
   pythonImportsCheck = [ "avea" ];
 
   meta = with lib; {
     description = "Python module for interacting with Elgato's Avea bulb";
     homepage = "https://github.com/k0rventen/avea";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/k0rventen/avea/releases/tag/${src.tag}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

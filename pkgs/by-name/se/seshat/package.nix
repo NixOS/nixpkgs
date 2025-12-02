@@ -41,7 +41,6 @@ stdenvNoCC.mkDerivation {
     '';
     platforms = platforms.all;
     maintainers = with maintainers; [
-      leenaars
       minijackson
     ];
     license = licenses.cc0;

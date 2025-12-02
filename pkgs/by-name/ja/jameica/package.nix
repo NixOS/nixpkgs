@@ -46,8 +46,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "willuhn";
     repo = "jameica";
-    # Releases currently happen on branches named like the version number. Rev of the "2.12.0" branch.
-    rev = "b74b160643b18171d2d185b80b60e82a02a75898";
+    tag = version;
     hash = "sha256-7KpQas8ttL2DP+gFH87uLQyx4PMwVQ+FaqXpZBPWV5U=i";
   };
 

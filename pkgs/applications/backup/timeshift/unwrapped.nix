@@ -19,6 +19,10 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "timeshift";
   version = "25.07.7";
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "linuxmint";

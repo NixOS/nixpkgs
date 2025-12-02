@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   cmake,
   ninja,
   intltool,
@@ -43,26 +42,24 @@
   p11-kit,
   openldap,
   spamassassin,
+  gnutar,
+  gzip,
+  xz,
 }:
 
 stdenv.mkDerivation rec {
   pname = "evolution";
-  version = "3.56.2";
+  version = "3.58.2";
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-ff3JrrLasybav9wfhXfE7MEjoS2gAS+MZKcmBlo8Cys=";
+    hash = "sha256-uhvDtXKKMbjJ6qDaHuiulG7dzFRO6CQtzMIJ2W3KozA=";
   };
-
-  patches = [
-    # fix crash when opening attachment with recent webkitgtk versions
-    # https://gitlab.gnome.org/GNOME/evolution/-/issues/3124
-    # remove when updating to 3.58.0
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/evolution/-/commit/811a6df1f990855e49ecc0ba7b1a7f7a5ec251e6.patch";
-      hash = "sha256-Aj8H7PnAblInX2zRPQH7n0HOdLNuhITNHunWRYCPBsI=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -121,6 +118,18 @@ stdenv.mkDerivation rec {
     "-DWITH_BOGOFILTER=${bogofilter}/bin/bogofilter"
     "-DWITH_OPENLDAP=${openldap}"
   ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "${
+        lib.makeBinPath [
+          gnutar
+          gzip
+          xz
+        ]
+      }"
+    )
+  '';
 
   requiredSystemFeatures = [
     "big-parallel"

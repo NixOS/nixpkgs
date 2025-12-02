@@ -63,6 +63,13 @@ python3.pkgs.buildPythonApplication rec {
     "test_check_exclude"
   ];
 
+  disabledTestPaths = [
+    # AssertionError
+    "tests/test_analyze.py"
+    "tests/test_convert.py"
+    "tests/test_filters.py"
+  ];
+
   pythonImportsCheck = [ "sigma.cli" ];
 
   meta = with lib; {

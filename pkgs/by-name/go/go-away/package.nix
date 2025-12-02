@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitea,
+  nix-update-script,
 
   # asset compression
   brotli,
@@ -57,6 +58,15 @@ buildGoModule (finalAttrs: {
     cp -rv examples/snippets $out/lib/go-away/
   '';
 
+  passthru.updateScript = nix-update-script {
+    # the main repository does not have the releases feed enabled, so use the
+    # codeberg mirror
+    extraArgs = [
+      "--url"
+      "https://codeberg.org/gone/go-away"
+    ];
+  };
+
   meta = {
     changelog = "https://git.gammaspectra.live/git/go-away/releases/tag/${finalAttrs.src.tag}";
     description = "Self-hosted abuse detection and rule enforcement against low-effort mass AI scraping and bots";
@@ -72,5 +82,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://git.gammaspectra.live/git/go-away";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+    mainProgram = "go-away";
   };
 })

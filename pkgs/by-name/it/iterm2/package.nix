@@ -15,13 +15,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "iterm2";
-  version = "3.5.14";
+  version = "3.6.6";
 
   src = fetchzip {
     url = "https://iterm2.com/downloads/stable/iTerm2-${
       lib.replaceStrings [ "." ] [ "_" ] version
     }.zip";
-    hash = "sha256-cF7gg4kT0z/7Qu7d6AyXpnvrSQ937JbFUgpXw5F4AWE=";
+    hash = "sha256-n3VoRxMOBQK/8mbVbORSBz73tsuKAUMG7dFZIbaqdHU=";
   };
 
   dontFixup = true;
@@ -40,14 +40,16 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Replacement for Terminal and the successor to iTerm";
     homepage = "https://www.iterm2.com/";
     hydraPlatforms = [ ]; # The build is little more than copying the binary
     license = licenses.gpl2;
     maintainers = with maintainers; [
-      steinybot
       tricktron
+      emaiax
     ];
     platforms = [
       "x86_64-darwin"

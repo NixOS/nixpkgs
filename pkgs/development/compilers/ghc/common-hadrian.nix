@@ -55,7 +55,8 @@
   gmp,
 
   # If enabled, use -fPIC when compiling static libs.
-  enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform,
+  enableRelocatedStaticLibs ?
+    stdenv.targetPlatform != stdenv.hostPlatform && !stdenv.targetPlatform.isWindows,
 
   # Exceeds Hydra output limit (at the time of writing ~3GB) when cross compiled to riscv64.
   # A riscv64 cross-compiler fits into the limit comfortably.
@@ -185,32 +186,9 @@
           || (lib.versionAtLeast version "9.8" && lib.versionOlder version "9.11");
       in
 
-      lib.optionals
-        (
-          # 2025-01-16: unix >= 2.8.6.0 is unaffected which is shipped by GHC 9.12.1 and 9.8.4
-          lib.versionOlder version "9.11"
-          && !(lib.versionAtLeast version "9.6.7" && lib.versionOlder version "9.8")
-          && !(lib.versionAtLeast version "9.8.4" && lib.versionOlder version "9.9")
-          && !(lib.versionAtLeast version "9.10.2" && lib.versionOlder version "9.11")
-        )
-        [
-          # Determine size of time related types using hsc2hs instead of assuming CLong.
-          # Prevents failures when e.g. stat(2)ing on 32bit systems with 64bit time_t etc.
-          # https://github.com/haskell/ghcup-hs/issues/1107
-          # https://gitlab.haskell.org/ghc/ghc/-/issues/25095
-          # Note that in normal situations this shouldn't be the case since nixpkgs
-          # doesn't set -D_FILE_OFFSET_BITS=64 and friends (yet).
-          (fetchpatch {
-            name = "unix-fix-ctimeval-size-32-bit.patch";
-            url = "https://github.com/haskell/unix/commit/8183e05b97ce870dd6582a3677cc82459ae566ec.patch";
-            sha256 = "17q5yyigqr5kxlwwzb95sx567ysfxlw6bp3j4ji20lz0947aw6gv";
-            stripLen = 1;
-            extraPrefix = "libraries/unix/";
-          })
-        ]
-      ++ lib.optionals (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.8") [
+      lib.optionals (lib.versionOlder version "9.8") [
         # Fix unlit being installed under a different name than is used in the
-        # settings file: https://gitlab.haskell.org/ghc/ghc/-/issues/23317
+        # settings file: https://gitlab.haskell.org/ghc/ghc/-/issues/23317 krank:ignore-line
         (fetchpatch {
           name = "ghc-9.6-fix-unlit-path.patch";
           url = "https://gitlab.haskell.org/ghc/ghc/-/commit/8fde4ac84ec7b1ead238cb158bbef48555d12af9.patch";
@@ -223,7 +201,7 @@
         #
         # These cause problems as they're not eliminated by GHC's dead code
         # elimination on aarch64-darwin. (see
-        # https://github.com/NixOS/nixpkgs/issues/140774 for details).
+        # https://github.com/NixOS/nixpkgs/issues/140774 for details). krank:ignore-line
         (
           if lib.versionOlder version "9.10" then
             ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
@@ -239,12 +217,17 @@
           hash = "sha256-sb+AHdkGkCu8MW0xoQIpD5kEc0zYX8udAMDoC+TWc0Q=";
         })
       ]
+      ++ lib.optionals stdenv.targetPlatform.isGhcjs [
+        # https://gitlab.haskell.org/ghc/ghc/-/issues/26290
+        ./export-heap-methods.patch
+      ]
       # Prevents passing --hyperlinked-source to haddock. Note that this can
       # be configured via a user defined flavour now. Unfortunately, it is
       # impossible to import an existing flavour in UserSettings, so patching
       # the defaults is actually simpler and less maintenance intensive
       # compared to keeping an entire flavour definition in sync with upstream
-      # manually. See also https://gitlab.haskell.org/ghc/ghc/-/issues/23625
+      # manually.
+      # See also https://gitlab.haskell.org/ghc/ghc/-/issues/23625 krank:ignore-line
       ++ lib.optionals (!enableHyperlinkedSource) [
         (
           if lib.versionOlder version "9.8" then
@@ -279,7 +262,7 @@
           ]
       # Fixes stack overrun in rts which crashes an process whenever
       # freeHaskellFunPtr is called with nixpkgs' hardening flags.
-      # https://gitlab.haskell.org/ghc/ghc/-/issues/25485
+      # https://gitlab.haskell.org/ghc/ghc/-/issues/25485 krank:ignore-line
       # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13599
       ++ lib.optionals (lib.versionOlder version "9.13") [
         (fetchpatch {
@@ -292,7 +275,9 @@
       # Missing ELF symbols
       ++ lib.optionals stdenv.targetPlatform.isAndroid [
         ./ghc-define-undefined-elf-st-visibility.patch
-      ];
+      ]
+
+      ++ (import ./common-llvm-patches.nix { inherit lib version fetchpatch; });
 
     stdenv = stdenvNoCC;
   },
@@ -348,6 +333,8 @@ let
     # documentation) makes the GHC RTS able to load static libraries, which may
     # be needed for TemplateHaskell. This solution was described in
     # https://www.tweag.io/blog/2020-09-30-bazel-static-haskell
+    #
+    # Note `-fexternal-dynamic-refs` causes `undefined reference` errors when building GHC cross compiler for windows
     lib.optionals enableRelocatedStaticLibs [
       "*.*.ghc.*.opts += -fPIC -fexternal-dynamic-refs"
     ]
@@ -780,14 +767,8 @@ stdenv.mkDerivation (
 
     checkTarget = "test";
 
-    # GHC cannot currently produce outputs that are ready for `-pie` linking.
-    # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
-    # See:
-    # * https://github.com/NixOS/nixpkgs/issues/129247
-    # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
     hardeningDisable = [
       "format"
-      "pie"
     ];
 
     # big-parallel allows us to build with more than 2 cores on
@@ -808,7 +789,8 @@ stdenv.mkDerivation (
 
     ''
     # the bindist configure script uses different env variables than the GHC configure script
-    # see https://github.com/NixOS/nixpkgs/issues/267250 and https://gitlab.haskell.org/ghc/ghc/-/issues/24211
+    # see https://github.com/NixOS/nixpkgs/issues/267250 krank:ignore-line
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/24211  krank:ignore-line
     + lib.optionalString (stdenv.targetPlatform.linker == "cctools") ''
       export InstallNameToolCmd=$INSTALL_NAME_TOOL
       export OtoolCmd=$OTOOL
@@ -894,8 +876,6 @@ stdenv.mkDerivation (
       timeout = 24 * 3600;
       platforms = lib.platforms.all;
       inherit (bootPkgs.ghc.meta) license;
-      # To be fixed by <https://github.com/NixOS/nixpkgs/pull/440774>.
-      broken = useLLVM;
     };
 
     dontStrip = targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm;

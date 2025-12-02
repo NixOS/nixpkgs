@@ -1,6 +1,7 @@
 {
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   lib,
   cmake,
   qtbase,
@@ -13,17 +14,25 @@
   wrapQtAppsHook,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vite";
-  version = "unstable-2022-05-17";
+  version = "1.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.inria.fr";
     owner = "solverstack";
     repo = "vite";
-    rev = "6d497cc519fac623e595bd174e392939c4de845c";
-    hash = "sha256-Yf2jYALZplIXzVtd/sg6gzEYrZ+oU0zLG1ETd/hiTi0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-z2M4BazLzO/NCcq/VKb+tgrZ6QUs+AX0BbzJW809Krg=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "cmake4-fix";
+      url = "https://gitlab.inria.fr/solverstack/vite/-/commit/0359f78c8b11ced3a79ac4d73f4ecb9087eba1e8.patch";
+      hash = "sha256-UMg21ZlwyRSVQ4CD1oKNUkT+RNxqOIQi2WNBLbYPkJg=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -54,4 +63,4 @@ stdenv.mkDerivation {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

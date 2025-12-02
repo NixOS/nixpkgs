@@ -71,14 +71,7 @@ in
         The contents of the specified paths will be read at service start time and merged with the attributes provided in `settings`.
       '';
       default = { };
-      type =
-        with lib.types;
-        nullOr (
-          attrsOf (pathWith {
-            inStore = false;
-            absolute = true;
-          })
-        );
+      type = with lib.types; nullOr (attrsOf externalPath);
     };
 
     settings = lib.mkOption {
@@ -338,10 +331,10 @@ in
                 proxy_buffering off;
                 proxy_request_buffering off;
               ''
-              + lib.optionalString (lib.elem "brotli" config.services.nginx.additionalModules) ''
+              + lib.optionalString (lib.any (m: m.name == "brotli") config.services.nginx.additionalModules) ''
                 brotli off;
               ''
-              + lib.optionalString (lib.elem "zstd" config.services.nginx.additionalModules) ''
+              + lib.optionalString (lib.any (m: m.name == "zstd") config.services.nginx.additionalModules) ''
                 zstd off;
               '';
             };

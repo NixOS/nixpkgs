@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "inline-snapshot";
-  version = "0.24.0";
+  version = "0.28.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "15r10nk";
     repo = "inline-snapshot";
     tag = version;
-    hash = "sha256-UiVxG9W1lwvvoflVey4250iL8gL8Tm41LBo0ab0tTqk=";
+    hash = "sha256-f572H7jeolv9nONuRBtZR/pcVDs5oX/dOiEjXlJyiio=";
   };
 
   build-system = [ hatchling ];
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     pytestCheckHook
     time-machine
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   optional-dependencies = {
     black = [ black ];

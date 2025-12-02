@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  stdenv,
 
   # build-system
   setuptools,
@@ -29,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "svgdigitizer";
-  version = "0.13.0";
+  version = "0.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "echemdb";
     repo = "svgdigitizer";
     tag = version;
-    hash = "sha256-UlcvCfNoEijIKoqSbufEZ6988rqwT2xDEy4P/9fdgVM=";
+    hash = "sha256-ZOR9CviQhPyJQjbLpR53ZVwaarrICg87vtzCL1nq+jE=";
   };
 
   build-system = [
@@ -68,6 +67,11 @@ buildPythonPackage rec {
   pytestFlags = [
     "--doctest-modules"
     "svgdigitizer"
+  ];
+
+  disabledTests = [
+    # test tries to connect to doi.org
+    "svgdigitizer.pdf.Pdf.bibliographic_entry"
   ];
 
   pythonImportsCheck = [

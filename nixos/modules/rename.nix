@@ -71,10 +71,24 @@ in
       "programs"
       "gnome-documents"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule
+      [
+        "services"
+        "preload"
+      ]
+      ''
+        The corresponding package was removed from nixpkgs,
+        due to lack of usage and being broken since its introduction.
+      ''
+    ) # added 2025-11-29
     (mkRemovedOptionModule [
       "programs"
       "goldwarden"
     ] "'goldwarden' has been removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
+      "file-roller"
+    ] "Not required for the package to function anymore, use `pkgs.file-roller` instead.")
     (mkRemovedOptionModule [ "programs" "pantheon-tweaks" ] ''
       pantheon-tweaks is no longer a switchboard plugin but an independent app,
       adding the package to environment.systemPackages is sufficient.
@@ -234,6 +248,10 @@ in
     (mkRemovedOptionModule [ "services" "pantheon" "files" ] ''
       This module was removed, please add pkgs.pantheon.elementary-files to environment.systemPackages directly.
     '')
+    (mkRemovedOptionModule [ "services" "parsoid" ] ''
+      The Javascript version of Parsoid configured through this module does not work with modern MediaWiki versions,
+      and has been deprecated by upstream, so it has been removed. MediaWiki comes with a new PHP-based parser built-in, so there is no need for this module.
+    '')
     (mkRemovedOptionModule [ "services" "polipo" ] ''
       The polipo project is unmaintained and archived upstream.
     '')
@@ -244,6 +262,9 @@ in
       "services"
       "quagga"
     ] "the corresponding package has been removed from nixpkgs")
+    (mkRemovedOptionModule [ "services" "quorum" ] ''
+      The corresponding package was broken, abandoned upstream and thus removed from nixpkgs.
+    '')
     (mkRemovedOptionModule [
       "services"
       "railcar"
@@ -419,6 +440,9 @@ in
       as an hardware RNG, as it will automatically run the krngd task
       to periodically collect random data from the device and mix it
       into the kernel's RNG.
+    '')
+    (mkRemovedOptionModule [ "virtualisation" "multipass" ] ''
+      virtualisation.multipass has been removed since it was unmaintained in nixpkgs
     '')
     # Do NOT add any option renames here, see top of the file
   ];

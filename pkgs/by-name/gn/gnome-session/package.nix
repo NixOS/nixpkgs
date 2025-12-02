@@ -7,9 +7,10 @@
   ninja,
   pkg-config,
   gnome,
+  gobject-introspection,
   adwaita-icon-theme,
   glib,
-  gtk3,
+  gtk4,
   gsettings-desktop-schemas,
   gnome-desktop,
   gnome-settings-daemon,
@@ -19,22 +20,21 @@
   libICE,
   xmlto,
   docbook_xsl,
-  docbook_xml_dtd_412,
+  docbook_xml_dtd_45,
   python3,
   libxslt,
   gettext,
-  makeWrapper,
   systemd,
   xorg,
   libepoxy,
-  bash,
   gnome-session-ctl,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-session";
   # Also bump ./ctl.nix when bumping major version.
-  version = "48.0";
+  version = "49.2";
 
   outputs = [
     "out"
@@ -43,34 +43,32 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-session/${lib.versions.major finalAttrs.version}/gnome-session-${finalAttrs.version}.tar.xz";
-    hash = "sha256-3ZCfvFsizb2y/E3xpH140bWUPMxeYeaiChhGJGNHxBc=";
+    hash = "sha256-/NtPRdamDYTp7K4eN0C6tuVbqwy0ng+zgoDps486hIU=";
   };
 
   patches = [
-    (replaceVars ./fix-paths.patch {
-      gsettings = "${glib.bin}/bin/gsettings";
-      dbusLaunch = "${dbus.lib}/bin/dbus-launch";
-      bash = "${bash}/bin/bash";
-    })
+    # https://github.com/NixOS/nixpkgs/pull/48517
+    ./nixos_set_environment_done.patch
   ];
 
   nativeBuildInputs = [
+    gobject-introspection.setupHook
     meson
     ninja
     pkg-config
     gettext
-    makeWrapper
     xmlto
     libxslt
     docbook_xsl
-    docbook_xml_dtd_412
+    docbook_xml_dtd_45
     python3
     dbus # for DTD
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     glib
-    gtk3
+    gtk4
     libICE
     gnome-desktop
     json-glib
@@ -107,15 +105,11 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf $out/libexec/gnome-session-ctl
   '';
 
-  # `bin/gnome-session` will reset the environment when run in wayland, we
-  # therefor wrap `libexec/gnome-session-binary` instead which is the actual
-  # binary needing wrapping
   preFixup = ''
-    wrapProgram "$out/libexec/gnome-session-binary" \
-      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --suffix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
-      --suffix XDG_DATA_DIRS : "${gnome-shell}/share" \
+    gappsWrapperArgs+=(
+      --suffix XDG_DATA_DIRS : "${gnome-shell}/share"
       --suffix XDG_CONFIG_DIRS : "${gnome-settings-daemon}/etc/xdg"
+    )
   '';
 
   separateDebugInfo = true;
@@ -126,7 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
     };
     providedSessions = [
       "gnome"
-      "gnome-xorg"
     ];
   };
 

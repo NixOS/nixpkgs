@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   ninja,
   git,
@@ -15,9 +14,12 @@
   spirv-headers,
 }:
 
+let
+  llvmVersion = "16.0.6";
+in
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "2.18.5";
+  version = "2.22.2";
 
   # See the repository for expected versions:
   # <https://github.com/intel/intel-graphics-compiler/blob/v2.16.0/documentation/build_ubuntu.md#revision-table>
@@ -27,35 +29,35 @@ stdenv.mkDerivation rec {
       owner = "intel";
       repo = "intel-graphics-compiler";
       tag = "v${version}";
-      hash = "sha256-AvEeK3rySEu89br4JgeZlXVQ6IXEzStVZYvehzdWq7g=";
+      hash = "sha256-4Tp9kY+Sbirf4kN/C5Q1ClcoUI/fhfUJpqL+/eO8a/o=";
     })
     (fetchFromGitHub {
       name = "llvm-project";
       owner = "llvm";
       repo = "llvm-project";
-      tag = "llvmorg-15.0.7";
-      hash = "sha256-wjuZQyXQ/jsmvy6y1aksCcEDXGBjuhpgngF3XQJ/T4s=";
+      tag = "llvmorg-${llvmVersion}";
+      hash = "sha256-fspqSReX+VD+Nl/Cfq+tDcdPtnQPV1IRopNDfd5VtUs=";
     })
     (fetchFromGitHub {
       name = "vc-intrinsics";
       owner = "intel";
       repo = "vc-intrinsics";
-      tag = "v0.23.1";
-      hash = "sha256-7coQegLcgIKiqnonZmgrKlw6FCB3ltSh6oMMvdopeQc=";
+      tag = "v0.23.4";
+      hash = "sha256-zorhOhBTcymnAlShJxJecXD+HIfScGouhSea/A3tBXE=";
     })
     (fetchFromGitHub {
       name = "opencl-clang";
       owner = "intel";
       repo = "opencl-clang";
-      tag = "v15.0.3";
-      hash = "sha256-JkYFmnDh7Ot3Br/818aLN33COEG7+xyOf8OhdoJX9Cw==";
+      tag = "v16.0.5";
+      hash = "sha256-JfynEsCXltVdVY/LqWvZwzWfzEFUz6nI9Zub+bze1zE=";
     })
     (fetchFromGitHub {
       name = "llvm-spirv";
       owner = "KhronosGroup";
       repo = "SPIRV-LLVM-Translator";
-      tag = "v15.0.15";
-      hash = "sha256-kFVDS+qwoG1AXrZ8LytoiLVbZkTGR9sO+Wrq3VGgWNQ=";
+      tag = "v16.0.18";
+      hash = "sha256-JwFwjHUv1tBC7KDWAhkse557R6QCaVjOekhndQlVetM=";
     })
   ];
 
@@ -90,6 +92,10 @@ stdenv.mkDerivation rec {
     substituteInPlace llvm-project/llvm/projects/opencl-clang/cmake/modules/CMakeFunctions.cmake \
       --replace-fail 'COMMAND ''${GIT_EXECUTABLE} am --3way --ignore-whitespace -C0 ' \
                      'COMMAND patch -p1 --ignore-whitespace -i '
+
+    # match default LLVM version with our provided version to apply correct patches
+    substituteInPlace igc/external/llvm/llvm_preferred_version.cmake \
+      --replace-fail "16.0.6" "${llvmVersion}"
   '';
 
   nativeBuildInputs = [

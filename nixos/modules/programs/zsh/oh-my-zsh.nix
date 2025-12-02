@@ -15,7 +15,7 @@ let
       env = pkgs.buildEnv {
         name = "zsh-${name}-env";
         paths = cfg.customPkgs;
-        pathsToLink = "/share/zsh/${dir}";
+        pathsToLink = [ "/share/zsh/${dir}" ];
       };
     in
     {

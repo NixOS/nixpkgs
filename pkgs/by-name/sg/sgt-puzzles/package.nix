@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sgt-puzzles";
-  version = "20251021.790f585";
+  version = "20251127.a4f68b6";
 
   src = fetchurl {
     url = "http://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${finalAttrs.version}.tar.gz";
-    hash = "sha256-4EZgFswP0oqjS0OZbkyTHCs7dKm2PgUKpsJWssQAvQ4=";
+    hash = "sha256-NaRLonSMOKZaZjttBDnM2VV1oa21rLDISvSyV8F9tQ0=";
   };
 
   sgt-puzzles-menu = fetchurl {
@@ -94,7 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       raskin
       tomfitzhenry
-      iedame
     ];
     platforms = lib.platforms.linux;
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/puzzles/";

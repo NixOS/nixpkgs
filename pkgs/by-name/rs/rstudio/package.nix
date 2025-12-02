@@ -24,7 +24,6 @@
   yarnConfigHook,
   zip,
 
-  apple-sdk_11,
   boost187,
   electron_37,
   fontconfig,
@@ -159,9 +158,6 @@ stdenv.mkDerivation rec {
     R
     soci
     sqlite.dev
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_11
   ]
   ++ lib.optionals (!server) [
     fontconfig
@@ -365,7 +361,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       ciil
-      cfhammill
       tomasajt
     ];
     mainProgram = "rstudio" + lib.optionalString server "-server";

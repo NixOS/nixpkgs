@@ -6,7 +6,6 @@
   autoAddDriverRunpath,
   autoPatchelfHook,
   backendStdenv,
-  config,
   cudaMajorMinorVersion,
   cudaMajorVersion,
   cudaNamePrefix,
@@ -14,7 +13,7 @@
   lib,
   manifests,
   markForCudatoolkitRootHook,
-  setupCudaHook,
+  removeStubsFromRunpathHook,
   srcOnly,
   stdenv,
   stdenvNoCC,
@@ -24,6 +23,7 @@ let
   inherit (_cuda.lib) getNixSystems _mkCudaVariant mkRedistUrl;
   inherit (lib.attrsets)
     foldlAttrs
+    getDev
     hasAttr
     isAttrs
     attrNames
@@ -55,6 +55,7 @@ let
     ;
   inherit (lib.strings)
     concatMapStringsSep
+    optionalString
     toUpper
     stringLength
     substring
@@ -138,6 +139,8 @@ extendMkDerivation {
 
       # Fixups
       appendRunpaths ? [ ],
+      includeRemoveStubsFromRunpathHook ? elem "stubs" finalAttrs.outputs,
+      postFixup ? "",
 
       # Extra
       passthru ? { },
@@ -201,7 +204,10 @@ extendMkDerivation {
         outputPython = [ "python" ];
         outputSamples = [ "samples" ];
         outputStatic = [ "static" ];
-        outputStubs = [ "stubs" ];
+        outputStubs = [
+          "stubs"
+          "lib"
+        ];
       },
       ...
     }:
@@ -266,6 +272,9 @@ extendMkDerivation {
         # in typically /lib/opengl-driver by adding that
         # directory to the rpath of all ELF binaries.
         # Check e.g. with `patchelf --print-rpath path/to/my/binary
+        # TODO(@connorbaker): Given we'll have stubs available, we can switch from autoPatchelfIgnoreMissingDeps to
+        # allowing autoPatchelf to find and link against the stub files and rely on removeStubsFromRunpathHook to
+        # automatically find and replace those references with ones to the driver link lib directory.
         autoAddDriverRunpath
         markForCudatoolkitRootHook
       ]
@@ -332,6 +341,16 @@ extendMkDerivation {
 
       inherit doInstallCheck;
       inherit allowFHSReferences;
+      inherit includeRemoveStubsFromRunpathHook;
+
+      postFixup =
+        postFixup
+        + optionalString finalAttrs.includeRemoveStubsFromRunpathHook ''
+          nixLog "installing stub removal runpath hook"
+          mkdir -p "''${!outputStubs:?}/nix-support"
+          printWords >>"''${!outputStubs:?}/nix-support/propagated-build-inputs" \
+            "${getDev removeStubsFromRunpathHook}"
+        '';
 
       passthru = passthru // {
         inherit redistName release;

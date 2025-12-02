@@ -16,16 +16,16 @@ let
   variants = {
     # ./update-zen.py zen
     zen = {
-      version = "6.17.6"; # zen
+      version = "6.17.9"; # zen
       suffix = "zen1"; # zen
-      sha256 = "0kkrfmxj1q7il7njc1s8fnn459rcgviyy5q2kbynasrqij5kdciy"; # zen
+      sha256 = "0xrmhs2kabiszdldqx7c4bj3zicbslvvgmw8j77zlc49zddxhz1q"; # zen
       isLqx = false;
     };
     # ./update-zen.py lqx
     lqx = {
-      version = "6.17.5"; # lqx
+      version = "6.17.9"; # lqx
       suffix = "lqx1"; # lqx
-      sha256 = "1jgwpxw1h27kphj0rrf1b9dbhj4jlycr6lnykv8dhf3m0p5vjn46"; # lqx
+      sha256 = "0c1b73yzj5g783qrz3pydq2ilk57bmb867y48spxr1jxncxml8dz"; # lqx
       isLqx = true;
     };
   };

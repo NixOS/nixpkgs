@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromSourcehut,
-  fetchpatch,
   asciidoc,
   cmocka,
   docbook_xsl,
@@ -10,15 +9,20 @@
   meson,
   ninja,
   pkg-config,
-  icu75,
+  tinyxxd,
+  icu,
   pango,
   inih,
   withWindowSystem ? if stdenv.hostPlatform.isLinux then "all" else "x11",
   xorg,
   libxkbcommon,
-  libGLU,
+  libGL,
   wayland,
+  wayland-protocols,
+  wayland-scanner,
+  versionCheckHook,
   withBackends ? [
+    "farbfeld"
     "libjxl"
     "libtiff"
     "libjpeg"
@@ -26,6 +30,9 @@
     "librsvg"
     "libheif"
     "libnsgif"
+    "libnsbmp"
+    "libwebp"
+    "qoi"
   ],
   libtiff,
   libjpeg_turbo,
@@ -34,17 +41,23 @@
   librsvg,
   libnsgif,
   libheif,
+  libnsbmp,
+  libwebp,
+  qoi,
 }:
 
 let
   windowSystems = {
     all = windowSystems.x11 ++ windowSystems.wayland;
     x11 = [
-      libGLU
       xorg.libxcb
       xorg.libX11
     ];
-    wayland = [ wayland ];
+    wayland = [
+      wayland
+      wayland-scanner
+      wayland-protocols
+    ];
   };
 
   backends = {
@@ -55,14 +68,15 @@ let
       libheif
       libjxl
       libnsgif
+      libnsbmp
+      libwebp
+      qoi
       ;
+    farbfeld = null; # builtin
     libjpeg = libjpeg_turbo;
-    freeimage = throw "freeimage backend not supported";
   };
 
-  backendFlags = map (
-    b: if builtins.elem b withBackends then "-D${b}=enabled" else "-D${b}=disabled"
-  ) (builtins.attrNames backends);
+  backendFlags = map (b: lib.mesonEnable b (lib.elem b withBackends)) (lib.attrNames backends);
 in
 
 # check that given window system is valid
@@ -72,9 +86,9 @@ assert builtins.all (
   b: lib.assertOneOf "each backend" b (builtins.attrNames backends)
 ) withBackends;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imv";
-  version = "4.5.0";
+  version = "5.0.1";
   outputs = [
     "out"
     "man"
@@ -83,14 +97,14 @@ stdenv.mkDerivation rec {
   src = fetchFromSourcehut {
     owner = "~exec64";
     repo = "imv";
-    rev = "v${version}";
-    sha256 = "sha256-aJ2EXgsS0WUTxMqC1Q+uOWLG8BeuwAyXPmJB/9/NCCU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2JTs/hj6t9wEZKoUpcLDFulbdU/grDlQkuEAE7uayDs=";
   };
 
   mesonFlags = [
-    "-Dwindows=${withWindowSystem}"
-    "-Dtest=enabled"
-    "-Dman=enabled"
+    (lib.mesonOption "windows" withWindowSystem)
+    (lib.mesonEnable "test" finalAttrs.finalPackage.doCheck)
+    (lib.mesonEnable "man" true)
   ]
   ++ backendFlags;
 
@@ -106,8 +120,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cmocka
-    icu75
+    libGL
+    icu
     libxkbcommon
     pango
     inih
@@ -115,40 +129,28 @@ stdenv.mkDerivation rec {
   ++ windowSystems."${withWindowSystem}"
   ++ map (b: backends."${b}") withBackends;
 
-  patches = [
-    (fetchpatch {
-      # https://lists.sr.ht/~exec64/imv-devel/patches/55937
-      name = "update libnsgif backend";
-      url = "https://lists.sr.ht/~exec64/imv-devel/%3C20241113012702.30521-2-reallyjohnreed@gmail.com%3E/raw";
-      hash = "sha256-/OQeDfIkPtJIIZwL8jYVRy0B7LSBi9/NvAdPoDm851k=";
-    })
+  doCheck = true;
+  nativeCheckInputs = [
+    tinyxxd
+  ];
+  checkInputs = [
+    cmocka
   ];
 
-  postInstall = ''
-    install -Dm644 ../files/imv.desktop $out/share/applications/
-  '';
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
 
-  postFixup = lib.optionalString (withWindowSystem == "all") ''
-    # The `bin/imv` script assumes imv-wayland or imv-x11 in PATH,
-    # so we have to fix those to the binaries we installed into the /nix/store
-
-    substituteInPlace "$out/bin/imv" \
-      --replace-fail "imv-wayland" "$out/bin/imv-wayland" \
-      --replace-fail "imv-x11" "$out/bin/imv-x11"
-  '';
-
-  doCheck = true;
-
-  meta = with lib; {
+  meta = {
     description = "Command line image viewer for tiling window managers";
     homepage = "https://sr.ht/~exec64/imv/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       rnhmjoj
       markus1189
     ];
-    platforms = platforms.all;
-    badPlatforms = platforms.darwin;
+    platforms = lib.platforms.all;
+    badPlatforms = lib.platforms.darwin;
     mainProgram = "imv";
   };
-}
+})

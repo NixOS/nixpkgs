@@ -8,7 +8,6 @@
   platformio,
   esptool,
   git,
-  inetutils,
   versionCheckHook,
   nixosTests,
 }:
@@ -34,14 +33,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2025.10.3";
+  version = "2025.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = version;
-    hash = "sha256-k/wqS5koXQ/hGhDNhxuv/t496+f0YPHZibkUjRyCjwo=";
+    hash = "sha256-nu5sJkihCptZ3KSBE/8xR31yl7gnFQQdT+auLQ2qEw0=";
   };
 
   patches = [
@@ -76,13 +75,10 @@ python.pkgs.buildPythonApplication rec {
   # Remove esptool and platformio from requirements
   env.ESPHOME_USE_SUBPROCESS = "";
 
-  # esphome has optional dependencies it does not declare, they are
-  # loaded when certain config blocks are used.
-  # They have validation functions like:
-  # - validate_cryptography_installed for the wifi component
   dependencies = with python.pkgs; [
     aioesphomeapi
     argcomplete
+    bleak
     cairosvg
     click
     colorama
@@ -92,35 +88,30 @@ python.pkgs.buildPythonApplication rec {
     freetype-py
     icmplib
     jinja2
-    kconfiglib
-    packaging
     paho-mqtt
     pillow
     platformio
-    protobuf
     puremagic
     pyparsing
     pyserial
     pyyaml
-    requests
     ruamel-yaml
     tornado
     tzdata
     tzlocal
     voluptuous
+    zeroconf
   ];
 
   makeWrapperArgs = [
     # platformio is used in esphome/platformio_api.py
     # esptool is used in esphome/__main__.py
-    # git is used in esphome/writer.py
-    # inetutils is used in esphome/dashboard/status/ping.py
+    # git is used in esphome/git.py
     "--prefix PATH : ${
       lib.makeBinPath [
         platformio
         esptool
         git
-        inetutils
       ]
     }"
     "--prefix PYTHONPATH : ${python.pkgs.makePythonPath dependencies}" # will show better error messages
@@ -134,7 +125,7 @@ python.pkgs.buildPythonApplication rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs =
-    with python3Packages;
+    with python.pkgs;
     [
       hypothesis
       mock
@@ -143,7 +134,10 @@ python.pkgs.buildPythonApplication rec {
       pytest-mock
       pytestCheckHook
     ]
-    ++ [ versionCheckHook ];
+    ++ [
+      git
+      versionCheckHook
+    ];
 
   disabledTestPaths = [
     # platformio builds; requires networking for dependency resolution
@@ -156,7 +150,7 @@ python.pkgs.buildPythonApplication rec {
 
   postInstall =
     let
-      argcomplete = lib.getExe' python3Packages.argcomplete "register-python-argcomplete";
+      argcomplete = lib.getExe' python.pkgs.argcomplete "register-python-argcomplete";
     in
     ''
       installShellCompletion --cmd esphome \
@@ -178,6 +172,9 @@ python.pkgs.buildPythonApplication rec {
     "test_upload_using_esptool_with_file_path"
     # AssertionError: Expected 'run_external_command' to have been called once. Called 0 times.
     "test_run_platformio_cli_sets_environment_variables"
+    # Expects a full git clone
+    "test_clang_tidy_mode_full_scan"
+    "test_clang_tidy_mode_targeted_scan"
   ];
 
   versionCheckProgramArg = "--version";
@@ -198,6 +195,7 @@ python.pkgs.buildPythonApplication rec {
     ];
     maintainers = with lib.maintainers; [
       hexa
+      thanegill
     ];
     mainProgram = "esphome";
   };

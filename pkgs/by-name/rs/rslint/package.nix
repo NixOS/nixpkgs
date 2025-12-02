@@ -24,6 +24,11 @@ rustPlatform.buildRustPackage rec {
     "rslint_lsp"
   ];
 
+  patches = [
+    # This patch comes from https://github.com/rslint/rslint/pull/165, which was unmerged.
+    ./fix-rustc-1.89-compatibility.patch
+  ];
+
   meta = with lib; {
     description = "Fast, customizable, and easy to use JavaScript and TypeScript linter";
     homepage = "https://rslint.org";

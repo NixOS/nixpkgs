@@ -20,6 +20,23 @@ in
       description = "FQDN for the OnlyOffice instance.";
     };
 
+    securityNonceFile = lib.mkOption {
+      type = lib.types.str;
+      example = "/run/keys/onlyoffice-nginx-nonce.conf";
+      description = ''
+        File holding nginx configuration that sets the nonce used to create secret links.
+
+        Example:
+        ```
+        set $secure_link_secret "changeme";
+        ```
+
+        This file must be readable both by nginx and by the onlyoffice
+        documentserver. Since nginx is added to the onlyoffice group,
+        you may want to make the file readable to the onlyoffice group.
+      '';
+    };
+
     jwtSecretFile = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
@@ -147,7 +164,7 @@ in
               alias /var/lib/onlyoffice/documentserver/App_Data$1;
               more_set_headers "Content-Disposition: attachment; filename*=UTF-8''$arg_filename";
 
-              set $secure_link_secret verysecretstring;
+              include ${cfg.securityNonceFile};
               secure_link $arg_md5,$arg_expires;
               secure_link_md5 "$secure_link_expires$uri$secure_link_secret";
 
@@ -279,7 +296,9 @@ in
 
             # for a mapping of environment variables from the docker container to json options see
             # https://github.com/ONLYOFFICE/Docker-DocumentServer/blob/master/run-document-server.sh
+            FS_SECRET_STRING=$(cut -d '"' -f 2 < ${cfg.securityNonceFile})
             jq '
+              .storage.fs.secretString = "'$FS_SECRET_STRING'" |
               .services.CoAuthoring.server.port = ${toString cfg.port} |
               .services.CoAuthoring.sql.dbHost = "${cfg.postgresHost}" |
               .services.CoAuthoring.sql.dbName = "${cfg.postgresName}" |
@@ -315,6 +334,7 @@ in
           after = [
             "network.target"
             "postgresql.target"
+            "rabbitmq.service"
           ];
           requires = [ "postgresql.target" ];
           wantedBy = [ "multi-user.target" ];
@@ -343,4 +363,6 @@ in
 
     users.groups.onlyoffice = { };
   };
+
+  meta.maintainers = with lib.maintainers; [ raboof ];
 }

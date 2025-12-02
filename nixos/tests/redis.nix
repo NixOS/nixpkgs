@@ -10,7 +10,7 @@ let
   mkTestName =
     pkg: "${pkg.pname}_${builtins.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor pkg.version)}";
   redisPackages = {
-    inherit (pkgs) redis keydb valkey;
+    inherit (pkgs) redis valkey;
   };
   makeRedisTest =
     {

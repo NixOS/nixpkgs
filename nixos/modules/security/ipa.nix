@@ -4,7 +4,7 @@
   pkgs,
   ...
 }:
-with lib;
+
 let
   cfg = config.security.ipa;
 
@@ -30,17 +30,17 @@ in
 {
   options = {
     security.ipa = {
-      enable = mkEnableOption "FreeIPA domain integration";
+      enable = lib.mkEnableOption "FreeIPA domain integration";
 
-      certificate = mkOption {
-        type = types.package;
+      certificate = lib.mkOption {
+        type = lib.types.package;
         description = ''
           IPA server CA certificate.
 
           Use `nix-prefetch-url http://$server/ipa/config/ca.crt` to
           obtain the file and the hash.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           pkgs.fetchurl {
             url = "http://ipa.example.com/ipa/config/ca.crt";
             hash = lib.fakeHash;
@@ -48,87 +48,109 @@ in
         '';
       };
 
-      domain = mkOption {
-        type = types.str;
+      domain = lib.mkOption {
+        type = lib.types.str;
         example = "example.com";
         description = "Domain of the IPA server.";
       };
 
-      realm = mkOption {
-        type = types.str;
+      realm = lib.mkOption {
+        type = lib.types.str;
         example = "EXAMPLE.COM";
         description = "Kerberos realm.";
       };
 
-      server = mkOption {
-        type = types.str;
+      server = lib.mkOption {
+        type = lib.types.str;
         example = "ipa.example.com";
         description = "IPA Server hostname.";
       };
 
-      basedn = mkOption {
-        type = types.str;
+      basedn = lib.mkOption {
+        type = lib.types.str;
         example = "dc=example,dc=com";
         description = "Base DN to use when performing LDAP operations.";
       };
 
-      offlinePasswords = mkOption {
-        type = types.bool;
+      offlinePasswords = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Whether to store offline passwords when the server is down.";
       };
 
-      cacheCredentials = mkOption {
-        type = types.bool;
+      cacheCredentials = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Whether to cache credentials.";
       };
 
-      ipaHostname = mkOption {
-        type = types.str;
+      useAsTimeserver = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Whether to add the IPA server to the timeserver.";
+      };
+
+      ipaHostname = lib.mkOption {
+        type = lib.types.str;
         example = "myworkstation.example.com";
         default =
           if config.networking.domain != null then
             config.networking.fqdn
           else
             "${config.networking.hostName}.${cfg.domain}";
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           if config.networking.domain != null then config.networking.fqdn
           else "''${networking.hostName}.''${security.ipa.domain}"
         '';
         description = "Fully-qualified hostname used to identify this host in the IPA domain.";
       };
 
-      ifpAllowedUids = mkOption {
-        type = types.listOf types.str;
+      ifpAllowedUids = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ "root" ];
         description = "A list of users allowed to access the ifp dbus interface.";
       };
 
       dyndns = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = "Whether to enable FreeIPA automatic hostname updates.";
         };
 
-        interface = mkOption {
-          type = types.str;
+        interface = lib.mkOption {
+          type = lib.types.str;
           example = "eth0";
           default = "*";
           description = "Network interface to perform hostname updates through.";
         };
       };
 
-      chromiumSupport = mkOption {
-        type = types.bool;
+      chromiumSupport = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Whether to whitelist the FreeIPA domain in Chromium.";
+      };
+
+      shells = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = with pkgs; [
+          bash
+          zsh
+        ];
+        defaultText = lib.literalExpression ''
+          with pkgs; [ bash zsh ];
+        '';
+        description = ''
+          List of shells which binaries should be installed to /bin/<name>.
+
+          FreeIPA typicly configures somesthing like /bin/bash into the users shell attribute.
+        '';
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = !config.security.krb5.enable;
@@ -141,21 +163,24 @@ in
     ];
 
     environment.systemPackages = with pkgs; [
-      krb5Full
+      krb5
       freeipa
     ];
 
     environment.etc = {
-      "ipa/default.conf".text = ''
-        [global]
-        basedn = ${cfg.basedn}
-        realm = ${cfg.realm}
-        domain = ${cfg.domain}
-        server = ${cfg.server}
-        host = ${config.networking.hostName}
-        xmlrpc_uri = https://${cfg.server}/ipa/xml
-        enable_ra = True
-      '';
+      "ipa/default.conf".text = lib.generators.toINI { } {
+        global = {
+          inherit (cfg)
+            basedn
+            realm
+            domain
+            server
+            ;
+          host = cfg.ipaHostname;
+          xmlrpc_uri = "https://${cfg.server}/ipa/xml";
+          enable_ra = "True";
+        };
+      };
 
       "ipa/nssdb".source = nssDb;
 
@@ -191,7 +216,7 @@ in
 
       "ldap.conf".source = ldapConf;
 
-      "chromium/policies/managed/freeipa.json" = mkIf cfg.chromiumSupport {
+      "chromium/policies/managed/freeipa.json" = lib.mkIf cfg.chromiumSupport {
         text = builtins.toJSON {
           AuthServerWhitelist = "*.${cfg.domain}";
         };
@@ -248,7 +273,7 @@ in
 
           cache_credentials = cfg.cacheCredentials;
           krb5_store_password_if_offline = cfg.offlinePasswords;
-          krb5_realm = lib.mkIf ((toLower cfg.domain) != (toLower cfg.realm)) cfg.realm;
+          krb5_realm = lib.mkIf ((lib.toLower cfg.domain) != (lib.toLower cfg.realm)) cfg.realm;
 
           dyndns_update = cfg.dyndns.enable;
           dyndns_iface = cfg.dyndns.interface;
@@ -279,13 +304,23 @@ in
 
         ifp = {
           user_attributes = "+mail, +telephoneNumber, +givenname, +sn, +lock";
-          allowed_uids = concatStringsSep ", " cfg.ifpAllowedUids;
+          allowed_uids = lib.concatStringsSep ", " cfg.ifpAllowedUids;
         };
       };
     };
 
-    networking.timeServers = singleton cfg.server;
+    networking.timeServers = lib.optional cfg.useAsTimeserver cfg.server;
 
-    security.pki.certificateFiles = singleton cfg.certificate;
+    security.pki.certificateFiles = lib.singleton cfg.certificate;
+
+    systemd.tmpfiles.settings."10-ipa-shells" = lib.foldl' (
+      acc: pkg:
+      (
+        acc
+        // {
+          ${pkg.shellPath}."L+".argument = "${pkg}${pkg.shellPath}";
+        }
+      )
+    ) { } cfg.shells;
   };
 }

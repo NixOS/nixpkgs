@@ -16,7 +16,6 @@ stdenv.mkDerivation {
     hash = "sha256-rRJrtCcgfbqC/4qQiTVeUUcPqoJlNfitYRqIO58AmpA=";
   };
 
-  hardeningEnable = [ "pie" ];
   preBuild = ''
     # pipe2() is only exposed with _GNU_SOURCE
     # Upstream makefile explicitly uses -O3 to improve SHA-3 performance

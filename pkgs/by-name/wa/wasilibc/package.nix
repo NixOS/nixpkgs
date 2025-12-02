@@ -19,6 +19,12 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  # These flags break pkgsCross.wasi32.llvmPackages.libcxx
+  hardeningDisable = [
+    "libcxxhardeningfast"
+    "libcxxhardeningextensive"
+  ];
+
   outputs = [
     "out"
     "dev"
@@ -64,7 +70,6 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     homepage = "https://wasi.dev";
     platforms = platforms.wasi;
     maintainers = with maintainers; [
-      matthewbauer
       rvolosatovs
       wucke13
     ];

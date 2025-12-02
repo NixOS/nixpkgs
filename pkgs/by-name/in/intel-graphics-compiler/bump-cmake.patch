@@ -8,25 +8,11 @@ are no uses of COMPILE_DEFINITIONS_<CONFIG>.
 
 Signed-off-by: Chris Mayo <aklhfex@gmail.com>
 ---
- IGC/MDAutogen/CMakeLists.txt                    | 2 +-
  external/SPIRV-Tools/CMakeLists.txt             | 2 +-
  visa/CMakeLists.txt                             | 7 +------
  visa/iga/GEDLibrary/GED_external/CMakeLists.txt | 6 +-----
  4 files changed, 4 insertions(+), 13 deletions(-)
 
-diff --git a/IGC/MDAutogen/CMakeLists.txt b/IGC/MDAutogen/CMakeLists.txt
-index c9522feea29d..0a79b3c8e32b 100644
---- a/igc/IGC/MDAutogen/CMakeLists.txt
-+++ b/igc/IGC/MDAutogen/CMakeLists.txt
-@@ -6,7 +6,7 @@
- #
- #============================ end_copyright_notice =============================
- 
--cmake_minimum_required(VERSION 2.8.12)
-+cmake_minimum_required(VERSION 3.5)
- 
- set(_autogenScript "${IGC_SOURCE_DIR}/common/autogen.py")
- set(_autogenSource "${IGC_SOURCE_DIR}/common/MDFrameWork.h")
 diff --git a/external/SPIRV-Tools/CMakeLists.txt b/external/SPIRV-Tools/CMakeLists.txt
 index d2e3f63fb0d3..75f013409990 100644
 --- a/igc/external/SPIRV-Tools/CMakeLists.txt

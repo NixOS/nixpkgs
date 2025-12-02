@@ -7,7 +7,7 @@
     "postgres"
     "url-preview"
   ]
-  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform matrix-synapse-unwrapped.python.pkgs.systemd) "systemd",
+  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform matrix-synapse-unwrapped.python.pkgs.systemd-python) "systemd",
   plugins ? [ ],
 }:
 

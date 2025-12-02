@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "makeself";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "megastep";
     repo = "makeself";
     tag = "release-${version}";
     fetchSubmodules = true;
-    hash = "sha256-QPisihCGnzG9gaZyb/bUroWdPAoC2GdQiz1tSkoScjs=";
+    hash = "sha256-F5lx8B2C8CsEUXQPQTK1q8PAMf5yzIEAqq3zbYnseTs=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

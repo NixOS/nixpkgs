@@ -14,6 +14,8 @@ let
   # Coerces a string to an int.
   coerceInt = val: if lib.isInt val then val else lib.toIntBase10 val;
 
+  coerceIntVersion = v: coerceInt (lib.versions.major v);
+
   # Parses a single version, substituting "latest" with the latest version.
   parseVersion =
     repo: key: version:
@@ -97,8 +99,8 @@ in
   platformVersions ?
     if minPlatformVersion != null && maxPlatformVersion != null then
       let
-        minPlatformVersionInt = coerceInt (parseVersion repo "platforms" minPlatformVersion);
-        maxPlatformVersionInt = coerceInt (parseVersion repo "platforms" maxPlatformVersion);
+        minPlatformVersionInt = coerceIntVersion (parseVersion repo "platforms" minPlatformVersion);
+        maxPlatformVersionInt = coerceIntVersion (parseVersion repo "platforms" maxPlatformVersion);
       in
       lib.range (lib.min minPlatformVersionInt maxPlatformVersionInt) (
         lib.max minPlatformVersionInt maxPlatformVersionInt
@@ -109,10 +111,8 @@ in
           if minPlatformVersion == null then
             1
           else
-            coerceInt (parseVersion repo "platforms" minPlatformVersion);
-        latestPlatformVersionInt = lib.max minPlatformVersionInt (
-          coerceInt (lib.versions.major repo.latest.platforms)
-        );
+            coerceIntVersion (parseVersion repo "platforms" minPlatformVersion);
+        latestPlatformVersionInt = lib.max minPlatformVersionInt (coerceIntVersion repo.latest.platforms);
         firstPlatformVersionInt = lib.max minPlatformVersionInt (
           latestPlatformVersionInt - (lib.max 1 numLatestPlatformVersions) + 1
         );
@@ -190,18 +190,21 @@ let
             map (
               archive:
               (fetchurl {
+                pname = packageInfo.name;
+                version = packageInfo.revision;
                 inherit (archive) url sha1;
                 inherit meta;
                 passthru = {
                   info = packageInfo;
                 };
               }).overrideAttrs
-                (prev: {
-                  # fetchurl won't generate the correct filename if we specify pname and version,
-                  # and we still want the version attribute to show up in search, so specify these in an override
-                  pname = packageInfo.name;
-                  version = packageInfo.revision;
-                })
+                (
+                  finalAttrs: previousAttrs: {
+                    # fetchurl prioritize `pname` and `version` over the specified `name`,
+                    # so specify custom `name` in an override.
+                    name = baseNameOf (lib.head (finalAttrs.urls));
+                  }
+                )
             ) validArchives
           )
         )

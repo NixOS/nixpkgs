@@ -24,8 +24,8 @@ mkDerivation {
   pname = "bruijn";
   version = "0.1.0.0";
   src = fetchzip {
-    url = "https://github.com/marvinborner/bruijn/archive/9b7ff47f7c4d75093fcf6910b8d33aa44e0516ad.tar.gz";
-    sha256 = "1zx2pcrd25gsq6qz0rixpsdwm0h05cjn5f1a2d2ivbmax88yvsjf";
+    url = "https://github.com/marvinborner/bruijn/archive/c37a9d27b9f654b1e0118d32269a1548800b062b.tar.gz";
+    sha256 = "1a667693agsc559yy4k04gxv1hlsgkn3aw64yvg876fbn5dr7sk3";
   };
   isLibrary = true;
   isExecutable = true;

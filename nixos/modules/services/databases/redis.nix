@@ -559,8 +559,7 @@ in
           ];
           RestrictNamespaces = true;
           LockPersonality = true;
-          # we need to disable MemoryDenyWriteExecute for keydb
-          MemoryDenyWriteExecute = cfg.package.pname != "keydb";
+          MemoryDenyWriteExecute = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           PrivateMounts = true;

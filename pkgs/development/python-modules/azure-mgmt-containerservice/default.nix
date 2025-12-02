@@ -1,33 +1,30 @@
 {
   lib,
-  azure-common,
   azure-mgmt-core,
   buildPythonPackage,
   fetchPypi,
-  isodate,
-  pythonOlder,
+  msrest,
+  typing-extensions,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-containerservice";
-  version = "39.1.0";
+  version = "40.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "azure_mgmt_containerservice";
     inherit version;
-    hash = "sha256-bww/5E6Tfo79C2A3vhAjkjWZpSzle4EeMFbYC3+XONA=";
+    hash = "sha256-rNVcrpW3aO/rA3fYPeoH1hDENO7AwIngKTX/MfDj4H0=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    azure-common
+    msrest
     azure-mgmt-core
-    isodate
+    typing-extensions
   ];
 
   # has no tests

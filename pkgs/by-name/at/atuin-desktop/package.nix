@@ -11,6 +11,7 @@
   pkg-config,
   pnpm,
 
+  alsa-lib,
   glib-networking,
   libappindicator-gtk3,
   openssl,
@@ -18,28 +19,28 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin-desktop";
-  version = "0.1.3";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-woYWWDJ2JeyghlRh5IKhPfDy4WmcAGlBJgjBPg1hHq8=";
+    hash = "sha256-XuPbfD6yEt82kHOIiKyxXyKcOkXEF/AsuE7Cde6QNNA=";
   };
 
-  cargoRoot = "backend";
-  buildAndTestSubdir = finalAttrs.cargoRoot;
-  cargoHash = "sha256-tyN9gM8U8kOl62Z0N/plcpTOCbOPuT0kkLI/EKLv/mQ=";
+  cargoRoot = "./.";
+  cargoHash = "sha256-nmxF7IKmdLr2l6y///7pqcEBe7ijTYWSmB3cy6tTf9E=";
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
-    hash = "sha256-y+WZF30R/+nvAVr50SWmMN5kfVb1kYiylAd1IBftoVA=";
+    hash = "sha256-Tdcdghhc4cH+cYIeUy3inChgPfb1i9E7F1mpxxWoW4Q=";
   };
 
   nativeBuildInputs = [
     cargo-tauri.hook
     pnpm.configHook
+    rustPlatform.bindgenHook
 
     nodejs
     pkg-config
@@ -47,6 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook4 ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
     glib-networking
     libappindicator-gtk3
     openssl
@@ -54,8 +56,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
-    # Used upstream: https://github.com/atuinsh/desktop/blob/2f9a90963c4a6299bf35d8a49b0a2ffb8a28ee32/.envrc.
-    NODE_OPTIONS = "--max-old-space-size=5120";
+    # Used upstream: https://github.com/atuinsh/desktop/blob/6ddebdf66c70042defe5587f7f6c433f889b9ef4/.envrc#L1
+    NODE_OPTIONS = "--max-old-space-size=6144";
   };
 
   # Otherwise tauri will look for a private key we don't have.
@@ -71,6 +73,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+  checkFlags = [
+    "--skip=ui::viewport::tests::test_add_line_scrolling"
+    "--skip=ui::viewport::tests::test_line_wrapping"
+  ];
+  doCheck = !stdenv.isDarwin;
+
   meta = {
     description = "Local-first, executable runbook editor";
     homepage = "https://atuin.sh";
@@ -84,6 +92,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     mainProgram = "atuin-desktop";
     platforms = with lib.platforms; windows ++ darwin ++ linux;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

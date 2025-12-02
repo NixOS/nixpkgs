@@ -23,7 +23,9 @@ gccStdenv.mkDerivation rec {
 
   postPatch = ''
     mkdir -p $out/bin
-    substituteInPlace Makefile --replace "/usr/local" "$out"
+    substituteInPlace Makefile \
+      --replace-fail "/usr/local" "$out" \
+      --replace-fail "strip " "${gccStdenv.cc.targetPrefix}strip "
   '';
 
   meta = with lib; {

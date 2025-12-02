@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   django,
-  pythonOlder,
   pytestCheckHook,
   django-polymorphic,
   setuptools,
@@ -16,16 +15,14 @@
 
 buildPythonPackage rec {
   pname = "django-filer";
-  version = "3.3.2";
+  version = "3.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "django-cms";
     repo = "django-filer";
     tag = version;
-    hash = "sha256-XB+imTAcWCj9C6bNAo+uEdrshYKBlhxYXT37l92VW9M=";
+    hash = "sha256-lbt7Tk+BJX9sesIPjZ0bIpE0RzO4nH/TAdimowfYtkA=";
   };
 
   build-system = [ setuptools ];
@@ -34,7 +31,8 @@ buildPythonPackage rec {
     django
     django-polymorphic
     easy-thumbnails
-  ];
+  ]
+  ++ easy-thumbnails.optional-dependencies.svg;
 
   optional-dependencies = {
     heif = [ pillow-heif ];
@@ -52,6 +50,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
+    changelog = "https://github.com/django-cms/django-filer/blob/${src.tag}/CHANGELOG.rst";
     description = "File management application for Django";
     homepage = "https://github.com/django-cms/django-filer";
     license = lib.licenses.mit;

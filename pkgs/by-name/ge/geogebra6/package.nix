@@ -25,7 +25,6 @@ let
     maintainers = with maintainers; [
       voidless
       sikmir
-      iedame
     ];
     license = licenses.geogebra;
     sourceProvenance = with sourceTypes; [

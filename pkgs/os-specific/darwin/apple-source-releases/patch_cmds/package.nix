@@ -14,7 +14,7 @@ mkAppleDerivation {
     "man"
   ];
 
-  xcodeHash = "sha256-FLCJY40l74ExO0WTaA8hb9guhOBXeui2GqWL/7QeJJk=";
+  xcodeHash = "sha256-Ox8Ii2sUuledUttZ64DaHC0iFlUybs3lNZ23IDeziPM=";
 
   nativeBuildInputs = [ pkg-config ];
 

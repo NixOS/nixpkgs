@@ -66,6 +66,11 @@ let
     fixupOptionType
     mergeOptionDecls
     ;
+  inherit (lib.fileset)
+    isFileset
+    unions
+    empty
+    ;
 
   inAttrPosSuffix =
     v: name:
@@ -618,6 +623,15 @@ let
         };
       };
 
+      fileset = mkOptionType {
+        name = "fileset";
+        description = "fileset";
+        descriptionClass = "noun";
+        check = isFileset;
+        merge = loc: defs: unions (map (x: x.value) defs);
+        emptyValue.value = empty;
+      };
+
       # A package is a top-level store path (/nix/store/hash-name). This includes:
       # - derivations
       # - more generally, attribute sets with an `outPath` or `__toString` attribute
@@ -660,6 +674,11 @@ let
 
       pathInStore = pathWith {
         inStore = true;
+      };
+
+      externalPath = pathWith {
+        absolute = true;
+        inStore = false;
       };
 
       pathWith =
@@ -946,7 +965,7 @@ let
         in
         mkOptionType {
           name = "attrTag";
-          description = "attribute-tagged union";
+          description = "attribute-tagged union with choices: ${choicesStr}";
           descriptionClass = "noun";
           getSubOptions =
             prefix: mapAttrs (tagName: tagOption: tagOption // { loc = prefix ++ [ tagName ]; }) tags;

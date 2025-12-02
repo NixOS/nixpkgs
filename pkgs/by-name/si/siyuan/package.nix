@@ -12,6 +12,7 @@
   makeDesktopItem,
   copyDesktopItems,
   nix-update-script,
+  xdg-utils,
 }:
 
 let
@@ -35,20 +36,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
-  version = "3.3.6";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "siyuan-note";
     repo = "siyuan";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LG6JVeP5OmC/8OcUq+a3Xj/BTNB5C4XXhp0VVE8BZ6k=";
+    hash = "sha256-BplxcFV8h0V+eyk2knCpwPCxUo9PdoIHp4mDXXo/HyE=";
   };
 
   kernel = buildGoModule {
     name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
-    vendorHash = "sha256-ZUSfehCqHUZyWHHisulg4x9v+YtnoktqaLDR7SjeGQo=";
+    vendorHash = "sha256-v2I8+1K+Yz+DR2QsJ+1SaKLh3aEIBaR3aXRfwDMNvVs=";
 
     patches = [
       (replaceVars ./set-pandoc-path.patch {
@@ -97,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
       postPatch
       ;
     fetcherVersion = 1;
-    hash = "sha256-uAv/KTkLy/cvVctceBFA5xwlgGeSmbutgUP39zvZIhU=";
+    hash = "sha256-bteZZ9sgYLLvOPSVbqm9E0Hb5x1UdWMu8DtpQHGjbPU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
@@ -138,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
         --add-flags $out/share/siyuan/resources/app \
         --set ELECTRON_FORCE_IS_PACKAGED 1 \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+        --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
         --inherit-argv0
 
     install -Dm644 src/assets/icon.svg $out/share/icons/hicolor/scalable/apps/siyuan.svg

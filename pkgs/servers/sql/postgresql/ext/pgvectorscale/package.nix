@@ -1,6 +1,6 @@
 {
   buildPgrxExtension,
-  cargo-pgrx_0_12_6,
+  cargo-pgrx_0_16_1,
   postgresql,
   fetchFromGitHub,
   lib,
@@ -9,18 +9,18 @@
 
 buildPgrxExtension (finalAttrs: {
   pname = "pgvectorscale";
-  version = "0.7.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "pgvectorscale";
     tag = finalAttrs.version;
-    hash = "sha256-dy481k2SvyYXwwcsyLZSl3XlhSk9C5+4LfEfciB1DK4=";
+    hash = "sha256-whGTJI73wifYkleC+aAbDV4nhwls3uFs1xKcB0zLDRo=";
   };
 
   doCheck = false;
 
-  cargoHash = "sha256-CeRyDn9VhxfjWFJ1/Z/XvOUQOSnDoHHZAqgfYTeKU0o=";
+  cargoHash = "sha256-uaRKUtsUdZPcrQLAixCiEphXQqdsRhi8nSfh9b3w0ao=";
   cargoPatches = [
     ./add-Cargo.lock.patch
   ];
@@ -31,7 +31,7 @@ buildPgrxExtension (finalAttrs: {
   ];
 
   inherit postgresql;
-  cargo-pgrx = cargo-pgrx_0_12_6;
+  cargo-pgrx = cargo-pgrx_0_16_1;
 
   passthru.tests.extension = postgresqlTestExtension {
     inherit (finalAttrs) finalPackage;
@@ -65,11 +65,8 @@ buildPgrxExtension (finalAttrs: {
   };
 
   meta = {
-    # PostgreSQL 18 support issue upstream: https://github.com/timescale/pgvectorscale/issues/249
-    # Check after next package update.
-    broken =
-      lib.warnIf (finalAttrs.version != "0.7.0") "Is postgresql18Packages.pgvectorscale still broken?"
-        (lib.versionAtLeast postgresql.version "18");
+    # Upstream removed support for PostgreSQL 13 on 0.9.0: https://github.com/timescale/pgvectorscale/releases/tag/0.9.0
+    broken = lib.versionOlder postgresql.version "14";
     homepage = "https://github.com/timescale/pgvectorscale";
     teams = [ lib.teams.flyingcircus ];
     description = "Complement to pgvector for high performance, cost efficient vector search on large workloads";

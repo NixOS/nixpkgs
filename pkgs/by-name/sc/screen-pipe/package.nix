@@ -11,7 +11,6 @@
   stdenv,
   alsa-lib,
   xorg,
-  apple-sdk_12,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "screen-pipe";
@@ -47,9 +46,6 @@ rustPlatform.buildRustPackage rec {
     oniguruma
     openssl
     sqlite
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_12
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib

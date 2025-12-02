@@ -456,6 +456,8 @@ in
 
       package = lib.mkPackageOption pkgs "tor" { };
 
+      obfs4Package = lib.mkPackageOption pkgs "obfs4" { };
+
       enableGeoIP =
         lib.mkEnableOption ''
           use of GeoIP databases.
@@ -1055,7 +1057,11 @@ in
           options.MaxClientCircuitsPending = optionInt "MaxClientCircuitsPending";
           options.NATDPort = optionIsolablePorts "NATDPort";
           options.NewCircuitPeriod = optionInt "NewCircuitPeriod";
-          options.Nickname = optionString "Nickname";
+          options.Nickname = lib.mkOption {
+            type = with lib.types; nullOr (strMatching "^[a-zA-Z0-9]{1,19}$");
+            default = null;
+            description = (descriptionGeneric "Nickname");
+          };
           options.ORPort = optionORPort "ORPort";
           options.OfflineMasterKey = optionBool "OfflineMasterKey";
           options.OptimisticData = optionBool "OptimisticData"; # default is null and like "auto"
@@ -1249,7 +1255,7 @@ in
               BridgeRelay = true;
               ExtORPort.port = lib.mkDefault "auto";
               ServerTransportPlugin.transports = lib.mkDefault [ "obfs4" ];
-              ServerTransportPlugin.exec = lib.mkDefault "${lib.getExe pkgs.obfs4} managed";
+              ServerTransportPlugin.exec = lib.mkDefault "${lib.getExe cfg.obfs4Package} managed";
             }
         // lib.optionalAttrs (cfg.relay.role == "private-bridge") {
           ExtraInfoStatistics = false;
@@ -1322,7 +1328,7 @@ in
     systemd.services.tor = {
       description = "Tor Daemon";
       documentation = [ "man:tor(8)" ];
-      path = [ pkgs.tor ];
+      path = [ cfg.package ];
 
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];

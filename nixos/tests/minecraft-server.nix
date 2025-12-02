@@ -15,8 +15,6 @@ in
     {
       environment.systemPackages = [ pkgs.mcrcon ];
 
-      nixpkgs.config.allowUnfree = true;
-
       services.minecraft-server = {
         declarative = true;
         enable = true;

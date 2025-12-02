@@ -38,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/rhgrant10/ndjson";
     changelog = "https://github.com/rhgrant10/ndjson/blob/v${version}/HISTORY.rst";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = [ ];
   };
 }

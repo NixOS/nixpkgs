@@ -114,6 +114,7 @@ let
     with config.boot;
     [
       kernelPackages.kernel
+      (lib.getOutput "modules" kernelPackages.kernel)
       kernelPackages.${pkgs.zfs.kernelModuleAttribute}
     ]
   );

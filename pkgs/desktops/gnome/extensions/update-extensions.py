@@ -32,10 +32,11 @@ supported_versions = {
     "46": "46",
     "47": "47",
     "48": "48",
+    "49": "49",
 }
 
 # shell versions that we want to put into the gnomeExtensions attr set
-versions_to_merge = ["46", "47", "48"]
+versions_to_merge = ["47", "48", "49"]
 
 # Some type alias to increase readability of complex compound types
 PackageName = str

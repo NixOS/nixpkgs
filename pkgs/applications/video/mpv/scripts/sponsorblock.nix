@@ -39,7 +39,7 @@ buildLua {
       --replace-fail 'mp.find_config_file("scripts")' "\"$out/share/mpv/scripts\""
   '';
 
-  extraScripts = [ "sponsorblock_shared" ];
+  extraScriptsToCopy = [ "sponsorblock_shared" ];
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 

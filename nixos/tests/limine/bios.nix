@@ -3,7 +3,6 @@
   name = "bios";
   meta.maintainers = with lib.maintainers; [
     lzcunt
-    phip1611
     programmerlexi
   ];
   meta.platforms = [

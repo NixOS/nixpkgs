@@ -60,9 +60,6 @@ buildGoModule rec {
     homepage = "https://github.com/charmbracelet/vhs";
     changelog = "https://github.com/charmbracelet/vhs/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      maaslalani
-      penguwin
-    ];
+    maintainers = with lib.maintainers; [ maaslalani ];
   };
 }

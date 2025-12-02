@@ -32,12 +32,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-+MNIZQnecFGSE4sA7ywAu73Q6Eww1cB9I/xzqdxMycw=";
   };
 
-  # PIE is incompatible with the "persistent malloc" ("pma") feature.
-  # While build system attempts to pass -no-pie to gcc. nixpkgs' `ld`
-  # wrapped still passes `-pie` flag to linker and breaks linkage.
-  # Let's disable "pie" until `ld` is fixed to do the right thing.
-  hardeningDisable = [ "pie" ];
-
   # When we do build separate interactive version, it makes sense to always include man.
   outputs = [
     "out"

@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "django-debug-toolbar";
-  version = "6.0.0";
+  version = "6.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "jazzband";
     repo = "django-debug-toolbar";
     tag = version;
-    hash = "sha256-ZNevSqEpTdk0cZeMzOpbtatEiV9SAsVUlRb9YddcAGY=";
+    hash = "sha256-gDBir6xf4BBo3KwfVGEUo+Ve5vsmuB12cQqy9sdXSUg=";
   };
 
   postPatch = ''

@@ -15,7 +15,7 @@
   go-md2man,
   nixosTests,
   python3,
-  makeWrapper,
+  makeBinaryWrapper,
   symlinkJoin,
   replaceVars,
   extraPackages ? [ ],
@@ -39,55 +39,20 @@
   coreutils,
   runtimeShell,
 }:
-let
-  # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
-
-  binPath = lib.makeBinPath (
-    lib.optionals stdenv.hostPlatform.isLinux [
-      fuse-overlayfs
-      util-linuxMinimal
-      iptables
-      iproute2
-      nftables
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      vfkit
-    ]
-    ++ extraPackages
-  );
-
-  helpersBin = symlinkJoin {
-    name = "podman-helper-binary-wrapper";
-
-    # this only works for some binaries, others may need to be added to `binPath` or in the modules
-    paths = [
-      gvproxy
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      aardvark-dns
-      catatonit # added here for the pause image and also set in `containersConf` for `init_path`
-      netavark
-      passt
-      conmon
-      crun
-    ]
-    ++ extraRuntimes;
-  };
-in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "podman";
-  version = "5.6.2";
+  version = "5.7.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
-    rev = "v${version}";
-    hash = "sha256-VVPwnzcGOm3UDHtoLbP1I+9NIluMU/wHuerM+ePiKhg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SHIWfY8eKdimwpLfB1NtpF1DBh6qaR5KCDTU4vWAMFw=";
   };
 
   patches = [
     (replaceVars ./hardcode-paths.patch {
-      bin_path = helpersBin;
+      bin_path = finalAttrs.passthru.helpersBin;
     })
 
     # we intentionally don't build and install the helper so we shouldn't display messages to users about it
@@ -107,7 +72,7 @@ buildGoModule rec {
     pkg-config
     go-md2man
     installShellFiles
-    makeWrapper
+    makeBinaryWrapper
     python3
   ];
 
@@ -121,11 +86,14 @@ buildGoModule rec {
     systemd
   ];
 
-  HELPER_BINARIES_DIR = "${PREFIX}/libexec/podman"; # used in buildPhase & installPhase
-  PREFIX = "${placeholder "out"}";
+  env = {
+    HELPER_BINARIES_DIR = "${placeholder "out"}/libexec/podman"; # used in buildPhase & installPhase
+    PREFIX = "${placeholder "out"}";
+  };
 
   buildPhase = ''
     runHook preBuild
+
     patchShebangs .
     ${
       if stdenv.hostPlatform.isDarwin then
@@ -138,11 +106,13 @@ buildGoModule rec {
         ''
     }
     make docs
+
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
+
     ${
       if stdenv.hostPlatform.isDarwin then
         ''
@@ -154,10 +124,11 @@ buildGoModule rec {
         ''
     }
     make install.completions install.man
-    mkdir -p ${HELPER_BINARIES_DIR}
-    ln -s ${helpersBin}/bin/* ${HELPER_BINARIES_DIR}
+    mkdir -p ${finalAttrs.env.HELPER_BINARIES_DIR}
+    ln -s ${finalAttrs.passthru.helpersBin}/bin/* ${finalAttrs.env.HELPER_BINARIES_DIR}
     wrapProgram $out/bin/podman \
-      --prefix PATH : ${lib.escapeShellArg binPath}
+      --prefix PATH : ${lib.escapeShellArg finalAttrs.passthru.binPath}
+
     runHook postInstall
   '';
 
@@ -177,13 +148,47 @@ buildGoModule rec {
   versionCheckKeepEnvironment = [ "HOME" ];
   versionCheckProgramArg = "--version";
 
-  passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
-    inherit (nixosTests) podman;
-    # related modules
-    inherit (nixosTests)
-      podman-tls-ghostunnel
-      ;
-    oci-containers-podman = nixosTests.oci-containers.podman;
+  passthru = {
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      inherit (nixosTests) podman;
+      # related modules
+      inherit (nixosTests)
+        podman-tls-ghostunnel
+        ;
+      oci-containers-podman = nixosTests.oci-containers.podman;
+    };
+    # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
+    binPath = lib.makeBinPath (
+      lib.optionals stdenv.hostPlatform.isLinux [
+        fuse-overlayfs
+        util-linuxMinimal
+        iptables
+        iproute2
+        nftables
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        vfkit
+      ]
+      ++ extraPackages
+    );
+
+    helpersBin = symlinkJoin {
+      name = "podman-helper-binary-wrapper";
+
+      # this only works for some binaries, others may need to be added to `binPath` or in the modules
+      paths = [
+        gvproxy
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        aardvark-dns
+        catatonit # added here for the pause image and also set in `containersConf` for `init_path`
+        netavark
+        passt
+        conmon
+        crun
+      ]
+      ++ extraRuntimes;
+    };
   };
 
   meta = {
@@ -194,9 +199,9 @@ buildGoModule rec {
 
       To install on NixOS, please use the option `virtualisation.podman.enable = true`.
     '';
-    changelog = "https://github.com/containers/podman/blob/v${version}/RELEASE_NOTES.md";
+    changelog = "https://github.com/containers/podman/blob/v${finalAttrs.version}/RELEASE_NOTES.md";
     license = lib.licenses.asl20;
     teams = [ lib.teams.podman ];
     mainProgram = "podman";
   };
-}
+})

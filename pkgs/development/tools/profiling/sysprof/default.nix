@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sysprof";
-  version = "48.0";
+  version = "49.0";
 
   outputs = [
     "out"
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/sysprof/${lib.versions.major finalAttrs.version}/sysprof-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Gw8DgPLzBwi6h4KTIaBv7h2zbfqHeXu/B/CnrPRJjRg=";
+    hash = "sha256-/wQTljd4XIQZSIYgh6QyO5gWgNlCKWQJMhtXT8soKHg=";
   };
 
   nativeBuildInputs = [

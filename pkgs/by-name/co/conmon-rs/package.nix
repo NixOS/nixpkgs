@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "conmon-rs";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "conmon-rs";
     rev = "v${version}";
-    hash = "sha256-FZwX9xihg2mKpHT11FCASyoJ5nDUkAa4Cqk5zRQOfeY=";
+    hash = "sha256-fs+IcibhyoC5+Sbr9lWtBbb0Sk6Uf+YVockXNbCLXCY=";
   };
 
   nativeBuildInputs = [
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   ];
   doCheck = false;
 
-  cargoHash = "sha256-JVUckmOAJj4zNBe4yq/JzrPw+IqfhiZRB6s03ZxXFV4=";
+  cargoHash = "sha256-l+FcrLPE+EGb3IEWikUJ1Ak8lOSlYz9WvUffGHzU0tc=";
 
   meta = with lib; {
     description = "OCI container runtime monitor written in Rust";

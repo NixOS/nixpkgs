@@ -174,6 +174,5 @@ stdenv.mkDerivation rec {
     homepage = "https://suricata.io";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ magenbluten ];
   };
 }

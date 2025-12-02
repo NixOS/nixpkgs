@@ -8,82 +8,157 @@ let
 
   # some components' tests have additional dependencies
   extraCheckInputs = with home-assistant.python.pkgs; {
-    axis = getComponentDeps "deconz";
-    homeassistant_connect_zbt2 = getComponentDeps "zha";
+    abode = getComponentDeps "camera";
+    agent_dvr = getComponentDeps "camera";
+    air_quality = getComponentDeps "camera" ++ getComponentDeps "conversation";
+    alexa = getComponentDeps "cloud" ++ getComponentDeps "frontend" ++ getComponentDeps "stream";
+    android_ip_webcam = getComponentDeps "camera";
+    assist_pipeline = getComponentDeps "frontend";
+    automation = getComponentDeps "frontend" ++ getComponentDeps "mobile_app";
+    axis = getComponentDeps "camera" ++ getComponentDeps "deconz";
+    blink = getComponentDeps "camera";
+    bthome = getComponentDeps "frontend";
+    buienradar = getComponentDeps "camera";
+    camera = getComponentDeps "conversation" ++ getComponentDeps "stream";
+    canary = getComponentDeps "camera";
+    climate = getComponentDeps "conversation";
+    color_extractor = getComponentDeps "camera" ++ getComponentDeps "conversation";
+    deconz = getComponentDeps "frontend";
+    demo = getComponentDeps "camera";
+    device_tracker = getComponentDeps "conversation";
+    dialogflow = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
+    dlib_face_detect = getComponentDeps "image_processing";
+    dlib_face_identify = getComponentDeps "image_processing";
+    doorbird = getComponentDeps "camera";
+    dremel_3d_printer = getComponentDeps "camera";
+    elevenlabs = getComponentDeps "tts";
+    elkm1 = getComponentDeps "frontend";
+    emulated_hue = getComponentDeps "conversation" ++ [
+      defusedxml
+    ];
+    emulated_kasa = getComponentDeps "camera" ++ getComponentDeps "conversation";
+    environment_canada = getComponentDeps "camera";
+    esphome = getComponentDeps "camera";
+    fan = getComponentDeps "conversation";
+    foscam = getComponentDeps "camera";
+    freebox = getComponentDeps "camera";
+    fully_kiosk = getComponentDeps "camera";
     gardena_bluetooth = getComponentDeps "husqvarna_automower_ble";
+    geofency = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
+    google_assistant = getComponentDeps "conversation";
+    google_assistant_sdk = getComponentDeps "conversation" ++ getComponentDeps "frontend";
+    google_cloud = getComponentDeps "tts";
+    google_drive = getComponentDeps "frontend";
+    google_generative_ai_conversation = getComponentDeps "ai_task";
+    google_translate = getComponentDeps "tts";
     govee_ble = [
       ibeacon-ble
     ];
-    hassio = getComponentDeps "homeassistant_yellow";
+    gpslogger = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
+    group = getComponentDeps "camera" ++ getComponentDeps "conversation";
+    hassio = getComponentDeps "frontend" ++ getComponentDeps "homeassistant_yellow";
+    homeassistant = getComponentDeps "camera" ++ getComponentDeps "conversation";
+    homeassistant_connect_zbt2 = getComponentDeps "zha";
     homeassistant_hardware = getComponentDeps "otbr" ++ getComponentDeps "zha";
     homeassistant_sky_connect = getComponentDeps "zha";
     homeassistant_yellow = getComponentDeps "zha";
-    husqvarna_automower_ble = getComponentDeps "gardena_bluetooth";
+    homekit = getComponentDeps "conversation" ++ getComponentDeps "frontend";
+    homekit_controller = getComponentDeps "camera";
+    http = getComponentDeps "cloud" ++ getComponentDeps "frontend";
+    humidifier = getComponentDeps "conversation";
+    hyperion = getComponentDeps "camera";
+    ifttt = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
+    image_processing = getComponentDeps "conversation";
+    intent = getComponentDeps "conversation";
+    light = getComponentDeps "conversation";
+    local_file = getComponentDeps "camera";
+    locative = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
+    logbook = getComponentDeps "alexa";
     lovelace = [
       pychromecast
     ];
-    matrix = [
-      pydantic
+    lutron_caseta = getComponentDeps "frontend";
+    mailgun = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
+    marytts = getComponentDeps "tts";
+    media_player = getComponentDeps "camera" ++ getComponentDeps "conversation";
+    microsoft = getComponentDeps "tts";
+    microsoft_face_detect = getComponentDeps "conversation";
+    microsoft_face_identify = getComponentDeps "conversation";
+    mjpeg = getComponentDeps "camera";
+    mobile_app = getComponentDeps "frontend";
+    motioneye = getComponentDeps "camera";
+    mqtt = getComponentDeps "camera";
+    nest = getComponentDeps "camera" ++ [
+      av
     ];
-    mopeka = getComponentDeps "switchbot";
-    onboarding = [
+    number = getComponentDeps "conversation";
+    octoprint = getComponentDeps "camera";
+    ollama = getComponentDeps "ai_task";
+    onboarding = getComponentDeps "tts" ++ [
       pymetno
       radios
       rpi-bad-power
     ];
+    onvif = getComponentDeps "camera";
+    open_router = getComponentDeps "ai_task";
+    openai_conversation = getComponentDeps "camera";
+    openalpr_cloud = getComponentDeps "camera" ++ getComponentDeps "conversation";
+    prosegur = getComponentDeps "camera";
+    prusalink = getComponentDeps "camera";
+    push = getComponentDeps "camera";
     raspberry_pi = [
       rpi-bad-power
     ];
-    shelly = [
-      pyswitchbot
+    reolink = getComponentDeps "stream";
+    ring = getComponentDeps "camera";
+    roku = getComponentDeps "camera";
+    rss_feed_template = [
+      defusedxml
     ];
+    script = getComponentDeps "frontend" ++ getComponentDeps "mobile_app";
+    sensor = getComponentDeps "camera" ++ getComponentDeps "conversation";
+    shelly = getComponentDeps "frontend" ++ getComponentDeps "switchbot";
+    sighthound = getComponentDeps "conversation" ++ getComponentDeps "image_processing";
+    skybell = getComponentDeps "camera";
+    sleep_as_android = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
     songpal = [
       isal
     ];
     swiss_public_transport = getComponentDeps "cookidoo";
+    switch = getComponentDeps "camera" ++ getComponentDeps "conversation";
+    switch_as_x = getComponentDeps "camera" ++ getComponentDeps "conversation";
+    synology_dsm = getComponentDeps "camera";
     system_log = [
       isal
     ];
-    tesla_fleet = getComponentDeps "teslemetry";
+    tasmota = getComponentDeps "camera";
+    todo = getComponentDeps "conversation";
+    traccar = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
+    trafikverket_camera = getComponentDeps "camera";
+    tts = getComponentDeps "conversation";
+    tuya = getComponentDeps "camera";
+    twilio = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
+    unifiprotect = getComponentDeps "camera";
+    universal = getComponentDeps "camera" ++ getComponentDeps "conversation";
+    uvc = getComponentDeps "camera";
+    voicerss = getComponentDeps "tts";
+    weather = getComponentDeps "conversation";
+    websocket_api = getComponentDeps "camera" ++ getComponentDeps "conversation";
     xiaomi_miio = [
       arrow
     ];
-    zeroconf = [
-      aioshelly
-    ];
-    zha = [
-      pydeconz
-    ];
+    yandextts = getComponentDeps "tts";
+    zeroconf = getComponentDeps "shelly";
+    zha = getComponentDeps "deconz" ++ getComponentDeps "frontend";
+    zwave_js = getComponentDeps "frontend";
   };
 
   extraDisabledTestPaths = {
-    backup = [
-      # outdated snapshot
-      "tests/components/backup/test_sensors.py::test_sensors"
-    ];
-    bosch_alarm = [
-      # outdated snapshots
-      "tests/components/bosch_alarm/test_binary_sensor.py::test_binary_sensor[None-solution_3000]"
-      "tests/components/bosch_alarm/test_binary_sensor.py::test_binary_sensor[None-amax_3000]"
-      "tests/components/bosch_alarm/test_binary_sensor.py::test_binary_sensor[None-b5512]"
-    ];
-    bmw_connected_drive = [
-      # outdated snapshot
-      "tests/components/bmw_connected_drive/test_binary_sensor.py::test_entity_state_attrs"
-    ];
-    dnsip = [
-      # Tries to resolve DNS entries
-      "tests/components/dnsip/test_config_flow.py::test_options_flow"
-    ];
     jellyfin = [
       # AssertionError: assert 'audio/x-flac' == 'audio/flac'
       "tests/components/jellyfin/test_media_source.py::test_resolve"
       "tests/components/jellyfin/test_media_source.py::test_audio_codec_resolve"
       "tests/components/jellyfin/test_media_source.py::test_music_library"
-    ];
-    matter = [
-      # outdated snapshot in eve_weather_sensor variant
-      "tests/components/matter/test_number.py::test_numbers"
     ];
     minecraft_server = [
       # FileNotFoundError: [Errno 2] No such file or directory: '/etc/resolv.conf'
@@ -104,22 +179,17 @@ let
       "tests/components/nzbget/test_init.py::test_async_setup_raises_entry_not_ready"
     ];
     openai_conversation = [
-      # outdated snapshot
-      "tests/components/openai_conversation/test_conversation.py::test_function_call"
       # Pydantic validation error
       "tests/components/openai_conversation/test_conversation.py"
       "tests/components/openai_conversation/test_ai_task.py"
-      # TypeError: object ImagesResponse can't be used in 'await' expression
-      "tests/components/openai_conversation/test_init.py::test_generate_image_service"
-      "tests/components/openai_conversation/test_init.py::test_generate_image_service_error"
     ];
     overseerr = [
       # imports broken future module
       "tests/components/overseerr/test_event.py"
     ];
-    technove = [
+    youtube = [
       # outdated snapshot
-      "tests/components/technove/test_switch.py::test_switches"
+      "tests/components/youtube/test_sensor.py::test_sensor"
     ];
   };
 
@@ -127,10 +197,6 @@ let
     conversation = [
       # intent fixture mismatch
       "test_error_no_device_on_floor"
-    ];
-    forecast_solar = [
-      # language fixture mismatch
-      "test_enabling_disable_by_default"
     ];
     sensor = [
       # Failed: Translation not found for sensor
@@ -146,14 +212,6 @@ let
     shell_command = [
       # tries to retrieve file from github
       "test_non_text_stdout_capture"
-    ];
-    smartthings = [
-      # outdated snapshots
-      "test_all_entities"
-    ];
-    websocket_api = [
-      # AssertionError: assert 'unknown_error' == 'template_error'
-      "test_render_template_with_timeout"
     ];
     zeroconf = [
       # multicast socket bind, not possible in the sandbox
@@ -174,12 +232,12 @@ lib.listToAttrs (
         dontInstall = true;
 
         nativeCheckInputs =
-          old.nativeCheckInputs
+          old.requirementsTest
           ++ home-assistant.getPackages component home-assistant.python.pkgs
           ++ extraCheckInputs.${component} or [ ];
 
-        disabledTests = old.disabledTests or [ ] ++ extraDisabledTests.${component} or [ ];
-        disabledTestPaths = old.disabledTestPaths or [ ] ++ extraDisabledTestPaths.${component} or [ ];
+        disabledTests = extraDisabledTests.${component} or [ ];
+        disabledTestPaths = extraDisabledTestPaths.${component} or [ ];
 
         # components are more often racy than the core
         dontUsePytestXdist = true;

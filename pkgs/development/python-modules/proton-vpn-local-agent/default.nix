@@ -5,12 +5,13 @@
   python,
   buildPythonPackage,
   cargo,
+  pypaInstallHook,
   rustPlatform,
 }:
 
 buildPythonPackage rec {
   pname = "proton-vpn-local-agent";
-  version = "1.4.8";
+  version = "1.6.0";
   pyproject = false;
   withDistOutput = false;
 
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-local-agent";
     rev = version;
-    hash = "sha256-AHY2b0JaYaLhgnNkTsm9ERkw0s0NWnpbPAPgw+r2Gz4=";
+    hash = "sha256-rk3wi6q0UDuwh5yhLBqdLYsJxVqhlI+Yc7HZsiAU1Y8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -28,7 +29,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-zzUZsF0R0QGhxe4To6xSHYUVJTIDddf+UdTJg7E9Ef8=";
+    hash = "sha256-jjSkPgGp3Yvypnlrt9pV1F/K3o2doNteQs1rwr5fhnM=";
   };
 
   sourceRoot = "${src.name}/python-proton-vpn-local-agent";
@@ -36,6 +37,7 @@ buildPythonPackage rec {
   cargoBuildType = "release";
   nativeBuildInputs = [
     cargo
+    pypaInstallHook
     rustPlatform.cargoSetupHook
     rustPlatform.cargoBuildHook
   ];
@@ -45,14 +47,18 @@ buildPythonPackage rec {
     rustPlatform.cargoCheckHook
   ];
 
-  installPhase = ''
-    runHook preInstall
+  postPatch = ''
+    substituteInPlace scripts/build_wheel.py \
+      --replace-fail 'ARCH = "x86_64"' \
+                     'ARCH = "${stdenv.hostPlatform.uname.processor}"' \
+      --replace-fail 'LIB_PATH = get_lib_path("x86_64-unknown-linux-gnu")' \
+                     'LIB_PATH = get_lib_path("${stdenv.hostPlatform.config}")'
+  '';
 
-    # manually install the python binding
-    mkdir -p $out/${python.sitePackages}/proton/vpn/
-    cp ./target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/libpython_proton_vpn_local_agent.so $out/${python.sitePackages}/proton/vpn/local_agent.so
-
-    runHook postInstall
+  postBuild = ''
+    ${python.interpreter} scripts/build_wheel.py
+    mkdir -p ./dist
+    cp ./target/*.whl ./dist
   '';
 
   pythonImportsCheck = [ "proton.vpn.local_agent" ];
@@ -62,6 +68,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-local-agent";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ sebtm ];
+    maintainers = with lib.maintainers; [
+      sebtm
+      rapiteanu
+    ];
   };
 }

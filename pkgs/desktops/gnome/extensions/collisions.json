@@ -1,4 +1,8 @@
 {
+  "activitywatch-status": [
+    "activitywatch-status@cweiske.de",
+    "aw-status@brayo.dev"
+  ],
   "applications-menu": [
     "Applications_Menu@rmy.pobox.com",
     "apps-menu@gnome-shell-extensions.gcampax.github.com"
@@ -12,13 +16,13 @@
     "eur-usd-gshell@vezza.github.com",
     "usd-mxn-gshell@kinduff.github.com"
   ],
-  "fullscreen-to-empty-workspace": [
-    "fullscreen-to-empty-workspace2@corgijan.dev",
-    "fullscreen-to-empty-workspace@aiono.dev"
-  ],
   "fuzzy-clock": [
     "FuzzyClock@fire-man-x",
     "FuzzyClock@johngoetz"
+  ],
+  "lock-keys": [
+    "lockkeys@febueldo.test",
+    "lockkeys@vaina.lt"
   ],
   "mouse-follows-focus": [
     "mouse-follows-focus@crisidev.org",
@@ -32,12 +36,9 @@
     "PersianCalendar@oxygenws.com",
     "persian-calendar@iamrezamousavi.gmail.com"
   ],
-  "power-profile-indicator": [
-    "power-profile-indicator@laux.wtf",
-    "power-profile@fthx"
-  ],
   "system-monitor": [
+    "system-monitor@gnome-shell-extensions.gcampax.github.com",
     "System_Monitor@bghome.gmail.com",
-    "system-monitor@gnome-shell-extensions.gcampax.github.com"
+    "system-monitor@axet.github.com"
   ]
 }

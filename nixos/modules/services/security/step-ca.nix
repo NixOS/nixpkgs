@@ -55,10 +55,8 @@ in
         '';
       };
       intermediatePasswordFile = lib.mkOption {
-        type = lib.types.pathWith {
-          inStore = false;
-          absolute = true;
-        };
+        type = lib.types.nullOr lib.types.externalPath;
+        default = null;
         example = "/run/keys/smallstep-password";
         description = ''
           Path to the file containing the password for the intermediate
@@ -104,11 +102,18 @@ in
           ReadWritePaths = ""; # override upstream
 
           # LocalCredential handles file permission problems arising from the use of DynamicUser.
-          LoadCredential = "intermediate_password:${cfg.intermediatePasswordFile}";
+          LoadCredential = lib.mkIf (
+            cfg.intermediatePasswordFile != null
+          ) "intermediate_password:${cfg.intermediatePasswordFile}";
 
           ExecStart = [
             "" # override upstream
-            "${cfg.package}/bin/step-ca /etc/smallstep/ca.json --password-file \${CREDENTIALS_DIRECTORY}/intermediate_password"
+            (
+              "${cfg.package}/bin/step-ca /etc/smallstep/ca.json"
+              + lib.optionalString (
+                cfg.intermediatePasswordFile != null
+              ) " --password-file \${CREDENTIALS_DIRECTORY}/intermediate_password"
+            )
           ];
 
           # ProtectProc = "invisible"; # not supported by upstream yet

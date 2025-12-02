@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dotenv-linter";
-  version = "3.3.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "dotenv-linter";
     repo = "dotenv-linter";
     rev = "v${version}";
-    sha256 = "sha256-HCP1OUWm/17e73TbinmDxYUi18/KXxppstyUSixjlSo=";
+    sha256 = "sha256-H4a/JM2CFrELmP4w4vrFxbvmvdTQk8k7g3QjQKm++Uk=";
   };
 
-  cargoHash = "sha256-lBHqvwZrnkSfmMXBmnhovbDn+pf5iLJepJjO/FKT1wY=";
+  cargoHash = "sha256-11u3a4W3vrGJQXjSMcDAS5D9mqG+XJ0L5FYmqqH/McM=";
 
   meta = with lib; {
     description = "Lightning-fast linter for .env files. Written in Rust";

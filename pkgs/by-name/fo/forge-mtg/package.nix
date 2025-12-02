@@ -3,6 +3,7 @@
   fetchFromGitHub,
   gnused,
   lib,
+  stdenv,
   maven,
   makeWrapper,
   openjdk,
@@ -15,13 +16,13 @@
 }:
 
 let
-  version = "2.0.06";
+  version = "2.0.07";
 
   src = fetchFromGitHub {
     owner = "Card-Forge";
     repo = "forge";
     rev = "forge-${version}";
-    hash = "sha256-/V8Ce1r68Svf4TQ/zgIqSWjqIFr1uJOmv+aRNLm1qE4=";
+    hash = "sha256-hPE++/wcK0jkhM4LYt09HZPL6tUVajHaKxXxBYhBw2g=";
   };
 
   # launch4j downloads and runs a native binary during the package phase.
@@ -32,7 +33,7 @@ maven.buildMavenPackage {
   pname = "forge-mtg";
   inherit version src patches;
 
-  mvnHash = "sha256-DeYmCmsDdNOVMlD+SwvSB2VdqvCDwKghXlyaDuamHiY=";
+  mvnHash = "sha256-nAhULH7DGO0gkIyHwVmhvyO2lqmBpFWkfiCgtuK9T3A=";
 
   doCheck = false; # Needs a running Xorg
 
@@ -108,10 +109,12 @@ maven.buildMavenPackage {
       PREFIX_CMD=""
       if [ "$commandToInstall" = "forge-adventure" ]; then
         PREFIX_CMD="--prefix LD_LIBRARY_PATH : ${
-          lib.makeLibraryPath [
-            libGL
-            alsa-lib
-          ]
+          lib.makeLibraryPath (
+            [
+              libGL
+            ]
+            ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform alsa-lib) [ alsa-lib ]
+          )
         }"
       fi
 

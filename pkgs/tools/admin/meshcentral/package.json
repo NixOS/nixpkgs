@@ -1,6 +1,6 @@
 {
   "name": "meshcentral",
-  "version": "1.1.53",
+  "version": "1.1.54",
   "keywords": [
     "Remote Device Management",
     "Remote Device Monitoring",
@@ -65,13 +65,13 @@
   },
   "readme": "readme.md",
   "optionalDependencies": {
-    "passport": "*",
-    "connect-flash": "*",
-    "passport-twitter": "*",
-    "passport-google-oauth20": "*",
-    "passport-github2": "*",
-    "passport-azure-oauth2": "*",
-    "jwt-simple": "*",
+    "passport": "0.7.0",
+    "connect-flash": "0.1.1",
+    "passport-twitter": "1.0.4",
+    "passport-google-oauth20": "2.0.0",
+    "passport-github2": "0.1.12",
+    "passport-azure-oauth2": "0.1.0",
+    "jwt-simple": "0.5.6",
     "openid-client": "5.7.1",
     "passport-saml": "*",
     "@duosecurity/duo_universal": "2.1.0",

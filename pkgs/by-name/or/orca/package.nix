@@ -1,5 +1,7 @@
 {
   lib,
+  stdenv,
+  buildPackages,
   pkg-config,
   fetchurl,
   meson,
@@ -29,13 +31,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "orca";
-  version = "48.6";
+  version = "49.5";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/orca/${lib.versions.major version}/orca-${version}.tar.xz";
-    hash = "sha256-7cUDRODf1yR2tcFLOqclyiaHGOpt2JvE7ib0ULM51pY=";
+    hash = "sha256-U99BVYMZ6XwehK1gSYmVegK10P9TFBkZDwWH6mslYDQ=";
   };
 
   patches = [
@@ -47,7 +49,15 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
+  # needed for cross-compilation
+  depsBuildBuild = [ pkg-config ];
+
   nativeBuildInputs = [
+    # cross-compilation support requires the host environment's build time
+    # to make the following buildPackages available.
+    buildPackages.gtk3
+    buildPackages.python3
+    buildPackages.python3Packages.pygobject3
     meson
     ninja
     wrapGAppsHook3
@@ -59,6 +69,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   pythonPath = with python3.pkgs; [
+    dasbus
     pygobject3
     dbus-python
     pyxdg
@@ -84,10 +95,16 @@ python3.pkgs.buildPythonApplication rec {
     gst_all_1.gst-plugins-good
   ];
 
+  # Help GI find typelibs during Meson's configure step in cross builds
+  preConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    export GI_TYPELIB_PATH=${buildPackages.gtk3}/lib/girepository-1.0''${GI_TYPELIB_PATH:+:$GI_TYPELIB_PATH}
+  '';
+
   dontWrapGApps = true; # Prevent double wrapping
 
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    substituteInPlace $out/lib/systemd/user/orca.service --replace-fail ExecStart=orca ExecStart=$out/bin/orca
   '';
 
   passthru = {

@@ -10,6 +10,7 @@
   flags,
   lib,
   python3,
+  removeReferencesTo,
   which,
   # passthru.updateScript
   gitUpdater,
@@ -72,6 +73,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cuda_nvcc
     python3
+    removeReferencesTo
     which
   ];
 
@@ -117,7 +119,21 @@ backendStdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     _overrideFirst outputStatic "static" "lib" "out"
     moveToOutput lib/libnccl_static.a "''${!outputStatic:?}"
+  ''
+  # Since CUDA 12.8, the cuda_nvcc path leaks in:
+  # - libnccl.so's .nv_fatbin section
+  # - libnccl_static.a
+  # &devrt -L /nix/store/00000000000000000000000000000000-...nvcc-.../bin/...
+  # This string makes cuda_nvcc a runtime dependency of nccl.
+  # See https://github.com/NixOS/nixpkgs/pull/457803
+  + ''
+    remove-references-to -t "${lib.getBin cuda_nvcc}" \
+      ''${!outputLib}/lib/libnccl.so.* \
+      ''${!outputStatic}/lib/*.a
   '';
+
+  # C.f. remove-references-to above. Ensure *all* references to cuda_nvcc are removed
+  disallowedRequisites = [ (lib.getBin cuda_nvcc) ];
 
   passthru = {
     platformAssertions = [
@@ -147,7 +163,6 @@ backendStdenv.mkDerivation (finalAttrs: {
     badPlatforms = _mkMetaBadPlatforms finalAttrs;
     maintainers = with maintainers; [
       mdaiter
-      orivej
     ];
     teams = [ teams.cuda ];
   };

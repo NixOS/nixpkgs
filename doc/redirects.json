@@ -119,6 +119,12 @@
   "inkscape-plugins": [
     "index.html#inkscape-plugins"
   ],
+  "libcxxhardeningextensive": [
+    "index.html#libcxxhardeningextensive"
+  ],
+  "libcxxhardeningfast": [
+    "index.html#libcxxhardeningfast"
+  ],
   "julec-hook": [
     "index.html#julec-hook"
   ],
@@ -247,6 +253,9 @@
   "sec-building-packages-with-llvm-using-clang-stdenv": [
     "index.html#sec-building-packages-with-llvm-using-clang-stdenv"
   ],
+  "sec-darwin-availability-checks": [
+    "index.html#sec-darwin-availability-checks"
+  ],
   "sec-darwin-libcxx-deployment-targets": [
     "index.html#sec-darwin-libcxx-deployment-targets"
   ],
@@ -288,6 +297,30 @@
   ],
   "chap-overlays": [
     "index.html#chap-overlays"
+  ],
+  "sec-nixpkgs-release-26.05": [
+    "release-notes.html#sec-nixpkgs-release-26.05"
+  ],
+  "sec-nixpkgs-release-26.05-highlights": [
+    "release-notes.html#sec-nixpkgs-release-26.05-highlights"
+  ],
+  "sec-nixpkgs-release-26.05-incompatibilities": [
+    "release-notes.html#sec-nixpkgs-release-26.05-incompatibilities"
+  ],
+  "sec-nixpkgs-release-26.05-lib": [
+    "release-notes.html#sec-nixpkgs-release-26.05-lib"
+  ],
+  "sec-nixpkgs-release-26.05-lib-breaking": [
+    "release-notes.html#sec-nixpkgs-release-26.05-lib-breaking"
+  ],
+  "sec-nixpkgs-release-26.05-lib-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-26.05-lib-deprecations"
+  ],
+  "sec-nixpkgs-release-26.05-lib-additions-improvements": [
+    "release-notes.html#sec-nixpkgs-release-26.05-lib-additions-improvements"
+  ],
+  "sec-nixpkgs-release-26.05-notable-changes": [
+    "release-notes.html#sec-nixpkgs-release-26.05-notable-changes"
   ],
   "sec-nixpkgs-release-25.11": [
     "release-notes.html#sec-nixpkgs-release-25.11"
@@ -388,6 +421,24 @@
   ],
   "sec-pkg-overrideDerivation": [
     "index.html#sec-pkg-overrideDerivation"
+  ],
+  "sec-platform-breakdown": [
+    "index.html#sec-platform-breakdown"
+  ],
+  "sec-platform-tier1": [
+    "index.html#sec-platform-tier1"
+  ],
+  "sec-platform-tier2": [
+    "index.html#sec-platform-tier2"
+  ],
+  "sec-platform-tier3": [
+    "index.html#sec-platform-tier3"
+  ],
+  "sec-platform-tier4-7": [
+    "index.html#sec-platform-tier4-7"
+  ],
+  "sec-platform-tiers": [
+    "index.html#sec-platform-tiers"
   ],
   "sec-lib-makeOverridable": [
     "index.html#sec-lib-makeOverridable"
@@ -1224,7 +1275,8 @@
     "index.html#sec-purity-in-nixpkgs"
   ],
   "sec-hardening-in-nixpkgs": [
-    "index.html#sec-hardening-in-nixpkgs"
+    "index.html#sec-hardening-in-nixpkgs",
+    "index.html#pie"
   ],
   "sec-hardening-flags-enabled-by-default": [
     "index.html#sec-hardening-flags-enabled-by-default"
@@ -1258,9 +1310,6 @@
   ],
   "sec-hardening-flags-disabled-by-default": [
     "index.html#sec-hardening-flags-disabled-by-default"
-  ],
-  "pie": [
-    "index.html#pie"
   ],
   "shadowstack": [
     "index.html#shadowstack"
@@ -3375,15 +3424,6 @@
   ],
   "javascript-using-node_modules": [
     "index.html#javascript-using-node_modules"
-  ],
-  "javascript-packages-nixpkgs": [
-    "index.html#javascript-packages-nixpkgs"
-  ],
-  "javascript-adding-or-updating-packages": [
-    "index.html#javascript-adding-or-updating-packages"
-  ],
-  "javascript-git-error": [
-    "index.html#javascript-git-error"
   ],
   "javascript-tool-specific": [
     "index.html#javascript-tool-specific"

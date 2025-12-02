@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Etaash-mathamsetty/heroic-epic-integration";
     changelog = "https://github.com/Etaash-mathamsetty/heroic-epic-integration/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ iedame ];
+    maintainers = [ ];
   };
 
   passthru.updateScript = gitUpdater { };

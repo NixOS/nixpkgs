@@ -34,7 +34,7 @@ buildDotnetModule rec {
     homepage = "https://github.com/CycloneDX/cyclonedx-cli";
     changelog = "https://github.com/CycloneDX/cyclonedx-cli/releases/tag/v${version}";
     maintainers = with lib.maintainers; [ thillux ];
-    teams = [ lib.teams.cyberus ];
+    teams = [ lib.teams.ctrl-os ];
     license = lib.licenses.asl20;
     platforms = with lib.platforms; (linux ++ darwin);
     mainProgram = "cyclonedx";

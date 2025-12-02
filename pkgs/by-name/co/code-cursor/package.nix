@@ -16,20 +16,20 @@ let
 
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://downloads.cursor.com/production/9675251a06b1314d50ff34b0cbe5109b78f848cd/linux/x64/Cursor-1.7.52-x86_64.AppImage";
-      hash = "sha256-nhDDdXE5/m9uASiQUJ4GHfApkzkf9ju5b8s0h6BhpjQ=";
+      url = "https://downloads.cursor.com/production/2e353c5f5b30150ff7b874dee5a87660693d9de6/linux/x64/Cursor-2.1.42-x86_64.AppImage";
+      hash = "sha256-UqHi9QlQSaOJZWW6bmElDrK5GaEGT3kU5LsXg2LUeHg=";
     };
     aarch64-linux = fetchurl {
-      url = "https://downloads.cursor.com/production/9675251a06b1314d50ff34b0cbe5109b78f848cd/linux/arm64/Cursor-1.7.52-aarch64.AppImage";
-      hash = "sha256-96zL0pmcrEyDEy8oW2qWk6RM8XGE4Gd2Aa3Hhq0qvk0=";
+      url = "https://downloads.cursor.com/production/2e353c5f5b30150ff7b874dee5a87660693d9de6/linux/arm64/Cursor-2.1.42-aarch64.AppImage";
+      hash = "sha256-v7m9puw9xQKt36U8+m0n7sGmkoNkVjiDI+Wo6qaN64g=";
     };
     x86_64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/production/9675251a06b1314d50ff34b0cbe5109b78f848cd/darwin/x64/Cursor-darwin-x64.dmg";
-      hash = "sha256-0//Sv57iEgRm/exnUnKVpdyk6fwxAnx0PDg2mVaB9J8=";
+      url = "https://downloads.cursor.com/production/2e353c5f5b30150ff7b874dee5a87660693d9de6/darwin/x64/Cursor-darwin-x64.dmg";
+      hash = "sha256-rQNuGGaONl4BUxrrrI2RVq4iRlDvVxY6TtFq67MLHUA=";
     };
     aarch64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/production/9675251a06b1314d50ff34b0cbe5109b78f848cd/darwin/arm64/Cursor-darwin-arm64.dmg";
-      hash = "sha256-g8Fk9+MDwzLTNitxJMApypfiLWEjze0PR2OIPC774j8=";
+      url = "https://downloads.cursor.com/production/2e353c5f5b30150ff7b874dee5a87660693d9de6/darwin/arm64/Cursor-darwin-arm64.dmg";
+      hash = "sha256-mwKwOAhwihQTs4gF002BMt4EMF/AvZBV+QSp/UM5D/4=";
     };
   };
 
@@ -39,12 +39,12 @@ in
   inherit useVSCodeRipgrep;
   commandLineArgs = finalCommandLineArgs;
 
-  version = "1.7.52";
+  version = "2.1.42";
   pname = "cursor";
 
   # You can find the current VSCode version in the About dialog:
   # workbench.action.showAboutDialog (Help: About)
-  vscodeVersion = "1.99.3";
+  vscodeVersion = "1.105.1";
 
   executableName = "cursor";
   longName = "Cursor";

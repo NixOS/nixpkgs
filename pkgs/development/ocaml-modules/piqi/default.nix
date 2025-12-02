@@ -11,54 +11,51 @@
   base64,
 }:
 
-lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
-  "piqi is not available for OCaml ${ocaml.version}"
+stdenv.mkDerivation rec {
+  version = "0.6.16";
+  pname = "piqi";
+  name = "ocaml${ocaml.version}-${pname}-${version}";
 
-  stdenv.mkDerivation
-  rec {
-    version = "0.6.16";
-    pname = "piqi";
-    name = "ocaml${ocaml.version}-${pname}-${version}";
+  src = fetchFromGitHub {
+    owner = "alavrik";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-qE+yybTn+kzbY0h8udhZYO+GwQPI/J/6p3LMmF12cFU=";
+  };
 
-    src = fetchFromGitHub {
-      owner = "alavrik";
-      repo = pname;
-      rev = "v${version}";
-      sha256 = "sha256-qE+yybTn+kzbY0h8udhZYO+GwQPI/J/6p3LMmF12cFU=";
-    };
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    which
+  ];
+  propagatedBuildInputs = [
+    sedlex
+    xmlm
+    easy-format
+    base64
+  ];
 
-    nativeBuildInputs = [
-      ocaml
-      findlib
-      which
-    ];
-    propagatedBuildInputs = [
-      sedlex
-      xmlm
-      easy-format
-      base64
-    ];
+  strictDeps = true;
 
-    strictDeps = true;
+  patches = [
+    ./no-stream.patch
+    ./no-ocamlpath-override.patch
+  ];
 
-    patches = [
-      ./no-stream.patch
-      ./no-ocamlpath-override.patch
-    ];
+  createFindlibDestdir = true;
 
-    createFindlibDestdir = true;
+  postBuild = "make -C piqilib piqilib.cma";
 
-    postBuild = "make -C piqilib piqilib.cma";
+  installTargets = [
+    "install"
+    "ocaml-install"
+  ];
 
-    installTargets = [
-      "install"
-      "ocaml-install"
-    ];
-
-    meta = with lib; {
-      homepage = "https://piqi.org";
-      description = "Universal schema language and a collection of tools built around it";
-      license = licenses.asl20;
-      maintainers = [ maintainers.maurer ];
-    };
-  }
+  meta = with lib; {
+    homepage = "https://piqi.org";
+    description = "Universal schema language and a collection of tools built around it";
+    license = licenses.asl20;
+    maintainers = [ maintainers.maurer ];
+    broken = lib.versionAtLeast ocaml.version "5.0";
+  };
+}

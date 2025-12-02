@@ -90,6 +90,7 @@
   waylandSupport ? !stdenv.hostPlatform.isDarwin,
   x11Support ? !stdenv.hostPlatform.isDarwin,
   zimgSupport ? true,
+  versionCheckHook,
 }:
 
 let
@@ -120,6 +121,20 @@ stdenv.mkDerivation (finalAttrs: {
       name = "ffmpeg-8.patch";
       url = "https://github.com/mpv-player/mpv/commit/26b29fba02a2782f68e2906f837d21201fc6f1b9.patch";
       hash = "sha256-ANNoTtIJBARHbm5IgrE0eEZyzmNhOnbVgve7iqCBzQg=";
+    })
+    # clipboard-wayland: prevent reading from hung up fd:
+    #   https://github.com/mpv-player/mpv/pull/16140
+    (fetchpatch {
+      name = "clipboard-wayland-prevent-hung-up-fd.patch";
+      url = "https://github.com/mpv-player/mpv/commit/d20ded876d27497d3fe6a9494add8106b507a45c.patch";
+      hash = "sha256-sll4BpeVW6OA+/vbH7ZfIh0/vePfPEX87vzUu/GCj44=";
+    })
+    # clipboard-wayland: read already sent data when the fd is hung up:
+    #   https://github.com/mpv-player/mpv/pull/16236
+    (fetchpatch {
+      name = "clipboard-wayland-read-sent-data-on-hangup.patch";
+      url = "https://github.com/mpv-player/mpv/commit/896b3400f3cad286533dbb9cc3658ce18ed9966c.patch";
+      hash = "sha256-GU0VdYC/Q0RCS/I2h4gBVNhScDLSAB2KxN3Ca6CGBMM=";
     })
   ];
 
@@ -286,6 +301,11 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs --update --host $out/bin/umpv $out/bin/mpv_identify.sh
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   passthru = {
     inherit
       # The wrapper consults luaEnv and lua.version
@@ -305,7 +325,6 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       inherit (nixosTests) mpv;
 
-      version = testers.testVersion { package = finalAttrs.finalPackage; };
       pkg-config = testers.hasPkgConfigModules {
         package = finalAttrs.finalPackage;
         moduleNames = [ "mpv" ];
@@ -321,7 +340,10 @@ stdenv.mkDerivation (finalAttrs: {
       MPlayer and mplayer2 projects, with great improvements above both.
     '';
     changelog = "https://github.com/mpv-player/mpv/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl2Plus;
+    license = [
+      lib.licenses.gpl2Plus
+      lib.licenses.lgpl21Plus
+    ];
     mainProgram = "mpv";
     maintainers = with lib.maintainers; [
       fpletz

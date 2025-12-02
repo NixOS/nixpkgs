@@ -49,7 +49,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "librsvg";
-  version = "2.61.1";
+  version = "2.61.3";
 
   outputs = [
     "out"
@@ -61,24 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/librsvg/${lib.versions.majorMinor finalAttrs.version}/librsvg-${finalAttrs.version}.tar.xz";
-    hash = "sha256-vBu81BkSCwmNsovqVTNdneJHDU5qn27pcge0EPwVhn0=";
+    hash = "sha256-pW0sgNdErS8nGPhd9Gb+cdJP8fm8Pl71iL3k1+h4FfI=";
   };
-
-  patches = [
-    # too_many_elements test fails with libxml 2.15.0,
-    # because libxml2 no longer updates the element count
-    # before erroring out, which breaks the librsvg limit check.
-    #
-    # This is okay, because the error is still detected.
-    # The error is simply not reported accurately.
-    # https://gitlab.gnome.org/GNOME/librsvg/-/issues/1201
-    ./expect-any-error-too-many-elements.patch
-  ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "librsvg-deps-${finalAttrs.version}";
-    hash = "sha256-3DAFyY7uNB5cP8ry28v12QsFdxHtpr1nyLtzhojBq7c=";
+    hash = "sha256-5uNkjfZhETuG8Sjw66zapYXOj4dgz9Ziry2kAV+pvZQ=";
     dontConfigure = true;
   };
 

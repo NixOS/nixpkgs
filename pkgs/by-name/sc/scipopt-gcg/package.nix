@@ -13,16 +13,16 @@
 
 stdenv.mkDerivation rec {
   pname = "scipopt-gcg";
-  version = "372";
+  version = "372-unstable-2025-10-11";
 
   # To correlate scipVersion and version, check: https://scipopt.org/#news
-  scipVersion = "9.2.3";
+  scipVersion = "9.2.4";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "gcg";
-    tag = "v${version}";
-    hash = "sha256-Sx0ZSca7XBT4GqxWt3bzelaXlI7kZCJo+by22mtTFhA=";
+    rev = "83a2d210a03f920dd941d547da94867deb504882";
+    hash = "sha256-wbzknCmwDhJ38gItA3DppJxSJfNK7NeIkxZVRd2kmp0=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +53,12 @@ stdenv.mkDerivation rec {
     )
   '';
   doCheck = true;
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.3)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = {
     maintainers = with lib.maintainers; [ fettgoenner ];
     changelog = "https://scipopt.org/doc-${scipVersion}/html/RN${lib.versions.major scipVersion}.php";

@@ -2,25 +2,27 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   pkg-config,
   alsa-lib,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tomat";
-  version = "2.3.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "jolars";
     repo = "tomat";
     tag = "v${version}";
-    hash = "sha256-lkNBcTn7uXWifIVNoXmggPy+UjozL5YqVYorH9XAejo=";
+    hash = "sha256-i6gakWbY6N1FB1lAfONuDsoXv5PcaXqnbmfuSBp/DC0=";
   };
 
-  cargoHash = "sha256-jBpZyNfsJKchJnKwWJQeVavj0Yog83QrCM8kOJFVugg=";
+  cargoHash = "sha256-dLdo0mtf9IO9mBc6MI1Q6fu8x6+TmlFN6rfEFC6cFek=";
 
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
   ];
 
   buildInputs = [
@@ -33,6 +35,15 @@ rustPlatform.buildRustPackage rec {
     "--skip=timer::tests::test_notification_icon_config"
     "--skip=integration::"
   ];
+
+  postInstall = ''
+    installShellCompletion --cmd tomat \
+      --bash target/completions/tomat.bash \
+      --fish target/completions/tomat.fish \
+      --zsh target/completions/_tomat
+
+    installManPage target/man/*
+  '';
 
   meta = {
     description = "Pomodoro timer for status bars";

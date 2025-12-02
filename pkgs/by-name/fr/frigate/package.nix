@@ -2,7 +2,7 @@
   lib,
   stdenv,
   callPackage,
-  python312Packages,
+  python313Packages,
   fetchFromGitHub,
   fetchurl,
   ffmpeg-headless,
@@ -27,7 +27,7 @@ let
     inherit version src;
   };
 
-  python = python312Packages.python.override {
+  python = python313Packages.python.override {
     packageOverrides = self: super: {
       joserfc = super.joserfc.overridePythonAttrs (oldAttrs: {
         version = "1.1.0";
@@ -141,7 +141,6 @@ python3Packages.buildPythonApplication rec {
     distlib
     fastapi
     filelock
-    future
     importlib-metadata
     importlib-resources
     google-generativeai

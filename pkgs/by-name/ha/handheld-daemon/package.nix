@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  withAdjustor ? false,
 
   # dependencies
   systemd,
@@ -14,18 +13,17 @@
   lsof,
   btrfs-progs,
   util-linux,
-  adjustor,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "handheld-daemon";
-  version = "3.18.5";
+  version = "4.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hhd-dev";
     repo = "hhd";
     tag = "v${version}";
-    hash = "sha256-T/0qKHF/BmVtVO19pd4/iqIZP1/G7iayDzHdhjRIA7U=";
+    hash = "sha256-Lh9rilpdx+njikVDftFAeA5HWgWQwgfnzocT/nSO2NU=";
   };
 
   # Handheld-daemon runs some selinux-related utils which are not in nixpkgs.
@@ -51,7 +49,7 @@ python3Packages.buildPythonApplication rec {
 
     substituteInPlace src/hhd/plugins/power/power.py \
       --replace-fail '"efibootmgr"' '"${lib.getExe' efibootmgr "id"}"' \
-      --replace-fail '"systemctl"' '"${lib.getExe' systemd "systemctl"}"' \
+      --replace-fail '"systemctl' '"${lib.getExe' systemd "systemctl"}' \
       --replace-fail '"stat"' '"${lib.getExe' coreutils "stat"}"' \
       --replace-fail '"swapon"' '"${lib.getExe' util-linux "swapon"}"' \
       --replace-fail '"swapoff"' '"${lib.getExe' util-linux "swapoff"}"' \
@@ -75,28 +73,34 @@ python3Packages.buildPythonApplication rec {
 
     substituteInPlace usr/lib/udev/rules.d/83-hhd.rules \
       --replace-fail '/bin/chmod' '${lib.getExe' coreutils "chmod"}'
+
+    substituteInPlace src/adjustor/core/acpi.py \
+      --replace-fail '"modprobe"' '"${lib.getExe' kmod "modprobe"}"'
   '';
 
   build-system = with python3Packages; [
     setuptools
   ];
 
-  dependencies =
-    with python3Packages;
-    [
-      evdev
-      pyserial
-      pyyaml
-      rich
-      setuptools
-      xlib
-    ]
-    ++ lib.optionals withAdjustor [
-      adjustor
-    ];
+  dependencies = with python3Packages; [
+    evdev
+    pyserial
+    pyyaml
+    rich
+    setuptools
+    xlib
+    pyroute2
+    pygobject3
+    dbus-python
+  ];
 
   # This package doesn't have upstream tests.
   doCheck = false;
+
+  pythonImportsCheck = [
+    "hhd"
+    "adjustor"
+  ];
 
   postInstall = ''
     install -Dm644 usr/lib/udev/rules.d/83-hhd.rules -t $out/lib/udev/rules.d/
@@ -108,7 +112,7 @@ python3Packages.buildPythonApplication rec {
     description = "Linux support for handheld gaming devices like the Legion Go, ROG Ally, and GPD Win";
     platforms = lib.platforms.linux;
     changelog = "https://github.com/hhd-dev/hhd/releases/tag/${src.tag}";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [
       toast
     ];

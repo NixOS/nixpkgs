@@ -3,8 +3,9 @@
   fetchFromGitHub,
   lib,
   installShellFiles,
+  stdenv,
+  writableTmpDirAsHomeHook,
 }:
-
 buildGoModule rec {
   pname = "jump";
   version = "0.51.0";
@@ -18,7 +19,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-nMUqZWdq//q/DNthvpKiYLq8f95O0QoItyX5w4vHzSA=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    writableTmpDirAsHomeHook
+  ];
 
   ldflags = [
     "-s"
@@ -27,6 +31,12 @@ buildGoModule rec {
 
   postInstall = ''
     installManPage man/j.1 man/jump.1
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd jump \
+       --bash <($out/bin/jump shell bash) \
+       --fish <($out/bin/jump shell fish) \
+       --zsh <($out/bin/jump shell zsh)
   '';
 
   meta = with lib; {

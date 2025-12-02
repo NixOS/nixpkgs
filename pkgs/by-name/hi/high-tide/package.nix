@@ -49,6 +49,7 @@ python313Packages.buildPythonApplication rec {
     gstreamer
     gst-plugins-base
     gst-plugins-good
+    gst-plugins-bad
     libsecret
   ]);
 

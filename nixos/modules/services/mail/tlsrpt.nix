@@ -9,6 +9,7 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
+    mkMerge
     mkOption
     mkPackageOption
     types
@@ -59,8 +60,6 @@ let
   reportdConfigFile = format.generate "tlsrpt-reportd.cfg" {
     tlsrpt_reportd = dropNullValues cfg.reportd.settings;
   };
-
-  withPostfix = config.services.postfix.enable && cfg.configurePostfix;
 in
 
 {
@@ -286,71 +285,83 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    environment.etc = {
-      "tlsrpt/collectd.cfg".source = collectdConfigFile;
-      "tlsrpt/fetcher.cfg".source = fetcherConfigFile;
-      "tlsrpt/reportd.cfg".source = reportdConfigFile;
-    };
+  config = mkMerge [
+    (mkIf (cfg.enable && config.services.postfix.enable && cfg.configurePostfix) {
+      users.users.postfix.extraGroups = [
+        "tlsrpt"
+      ];
 
-    users.users.tlsrpt = {
-      isSystemUser = true;
-      group = "tlsrpt";
-    };
-    users.groups.tlsrpt = { };
-
-    users.users.postfix.extraGroups = lib.mkIf withPostfix [
-      "tlsrpt"
-    ];
-
-    systemd.services.tlsrpt-collectd = {
-      description = "TLSRPT datagram collector";
-      documentation = [ "man:tlsrpt-collectd(1)" ];
-
-      wantedBy = [ "multi-user.target" ];
-
-      restartTriggers = [ collectdConfigFile ];
-
-      serviceConfig = commonServiceSettings // {
-        ExecStart = toString (
-          [
-            (lib.getExe' cfg.package "tlsrpt-collectd")
-          ]
-          ++ cfg.collectd.extraFlags
-        );
-        IPAddressDeny = "any";
-        PrivateNetwork = true;
-        RestrictAddressFamilies = [ "AF_UNIX" ];
-        RuntimeDirectory = "tlsrpt";
-        RuntimeDirectoryMode = "0750";
-        UMask = "0157";
+      services.postfix.settings.main = {
+        smtp_tlsrpt_enable = true;
+        smtp_tlsrpt_socket_name = cfg.collectd.settings.socketname;
       };
-    };
 
-    systemd.services.tlsrpt-reportd = {
-      description = "TLSRPT report generator";
-      documentation = [ "man:tlsrpt-reportd(1)" ];
-
-      wantedBy = [ "multi-user.target" ];
-
-      restartTriggers = [ reportdConfigFile ];
-
-      serviceConfig = commonServiceSettings // {
-        ExecStart = toString (
-          [
-            (lib.getExe' cfg.package "tlsrpt-reportd")
-          ]
-          ++ cfg.reportd.extraFlags
-        );
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-          "AF_NETLINK"
-        ];
-        ReadWritePaths = lib.optionals withPostfix [ "/var/lib/postfix/queue/maildrop" ];
-        SupplementaryGroups = lib.optionals withPostfix [ "postdrop" ];
-        UMask = "0077";
+      systemd.services.tlsrpt-reportd.serviceConfig = {
+        ReadWritePaths = [ "/var/lib/postfix/queue/maildrop" ];
+        SupplementaryGroups = [ "postdrop" ];
       };
-    };
-  };
+    })
+
+    (mkIf cfg.enable {
+      environment.etc = {
+        "tlsrpt/collectd.cfg".source = collectdConfigFile;
+        "tlsrpt/fetcher.cfg".source = fetcherConfigFile;
+        "tlsrpt/reportd.cfg".source = reportdConfigFile;
+      };
+
+      users.users.tlsrpt = {
+        isSystemUser = true;
+        group = "tlsrpt";
+      };
+      users.groups.tlsrpt = { };
+
+      systemd.services.tlsrpt-collectd = {
+        description = "TLSRPT datagram collector";
+        documentation = [ "man:tlsrpt-collectd(1)" ];
+
+        wantedBy = [ "multi-user.target" ];
+
+        restartTriggers = [ collectdConfigFile ];
+
+        serviceConfig = commonServiceSettings // {
+          ExecStart = toString (
+            [
+              (lib.getExe' cfg.package "tlsrpt-collectd")
+            ]
+            ++ cfg.collectd.extraFlags
+          );
+          IPAddressDeny = "any";
+          PrivateNetwork = true;
+          RestrictAddressFamilies = [ "AF_UNIX" ];
+          RuntimeDirectory = "tlsrpt";
+          RuntimeDirectoryMode = "0750";
+          UMask = "0157";
+        };
+      };
+
+      systemd.services.tlsrpt-reportd = {
+        description = "TLSRPT report generator";
+        documentation = [ "man:tlsrpt-reportd(1)" ];
+
+        wantedBy = [ "multi-user.target" ];
+
+        restartTriggers = [ reportdConfigFile ];
+
+        serviceConfig = commonServiceSettings // {
+          ExecStart = toString (
+            [
+              (lib.getExe' cfg.package "tlsrpt-reportd")
+            ]
+            ++ cfg.reportd.extraFlags
+          );
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_NETLINK"
+          ];
+          UMask = "0077";
+        };
+      };
+    })
+  ];
 }

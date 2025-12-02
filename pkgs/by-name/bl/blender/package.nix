@@ -16,7 +16,7 @@
   embree,
   fetchzip,
   fetchFromGitHub,
-  ffmpeg,
+  ffmpeg_7,
   fftw,
   fftwFloat,
   freetype,
@@ -69,6 +69,7 @@
   pugixml,
   python3Packages, # must use instead of python3.pkgs, see https://github.com/NixOS/nixpkgs/issues/211340
   rocmPackages, # comes with a significantly larger closure size
+  rubberband,
   runCommand,
   shaderc,
   spaceNavSupport ? stdenv.hostPlatform.isLinux,
@@ -116,13 +117,17 @@ in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.5.3";
+  version = "5.0.0";
 
   src = fetchzip {
     name = "source";
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-DNVZUZpysCyB/Xt8yB352gO+UK8Cd4aDFGYuUDKyIrs=";
+    hash = "sha256-UUHsylDmMWRcr1gGiXuYnno7D6uMjLqTYd9ak4FnZis=";
   };
+
+  patches = [
+    ./fix-hip-path.patch # https://projects.blender.org/blender/blender/pulls/150321
+  ];
 
   postPatch =
     (lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -146,68 +151,63 @@ stdenv'.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-I${python3}/include/${python3.libPrefix}";
 
   cmakeFlags = [
-    "-DMaterialX_DIR=${python3Packages.materialx}/lib/cmake/MaterialX"
-    "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
-    "-DPYTHON_LIBPATH=${python3}/lib"
-    "-DPYTHON_LIBRARY=${python3.libPrefix}"
-    "-DPYTHON_NUMPY_INCLUDE_DIRS=${python3Packages.numpy_1}/${python3.sitePackages}/numpy/core/include"
-    "-DPYTHON_NUMPY_PATH=${python3Packages.numpy_1}/${python3.sitePackages}"
-    "-DPYTHON_VERSION=${python3.pythonVersion}"
-    "-DWITH_ALEMBIC=ON"
-    "-DWITH_ASSERT_ABORT=OFF"
-    "-DWITH_BUILDINFO=OFF"
-    "-DWITH_CODEC_FFMPEG=ON"
-    "-DWITH_CODEC_SNDFILE=ON"
-    "-DWITH_CPU_CHECK=OFF"
-    "-DWITH_CYCLES_DEVICE_HIP=${if hipSupport then "ON" else "OFF"}"
-    "-DWITH_CYCLES_DEVICE_OPTIX=${if cudaSupport then "ON" else "OFF"}"
-    "-DWITH_CYCLES_EMBREE=${if embreeSupport then "ON" else "OFF"}"
-    "-DWITH_CYCLES_OSL=OFF"
-    "-DWITH_FFTW3=ON"
-    "-DWITH_HYDRA=${if openUsdSupport then "ON" else "OFF"}"
-    "-DWITH_IMAGE_OPENJPEG=ON"
-    "-DWITH_INSTALL_PORTABLE=OFF"
-    "-DWITH_JACK=${if jackaudioSupport then "ON" else "OFF"}"
-    "-DWITH_LIBS_PRECOMPILED=OFF"
-    "-DWITH_MOD_OCEANSIM=ON"
-    "-DWITH_OPENCOLLADA=${if colladaSupport then "ON" else "OFF"}"
-    "-DWITH_OPENCOLORIO=ON"
-    "-DWITH_OPENIMAGEDENOISE=${if openImageDenoiseSupport then "ON" else "OFF"}"
-    "-DWITH_OPENSUBDIV=ON"
-    "-DWITH_OPENVDB=ON"
-    "-DWITH_PIPEWIRE=OFF"
-    "-DWITH_PULSEAUDIO=OFF"
-    "-DWITH_PYTHON_INSTALL=OFF"
-    "-DWITH_PYTHON_INSTALL_NUMPY=OFF"
-    "-DWITH_PYTHON_INSTALL_REQUESTS=OFF"
-    "-DWITH_SDL=OFF"
-    "-DWITH_STRICT_BUILD_OPTIONS=ON"
-    "-DWITH_TBB=ON"
-    "-DWITH_USD=${if openUsdSupport then "ON" else "OFF"}"
+    "-C../build_files/cmake/config/blender_release.cmake"
+
+    (lib.cmakeFeature "MaterialX_DIR" "${python3Packages.materialx}/lib/cmake/MaterialX")
+    (lib.cmakeFeature "PYTHON_INCLUDE_DIR" "${python3}/include/${python3.libPrefix}")
+    (lib.cmakeFeature "PYTHON_LIBPATH" "${python3}/lib")
+    (lib.cmakeFeature "PYTHON_LIBRARY" "${python3.libPrefix}")
+    (lib.cmakeFeature "PYTHON_NUMPY_INCLUDE_DIRS" "${python3Packages.numpy_1}/${python3.sitePackages}/numpy/core/include")
+    (lib.cmakeFeature "PYTHON_NUMPY_PATH" "${python3Packages.numpy_1}/${python3.sitePackages}")
+    (lib.cmakeFeature "PYTHON_VERSION" "${python3.pythonVersion}")
+
+    (lib.cmakeBool "WITH_BUILDINFO" false)
+    (lib.cmakeBool "WITH_CPU_CHECK" false)
+    (lib.cmakeBool "WITH_CYCLES_CUDA_BINARIES" cudaSupport)
+    (lib.cmakeBool "WITH_CYCLES_DEVICE_HIP" hipSupport)
+    (lib.cmakeBool "WITH_CYCLES_DEVICE_ONEAPI" false)
+    (lib.cmakeBool "WITH_CYCLES_DEVICE_OPTIX" cudaSupport)
+    (lib.cmakeBool "WITH_CYCLES_EMBREE" embreeSupport)
+    (lib.cmakeBool "WITH_CYCLES_OSL" false)
+    (lib.cmakeBool "WITH_HYDRA" openUsdSupport)
+    (lib.cmakeBool "WITH_INSTALL_PORTABLE" false)
+    (lib.cmakeBool "WITH_JACK" jackaudioSupport)
+    (lib.cmakeBool "WITH_LIBS_PRECOMPILED" false)
+    (lib.cmakeBool "WITH_OPENCOLLADA" colladaSupport)
+    (lib.cmakeBool "WITH_OPENIMAGEDENOISE" openImageDenoiseSupport)
+    (lib.cmakeBool "WITH_PIPEWIRE" false)
+    (lib.cmakeBool "WITH_PULSEAUDIO" false)
+    (lib.cmakeBool "WITH_PYTHON_INSTALL" false)
+    (lib.cmakeBool "WITH_PYTHON_INSTALL_NUMPY" false)
+    (lib.cmakeBool "WITH_PYTHON_INSTALL_REQUESTS" false)
+    (lib.cmakeBool "WITH_STRICT_BUILD_OPTIONS" true)
+    (lib.cmakeBool "WITH_USD" openUsdSupport)
 
     # Blender supplies its own FindAlembic.cmake (incompatible with the Alembic-supplied config file)
-    "-DALEMBIC_INCLUDE_DIR=${lib.getDev alembic}/include"
-    "-DALEMBIC_LIBRARY=${lib.getLib alembic}/lib/libAlembic${stdenv.hostPlatform.extensions.sharedLibrary}"
+    (lib.cmakeFeature "ALEMBIC_INCLUDE_DIR" "${lib.getDev alembic}/include")
+    (lib.cmakeFeature "ALEMBIC_LIBRARY" "${lib.getLib alembic}/lib/libAlembic${stdenv.hostPlatform.extensions.sharedLibrary}")
   ]
   ++ lib.optionals cudaSupport [
-    "-DOPTIX_ROOT_DIR=${optix}"
-    "-DWITH_CYCLES_CUDA_BINARIES=ON"
+    (lib.cmakeFeature "OPTIX_ROOT_DIR" "${optix}")
+    (lib.cmakeBool "WITH_CYCLES_CUDA_BINARIES" true)
   ]
   ++ lib.optionals hipSupport [
-    "-DHIPRT_INCLUDE_DIR=${rocmPackages.hiprt}/include"
-    "-DWITH_CYCLES_DEVICE_HIPRT=ON"
-    "-DWITH_CYCLES_HIP_BINARIES=ON"
+    (lib.cmakeFeature "HIPRT_INCLUDE_DIR" "${rocmPackages.hiprt}/include")
+    (lib.cmakeBool "WITH_CYCLES_DEVICE_HIPRT" true)
+    (lib.cmakeBool "WITH_CYCLES_HIP_BINARIES" true)
   ]
   ++ lib.optionals waylandSupport [
-    "-DWITH_GHOST_WAYLAND=ON"
-    "-DWITH_GHOST_WAYLAND_DBUS=ON"
-    "-DWITH_GHOST_WAYLAND_DYNLOAD=OFF"
-    "-DWITH_GHOST_WAYLAND_LIBDECOR=ON"
+    (lib.cmakeBool "WITH_GHOST_WAYLAND" true)
+    (lib.cmakeBool "WITH_GHOST_WAYLAND_DBUS" true)
+    (lib.cmakeBool "WITH_GHOST_WAYLAND_DYNLOAD" false)
+    (lib.cmakeBool "WITH_GHOST_WAYLAND_LIBDECOR" true)
   ]
-  ++ lib.optional stdenv.cc.isClang "-DPYTHON_LINKFLAGS=" # Clang doesn't support "-export-dynamic"
+  ++ lib.optionals stdenv.cc.isClang [
+    (lib.cmakeFeature "PYTHON_LINKFLAGS" "") # Clang doesn't support "-export-dynamic"
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DLIBDIR=/does-not-exist"
-    "-DSSE2NEON_INCLUDE_DIR=${sse2neon}/lib"
+    (lib.cmakeFeature "LIBDIR" "/does-not-exist")
+    (lib.cmakeFeature "SSE2NEON_INCLUDE_DIR" "${sse2neon}/include")
   ];
 
   preConfigure = ''
@@ -239,7 +239,7 @@ stdenv'.mkDerivation (finalAttrs: {
   buildInputs = [
     alembic
     boost
-    ffmpeg
+    ffmpeg_7
     fftw
     fftwFloat
     freetype
@@ -263,11 +263,12 @@ stdenv'.mkDerivation (finalAttrs: {
     openpgl
     (opensubdiv.override { inherit cudaSupport; })
     openvdb
+    onetbb
     potrace
     pugixml
     python3
     python3Packages.materialx
-    onetbb
+    rubberband
     zlib
     zstd
   ]

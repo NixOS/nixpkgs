@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pyreadstat";
-  version = "1.3.1";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Roche";
     repo = "pyreadstat";
     tag = "v${version}";
-    hash = "sha256-EiQKsz4+PdUNXAniw8ftZbF5B+BegUx40zumE3Z7Xmo=";
+    hash = "sha256-JDs5SxiqSZHVOJTPezq5oIT+Xgp6tz2BytoQ6jb/ZwU=";
   };
 
   build-system = [

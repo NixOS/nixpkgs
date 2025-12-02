@@ -126,7 +126,8 @@ in
             ReadWritePaths = "";
             BindPaths =
               optional (cfg.settings ? DataFolder) cfg.settings.DataFolder
-              ++ optional (cfg.settings ? CacheFolder) cfg.settings.CacheFolder;
+              ++ optional (cfg.settings ? CacheFolder) cfg.settings.CacheFolder
+              ++ optional (cfg.settings ? Backup.Path) cfg.settings.Backup.Path;
             BindReadOnlyPaths = [
               # navidrome uses online services to download additional album metadata / covers
               "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"

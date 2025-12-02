@@ -69,7 +69,15 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (
     stdenv.hostPlatform.isx86_64 && (precision == "single" || precision == "double")
   ) "--enable-sse2 --enable-avx --enable-avx2 --enable-avx512 --enable-avx128-fma"
-  ++ lib.optional enableMpi "--enable-mpi"
+  ++ lib.optionals enableMpi [
+    "--enable-mpi"
+    # link libfftw3_mpi explicitly with -lmpi
+    # linker on darwin requires all symbols to be resolvable at link time
+    # see
+    #   https://github.com/FFTW/fftw3/issues/274
+    #   https://github.com/spack/spack/pull/29279
+    "MPILIBS=-lmpi"
+  ]
   # doc generation causes Fortran wrapper generation which hard-codes gcc
   ++ lib.optional (!withDoc) "--disable-doc";
 

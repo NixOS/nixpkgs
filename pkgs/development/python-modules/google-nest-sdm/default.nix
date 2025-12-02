@@ -11,7 +11,6 @@
   pytest-aiohttp,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests-oauthlib,
   setuptools,
@@ -19,16 +18,14 @@
 
 buildPythonPackage rec {
   pname = "google-nest-sdm";
-  version = "7.1.5";
+  version = "9.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "python-google-nest-sdm";
     tag = version;
-    hash = "sha256-YpXpQnfRp5Kvr3fNAnlwsZwJdXuES7KXOykt+YK5Wz4=";
+    hash = "sha256-qbw5KryI/h+uBddFrYBCQHXxFAhXR1SHdkuIeUKxbVw=";
   };
 
   build-system = [ setuptools ];

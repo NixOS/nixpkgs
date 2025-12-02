@@ -55,7 +55,7 @@ buildPythonPackage rec {
     pytest-mock
     udevCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [ "tests/test_pydantic_models.py" ];
 

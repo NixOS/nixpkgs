@@ -7,18 +7,6 @@ let
     });
   };
 
-  # Only allow the demo data to be used (only if it's unfreeRedistributable).
-  unfreePredicate =
-    pkg:
-    let
-      allowPackageNames = [
-        "quake3-demodata"
-        "quake3-pointrelease"
-      ];
-      allowLicenses = [ lib.licenses.unfreeRedistributable ];
-    in
-    lib.elem pkg.pname allowPackageNames && lib.elem (pkg.meta.license or null) allowLicenses;
-
   client =
     { pkgs, ... }:
     {
@@ -26,7 +14,6 @@ let
       hardware.graphics.enable = true;
       environment.systemPackages = [ pkgs.quake3demo ];
       nixpkgs.config.packageOverrides = overrides;
-      nixpkgs.config.allowUnfreePredicate = unfreePredicate;
     };
 in
 {
@@ -49,7 +36,6 @@ in
             + "+map q3dm7 +addbot grunt +addbot daemia 2> /tmp/log";
         };
         nixpkgs.config.packageOverrides = overrides;
-        nixpkgs.config.allowUnfreePredicate = unfreePredicate;
         networking.firewall.allowedUDPPorts = [ 27960 ];
       };
 

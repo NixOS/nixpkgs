@@ -4,7 +4,7 @@
   writeShellApplication,
   buildFHSEnv,
   webkitgtk_4_1,
-  ffmpeg,
+  ffmpeg_7,
   gtk3,
   pango,
   atk,
@@ -49,7 +49,7 @@ buildFHSEnv {
     custom_lsb_release
     webkitgtk_4_1
     gtk3
-    ffmpeg
+    ffmpeg_7
     pango
     atk
     cairo

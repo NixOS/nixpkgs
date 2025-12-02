@@ -37,6 +37,11 @@ rustPlatform.buildRustPackage rec {
       url = "https://github.com/cjdelisle/cjdns/commit/436d9a9784bae85734992c2561c778fbd2f5ac32.patch";
       hash = "sha256-THcYNGVbMx/xf3/5UIxEhz3OlODE0qiYgDBOlHunhj8=";
     })
+    # Fix build failure with Rust 1.89.0 (https://github.com/cjdelisle/cjdns/pull/1271)
+    (fetchpatch {
+      url = "https://github.com/cjdelisle/cjdns/commit/68b786aca5bfa427e5f58c029e4d9cc74969ef87.patch";
+      hash = "sha256-FmrooDzrIWUIAnzwZTVDXI+Cl8pMngPqxsJjUHVhry8=";
+    })
   ];
 
   cargoHash = "sha256-f96y6ZW0HxC+73ts5re8GIo2aigQgK3gXyF7fMrcJ0o=";
@@ -81,8 +86,9 @@ rustPlatform.buildRustPackage rec {
   passthru.tests.basic = nixosTests.cjdns;
 
   meta = {
-    homepage = "https://github.com/cjdelisle/cjdns";
     description = "Encrypted networking for regular people";
+    homepage = "https://github.com/cjdelisle/cjdns";
+    changelog = "https://github.com/cjdelisle/cjdns/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   libXdmcp,
   libexif,
@@ -16,7 +15,7 @@
   qttools,
   wrapQtAppsHook,
   gitUpdater,
-  version ? "2.2.0",
+  version ? "2.3.0",
   qtx11extras ? null,
 }:
 
@@ -31,20 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash =
       {
         "1.4.0" = "sha256-QxPYSA7537K+/dRTxIYyg+Q/kj75rZOdzlUsmSdQcn4=";
-        "2.2.0" = "sha256-xLXHwrcMJ8PObZ2qWVZTf9FREcjUi5qtcCJgNHj391Q=";
+        "2.3.0" = "sha256-A0kBwLiPvHIsJWQvg6lwb5lrojU8oDDQYHuC2pTXdPc=";
       }
       ."${finalAttrs.version}";
   };
-
-  patches = lib.optionals (finalAttrs.version == "2.2.0") [
-    # fix build against Qt >= 6.10 (https://github.com/lxqt/libfm-qt/pull/1060)
-    # TODO: drop when upgrading beyond version 2.2.0
-    (fetchpatch {
-      name = "cmake-fix-build-with-Qt-6.10.patch";
-      url = "https://github.com/lxqt/libfm-qt/commit/3bcbae5831f5ce3d2f06dc370f0c2ad0026ae82a.patch";
-      hash = "sha256-nTuPXlkP7AzC8R4OHfQx6/kxPsDjaw7tGzQGyiYqQSQ=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

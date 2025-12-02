@@ -98,8 +98,19 @@ let
         hardeningDisable = [ "all" ];
         dontStrip = true;
 
-        # breaks secondary CPU bringup on at least RK3588, maybe others
-        env.NIX_CFLAGS_COMPILE = "-fomit-frame-pointer";
+        env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
+          # breaks secondary CPU bringup on at least RK3588, maybe others
+          "-fomit-frame-pointer"
+
+          # Breaks compilation of armTrustedFirmwareRK3399:
+          # /nix/store/hash-arm-none-eabi-binutils-2.44/bin/arm-none-eabi-ld: /build/source/build/rk3399/release/m0/rk3399m0.elf: error: PHDR segment not covered by LOAD segment
+          #
+          # This was caused by ccc56d1a79ff2a0f528cecf5e36eb76beaacc8c0 adding the flag `--enable-default-pie`.
+          # According to https://trustedfirmware-a.readthedocs.io/en/v2.2/getting_started/user-guide.html,
+          # Trusted Firmware-A has an option called ENABLE_PIE, which is turned off by default.
+          # Someone with more knowledge of the implications can try using that option instead.
+          "-no-pie"
+        ];
 
         meta =
           with lib;

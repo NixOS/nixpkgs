@@ -46,9 +46,10 @@ buildGoModule (finalAttrs: {
   # FIXME: Remove after https://github.com/temporalio/tcld/pull/447 lands.
   patches = [ ./compgen.patch ];
 
-  # NOTE: Some tests appear to require (local only?) network access, which
-  # doesn't work in the sandbox.
-  __darwinAllowLocalNetworking = true;
+  checkFlags = [
+    # This test appears to require network access and does not work in the sandbox.
+    "-skip=^TestFxDependencyInjection$"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''

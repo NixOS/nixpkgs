@@ -24,6 +24,7 @@
 
   nix-update-script,
   withGraphics ? false,
+  versionCheckHook,
 }:
 let
   rpathLibs = [
@@ -43,8 +44,8 @@ let
   ];
 in
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "alacritty";
-  version = if !withGraphics then "0.16.1" else "0.16.1-graphics";
+  pname = "alacritty${lib.optionalString withGraphics "-graphics"}";
+  version = "0.16.1";
 
   src =
     # by default we want the official package
@@ -60,7 +61,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       fetchFromGitHub {
         owner = "ayosec";
         repo = "alacritty";
-        tag = "v${finalAttrs.version}";
+        tag = "v${finalAttrs.version}-graphics";
         hash = "sha256-e+o0GLy05qXEY4T57dCuqhukTKBSm1WIHzPUV8uswRI=";
       };
 
@@ -141,6 +142,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tests.test = nixosTests.terminal-emulators.alacritty;
     updateScript = nix-update-script { };
   };
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "Cross-platform, GPU-accelerated terminal emulator";

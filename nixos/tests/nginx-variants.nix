@@ -25,10 +25,8 @@ builtins.listToAttrs (
     })
     [
       "angie"
-      "angieQuic"
       "nginxStable"
       "nginxMainline"
-      "nginxQuic"
       "nginxShibboleth"
       "openresty"
       "tengine"

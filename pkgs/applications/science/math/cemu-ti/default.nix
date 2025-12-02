@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     # This is resolved upstream, but I can't apply the patch because the
     # sourceRoot isn't set to the base of the Git repo.
     ./resolve-ambiguous-constexpr.patch
+    # Disable the deploy_script generation. It's broken with Qt 6.10 and not used by this package.
+    ./cmake-no-deploy.patch
   ];
 
   nativeBuildInputs = [

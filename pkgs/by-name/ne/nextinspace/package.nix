@@ -41,6 +41,6 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "nextinspace";
     homepage = "https://github.com/The-Kid-Gid/nextinspace";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ penguwin ];
+    maintainers = [ ];
   };
 }

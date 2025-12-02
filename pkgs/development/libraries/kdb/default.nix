@@ -1,8 +1,7 @@
 {
   mkDerivation,
   lib,
-  fetchurl,
-  fetchpatch,
+  fetchFromGitLab,
   extra-cmake-modules,
   qtbase,
   kcoreaddons,
@@ -13,27 +12,17 @@
   qttools,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "kdb";
-  version = "3.2.0";
+  version = "3.2.0-unstable-2025-10-17";
 
-  src = fetchurl {
-    url = "mirror://kde/stable/kdb/src/kdb-${version}.tar.xz";
-    sha256 = "0s909x34a56n3xwhqz27irl2gbzidax0685w2kf34f0liny872cg";
+  src = fetchFromGitLab {
+    domain = "invent.kde.org";
+    owner = "libraries";
+    repo = "kdb";
+    rev = "819f9f61d629ffd80990ae17ae6c8078721a142b";
+    hash = "sha256-XkpFFzTgLEjPxEzwinbGhHRTULQrhl5TdakJlQuI27A=";
   };
-
-  patches = [
-    # fix build with newer QT versions
-    (fetchpatch {
-      url = "https://github.com/KDE/kdb/commit/b36d74f13a1421437a725fb74502c993c359392a.patch";
-      sha256 = "sha256-ENMZTUZ3yCKUhHPMUcDe1cMY2GLBz0G3ZvMRyj8Hfrw=";
-    })
-    # fix build with newer posgresql versions
-    (fetchpatch {
-      url = "https://github.com/KDE/kdb/commit/40cdaea4d7824cc1b0d26e6ad2dcb61fa2077911.patch";
-      sha256 = "sha256-cZpX6L/NZX3vztnh0s2+v4J7kBcKgUdecY53LRp8CwM=";
-    })
-  ];
 
   nativeBuildInputs = [
     extra-cmake-modules
@@ -50,11 +39,11 @@ mkDerivation rec {
 
   propagatedBuildInputs = [ qtbase ];
 
-  meta = with lib; {
+  meta = {
     description = "Database connectivity and creation framework for various database vendors";
     mainProgram = "kdb3_sqlite3_dump";
-    license = licenses.lgpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ zraexy ];
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ zraexy ];
   };
 }

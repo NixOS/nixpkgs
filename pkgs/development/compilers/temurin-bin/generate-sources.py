@@ -6,7 +6,7 @@ import re
 import requests
 import sys
 
-feature_versions = (8, 11, 17, 21, 23, 25)
+feature_versions = (8, 11, 17, 21, 25)
 oses = ("mac", "linux", "alpine-linux")
 types = ("jre", "jdk")
 impls = ("hotspot",)

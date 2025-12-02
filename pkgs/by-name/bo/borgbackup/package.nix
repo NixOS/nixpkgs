@@ -13,6 +13,7 @@
   zstd,
   installShellFiles,
   nixosTests,
+  nix-update-script,
 }:
 
 let
@@ -120,6 +121,11 @@ python.pkgs.buildPythonApplication rec {
     "test_get_keys_dir"
     "test_get_security_dir"
     "test_get_config_dir"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Tests create files with append-only flags that cause cleanup issues on macOS
+    "test_extract_restores_append_flag"
+    "test_file_status_excluded"
   ];
 
   preCheck = ''
@@ -138,6 +144,14 @@ python.pkgs.buildPythonApplication rec {
 
   disabled = python.pythonOlder "3.9";
 
+  passthru.updateScript = nix-update-script {
+    # Only match tags formatted as x.y.z (e.g., 1.2.3)
+    extraArgs = [
+      "--version-regex"
+      "^([0-9]+\\.[0-9]+\\.[0-9]+)$"
+    ];
+  };
+
   meta = with lib; {
     changelog = "https://github.com/borgbackup/borg/blob/${src.rev}/docs/changes.rst";
     description = "Deduplicating archiver with compression and encryption";
@@ -148,7 +162,6 @@ python.pkgs.buildPythonApplication rec {
     maintainers = with maintainers; [
       dotlambda
       globin
-      iedame
     ];
   };
 }

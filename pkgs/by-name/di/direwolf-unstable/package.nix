@@ -12,14 +12,17 @@
   inherit hamlibSupport gpsdSupport extraScripts;
 }).overrideAttrs
   (oldAttrs: {
-    version = "1.7-unstable-2025-04-29";
+    version = "1.8.1-unstable-2025-11-16";
 
     src = fetchFromGitHub {
       owner = "wb2osz";
       repo = "direwolf";
-      rev = "486b3cf1f685502af7dc87b0f9c9cead6800d47b";
-      hash = "sha256-VFBkOWHGZP7GjekHL3GY3BGkVXQbtyD1YPmu0xaQ1ME=";
+      rev = "694c95485b21c1c22bc4682703771dec4d7a374b";
+      hash = "sha256-O2ycOQx4EVwdYGC9LTBlxheMFZp0ddHquSUwVsB5fco=";
     };
+
+    # drop upstreamed cmake-4 patch
+    patches = [ ];
 
     postPatch =
       builtins.replaceStrings

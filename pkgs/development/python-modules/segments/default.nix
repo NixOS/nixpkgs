@@ -6,7 +6,6 @@
   setuptools,
   regex,
   csvw,
-  clldutils,
   pytestCheckHook,
   pytest-cov-stub,
   pytest-mock,
@@ -30,7 +29,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     regex
     csvw
-    clldutils
   ];
 
   nativeCheckInputs = [

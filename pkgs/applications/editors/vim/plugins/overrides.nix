@@ -143,6 +143,7 @@ let
 in
 
 assertNoAdditions {
+  # keep-sorted start case=no block=yes newline_separated=yes
   advanced-git-search-nvim = super.advanced-git-search-nvim.overrideAttrs {
     checkInputs = with self; [
       fzf-lua
@@ -313,6 +314,14 @@ assertNoAdditions {
       maintainers = with lib.maintainers; [ m3l6h ];
     };
   });
+
+  blink-cmp-env = super.blink-cmp-env.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
+  };
+
+  blink-cmp-yanky = super.blink-cmp-yanky.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
+  };
 
   bluloco-nvim = super.bluloco-nvim.overrideAttrs {
     dependencies = [ self.lush-nvim ];
@@ -500,6 +509,10 @@ assertNoAdditions {
   };
 
   cmp-digraphs = super.cmp-digraphs.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
+  cmp-dotenv = super.cmp-dotenv.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
   };
 
@@ -1203,6 +1216,10 @@ assertNoAdditions {
     dependencies = [ self.leap-nvim ];
   };
 
+  floaterm = super.floaterm.overrideAttrs {
+    dependencies = [ self.nvzone-volt ];
+  };
+
   flutter-tools-nvim = super.flutter-tools-nvim.overrideAttrs {
     # Optional dap integration
     checkInputs = [ self.nvim-dap ];
@@ -1220,40 +1237,6 @@ assertNoAdditions {
   freeze-nvim = super.freeze-nvim.overrideAttrs {
     runtimeDeps = [ charm-freeze ];
   };
-
-  fruzzy =
-    let
-      # until https://github.com/NixOS/nixpkgs/pull/67878 is merged, there's no better way to install nim libraries with nix
-      nimpy = fetchFromGitHub {
-        owner = "yglukhov";
-        repo = "nimpy";
-        rev = "4840d1e438985af759ddf0923e7a9250fd8ea0da";
-        sha256 = "0qqklvaajjqnlqm3rkk36pwwnn7x942mbca7nf2cvryh36yg4q5k";
-      };
-      binaryheap = fetchFromGitHub {
-        owner = "bluenote10";
-        repo = "nim-heap";
-        rev = "c38039309cb11391112571aa332df9c55f625b54";
-        sha256 = "05xdy13vm5n8dw2i366ppbznc4cfhq23rdcklisbaklz2jhdx352";
-      };
-    in
-    super.fruzzy.overrideAttrs (old: {
-      buildInputs = [ nim1 ];
-      patches = [
-        (replaceVars ./patches/fruzzy/get_version.patch {
-          inherit (old) version;
-        })
-      ];
-      configurePhase = ''
-        substituteInPlace Makefile \
-          --replace-fail \
-            "nim c" \
-            "nim c --nimcache:$TMP --path:${nimpy} --path:${binaryheap}"
-      '';
-      buildPhase = ''
-        make build
-      '';
-    });
 
   fugit2-nvim = super.fugit2-nvim.overrideAttrs {
     # Requires web-devicons but mini.icons can mock them up
@@ -1866,6 +1849,16 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
+  markdoc-nvim = super.markdoc-nvim.overrideAttrs {
+    dependencies = with self; [
+      (nvim-treesitter.withPlugins (p: [
+        p.markdown
+        p.markdown_inline
+        p.html
+      ]))
+    ];
+  };
+
   markdown-preview-nvim =
     let
       # We only need its dependencies `node-modules`.
@@ -2342,6 +2335,12 @@ assertNoAdditions {
     ];
   };
 
+  neovim-tips = super.neovim-tips.overrideAttrs {
+    dependencies = [
+      self.nui-nvim
+    ];
+  };
+
   nlsp-settings-nvim = super.nlsp-settings-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
   };
@@ -2558,6 +2557,13 @@ assertNoAdditions {
       "nvls.errors.lilypond-book"
       "nvls.tex"
       "nvls.texinfo"
+    ];
+  };
+
+  nvim-k8s-crd = super.nvim-k8s-crd.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      nvim-lspconfig
     ];
   };
 
@@ -3191,6 +3197,11 @@ assertNoAdditions {
       "snacks.debug"
       "snacks.dim"
       "snacks.explorer.init"
+      "snacks.gh.actions"
+      "snacks.gh.buf"
+      "snacks.gh.init"
+      "snacks.gh.render"
+      "snacks.gh.render.init"
       "snacks.git"
       "snacks.image.convert"
       "snacks.image.image"
@@ -3203,6 +3214,8 @@ assertNoAdditions {
       "snacks.picker.actions"
       "snacks.picker.config.highlights"
       "snacks.picker.core.list"
+      "snacks.picker.source.gh"
+      "snacks.picker.util.diff"
       "snacks.scratch"
       "snacks.scroll"
       "snacks.terminal"
@@ -4078,6 +4091,19 @@ assertNoAdditions {
     ];
   };
 
+  vscode-diff-nvim = super.vscode-diff-nvim.overrideAttrs {
+    dependencies = [
+      self.nui-nvim
+    ];
+    nativeBuildInputs = [ cmake ];
+    dontUseCmakeConfigure = true;
+    buildPhase = ''
+      runHook preBuild
+      make
+      runHook postBuild
+    '';
+  };
+
   which-key-nvim = super.which-key-nvim.overrideAttrs {
     nvimSkipModules = [ "which-key.docs" ];
   };
@@ -4229,11 +4255,5 @@ assertNoAdditions {
         --replace-fail "'zoxide_executable', 'zoxide'" "'zoxide_executable', '${zoxide}/bin/zoxide'"
     '';
   };
-
-  nvim-k8s-crd = super.nvim-k8s-crd.overrideAttrs {
-    dependencies = with self; [
-      plenary-nvim
-      nvim-lspconfig
-    ];
-  };
+  # keep-sorted end
 }

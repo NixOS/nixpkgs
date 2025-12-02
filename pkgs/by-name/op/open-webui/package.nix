@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.34";
+  version = "0.6.40";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-crjBVR0ZXUYck4pyLNb1IO9IoQ6MFBnCKEBsi0/JXCI=";
+    hash = "sha256-whQmHSnHWeAozNsWemZZXi3quqcY27PTO6/3lpxiy+c=";
   };
 
   frontend = buildNpmPackage rec {
@@ -32,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-ofw/leDcfrc+Bp93s9BkB3WFs8qQgiWUag7gvdPJdlo=";
+    npmDepsHash = "sha256-WL239S/XB+fZEOY2MQMMxbyJ5RoXfZJz94A8IOmyQ9c=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -75,6 +75,8 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [ hatchling ];
 
+  patches = [ ./langchain-v1.patch ];
+
   # Not force-including the frontend build directory as frontend is managed by the `frontend` derivation above.
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -106,6 +108,7 @@ python3Packages.buildPythonApplication rec {
       beautifulsoup4
       black
       boto3
+      chardet
       chromadb
       cryptography
       ddgs
@@ -128,11 +131,13 @@ python3Packages.buildPythonApplication rec {
       iso-639
       itsdangerous
       langchain
+      langchain-classic
       langchain-community
       langdetect
       ldap3
       loguru
       markdown
+      msoffcrypto-tool
       mcp
       nltk
       onnxruntime
@@ -201,6 +206,7 @@ python3Packages.buildPythonApplication rec {
     ];
 
     all = [
+      azure-search-documents
       colbert-ai
       elasticsearch
       firecrawl-py
@@ -212,7 +218,7 @@ python3Packages.buildPythonApplication rec {
       pymilvus
       pymongo
       qdrant-client
-      tencentcloud-sdk-python
+      weaviate-client
     ]
     ++ moto.optional-dependencies.s3
     ++ postgres;

@@ -6,15 +6,15 @@
 
 buildGoModule rec {
   pname = "mev-boost";
-  version = "1.9";
+  version = "1.10.1";
   src = fetchFromGitHub {
     owner = "flashbots";
     repo = "mev-boost";
     rev = "v${version}";
-    hash = "sha256-VBvbiB7M6X+bQ5xEwmJo5dptiR7PIBiFDqkg1fyU8ro=";
+    hash = "sha256-Fm/zeaFJTtevEMZPK0O1QyfF7KXKcpqS2SC3DW7dn3Y=";
   };
 
-  vendorHash = "sha256-OyRyMsINy4I04E2QvToOEY7UKh2s6NUeJJO0gJI5uS0=";
+  vendorHash = "sha256-FpkQp/PgmZ9+swQYI984j87ODbT0kpanBkHfJK86FWA=";
 
   meta = with lib; {
     description = "Ethereum block-building middleware";

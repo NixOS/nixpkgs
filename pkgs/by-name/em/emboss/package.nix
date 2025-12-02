@@ -50,5 +50,7 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.gpl2;
     homepage = "https://emboss.sourceforge.net/";
+    # The last successful Darwin Hydra build was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

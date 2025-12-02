@@ -28,7 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  patches = lib.optionals (!textToSpeechSupport) [
+  patches = [
+    # Meet Qt 6.10 requirement for explicit find_package of private targets
+    ./fix-qt6-10-private-targets.diff
+  ]
+  ++ lib.optionals (!textToSpeechSupport) [
     # Removes TTS support
     ./disable-tts.patch
   ];

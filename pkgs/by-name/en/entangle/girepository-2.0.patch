@@ -1,0 +1,39 @@
+diff --git a/src/entangle-main.c b/src/entangle-main.c
+index 970bfee..8bc16eb 100644
+--- a/src/entangle-main.c
++++ b/src/entangle-main.c
+@@ -21,7 +21,7 @@
+ #include <locale.h>
+ #include <stdio.h>
+ 
+-#include <girepository.h>
++#include <girepository/girepository.h>
+ #include <glib/gi18n.h>
+ #include <gst/gst.h>
+ #include <gtk/gtk.h>
+@@ -80,7 +80,11 @@ main(int argc, char **argv)
+     gst_init(NULL, NULL);
+ 
+     if (ins) {
+-        g_irepository_dump(ins, NULL);
++        char **ins_args;
++        ins_args = g_strsplit(ins, ",", 2);
++        if (g_strv_length(ins_args) == 2)
++            gi_repository_dump(ins_args[0], ins_args[1], NULL);
++        g_strfreev(ins_args);
+         return 0;
+     }
+ 
+diff --git a/src/frontend/entangle-application.c b/src/frontend/entangle-application.c
+index 3e3e1af..f7c03d5 100644
+--- a/src/frontend/entangle-application.c
++++ b/src/frontend/entangle-application.c
+@@ -470,7 +470,7 @@ entangle_application_init(EntangleApplication *app)
+     app->activeCameras = entangle_camera_list_new_active();
+     app->supportedCameras = entangle_camera_list_new_supported();
+ 
+-    g_irepository_require(g_irepository_get_default(), "Peas", "1.0", 0, NULL);
++    gi_repository_require(gi_repository_dup_default(), "Peas", "1.0", 0, NULL);
+ 
+     userdir =
+         g_build_filename(g_get_user_config_dir(), "entangle/plugins", NULL);

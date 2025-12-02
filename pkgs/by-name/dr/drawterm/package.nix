@@ -5,7 +5,6 @@
   unstableGitUpdater,
   installShellFiles,
   makeWrapper,
-  apple-sdk_13,
   xorg,
   pkg-config,
   wayland-scanner,
@@ -54,8 +53,7 @@ stdenv.mkDerivation {
     ++ lib.optionals withXorg [
       xorg.libX11
       xorg.libXt
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_13;
+    ];
 
   makeFlags =
     lib.optional withWayland "CONF=linux"

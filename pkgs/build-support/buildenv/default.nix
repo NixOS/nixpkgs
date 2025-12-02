@@ -105,6 +105,7 @@ lib.makeOverridable (
           nativeBuildInputs
           buildInputs
           ;
+        pathsToLinkJSON = builtins.toJSON pathsToLink;
         pkgs = builtins.toJSON chosenOutputs;
         extraPathsFrom = lib.optional includeClosures (writeClosure pathsForClosure);
         preferLocalBuild = true;

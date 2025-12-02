@@ -23,19 +23,16 @@
   enableRS3 ? false,
 }:
 let
-  cef = cef-binary.overrideAttrs (oldAttrs: {
+  cef = cef-binary.override {
     version = "126.2.18";
-    __intentionallyOverridingVersion = true; # `cef-binary` uses the overridden `srcHash` values in its source FOD
     gitRevision = "3647d39";
     chromiumVersion = "126.0.6478.183";
 
-    srcHash =
-      {
-        aarch64-linux = "sha256-Ni5aEbI+WuMnbT8gPWMONN5NkTySw7xJvnM6U44Njao=";
-        x86_64-linux = "sha256-YwND4zsndvmygJxwmrCvaFuxjJO704b6aDVSJqpEOKc=";
-      }
-      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
-  });
+    srcHashes = {
+      aarch64-linux = "sha256-Ni5aEbI+WuMnbT8gPWMONN5NkTySw7xJvnM6U44Njao=";
+      x86_64-linux = "sha256-YwND4zsndvmygJxwmrCvaFuxjJO704b6aDVSJqpEOKc=";
+    };
+  };
 in
 let
   bolt = stdenv.mkDerivation (finalAttrs: {
@@ -158,7 +155,6 @@ buildFHSEnv {
     maintainers = with lib.maintainers; [
       nezia
       jaspersurmont
-      iedame
     ];
     platforms = lib.platforms.linux;
     mainProgram = "${bolt.name}";

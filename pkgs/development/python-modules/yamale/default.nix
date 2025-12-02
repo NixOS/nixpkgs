@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   pyyaml,
   ruamel-yaml,
@@ -11,16 +10,14 @@
 
 buildPythonPackage rec {
   pname = "yamale";
-  version = "6.0.0";
+  version = "6.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "23andMe";
     repo = "yamale";
     tag = version;
-    hash = "sha256-Ij9jhGMYHUStZ/xR5GUg/eF6YQdtIfpLU7g1pev6wJU=";
+    hash = "sha256-+UZJhZLJEZVGPF9D9B8blGh4pLszQnDoOl5xQMpvVl0=";
   };
 
   build-system = [ setuptools ];

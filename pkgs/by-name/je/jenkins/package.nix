@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   common-updater-scripts,
   coreutils,
@@ -16,7 +16,7 @@
   curl,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "jenkins";
   version = "2.528.1";
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = { inherit (nixosTests) jenkins jenkins-cli; };
 
     updateScript = writeScript "update.sh" ''
-      #!${stdenv.shell}
+      #!${stdenvNoCC.shell}
       set -o errexit
       PATH=${
         lib.makeBinPath [

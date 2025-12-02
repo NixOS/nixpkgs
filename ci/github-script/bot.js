@@ -5,6 +5,7 @@ module.exports = async ({ github, context, core, dry }) => {
   const withRateLimit = require('./withRateLimit.js')
   const { classify } = require('../supportedBranches.js')
   const { handleMerge } = require('./merge.js')
+  const { handleReviewers } = require('./reviewers.js')
 
   const artifactClient = new DefaultArtifactClient()
 
@@ -45,7 +46,7 @@ module.exports = async ({ github, context, core, dry }) => {
           name: 'maintainers',
         })
       ).data.artifacts[0]
-      if (!artifact) continue
+      if (!artifact || artifact.expired) continue
 
       await artifactClient.downloadArtifact(artifact.id, {
         findBy: {
@@ -96,6 +97,47 @@ module.exports = async ({ github, context, core, dry }) => {
     return maintainerMaps[branch]
   }
 
+  // Caching the list of team members saves API requests when running the bot on the schedule and
+  // processing many PRs at once.
+  const members = {}
+  function getTeamMembers(team_slug) {
+    if (context.eventName === 'pull_request') {
+      // We have no chance of getting a token in the pull_request context with the right
+      // permissions to access the members endpoint below. Thus, we're pretending to have
+      // no members. This is OK; because this is only for the Test workflow, not for
+      // real use.
+      return []
+    }
+
+    if (!members[team_slug]) {
+      members[team_slug] = github.paginate(github.rest.teams.listMembersInOrg, {
+        org: context.repo.owner,
+        team_slug,
+        per_page: 100,
+      })
+    }
+
+    return members[team_slug]
+  }
+
+  // Caching users saves API requests when running the bot on the schedule and processing
+  // many PRs at once. It also helps to encapsulate the special logic we need, because
+  // actions/github doesn't support that endpoint fully, yet.
+  const users = {}
+  function getUser(id) {
+    if (!users[id]) {
+      users[id] = github
+        .request({
+          method: 'GET',
+          url: '/user/{id}',
+          id,
+        })
+        .then((resp) => resp.data)
+    }
+
+    return users[id]
+  }
+
   async function handlePullRequest({ item, stats, events }) {
     const log = (k, v) => core.info(`PR #${item.number} - ${k}: ${v}`)
 
@@ -110,6 +152,8 @@ module.exports = async ({ github, context, core, dry }) => {
       })
     ).data
 
+    log('author', pull_request.user?.login)
+
     const maintainers = await getMaintainerMap(pull_request.base.ref)
 
     const merge_bot_eligible = await handleMerge({
@@ -121,55 +165,24 @@ module.exports = async ({ github, context, core, dry }) => {
       pull_request,
       events,
       maintainers,
+      getTeamMembers,
+      getUser,
     })
 
-    // When the same change has already been merged to the target branch, a PR will still be
-    // open and display the same changes - but will not actually have any effect. This causes
-    // strange CI behavior, because the diff of the merge-commit is empty, no rebuilds will
-    // be detected, no maintainers pinged.
-    // We can just check the temporary merge commit, and if it's empty the PR can safely be
-    // closed - there are no further changes.
-    // We only do this for PRs, which are non-empty to start with. This avoids closing PRs
-    // which have been created with an empty commit for notification purposes, for example
-    // the yearly election notification for voters.
-    if (pull_request.merge_commit_sha && pull_request.changed_files > 0) {
-      const commit = (
-        await github.rest.repos.getCommit({
-          ...context.repo,
-          ref: pull_request.merge_commit_sha,
-        })
-      ).data
-
-      if (commit.files.length === 0) {
-        const body = [
-          `The diff for the temporary merge commit ${pull_request.merge_commit_sha} is empty.`,
-          'The changes in this PR have almost certainly already been merged to the target branch.',
-        ].join('\n')
-
-        core.info(`PR #${item.number}: closed`)
-
-        if (!dry) {
-          await github.rest.issues.createComment({
-            ...context.repo,
-            issue_number: pull_number,
-            body,
-          })
-
-          await github.rest.pulls.update({
-            ...context.repo,
-            pull_number,
-            state: 'closed',
-          })
-        }
-
-        return {}
-      }
-    }
-
-    const reviews = await github.paginate(github.rest.pulls.listReviews, {
-      ...context.repo,
-      pull_number,
-    })
+    // Check for any human reviews other than the PR author, GitHub actions and other GitHub apps.
+    // Accounts could be deleted as well, so don't count them.
+    const reviews = (
+      await github.paginate(github.rest.pulls.listReviews, {
+        ...context.repo,
+        pull_number,
+      })
+    ).filter(
+      (r) =>
+        r.user &&
+        !r.user.login.endsWith('[bot]') &&
+        r.user.type !== 'Bot' &&
+        r.user.id !== pull_request.user?.id,
+    )
 
     const approvals = new Set(
       reviews
@@ -239,13 +252,6 @@ module.exports = async ({ github, context, core, dry }) => {
     log('Last eval run', run_id ?? '<n/a>')
 
     if (conclusion === 'success') {
-      // Check for any human reviews other than GitHub actions and other GitHub apps.
-      // Accounts could be deleted as well, so don't count them.
-      const humanReviews = reviews.filter(
-        (r) =>
-          r.user && !r.user.login.endsWith('[bot]') && r.user.type !== 'Bot',
-      )
-
       Object.assign(prLabels, {
         // We only set this label if the latest eval run was successful, because if it was not, it
         // *could* have requested reviewers. We will let the PR author fix CI first, before "escalating"
@@ -258,7 +264,7 @@ module.exports = async ({ github, context, core, dry }) => {
         '9.needs: reviewer':
           !pull_request.draft &&
           pull_request.requested_reviewers.length === 0 &&
-          humanReviews.length === 0,
+          reviews.length === 0,
       })
     }
 
@@ -330,6 +336,41 @@ module.exports = async ({ github, context, core, dry }) => {
           maintainers[pkg]?.some((m) => approvals.has(m)),
         ),
       })
+
+      if (!pull_request.draft) {
+        let owners = []
+        try {
+          // TODO: Create owner map similar to maintainer map.
+          owners = (await readFile(`${pull_number}/owners.txt`, 'utf-8')).split(
+            '\n',
+          )
+        } catch (e) {
+          // Older artifacts don't have the owners.txt, yet.
+          if (e.code !== 'ENOENT') throw e
+        }
+
+        // We set this label earlier already, but the current PR state can be very different
+        // after handleReviewers has requested reviews, so update it in this case to prevent
+        // this label from flip-flopping.
+        prLabels['9.needs: reviewer'] = await handleReviewers({
+          github,
+          context,
+          core,
+          log,
+          dry,
+          pull_request,
+          reviews,
+          // TODO: Use maintainer map instead of the artifact.
+          maintainers: Object.keys(
+            JSON.parse(
+              await readFile(`${pull_number}/maintainers.json`, 'utf-8'),
+            ),
+          ).map((id) => parseInt(id)),
+          owners,
+          getTeamMembers,
+          getUser,
+        })
+      }
     }
 
     return prLabels
@@ -399,22 +440,6 @@ module.exports = async ({ github, context, core, dry }) => {
         },
       )
 
-      if (item.pull_request || context.payload.pull_request) {
-        stats.prs++
-        Object.assign(
-          itemLabels,
-          await handlePullRequest({ item, stats, events }),
-        )
-      } else {
-        stats.issues++
-        if (item.labels.some(({ name }) => name === '4.workflow: auto-close')) {
-          // If this returns true, the issue was closed. In this case we return, to not
-          // label the issue anymore. Most importantly this avoids unlabeling stale issues
-          // which are closed via auto-close.
-          if (await handleAutoClose(item)) return
-        }
-      }
-
       const latest_event_at = new Date(
         events
           .filter(({ event }) =>
@@ -455,6 +480,29 @@ module.exports = async ({ github, context, core, dry }) => {
       log('latest_event_at', latest_event_at.toISOString())
 
       const stale_at = new Date(new Date().setDate(new Date().getDate() - 180))
+      const is_stale = latest_event_at < stale_at
+
+      if (item.pull_request || context.payload.pull_request) {
+        // No need to compute merge commits for stale PRs over and over again.
+        // This increases the repo size on GitHub's side unnecessarily and wastes
+        // a lot of API requests, too. Any relevant change will result in the
+        // stale status to change and thus pick up the PR again for labeling.
+        if (!is_stale) {
+          stats.prs++
+          Object.assign(
+            itemLabels,
+            await handlePullRequest({ item, stats, events }),
+          )
+        }
+      } else {
+        stats.issues++
+        if (item.labels.some(({ name }) => name === '4.workflow: auto-close')) {
+          // If this returns true, the issue was closed. In this case we return, to not
+          // label the issue anymore. Most importantly this avoids unlabeling stale issues
+          // which are closed via auto-close.
+          if (await handleAutoClose(item)) return
+        }
+      }
 
       // Create a map (Label -> Boolean) of all currently set labels.
       // Each label is set to True and can be disabled later.
@@ -468,8 +516,7 @@ module.exports = async ({ github, context, core, dry }) => {
       )
 
       Object.assign(itemLabels, {
-        '2.status: stale':
-          !before['1.severity: security'] && latest_event_at < stale_at,
+        '2.status: stale': !before['1.severity: security'] && is_stale,
       })
 
       const after = Object.assign({}, before, itemLabels)
@@ -478,7 +525,7 @@ module.exports = async ({ github, context, core, dry }) => {
       const hasChanges = Object.keys(after).some(
         (name) => (before[name] ?? false) !== after[name],
       )
-      if (log('Has changes', hasChanges, !hasChanges)) return
+      if (log('Has label changes', hasChanges, !hasChanges)) return
 
       // Skipping labeling on a pull_request event, because we have no privileges.
       const labels = Object.entries(after)
@@ -496,7 +543,14 @@ module.exports = async ({ github, context, core, dry }) => {
     }
   }
 
-  await withRateLimit({ github, core }, async (stats) => {
+  // Controls level of parallelism. Applies to both the number of concurrent requests
+  // as well as the number of concurrent workers going through the list of PRs.
+  // We'll only boost concurrency when we're running many PRs in parallel on a schedule,
+  // but not for single PRs. This avoids things going wild, when we accidentally make
+  // too many API requests on treewides.
+  const maxConcurrent = context.payload.pull_request ? 1 : 20
+
+  await withRateLimit({ github, core, maxConcurrent }, async (stats) => {
     if (context.payload.pull_request) {
       await handle({ item: context.payload.pull_request, stats })
     } else {
@@ -555,7 +609,7 @@ module.exports = async ({ github, context, core, dry }) => {
         ).data.artifacts[0]
 
         // If the artifact is not available, the next iteration starts at the beginning.
-        if (artifact) {
+        if (artifact && !artifact.expired) {
           stats.artifacts++
 
           const { downloadPath } = await artifactClient.downloadArtifact(
@@ -625,11 +679,23 @@ module.exports = async ({ github, context, core, dry }) => {
             arr.findIndex((firstItem) => firstItem.number === thisItem.number),
         )
 
-      ;(await Promise.allSettled(items.map((item) => handle({ item, stats }))))
-        .filter(({ status }) => status === 'rejected')
-        .map(({ reason }) =>
-          core.setFailed(`${reason.message}\n${reason.cause.stack}`),
-        )
+      // Instead of handling all items in parallel we set up some workers to handle the queue
+      // with more controlled parallelism. This avoids problems with `pull_request` fetched at
+      // the beginning getting out of date towards the end, because it took the whole job 20
+      // minutes or more to go through 100's of PRs.
+      await Promise.all(
+        Array.from({ length: maxConcurrent }, async () => {
+          while (true) {
+            const item = items.pop()
+            if (!item) break
+            try {
+              await handle({ item, stats })
+            } catch (e) {
+              core.setFailed(`${e.message}\n${e.cause.stack}`)
+            }
+          }
+        }),
+      )
     }
   })
 }

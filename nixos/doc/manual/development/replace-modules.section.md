@@ -37,7 +37,7 @@ nixos-unstable unless explicitly configured to do so.
 
   imports = [
     # Use postgresql service from nixos-unstable channel.
-    # sudo nix-channel --add https://nixos.org/channels/nixos-unstable nixos-unstable
+    # sudo nix-channel --add https://channels.nixos.org/nixos-unstable nixos-unstable
     <nixos-unstable/nixos/modules/services/databases/postgresql.nix>
   ];
 

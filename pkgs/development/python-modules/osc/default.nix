@@ -8,18 +8,19 @@
   rpm,
   urllib3,
   keyring,
+  ruamel-yaml,
 }:
 
 buildPythonPackage rec {
   pname = "osc";
-  version = "1.21.0";
+  version = "1.22.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "osc";
     rev = version;
-    hash = "sha256-VNDDb67zWkY1RDEjCgB29sVhtVZtY3KMB1T8N2d+xGQ=";
+    hash = "sha256-sohuRbWoLZ6/tBMRIKlvhmsDOgHaB8oGF58veVQBWpk=";
   };
 
   buildInputs = [ bashInteractive ]; # needed for bash-completion helper
@@ -31,6 +32,7 @@ buildPythonPackage rec {
     urllib3
     cryptography
     keyring
+    ruamel-yaml
   ];
 
   postInstall = ''

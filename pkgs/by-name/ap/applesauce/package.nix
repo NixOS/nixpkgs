@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "applesauce";
-  version = "0.5.20";
+  version = "0.5.21";
 
   src = fetchFromGitHub {
     owner = "Dr-Emann";
     repo = "applesauce";
     tag = "applesauce-cli-v${finalAttrs.version}";
-    hash = "sha256-KiivMFp772x/rFHh9PpDBjCxxC/6n6+KyAaZTmhnZV0=";
+    hash = "sha256-Dd1gfjtg1kEXyDakIoAkbu+iiRafykPO39z7tMJylkM=";
   };
 
-  cargoHash = "sha256-WyDHp34NQi3/OotM4+4/d4ySOSYg+PDDmnLUn5R9yaU=";
+  cargoHash = "sha256-fx/D5Bt5YKySJXZRBHlJlAiFWu5++JXgHK1jSKvWEiA=";
 
   meta = {
     description = "Transparent compression for Apple File System Compression (AFSC)";

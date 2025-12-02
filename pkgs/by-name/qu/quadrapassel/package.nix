@@ -3,71 +3,66 @@
   lib,
   fetchurl,
   pkg-config,
-  gtk3,
+  gtk4,
+  libadwaita,
+  libgee,
+  pango,
   gnome,
-  adwaita-icon-theme,
   gdk-pixbuf,
   librsvg,
   gsound,
   libmanette,
-  gettext,
-  itstool,
-  libxml2,
-  clutter,
-  clutter-gtk,
-  wrapGAppsHook3,
+  blueprint-compiler,
+  wrapGAppsHook4,
   meson,
   ninja,
-  python3,
   vala,
   desktop-file-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "quadrapassel";
-  version = "40.2";
+  version = "49.2.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/quadrapassel/${lib.versions.major version}/quadrapassel-${version}.tar.xz";
-    hash = "sha256-C9giQUIHxzEj7WpJ9yPaWsjdTfXTXtwJn/6i4TmcwAo=";
+    url = "mirror://gnome/sources/quadrapassel/${lib.versions.major finalAttrs.version}/quadrapassel-${finalAttrs.version}.tar.xz";
+    hash = "sha256-pTIKb47ghWKkNsq6TjT3rgQP7cjXL76iJ/cCXZPExrk=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    python3
     vala
     desktop-file-utils
     pkg-config
-    adwaita-icon-theme
-    libxml2
-    itstool
-    gettext
-    wrapGAppsHook3
+    blueprint-compiler
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
+    libadwaita
+    libgee
+    pango
     gdk-pixbuf
     librsvg
     libmanette
     gsound
-    clutter
-    libxml2
-    clutter-gtk
   ];
 
   passthru = {
-    updateScript = gnome.updateScript { packageName = "quadrapassel"; };
+    updateScript = gnome.updateScript {
+      packageName = "quadrapassel";
+    };
   };
 
   meta = {
     description = "Classic falling-block game, Tetris";
     mainProgram = "quadrapassel";
     homepage = "https://gitlab.gnome.org/GNOME/quadrapassel";
-    changelog = "https://gitlab.gnome.org/GNOME/quadrapassel/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/quadrapassel/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
   };
-}
+})

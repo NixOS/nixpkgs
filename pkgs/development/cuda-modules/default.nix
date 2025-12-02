@@ -24,8 +24,6 @@ let
   cudaMajorMinorVersion = majorMinor cudaMajorMinorPatchVersion;
   cudaMajorVersion = major cudaMajorMinorPatchVersion;
 
-  cudaPackagesMajorMinorVersionedName = mkVersionedName "cudaPackages" cudaMajorMinorVersion;
-
   # We must use an instance of Nixpkgs where the CUDA package set we're building is the default; if we do not, members
   # of the versioned, non-default package sets may rely on (transitively) members of the default, unversioned CUDA
   # package set.
@@ -34,18 +32,36 @@ let
     let
       cudaPackagesUnversionedName = "cudaPackages";
       cudaPackagesMajorVersionedName = mkVersionedName cudaPackagesUnversionedName cudaMajorVersion;
+      cudaPackagesMajorMinorVersionedName = mkVersionedName cudaPackagesUnversionedName cudaMajorMinorVersion;
     in
-    pkgs.extend (
-      final: _: {
-        recurseForDerivations = false;
-        # The CUDA package set will be available as cudaPackages_x_y, so we need only update the aliases for the
-        # minor-versioned and unversioned package sets.
-        # cudaPackages_x = cudaPackages_x_y
-        ${cudaPackagesMajorVersionedName} = final.${cudaPackagesMajorMinorVersionedName};
-        # cudaPackages = cudaPackages_x
-        ${cudaPackagesUnversionedName} = final.${cudaPackagesMajorVersionedName};
-      }
-    );
+    if
+      # If the default CUDA package set is the same as the one we're constructing, pass through pkgs unchanged.
+      # This is a handy speedup for cases where we're using the default CUDA package set and don't need to pay for
+      # a re-instantiation of Nixpkgs.
+      pkgs.${cudaPackagesMajorMinorVersionedName}.manifests
+      == pkgs.${cudaPackagesMajorVersionedName}.manifests
+      &&
+        pkgs.${cudaPackagesMajorMinorVersionedName}.manifests
+        == pkgs.${cudaPackagesUnversionedName}.manifests
+    then
+      pkgs
+    else
+      pkgs.extend (
+        final: _: {
+          recurseForDerivations = false;
+          # The CUDA package set will be available as cudaPackages_x_y, so we need only update the aliases for the
+          # minor-versioned and unversioned package sets.
+          # However, if we do not replace the major-minor-versioned CUDA package set with our own, our use of splicing
+          # causes the package set to be re-evaluated for each build/host/target!
+
+          # cudaPackages_x_y = <package set created in this file>
+          ${cudaPackagesMajorMinorVersionedName} = cudaPackages;
+          # cudaPackages_x = cudaPackages_x_y
+          ${cudaPackagesMajorVersionedName} = final.${cudaPackagesMajorMinorVersionedName};
+          # cudaPackages = cudaPackages_x
+          ${cudaPackagesUnversionedName} = final.${cudaPackagesMajorVersionedName};
+        }
+      );
 
   cudaPackagesFixedPoint =
     finalCudaPackages:
@@ -80,6 +96,24 @@ let
       # depend on them recursively as they are used to add top-level attributes.
       inherit manifests;
 
+      # Construct without relying on the fixed-point to allow the use of backendStdenv in creating CUDA package sets.
+      # For example, this allows selecting manifests by predicating on values like
+      # `backendStdenv.hasJetsonCudaCapability`, which would otherwise result in infinite recursion due to the reliance
+      # on `pkgs'`, which in turn depends on the manifests provided to this file (which can depend on `backendStdenv`).
+      backendStdenv = import ./backendStdenv {
+        inherit
+          _cuda
+          config
+          cudaMajorMinorVersion
+          lib
+          pkgs
+          ;
+        inherit (pkgs)
+          stdenv
+          stdenvAdapters
+          ;
+      };
+
       # Create backendStdenv variants for different host compilers, since users may want to build a CUDA project with
       # Clang or GCC specifically.
       # TODO(@connorbaker): Because of the way our setup hooks and patching of NVCC works, the user's choice of
@@ -96,13 +130,14 @@ let
       # Must be constructed without `callPackage` to avoid replacing the `override` attribute with that of
       # `callPackage`'s.
       buildRedist = import ./buildRedist {
-        inherit (pkgs)
+        inherit
           _cuda
+          lib
+          ;
+        inherit (pkgs)
           autoAddDriverRunpath
           autoPatchelfHook
-          config
           fetchurl
-          lib
           srcOnly
           stdenv
           stdenvNoCC
@@ -115,7 +150,7 @@ let
           cudaNamePrefix
           manifests
           markForCudatoolkitRootHook
-          setupCudaHook
+          removeStubsFromRunpathHook
           ;
       };
 
@@ -145,8 +180,18 @@ let
     ]
     ++ _cuda.extensions
   );
+
+  # Using lib.makeScopeWithSplicing' instead of the templated one from pkgs' allows us to defer calling pkgs.extend.
+  cudaPackages =
+    lib.makeScopeWithSplicing'
+      {
+        splicePackages = pkgs'.splicePackages;
+        newScope = pkgs'.newScope;
+      }
+      {
+        # In pkgs', the default CUDA package set is always the one we've constructed here.
+        otherSplices = pkgs'.generateSplicesForMkScope [ "cudaPackages" ];
+        f = extends composedExtensions cudaPackagesFixedPoint;
+      };
 in
-pkgs'.makeScopeWithSplicing' {
-  otherSplices = pkgs'.generateSplicesForMkScope [ cudaPackagesMajorMinorVersionedName ];
-  f = extends composedExtensions cudaPackagesFixedPoint;
-}
+cudaPackages

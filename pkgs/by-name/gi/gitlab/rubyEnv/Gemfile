@@ -26,10 +26,13 @@ gem 'bundler-checksum', '~> 0.1.0', path: 'gems/bundler-checksum', require: fals
 # See https://docs.gitlab.com/ee/development/gemfile.html#upgrade-rails for guidelines when upgrading Rails
 
 if next?
-  gem 'rails', '~> 7.2.2.2', feature_category: :shared
+  gem 'rails', '~> 7.2.3', feature_category: :shared
 else
-  gem 'rails', '~> 7.1.5.2', feature_category: :shared
+  gem 'rails', '~> 7.1.6', feature_category: :shared
 end
+
+# Pin Zeitwerk until https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/9408 is fixed
+gem 'zeitwerk', '= 2.6.18', feature_category: :shared
 
 gem 'activerecord-gitlab', path: 'gems/activerecord-gitlab', feature_category: :shared
 # This can be dropped after upgrading to Rails 7.2: https://github.com/rails/rails/pull/49674
@@ -47,7 +50,7 @@ else
   gem 'ffi', '~> 1.17.2', force_ruby_platform: true, feature_category: :shared
 end
 
-gem 'openssl', '~> 3.0', feature_category: :shared
+gem 'openssl', '~> 3.3.2', feature_category: :shared
 
 gem 'gitlab-safe_request_store', path: 'gems/gitlab-safe_request_store', feature_category: :shared
 
@@ -176,9 +179,9 @@ gem 'gitlab-topology-service-client', '~> 0.1',
   feature_category: :cell
 
 # Duo Workflow
-gem 'gitlab-duo-workflow-service-client', '~> 0.4',
+gem 'gitlab-duo-workflow-service-client', '~> 0.6',
   path: 'vendor/gems/gitlab-duo-workflow-service-client',
-  feature_category: :agent_foundations
+  feature_category: :duo_agent_platform
 
 # Generate Fake data
 gem 'ffaker', '~> 2.24', feature_category: :shared
@@ -227,7 +230,7 @@ gem 'google-apis-container_v1', '~> 0.100.0', feature_category: :shared
 gem 'google-apis-container_v1beta1', '~> 0.91.0', feature_category: :shared
 gem 'google-apis-cloudbilling_v1', '~> 0.22.0', feature_category: :shared
 gem 'google-apis-cloudresourcemanager_v1', '~> 0.44.0', feature_category: :shared
-gem 'google-apis-iam_v1', '~> 0.73.0', feature_category: :shared
+gem 'google-apis-iam_v1', '~> 0.79.0', feature_category: :shared
 gem 'google-apis-serviceusage_v1', '~> 0.28.0', feature_category: :shared
 gem 'google-apis-sqladmin_v1beta4', '~> 0.41.0', feature_category: :shared
 gem 'google-apis-androidpublisher_v3', '~> 0.86.0', feature_category: :shared
@@ -271,7 +274,7 @@ gem 'asciidoctor-kroki', '~> 0.10.0', require: false, feature_category: :markdow
 gem 'rouge', '~> 4.6.1', feature_category: :shared
 gem 'truncato', '~> 0.7.13', feature_category: :team_planning
 gem 'nokogiri', '~> 1.18', feature_category: :shared
-gem 'gitlab-glfm-markdown', '~> 0.0.36', feature_category: :markdown
+gem 'gitlab-glfm-markdown', '~> 0.0.38', feature_category: :markdown
 gem 'tanuki_emoji', '~> 0.13', feature_category: :markdown
 gem 'unicode-emoji', '~> 4.0', feature_category: :markdown
 
@@ -331,8 +334,7 @@ gem 'js_regex', '~> 3.8', feature_category: :shared
 gem 'device_detector', feature_category: :shared
 
 # Redis
-# Do NOT upgrade until Rails is upgraded with a version that contains https://github.com/rails/rails/pull/55359.
-gem 'redis', '= 5.4.0', feature_category: :redis
+gem 'redis', '~> 5.4.1', feature_category: :redis
 gem 'redis-client', '~> 0.25', feature_category: :redis
 gem 'redis-cluster-client', '~> 0.13', feature_category: :redis
 gem 'redis-clustering', '~> 5.4.0', feature_category: :redis
@@ -382,7 +384,7 @@ gem 'rack-proxy', '~> 0.7.7', feature_category: :shared
 gem 'cssbundling-rails', '1.4.3', feature_category: :shared
 gem 'terser', '1.0.2', feature_category: :shared
 
-gem 'click_house-client', '0.8.0', feature_category: :database
+gem 'click_house-client', '0.8.2', feature_category: :database
 gem 'addressable', '~> 2.8', feature_category: :shared
 gem 'gon', '~> 6.5.0', feature_category: :shared
 gem 'request_store', '~> 1.7.0', feature_category: :shared
@@ -390,7 +392,7 @@ gem 'base32', '~> 0.3.0', feature_category: :shared
 gem 'gitlab-license', '~> 2.6', feature_category: :shared
 
 # Protect against bruteforcing
-gem 'rack-attack', '~> 6.7.0', feature_category: :shared
+gem 'rack-attack', '~> 6.8.0', feature_category: :shared
 
 # Sentry integration
 gem 'sentry-ruby', '~> 5.23.0', feature_category: :observability
@@ -405,7 +407,7 @@ gem 'gitlab-schema-validation', path: 'gems/gitlab-schema-validation', feature_c
 gem 'gitlab-http', path: 'gems/gitlab-http', feature_category: :shared
 
 gem 'premailer-rails', '~> 1.12.0', feature_category: :notifications
-gem 'gitlab-labkit', '~> 0.42.0', feature_category: :shared
+gem 'gitlab-labkit', '~> 0.42.2', feature_category: :shared
 gem 'thrift', '~> 0.22.0', feature_category: :shared
 
 # I18n
@@ -509,7 +511,7 @@ end
 group :development, :test do
   gem 'deprecation_toolkit', '~> 2.2.3', require: false, feature_category: :shared
   gem 'bullet', '~> 8.0.0', feature_category: :shared
-  gem 'parser', '= 3.3.9.0', feature_category: :shared
+  gem 'parser', '= 3.3.10.0', feature_category: :shared
   gem 'pry-byebug', feature_category: :shared
   gem 'pry-rails', '~> 0.3.9', feature_category: :shared
   gem 'pry-shell', '~> 0.6.4', feature_category: :shared
@@ -559,7 +561,7 @@ end
 group :development, :test, :coverage do
   gem 'simplecov', '~> 0.22', require: false, feature_category: :tooling
   gem 'simplecov-lcov', '~> 0.8.0', require: false, feature_category: :tooling
-  gem 'simplecov-cobertura', '~> 2.1.0', require: false, feature_category: :tooling
+  gem 'simplecov-cobertura', '~> 3.1.0', require: false, feature_category: :tooling
   gem 'undercover', '~> 0.7.0', require: false, feature_category: :tooling
 end
 
@@ -606,7 +608,7 @@ group :test do
   # Moved in `test` because https://gitlab.com/gitlab-org/gitlab/-/issues/217527
   gem 'derailed_benchmarks', require: false, feature_category: :shared
 
-  gem 'gitlab_quality-test_tooling', '~> 2.20.0', require: false, feature_category: :tooling
+  gem 'gitlab_quality-test_tooling', '~> 2.26.0', require: false, feature_category: :tooling
 end
 
 gem 'octokit', '~> 9.0', feature_category: :importers
@@ -642,12 +644,12 @@ gem 'ssh_data', '~> 2.0', feature_category: :shared
 gem 'spamcheck', '~> 1.3.0', feature_category: :insider_threat
 
 # Gitaly GRPC protocol definitions
-gem 'gitaly', '~> 18.4.0.pre.rc1', feature_category: :gitaly
+gem 'gitaly', '~> 18.6.0.pre.rc1', feature_category: :gitaly
 
 # KAS GRPC protocol definitions
 gem 'gitlab-kas-grpc', '~> 18.5.0-rc4', feature_category: :deployment_management
 
-gem 'grpc', '~> 1.75.0', feature_category: :shared
+gem 'grpc', '~> 1.76.0', feature_category: :shared
 
 gem 'google-protobuf', '~> 3.25', '>= 3.25.3', feature_category: :shared
 
@@ -682,7 +684,7 @@ gem 'lru_redux', feature_category: :shared
 # `config/initializers/mail_starttls_patch.rb` has also been patched to
 # fix STARTTLS handling until https://github.com/mikel/mail/pull/1536 is
 # released.
-gem 'mail', '= 2.8.1', feature_category: :shared
+gem 'mail', '= 2.9.0', feature_category: :shared
 gem 'mail-smtp_pool', '~> 0.1.0', path: 'gems/mail-smtp_pool', require: false, feature_category: :shared
 
 gem 'microsoft_graph_mailer', '~> 0.1.0', path: 'vendor/gems/microsoft_graph_mailer', feature_category: :shared
@@ -749,7 +751,7 @@ gem 'net-http', '= 0.6.0', feature_category: :shared
 # This is locked to 0.13.0 because the default parser changes from RFC2396 to RFC3986,
 # which can be removed after Rails 7.2 upgrade
 # See https://gitlab.com/gitlab-org/gitlab/-/merge_requests/173142#note_2277952450
-gem 'uri', '= 0.13.2', feature_category: :shared
+gem 'uri', '= 0.13.3', feature_category: :shared
 
 gem 'duo_api', '~> 1.3', feature_category: :system_access
 
@@ -759,4 +761,4 @@ gem 'paper_trail', '~> 16.0', feature_category: :shared
 
 gem "i18n_data", "~> 0.13.1", feature_category: :system_access
 
-gem "gitlab-cloud-connector", "~> 1.26", require: 'gitlab/cloud_connector', feature_category: :plan_provisioning
+gem "gitlab-cloud-connector", "~> 1.35", require: 'gitlab/cloud_connector', feature_category: :plan_provisioning

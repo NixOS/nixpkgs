@@ -1,5 +1,9 @@
 {
-  abseil-cpp_202407,
+  stdenv,
+  lib,
+  callPackage,
+
+  abseil-cpp_202505,
   bzip2,
   cbc,
   cmake,
@@ -11,12 +15,10 @@
   gbenchmark,
   glpk,
   highs,
-  lib,
   pkg-config,
-  protobuf_29,
+  protobuf_31,
   python3,
   re2,
-  stdenv,
   swig,
   unzip,
   zlib,
@@ -30,21 +32,57 @@ let
   # protobuf. Do not un-pin these, even if you're upgrading them to
   # what might happen to be the latest version at the current moment;
   # future upgrades *will* break the build.
-  abseil-cpp = abseil-cpp_202407;
-  protobuf = protobuf_29.override { inherit abseil-cpp; };
-  python-protobuf = python3.pkgs.protobuf5.override { inherit protobuf; };
-  pybind11-protobuf = python3.pkgs.pybind11-protobuf.override { protobuf_29 = protobuf; };
+  abseil-cpp' = abseil-cpp_202505;
+  protobuf' = protobuf_31.override { abseil-cpp = abseil-cpp'; };
+  python-protobuf' = python3.pkgs.protobuf5.override { protobuf = protobuf'; };
+
+  pybind11' = callPackage ./pybind11-2.13.6.nix {
+    inherit (python3.pkgs)
+      buildPythonPackage
+      cmake
+      ninja
+      numpy
+      pytestCheckHook
+      pythonOlder
+      setuptools
+      ;
+    python = python3;
+  };
+  pybind11-abseil' = python3.pkgs.pybind11-abseil.override {
+    pybind11 = pybind11';
+    abseil-cpp = abseil-cpp';
+  };
+  pybind11-protobuf' = callPackage ./pybind11-protobuf.nix {
+    inherit (python3.pkgs) buildPythonPackage;
+    pybind11 = pybind11';
+  };
+  # re2 must also use the same abseil version, else these two versions will conflict during linking
+  re2' = re2.override { abseil-cpp = abseil-cpp'; };
+
+  # 77a28070b9c4c83995ac6bbfa9544722ff3342ce renamed the scip cmake target(s) differently
+  # to what upstream still calls it. Apply this patch to scipopt-scip.
+  scipopt-scip' = scipopt-scip.overrideAttrs (old: {
+    patches = old.patches or [ ] ++ [
+      # from https://github.com/google/or-tools/commit/77a28070b9c4c83995ac6bbfa9544722ff3342ce#diff-c95174a817e73db366d414af1e329c1856f70e5158ed3994d43da88765ccc98f
+      ./scip.patch
+    ];
+    # Their patch forgets to find_package() soplex, bring it back.
+    postPatch = (old.postPatch or "") + ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'message(STATUS "Finding Soplex...")' 'find_package(SOPLEX CONFIG HINTS ''${SOPLEX_DIR})'
+    '';
+  });
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "or-tools";
-  version = "9.12";
+  version = "9.14";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "or-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5rFeAK51+BfjIyu/5f5ptaKMD7Hd20yHa2Vj3O3PkLU=";
+    hash = "sha256-FxKe3uY4L33mavwC2aanji3fY9dPqpkwVqi6PNjovSA=";
   };
 
   patches = [
@@ -55,15 +93,24 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://build.opensuse.org/public/source/science/google-or-tools/0001-Revert-python-Fix-python-install-on-windows-breaks-L.patch?rev=19";
       hash = "sha256-BNB3KlgjpWcZtb9e68Jkc/4xC4K0c+Iisw0eS6ltYXE=";
     })
-    (fetchpatch {
-      name = "0001-Fix-up-broken-CMake-rules-for-bundled-pybind-stuff.patch";
-      url = "https://build.opensuse.org/public/source/science/google-or-tools/0001-Fix-up-broken-CMake-rules-for-bundled-pybind-stuff.patch?rev=19";
-      hash = "sha256-r38ZbRkEW1ZvJb0Uf56c0+HcnfouZZJeEYlIK7quSjQ=";
-    })
+    ./0001-Fix-up-broken-CMake-rules-for-bundled-pybind-stuff.patch
     (fetchpatch {
       name = "math_opt-only-run-SCIP-tests-if-enabled.patch";
       url = "https://github.com/google/or-tools/commit/b5a2f8ac40dd4bfa4359c35570733171454ec72b.patch";
       hash = "sha256-h96zJkqTtwfBd+m7Lm9r/ks/n8uvY4iSPgxMZe8vtXI=";
+    })
+    # Fix tests on aarch64-linux
+    # https://github.com/google/or-tools/issues/4746
+    (fetchpatch {
+      url = "https://github.com/google/or-tools/commit/8442c7b1c219b0c8d58ee96d266d81b7c3a19ad2.patch";
+      hash = "sha256-HrV9wU3PFMdb3feGt8i5UJNgHuitMRBF9cNrH5RRENQ=";
+    })
+    # Fix compatibility with highs 1.12.0
+    # https://github.com/google/or-tools/issues/4911
+    (fetchpatch {
+      url = "https://github.com/google/or-tools/commit/6c7c1e7cb5bab2701e5b3b00c0f8397273654d2b.patch";
+      includes = [ "ortools/math_opt/solvers/highs_solver_test.cc" ];
+      hash = "sha256-/dFk/F/3/BwH5IwIwNU4Ua+4sROPXYCjO8R6jpoZpgo=";
     })
   ];
 
@@ -89,6 +136,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
     (lib.cmakeBool "FETCH_PYTHON_DEPS" false)
+    # not packaged in nixpkgs
+    (lib.cmakeBool "USE_fuzztest" false)
     (lib.cmakeBool "USE_GLPK" true)
     (lib.cmakeBool "USE_SCIP" withScip)
     (lib.cmakeFeature "Python3_EXECUTABLE" "${python3.pythonOnBuildForHost.interpreter}")
@@ -117,7 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
     mypy
   ]);
   buildInputs = [
-    abseil-cpp
+    abseil-cpp'
     bzip2
     cbc
     eigen
@@ -126,28 +175,28 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
     highs
     python3.pkgs.absl-py
-    python3.pkgs.pybind11
-    python3.pkgs.pybind11-abseil
-    pybind11-protobuf
+    pybind11'
+    pybind11-abseil'
+    pybind11-protobuf'
     python3.pkgs.pytest
     python3.pkgs.scipy
     python3.pkgs.setuptools
     python3.pkgs.wheel
-    re2
+    re2'
     zlib
   ];
   propagatedBuildInputs = [
-    abseil-cpp
+    abseil-cpp'
     highs
-    protobuf
-    python-protobuf
+    protobuf'
+    python-protobuf'
     python3.pkgs.immutabledict
     python3.pkgs.numpy
     python3.pkgs.pandas
   ]
   ++ lib.optionals withScip [
     # Needed for downstream cmake consumers to not need to set SCIP_ROOT explicitly
-    scipopt-scip
+    scipopt-scip'
   ];
 
   nativeCheckInputs = [
@@ -159,8 +208,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.virtualenv
   ];
 
-  # some tests fail on aarch64-linux and hang on darwin
-  doCheck = stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux;
+  # some tests hang on darwin
+  doCheck = stdenv.hostPlatform.isLinux;
 
   preCheck = ''
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/lib

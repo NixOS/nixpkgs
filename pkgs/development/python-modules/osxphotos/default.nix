@@ -5,10 +5,12 @@
   fetchFromGitHub,
   setuptools,
 
+  beautifulsoup4,
   bitmath,
   bpylist2,
   click,
   mako,
+  markdown2,
   more-itertools,
   objexplore,
   packaging,
@@ -26,32 +28,37 @@
   textx,
   toml,
   tzdata,
+  utitools,
+  whenever,
   wrapt,
   wurlitzer,
   xdg-base-dirs,
-
+  # tests
   pytestCheckHook,
   pytest-mock,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "osxphotos";
-  version = "0.72.1";
+  version = "0.74.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RhetTbull";
     repo = "osxphotos";
     tag = "v${version}";
-    hash = "sha256-6BUdF2l/C0Zim7ei/t4DKs4RUIDMWikhZmhattYrXmg=";
+    hash = "sha256-iX+6zJNpLm4RBwjACHsRYyepRrifeKqy/GDbLrl8ZEA=";
   };
 
   build-system = [ setuptools ];
   dependencies = [
+    beautifulsoup4
     bitmath
     bpylist2
     click
     mako
+    markdown2
     more-itertools
     objexplore
     packaging
@@ -69,6 +76,8 @@ buildPythonPackage rec {
     textx
     toml
     tzdata
+    utitools
+    whenever
     wrapt
     wurlitzer
     xdg-base-dirs
@@ -78,6 +87,7 @@ buildPythonPackage rec {
     "mako"
     "more-itertools"
     "objexplore"
+    "rich"
     "textx"
     "tenacity"
   ];
@@ -86,20 +96,14 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
+    writableTmpDirAsHomeHook
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
-  disabledTestPaths = [ "tests/test_comments.py" ];
   disabledTests = [
-    "test_iphoto_info"
+    "test_datetime_naive_to_local"
     "test_from_to_date_tz"
     "test_function_url"
     "test_get_local_tz"
-    "test_datetime_naive_to_local"
-    "test_from_to_date_tz"
     "test_query_from_to_date_alt_location"
     "test_query_function_url"
   ];

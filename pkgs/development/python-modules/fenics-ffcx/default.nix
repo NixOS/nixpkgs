@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "fenics-ffcx";
-  version = "0.10.0";
+  version = "0.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fenics";
     repo = "ffcx";
     tag = "v${version}";
-    hash = "sha256-i8fawnXWxIHfOvb0nK4/bzhrzfRJJACMCkFZKtdUwkU=";
+    hash = "sha256-7UkTuSsGT+/RUUP6vpdTa01MSM53Ky6jodrVPoJCOIg=";
   };
 
   pythonRelaxDeps = [

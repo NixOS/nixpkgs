@@ -75,6 +75,11 @@ stdenv.mkDerivation rec {
     ${optionalString withPerl "./configure perl   --module=perl     --perl=${perl}/bin/perl"}
   '';
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    # 'EVP_PKEY_asn1_find_str' is deprecated since OpenSSL 3.6
+    "-Wno-error=deprecated-declarations"
+  ];
+
   passthru.tests = {
     unit-perl = nixosTests.unit-perl;
     unit-php = nixosTests.unit-php;

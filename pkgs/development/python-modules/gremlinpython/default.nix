@@ -2,9 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   aenum,
   aiohttp,
-  importlib-metadata,
   isodate,
   nest-asyncio,
   pytestCheckHook,
@@ -13,38 +13,46 @@
   pyhamcrest,
   pyyaml,
   radish-bdd,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   __structuredAttrs = true;
 
   pname = "gremlinpython";
-  version = "3.7.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "3.8.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "tinkerpop";
     tag = version;
-    hash = "sha256-Yc0l3kE+6dM9v4QUZPFpm/yjDCrqVO35Vy5srEjAExE=";
+    hash = "sha256-dslSvtne+0mobjhjZDiO7crQE3aW5wEMWw7l3LkBTV8=";
   };
 
-  sourceRoot = "${src.name}/gremlin-python/src/main/python";
+  patches = [
+    (fetchpatch {
+      name = "remove-async_timeout.pach";
+      url = "https://github.com/apache/tinkerpop/commit/aa327ace6feaf6ccd3eca411f3b5f6f86f8571f6.patch";
+      excludes = [ "gremlin-python/src/main/python/setup.py" ];
+      hash = "sha256-NyXA9vffFem1EzhdNWuoYr7JPkT5DuKyl409LFj9AvQ=";
+    })
+  ];
 
   postPatch = ''
-    sed -i '/pytest-runner/d' setup.py
+    cd gremlin-python/src/main/python
 
-    substituteInPlace setup.py \
-      --replace 'importlib-metadata<5.0.0' 'importlib-metadata' \
-      --replace "os.getenv('VERSION', '?').replace('-SNAPSHOT', '.dev-%d' % timestamp)" '"${version}"'
+    substituteInPlace gremlin_python/__init__.py \
+      --replace-fail ".dev1" ""
   '';
 
-  # setup-requires requirements
-  nativeBuildInputs = [ importlib-metadata ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  pythonRemoveDeps = [
+    "async-timeout"
+  ];
+
+  dependencies = [
     aenum
     aiohttp
     isodate
@@ -61,7 +69,6 @@ buildPythonPackage rec {
 
   # disable custom pytest report generation
   preCheck = ''
-    substituteInPlace setup.cfg --replace 'addopts' '#addopts'
     export TEST_TRANSACTIONS='false'
   '';
 
@@ -91,6 +98,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/apache/tinkerpop/blob/${src.tag}/CHANGELOG.asciidoc";
     description = "Gremlin-Python implements Gremlin, the graph traversal language of Apache TinkerPop, within the Python language";
     homepage = "https://tinkerpop.apache.org/";
     license = licenses.asl20;

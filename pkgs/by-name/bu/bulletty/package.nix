@@ -1,38 +1,50 @@
 {
   lib,
-  pkgs,
-  fetchFromGitHub,
   rustPlatform,
-  nix-update-script,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bulletty";
-  version = "0.1.9";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "CrociDB";
     repo = "bulletty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fNMUdZ5WoDUVShiKl4pitkcOlHYTKXUVfiAHVqpdWmo=";
+    hash = "sha256-HX5J00Y7nkBwLIOEoc9jRtv9xObeWrWpHhYBQUOUVKA=";
   };
 
-  cargoHash = "sha256-ZdJtFPEjPDQSUEtdPv3uIH44wa6mGPzm/KRp5VTOb1Y=";
-
-  # perl is required for bulletty package build for openssl
-  nativeBuildInputs = with pkgs; [
-    perl
+  patches = [
+    # Add patch that disables rustfmt to prevent compile time crashes
+    ./remove-rustfmt-exec.patch
   ];
 
-  doInstallCheck = true;
+  cargoHash = "sha256-WIEbZIWdIGWiwi6918MVFu++aZ2oWJTF4AUSTpKRZvQ=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ openssl ];
+
+  env.OPENSSL_NO_VENDOR = true;
+
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "bulletty is a feed reader for the terminal";
-    homepage = "https://bulletty.croci.dev/";
+    description = "Terminal UI RSS/ATOM feed reader";
+    homepage = "https://bulletty.croci.dev";
+    changelog = "https://github.com/CrociDB/bulletty/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.FKouhai ];
+    mainProgram = "bulletty";
   };
 })

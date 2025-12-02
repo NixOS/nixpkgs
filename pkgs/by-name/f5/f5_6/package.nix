@@ -31,7 +31,6 @@ stdenvNoCC.mkDerivation {
     description = "Weighted decorative font";
     platforms = platforms.all;
     maintainers = with maintainers; [
-      leenaars
       minijackson
     ];
     license = licenses.ofl;

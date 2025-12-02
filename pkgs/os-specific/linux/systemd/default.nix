@@ -108,10 +108,10 @@
   withFido2 ? true,
   withFirstboot ? true,
   withGcrypt ? true,
-  withHomed ? !stdenv.hostPlatform.isMusl,
+  withHomed ? true,
   withHostnamed ? true,
   withHwdb ? true,
-  withImportd ? !stdenv.hostPlatform.isMusl,
+  withImportd ? true,
   withKmod ? true,
   withLibBPF ?
     lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
@@ -143,9 +143,9 @@
   withPasswordQuality ? true,
   withPCRE2 ? true,
   withPolkit ? true,
-  withPortabled ? !stdenv.hostPlatform.isMusl,
+  withPortabled ? true,
   withQrencode ? true,
-  withRemote ? !stdenv.hostPlatform.isMusl,
+  withRemote ? true,
   withResolved ? true,
   withShellCompletions ? true,
   withSysusers ? true,
@@ -156,6 +156,10 @@
   # adds python to closure which is too much by default
   withUkify ? false,
   withUserDb ? true,
+  # utmp does not exist on musl, so it would be implicitly disabled
+  # It is important to document the lack of utmp in nix,
+  # otherwise the condition for systemd-update-utmp.service will
+  # attempt to load a service which does not exist, resulting in errors.
   withUtmp ? !stdenv.hostPlatform.isMusl,
   withVmspawn ? true,
   # kernel-install shouldn't usually be used on NixOS, but can be useful, e.g. for
@@ -163,6 +167,7 @@
   # on their live NixOS system, we disable it by default.
   withKernelInstall ? false,
   withLibarchive ? true,
+  withVConsole ? true,
   # tests assume too much system access for them to be feasible for us right now
   withTests ? false,
   # build only libudev and libsystemd
@@ -202,15 +207,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "258";
+  version = "258.2";
 
-  # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
-  # This has proven to be less error-prone than the previous systemd fork.
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xtGZaVNsBNxkidgfVBu8xtvj0SxpY6OyJCUE+gq59qE=";
+    hash = "sha256-1iWeuNefDOIEUSTzxzvt+jfcs6sSMPhxQfdwp0mqUjQ=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -222,18 +225,6 @@ stdenv.mkDerivation (finalAttrs: {
   # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all
   # patches
   patches = [
-    # https://github.com/systemd/systemd/pull/39094
-    (fetchpatch {
-      url = "https://github.com/systemd/systemd/commit/0f44a6c64aebc64a0611a605831206afee9cb730.patch";
-      hash = "sha256-DO6q17mE2U8iLezMYt4PX5Ror20N1gCrUbXeQmrW1is=";
-    })
-
-    # https://github.com/systemd/systemd/pull/39069
-    (fetchpatch {
-      url = "https://github.com/systemd/systemd/commit/b5fdfedf729712b9824a5cb457a07d5699d2946c.patch";
-      hash = "sha256-0SvAn9Dl4z80PRIvDbIVIjKp5DsT/IUoHa5IiH1HHFY=";
-    })
-
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0003-Fix-NixOS-containers.patch
@@ -328,17 +319,13 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
   __structuredAttrs = true;
 
-  hardeningDisable = [
-    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111523
-    "trivialautovarinit"
-  ]
-  ++ (lib.optionals withLibBPF [
+  hardeningDisable = lib.optionals withLibBPF [
     # breaks clang -target bpf; should be fixed to not use
     # a wrapped clang?
     "zerocallusedregs"
     "shadowstack"
     "pacret"
-  ]);
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -447,11 +434,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "tty-gid" "3") # tty in NixOS has gid 3
     (lib.mesonOption "pamconfdir" "${placeholder "out"}/etc/pam.d")
     (lib.mesonOption "shellprofiledir" "${placeholder "out"}/etc/profile.d")
-    (lib.mesonOption "kmod-path" "${kmod}/bin/kmod")
 
     # /bin/sh is also the upstream default. Explicitly set this so that we're
     # independent of upstream changes to the default.
     (lib.mesonOption "debug-shell" "/bin/sh")
+
+    # Use the correct path for Bash for user shells (e.g. used in nspawn and
+    # homed), which otherwise defaults to /bin/bash.
+    (lib.mesonOption "default-user-shell" "/run/current-system/sw/bin/bash")
 
     # Attempts to check /usr/sbin and that fails in macOS sandbox because
     # permission is denied. If /usr/sbin is not a symlink, it defaults to true.
@@ -467,10 +457,6 @@ stdenv.mkDerivation (finalAttrs: {
     # pkgconfig
     (lib.mesonOption "pkgconfiglibdir" "${placeholder "dev"}/lib/pkgconfig")
     (lib.mesonOption "pkgconfigdatadir" "${placeholder "dev"}/share/pkgconfig")
-
-    # Keyboard
-    (lib.mesonOption "loadkeys-path" "${kbd}/bin/loadkeys")
-    (lib.mesonOption "setfont-path" "${kbd}/bin/setfont")
 
     # SBAT
     (lib.mesonOption "sbat-distro" "nixos")
@@ -488,8 +474,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "sysvrcnd-path" "")
 
     # Login
-    (lib.mesonOption "sulogin-path" "${util-linux.login}/bin/sulogin")
-    (lib.mesonOption "nologin-path" "${util-linux.login}/bin/nologin")
+    (lib.mesonOption "sulogin-path" "${lib.getOutput "login" util-linux}/bin/sulogin")
+    (lib.mesonOption "nologin-path" "${lib.getOutput "login" util-linux}/bin/nologin")
 
     # Mount
     (lib.mesonOption "mount-path" "${lib.getOutput "mount" util-linux}/bin/mount")
@@ -573,6 +559,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "man" true)
     (lib.mesonEnable "nspawn" withNspawn)
 
+    (lib.mesonBool "vconsole" withVConsole)
     (lib.mesonBool "analyze" withAnalyze)
     (lib.mesonBool "logind" withLogind)
     (lib.mesonBool "localed" withLocaled)
@@ -599,7 +586,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "create-log-dirs" false)
     (lib.mesonBool "smack" true)
     (lib.mesonBool "b_pie" true)
-
+  ]
+  ++ lib.optionals withVConsole [
+    (lib.mesonOption "loadkeys-path" "${kbd}/bin/loadkeys")
+    (lib.mesonOption "setfont-path" "${kbd}/bin/setfont")
+  ]
+  ++ lib.optionals withKmod [
+    (lib.mesonOption "kmod-path" "${kmod}/bin/kmod")
   ]
   ++ lib.optionals (withShellCompletions == false) [
     (lib.mesonOption "bashcompletiondir" "no")
@@ -857,11 +850,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Avoid *.EFI binary stripping.
   # At least on aarch64-linux strip removes too much from PE32+ files:
   #   https://github.com/NixOS/nixpkgs/issues/169693
-  # The hack is to move EFI file out of lib/ before doStrip run and return it
-  # after doStrip run.
-  preFixup = lib.optionalString withBootloader ''
-    mv $out/lib/systemd/boot/efi $out/dont-strip-me
-  '';
+  stripExclude = [ "lib/systemd/boot/efi/*" ];
 
   # Wrap in the correct path for LUKS2 tokens.
   postFixup =
@@ -870,9 +859,6 @@ stdenv.mkDerivation (finalAttrs: {
         # This needs to be in LD_LIBRARY_PATH because rpath on a binary is not propagated to libraries using dlopen, in this case `libcryptsetup.so`
         wrapProgram $out/$f --prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib/cryptsetup
       done
-    ''
-    + lib.optionalString withBootloader ''
-      mv $out/dont-strip-me $out/lib/systemd/boot/efi
     ''
     + lib.optionalString withUkify ''
       # To cross compile a derivation that builds a UKI with ukify, we need to wrap

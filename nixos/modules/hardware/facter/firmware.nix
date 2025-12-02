@@ -8,7 +8,7 @@ let
   hasIntelCpu = facterLib.hasIntelCpu report;
 in
 {
-  config = lib.mkIf isBaremetal {
+  config = lib.mkIf (config.hardware.facter.reportPath != null && isBaremetal) {
     # none (e.g. bare-metal)
     # provide firmware for devices that might not have been detected by nixos-facter
     hardware.enableRedistributableFirmware = lib.mkDefault true;

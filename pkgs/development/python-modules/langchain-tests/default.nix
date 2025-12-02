@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   httpx,
@@ -30,19 +30,19 @@
 
 buildPythonPackage rec {
   pname = "langchain-tests";
-  version = "0.3.21";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-tests==${version}";
-    hash = "sha256-CufnUFhYTENuq4/32u0w3UZb7TdZxEpshyQqLH6NEZo=";
+    hash = "sha256-ke/nIvZRtwyeN5uQuqOjJ4KdE+cJOc9XkmDuT+nnZpQ=";
   };
 
   sourceRoot = "${src.name}/libs/standard-tests";
 
-  build-system = [ pdm-backend ];
+  build-system = [ hatchling ];
 
   pythonRelaxDeps = [
     # Each component release requests the exact latest core.

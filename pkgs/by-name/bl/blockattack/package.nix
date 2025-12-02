@@ -9,6 +9,7 @@
   fetchFromGitHub,
   gettext,
   gitUpdater,
+  libx11,
   ninja,
   physfs,
   pkg-config,
@@ -18,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blockattack";
-  version = "2.9.0";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "blockattack";
     repo = "blockattack-game";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-6mPj6A7mYm4CXkSSemNPn1CPkd7+01yr8KvCBM3a5po=";
+    hash = "sha256-sp/D0MSLWV1iV89UULlz8IrP5nmiMv6PsoGf1WM5kGw=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2_ttf
     SDL2_ttf
     boost
+    libx11
     physfs
   ];
 

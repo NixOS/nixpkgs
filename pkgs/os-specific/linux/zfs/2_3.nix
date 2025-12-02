@@ -13,10 +13,10 @@ callPackage ./generic.nix args {
   kernelModuleAttribute = "zfs_2_3";
 
   kernelMinSupportedMajorMinor = "4.18";
-  kernelMaxSupportedMajorMinor = "6.16";
+  kernelMaxSupportedMajorMinor = "6.17";
 
   # this package should point to the latest release.
-  version = "2.3.4";
+  version = "2.3.5";
 
   extraPatches = [
     (fetchpatch {
@@ -38,5 +38,5 @@ callPackage ./generic.nix args {
     amarshall
   ];
 
-  hash = "sha256-8BSuDRDyqPGAiyGGxFyEZIcXB+cKsKk25jcFPrSK3GI=";
+  hash = "sha256-zTDdoQWbguKeWjQH5+FOTDhxfs3e7UPFnUX8ZugHQy4=";
 }

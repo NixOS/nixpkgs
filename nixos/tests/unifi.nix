@@ -11,8 +11,6 @@
   node.pkgsReadOnly = false;
 
   nodes.machine = {
-    nixpkgs.config.allowUnfree = true;
-
     services.unifi.enable = true;
   };
 

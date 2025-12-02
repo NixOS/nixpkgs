@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "twingate";
-  version = "2025.175.154516";
+  version = "2025.310.174671";
 
   src = fetchurl {
     url = "https://binaries.twingate.com/client/linux/DEB/x86_64/${version}/twingate-amd64.deb";
-    hash = "sha256-WqIG5AUfRxkJ1qzGs6cB/2fe/UUNOZiL5/v9QMXlmK8=";
+    hash = "sha256-ZzOsXpjLBR447Kvo2kwy9y8TRm8Yp3EMlVx6vQU72jQ=";
   };
 
   buildInputs = [
@@ -57,7 +57,6 @@ stdenv.mkDerivation rec {
     description = "Twingate Client";
     homepage = "https://twingate.com";
     license = licenses.unfree;
-    maintainers = with maintainers; [ tonyshkurenko ];
     platforms = [ "x86_64-linux" ];
   };
 }

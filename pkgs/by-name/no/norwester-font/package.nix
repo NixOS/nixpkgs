@@ -26,7 +26,6 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     homepage = "http://jamiewilson.io/norwester";
     description = "Condensed geometric sans serif by Jamie Wilson";
-    maintainers = with maintainers; [ leenaars ];
     license = licenses.ofl;
     platforms = platforms.all;
   };

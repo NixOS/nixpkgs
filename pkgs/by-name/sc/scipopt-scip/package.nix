@@ -19,19 +19,14 @@
 
 stdenv.mkDerivation rec {
   pname = "scipopt-scip";
-  version = "9.2.3";
+  version = "9.2.4";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "scip";
     tag = "v${lib.replaceStrings [ "." ] [ "" ] version}";
-    hash = "sha256-Zc1AXNpHQXXFO8jkMaJj6xYkmkQxAM8G+SiPiH9xCAw=";
+    hash = "sha256-nwFRtP63/HPfk9JhcyLKApicgqE9IF+7s5MGGrVJrpM=";
   };
-
-  patches = [
-    # https://github.com/scipopt/scip/pull/169
-    ./0001-check-fix-invalid-ctest-invocation.patch
-  ];
 
   nativeBuildInputs = [ cmake ];
 

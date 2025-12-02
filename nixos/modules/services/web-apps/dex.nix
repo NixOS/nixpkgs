@@ -99,7 +99,7 @@ in
       description = "dex identity provider";
       wantedBy = [ "multi-user.target" ];
       after = [
-        "networking.target"
+        "network.target"
       ]
       ++ (optional (cfg.settings.storage.type == "postgres") "postgresql.target");
       path = with pkgs; [ replace-secret ];

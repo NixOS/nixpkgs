@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/frontend/yarn.lock";
-    hash = "sha256-e+3LCoOzfjSG4CjzOLXTcXGkmzNwFTLCrN0l5odOBMs=";
+    hash = "sha256-qwxsnl9xKzNJEomMB4p8eaiybmlpeUgSUpJtIRhF1Cw=";
   };
 
   nativeBuildInputs = [
@@ -28,6 +28,7 @@ stdenv.mkDerivation {
     nodejs
     (yarn.override { inherit nodejs; })
     writableTmpDirAsHomeHook
+    dart-sass
   ];
 
   configurePhase = ''
@@ -37,11 +38,11 @@ stdenv.mkDerivation {
 
     yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
     fixup-yarn-lock yarn.lock
-    yarn install --frozen-lockfile --offline --no-progress --non-interactive
-    patchShebangs node_modules/
+    yarn install --frozen-lockfile --offline --no-progress --non-interactive --ignore-scripts
+    patchShebangs node_modules
 
-    mkdir -p node_modules/sass-embedded/dist/lib/src/vendor/dart-sass
-    ln -s ${dart-sass}/bin/dart-sass node_modules/sass-embedded/dist/lib/src/vendor/dart-sass/sass
+    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["dart-sass"];'
 
     runHook postConfigure
   '';
@@ -50,9 +51,7 @@ stdenv.mkDerivation {
     runHook preBuild
 
     export NUXT_TELEMETRY_DISABLED=1
-    yarn --offline build
-    yarn --offline generate
-
+    yarn --offline generate --env production
     runHook postBuild
   '';
 

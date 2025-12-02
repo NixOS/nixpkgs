@@ -268,6 +268,7 @@ in
     services.upower.enable = config.powerManagement.enable;
     services.libinput.enable = mkDefault true;
     services.geoclue2.enable = mkDefault true;
+    services.fwupd.enable = mkDefault true;
 
     # Extra UDEV rules used by Solid
     services.udev.packages = [

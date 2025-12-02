@@ -30,7 +30,7 @@ let
   inherit (python3Packages)
     docutils
     python
-    fb-re2
+    google-re2
     pygit2
     pygments
     setuptools
@@ -64,7 +64,7 @@ let
     cargoRoot = if rustSupport then "rust" else null;
 
     propagatedBuildInputs =
-      lib.optional re2Support fb-re2
+      lib.optional re2Support google-re2
       ++ lib.optional gitSupport pygit2
       ++ lib.optional highlightSupport pygments;
     nativeBuildInputs = [

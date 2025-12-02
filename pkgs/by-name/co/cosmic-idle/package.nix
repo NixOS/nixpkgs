@@ -16,17 +16,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-idle";
-  version = "1.0.0-beta.4";
+  version = "1.0.0-beta.8";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-idle";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-dRvcow+rZ4sJV6pBxRIw6SCmU3aXP9uVKtFEJ9vozzI=";
+    hash = "sha256-qVrcMI7sr0mWyYW1fM6oP/6qKEhlqqyQ/WiJaWfCQPU=";
   };
 
-  cargoHash = "sha256-iFR0kFyzawlXrWItzFQbG/tKGd3Snwk/0LYkPzCkJUQ=";
+  cargoHash = "sha256-vfuhXT/MJHchJdW+3GPuvZbYVdClpsbNfOzLKWW4LPY=";
 
   nativeBuildInputs = [
     just

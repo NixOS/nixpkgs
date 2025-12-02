@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmobile";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Phosh";
     repo = "gmobile";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5WRsHbwReLy3ZMbfsyjr3VsGawaQoXMFIDtKw3P/loA=";
+    hash = "sha256-VBtZU3AM+Off8bHYyW50y3+PY9u7D+xzChlnBlae+ns=";
   };
 
   nativeBuildInputs = [

@@ -18,6 +18,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-CZsVd9ob4FHC9KeepK7OHWatVTJUiJEjqtaylhD+yS0=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.8.11,<0.9.0" "uv_build"
+  '';
+
   pythonRelaxDeps = [ "pydantic" ];
 
   build-system = with python3.pkgs; [ uv-build ];

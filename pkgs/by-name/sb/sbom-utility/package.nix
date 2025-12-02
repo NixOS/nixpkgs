@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "0.17.0";
+  version = "0.18.1";
 in
 buildGoModule {
   pname = "sbom-utility";
@@ -19,20 +19,10 @@ buildGoModule {
     owner = "CycloneDX";
     repo = "sbom-utility";
     tag = "v${version}";
-    hash = "sha256-LiHCA5q9IJ67jZ2JUcbCFVCYnT36nyq9QzgH9PMr9kM=";
+    hash = "sha256-LIyr9qu4FQ85EBWzNncztURy1U02VnLMCwEjHwCJvUM=";
   };
 
   vendorHash = "sha256-vyYSir5u6d5nv+2ScrHpasQGER4VFSoLb1FDUDIrtDM=";
-
-  patches = [
-    # work around https://github.com/CycloneDX/sbom-utility/issues/121, which otherwise
-    # breaks shell completions
-    ./name.patch
-    # Output logs to stderr rather than stdout.
-    # Patch of https://github.com/CycloneDX/sbom-utility/pull/122, adapted to apply
-    # against v0.17.0
-    ./stderr.patch
-  ];
 
   ldflags = [
     "-X main.Version=${version}"

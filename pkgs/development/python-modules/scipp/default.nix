@@ -39,18 +39,17 @@
 
 buildPythonPackage rec {
   pname = "scipp";
-  version = "25.08.0";
+  version = "25.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipp";
     repo = "Scipp";
-    # https://github.com/scipp/scipp/pull/3722
     tag = version;
-    hash = "sha256-nLccJlFnnVTpamph2oIaMxRD5ljrw6GlCnnTx7LfrO0=";
+    hash = "sha256-/gCLWRpBnOjNMBEpJe0JSda496iXDFnCE+R+zIaRkWo=";
   };
   env = {
-    SKIP_CONAN = "true";
+    SKIP_REMOTE_SOURCES = "true";
   };
 
   build-system = [

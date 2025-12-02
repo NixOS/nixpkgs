@@ -3,6 +3,7 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  arrow-cpp,
   # nativeBuildInputs
   binaryen,
   lld,
@@ -34,13 +35,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rerun";
-  version = "0.26.2";
+  version = "0.27.2";
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "rerun-io";
     repo = "rerun";
     tag = finalAttrs.version;
-    hash = "sha256-o+aV7YcsunaG3n2m8oTXug/kR3IU+ty9NYCkG/vEzyM=";
+    hash = "sha256-az/NylYwhWoNvrOvsB+cRywoPrjngy/KX1B2hohcl0Q=";
   };
 
   # The path in `build.rs` is wrong for some reason, so we patch it to make the passthru tests work
@@ -49,9 +55,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"rerun_sdk/rerun_cli/rerun"' '"rerun_sdk/rerun"'
   '';
 
-  cargoHash = "sha256-EH/R+OgLeLNrZnkIGqutTo4K9XzhW+CGwG/uQKwWGXA=";
+  cargoHash = "sha256-wU2Bv9BzcHI9vhIzGpQY2oYCRCNTwXkBrUruf6+W7g8=";
 
-  cargoBuildFlags = [ "--package rerun-cli" ];
+  cargoBuildFlags = [
+    "--package rerun-cli"
+    "--package rerun_c"
+  ];
   cargoTestFlags = [ "--package rerun-cli" ];
   buildNoDefaultFeatures = true;
   buildFeatures = [
@@ -128,6 +137,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib wayland) ];
 
+  propagatedBuildInputs = [ arrow-cpp ];
+
   addDlopenRunpaths = map (p: "${lib.getLib p}/lib") (
     lib.optionals stdenv.hostPlatform.isLinux [
       libxkbcommon
@@ -155,6 +166,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPhases = lib.optionals stdenv.hostPlatform.isLinux [ "addDlopenRunpathsPhase" ];
 
+  postInstall = ''
+    # Install C++ SDK components
+    mkdir -p $dev/include
+    cp -r $src/rerun_cpp/src/* $dev/include/
+
+    # Install rerun_c library (built from Rust)
+    if [ -f "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/librerun_c.a" ]; then
+      cp "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/librerun_c.a" $out/lib/
+    fi
+
+    # Install CMake config files
+    mkdir -p $dev/lib/cmake/rerun_sdk
+    cp $src/rerun_cpp/CMakeLists.txt $dev/lib/cmake/rerun_sdk/
+    cp $src/rerun_cpp/Config.cmake.in $dev/lib/cmake/rerun_sdk/
+    cp $src/rerun_cpp/download_and_build_arrow.cmake $dev/lib/cmake/rerun_sdk/
+  '';
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
@@ -169,7 +197,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Visualize streams of multimodal data. Fast, easy to use, and simple to integrate.  Built in Rust using egui";
+    description = "Visualize streams of multimodal data. Fast, easy to use, and simple to integrate. Built in Rust using egui. Includes C++ SDK";
     homepage = "https://github.com/rerun-io/rerun";
     changelog = "https://github.com/rerun-io/rerun/blob/${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
@@ -177,8 +205,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
     ];
     maintainers = with lib.maintainers; [
+      GaetanLepage
       SomeoneSerge
-      robwalt
     ];
     mainProgram = "rerun";
   };

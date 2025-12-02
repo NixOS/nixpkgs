@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "pat";
-  version = "0.17.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "la5nta";
     repo = "pat";
     rev = "v${version}";
-    hash = "sha256-2CQQKZ9ZnabMhvmbFeYBZ2iv9WJo6QR5IqROUXy7sck=";
+    hash = "sha256-hpbSjxePAXuqQAlNTAfknh+noZgdILtNG57OWVJO02M=";
   };
 
-  vendorHash = "sha256-ajkRUnfYHCrFBxZsJLd6ypRl9+gYz+q4C/asOJZrVYg=";
+  vendorHash = "sha256-8XPnY99arnDDeGlzPv4sw6pwxXkSsxSzNFtz+IeKeq4=";
 
   ldflags = [
     "-s"

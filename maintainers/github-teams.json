@@ -220,7 +220,6 @@
       "gshpychka": 23005347,
       "hexagonal-sun": 222664,
       "heywoodlh": 18178614,
-      "iedame": 60272,
       "isabelroses": 71222764,
       "jonhermansen": 660911,
       "juliusrickert": 5007494,
@@ -242,11 +241,9 @@
       "mirkolenz": 5160954,
       "mstone": 412508,
       "n8henrie": 1234956,
-      "niklaskorz": 590517,
       "ofalvai": 1694986,
       "pasqui23": 6931743,
       "prusnak": 42201,
-      "pupbrained": 33522919,
       "reckenrode": 7413633,
       "ryand56": 22267679,
       "samrose": 115821,
@@ -255,6 +252,7 @@
       "sikmir": 688044,
       "siraben": 8219659,
       "siriobalmelli": 23038812,
+      "skulldogged": 33522919,
       "starcraft66": 1858154,
       "stepbrobd": 81826728,
       "stephank": 89950,
@@ -311,8 +309,7 @@
     "description": "",
     "id": 2516946,
     "maintainers": {
-      "jian-lin": 75130626,
-      "matthewbauer": 19036
+      "jian-lin": 75130626
     },
     "members": {
       "AndersonTorres": 5954806,
@@ -348,6 +345,18 @@
       "sternenseemann": 3154475
     },
     "name": "exotic-platform-maintainers"
+  },
+  "feel-co": {
+    "description": "Managing packages related to https://github.com/feel-co",
+    "id": 15169000,
+    "maintainers": {
+      "NotAShelf": 62766066,
+      "eclairevoyant": 848000
+    },
+    "members": {
+      "Gerg-L": 88247690
+    },
+    "name": "feel-co"
   },
   "flutter": {
     "description": "Maintain Flutter and Dart-related packages and build tools",
@@ -633,8 +642,7 @@
     "description": "Marketing team [leader=@djacu]",
     "id": 7709512,
     "maintainers": {
-      "djacu": 7043297,
-      "tomberek": 178444
+      "djacu": 7043297
     },
     "members": {
       "flyfloh": 74379,
@@ -666,6 +674,18 @@
     },
     "name": "neovim"
   },
+  "nim": {
+    "description": "Maintains the nim language and build tooling",
+    "id": 14913434,
+    "maintainers": {
+      "eclairevoyant": 848000
+    },
+    "members": {
+      "Eveeifyeve": 88671402,
+      "daylinmorgan": 47667941
+    },
+    "name": "nim"
+  },
   "nix-formatting": {
     "description": "Maintain the official Nix formatter and apply it to Nixpkgs: https://nixos.org/community/teams/formatting/",
     "id": 9676823,
@@ -678,7 +698,7 @@
       "MattSturgeon": 5046562,
       "Sereja313": 112060595,
       "dasJ": 4971975,
-      "piegamesde": 14054505
+      "dyegoaurelio": 42411160
     },
     "name": "nix-formatting"
   },
@@ -686,11 +706,12 @@
     "description": "",
     "id": 174820,
     "maintainers": {
+      "Ericson2314": 1055245,
       "tomberek": 178444
     },
     "members": {
-      "Ericson2314": 1055245,
       "Mic92": 96200,
+      "Radvendii": 1239929,
       "edolstra": 1148549,
       "xokdvium": 145775305
     },
@@ -724,7 +745,6 @@
     "description": "Provides leadership for and has authority over Nixpkgs.",
     "id": 14317027,
     "maintainers": {
-      "K900": 386765,
       "alyssais": 2768870,
       "emilazy": 18535642,
       "wolfgangwalther": 9132420

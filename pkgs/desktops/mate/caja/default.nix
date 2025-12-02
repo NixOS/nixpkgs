@@ -21,6 +21,10 @@
 stdenv.mkDerivation rec {
   pname = "caja";
   version = "1.28.0";
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";

@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "yamlfix";
-  version = "1.18.0";
+  version = "1.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lyz-code";
     repo = "yamlfix";
     tag = version;
-    hash = "sha256-g2X9fBUS5wbQJbP29V5pWwrQ1+P/Y8euK4Rv7C6r3WM=";
+    hash = "sha256-c8vspcouS3r0S/4S210QGYT2XdU3aR0FvUoKaC2WLUM=";
   };
 
   build-system = [

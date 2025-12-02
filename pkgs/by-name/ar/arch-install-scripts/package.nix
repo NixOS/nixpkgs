@@ -19,18 +19,19 @@
     "/usr/bin/vendor_perl"
     "/usr/bin/core_perl"
   ],
+  chrootSetprivPath ? "/usr/bin/setpriv",
 }:
 
 resholve.mkDerivation rec {
   pname = "arch-install-scripts";
-  version = "29";
+  version = "31";
 
   src = fetchFromGitLab {
     domain = "gitlab.archlinux.org";
     owner = "archlinux";
     repo = "arch-install-scripts";
     tag = "v${version}";
-    hash = "sha256-XWcZZ+ET3J4dB6M9CdXESf0iQh+2vYxlxoJ6TZ3vFUk=";
+    hash = "sha256-Oh1nC/gPJDDy8cXiZPbEfpwOuO+RFRcxVCZuTtB2MV8=";
   };
 
   nativeBuildInputs = [
@@ -40,12 +41,16 @@ resholve.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./Makefile \
-      --replace "PREFIX = /usr/local" "PREFIX ?= /usr/local"
+      --replace-fail "PREFIX = /usr/local" "PREFIX ?= /usr/local"
+
     substituteInPlace ./pacstrap.in \
-      --replace "cp -a" "cp -LR --no-preserve=mode" \
-      --replace "unshare pacman" "unshare ${pacman}/bin/pacman" \
-      --replace 'gnupg "$newroot/etc/pacman.d/"' 'gnupg "$newroot/etc/pacman.d/" && chmod 700 "$newroot/etc/pacman.d/gnupg"'
+      --replace-fail "cp -a" "cp -LR --no-preserve=mode" \
+      --replace-fail "unshare pacman" "unshare ${pacman}/bin/pacman" \
+      --replace-fail '"$gpg_dir" "$newroot/$gpg_dir"' '"$gpg_dir" "$newroot/$gpg_dir" && chmod 700 "$newroot/etc/pacman.d/gnupg"'
+
     echo "export PATH=${lib.strings.makeSearchPath "" chrootPath}:\$PATH" >> ./common
+    substituteInPlace ./arch-chroot.in \
+      --replace-fail "sd_args+=(setpriv" "sd_args+=(${chrootSetprivPath}"
   '';
 
   installFlags = [ "PREFIX=$(out)" ];
@@ -80,10 +85,17 @@ resholve.mkDerivation rec {
         util-linux
       ];
 
-      execer = [ "cannot:${pacman}/bin/pacman-key" ];
+      execer = [
+        "cannot:${pacman}/bin/pacman-conf"
+        "cannot:${pacman}/bin/pacman-key"
+      ];
 
-      # TODO: no good way to resolve mount/umount in Nix builds for now
-      # see https://github.com/abathur/resholve/issues/29
+      fake.external = [
+        "systemd-escape"
+        "systemd-run"
+      ];
+
+      # Avoid using setuid wrappers
       fix = {
         mount = true;
         umount = true;
@@ -93,6 +105,7 @@ resholve.mkDerivation rec {
         "$setup"
         "$pid_unshare"
         "$mount_unshare"
+        "$sd_args"
         "${pacman}/bin/pacman"
       ];
     };

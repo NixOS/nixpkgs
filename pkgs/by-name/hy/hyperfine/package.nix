@@ -3,20 +3,21 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hyperfine";
-  version = "1.19.0";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "hyperfine";
     rev = "v${version}";
-    hash = "sha256-c8yK9U8UWRWUSGGGrAds6zAqxAiBLWq/RcZ6pvYNpgk=";
+    hash = "sha256-Ee889Fx2Mi2005SrlcKc7TwG8ZIpTqisfLebXYadvSg=";
   };
 
-  cargoHash = "sha256-eZpGqkowp/R//RqLRk3AIbTpW3i9e+lOWpfdli7S4uE=";
+  cargoHash = "sha256-0e6QDVv//WQtfvrJj6jW1sEz7jFv3VC6UKLvclyytLs=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,6 +29,8 @@ rustPlatform.buildRustPackage rec {
       --zsh $releaseDir/build/hyperfine-*/out/_hyperfine
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Command-line benchmarking tool";
     homepage = "https://github.com/sharkdp/hyperfine";
@@ -37,6 +40,7 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [
+      mdaniels5757
       thoughtpolice
     ];
     mainProgram = "hyperfine";

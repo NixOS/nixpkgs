@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   dask,
   duckdb,
@@ -56,7 +57,7 @@ buildPythonPackage rec {
     pytest-env
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "narwhals" ];
 
@@ -80,6 +81,11 @@ buildPythonPackage rec {
     # ibis improvements cause strict XPASS failures (tests expected to fail now pass)
     "test_empty_scalar_reduction_with_columns"
     "test_collect_empty"
+  ];
+
+  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    # Segfault in included polars/lazyframe
+    "tests/tpch_q1_test.py"
   ];
 
   pytestFlags = [

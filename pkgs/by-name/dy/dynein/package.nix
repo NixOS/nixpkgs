@@ -23,11 +23,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-PA7Hvn+vYBD80thkIamwOhw4lJWAmU/TQBnwJro4r7c=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
     openssl
-    cmake
   ];
 
   preBuild = ''

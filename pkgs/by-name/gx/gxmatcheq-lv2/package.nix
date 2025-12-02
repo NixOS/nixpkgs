@@ -43,5 +43,6 @@ buildStdenv.mkDerivation (finalAttrs: {
     description = "Matching Equalizer to apply EQ curve from one source to another source";
     maintainers = with lib.maintainers; [ magnetophon ];
     license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
 })

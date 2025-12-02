@@ -25,7 +25,7 @@ in
 
       partitionTableType = "efi";
       format = "qcow2-compressed";
-      copyChannel = true;
+      copyChannel = config.system.installer.channel.enable;
     };
 
     fileSystems = {

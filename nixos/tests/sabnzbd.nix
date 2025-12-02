@@ -11,9 +11,6 @@
       services.sabnzbd = {
         enable = true;
       };
-
-      # unrar is unfree
-      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "unrar" ];
     };
 
   testScript = ''

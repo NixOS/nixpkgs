@@ -7,13 +7,14 @@
   pkg-config,
   rustc,
   cargo,
+  python3,
   rustPlatform,
   vala,
   gi-docgen,
+  gobject-introspection,
   libseccomp,
   lcms2,
   gtk4,
-  gobject-introspection,
   gnome,
   replaceVars,
   bubblewrap,
@@ -26,14 +27,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libglycin";
-  version = "1.2.3";
+  version = "2.0.7";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "glycin";
     tag = finalAttrs.version;
-    hash = "sha256-O7Z7kzC0BU7FAF1UZC6LbXVIXPDertsAUNYwHAjkzPI=";
+    hash = "sha256-17ebdiLMuDJuuw8TBYWamyyDM4aZgtWRWEQhWGb/2mw=";
   };
 
   nativeBuildInputs = [
@@ -42,24 +43,25 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     rustc
     cargo
+    python3
     rustPlatform.cargoSetupHook
   ]
   ++ lib.optionals withIntrospection [
     vala
     gi-docgen
+    gobject-introspection
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-g2tsQ6q+sUxn3itu3IgZ5EGtDorPzhaO5B1hlEW5xzs=";
+    hash = "sha256-7x4Ts0wRFoxZ2u3AHVEey8g6+XWDpxM/hFZeomkojKU=";
   };
 
   buildInputs = [
     libseccomp
     lcms2
     gtk4
-  ]
-  ++ lib.optionals withIntrospection [ gobject-introspection ];
+  ];
 
   propagatedBuildInputs = [
     libseccomp
@@ -68,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     (lib.mesonBool "glycin-loaders" false)
+    (lib.mesonBool "glycin-thumbnailer" false)
     (lib.mesonBool "libglycin" true)
     (lib.mesonBool "introspection" withIntrospection)
     (lib.mesonBool "vapi" withIntrospection)
@@ -75,7 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    patch -p2 < ${finalAttrs.passthru.glycinPathsPatch}
+    patch -p2 < ${finalAttrs.passthru.glycin3PathsPatch}
+
+    patchShebangs \
+      build-aux/crates-version.py
   '';
 
   passthru = {
@@ -108,6 +114,10 @@ stdenv.mkDerivation (finalAttrs: {
       ];
 
     glycinPathsPatch = replaceVars ./fix-glycin-paths.patch {
+      bwrap = "${bubblewrap}/bin/bwrap";
+    };
+
+    glycin3PathsPatch = replaceVars ./fix-glycin-3-paths.patch {
       bwrap = "${bubblewrap}/bin/bwrap";
     };
   };

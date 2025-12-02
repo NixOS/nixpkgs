@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     mkdir src/private
     substituteInPlace scripts/build/macOS/fix_bundle.py \
-      --replace-fail "path.startswith('/usr/lib/')" "path.startswith('${builtins.storeDir}')"
+      --replace-fail "path.startswith('/usr/lib/')" "path.startswith('/usr/lib/') or path.startswith('${builtins.storeDir}')"
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace libraries/lib-files/FileNames.cpp \

@@ -42,5 +42,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/morrownr/8814au";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.lassulus ];
+    broken = kernel.kernelOlder "5.2" || kernel.kernelAtLeast "6.15";
   };
 }

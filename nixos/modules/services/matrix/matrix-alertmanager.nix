@@ -76,17 +76,11 @@ in
       description = "Makes the bot mention @room when posting an alert";
     };
     tokenFile = lib.mkOption {
-      type = lib.types.pathWith {
-        inStore = false;
-        absolute = true;
-      };
+      type = lib.types.externalPath;
       description = "File that contains a valid Matrix token for the Matrix user.";
     };
     secretFile = lib.mkOption {
-      type = lib.types.pathWith {
-        inStore = false;
-        absolute = true;
-      };
+      type = lib.types.externalPath;
       description = "File that contains a secret for the Alertmanager webhook.";
     };
   };

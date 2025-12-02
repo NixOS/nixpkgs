@@ -43,24 +43,24 @@ let
     in
     {
       repeatedOverrides-pname = {
-        expr = repeatedOverrides.pname == "a-better-hello-with-blackjack";
-        expected = true;
+        expr = repeatedOverrides.pname;
+        expected = "a-better-hello-with-blackjack";
       };
       repeatedOverrides-entangled-pname = {
-        expr = repeatedOverrides.entangled.pname == "a-better-figlet-with-blackjack";
-        expected = true;
+        expr = repeatedOverrides.entangled.pname;
+        expected = "a-better-figlet-with-blackjack";
       };
       overriding-using-only-attrset = {
-        expr = (pkgs.hello.overrideAttrs { pname = "hello-overriden"; }).pname == "hello-overriden";
-        expected = true;
+        expr = (pkgs.hello.overrideAttrs { pname = "hello-overriden"; }).pname;
+        expected = "hello-overriden";
       };
       overriding-using-only-attrset-no-final-attrs = {
         name = "overriding-using-only-attrset-no-final-attrs";
         expr =
           ((stdenvNoCC.mkDerivation { pname = "hello-no-final-attrs"; }).overrideAttrs {
             pname = "hello-no-final-attrs-overridden";
-          }).pname == "hello-no-final-attrs-overridden";
-        expected = true;
+          }).pname;
+        expected = "hello-no-final-attrs-overridden";
       };
     };
 
@@ -118,16 +118,16 @@ let
         expected = true;
       };
       extendMkDerivation-helloLocal-plain-equivalence = {
-        expr = helloLocal.drvPath == helloLocalPlain.drvPath;
-        expected = true;
+        expr = helloLocal.drvPath;
+        expected = helloLocalPlain.drvPath;
       };
       extendMkDerivation-helloLocal-finalAttrs = {
-        expr = helloLocal.bar == "ab";
-        expected = true;
+        expr = helloLocal.bar;
+        expected = "ab";
       };
       extendMkDerivation-helloLocal-specialArg = {
-        expr = hiLocal.greeting == "Hi!";
-        expected = true;
+        expr = hiLocal.greeting;
+        expected = "Hi!";
       };
     };
 
@@ -152,27 +152,35 @@ let
     in
     {
       hash-outputHash-equivalence = {
-        expr = ruamel_0_17_21-src.outputHash == ruamel_0_17_21-hash;
-        expected = true;
+        expr = ruamel_0_17_21-src.outputHash;
+        expected = ruamel_0_17_21-hash;
       };
 
       hash-overridability-outputHash = {
-        expr = ruamel_0_17_21-src-by-overriding.outputHash == ruamel_0_17_21-hash;
-        expected = true;
+        expr = ruamel_0_17_21-src-by-overriding.outputHash;
+        expected = ruamel_0_17_21-hash;
       };
 
       hash-overridability-drvPath = {
-        expr =
-          lib.isString ruamel_0_17_21-src-by-overriding.drvPath
-          && ruamel_0_17_21-src-by-overriding.drvPath == ruamel_0_17_21-src.drvPath;
-        expected = true;
+        expr = [
+          (lib.isString ruamel_0_17_21-src-by-overriding.drvPath)
+          ruamel_0_17_21-src-by-overriding.drvPath
+        ];
+        expected = [
+          true
+          ruamel_0_17_21-src.drvPath
+        ];
       };
 
       hash-overridability-outPath = {
-        expr =
-          lib.isString ruamel_0_17_21-src-by-overriding.outPath
-          && ruamel_0_17_21-src-by-overriding.outPath == ruamel_0_17_21-src.outPath;
-        expected = true;
+        expr = [
+          (lib.isString ruamel_0_17_21-src-by-overriding.outPath)
+          ruamel_0_17_21-src-by-overriding.outPath
+        ];
+        expected = [
+          true
+          ruamel_0_17_21-src.outPath
+        ];
       };
     };
 
@@ -249,44 +257,32 @@ let
       pet-vendored = pet-foo.overrideAttrs { vendorHash = null; };
     in
     {
-      buildGoModule-overrideAttrs = {
-        expr =
-          lib.all
-            (
-              attrPath:
-              let
-                attrPathPretty = lib.concatStringsSep "." attrPath;
-                valueNative = lib.getAttrFromPath attrPath pet_0_4_0;
-                valueOverridden = lib.getAttrFromPath attrPath pet_0_4_0-overridden;
-              in
-              lib.warnIfNot (valueNative == valueOverridden)
-                "pet_0_4_0.${attrPathPretty} (${valueNative}) does not equal pet_0_4_0-overridden.${attrPathPretty} (${valueOverridden})"
-                true
-            )
-            [
-              [ "drvPath" ]
-              [ "name" ]
-              [ "pname" ]
-              [ "version" ]
-              [ "vendorHash" ]
-              [
-                "goModules"
-                "drvPath"
-              ]
-              [
-                "goModules"
-                "name"
-              ]
-              [
-                "goModules"
-                "outputHash"
-              ]
-            ];
-        expected = true;
-      };
+      buildGoModule-overrideAttrs =
+        let
+          getComparingAttrs = p: {
+            inherit (p)
+              drvPath
+              name
+              pname
+              version
+              vendorHash
+              ;
+            goModules = {
+              inherit (p.goModules)
+                drvPath
+                name
+                outPath
+                ;
+            };
+          };
+        in
+        {
+          expr = getComparingAttrs pet_0_4_0-overridden;
+          expected = getComparingAttrs pet_0_4_0;
+        };
       buildGoModule-goModules-overrideAttrs = {
-        expr = pet-foo.goModules.FOO == "foo";
-        expected = true;
+        expr = pet-foo.goModules.FOO;
+        expected = "foo";
       };
       buildGoModule-goModules-overrideAttrs-vendored = {
         expr = lib.isString pet-vendored.drvPath;
@@ -309,14 +305,35 @@ let
 
 in
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
   name = "test-overriding";
-  passthru = { inherit tests; };
+  passthru = {
+    inherit tests;
+    failures = lib.runTests (finalAttrs.passthru.tests // { tests = lib.attrNames tests; });
+  };
+  testResults = lib.mapAttrs (testName: test: test.expr == test.expected) finalAttrs.passthru.tests;
   buildCommand = ''
     touch $out
+    for testName in "''${!testResults[@]}"; do
+      if [[ -n "''${testResults[$testName]}" ]]; then
+        echo "$testName success"
+      else
+        echo "$testName fail"
+      fi
+    done
   ''
-  + lib.concatMapAttrsStringSep "\n" (
-    name: t:
-    "([[ ${lib.boolToString t.expr} == ${lib.boolToString t.expected} ]] && echo '${name} success') || (echo '${name} fail' && exit 1)"
-  ) tests;
-}
+  + lib.optionalString (lib.any (v: !v) (lib.attrValues finalAttrs.testResults)) ''
+    {
+      echo "ERROR: tests.overriding: Encountering failed tests."
+      for testName in "''${!testResults[@]}"; do
+        if [[ -z "''${testResults[$testName]}" ]]; then
+          echo "- $testName"
+        fi
+      done
+      echo "To inspect the expected and actual result, "
+      echo '  evaluate `tests.overriding.tests.''${testName}`.'
+    } >&2
+    exit 1
+  '';
+})

@@ -23,6 +23,10 @@
 stdenv.mkDerivation rec {
   pname = "mate-notification-daemon";
   version = "1.28.5";
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "mate-desktop";

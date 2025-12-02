@@ -31,7 +31,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "ao";
+  pname = "torchao";
   version = "0.14.1";
   pyproject = true;
 

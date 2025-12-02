@@ -8,21 +8,24 @@
 
 buildGoModule rec {
   pname = "poutine";
-  version = "0.15.2";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "boostsecurityio";
     repo = "poutine";
     tag = "v${version}";
-    hash = "sha256-YBoGsexYT2/lAWEajMVa/xNRBv1R1i0hB6pTAlk43E0=";
+    hash = "sha256-Rk4Fd/h83NKIVlz/QXOSLnCKfxfKFXUfvUF5FSjomQY=";
   };
 
-  vendorHash = "sha256-CZLzIGu6jj4JXmKJaWmyeRvcRNjBYecblW47kcsg5Nw=";
+  vendorHash = "sha256-qp3Ko+01kk9AH0oCT2Si/si+74gT5KFtPFslwih/IBE=";
 
   ldflags = [
     "-s"
     "-w"
   ];
+
+  # "dagger" directory contains its own go module, which should be excluded from the build
+  excludedPackages = [ "dagger" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -40,6 +43,5 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "poutine";
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

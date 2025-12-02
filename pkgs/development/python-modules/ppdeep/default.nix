@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "ppdeep";
-  version = "20250625";
+  version = "20251115";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-t9pQ5U7ZvXkyY4K28vUfNxgW8ElaUjPe4jqUafh6Kng=";
+    hash = "sha256-xv21EXsO6/vpGhF7PIn03l0WGnoMGi0wI6BlpnZye3w=";
   };
 
   build-system = [ setuptools ];

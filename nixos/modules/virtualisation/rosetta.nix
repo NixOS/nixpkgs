@@ -76,7 +76,7 @@ in
       mask = ''\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'';
       fixBinary = true;
       matchCredentials = true;
-      preserveArgvZero = false;
+      preserveArgvZero = true;
 
       # Remove the shell wrapper and call the runtime directly
       wrapInterpreterInShell = false;

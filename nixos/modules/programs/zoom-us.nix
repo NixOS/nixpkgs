@@ -17,7 +17,11 @@
       # configuration elsewhere.
       config.programs.zoom-us.package.override (prev: {
         # Support pulseaudio if it's enabled on the system.
-        pulseaudioSupport = prev.pulseaudioSupport or config.services.pulseaudio.enable;
+        pulseaudioSupport =
+          prev.pulseaudioSupport or (
+            config.services.pulseaudio.enable
+            || (config.services.pipewire.enable && config.services.pipewire.pulse.enable)
+          );
 
         # Support Plasma 6 desktop environment if it's enabled on the system.
         plasma6XdgDesktopPortalSupport =

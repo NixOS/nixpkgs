@@ -28,13 +28,13 @@
   xorg,
 }:
 let
-  version = "2.19.3";
+  version = "2.19.6";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-VhBo61jW4lZeJYJcRRuVuYbR4enpM2JD47DDDlFJuao=";
+    hash = "sha256-nHLsA5hmAFkOAEQU/xD+hllwtc2SyBtns5auCNm9KNg=";
   };
 
   python = python3.override {
@@ -80,7 +80,7 @@ let
     pnpmDeps = pnpm.fetchDeps {
       inherit (finalAttrs) pname version src;
       fetcherVersion = 2;
-      hash = "sha256-AJp796oO8qOltPKndOXlLx1luCOfzsRSFscCUCe6MZo=";
+      hash = "sha256-lxZOwt+/ReU7m7he0iJSt5HqaPkRksveCgvDG7uodjA=";
     };
 
     nativeBuildInputs = [
@@ -171,6 +171,7 @@ python.pkgs.buildPythonApplication rec {
     "django-cors-headers"
     "drf-spectacular-sidecar"
     "filelock"
+    "ocrmypdf"
     "redis"
   ];
 

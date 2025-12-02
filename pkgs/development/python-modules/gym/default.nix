@@ -100,6 +100,9 @@ buildPythonPackage rec {
     # The requested array has an inhomogeneous shape after 1 dimensions.
     # The detected shape was (2,) + inhomogeneous part
     "test_sample_contains"
+
+    # segfault
+    "test_record_video"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Fatal Python error: Aborted

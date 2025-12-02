@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-crc32c";
     changelog = "https://github.com/googleapis/python-crc32c/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = [ ];
   };
 }

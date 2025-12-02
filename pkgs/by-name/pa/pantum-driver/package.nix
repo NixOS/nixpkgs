@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "pantum-driver";
-  version = "1.1.123";
+  version = "1.1.167";
 
   src = fetchzip {
-    url = "https://github.com/ArticExploit/pantum-driver/releases/download/${version}/Pantum.Ubuntu.Driver.V${
+    url = "https://github.com/osguot/pantum-universal-driver/releases/download/release/Pantum.Linux.Driver.V${
       builtins.replaceStrings [ "." ] [ "_" ] version
     }.zip";
-    hash = "sha256-TUk6CTnWlSvyG8MOpDRhg/eblAo6X/MDUFOiWuOuro0=";
+    hash = "sha256-0RyCgU00ZwGwcUhCkod971noVB7G10xnbH64/AdIFMA=";
   };
 
   buildInputs = [

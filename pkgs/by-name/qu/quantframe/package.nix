@@ -17,13 +17,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "quantframe";
-  version = "1.5.4";
+  version = "1.5.9";
 
   src = fetchFromGitHub {
     owner = "Kenya-DK";
     repo = "quantframe-react";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PCfejmL+dztzw2bBZxXzZlXBiSLO/eRgvP9jLK/G8PQ=";
+    hash = "sha256-jrGDgK/Z9oLSvtFfC+uIs0vj4Nku4Sp/bdR1MX/SK2E=";
   };
 
   postPatch = ''

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "ha-mqtt-discoverable";
-  version = "0.22.1";
+  version = "0.23.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "unixorn";
     repo = "ha-mqtt-discoverable";
     tag = "v${version}";
-    hash = "sha256-6xUfR9LR8xphex6EVX3u9VKjtvHhTX1EkC8KGPFtJzk=";
+    hash = "sha256-RITgyY9aAkDDm+SrBpfL4s2DJ2ssWddtbm0IvXswXxM=";
   };
 
   pythonRelaxDeps = [

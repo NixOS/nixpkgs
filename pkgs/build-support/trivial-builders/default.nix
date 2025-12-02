@@ -350,12 +350,10 @@ rec {
         ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
       ''
       + lib.optionalString (runtimeEnv != null) (
-        lib.concatStrings (
-          lib.mapAttrsToList (name: value: ''
-            ${lib.toShellVar name value}
-            export ${name}
-          '') runtimeEnv
-        )
+        lib.concatMapAttrsStringSep "" (name: value: ''
+          ${lib.toShellVar name value}
+          export ${name}
+        '') runtimeEnv
       )
       + lib.optionalString (runtimeInputs != [ ]) ''
 
@@ -958,7 +956,6 @@ rec {
       outputHashAlgo = hashAlgo_;
       outputHash = hash_;
       preferLocalBuild = true;
-      allowSubstitutes = false;
       builder = writeScript "restrict-message" ''
         source ${stdenvNoCC}/setup
         cat <<_EOF_

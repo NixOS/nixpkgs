@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "vt-py";
-  version = "0.21.0";
+  version = "0.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "VirusTotal";
     repo = "vt-py";
     tag = version;
-    hash = "sha256-hp9MjFSakFezlT/rTHa70KrL3VShhpayXaK88LxY7I4=";
+    hash = "sha256-CReFwX/7UCyFWVG/3hXwTVt92x+n+eu3FhvrKtDrgNU=";
   };
 
   postPatch = ''

@@ -37,8 +37,9 @@ body:
         If you are purposefully trying to build an ancient version of a package in an older Nixpkgs, please coordinate with the [NixOS Archivists](https://matrix.to/#/#archivists:nixos.org).
       options:
         - "Please select a version."
-        - "- Unstable (25.11)"
-        - "- Stable (25.05)"
+        - "- Unstable (26.05)"
+        - "- Stable (25.11)"
+        - "- Old Stable (25.05)"
       default: 0
     validations:
       required: true

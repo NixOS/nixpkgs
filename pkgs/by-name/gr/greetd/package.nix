@@ -1,6 +1,7 @@
 {
   rustPlatform,
   lib,
+  config,
   fetchFromSourcehut,
   pam,
   scdoc,
@@ -49,17 +50,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     let
       warnPassthru = name: lib.warnOnInstantiate "`greetd.${name}` was renamed to `${name}`";
     in
-    lib.mapAttrs warnPassthru {
-      inherit
-        gtkgreet
-        qtgreet
-        regreet
-        tuigreet
-        wlgreet
-        ;
-    }
+    lib.mapAttrs warnPassthru (
+      lib.optionalAttrs config.allowAliases {
+        inherit
+          gtkgreet
+          qtgreet
+          regreet
+          tuigreet
+          wlgreet
+          ;
+        greetd = finalAttrs.finalPackage;
+      }
+    )
     // {
-      greetd = warnPassthru "greetd" finalAttrs.finalPackage;
       updateScript = nix-update-script { };
     };
 

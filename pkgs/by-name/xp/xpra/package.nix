@@ -89,7 +89,7 @@ let
 in
 buildPythonApplication rec {
   pname = "xpra";
-  version = "6.3.4";
+  version = "6.3.6";
   format = "setuptools";
 
   stdenv = if withNvenc then cudaPackages.backendStdenv else args.stdenv;
@@ -98,7 +98,7 @@ buildPythonApplication rec {
     owner = "Xpra-org";
     repo = "xpra";
     tag = "v${version}";
-    hash = "sha256-Wx8s1e0nhFyNrwHYD2aVutudjNSc8ukTLPqaiYHp8n8=";
+    hash = "sha256-kXe/Pyjzf6CxYtsYP15hgYnj+qricrlXGqi/G3uQMFM=";
   };
 
   patches = [

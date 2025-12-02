@@ -30,14 +30,12 @@
   metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && !openclSupport,
   vulkanSupport ? false,
   rpcSupport ? false,
-  apple-sdk_14,
   curl,
   llama-cpp,
   shaderc,
   vulkan-headers,
   vulkan-loader,
   ninja,
-  git,
 }:
 
 let
@@ -75,13 +73,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "6908";
+  version = "6981";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-7zgeVK1dQLFy9rm6VsaVK9/vIadMst+RNry5Vf7yk+A=";
+    hash = "sha256-0WtiHDlMeb+m2XcMwkPFY1mtwVTwRJUoxQSwzpiRbts=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -93,7 +91,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
-    git
   ]
   ++ optionals cudaSupport [
     cudaPackages.cuda_nvcc
@@ -106,7 +103,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals rocmSupport rocmBuildInputs
     ++ optionals blasSupport [ blas ]
     ++ optionals vulkanSupport vulkanBuildInputs
-    ++ optionals metalSupport [ apple-sdk_14 ]
     ++ [ curl ];
 
   preConfigure = ''

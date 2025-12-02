@@ -137,8 +137,6 @@ stdenv.mkDerivation rec {
 
   preConfigure = (lib.concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);
 
-  hardeningEnable = optional (!stdenv.hostPlatform.isDarwin) "pie";
-
   enableParallelBuilding = true;
 
   postInstall = ''

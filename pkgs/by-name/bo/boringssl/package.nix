@@ -5,18 +5,18 @@
   cmake,
   ninja,
   perl,
-  buildGoModule,
+  gitUpdater,
 }:
 
 # reference: https://boringssl.googlesource.com/boringssl/+/refs/tags/0.20250818.0/BUILDING.md
-buildGoModule (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "boringssl";
-  version = "0.20251002.0";
+  version = "0.20251124.0";
 
   src = fetchgit {
     url = "https://boringssl.googlesource.com/boringssl";
     tag = finalAttrs.version;
-    hash = "sha256-/78GCbyB37lada0fA8MsOYXVJSUCM7CuC2pHCpy9qto=";
+    hash = "sha256-xRuerQhS2uk9eFNaSkl8krcepVwUDmAxc9nhLCI1w98=";
   };
 
   patches = [
@@ -30,18 +30,6 @@ buildGoModule (finalAttrs: {
     perl
   ];
 
-  vendorHash = "sha256-IXmnoCYLoiQ/XL2wjksRFv5Kwsje0VNkcupgGxG6rSY=";
-  proxyVendor = true;
-
-  # hack to get both go and cmake configure phase
-  # (if we use postConfigure then cmake will loop runHook postConfigure)
-  preBuild = ''
-    cmakeConfigurePhase
-  ''
-  + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    export GOARCH=$(go env GOHOSTARCH)
-  '';
-
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isGNU [
       # Needed with GCC 12 but breaks on darwin (with clang)
@@ -52,42 +40,25 @@ buildGoModule (finalAttrs: {
     ]
   );
 
-  buildPhase = ''
-    ninjaBuildPhase
-  '';
-
-  # CMAKE_OSX_ARCHITECTURES is set to x86_64 by Nix, but it confuses boringssl on aarch64-linux.
-  cmakeFlags = [
-    "-GNinja"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ "-DCMAKE_OSX_ARCHITECTURES=" ];
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $bin/bin $dev $out/lib
-
-    install -Dm755 bssl -t $bin/bin
-    install -Dm644 {libcrypto,libdecrepit,libpki,libssl}.a -t $out/lib
-
-    cp -r ../include $dev
-
-    runHook postInstall
-  '';
-
   outputs = [
     "out"
     "bin"
     "dev"
   ];
 
+  passthru.updateScript = gitUpdater { };
+
   meta = {
     description = "Free TLS/SSL implementation";
     mainProgram = "bssl";
     homepage = "https://boringssl.googlesource.com";
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      theoparis
+      niklaskorz
+    ];
     license = with lib.licenses; [
-      openssl
+      asl20
       isc
       mit
       bsd3

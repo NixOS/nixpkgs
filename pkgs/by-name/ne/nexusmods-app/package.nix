@@ -5,7 +5,6 @@
   desktop-file-utils,
   dotnetCorePackages,
   fetchFromGitHub,
-  fetchpatch2,
   imagemagick,
   lib,
   xdg-utils,
@@ -23,13 +22,13 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.19.4";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "Nexus-Mods";
     repo = "NexusMods.App";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WKfv5y6UmO3dmzkXrqZ+VtIbXf0FszRdsa5Rmp95rYg=";
+    hash = "sha256-RTQ3EwfA7hRfnCJoRubWtaqFVHhRdbWfLTBORVc+kss=";
     fetchSubmodules = true;
   };
 
@@ -57,14 +56,6 @@ buildDotnetModule (finalAttrs: {
   dotnet-sdk = dotnetCorePackages.sdk_9_0;
   dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
-  patches = [
-    (fetchpatch2 {
-      name = "Fix-SMAPI-installation.patch";
-      url = "https://github.com/Nexus-Mods/NexusMods.App/pull/4026.patch?full_index=1";
-      hash = "sha256-1LgFTi63fVhGUZXZtS6iD2yqd0RxhdpiXKtWMFNEoD4=";
-    })
-  ];
-
   postPatch = ''
     # Specify a fixed date to improve build reproducibility
     echo "1970-01-01T00:00:00Z" >buildDate.txt
@@ -82,11 +73,6 @@ buildDotnetModule (finalAttrs: {
     ${lib.optionalString finalAttrs.doCheck ''
       # For some reason these tests fail (intermittently?) with a zero timestamp
       touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
-
-      # Fix expected version number in text fixture
-      # https://github.com/Nexus-Mods/NexusMods.App/issues/4030
-      substituteInPlace tests/NexusMods.Backend.Tests/EventTrackerTests.Test_PrepareRequest.verified.txt \
-        --replace-fail 0.0.1 ${finalAttrs.version}
     ''}
   '';
 
@@ -151,6 +137,9 @@ buildDotnetModule (finalAttrs: {
     "--environment=USER=nobody"
     "--property:Version=${finalAttrs.version}"
     "--property:DefineConstants=${lib.strings.concatStringsSep "%3B" constants}"
+
+    # Disable native apphosts for tests; they fail in checkPhase as the wrapper env (DOTNET_ROOT, libs) isn't applied
+    "--property:UseAppHost=false"
   ];
 
   testFilters = [

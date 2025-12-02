@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lean4";
-  version = "4.24.0";
+  version = "4.25.0";
 
   # Using a vendored version rather than nixpkgs' version to match the exact version required by
   # Lean.  Apparently, even a slight version change can impact greatly the final performance.
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "leanprover";
     repo = "lean4";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m0DjKjFia5F5rCVMgn2xxPbbU/5uy7g84FUXSBPgy3w=";
+    hash = "sha256-VM7Y3KzsAWAvDTFXbi183s6tVqlyrMlV3oEsc9d8Rk0=";
   };
 
   postPatch =

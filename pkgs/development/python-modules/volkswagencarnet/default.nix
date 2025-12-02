@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "volkswagencarnet";
-  version = "5.0.2";
+  version = "5.1.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "robinostlund";
     repo = "volkswagencarnet";
     tag = "v${version}";
-    hash = "sha256-NpfkhFGxd3VjLjQ8pPpamYgwc5zqWt5CojONe4L1s4s=";
+    hash = "sha256-LH8w+sIInez5hUM/rj1C8ew/RlfKTPKh0ZgLt6cRcnY=";
   };
 
   postPatch = ''
@@ -47,6 +47,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    changelog = "https://github.com/robinostlund/volkswagencarnet/releases/tag/${src.tag}";
     description = "Python library for volkswagen carnet";
     homepage = "https://github.com/robinostlund/volkswagencarnet";
     license = lib.licenses.gpl3Only;

@@ -2,18 +2,19 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  fetchpatch2,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "jj-pre-push";
-  version = "0.3.0";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "acarapetis";
     repo = "jj-pre-push";
     tag = "v${version}";
-    hash = "sha256-nWkMXXlzJeXz0kHBuN4g8YWW6JmwrfE/y9oFfEOqeQk=";
+    hash = "sha256-/fh06T7kTlyyzj+ez9JkbU5h80Ez9B0nwZ/znjwTUJg=";
   };
 
   build-system = [

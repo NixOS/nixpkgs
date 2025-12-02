@@ -6,13 +6,13 @@
 }:
 buildLua {
   pname = "visualizer";
-  version = "0-unstable-2025-04-12";
+  version = "0-unstable-2025-11-07";
 
   src = fetchFromGitHub {
     owner = "mfcc64";
     repo = "mpv-scripts";
-    rev = "bf6776f5c3dae8d83ba29b820496af89dc436613";
-    sha256 = "9ApUBXjH4TKPP4P/fUXSNYbJu2AH6HBYt+1K+sHB7yE=";
+    rev = "fd73f95c6b642366adf1df8dd4ff998d89d2e13e";
+    sha256 = "+4QV1f+8YffevXNYETHDl4Rwb5cDx+YBbaDk7MscHEU=";
   };
   passthru.updateScript = unstableGitUpdater { };
 
