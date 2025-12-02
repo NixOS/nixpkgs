@@ -79,7 +79,6 @@ buildGoModule rec {
     homepage = "https://grafana.com/oss/loki/";
     changelog = "https://github.com/grafana/loki/releases/tag/v${version}";
     maintainers = with lib.maintainers; [
-      globin
       mmahut
       emilylange
       ryan4yin

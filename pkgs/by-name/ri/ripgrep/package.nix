@@ -67,7 +67,6 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [
-      globin
       ma27
       zowoq
     ];

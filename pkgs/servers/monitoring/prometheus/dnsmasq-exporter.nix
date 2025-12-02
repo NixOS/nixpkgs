@@ -28,9 +28,7 @@ buildGoModule rec {
     description = "Dnsmasq exporter for Prometheus";
     mainProgram = "dnsmasq_exporter";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      globin
-    ];
+    maintainers = [ ];
     # Broken on darwin for Go toolchain > 1.22, with error:
     # 'link: golang.org/x/net/internal/socket: invalid reference to syscall.recvmsg'
     broken = stdenv.hostPlatform.isDarwin;

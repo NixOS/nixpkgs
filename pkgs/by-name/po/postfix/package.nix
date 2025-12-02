@@ -199,7 +199,6 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      globin
       dotlambda
       lewo
     ];

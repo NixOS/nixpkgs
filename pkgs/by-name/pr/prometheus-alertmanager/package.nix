@@ -64,7 +64,6 @@ buildGoModule (finalAttrs: {
     maintainers = with maintainers; [
       benley
       fpletz
-      globin
       Frostman
     ];
   };

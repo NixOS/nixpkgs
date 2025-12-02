@@ -9569,12 +9569,6 @@
     githubId = 10156748;
     name = "Craig Hall";
   };
-  globin = {
-    email = "mail@glob.in";
-    github = "globin";
-    githubId = 1447245;
-    name = "Robin Gloster";
-  };
   globule655 = {
     email = "globule655@gmail.com";
     github = "globule655";

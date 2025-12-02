@@ -37,7 +37,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       ma27
-      globin
     ];
     mainProgram = "prometheus_wireguard_exporter";
   };

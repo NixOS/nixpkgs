@@ -48,7 +48,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       "aarch64-linux"
     ];
     maintainers = with maintainers; [
-      globin
       patryk27
     ];
   };

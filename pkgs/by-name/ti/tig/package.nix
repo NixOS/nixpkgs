@@ -83,7 +83,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       bjornfor
       qknight
-      globin
       ma27
     ];
     license = licenses.gpl2Plus;

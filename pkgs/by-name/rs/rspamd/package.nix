@@ -116,7 +116,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       avnik
       fpletz
-      globin
       lewo
     ];
     platforms = with platforms; linux;

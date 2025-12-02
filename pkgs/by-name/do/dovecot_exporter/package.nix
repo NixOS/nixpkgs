@@ -34,8 +34,6 @@ buildGoModule rec {
     description = "Prometheus metrics exporter for Dovecot";
     mainProgram = "dovecot_exporter";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      globin
-    ];
+    maintainers = [ ];
   };
 }

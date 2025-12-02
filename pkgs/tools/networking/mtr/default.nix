@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       koral
       raskin
-      globin
       ryan4yin
     ];
     mainProgram = "mtr";

@@ -216,7 +216,6 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ cygwin ++ freebsd ++ darwin;
     maintainers = with lib.maintainers; [
       pierron
-      globin
       lsix
     ];
   };

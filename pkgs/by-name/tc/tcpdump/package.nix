@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
     description = "Network sniffer";
     homepage = "https://www.tcpdump.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ globin ];
     platforms = platforms.unix;
     mainProgram = "tcpdump";
   };
