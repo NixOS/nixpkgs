@@ -113,7 +113,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     branch = versions.majorMinor version;
     maintainers = with maintainers; [
-      nequissimus
       kashw2
     ];
   };

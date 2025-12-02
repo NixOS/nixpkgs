@@ -18395,12 +18395,6 @@
     githubId = 1771772;
     name = "Alexander Ben Nasrallah";
   };
-  nequissimus = {
-    email = "tim@nequissimus.com";
-    github = "NeQuissimus";
-    githubId = 628342;
-    name = "Tim Steinbach";
-  };
   nerdypepper = {
     email = "nerdy@peppe.rs";
     github = "oppiliappan";
