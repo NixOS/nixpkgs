@@ -18,20 +18,12 @@
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "6.17.0";
+  version = "6.18.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-l4HllBCrfeqOn3m7EP8UiOY9EPy7cFA7lEJronqOLew=";
+    hash = "sha256-a6Ug4ZdeTFDckx7q6R6jfBmLihc3RIhfiJW4QyX51FY=";
   };
-
-  patches = [
-    (fetchurl {
-      name = "musl-redefinition.patch";
-      url = "https://lore.kernel.org/netdev/20251012124002.296018-1-yureka@cyberchaos.dev/raw";
-      hash = "sha256-8gSpZb/B5sMd2OilUQqg0FqM9y3GZd5Ch5AXV5wrCZQ=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace Makefile \
