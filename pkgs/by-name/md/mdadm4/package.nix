@@ -94,7 +94,6 @@ stdenv.mkDerivation rec {
     homepage = "https://git.kernel.org/pub/scm/utils/mdadm/mdadm.git";
     license = licenses.gpl2Plus;
     mainProgram = "mdadm";
-    maintainers = with maintainers; [ ekleog ];
     platforms = platforms.linux;
   };
 }

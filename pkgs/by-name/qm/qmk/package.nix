@@ -77,9 +77,7 @@ python3.pkgs.buildPythonApplication rec {
       - ... and many more!
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [
-      ekleog
-    ];
+    maintainers = [ ];
     mainProgram = "qmk";
   };
 }
