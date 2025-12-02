@@ -38,7 +38,7 @@ fn cache_map_path() -> Option<PathBuf> {
 /// `dependencies` key in v2 lockfiles designed for backwards compatibility with v1 parsers is removed because of inconsistent data.
 fn fixup_lockfile(
     mut lock: Map<String, Value>,
-    cache: &Option<HashMap<String, String>>,
+    cache: Option<&HashMap<String, String>>,
 ) -> anyhow::Result<Option<Map<String, Value>>> {
     let mut fixed = false;
 
@@ -64,29 +64,29 @@ fn fixup_lockfile(
                 .ok_or_else(|| anyhow!("packages isn't a map"))?
                 .values_mut()
             {
-                if let Some(Value::String(resolved)) = package.get("resolved") {
-                    if let Some(Value::String(integrity)) = package.get("integrity") {
-                        if resolved.starts_with("git+") {
+                if let Some(Value::String(resolved)) = package.get("resolved")
+                    && let Some(Value::String(integrity)) = package.get("integrity")
+                {
+                    if resolved.starts_with("git+") {
+                        fixed = true;
+
+                        package
+                            .as_object_mut()
+                            .ok_or_else(|| anyhow!("package isn't a map"))?
+                            .remove("integrity");
+                    } else if let Some(cache_hashes) = cache {
+                        let cache_hash = cache_hashes
+                            .get(resolved)
+                            .expect("dependency should have a hash");
+
+                        if integrity != cache_hash {
                             fixed = true;
 
-                            package
+                            *package
                                 .as_object_mut()
                                 .ok_or_else(|| anyhow!("package isn't a map"))?
-                                .remove("integrity");
-                        } else if let Some(cache_hashes) = cache {
-                            let cache_hash = cache_hashes
-                                .get(resolved)
-                                .expect("dependency should have a hash");
-
-                            if integrity != cache_hash {
-                                fixed = true;
-
-                                *package
-                                    .as_object_mut()
-                                    .ok_or_else(|| anyhow!("package isn't a map"))?
-                                    .get_mut("integrity")
-                                    .unwrap() = Value::String(cache_hash.clone());
-                            }
+                                .get_mut("integrity")
+                                .unwrap() = Value::String(cache_hash.clone());
                         }
                     }
                 }
@@ -99,17 +99,13 @@ fn fixup_lockfile(
         v => bail!("unsupported lockfile version {v}"),
     }
 
-    if fixed {
-        Ok(Some(lock))
-    } else {
-        Ok(None)
-    }
+    if fixed { Ok(Some(lock)) } else { Ok(None) }
 }
 
 // Recursive helper to fixup v1 lockfile deps
 fn fixup_v1_deps(
     dependencies: &mut Map<String, Value>,
-    cache: &Option<HashMap<String, String>>,
+    cache: Option<&HashMap<String, String>>,
     fixed: &mut bool,
 ) {
     for dep in dependencies.values_mut() {
@@ -117,31 +113,29 @@ fn fixup_v1_deps(
             .as_object()
             .expect("v1 dep must be object")
             .get("resolved")
-        {
-            if let Some(Value::String(integrity)) = dep
+            && let Some(Value::String(integrity)) = dep
                 .as_object()
                 .expect("v1 dep must be object")
                 .get("integrity")
-            {
-                if resolved.starts_with("git+ssh://") {
+        {
+            if resolved.starts_with("git+ssh://") {
+                *fixed = true;
+
+                dep.as_object_mut()
+                    .expect("v1 dep must be object")
+                    .remove("integrity");
+            } else if let Some(cache_hashes) = cache {
+                let cache_hash = cache_hashes
+                    .get(resolved)
+                    .expect("dependency should have a hash");
+
+                if integrity != cache_hash {
                     *fixed = true;
 
-                    dep.as_object_mut()
+                    *dep.as_object_mut()
                         .expect("v1 dep must be object")
-                        .remove("integrity");
-                } else if let Some(cache_hashes) = cache {
-                    let cache_hash = cache_hashes
-                        .get(resolved)
-                        .expect("dependency should have a hash");
-
-                    if integrity != cache_hash {
-                        *fixed = true;
-
-                        *dep.as_object_mut()
-                            .expect("v1 dep must be object")
-                            .get_mut("integrity")
-                            .unwrap() = Value::String(cache_hash.clone());
-                    }
+                        .get_mut("integrity")
+                        .unwrap() = Value::String(cache_hash.clone());
                 }
             }
         }
@@ -185,26 +179,30 @@ fn main() -> anyhow::Result<()> {
         process::exit(1);
     }
 
-    if let Ok(jobs) = env::var("NIX_BUILD_CORES") {
-        if !jobs.is_empty() {
-            rayon::ThreadPoolBuilder::new()
-                .num_threads(
-                    jobs.parse()
-                        .expect("NIX_BUILD_CORES must be a whole number"),
-                )
-                .build_global()
-                .unwrap();
-        }
+    if let Ok(jobs) = env::var("NIX_BUILD_CORES")
+        && !jobs.is_empty()
+    {
+        rayon::ThreadPoolBuilder::new()
+            .num_threads(
+                jobs.parse()
+                    .expect("NIX_BUILD_CORES must be a whole number"),
+            )
+            .build_global()
+            .unwrap();
     }
 
     if args[1] == "--fixup-lockfile" {
         let lock = serde_json::from_str(&fs::read_to_string(&args[2])?)?;
 
         let cache = cache_map_path()
-            .map(|map_path| Ok::<_, anyhow::Error>(serde_json::from_slice(&fs::read(map_path)?)?))
+            .map(|map_path| {
+                Ok::<_, anyhow::Error>(serde_json::from_slice::<HashMap<String, String>>(
+                    &fs::read(map_path)?,
+                )?)
+            })
             .transpose()?;
 
-        if let Some(fixed) = fixup_lockfile(lock, &cache)? {
+        if let Some(fixed) = fixup_lockfile(lock, cache.as_ref())? {
             println!("Fixing lockfile");
 
             fs::write(&args[2], serde_json::to_string(&fixed)?)?;
@@ -345,7 +343,7 @@ mod tests {
         hashes.insert(String::from("foo"), String::from("sha512-foo"));
 
         assert_eq!(
-            fixup_lockfile(input.as_object().unwrap().clone(), &Some(hashes))?,
+            fixup_lockfile(input.as_object().unwrap().clone(), Some(hashes).as_ref())?,
             Some(expected.as_object().unwrap().clone())
         );
 
@@ -418,7 +416,7 @@ mod tests {
         hashes.insert(String::from("foo"), String::from("sha512-foo"));
 
         assert_eq!(
-            fixup_lockfile(input.as_object().unwrap().clone(), &Some(hashes))?,
+            fixup_lockfile(input.as_object().unwrap().clone(), Some(hashes).as_ref())?,
             Some(expected.as_object().unwrap().clone())
         );
 
