@@ -244,7 +244,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./update-ui_builder.sh
   ];
 
-  passthru.tests = lib.optionalAttrs (stdenv.hostPlatform.isLinux) nixosTests.windmill;
+  passthru.tests = lib.optionalAttrs (
+    # Only ofborg platform x86_64-linux has enough performance for stable/valid test results.
+    stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64
+  ) nixosTests.windmill;
 
   meta = {
     changelog = "https://github.com/windmill-labs/windmill/blob/${src.rev}/CHANGELOG.md";
