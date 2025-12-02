@@ -187,6 +187,10 @@ in
 
   texlive = recurseIntoAttrs (callPackage ./texlive { });
 
+  problems = callPackage ./problems { };
+  # Temporarily disabled so we can see the performance comparison
+  #problems = recurseIntoAttrs (callPackage ./problems { });
+
   cuda = callPackage ./cuda { };
 
   trivial-builders = callPackage ../build-support/trivial-builders/test/default.nix { };

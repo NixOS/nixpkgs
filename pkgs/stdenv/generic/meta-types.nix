@@ -12,11 +12,16 @@ let
     isList
     all
     any
+    attrNames
     attrValues
+    concatMap
     isFunction
     isBool
     concatStringsSep
+    concatMapStringsSep
     isFloat
+    elem
+    mapAttrs
     ;
   isTypeDef = t: isAttrs t && t ? name && isString t.name && t ? verify && isFunction t.verify;
 
@@ -94,5 +99,48 @@ lib.fix (self: {
     {
       name = "union<${concatStringsSep "," (map (t: t.name) types)}>";
       verify = v: any (func: func v) funcs;
+    };
+
+  enum =
+    values:
+    assert isList values && all isString values;
+    {
+      name = "enum<${concatStringsSep "," values}>";
+      verify = v: isString v && elem v values;
+    };
+
+  record =
+    fields:
+    assert isAttrs fields && all isTypeDef (attrValues fields);
+    let
+      # Map attrs directly to the verify function for performance
+      fieldVerifiers = mapAttrs (_: t: t.verify) fields;
+    in
+    {
+      name = "record";
+      verify = v: all (k: fieldVerifiers ? ${k} && fieldVerifiers.${k} v.${k}) (attrNames v);
+      errors =
+        ctx: v:
+        concatMap (
+          k:
+          if fieldVerifiers ? ${k} then
+            if fieldVerifiers.${k} v.${k} then
+              [ ]
+            else
+              (fields.${k}.errors or (ctx': v': [
+                "${ctx'}: Invalid value; expected ${fields.${k}.name}, got\n    ${
+                  lib.generators.toPretty { indent = "    "; } v'
+                }"
+              ])
+              )
+                (ctx + ".${k}")
+                v.${k}
+          else
+            [
+              "${ctx}: key '${k}' is unrecognized; expected one of: \n  [${
+                concatMapStringsSep ", " (x: "'${x}'") (attrNames fields)
+              }]"
+            ]
+        ) (attrNames v);
     };
 })

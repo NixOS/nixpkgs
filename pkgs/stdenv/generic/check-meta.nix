@@ -10,23 +10,23 @@
 let
   inherit (lib)
     all
-    attrNames
     attrValues
     concatMapStrings
-    concatMapStringsSep
     concatStrings
+    concatStringsSep
     filter
     findFirst
     getName
+    groupBy
     isDerivation
     length
     concatMap
+    mapAttrsToList
     mutuallyExclusive
     optional
     optionalString
     isAttrs
     isString
-    mapAttrs
     ;
 
   inherit (lib.lists)
@@ -51,6 +51,15 @@ let
     getEnv
     trace
     ;
+
+  inherit (import ./problems.nix { inherit lib; })
+    problemKindsManual
+    problemKindsManual'
+    problemKindsUnique'
+    ;
+  generateProblems = (import ./problems.nix { inherit lib; }).generateProblems {
+    inherit hasNoMaintainers;
+  } config.problems;
 
   # If we're in hydra, we can dispense with the more verbose error
   # messages and make problems easier to spot.
@@ -288,6 +297,71 @@ let
 
     '';
 
+  remediate_problem =
+    pkg:
+    let
+      pkgName = lib.getName pkg;
+
+      fullMessage =
+        problem:
+        (if problem.kind != problem.name then problem.kind + ": " else "")
+        + problem.name
+        + ": "
+        + problem.message;
+      urlMessage =
+        problem:
+        let
+          urls = problem.urls or [ ];
+        in
+        lib.concatMapStrings (url: "\n  - " + url) urls;
+
+      printProblem = problem: "- " + fullMessage problem + urlMessage problem;
+
+      problems = generateProblems pkg;
+
+      ignorePattern =
+        indentation:
+        lib.pipe problems [
+          (lib.filter ({ handler, ... }: handler == "error"))
+          (builtins.map ({ name, ... }: ''"${pkgName}"."${name}" = "warn";''))
+          (lib.concatStringsSep ("\n" + indentation))
+        ];
+    in
+    ''
+
+
+      Package problems:
+
+      ${lib.pipe problems [
+        (lib.filter ({ handler, ... }: handler == "error"))
+        (builtins.map printProblem)
+        (lib.concatStringsSep "\n")
+      ]}
+
+      You can use it anyway by ignoring its problems, using one of the
+      following methods:
+
+      a) For `nixos-rebuild` you can add "warn" or "ignore" entries to
+        `nixpkgs.config.problems.handlers` inside configuration.nix,
+        like this:
+
+          {
+            nixpkgs.config.problems.handlers = {
+              ${ignorePattern "        "}
+            };
+          }
+
+      b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
+        "warn" or "ignore" to `problems.handlers` in
+        ~/.config/nixpkgs/config.nix, like this:
+
+          {
+            problems.handlers = {
+              ${ignorePattern "        "}
+            };
+          }
+    '';
+
   remediateOutputsToInstall =
     attrs:
     let
@@ -305,7 +379,7 @@ let
       ${concatStrings (map (output: "  - ${output}\n") missingOutputs)}
     '';
 
-  metaTypes =
+  metaType =
     let
       types = import ./meta-types.nix { inherit lib; };
       inherit (types)
@@ -317,13 +391,15 @@ let
         any
         listOf
         bool
+        record
+        enum
         ;
       platforms = listOf (union [
         str
         (attrsOf any)
       ]); # see lib.meta.platformMatch
     in
-    {
+    record {
       # These keys are documented
       description = str;
       mainProgram = str;
@@ -361,6 +437,65 @@ let
       unfree = bool;
       unsupported = bool;
       insecure = bool;
+      # This is checked in more detail further down
+      problems =
+        let
+          kindType = enum problemKindsManual;
+          subRecord = record {
+            kind = kindType;
+            message = str;
+            urls = listOf str;
+          };
+        in
+        {
+          name = "problems";
+          verify =
+            v:
+            if v == { } then
+              true
+            else
+              let
+                kinds = groupBy (p: p) (mapAttrsToList (name: p: p.kind or name) v);
+              in
+              all (p: p ? message && subRecord.verify p) (attrValues v)
+              && all (k: problemKindsManual' ? ${k} && (problemKindsUnique' ? ${k} -> length kinds.${k} == 1)) (
+                lib.attrNames kinds
+              );
+          errors =
+            ctx: v:
+            let
+              kinds = groupBy (p: p.kind) (
+                mapAttrsToList (name: p: {
+                  inherit name;
+                  explicit = p ? kind;
+                  kind = p.kind or name;
+                }) v
+              );
+            in
+            lib.concatLists (
+              lib.mapAttrsToList (
+                name: p:
+                lib.optional (!p ? message) "${ctx}.${name}: `.message` not specified"
+                ++ subRecord.errors "${ctx}.${name}" p
+              ) v
+            )
+            ++ lib.concatLists (
+              lib.mapAttrsToList (
+                k: ks:
+                lib.optionals (!problemKindsManual ? ${k}) (
+                  map (
+                    k':
+                    "${ctx}.${k'.name}: Problem kind ${k}, inferred from the problem name, is invalid; expected ${kindType.name}. You can specify an explicit problem kind with `${ctx}.${k'.name}.kind`"
+                  ) (filter (k': !k'.explicit) ks)
+                )
+                ++
+                  lib.optional (problemKindsUnique' ? ${k} && length ks > 1)
+                    "${ctx}: Problem kind ${k} should be unique, but is used for these problems: ${
+                      lib.concatMapStringsSep ", " (k': k'.name) ks
+                    }"
+              ) kinds
+            );
+        };
       tests = {
         name = "test";
         verify =
@@ -400,34 +535,7 @@ let
       identifiers = attrs;
     };
 
-  # Map attrs directly to the verify function for performance
-  metaTypes' = mapAttrs (_: t: t.verify) metaTypes;
-
-  checkMetaAttr =
-    k: v:
-    if metaTypes ? ${k} then
-      if metaTypes'.${k} v then
-        [ ]
-      else
-        [
-          "key 'meta.${k}' has invalid value; expected ${metaTypes.${k}.name}, got\n    ${
-            toPretty { indent = "    "; } v
-          }"
-        ]
-    else
-      [
-        "key 'meta.${k}' is unrecognized; expected one of: \n  [${
-          concatMapStringsSep ", " (x: "'${x}'") (attrNames metaTypes)
-        }]"
-      ];
-
-  checkMeta = meta: concatMap (attr: checkMetaAttr attr meta.${attr}) (attrNames meta);
-
-  metaInvalid =
-    if config.checkMeta then
-      meta: !all (attr: metaTypes ? ${attr} && metaTypes'.${attr} meta.${attr}) (attrNames meta)
-    else
-      meta: false;
+  metaInvalid = if config.checkMeta then meta: !metaType.verify meta else meta: false;
 
   checkOutputsToInstall =
     if config.checkMeta then
@@ -455,7 +563,7 @@ let
       {
         reason = "unknown-meta";
         errormsg = "has an invalid meta attrset:${
-          concatMapStrings (x: "\n  - " + x) (checkMeta attrs.meta)
+          concatMapStrings (x: "\n  - " + x) (metaType.errors "${getName attrs}.meta" attrs.meta)
         }\n";
         remediation = "";
       }
@@ -528,7 +636,31 @@ let
         errormsg = "has no maintainers or teams";
         remediation = "";
       }
+
     else
+      ## --- RFC 127 problems ---
+      #let
+      #  problems = generateProblems attrs;
+      #  hasUnignoredProblems = lib.any ({ handler, ... }: handler != "ignore") problems;
+      #  hasErrorProblems = lib.any ({ handler, ... }: handler == "error") problems;
+      #in
+      #if hasUnignoredProblems then
+      #  {
+      #    valid = if hasErrorProblems then "no" else "warn";
+      #    reason = "problem";
+      #    errormsg =
+      #      if hasErrorProblems then
+      #        "has some problem that must be acknowledged"
+      #      else
+      #        "has the following problems: [ ${
+      #          lib.pipe problems [
+      #            (map (lib.getAttr "name"))
+      #            (map (x: ''"${x}"''))
+      #            (concatStringsSep " ")
+      #          ]
+      #        } ]";
+      #  }
+      #else
       null;
 
   # Helper functions and declarations to handle identifiers, extracted to reduce allocations
