@@ -13,20 +13,27 @@ let
     attrNames
     attrValues
     concatMapStrings
-    concatMapStringsSep
     concatStrings
+    concatLists
+    optionalAttrs
+    concatStringsSep
+    concatMapStringsSep
+    optionals
     filter
     findFirst
     getName
+    groupBy
     isDerivation
     length
     concatMap
+    mapAttrsToList
     mutuallyExclusive
     optional
     optionalString
     isAttrs
     isString
-    mapAttrs
+    warn
+    foldl'
     ;
 
   inherit (lib.lists)
@@ -47,10 +54,34 @@ let
     toPretty
     ;
 
+  inherit (lib.strings)
+    escapeNixIdentifier
+    ;
+
   inherit (builtins)
     getEnv
     trace
     ;
+
+  inherit (import ./problems.nix { inherit lib; })
+    problemKindsManual
+    problemKindsManual'
+    problemKindsUnique'
+    ;
+  problemHandlerSwitch =
+    let
+      res = (import ./problems.nix { inherit lib; }).genHandlerSwitch (
+        config.problems
+        // {
+          identOrder = [
+            "kind"
+            "package"
+            "name"
+          ];
+        }
+      );
+    in
+    res;
 
   # If we're in hydra, we can dispense with the more verbose error
   # messages and make problems easier to spot.
@@ -305,7 +336,7 @@ let
       ${concatStrings (map (output: "  - ${output}\n") missingOutputs)}
     '';
 
-  metaTypes =
+  metaType =
     let
       types = import ./meta-types.nix { inherit lib; };
       inherit (types)
@@ -317,13 +348,15 @@ let
         any
         listOf
         bool
+        record
+        enum
         ;
       platforms = listOf (union [
         str
         (attrsOf any)
       ]); # see lib.meta.platformMatch
     in
-    {
+    record {
       # These keys are documented
       description = str;
       mainProgram = str;
@@ -361,6 +394,65 @@ let
       unfree = bool;
       unsupported = bool;
       insecure = bool;
+      # This is checked in more detail further down
+      problems =
+        let
+          kindType = enum problemKindsManual;
+          subRecord = record {
+            kind = kindType;
+            message = str;
+            urls = listOf str;
+          };
+        in
+        {
+          name = "problems";
+          verify =
+            v:
+            if v == { } then
+              true
+            else
+              let
+                kinds = groupBy (p: p) (mapAttrsToList (name: p: p.kind or name) v);
+              in
+              all (p: p ? message && subRecord.verify p) (attrValues v)
+              && all (k: problemKindsManual' ? ${k} && (problemKindsUnique' ? ${k} -> length kinds.${k} == 1)) (
+                attrNames kinds
+              );
+          errors =
+            ctx: v:
+            let
+              kinds = groupBy (p: p.kind) (
+                mapAttrsToList (name: p: {
+                  inherit name;
+                  explicit = p ? kind;
+                  kind = p.kind or name;
+                }) v
+              );
+            in
+            concatLists (
+              mapAttrsToList (
+                name: p:
+                optional (!p ? message) "${ctx}.${name}: `.message` not specified"
+                ++ subRecord.errors "${ctx}.${name}" p
+              ) v
+            )
+            ++ concatLists (
+              mapAttrsToList (
+                k: ks:
+                optionals (!problemKindsManual' ? ${k}) (
+                  map (
+                    k':
+                    "${ctx}.${k'.name}: Problem kind ${k}, inferred from the problem name, is invalid; expected ${kindType.name}. You can specify an explicit problem kind with `${ctx}.${k'.name}.kind`"
+                  ) (filter (k': !k'.explicit) ks)
+                )
+                ++
+                  optional (problemKindsUnique' ? ${k} && length ks > 1)
+                    "${ctx}: Problem kind ${k} should be unique, but is used for these problems: ${
+                      concatMapStringsSep ", " (k': k'.name) ks
+                    }"
+              ) kinds
+            );
+        };
       tests = {
         name = "test";
         verify =
@@ -400,34 +492,7 @@ let
       identifiers = attrs;
     };
 
-  # Map attrs directly to the verify function for performance
-  metaTypes' = mapAttrs (_: t: t.verify) metaTypes;
-
-  checkMetaAttr =
-    k: v:
-    if metaTypes ? ${k} then
-      if metaTypes'.${k} v then
-        [ ]
-      else
-        [
-          "key 'meta.${k}' has invalid value; expected ${metaTypes.${k}.name}, got\n    ${
-            toPretty { indent = "    "; } v
-          }"
-        ]
-    else
-      [
-        "key 'meta.${k}' is unrecognized; expected one of: \n  [${
-          concatMapStringsSep ", " (x: "'${x}'") (attrNames metaTypes)
-        }]"
-      ];
-
-  checkMeta = meta: concatMap (attr: checkMetaAttr attr meta.${attr}) (attrNames meta);
-
-  metaInvalid =
-    if config.checkMeta then
-      meta: !all (attr: metaTypes ? ${attr} && metaTypes'.${attr} meta.${attr}) (attrNames meta)
-    else
-      meta: false;
+  metaInvalid = if config.checkMeta then meta: !metaType.verify meta else meta: false;
 
   checkOutputsToInstall =
     if config.checkMeta then
@@ -455,7 +520,7 @@ let
       {
         reason = "unknown-meta";
         errormsg = "has an invalid meta attrset:${
-          concatMapStrings (x: "\n  - " + x) (checkMeta attrs.meta)
+          concatMapStrings (x: "\n  - " + x) (metaType.errors "${getName attrs}.meta" attrs.meta)
         }\n";
         remediation = "";
       }
@@ -515,18 +580,6 @@ let
         reason = "insecure";
         errormsg = "is marked as insecure";
         remediation = remediate_insecure attrs;
-      }
-    else
-      null;
-
-  # Please also update the type in /pkgs/top-level/config.nix alongside this.
-  checkWarnings =
-    attrs:
-    if hasNoMaintainers attrs then
-      {
-        reason = "maintainerless";
-        errormsg = "has no maintainers or teams";
-        remediation = "";
       }
     else
       null;
@@ -682,59 +735,213 @@ let
       unsupported = hasUnsupportedPlatform attrs;
       insecure = isMarkedInsecure attrs;
 
+      # TODO: We can't really do this, because then a meta value can't be reused as an input
+      # Maybe we can just ignore any fields that are automatically set instead of disallowing them
+      #problems = processProblems attrs;
+
       available =
         validity.valid != "no"
         && ((config.checkMetaRecursively or false) -> all (d: d.meta.available or true) references);
     };
+
+  # TODO: Set default handler to error intsead of ignore? Safer default
+
+  # Needs to stay in sync with processProblems
+  # If noProblemsToHandle is false, then processProblems must not return {}
+  noProblemsToHandle =
+    attrs: pname: problems:
+    (
+      !hasNoMaintainers attrs || problemNeedsHandling pname "maintainerless" "maintainerless" == "ignore"
+    )
+    && (
+      problems == { }
+      || all (name: problemNeedsHandling pname name problems.${name}.kind or name == "ignore") (
+        attrNames problems
+      )
+    );
+
+  processProblems =
+    attrs:
+    attrs.meta.problems or { }
+    // optionalAttrs (hasNoMaintainers attrs) {
+      maintainerless.message = "This package has no declared maintainer, i.e. an empty `meta.maintainers` and `meta.teams` attribute.";
+    };
+
+  problemNeedsHandling =
+    pname: name: kind:
+    let
+      forKind = problemHandlerSwitch.${kind};
+      forPackage = forKind.packageSpecific.${pname} or forKind.packageFallback or forKind;
+    in
+    forPackage.nameSpecific.${name} or forPackage.nameFallback or forPackage;
 
   validYes = {
     valid = "yes";
     handled = true;
   };
 
-  assertValidity =
-    { meta, attrs }:
+  # We only need to check for maintainerless if we don't ignore it if it were an error
+
+  checkProblems =
+    attrs:
+    if noProblemsToHandle attrs (getName attrs) attrs.meta.problems or { } then
+      #builtins.trace "${getName attrs} has no problems to handle:\n  hasNoMaintainers: ${lib.boolToString (hasNoMaintainers attrs)}\n  problemNeedsHandling: ${(problemNeedsHandling (getName attrs) "maintainerless" "maintainerless")}"
+      null
+    else
+      let
+        pname = getName attrs;
+        problemsToHandle = filter (v: !isNull v) (
+          mapAttrsToList (
+            name: problem:
+            let
+              kind = problem.kind or name;
+              handler = problemNeedsHandling pname name kind;
+            in
+            if handler == "ignore" then
+              null
+            else
+              {
+                inherit handler name problem;
+                fullMessage =
+                  "${name}${optionalString (kind != name) " (kind \"${kind}\""}: "
+                  + "${problem.message}${
+                    optionalString (problem.urls or [ ] != [ ]) " (${concatStringsSep ", " problem.urls})"
+                  }";
+              }
+          ) (processProblems attrs)
+        );
+
+        grouped =
+          assert problemsToHandle != [ ];
+          groupBy (attrs: attrs.handler) problemsToHandle;
+
+        warnings = map (x: {
+          reason = "problem";
+          errormsg = "has the following problem: ${x.fullMessage}";
+          remediation = ""; # TODO, maybe just link to docs to keep it small
+        }) grouped.warn or [ ];
+
+        overrideHandlerString =
+          indentation:
+          concatMapStringsSep ("\n" + indentation) (
+            problem: ''${escapeNixIdentifier pname}.${escapeNixIdentifier problem.name} = "warn";''
+          ) grouped.error or [ ];
+
+        error =
+          if grouped.error or [ ] == [ ] then
+            null
+          else
+            {
+              reason = "problem";
+              errormsg = "has the following problems that must be acknowledged: [ ${
+                concatMapStringsSep " " (attrs: "\"${attrs.name}\"") grouped.error or [ ]
+              } ]";
+              ## TODO: Add mention of problem.matchers, or maybe better link to docs of that
+              remediation = ''
+
+                Package problems:
+
+                ${concatMapStringsSep "\n" (x: "- ${x.fullMessage}") grouped.error or [ ]}
+
+                You can use it anyway by ignoring its problems, using one of the
+                following methods:
+
+                a) For `nixos-rebuild` you can add "warn" or "ignore" entries to
+                  `nixpkgs.config.problems.handlers` inside configuration.nix,
+                  like this:
+
+                    {
+                      nixpkgs.config.problems.handlers = {
+                        ${overrideHandlerString "        "}
+                      };
+                    }
+
+                b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
+                  "warn" or "ignore" to `problems.handlers` in
+                  ~/.config/nixpkgs/config.nix, like this:
+
+                    {
+                      problems.handlers = {
+                        ${overrideHandlerString "        "}
+                      };
+                    }
+              '';
+            };
+      in
+      {
+        inherit error warnings;
+      };
+
+  handle =
+    {
+      attrs,
+      meta,
+      warnings ? [ ],
+      error ? null,
+    }:
     let
-      invalid = checkValidity attrs;
-      warning = checkWarnings attrs;
-    in
-    if isNull invalid then
-      if isNull warning then
-        validYes
-      else
+      withError =
+        if isNull error then
+          true
+        else
+          let
+            msg =
+              if inHydra then
+                "Failed to evaluate ${getNameWithVersion attrs}: «${error.reason}»: ${error.errormsg}"
+              else
+                ''
+                  Package ‘${getNameWithVersion attrs}’ in ${pos_str meta} ${error.errormsg}, refusing to evaluate.
+
+                ''
+                + error.remediation;
+          in
+          if config ? handleEvalIssue then config.handleEvalIssue error.reason msg else throw msg;
+
+      # TODO: Mention remediation
+      giveWarning =
+        acc: warning:
         let
           msg =
             if inHydra then
               "Warning while evaluating ${getNameWithVersion attrs}: «${warning.reason}»: ${warning.errormsg}"
             else
-              "Package ${getNameWithVersion attrs} in ${pos_str meta} ${warning.errormsg}, continuing anyway."
+              "Package ${getNameWithVersion attrs} in ${pos_str meta} ${warning.errormsg} Continuing anyway."
               + (optionalString (warning.remediation != "") "\n${warning.remediation}");
-
-          handled = if elem warning.reason showWarnings then trace msg true else true;
         in
-        warning
-        // {
-          valid = "warn";
-          handled = handled;
+        warn msg acc;
+    in
+    # Give all warnings first, then error if any
+    builtins.seq (foldl' giveWarning null warnings) withError;
+
+  assertValidity =
+    { meta, attrs }:
+    let
+      invalid = checkValidity attrs;
+      problems = checkProblems attrs;
+    in
+    if isNull invalid then
+      if isNull problems then
+        validYes
+      else
+        # Are these really needed in the output?
+        #reason = "problems";
+        #errormsg = "";
+        #remediation = "";
+        {
+          valid = if isNull problems.error then "warn" else "no";
+          handled = handle {
+            inherit attrs meta;
+            inherit (problems) error warnings;
+          };
         }
     else
-      let
-        msg =
-          if inHydra then
-            "Failed to evaluate ${getNameWithVersion attrs}: «${invalid.reason}»: ${invalid.errormsg}"
-          else
-            ''
-              Package ‘${getNameWithVersion attrs}’ in ${pos_str meta} ${invalid.errormsg}, refusing to evaluate.
-
-            ''
-            + invalid.remediation;
-
-        handled = if config ? handleEvalIssue then config.handleEvalIssue invalid.reason msg else throw msg;
-      in
       invalid
       // {
         valid = "no";
-        handled = handled;
+        handled = handle {
+          inherit attrs meta;
+          error = invalid;
+        };
       };
 
 in
