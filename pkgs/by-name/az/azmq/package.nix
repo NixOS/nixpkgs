@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation {
   pname = "azmq";
-  version = "1.0.3-unstable-2025-01-19";
+  version = "1.0.3-unstable-2025-11-30";
 
   src = fetchFromGitHub {
     owner = "zeromq";
     repo = "azmq";
-    rev = "4e8f18bf3ac60f5c8126db61e48927ea19a88195";
-    hash = "sha256-0TYZvQefoW77RXhQ57niXs3Kcz2YHW9cBDNGFU47BBs=";
+    rev = "819b24035cfa5b73081e21f5867445f2344f680d";
+    hash = "sha256-jOdggbO+A0ituGmhdpvvBGGNmudmdVlbUJJzEpXILVE=";
   };
 
   nativeBuildInputs = [
