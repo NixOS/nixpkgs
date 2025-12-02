@@ -20,10 +20,10 @@
         sourceVersion = {
           major = "3";
           minor = "13";
-          patch = "9";
+          patch = "10";
           suffix = "";
         };
-        hash = "sha256-7V7zTNo2z6Lzo0DwfKx+eBT5HH88QR9tNWIyOoZsXGY=";
+        hash = "sha256-vGc8BDdaGj8ICMJ7qPBBGrgRrTkKh0AxjMucYPrY/Xc=";
       };
     };
 
