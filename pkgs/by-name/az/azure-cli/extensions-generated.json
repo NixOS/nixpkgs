@@ -694,9 +694,9 @@
   },
   "migrate": {
     "pname": "migrate",
-    "version": "2.0.1b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/migrate-2.0.1b1-py3-none-any.whl",
-    "hash": "sha256-vRMg/oeqSFXwZaB6J6RO51U6kjWdE4O7EWc/i4LxOmU=",
+    "version": "3.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/migrate-3.0.0b1-py3-none-any.whl",
+    "hash": "sha256-/u8DKXNf95To56AMM3dm4eXueSW7JylQgzW/fBiqB0U=",
     "description": "Support for Azure Migrate preview"
   },
   "mixed-reality": {
