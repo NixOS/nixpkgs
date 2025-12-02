@@ -8,12 +8,12 @@
 buildHomeAssistantComponent rec {
   owner = "weltenwort";
   domain = "rct_power";
-  version = "v0.14.1";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "weltenwort";
     repo = "home-assistant-rct-power-integration";
-    tag = version;
+    tag = "v${version}";
     hash = "sha256-wM66MyRhBsMfUr+KlqV4jSuXcnKfW0fkbDAyuU2crsc=";
   };
 
