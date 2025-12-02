@@ -1980,6 +1980,7 @@ in
         StateDirectory = cfg.stateDir;
         StateDirectoryMode = "0700";
         # Hardening
+        CapabilityBoundingSet = [ "" ];
         DeviceAllow = [ "/dev/null rw" ];
         DevicePolicy = "strict";
         LockPersonality = true;
