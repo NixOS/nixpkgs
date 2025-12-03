@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   pkg-config,
   boost,
   lua,
@@ -11,9 +11,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "ansifilter";
   version = "2.22";
 
-  src = fetchurl {
-    url = "http://www.andre-simon.de/zip/ansifilter-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-zP9BynQLgTv5EDhotQAPQkPTKnUwTqkpohTEm5Q+zJM=";
+  src = fetchFromGitLab {
+    owner = "saalen";
+    repo = "ansifilter";
+    tag = finalAttrs.version;
+    hash = "sha256-jCgucC5mHkDwVtTKP92RBStxpouQCR7PHWkDt0y+9BM=";
   };
 
   nativeBuildInputs = [
@@ -35,13 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "Tool to convert ANSI to other formats";
+    description = "ANSI sequence filter";
     mainProgram = "ansifilter";
     longDescription = ''
-      Tool to remove ANSI or convert them to another format
-      (HTML, TeX, LaTeX, RTF, Pango or BBCode)
+      Ansifilter handles text files containing ANSI terminal escape codes.
+      The command sequences may be stripped or be interpreted to generate formatted
+      output (HTML, RTF, TeX, LaTeX, BBCode, Pango).
     '';
-    homepage = "http://www.andre-simon.de/doku/ansifilter/en/ansifilter.html";
+    homepage = "https://gitlab.com/saalen/ansifilter";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ doronbehar ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
