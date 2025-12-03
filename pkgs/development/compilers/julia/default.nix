@@ -25,17 +25,6 @@ in
       };
     }) { }
   );
-  julia_111-bin = wrapJulia (
-    callPackage (import ./generic-bin.nix {
-      version = "1.11.7";
-      sha256 = {
-        x86_64-linux = "aa5924114ecb89fd341e59aa898cd1882b3cb622ca4972582c1518eff5f68c05";
-        aarch64-linux = "f97f80b35c12bdaf40c26f6c55dbb7617441e49c9e6b842f65e8410a388ca6f4";
-        x86_64-darwin = "b2c11315df39da478ab0fa77fb228f3fd818f1eaf42dc5cc1223c703f7122fe5";
-        aarch64-darwin = "74df9d4755a7740d141b04524a631e2485da9d65065d934e024232f7ba0790b6";
-      };
-    }) { }
-  );
   julia_112-bin = wrapJulia (
     callPackage (import ./generic-bin.nix {
       version = "1.12.1";
@@ -61,12 +50,6 @@ in
           hash = "sha256-gXC3LE3AuHMlSdA4dW+rbAhJpSB6ZMaz9X1qrHDPX7Y=";
         })
       ];
-    }) { }
-  );
-  julia_111 = wrapJulia (
-    callPackage (import ./generic.nix {
-      version = "1.11.7";
-      hash = "sha256-puluy9YAV8kdx6mfwbN1F7Nhot+P0cRv/a0dm86Jln0=";
     }) { }
   );
   julia_112 = wrapJulia (
