@@ -3,13 +3,14 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
+  testers,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mlc";
   version = "3.12";
 
   src = fetchurl {
-    url = "https://downloadmirror.intel.com/866182/mlc_v${version}.tgz";
+    url = "https://downloadmirror.intel.com/866182/mlc_v${finalAttrs.version}.tgz";
     hash = "sha256-S492hdcZmN1dRFQyq0DCEVFYRiv801kROuVRqE4lDFA=";
   };
 
@@ -21,6 +22,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "${finalAttrs.meta.mainProgram} --help";
+    version = "v${finalAttrs.version}";
+  };
 
   meta = {
     homepage = "https://software.intel.com/content/www/us/en/develop/articles/intelr-memory-latency-checker.html";
@@ -31,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     mainProgram = "mlc";
   };
-}
+})
