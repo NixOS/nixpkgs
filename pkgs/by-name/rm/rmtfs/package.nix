@@ -12,10 +12,10 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.1.1";
 
   src = fetchFromGitHub {
-    owner = "andersson";
+    owner = "linux-msm";
     repo = "rmtfs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-00KOjdkwcAER261lleSl7OVDEAEbDyW9MWxDd0GI8KA=";
+    hash = "sha256-ehd8SbKNOpyVoF9oc7e5uYmJOHI+Q6woLyvwO8hhKEc=";
   };
 
   buildInputs = [
@@ -32,5 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/linux-msm/rmtfs";
     license = licenses.bsd3;
     platforms = platforms.aarch64;
+    mainProgram = "rmtfs";
   };
 })

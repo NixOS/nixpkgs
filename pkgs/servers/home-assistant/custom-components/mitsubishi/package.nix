@@ -11,13 +11,13 @@
 buildHomeAssistantComponent rec {
   owner = "pymitsubishi";
   domain = "mitsubishi";
-  version = "0.4.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "pymitsubishi";
     repo = "homeassistant-mitsubishi";
     tag = "v${version}";
-    hash = "sha256-VEV+HOzXrxX2rsStjwXD4ZWclP2oF6zZHv0MuzL8DE4=";
+    hash = "sha256-c1KnFpRK5dH7ZGsDuJD6Awa0xhxYYZxC4zCjoRdpOns=";
   };
 
   dependencies = [
