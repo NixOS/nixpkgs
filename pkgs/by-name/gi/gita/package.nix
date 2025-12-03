@@ -6,21 +6,20 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  version = "0.16.8.2";
-  format = "setuptools";
   pname = "gita";
+  version = "0.16.8.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    sha256 = "sha256-JzfGj17YCYXmpGV2jSsGLsG1oqO5ynj7r3u/mkSBRBg=";
-    rev = "v${version}";
     repo = "gita";
     owner = "nosarthur";
+    tag = "v${version}";
+    hash = "sha256-JzfGj17YCYXmpGV2jSsGLsG1oqO5ynj7r3u/mkSBRBg=";
   };
 
-  dependencies = with python3Packages; [
-    argcomplete
-    setuptools
-  ];
+  build-system = [ python3Packages.setuptools ];
+
+  dependencies = [ python3Packages.argcomplete ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -33,11 +32,12 @@ python3Packages.buildPythonApplication rec {
     installShellCompletion --zsh --name gita auto-completion/zsh/.gita-completion.zsh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool to manage multiple git repos";
     homepage = "https://github.com/nosarthur/gita";
-    license = licenses.mit;
-    maintainers = with maintainers; [ seqizz ];
+    changelog = "https://github.com/nosarthur/gita/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ seqizz ];
     mainProgram = "gita";
   };
 }
