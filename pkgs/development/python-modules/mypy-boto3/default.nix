@@ -1221,8 +1221,8 @@ in
       "sha256-2Mo8Pkx9/Yi4XPD5VlYnNOjzYIqvn5jpZp3CmMBiTV8=";
 
   mypy-boto3-securityhub =
-    buildMypyBoto3Package "securityhub" "1.41.1"
-      "sha256-AJrT6vmP5C61SLPqiUeeKIcJ2rLVBi49tKdrj8/pAwg=";
+    buildMypyBoto3Package "securityhub" "1.42.1"
+      "sha256-ppglMOEWt8NsBhbw6eKDRh0v7UXygjS0O5x8US8DhhI=";
 
   mypy-boto3-securitylake =
     buildMypyBoto3Package "securitylake" "1.41.0"
