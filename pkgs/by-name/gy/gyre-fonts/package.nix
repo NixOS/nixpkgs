@@ -4,21 +4,21 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gyre-fonts";
-  version = "2.005";
+  version = "2.501";
 
   src = fetchzip {
-    url = "http://www.gust.org.pl/projects/e-foundry/tex-gyre/whole/tg-${version}otf.zip";
-    stripRoot = false;
-    hash = "sha256-+6IufuFf+IoLXoZEPlfHUNgRhKrQNBEZ1OwPD9/uOjg=";
+    url = "http://www.gust.org.pl/projects/e-foundry/tex-gyre/whole/tg${
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
+    }otf.zip";
+    hash = "sha256-fxhsL4SSqFx0eAUlvRkGeWxX9gUSbEUbrMfW3OVvFHc=";
   };
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/fonts/truetype
-    cp *.otf $out/share/fonts/truetype
+    install -Dm444 -t $out/share/fonts/opentype */*.otf
 
     runHook postInstall
   '';
@@ -37,4 +37,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ bergey ];
   };
-}
+})
