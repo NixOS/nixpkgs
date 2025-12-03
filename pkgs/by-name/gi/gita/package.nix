@@ -29,6 +29,7 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     installShellCompletion --bash --name gita auto-completion/bash/.gita-completion.bash
+    installShellCompletion --fish --name gita auto-completion/fish/gita.fish
     installShellCompletion --zsh --name gita auto-completion/zsh/.gita-completion.zsh
   '';
 
