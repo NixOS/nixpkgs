@@ -2,8 +2,8 @@
  "!comment": "This is a nixpkgs Gradle dependency lockfile. For more details, refer to the Gradle section in the nixpkgs manual.",
  "!version": 1,
  "https://download.savannah.gnu.org": {
-  "releases/freetype/freetype-2.10.4": {
-   "tar.gz": "sha256-Xqt5XrsjrHcAHPtot9TVC11sdGkkewsBsslTJp9ljaw="
+  "releases/freetype/freetype-2.14.1": {
+   "tar.gz": "sha256-F02eU0AuG/nscnfiLsGZuj5Vpr4sB0DLGMDumFD8jDQ="
   }
  },
  "https://github.com": {
@@ -26,27 +26,34 @@
    "jar": "sha256-YbaPhCjWtlExwQ1dFNA6JrkiAfQYWxJ0VRV9rLnoYhY=",
    "pom": "sha256-ktvhk8s3T1zswrYWuXz+cWHRyK3YbkikD5Sv/gjcfz4="
   },
-  "libgdx/gdx-jnigen#gdx-jnigen-gradle/dffc32eecbf77aad264991ea44f1767a58cbee9d": {
-   "jar": "sha256-nuUxM4zDV48+8Z+Rsn2dhEhkH4wOcfG62lz84BUhDH0=",
-   "module": "sha256-OU9DEb3A9A7OtnJ6jQkS32KImMlNn9NX7eKMX4YVh5E=",
-   "pom": "sha256-0THLPDNZDZe9PbIEPl71pGwL7E6Oq2Y5LiVevltdbP8="
+  "libgdx/gdx-jnigen#gdx-jnigen-gradle/2.5.1": {
+   "jar": "sha256-58CVbO1KcCD3O1KssA1fjFtmFv/w1ELaKjpxYQy4uOo=",
+   "module": "sha256-ed8mnMRwzTx8sz6m1K00O/m5TUClRgFBr7Z52QTvMYI=",
+   "pom": "sha256-39d36SZMtgx/Lcu44RQbayrsHGmqq+7mUbHyZul96fc="
   },
-  "libgdx/gdx-jnigen#gdx-jnigen/28dd11fa4c33a7ae9e58897912b52ba7d53d54fe": {
-   "jar": "sha256-fPszziBPrTDACbBuL6OxJ2oK1iA4izBk4TMHK53b+GQ=",
-   "module": "sha256-0RR9vgSqD1ISADHSO5OV7rxi+6HM9h0ZO4kEYw/Ao4Y=",
-   "pom": "sha256-vnz59i+3/wY9RizYWGMOuebfrZO4HrpOYV73ShIFH2g="
+  "libgdx/gdx-jnigen#gdx-jnigen-loader/2.5.1": {
+   "jar": "sha256-6I+6THOtnaVYhOB4feFo1xkdF25G6T5iJfQyPCTc+Wo=",
+   "module": "sha256-Sdga7alkfzS4Loy6XAGXvw/+E0AoS6I1HcWD3cBPej4=",
+   "pom": "sha256-ieP1KOe4XwibX7rqHWJat1iH0saLcvfGjosSbODwKcc="
   },
-  "libgdx/gdx-jnigen#gdx-jnigen/dffc32eecbf77aad264991ea44f1767a58cbee9d": {
-   "jar": "sha256-bd8xr4/YgvQbvdFkayXdJKpMvYwE9XlISof20vsfcSU=",
-   "module": "sha256-zQ1DewRtrsdTgxXINq7pOa+UJwnDNrGsVKnX0K/AWRQ=",
-   "pom": "sha256-HWFvvs+x6DyJioqkRDDVvf0GCKfxPTjhdec8JC2PZvA="
+  "libgdx/gdx-jnigen#gdx-jnigen/2.5.1": {
+   "jar": "sha256-OeLq815DT4ZtC8d7Ko/3VtV3u7R8Rj8HGX8mQb0eAZw=",
+   "module": "sha256-nicta1Y8N7VYMmNINhN4BRjsUCljtHv+g1lphUuKno8=",
+   "pom": "sha256-lpq6D25HGTFHWR3WDgKd4G2irqsk1rnjvMQlqKL1/NM="
   }
  },
- "https://plugins.gradle.org/m2/org/jetbrains/kotlin": {
-  "jvm#org.jetbrains.kotlin.jvm.gradle.plugin/2.1.10": {
+ "https://plugins.gradle.org/m2": {
+  "de/undercouch#gradle-download-task/5.0.1": {
+   "jar": "sha256-7VONXLvRug+MUcCRaEVg0S4JPuJwyFvDN6emaj97Rcc=",
+   "pom": "sha256-AkX+RSGxdvwB9LLDtWi08AGYjBxHtCg7cm2rRqhqC4g="
+  },
+  "de/undercouch/download#de.undercouch.download.gradle.plugin/5.0.1": {
+   "pom": "sha256-GR8NCdz7n02v4EMwQRsdllH9IUpaZ5FoGnfOzSPCQ7A="
+  },
+  "org/jetbrains/kotlin/jvm#org.jetbrains.kotlin.jvm.gradle.plugin/2.1.10": {
    "pom": "sha256-KoiNElh3d5C3j7zg6xTZUFBwv1uLzKS7YB4s6/pCPtA="
   },
-  "kapt#org.jetbrains.kotlin.kapt.gradle.plugin/2.1.10": {
+  "org/jetbrains/kotlin/kapt#org.jetbrains.kotlin.kapt.gradle.plugin/2.1.10": {
    "pom": "sha256-HzOk8LbO3qaMYhC518PU/t7EGF2dUIqsqs0933q2Ti8="
   }
  },
