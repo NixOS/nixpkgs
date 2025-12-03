@@ -395,6 +395,7 @@ mapAliases {
   cereal_1_3_2 = throw "cereal_1_3_2 is now the only version and has been renamed to cereal"; # Added 2025-09-12
   certmgr-selfsigned = throw "'certmgr-selfsigned' has been renamed to/replaced by 'certmgr'"; # Converted to throw 2025-10-27
   challenger = throw "'challenger' has been renamed to/replaced by 'taler-challenger'"; # Converted to throw 2025-10-27
+  charis-sil = throw "'charis-sil' has renamed to/replaced by 'charis'"; # Added 2025-12-01
   charmcraft = throw "charmcraft was removed in Sep 25 following removal of LXD from nixpkgs"; # Added 2025-09-18
   chatgpt-retrieval-plugin = throw "chatgpt-retrieval-plugin has been removed because it has been marked as broken since at least November 2024."; # Added 2025-09-28
   check-esxi-hardware = throw "'check-esxi-hardware' has been renamed to/replaced by 'nagiosPlugins.check_esxi_hardware'"; # Converted to throw 2025-10-27
