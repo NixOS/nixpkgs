@@ -5,7 +5,7 @@
   fetchFromGitHub,
   cmake,
   git,
-  asio,
+  asio_1_32_0,
   catch2,
   spdlog,
   udev,
@@ -47,7 +47,8 @@ stdenv.mkDerivation rec {
     git
   ];
   buildInputs = [
-    asio
+    # Depends on io_service
+    asio_1_32_0
     catch2
     spdlog
   ];
