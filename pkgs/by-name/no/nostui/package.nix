@@ -6,13 +6,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nostui";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "akiomik";
     repo = "nostui";
     rev = "v${version}";
-    hash = "sha256-RCD11KdzM66Mkydc51r6fG+q8bmKl5eZma58YoARwPo=";
+    hash = "sha256-7i76JPg6MAk4/sO8/JI4ody4iYFJPeLkD2SWncFhT4o=";
   };
 
   GIT_HASH = "000000000000000000000000000000000000000000000000000";
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=widgets::text_note::tests::test_created_at"
   ];
 
-  cargoHash = "sha256-tway75ZAP2cGdpn79VpuRd0q/h+ovDvkih1LKitM/EU=";
+  cargoHash = "sha256-X5VeL9oWjqoWmXQTCINvvFLdXqCyhO01ckDU7x42Teo=";
 
   meta = with lib; {
     homepage = "https://github.com/akiomik/nostui";
