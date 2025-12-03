@@ -4778,10 +4778,9 @@ with pkgs;
 
   haskellPackages = recurseIntoAttrs (
     # Prefer native-bignum to avoid linking issues with gmp;
-    # TemplateHaskell doesn't work with hadrian built GHCs yet
-    # https://github.com/NixOS/nixpkgs/issues/275304
+    # GHC 9.10 doesn't work too well with iserv-proxy.
     if stdenv.hostPlatform.isStatic then
-      haskell.packages.native-bignum.ghc94
+      haskell.packages.native-bignum.ghc912
     # JS backend can't use gmp
     else if stdenv.hostPlatform.isGhcjs then
       haskell.packages.native-bignum.ghc910

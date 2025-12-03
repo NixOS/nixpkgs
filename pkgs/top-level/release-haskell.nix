@@ -428,15 +428,6 @@ let
                 postgrest
                 ;
             };
-
-            haskell.packages.native-bignum.ghc9103 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc9103)
-                hello
-                random
-                QuickCheck
-                terminfo # isn't bundled for cross
-                ;
-            };
           };
 
       pkgsCross = {
