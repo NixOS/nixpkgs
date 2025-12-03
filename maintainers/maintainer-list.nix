@@ -25751,6 +25751,11 @@
     githubId = 3889585;
     name = "Cheng Shao";
   };
+  terrorw0lf = {
+    name = "duckling";
+    github = "TERRORW0LF";
+    githubId = 61637480;
+  };
   terryg = {
     name = "Terry Garcia";
     email = "terry@terryg.org";
