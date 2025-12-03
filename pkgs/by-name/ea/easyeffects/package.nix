@@ -36,6 +36,7 @@
   webrtc-audio-processing,
   zam-plugins,
   zita-convolver,
+  wrapGAppsNoGuiHook,
 }:
 
 let
@@ -78,8 +79,11 @@ stdenv.mkDerivation rec {
     intltool
     ninja
     pkg-config
+    wrapGAppsNoGuiHook
     wrapQtAppsHook
   ];
+
+  dontWrapGApps = true;
 
   buildInputs = [
     appstream-qt
@@ -135,6 +139,7 @@ stdenv.mkDerivation rec {
     in
     ''
       qtWrapperArgs+=(
+        "''${gappsWrapperArgs[@]}"
         --set LV2_PATH "${lib.makeSearchPath "lib/lv2" lv2Plugins}"
         --set LADSPA_PATH "${lib.makeSearchPath "lib/ladspa" ladspaPlugins}"
       )
