@@ -19682,6 +19682,13 @@
     githubId = 83010835;
     keys = [ { fingerprint = "0181 FF89 4F34 7FCC EB06  5710 4C88 A185 FB89 301E"; } ];
   };
+  overloader = {
+    name = "Overloader";
+    github = "Overloader6";
+    githubId = 22007229;
+    email = "overloader@tutanota.com";
+    keys = [ { fingerprint = "B96E 6D41 E47B 042C 64A2  1D9A 8B17 537A AF09 AF18"; } ];
+  };
   ovlach = {
     email = "ondrej@vlach.xyz";
     name = "Ondrej Vlach";
