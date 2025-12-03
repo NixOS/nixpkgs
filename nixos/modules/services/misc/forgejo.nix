@@ -340,7 +340,7 @@ in
             };
             mailer = {
               ENABLED = true;
-              MAILER_TYPE = "sendmail";
+              PROTOCOL = "sendmail";
               FROM = "do-not-reply@example.org";
               SENDMAIL_PATH = "''${pkgs.system-sendmail}/bin/sendmail";
             };
