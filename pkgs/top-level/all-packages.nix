@@ -14261,8 +14261,6 @@ with pkgs;
 
   dartHooks = recurseIntoAttrs (callPackage ../build-support/dart/build-dart-application/hooks { });
 
-  httraqt = libsForQt5.callPackage ../tools/backup/httrack/qt.nix { };
-
   inherit (callPackage ../applications/networking/instant-messengers/discord { })
     discord
     discord-ptb
