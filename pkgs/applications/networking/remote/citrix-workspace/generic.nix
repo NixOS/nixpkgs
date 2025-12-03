@@ -299,11 +299,6 @@ stdenv.mkDerivation rec {
 
       ${mkWrappers copyCert extraCerts}
 
-      # See https://developer-docs.citrix.com/en-us/citrix-workspace-app-for-linux/citrix-workspace-app-for-linux-oem-reference-guide/reference-information/#library-files
-      # Those files are fallbacks to support older libwekit.so and libjpeg.so
-      rm $out/opt/citrix-icaclient/lib/ctxjpeg_fb_8.so || true
-      rm $out/opt/citrix-icaclient/lib/UIDialogLibWebKit.so || true
-
       # We support only Gstreamer 1.0
       rm $ICAInstDir/util/{gst_aud_{play,read},gst_*0.10,libgstflatstm0.10.so} || true
       ln -sf $ICAInstDir/util/gst_play1.0 $ICAInstDir/util/gst_play
