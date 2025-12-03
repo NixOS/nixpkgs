@@ -6,21 +6,18 @@
   pysigma,
   pysigma-pipeline-sysmon,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysigma-backend-splunk";
-  version = "1.1.3";
+  version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-backend-splunk";
     tag = "v${version}";
-    hash = "sha256-zDv04yHYQP2ZKX9g4v7kR8l3OmAyvh7GtmmqjxPtFvI=";
+    hash = "sha256-SiEESeF0YqPYDAK3OUEkqSHmn4uM5LQrCLOHvOy26Io=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -37,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to support Splunk for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-backend-splunk";
-    changelog = "https://github.com/SigmaHQ/pySigma-backend-splunk/releases/tag/v${version}";
-    license = with lib.licenses; [ lgpl21Only ];
-    maintainers = with lib.maintainers; [ fab ];
+    changelog = "https://github.com/SigmaHQ/pySigma-backend-splunk/releases/tag/${src.tag}";
+    license = licenses.lgpl21Only;
+    maintainers = with maintainers; [ fab ];
   };
 }
