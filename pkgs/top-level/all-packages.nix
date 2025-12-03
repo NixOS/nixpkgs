@@ -1902,15 +1902,6 @@ with pkgs;
 
   inherit (ocamlPackages) dune_2 dune_3 dune-release;
 
-  dvc = with python3.pkgs; toPythonApplication dvc;
-
-  dvc-with-remotes = dvc.override {
-    enableGoogle = true;
-    enableAWS = true;
-    enableAzure = true;
-    enableSSH = true;
-  };
-
   easycrypt = callPackage ../applications/science/logic/easycrypt {
     why3 = pkgs.why3.override {
       ideSupport = false;
