@@ -13,6 +13,13 @@
   useMusl ? stdenv.hostPlatform.libc == "musl",
   musl,
   extraConfig ? "",
+
+  # For tests
+  hostname,
+  coreutils,
+  zip,
+  which,
+  simple-http-server,
 }:
 
 assert stdenv.hostPlatform.libc == "musl" -> useMusl;
@@ -53,11 +60,13 @@ let
   };
   debianDispatcherScript = "${debianSource}/debian/tree/udhcpc/etc/udhcpc/default.script";
   outDispatchPath = "$out/default.script";
-in
 
-stdenv.mkDerivation rec {
   pname = "busybox";
   version = "1.36.1";
+in
+
+stdenv.mkDerivation (finalAttrs: {
+  inherit pname version;
 
   # Note to whoever is updating busybox: please verify that:
   # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
@@ -199,9 +208,71 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = false; # tries to access the net
+  doCheck = false; # Takes a while, requires extra dependencies
+  passthru = {
+    shellPath = "/bin/ash";
 
-  passthru.shellPath = "/bin/ash";
+    tests.withCheck = finalAttrs.finalPackage.overrideAttrs (_: {
+      doCheck = true;
+
+      nativeCheckInputs = [
+        hostname
+        zip
+        which
+        simple-http-server
+      ];
+
+      preCheck = ''
+        # Replace hard-coded dependencies on /bin
+        sed -i 's|/bin/date|${lib.getExe' coreutils "date"}|' testsuite/date/date-works-1
+
+        # wget tests rely on network access, use simple-http-server instead
+        simple-http-server --index &
+        sed -i 's|http://www.google.com|http://127.0.0.1:8000|' testsuite/wget/*
+
+        skip-files() {
+          for file in "$@"; do
+            echo "echo SKIPPED $file; exit 0" > $file
+          done
+        }
+
+        skip-testcase() {
+          sed -i "s@testing \"$2\"@echo SKIPPED $2 || testing \"$2\"@" "$1"
+        }
+
+        # Skip known-broken tests
+        export SKIP_KNOWN_BUGS=y
+
+        # There are some semi-expected locale-related issues, disable tests that rely on it
+        export CONFIG_UNICODE_USING_LOCALE=y
+
+        # DISABLE SOME TESTS
+        # TODO(balsoft): fix the tests instead of skipping
+
+        pushd testsuite
+
+        # Weird failures, may or may not be related to locales
+        skip-files du/du-{h,k,l}-works
+
+        # Relies on a default PATH (/bin/ls in particular)
+        skip-files which/which-uses-default-path
+
+        # Hangs indefinitely if run from sandbox
+        skip-files md5sum.tests
+
+        # Doesn't work with coreutils's "false"
+        skip-testcase start-stop-daemon.tests "start-stop-daemon with both -x and -a"
+
+        # Relies on /usr/bin
+        skip-testcase cpio.tests "cpio -p with absolute paths"
+
+        # Relies on suid/guid bits
+        skip-testcase cpio.tests "cpio restores suid/sgid bits"
+
+        popd
+      '';
+    });
+  };
 
   meta = with lib; {
     description = "Tiny versions of common UNIX utilities in a single small executable";
@@ -215,4 +286,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     priority = 15; # below systemd (halt, init, poweroff, reboot) and coreutils
   };
-}
+})
