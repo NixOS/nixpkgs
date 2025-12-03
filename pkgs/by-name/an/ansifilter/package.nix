@@ -1,7 +1,7 @@
 {
-  fetchurl,
   lib,
   stdenv,
+  fetchurl,
   pkg-config,
   boost,
   lua,
@@ -16,7 +16,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-zP9BynQLgTv5EDhotQAPQkPTKnUwTqkpohTEm5Q+zJM=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
   buildInputs = [
     boost
     lua
