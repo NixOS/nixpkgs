@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "grafana-image-renderer";
-  version = "5.0.10";
+  version = "5.0.11";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana-image-renderer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oWJlb1mV1sNgN7EQ8L4msfnKps5oV60JgwZYpAJQaq4=";
+    hash = "sha256-fHIxtIRCxxJVHUA3r1ddCpOAsJ8QCJoCbUWagFcj4+I=";
   };
 
   vendorHash = "sha256-wA1XeLO2bYwq7HZOQ5UNcdqqJdEWRUxFoAQucXAj48k=";
