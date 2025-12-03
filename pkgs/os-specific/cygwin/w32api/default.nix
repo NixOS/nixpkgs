@@ -32,6 +32,8 @@
     };
 
     meta = {
+      # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
+      broken = true;
       description = "MinGW w32api package for Cygwin";
       inherit (windows.mingw_w64_headers.meta)
         homepage
