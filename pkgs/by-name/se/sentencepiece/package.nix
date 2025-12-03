@@ -42,5 +42,8 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ pashashocky ];
+    # sentencepiece 0.2.1 segfaults on darwin when instantiated
+    # See https://github.com/NixOS/nixpkgs/issues/466092
+    badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];
   };
 }
