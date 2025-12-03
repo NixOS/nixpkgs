@@ -3,8 +3,6 @@
   stdenv,
   fetchFromGitLab,
   pkg-config,
-  boost,
-  lua,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,10 +18,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-  ];
-  buildInputs = [
-    boost
-    lua
   ];
 
   postPatch = ''
