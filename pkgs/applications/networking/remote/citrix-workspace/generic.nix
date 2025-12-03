@@ -324,12 +324,6 @@ stdenv.mkDerivation rec {
   # Make sure that `autoPatchelfHook` is executed before
   # running `ctx_rehash`.
   dontAutoPatchelf = true;
-  preFixup = ''
-    find $out/opt/citrix-icaclient/lib -name "libopencv_imgcodecs.so.*" | while read -r fname; do
-      # lib needs libtiff.so.5, but nixpkgs provides libtiff.so.6
-      patchelf --replace-needed libtiff.so.5 libtiff.so $fname
-    done
-  '';
   postFixup = ''
     autoPatchelf -- "$out"
     $out/opt/citrix-icaclient/util/ctx_rehash
