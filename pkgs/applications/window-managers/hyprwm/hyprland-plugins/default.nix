@@ -43,6 +43,7 @@ let
     { hyprgrass = import ./hyprgrass.nix; }
     { hyprspace = import ./hyprspace.nix; }
     { hyprsplit = import ./hyprsplit.nix; }
+    { hyprslidr = import ./hyprslidr.nix; }
     (import ./hyprland-plugins.nix)
     (lib.optionalAttrs config.allowAliases {
       hycov = throw "hyprlandPlugins.hycov has been removed because it has been marked as broken since September 2024."; # Added 2025-10-12
