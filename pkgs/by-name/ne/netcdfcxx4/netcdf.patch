@@ -1,0 +1,49 @@
+From b819b3616b96352d23cdf0840df9e6674437948c Mon Sep 17 00:00:00 2001
+From: Orion Poplawski <orion@nwra.com>
+Date: Mon, 17 Feb 2025 15:17:28 -0700
+Subject: [PATCH] Use HAVE_NC_SET_LOG_LEVEL to determine usage of
+ nc_set_log_level (fixes #161)
+
+---
+ cxx4/test_filter.cpp                | 2 ++
+ examples/pres_temp_4D_plugin_wr.cpp | 4 ++++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/cxx4/test_filter.cpp b/cxx4/test_filter.cpp
+index 879ba71..f442c64 100644
+--- a/cxx4/test_filter.cpp
++++ b/cxx4/test_filter.cpp
+@@ -30,7 +30,9 @@ int main()
+   try
+     {
+       NcFile test("pres_temp_plugin_4D.nc", NcFile::replace);
++#ifdef HAVE_NC_SET_LOG_LEVEL
+       nc_set_log_level(5);
++#endif
+       // Define the dimensions. NetCDF will hand back an ncDim object for
+       // each.
+       NcDim latDim = test.addDim(LAT_NAME, NLAT);
+diff --git a/examples/pres_temp_4D_plugin_wr.cpp b/examples/pres_temp_4D_plugin_wr.cpp
+index 832d2a6..584e8be 100644
+--- a/examples/pres_temp_4D_plugin_wr.cpp
++++ b/examples/pres_temp_4D_plugin_wr.cpp
+@@ -71,7 +71,9 @@ string LON_UNITS = "degrees_east";
+ 
+ int main()
+ {
++#ifdef HAVE_NC_SET_LOG_LEVEL
+   nc_set_log_level(5);
++#endif
+   // We will write latitude and longitude fields.
+    float lats[NLAT],lons[NLON];
+ 
+@@ -103,7 +105,9 @@ int main()
+ 
+       // Create the file.
+       NcFile test(FILE_NAME, NcFile::replace);
++#ifdef HAVE_NC_SET_LOG_LEVEL
+       nc_set_log_level(5);
++#endif
+       // Define the dimensions. NetCDF will hand back an ncDim object for
+       // each.
+       NcDim lvlDim = test.addDim(LVL_NAME, NLVL);

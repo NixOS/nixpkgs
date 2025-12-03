@@ -1,0 +1,1006 @@
+{
+  "acme": {
+    "description": "Maintain ACME-related packages and modules.",
+    "id": 3806126,
+    "maintainers": {},
+    "members": {
+      "arianvp": 628387,
+      "emilazy": 18535642,
+      "m1cr0man": 3044438
+    },
+    "name": "ACME"
+  },
+  "agda": {
+    "description": "Maintain Agda-related packages and modules",
+    "id": 14416551,
+    "maintainers": {
+      "alexarice": 17208985,
+      "ncfavier": 4323933,
+      "turion": 303489
+    },
+    "members": {
+      "phijor": 10487782
+    },
+    "name": "agda"
+  },
+  "android": {
+    "description": "Maintain Android-related tooling in nixpkgs",
+    "id": 11821955,
+    "maintainers": {
+      "RossComputerGuy": 19699320,
+      "numinit": 369111
+    },
+    "members": {
+      "JohnRTitor": 50095635,
+      "adrian-gierakowski": 330177,
+      "hadilq": 5190539
+    },
+    "name": "Android"
+  },
+  "bazel": {
+    "description": "Maintenance of https://bazel.build/ and related packages",
+    "id": 5468470,
+    "maintainers": {
+      "Profpatsch": 3153638
+    },
+    "members": {
+      "aherrmann": 732652,
+      "avdv": 3471749,
+      "ethercrow": 222467,
+      "groodt": 343415,
+      "kalbasit": 87115,
+      "mboes": 51356,
+      "uri-canva": 33242106
+    },
+    "name": "Bazel"
+  },
+  "beam": {
+    "description": "Maintain BEAM-related packages and modules.",
+    "id": 4502493,
+    "maintainers": {
+      "happysalada": 5317234
+    },
+    "members": {
+      "Br1ght0ne": 12615679,
+      "DianaOlympos": 15774340,
+      "adamcstephens": 2071575,
+      "ankhers": 750786,
+      "gleber": 33185,
+      "minijackson": 1200507,
+      "savtrip": 42227195,
+      "yurrriq": 1866448
+    },
+    "name": "Beam"
+  },
+  "bootstrapping": {
+    "description": "coordinates efforts towards bootstrappable builds (see https://bootstrappable.org/)",
+    "id": 9141350,
+    "maintainers": {
+      "zeuner": 2545850
+    },
+    "members": {
+      "philiptaron": 43863
+    },
+    "name": "bootstrapping"
+  },
+  "categorization": {
+    "description": "Maintain the categorization system in Nixpkgs, per RFC 0146. This team has authority over all categorization issues in Nixpkgs. Matrix: https://matrix.to/#/%23nixpkgs-categorization:matrix.org",
+    "id": 11723948,
+    "maintainers": {
+      "7c6f434c": 1891350,
+      "Aleksanaa": 42209822,
+      "GetPsyched": 43472218,
+      "Lyndeno": 13490857,
+      "SigmaSquadron": 174749595,
+      "fgaz": 8182846,
+      "natsukium": 25083790,
+      "philiptaron": 43863,
+      "pyrotelekinetic": 29682759,
+      "tomodachi94": 68489118
+    },
+    "members": {},
+    "name": "Categorization"
+  },
+  "channel-updaters": {
+    "description": "Users who can update the Nixpkgs/NixOS channels",
+    "id": 3475569,
+    "maintainers": {},
+    "members": {
+      "nixos-channel-bot": 56695723
+    },
+    "name": "channel-updaters"
+  },
+  "coq": {
+    "description": "Coq proof assistant and package maintainers",
+    "id": 7617261,
+    "maintainers": {
+      "Alizter": 8614547,
+      "Zimmi48": 1108325,
+      "vbgl": 2612464
+    },
+    "members": {},
+    "name": "Coq"
+  },
+  "cosmic": {
+    "description": "Maintain the COSMIC DE and related packages.",
+    "id": 12734494,
+    "maintainers": {
+      "alyssais": 2768870,
+      "nyabinary": 97130632
+    },
+    "members": {
+      "HeitorAugustoLN": 44377258,
+      "Pandapip1": 45835846,
+      "a-kenji": 65275785,
+      "ahoneybun": 4884946,
+      "drakon64": 6444703,
+      "michaelBelsanti": 62124625,
+      "thefossguy": 44400303
+    },
+    "name": "COSMIC"
+  },
+  "crystal-lang": {
+    "description": "The Crystal Lang eco-system",
+    "id": 3806663,
+    "maintainers": {
+      "peterhoeg": 722550
+    },
+    "members": {
+      "Br1ght0ne": 12615679,
+      "manveru": 3507
+    },
+    "name": "crystal-lang"
+  },
+  "cuda-maintainers": {
+    "description": "Maintain CUDA-enabled packages",
+    "id": 5704451,
+    "maintainers": {
+      "ConnorBaker": 3880346,
+      "SomeoneSerge": 9720532,
+      "samuela": 226872
+    },
+    "members": {
+      "GaetanLepage": 33058747,
+      "prusnak": 42201
+    },
+    "name": "cuda-maintainers"
+  },
+  "darwin-core": {
+    "description": "Maintain core platform support and packages for macOS and other Apple platforms",
+    "id": 11265438,
+    "maintainers": {
+      "emilazy": 18535642
+    },
+    "members": {
+      "reckenrode": 7413633,
+      "toonn": 1486805
+    },
+    "name": "darwin-core"
+  },
+  "darwin-maintainers": {
+    "description": "Improve Darwin-support across Nixpkgs and help maintainers without access to Darwin hardware. Apply to join through https://github.com/NixOS/nixpkgs/issues/323144 to keep the process transparent.",
+    "id": 2385202,
+    "maintainers": {
+      "toonn": 1486805
+    },
+    "members": {
+      "0xMRTT": 105598867,
+      "21CSM": 81891917,
+      "Aleksanaa": 42209822,
+      "CorbanR": 1918683,
+      "Emin017": 99674037,
+      "Et7f3": 29592775,
+      "FlameFlag": 57304299,
+      "Guanran928": 68757440,
+      "LnL7": 689294,
+      "Mastermindaxe": 33257997,
+      "Moraxyc": 69713071,
+      "Prince213": 25235514,
+      "Samasaur1": 30577766,
+      "Sciencentistguy": 4983935,
+      "Steven0351": 24440751,
+      "afh": 16507,
+      "azuwis": 9315,
+      "booxter": 90200,
+      "carlossless": 498906,
+      "cideM": 4246921,
+      "cidkidnix": 67574902,
+      "copumpkin": 2623,
+      "devusb": 4951663,
+      "domenkozar": 126339,
+      "donn": 12652988,
+      "dwt": 57199,
+      "emilazy": 18535642,
+      "ethancedwards8": 60861925,
+      "fiddlerwoaroof": 808745,
+      "frogamic": 10263813,
+      "gador": 1883533,
+      "griff": 4368,
+      "groodt": 343415,
+      "gshpychka": 23005347,
+      "hexagonal-sun": 222664,
+      "heywoodlh": 18178614,
+      "isabelroses": 71222764,
+      "jonhermansen": 660911,
+      "juliusrickert": 5007494,
+      "jwiegley": 8460,
+      "kashw2": 15855440,
+      "kevingriffin": 209729,
+      "khaneliman": 1778670,
+      "kloenk": 12898828,
+      "konradmalik": 13033392,
+      "kubukoz": 894884,
+      "lutzmor": 9321736,
+      "magistau": 43097806,
+      "maljub01": 350635,
+      "martinjlowm": 110860,
+      "matteo-pacini": 3139724,
+      "matthewbauer": 19036,
+      "mexisme": 329349,
+      "mikroskeem": 3490861,
+      "mirkolenz": 5160954,
+      "mstone": 412508,
+      "n8henrie": 1234956,
+      "ofalvai": 1694986,
+      "pasqui23": 6931743,
+      "prusnak": 42201,
+      "reckenrode": 7413633,
+      "ryand56": 22267679,
+      "samrose": 115821,
+      "sarahec": 11277967,
+      "shaunsingh": 71196912,
+      "sikmir": 688044,
+      "siraben": 8219659,
+      "siriobalmelli": 23038812,
+      "skulldogged": 33522919,
+      "starcraft66": 1858154,
+      "stepbrobd": 81826728,
+      "stephank": 89950,
+      "stephenstubbs": 18033664,
+      "t-monaghan": 62273348,
+      "thefloweringash": 42933,
+      "tricktron": 16036882,
+      "uncenter": 47499684,
+      "uri-canva": 33242106,
+      "usertam": 22500027,
+      "veprbl": 245573,
+      "viraptor": 188063,
+      "wegank": 9713184,
+      "willcohen": 5185341,
+      "willjr": 5904828,
+      "wldhx": 15619766,
+      "yeongsheng-tan": 809030,
+      "youhaveme9": 58213083,
+      "yzx9": 41458459,
+      "zachcoyle": 908716
+    },
+    "name": "darwin-maintainers"
+  },
+  "documentation-team": {
+    "description": "Maintain nixpkgs/NixOS documentation and tools for building it. https://nixos.org/community/teams/documentation",
+    "id": 6590023,
+    "maintainers": {
+      "alejandrosame": 1078000
+    },
+    "members": {
+      "hsjobeki": 50398876,
+      "wamirez": 24505474
+    },
+    "name": "Documentation Team"
+  },
+  "dotnet": {
+    "description": "Maintain the .NET ecosystem in nixpkgs",
+    "id": 8173604,
+    "maintainers": {
+      "corngood": 3077118,
+      "mdarocha": 11572618
+    },
+    "members": {
+      "GGG-KILLER": 5892127,
+      "IvarWithoutBones": 41924494,
+      "JamieMagee": 1358764,
+      "anpin": 6060545,
+      "meenzen": 22305878,
+      "raphaelr": 121178
+    },
+    "name": "Dotnet"
+  },
+  "emacs": {
+    "description": "",
+    "id": 2516946,
+    "maintainers": {
+      "jian-lin": 75130626
+    },
+    "members": {
+      "AndersonTorres": 5954806,
+      "adisbladis": 63286,
+      "panchoh": 471059,
+      "ttuegel": 563054
+    },
+    "name": "emacs"
+  },
+  "enlightenment": {
+    "description": "Maintain Enlightenment desktop environment and related packages",
+    "id": 5937665,
+    "maintainers": {
+      "romildo": 1217934
+    },
+    "members": {},
+    "name": "Enlightenment"
+  },
+  "exotic-platform-maintainers": {
+    "description": "",
+    "id": 3727378,
+    "maintainers": {
+      "Ericson2314": 1055245,
+      "matthewbauer": 19036
+    },
+    "members": {
+      "aaronjanse": 16829510,
+      "alyssais": 2768870,
+      "emilytrau": 13267947,
+      "minijackson": 1200507,
+      "r-burns": 52847440,
+      "siraben": 8219659,
+      "sternenseemann": 3154475
+    },
+    "name": "exotic-platform-maintainers"
+  },
+  "feel-co": {
+    "description": "Managing packages related to https://github.com/feel-co",
+    "id": 15169000,
+    "maintainers": {
+      "NotAShelf": 62766066,
+      "eclairevoyant": 848000
+    },
+    "members": {
+      "Gerg-L": 88247690
+    },
+    "name": "feel-co"
+  },
+  "flutter": {
+    "description": "Maintain Flutter and Dart-related packages and build tools",
+    "id": 7718198,
+    "maintainers": {
+      "RossComputerGuy": 19699320
+    },
+    "members": {
+      "FlafyDev": 44374434,
+      "hacker1024": 20849728,
+      "mkg20001": 7735145
+    },
+    "name": "Flutter"
+  },
+  "freedesktop": {
+    "description": "Maintain Freedesktop.org packages for graphical desktop.",
+    "id": 3806136,
+    "maintainers": {},
+    "members": {
+      "jtojnar": 705123
+    },
+    "name": "Freedesktop"
+  },
+  "geospatial": {
+    "description": "Maintain geospatial, remote sensing and OpenStreetMap software",
+    "id": 7084621,
+    "maintainers": {
+      "imincik": 476346
+    },
+    "members": {
+      "autra": 1576598,
+      "l0b0": 168301,
+      "nh2": 399535,
+      "nialov": 47318483,
+      "sikmir": 688044,
+      "willcohen": 5185341
+    },
+    "name": "Geospatial"
+  },
+  "gitlab": {
+    "description": "Maintain GitLab-related packages and modules",
+    "id": 8157777,
+    "maintainers": {
+      "leona-ya": 11006031,
+      "xanderio": 6298052,
+      "yayayayaka": 73759599
+    },
+    "members": {
+      "talyz": 63433
+    },
+    "name": "GitLab"
+  },
+  "gnome": {
+    "description": "Maintain GNOME desktop environment and platform.",
+    "id": 3806133,
+    "maintainers": {},
+    "members": {
+      "bobby285271": 20080233,
+      "dasj19": 7589338,
+      "hedning": 71978,
+      "jtojnar": 705123
+    },
+    "name": "GNOME"
+  },
+  "golang": {
+    "description": "Maintain Golang compilers",
+    "id": 4020424,
+    "maintainers": {
+      "Mic92": 96200,
+      "kalbasit": 87115,
+      "zowoq": 59103226
+    },
+    "members": {
+      "katexochen": 49727155,
+      "mfrw": 4929861,
+      "qbit": 68368
+    },
+    "name": "golang"
+  },
+  "haskell": {
+    "description": "Maintain Haskell packages and infrastructure",
+    "id": 4769723,
+    "maintainers": {
+      "cdepillabout": 64804,
+      "maralorn": 1651325,
+      "sternenseemann": 3154475
+    },
+    "members": {
+      "wolfgangwalther": 9132420
+    },
+    "name": "Haskell"
+  },
+  "hyprland": {
+    "description": "Maintain Hyprland compositor and ecosystem.",
+    "id": 12048885,
+    "maintainers": {
+      "khaneliman": 1778670
+    },
+    "members": {
+      "JohnRTitor": 50095635,
+      "NotAShelf": 62766066,
+      "donovanglover": 2374245,
+      "fufexan": 36706276
+    },
+    "name": "hyprland"
+  },
+  "java": {
+    "description": "Maintainers of the Nixpkgs Java ecosystem (JDK, JVM, Java, Gradle, Maven, Ant, and adjacent projects); frequently lingering in #jvm:nixos.org on Matrix",
+    "id": 11412419,
+    "maintainers": {
+      "FliegendeWurst": 12560461,
+      "Infinidoge": 22727114,
+      "chayleaf": 9590981,
+      "tomodachi94": 68489118
+    },
+    "members": {
+      "msgilligan": 61612
+    },
+    "name": "Java"
+  },
+  "k3s": {
+    "description": "Maintain K3s package, NixOS module, NixOS tests, update script",
+    "id": 7725877,
+    "maintainers": {
+      "Mic92": 96200,
+      "euank": 2147649,
+      "marcusramberg": 5526,
+      "wrmilling": 6162814
+    },
+    "members": {
+      "frederictobiasc": 26125115,
+      "heywoodlh": 18178614,
+      "rorosen": 76747196
+    },
+    "name": "k3s"
+  },
+  "kodi": {
+    "description": "Maintain Kodi related packages.",
+    "id": 4642467,
+    "maintainers": {
+      "aanderse": 7755101
+    },
+    "members": {
+      "cpages": 411324,
+      "edwtjo": 54799,
+      "minijackson": 1200507,
+      "peterhoeg": 722550,
+      "sephalon": 893474
+    },
+    "name": "kodi"
+  },
+  "kubernetes": {
+    "description": "Maintain the Kubernetes package and module",
+    "id": 5536808,
+    "maintainers": {
+      "johanot": 998763,
+      "offlinehacker": 585547,
+      "saschagrunert": 695473,
+      "srhb": 219362
+    },
+    "members": {},
+    "name": "kubernetes"
+  },
+  "linux-kernel": {
+    "description": "Maintain the Linux kernel",
+    "id": 13371617,
+    "maintainers": {
+      "alyssais": 2768870
+    },
+    "members": {
+      "K900": 386765,
+      "Ma27": 6025220,
+      "NeQuissimus": 628342,
+      "TredwellGit": 61860346
+    },
+    "name": "Linux kernel"
+  },
+  "lisp": {
+    "description": "Maintain the Lisp ecosystem",
+    "id": 7678368,
+    "maintainers": {
+      "7c6f434c": 1891350,
+      "Uthar": 15697697,
+      "hraban": 137852,
+      "lukego": 13791,
+      "nagy": 692274
+    },
+    "members": {},
+    "name": "lisp"
+  },
+  "lix-maintainers": {
+    "description": "Lix maintainers in nixpkgs/NixOS",
+    "id": 13838744,
+    "maintainers": {
+      "lf-": 6652840
+    },
+    "members": {
+      "9999years": 15312184,
+      "Qyriad": 1542224,
+      "RaitoBezarius": 314564,
+      "alois31": 36605164
+    },
+    "name": "Lix maintainers"
+  },
+  "llvm": {
+    "description": "Maintain LLVM package sets and related packages",
+    "id": 9955829,
+    "maintainers": {
+      "RossComputerGuy": 19699320,
+      "alyssais": 2768870
+    },
+    "members": {
+      "Ericson2314": 1055245,
+      "dtzWill": 817330,
+      "emilazy": 18535642,
+      "lovek323": 265084,
+      "rrbutani": 7833358,
+      "sternenseemann": 3154475
+    },
+    "name": "LLVM"
+  },
+  "loongarch64": {
+    "description": "Maintain LoongArch64 related packages and code",
+    "id": 13371619,
+    "maintainers": {
+      "Aleksanaa": 42209822
+    },
+    "members": {
+      "Cryolitia": 23723294,
+      "darkyzhou": 7220778,
+      "dramforever": 2818072,
+      "wegank": 9713184
+    },
+    "name": "loongarch64"
+  },
+  "lua": {
+    "description": "Maintain the lua ecosystem",
+    "id": 5255750,
+    "maintainers": {
+      "teto": 886074
+    },
+    "members": {
+      "7c6f434c": 1891350,
+      "Shados": 338268,
+      "khaneliman": 1778670,
+      "spencerpogo": 34356756
+    },
+    "name": "lua"
+  },
+  "lumina": {
+    "description": "Maintain lumina desktop environment and related packages",
+    "id": 5937661,
+    "maintainers": {
+      "romildo": 1217934
+    },
+    "members": {},
+    "name": "Lumina"
+  },
+  "lxc": {
+    "description": "LXC, LXD, Incus",
+    "id": 9223525,
+    "maintainers": {
+      "adamcstephens": 2071575
+    },
+    "members": {
+      "aanderse": 7755101,
+      "jnsgruk": 668505,
+      "megheaiulian": 1788114,
+      "mkg20001": 7735145
+    },
+    "name": "LXC"
+  },
+  "lxqt": {
+    "description": "Maintain LXQt desktop environment and related packages",
+    "id": 5937679,
+    "maintainers": {
+      "romildo": 1217934
+    },
+    "members": {},
+    "name": "LXQt"
+  },
+  "marketing-team": {
+    "description": "Marketing team [leader=@djacu]",
+    "id": 7709512,
+    "maintainers": {
+      "djacu": 7043297
+    },
+    "members": {
+      "flyfloh": 74379,
+      "thilobillerbeck": 7442383
+    },
+    "name": "Marketing Team"
+  },
+  "mate": {
+    "description": "Maintainers of the MATE Desktop Environment",
+    "id": 5937667,
+    "maintainers": {
+      "romildo": 1217934
+    },
+    "members": {
+      "bobby285271": 20080233
+    },
+    "name": "MATE"
+  },
+  "neovim": {
+    "description": "Maintain the vim and neovim text editors and related packages",
+    "id": 6748534,
+    "maintainers": {
+      "GaetanLepage": 33058747
+    },
+    "members": {
+      "PerchunPak": 68118654,
+      "khaneliman": 1778670,
+      "mrcjkb": 12857160
+    },
+    "name": "neovim"
+  },
+  "nim": {
+    "description": "Maintains the nim language and build tooling",
+    "id": 14913434,
+    "maintainers": {
+      "eclairevoyant": 848000
+    },
+    "members": {
+      "Eveeifyeve": 88671402,
+      "daylinmorgan": 47667941
+    },
+    "name": "nim"
+  },
+  "nix-formatting": {
+    "description": "Maintain the official Nix formatter and apply it to Nixpkgs: https://nixos.org/community/teams/formatting/",
+    "id": 9676823,
+    "maintainers": {
+      "infinisil": 20525370,
+      "jfly": 277474
+    },
+    "members": {
+      "0x4A6F": 9675338,
+      "MattSturgeon": 5046562,
+      "Sereja313": 112060595,
+      "dasJ": 4971975,
+      "dyegoaurelio": 42411160
+    },
+    "name": "nix-formatting"
+  },
+  "nix-team": {
+    "description": "",
+    "id": 174820,
+    "maintainers": {
+      "Ericson2314": 1055245,
+      "tomberek": 178444
+    },
+    "members": {
+      "Mic92": 96200,
+      "Radvendii": 1239929,
+      "edolstra": 1148549,
+      "xokdvium": 145775305
+    },
+    "name": "Nix team"
+  },
+  "nixos-release-managers": {
+    "description": "Manage the current nixpkgs/NixOS release",
+    "id": 3620128,
+    "maintainers": {
+      "jopejoe1": 34899572,
+      "leona-ya": 11006031
+    },
+    "members": {},
+    "name": "nixos-release-managers"
+  },
+  "nixpkgs-ci": {
+    "description": "Maintain Nixpkgs' in-tree Continuous Integration, including GitHub Actions",
+    "id": 13362067,
+    "maintainers": {
+      "philiptaron": 43863,
+      "wolfgangwalther": 9132420
+    },
+    "members": {
+      "MattSturgeon": 5046562,
+      "Mic92": 96200,
+      "zowoq": 59103226
+    },
+    "name": "Nixpkgs CI"
+  },
+  "nixpkgs-core": {
+    "description": "Provides leadership for and has authority over Nixpkgs.",
+    "id": 14317027,
+    "maintainers": {
+      "alyssais": 2768870,
+      "emilazy": 18535642,
+      "wolfgangwalther": 9132420
+    },
+    "members": {},
+    "name": "Nixpkgs core"
+  },
+  "nixpkgs-merge-bot": {
+    "description": "This team exists as a target for triggering the nixpkgs merge bot.",
+    "id": 13926892,
+    "maintainers": {},
+    "members": {},
+    "name": "nixpkgs-merge-bot"
+  },
+  "node": {
+    "description": "Maintains Node.js runtimes and build tooling.\r\n\r\n\"JS is hecked, thanks for coming to my TED Talk\" - @lilyinstarlight",
+    "id": 7309872,
+    "maintainers": {
+      "lilyinstarlight": 298109,
+      "winterqt": 78392041
+    },
+    "members": {},
+    "name": "Node"
+  },
+  "ocaml": {
+    "description": "Maintain the OCaml compiler and package set",
+    "id": 7553013,
+    "maintainers": {
+      "Alizter": 8614547,
+      "romildo": 1217934,
+      "ulrikstrid": 1607770
+    },
+    "members": {
+      "redianthus": 16472988
+    },
+    "name": "OCaml"
+  },
+  "pantheon": {
+    "description": "Maintain Pantheon desktop environment and platform",
+    "id": 4786995,
+    "maintainers": {
+      "davidak": 91113
+    },
+    "members": {
+      "bobby285271": 20080233
+    },
+    "name": "Pantheon"
+  },
+  "php": {
+    "description": "Maintain PHP related packages and extensions.",
+    "id": 3806182,
+    "maintainers": {},
+    "members": {
+      "Ma27": 6025220,
+      "aanderse": 7755101,
+      "piotrkwiecinski": 2151333,
+      "talyz": 63433
+    },
+    "name": "php"
+  },
+  "podman": {
+    "description": "Maintain Podman and CRI-O related packages and modules.",
+    "id": 3806184,
+    "maintainers": {},
+    "members": {
+      "saschagrunert": 695473,
+      "vdemeester": 6508
+    },
+    "name": "podman"
+  },
+  "postgres": {
+    "description": "Maintain the PostgreSQL package and plugins along with the NixOS module.",
+    "id": 11455958,
+    "maintainers": {
+      "Ma27": 6025220,
+      "thoughtpolice": 3416,
+      "wolfgangwalther": 9132420
+    },
+    "members": {},
+    "name": "postgres"
+  },
+  "qt-kde": {
+    "description": "Maintain the Qt framework, KDE application suite, Plasma desktop environment and related projects",
+    "id": 4341481,
+    "maintainers": {
+      "ttuegel": 563054
+    },
+    "members": {
+      "FRidh": 2129135,
+      "K900": 386765,
+      "LunNova": 782440,
+      "NickCao": 15247171,
+      "SCOTT-HAMILTON": 24496705,
+      "SuperSandro2000": 7258858,
+      "bkchr": 5718007,
+      "ilya-fedin": 17829319,
+      "mjm": 1181,
+      "nyanloutre": 7677321,
+      "peterhoeg": 722550
+    },
+    "name": "Qt-KDE"
+  },
+  "reproducible": {
+    "description": "Team that is interested in reproducible builds",
+    "id": 7625643,
+    "maintainers": {
+      "raboof": 131856,
+      "zimbatm": 3248
+    },
+    "members": {
+      "Artturin": 56650223,
+      "Atemu": 18599032,
+      "RaitoBezarius": 314564,
+      "davidak": 91113,
+      "mschwaig": 3856390
+    },
+    "name": "reproducible"
+  },
+  "risc-v": {
+    "description": "RISC-V team",
+    "id": 13425811,
+    "maintainers": {
+      "0x4A6F": 9675338
+    },
+    "members": {
+      "DarkKirb": 23011243,
+      "dramforever": 2818072,
+      "fgaz": 8182846,
+      "jonhermansen": 660911
+    },
+    "name": "RISC-V"
+  },
+  "rocm": {
+    "description": "Maintain ROCm and related packages",
+    "id": 6921873,
+    "maintainers": {
+      "mschwaig": 3856390
+    },
+    "members": {
+      "Flakebi": 6499211,
+      "GZGavinZhao": 74938940,
+      "LunNova": 782440
+    },
+    "name": "rocm"
+  },
+  "rust": {
+    "description": "Maintain the Rust compiler toolchain and nixpkgs integration",
+    "id": 7304571,
+    "maintainers": {
+      "Mic92": 96200,
+      "winterqt": 78392041,
+      "zowoq": 59103226
+    },
+    "members": {
+      "tjni": 3806110
+    },
+    "name": "rust"
+  },
+  "scala": {
+    "description": "Maintain Scala-related packages and modules.",
+    "id": 11193149,
+    "maintainers": {
+      "dottybot": 12519979,
+      "hamzaremmal": 56235032
+    },
+    "members": {
+      "natsukagami": 9061737
+    },
+    "name": "Scala"
+  },
+  "sdl": {
+    "description": "Maintain core SDL libraries",
+    "id": 13033942,
+    "maintainers": {
+      "pbsds": 140964
+    },
+    "members": {
+      "LordGrimmauld": 49513131,
+      "evysgarden": 92547295,
+      "jansol": 2588851,
+      "marcin-serwin": 12128106
+    },
+    "name": "SDL"
+  },
+  "static": {
+    "description": "People interested in static builds (creation of `.a` files, fully static executables, etc.) and keeping them working",
+    "id": 5906550,
+    "maintainers": {
+      "nh2": 399535
+    },
+    "members": {
+      "Ericson2314": 1055245,
+      "aherrmann": 732652,
+      "alyssais": 2768870,
+      "basvandijk": 576355,
+      "cdepillabout": 64804,
+      "dtzWill": 817330,
+      "lorenzleutgeb": 542154,
+      "matthewbauer": 19036,
+      "r-burns": 52847440,
+      "rnhmjoj": 2817565,
+      "sternenseemann": 3154475
+    },
+    "name": "static"
+  },
+  "stdenv": {
+    "description": "Maintain the standard environment and its surrounding logic.",
+    "id": 11265412,
+    "maintainers": {
+      "RossComputerGuy": 19699320
+    },
+    "members": {
+      "Artturin": 56650223,
+      "Ericson2314": 1055245,
+      "emilazy": 18535642,
+      "philiptaron": 43863,
+      "reckenrode": 7413633
+    },
+    "name": "stdenv"
+  },
+  "systemd": {
+    "description": "Maintain systemd for NixOS",
+    "id": 3894007,
+    "maintainers": {
+      "flokli": 183879
+    },
+    "members": {
+      "ElvishJerricco": 1365692,
+      "LordGrimmauld": 49513131,
+      "aanderse": 7755101,
+      "arianvp": 628387
+    },
+    "name": "systemd"
+  },
+  "xen-project": {
+    "description": "Maintain the Xen Project Hypervisor and the related tooling ecosystem. Members listed as \"Maintainers\" are recipients of Xen Security Advisories sent to xsa@nixos.org.",
+    "id": 11127725,
+    "maintainers": {
+      "CertainLach": 6235312,
+      "SigmaSquadron": 174749595,
+      "hehongbo": 665472
+    },
+    "members": {
+      "digitalrane": 1829286
+    },
+    "name": "Xen Project"
+  },
+  "xfce": {
+    "description": "Maintainers of the Xfce Desktop Environment",
+    "id": 5421745,
+    "maintainers": {
+      "romildo": 1217934
+    },
+    "members": {
+      "bobby285271": 20080233
+    },
+    "name": "Xfce"
+  }
+}

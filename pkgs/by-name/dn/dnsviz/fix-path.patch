@@ -1,0 +1,18 @@
+diff --git a/dnsviz/config.py.in b/dnsviz/config.py.in
+index 373fde2..007f0f1 100644
+--- a/dnsviz/config.py.in
++++ b/dnsviz/config.py.in
+@@ -26,12 +26,7 @@
+ import os
+ import sys
+
+-_prefix = '__DNSVIZ_INSTALL_PREFIX__'
+-if (hasattr(sys, 'real_prefix') or hasattr(sys, 'base_prefix')) and \
+-        not _prefix:
+-    DNSVIZ_INSTALL_PREFIX = sys.prefix
+-else:
+-    DNSVIZ_INSTALL_PREFIX = _prefix
++DNSVIZ_INSTALL_PREFIX = "@out@"
+ DNSVIZ_SHARE_PATH = os.getenv('DNSVIZ_SHARE_PATH', os.path.join(DNSVIZ_INSTALL_PREFIX, 'share', 'dnsviz'))
+ JQUERY_PATH = __JQUERY_PATH__
+ JQUERY_UI_PATH = __JQUERY_UI_PATH__

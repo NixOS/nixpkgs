@@ -1,0 +1,17 @@
+schroot/1.6.13-5
+1539621689.revert.schroot-1.6.10-48-g2600bcab.revert-environment-preserve-empty-values.patch
+1448890714.schroot-1.7.2-72-gbf30a928.setup-d-20copyfiles-canonicalize-destination-path.patch
+1453505583.schroot-1.7.2-72-g11587fd8.etc-setup-d-20copyfiles-replace-dangling-symlink-during-cp.patch
+1496783678.schroot-1.7.2-127-ga5e5d8d9.fix-bash-completion.patch
+1530433671.schroot-1.7.2-129-g00c0a972.cmake-use-soelim-r-option.patch
+1487872945.schroot-1.7.2-137-g5c36362b.support-copyfiles-installation-into-non-existent-directories.patch
+1487872999.schroot-1.7.2-138-g5a611c49.support-copyfiles-source-destination-specifications.patch
+1662655911.reschroot-1.6.13-2-g779349dc.replace-usage-of-egrep-and-which.patch
+1662656169.reschroot-1.6.13-3-ga9e100e5.clean-up-mess-created-in-the-portuguese-translations.patch
+1664011392.reschroot-1.6.13-4-g93017cff.update-french-translation.patch
+1665995770.reschroot-1.6.13-5-g81b88b45.document-a-login-shell-might-be-switched-to-a-regular-shell.patch
+1692468301.reschroot-1.6.13-6-g271acf6e.subject-mount-a-new-instance-of-dev-pts-in-the-chroot.patch
+1664222056.reschroot-1.6.13-9-g55af32cf.fix-localename-type.patch
+1658716738.reschroot-1.6.12-2-g2045008e.fix-variable-usage-in-copyfiles-copy-file-function.patch
+fix-dupes-in-buildd-configuration.patch
+fix-example-configuration.patch

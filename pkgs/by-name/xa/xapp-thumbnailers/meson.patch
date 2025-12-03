@@ -1,0 +1,14 @@
+diff --git a/meson.build b/meson.build
+index d0887d1..277cfb7 100644
+--- a/meson.build
++++ b/meson.build
+@@ -4,8 +4,8 @@ project_url = 'https://github.com/linuxmint/xapp-thumbnailers'
+ version = meson.project_version()
+
+ install_subdir(
+-    'files',
+-    install_dir: '/',
++    'files/usr',
++    install_dir: '',
+     strip_directory: true,
+ )

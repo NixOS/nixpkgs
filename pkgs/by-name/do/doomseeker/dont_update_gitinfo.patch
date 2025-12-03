@@ -1,0 +1,45 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b4b26e04..338858f8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -149,11 +149,8 @@ set(CXX_STANDARD_REQUIRED ON)
+ 
+ if(WIN32)
+ 	set(WITH_AUTOUPDATES 1)
+-	add_subdirectory(tools/updateinstaller)
+ endif()
+ 
+-add_subdirectory(tools/updaterevision)
+-
+ add_subdirectory(src/core)
+ add_subdirectory(src/plugins)
+ 
+diff --git a/src/core/CMakeLists.txt b/src/core/CMakeLists.txt
+index 089e3889..8add598d 100644
+--- a/src/core/CMakeLists.txt
++++ b/src/core/CMakeLists.txt
+@@ -50,13 +50,6 @@ configure_file(doomseeker_copts.h.in doomseeker_copts.h)
+ option(DOOMSEEKER_INSTALL_NONFREE "Install non-free resources?" ${DEFAULT_NONFREE_INSTALL})
+ set(DOOMSEEKER_IP2C_DAT "" CACHE FILEPATH "Path to IpToCountry.dat; optional")
+ 
+-# Get the revision from vcs
+-add_custom_target(revision_check ALL
+-	COMMAND updaterevision ${CMAKE_CURRENT_SOURCE_DIR}/gitinfo.h
+-	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+-	DEPENDS updaterevision
+-)
+-
+ # In case gitinfo.h isn't yet generated create a dummy file so our file listing
+ # will contain it. We can't just add it to the file listing since then CMake
+ # would complain that it doesn't exist.
+@@ -178,10 +171,6 @@ endif()
+ 
+ target_compile_definitions(doomseeker PRIVATE "-DINSTALL_PREFIX=\"${CMAKE_INSTALL_PREFIX}\"" "-DINSTALL_LIBDIR=\"${CMAKE_INSTALL_LIBDIR}\"")
+ 
+-# Make sure the vcs version file is created before we attempt to compile
+-# Doomseeker.
+-add_dependencies(doomseeker revision_check)
+-
+ target_link_libraries(doomseeker
+ LINK_PRIVATE
+ 	Wadseeker::wadseeker

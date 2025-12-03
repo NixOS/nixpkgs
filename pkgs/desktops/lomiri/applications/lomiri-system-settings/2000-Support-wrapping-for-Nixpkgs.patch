@@ -1,0 +1,160 @@
+From 8e21cf46551091c884014985d3e0dd9704d6dc04 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Wed, 14 Feb 2024 16:00:24 +0100
+Subject: [PATCH] Support wrapping for Nixpkgs
+
+---
+ src/CMakeLists.txt   | 24 +++++++++++++++++++-----
+ src/main.cpp         |  8 +++++---
+ src/plugin.cpp       | 19 +++++++++++++++++--
+ tests/CMakeLists.txt | 18 ++++++++++++++----
+ 4 files changed, 55 insertions(+), 14 deletions(-)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index cd3131d0..fcd78bdf 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -1,13 +1,27 @@
+ include_directories(${GLIB_INCLUDE_DIRS})
+ 
+-add_definitions(-DI18N_DIRECTORY="${CMAKE_INSTALL_FULL_LOCALEDIR}")
+ add_definitions(-DI18N_DOMAIN="lomiri-system-settings")
+-add_definitions(-DPLUGIN_PRIVATE_MODULE_DIR="${PLUGIN_PRIVATE_MODULE_DIR}")
++
++add_definitions(-DNIX_FALLBACK_PREFIX="${CMAKE_INSTALL_PREFIX}")
++
++set(I18N_DIRECTORY "${CMAKE_INSTALL_FULL_LOCALEDIR}")
++
++list(APPEND NIX_LOCATION_VARIABLES
++    I18N_DIRECTORY
++    PLUGIN_PRIVATE_MODULE_DIR
++    PLUGIN_MANIFEST_DIR
++    PLUGIN_QML_DIR
++    PLUGIN_MODULE_DIR
++)
++
++foreach(locvar IN LISTS NIX_LOCATION_VARIABLES)
++    string(REPLACE "${CMAKE_INSTALL_PREFIX}" "" NIX_${locvar}_RELATIVE "${${locvar}}")
++    add_definitions(-D${locvar}=do_not_use_me)
++    add_definitions(-DNIX_${locvar}_RELATIVE="${NIX_${locvar}_RELATIVE}")
++endforeach()
++
+ add_definitions(-DMANIFEST_DIR="${MANIFEST_DIR}")
+-add_definitions(-DPLUGIN_MANIFEST_DIR="${PLUGIN_MANIFEST_DIR}")
+ add_definitions(-DQML_DIR="${QML_DIR}")
+-add_definitions(-DPLUGIN_QML_DIR="${PLUGIN_QML_DIR}")
+-add_definitions(-DPLUGIN_MODULE_DIR="${PLUGIN_MODULE_DIR}")
+ 
+ add_subdirectory(SystemSettings)
+ 
+diff --git a/src/main.cpp b/src/main.cpp
+index 64441da3..cfcabe42 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -42,6 +42,8 @@ int main(int argc, char **argv)
+     QByteArray mountPoint = qEnvironmentVariableIsSet("SNAP") ? qgetenv("SNAP") : "";
+     bool isSnap = !mountPoint.isEmpty();
+ 
++    QByteArray dataPrefix = qEnvironmentVariableIsSet("NIX_LSS_PREFIX") ? qgetenv("NIX_LSS_PREFIX") : NIX_FALLBACK_PREFIX;
++
+     // Ensure printing environment is correct.
+     qputenv("QT_PRINTER_MODULE", "cupsprintersupport");
+ 
+@@ -78,12 +80,12 @@ int main(int argc, char **argv)
+     qmlRegisterType<LomiriSystemSettings::PluginManager>("SystemSettings", 1, 0, "PluginManager");
+     view.engine()->rootContext()->setContextProperty("Utilities", &utils);
+     view.setResizeMode(QQuickView::SizeRootObjectToView);
+-    view.engine()->addImportPath(mountPoint + PLUGIN_PRIVATE_MODULE_DIR);
+-    view.engine()->addImportPath(mountPoint + PLUGIN_QML_DIR);
++    view.engine()->addImportPath(mountPoint + dataPrefix + "/" + NIX_PLUGIN_PRIVATE_MODULE_DIR_RELATIVE);
++    view.engine()->addImportPath(mountPoint + dataPrefix + "/" + NIX_PLUGIN_QML_DIR_RELATIVE);
+     view.rootContext()->setContextProperty("defaultPlugin", defaultPlugin);
+     view.rootContext()->setContextProperty("mountPoint", mountPoint);
+     view.rootContext()->setContextProperty("isSnap", isSnap);
+-    view.rootContext()->setContextProperty("i18nDirectory", mountPoint + I18N_DIRECTORY);
++    view.rootContext()->setContextProperty("i18nDirectory", mountPoint + dataPrefix + "/" + NIX_I18N_DIRECTORY_RELATIVE);
+     view.rootContext()->setContextProperty("pluginOptions", pluginOptions);
+     view.rootContext()->setContextProperty("view", &view);
+     view.setSource(QUrl("qrc:/qml/MainWindow.qml"));
+diff --git a/src/plugin.cpp b/src/plugin.cpp
+index 133821af..6a1a152c 100644
+--- a/src/plugin.cpp
++++ b/src/plugin.cpp
+@@ -36,9 +36,16 @@
+ #include <LomiriSystemSettings/ItemBase>
+ #include <LomiriSystemSettings/PluginInterface>
+ 
++#include <libintl.h>
++
+ using namespace LomiriSystemSettings;
+ 
+-static const QLatin1String pluginModuleDir{PLUGIN_MODULE_DIR};
++const QLatin1String getWrapperPrefix()
++{
++    const QLatin1String pluginWrapperPrefix {qEnvironmentVariableIsSet("NIX_LSS_PREFIX") ? qgetenv("NIX_LSS_PREFIX") : NIX_FALLBACK_PREFIX};
++    return pluginWrapperPrefix;
++}
++static const QLatin1String pluginModuleDirRelative{NIX_PLUGIN_MODULE_DIR_RELATIVE};
+ static const QLatin1String pluginQmlDir{QML_DIR};
+ 
+ namespace LomiriSystemSettings {
+@@ -89,6 +96,11 @@ PluginPrivate::PluginPrivate(Plugin *q, const QFileInfo &manifest):
+ 
+     m_data = json.toVariant().toMap();
+     m_dataPath = manifest.absolutePath();
++
++    QString textDomain = m_data.value(keyTranslations).toString();
++    QString textDomainDir = QString("%1/%2")
++        .arg(getWrapperPrefix()).arg(NIX_I18N_DIRECTORY_RELATIVE);
++    bindtextdomain(qPrintable(textDomain), qPrintable(textDomainDir));
+ }
+ 
+ bool PluginPrivate::ensureLoaded() const
+@@ -110,8 +122,11 @@ bool PluginPrivate::ensureLoaded() const
+         ctx->contextProperty("mountPoint").value<QByteArray>() :
+         "";
+ 
++    QString wrapperModuleDir = QString("%1/%2")
++        .arg(getWrapperPrefix()).arg(pluginModuleDirRelative);
++
+     QString name = QString("%1%2/lib%3.so")
+-        .arg(mountPoint).arg(pluginModuleDir).arg(plugin);
++        .arg(mountPoint).arg(wrapperModuleDir).arg(plugin);
+ 
+     m_loader.setFileName(name);
+     if (Q_UNLIKELY(!m_loader.load())) {
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index c10b2e2d..a998b641 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -9,13 +9,23 @@ include_directories(
+ set(XVFB_CMD xvfb-run -a -s "-screen 0 640x480x24")
+ 
+ add_definitions(-DI18N_DOMAIN="lomiri-system-settings")
+-add_definitions(-DPLUGIN_PRIVATE_MODULE_DIR="${PLUGIN_PRIVATE_MODULE_DIR}")
+-add_definitions(-DPLUGIN_MODULE_DIR="${CMAKE_CURRENT_BINARY_DIR}")
++
++add_definitions(-DNIX_FALLBACK_PREFIX="${CMAKE_CURRENT_BINARY_DIR}")
++
++add_definitions(-DI18N_DIRECTORY=do_not_use_me)
++add_definitions(-DNIX_I18N_DIRECTORY_RELATIVE="")
++add_definitions(-DPLUGIN_PRIVATE_MODULE_DIR=do_not_use_me)
++add_definitions(-DNIX_PLUGIN_PRIVATE_MODULE_DIR_RELATIVE="")
++add_definitions(-DPLUGIN_MODULE_DIR=do_not_use_me)
++add_definitions(-DNIX_PLUGIN_MODULE_DIR_RELATIVE="")
++add_definitions(-DPLUGIN_MANIFEST_DIR=do_not_use_me)
++add_definitions(-DNIX_PLUGIN_MANIFEST_DIR_RELATIVE="../../tests/data")
++add_definitions(-DPLUGIN_QML_DIR=do_not_use_me)
++add_definitions(-DNIX_PLUGIN_QML_DIR_RELATIVE="")
++
+ add_definitions(-DMANIFEST_DIR="data")
+-add_definitions(-DPLUGIN_MANIFEST_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data")
+ add_definitions(-DQML_TEST_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
+ add_definitions(-DQML_DIR="${CMAKE_CURRENT_BINARY_DIR}")
+-add_definitions(-DPLUGIN_QML_DIR="${CMAKE_CURRENT_BINARY_DIR}")
+ add_definitions(-DSYSTEM_IMAGE_DBUS_TEMPLATE="${CMAKE_SOURCE_DIR}/tests/autopilot/lomiri_system_settings/tests/systemimage.py")
+ 
+ add_library(test-plugin SHARED test-plugin.cpp test-plugin.h)
+-- 
+2.42.0
+

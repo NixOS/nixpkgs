@@ -1,0 +1,194 @@
+{
+  "aqua": {
+    "product": "Aqua",
+    "wmClass": "jetbrains-aqua",
+    "meta": {
+      "isOpenSource": false,
+      "description": "Test automation IDE from JetBrains",
+      "maintainers": [ "remcoschrijver" ],
+      "longDescription": "Aqua is a test automation IDE from jetbrains that can deal with many languages and frameworks to improve your test workflows. Has support for popular testing frameworks like Selenium, Cypress, and Playwright.",
+      "homepage": "https://www.jetbrains.com/aqua/"
+    }
+  },
+  "clion": {
+    "product": "CLion",
+    "wmClass": "jetbrains-clion",
+    "meta": {
+      "isOpenSource": false,
+      "description": "C/C++ IDE from JetBrains",
+      "maintainers": [ "edwtjo", "mic92", "tymscar" ],
+      "longDescription": "Enhancing productivity for every C and C++ developer on Linux, macOS and Windows.",
+      "homepage": "https://www.jetbrains.com/clion/"
+    }
+  },
+  "datagrip": {
+    "product": "DataGrip",
+    "wmClass": "jetbrains-datagrip",
+    "meta": {
+      "isOpenSource": false,
+      "description": "Database IDE from JetBrains",
+      "maintainers": [ ],
+      "longDescription": "DataGrip is a new IDE from JetBrains built for database admins. It allows you to quickly migrate and refactor relational databases, construct efficient, statically checked SQL queries and much more.",
+      "homepage": "https://www.jetbrains.com/datagrip/"
+    }
+  },
+  "dataspell": {
+    "product": "DataSpell",
+    "wmClass": "jetbrains-dataspell",
+    "meta": {
+      "isOpenSource": false,
+      "description": "Data science IDE from JetBrains",
+      "maintainers": [ "leona" ],
+      "longDescription": "DataSpell is a new IDE from JetBrains built for Data Scientists. Mainly it integrates Jupyter notebooks in the IntelliJ platform.",
+      "homepage": "https://www.jetbrains.com/dataspell/"
+    }
+  },
+  "gateway": {
+    "product": "JetBrains Gateway",
+    "productShort": "Gateway",
+    "wmClass": "jetbrains-gateway",
+    "meta": {
+      "isOpenSource": false,
+      "description": "Remote development for JetBrains products",
+      "maintainers": [ ],
+      "longDescription": "JetBrains Gateway is a lightweight launcher that connects a remote server with your local machine, downloads necessary components on the backend, and opens your project in JetBrains Client.",
+      "homepage": "https://www.jetbrains.com/remote-development/gateway/"
+    }
+  },
+  "goland": {
+    "product": "Goland",
+    "wmClass": "jetbrains-goland",
+    "meta": {
+      "isOpenSource": false,
+      "description": "Go IDE from JetBrains",
+      "maintainers": [ "tymscar" ],
+      "longDescription": "Goland is the codename for a new commercial IDE by JetBrains aimed at providing an ergonomic environment for Go development.\n          The new IDE extends the IntelliJ platform with the coding assistance and tool integrations specific for the Go language",
+      "homepage": "https://www.jetbrains.com/go/"
+    }
+  },
+  "idea-community": {
+    "product": "IntelliJ IDEA CE",
+    "productShort": "IDEA",
+    "wmClass": "jetbrains-idea-ce",
+    "meta": {
+      "isOpenSource": true,
+      "description": "Free Java, Kotlin, Groovy and Scala IDE from jetbrains",
+      "maintainers": [ "edwtjo", "gytis-ivaskevicius", "tymscar" ],
+      "longDescription": "IDE for Java SE, Groovy & Scala development Powerful environment for building Google Android apps Integration with JUnit, TestNG, popular SCMs, Ant & Maven. Also known as IntelliJ.",
+      "homepage": "https://www.jetbrains.com/idea/"
+    }
+  },
+  "idea-ultimate": {
+    "product": "IntelliJ IDEA",
+    "productShort": "IDEA",
+    "wmClass": "jetbrains-idea",
+    "meta": {
+      "isOpenSource": false,
+      "description": "Paid-for Java, Kotlin, Groovy and Scala IDE from jetbrains",
+      "maintainers": [ "edwtjo", "gytis-ivaskevicius", "tymscar" ],
+      "longDescription": "IDE for Java SE, Groovy & Scala development Powerful environment for building Google Android apps Integration with JUnit, TestNG, popular SCMs, Ant & Maven. Also known as IntelliJ.",
+      "homepage": "https://www.jetbrains.com/idea/"
+    }
+  },
+  "mps": {
+    "product": "MPS",
+    "wmClass": "jetbrains-MPS",
+    "meta": {
+      "isOpenSource": false,
+      "description": "IDE for building domain-specific languages from JetBrains",
+      "maintainers": [ ],
+      "longDescription": "A metaprogramming system which uses projectional editing which allows users to overcome the limits of language parsers, and build DSL editors, such as ones with tables and diagrams.",
+      "homepage": "https://www.jetbrains.com/mps/"
+    }
+  },
+  "phpstorm": {
+    "product": "PhpStorm",
+    "wmClass": "jetbrains-phpstorm",
+    "meta": {
+      "isOpenSource": false,
+      "description": "PHP IDE from JetBrains",
+      "maintainers": [ "dritter", "tymscar" ],
+      "longDescription": "PhpStorm provides an editor for PHP, HTML and JavaScript with on-the-fly code analysis, error prevention and automated refactorings for PHP and JavaScript code. ",
+      "homepage": "https://www.jetbrains.com/phpstorm/"
+    }
+  },
+  "pycharm-community": {
+    "product": "PyCharm CE",
+    "productShort": "PyCharm",
+    "wmClass": "jetbrains-pycharm-ce",
+    "meta": {
+      "isOpenSource": true,
+      "description": "Free Python IDE from JetBrains",
+      "maintainers": [ "genericnerdyusername", "tymscar" ],
+      "longDescription": "Python IDE with complete set of tools for productive development with Python programming language. In addition, the IDE provides high-class capabilities for professional Web development with Django framework and Google App Engine. It has powerful coding assistance, navigation, a lot of refactoring features, tight integration with various Version Control Systems, Unit testing, powerful all-singing all-dancing Debugger and entire customization. PyCharm is developer driven IDE. It was developed with the aim of providing you almost everything you need for your comfortable and productive development!",
+      "homepage": "https://www.jetbrains.com/pycharm/"
+    }
+  },
+  "pycharm-professional": {
+    "product": "PyCharm",
+    "productShort": "PyCharm",
+    "wmClass": "jetbrains-pycharm",
+    "meta": {
+      "isOpenSource": false,
+      "description": "Paid-for Python IDE from JetBrains",
+      "maintainers": [ "genericnerdyusername", "tymscar" ],
+      "longDescription": "Python IDE with complete set of tools for productive development with Python programming language. In addition, the IDE provides high-class capabilities for professional Web development with Django framework and Google App Engine. It has powerful coding assistance, navigation, a lot of refactoring features, tight integration with various Version Control Systems, Unit testing, powerful all-singing all-dancing Debugger and entire customization. PyCharm is developer driven IDE. It was developed with the aim of providing you almost everything you need for your comfortable and productive development!",
+      "homepage": "https://www.jetbrains.com/pycharm/"
+    }
+  },
+  "rider": {
+    "product": "Rider",
+    "wmClass": "jetbrains-rider",
+    "meta": {
+      "isOpenSource": false,
+      "description": ".NET IDE from JetBrains",
+      "maintainers": [ "raphaelr" ],
+      "longDescription": "JetBrains Rider is a new .NET IDE based on the IntelliJ platform and ReSharper. Rider supports .NET Core, .NET Framework and Mono based projects. This lets you develop a wide array of applications including .NET desktop apps, services and libraries, Unity games, ASP.NET and ASP.NET Core web applications.",
+      "homepage": "https://www.jetbrains.com/rider/"
+    }
+  },
+  "ruby-mine": {
+    "product": "RubyMine",
+    "wmClass": "jetbrains-rubymine",
+    "meta": {
+      "isOpenSource": false,
+      "description": "Ruby IDE from JetBrains",
+      "maintainers": [ "edwtjo", "tymscar"],
+      "longDescription": "Ruby IDE from JetBrains",
+      "homepage": "https://www.jetbrains.com/ruby/"
+    }
+  },
+  "rust-rover": {
+    "product": "RustRover",
+    "wmClass": "jetbrains-rustrover",
+    "meta": {
+      "isOpenSource": false,
+      "description": "Rust IDE from JetBrains",
+      "maintainers": [ "genericnerdyusername"],
+      "longDescription": "Rust IDE from JetBrains",
+      "homepage": "https://www.jetbrains.com/rust/"
+    }
+  },
+  "webstorm": {
+    "product": "WebStorm",
+    "wmClass": "jetbrains-webstorm",
+    "meta": {
+      "isOpenSource": false,
+      "description": "Web IDE from JetBrains",
+      "maintainers": [ "abaldeau", "tymscar"],
+      "longDescription": "WebStorm provides an editor for HTML, JavaScript (incl. Node.js), and CSS with on-the-fly code analysis, error prevention and automated refactorings for JavaScript code.",
+      "homepage": "https://www.jetbrains.com/webstorm/"
+    }
+  },
+  "writerside": {
+    "product": "Writerside",
+    "wmClass": "jetbrains-writerside",
+    "meta": {
+      "isOpenSource": false,
+      "description": "Documentation IDE from JetBrains",
+      "maintainers": [ "zlepper"],
+      "longDescription": "The most powerful development environment – now adapted for writing documentation.",
+      "homepage": "https://www.jetbrains.com/writerside/"
+    }
+  }
+}

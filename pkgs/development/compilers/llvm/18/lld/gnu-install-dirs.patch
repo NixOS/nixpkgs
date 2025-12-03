@@ -1,0 +1,15 @@
+diff --git a/cmake/modules/AddLLD.cmake b/cmake/modules/AddLLD.cmake
+index d3924f7243d4..42a7cd62281c 100644
+--- a/cmake/modules/AddLLD.cmake
++++ b/cmake/modules/AddLLD.cmake
+@@ -18,8 +18,8 @@ macro(add_lld_library name)
+     install(TARGETS ${name}
+       COMPONENT ${name}
+       ${export_to_lldtargets}
+-      LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX}
+-      ARCHIVE DESTINATION lib${LLVM_LIBDIR_SUFFIX}
++      LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}"
++      ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}"
+       RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
+ 
+     if (${ARG_SHARED} AND NOT CMAKE_CONFIGURATION_TYPES)

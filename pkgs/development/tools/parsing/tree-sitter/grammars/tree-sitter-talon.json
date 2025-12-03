@@ -1,0 +1,14 @@
+{
+  "url": "https://github.com/wenkokke/tree-sitter-talon",
+  "rev": "53fd1d6102f692ab3040f90a1fe5023b7342ff23",
+  "date": "2024-06-18T14:14:45+01:00",
+  "path": "/nix/store/bva5mf6j33icgd2rr4067i50gjjzbd10-tree-sitter-talon",
+  "sha256": "1kw7axcqpmjbcsl6h8lsvraqv58k0w76rhxcvqqx7kly4jgz1wrm",
+  "hash": "sha256-NfPwnySeztMx3qzDbA4HE5WNVd6aImioZkvWi1lXh88=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "fetchTags": false,
+  "leaveDotGit": false,
+  "rootDir": ""
+}

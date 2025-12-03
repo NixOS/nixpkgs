@@ -1,0 +1,13 @@
+--- a/aider/linter.py	2025-05-28 17:12:07.177786621 +0000
++++ b/aider/linter.py	2025-05-28 17:12:45.834897524 +0000
+@@ -136,9 +136,7 @@
+     def flake8_lint(self, rel_fname):
+         fatal = "E9,F821,F823,F831,F406,F407,F701,F702,F704,F706"
+         flake8_cmd = [
+-            sys.executable,
+-            "-m",
+-            "flake8",
++            "@flake8@",
+             f"--select={fatal}",
+             "--show-source",
+             "--isolated",

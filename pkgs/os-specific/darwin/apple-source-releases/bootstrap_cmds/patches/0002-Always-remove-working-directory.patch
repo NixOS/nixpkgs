@@ -1,0 +1,19 @@
+diff --git a/migcom.tproj/mig.sh b/migcom.tproj/mig.sh
+index f91f1a0112..191eee0461 100644
+--- a/migcom.tproj/mig.sh
++++ b/migcom.tproj/mig.sh
+@@ -101,6 +101,7 @@
+       echo "Exiting..."
+       exit 1
+ fi
++trap 'rm -rf -- "$WORKTMP"' EXIT
+ 
+ # parse out the arguments until we hit plain file name(s)
+ 
+@@ -232,6 +233,5 @@
+     rm -f "${temp}.c"
+ done
+ 
+-/bin/rmdir "${WORKTMP}"
+ exit 0
+ 

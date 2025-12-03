@@ -1,0 +1,105 @@
+name: Test
+
+on:
+  pull_request:
+
+concurrency:
+  group: test-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  prepare:
+    runs-on: ubuntu-slim
+    outputs:
+      merge-group: ${{ steps.files.outputs.merge-group }}
+      mergedSha: ${{ steps.prepare.outputs.mergedSha }}
+      pr: ${{ steps.files.outputs.pr }}
+      push: ${{ steps.files.outputs.push }}
+      targetSha: ${{ steps.prepare.outputs.targetSha }}
+    steps:
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: true # default, for clarity
+          sparse-checkout: |
+            ci/github-script
+      - id: prepare
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        with:
+          retries: 10
+          # The default for this includes code 422, which happens regularly for us when comparing commits:
+          #   422 - Server Error: Sorry, this diff is taking too long to generate.
+          # Listing all other values from here to effectively remove 422:
+          #   https://github.com/octokit/plugin-retry.js/blob/9a2443746c350b3beedec35cf26e197ea318a261/src/index.ts#L14
+          retry-exempt-status-codes: 400,401,403,404
+          script: |
+            require('./ci/github-script/prepare.js')({
+              github,
+              context,
+              core,
+              // Review comments will be posted by the main PR workflow on the pull_request_target event.
+              dry: false,
+            })
+
+      - name: Determine changed files
+        id: files
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        with:
+          script: |
+            const files = (await github.paginate(github.rest.pulls.listFiles, {
+              ...context.repo,
+              pull_number: context.payload.pull_request.number,
+              per_page: 100,
+            })).map(file => file.filename)
+
+            if (files.some(file => [
+              '.github/workflows/eval.yml',
+              '.github/workflows/lint.yml',
+              '.github/workflows/merge-group.yml',
+              '.github/workflows/test.yml',
+            ].includes(file))) core.setOutput('merge-group', true)
+
+            if (files.some(file => [
+              '.github/actions/checkout/action.yml',
+              '.github/workflows/bot.yml',
+              '.github/workflows/build.yml',
+              '.github/workflows/check.yml',
+              '.github/workflows/eval.yml',
+              '.github/workflows/lint.yml',
+              '.github/workflows/pull-request-target.yml',
+              '.github/workflows/test.yml',
+              'ci/github-script/bot.js',
+              'ci/github-script/merge.js',
+              'ci/github-script/withRateLimit.js',
+            ].includes(file))) core.setOutput('pr', true)
+
+  merge-group:
+    if: needs.prepare.outputs.merge-group
+    name: Merge Group
+    needs: [prepare]
+    uses: ./.github/workflows/merge-group.yml
+    # Those are actually only used on the merge_group event, but will throw an error if not set.
+    permissions:
+      pull-requests: write
+      statuses: write
+    with:
+      artifact-prefix: mg-
+      mergedSha: ${{ needs.prepare.outputs.mergedSha }}
+      targetSha: ${{ needs.prepare.outputs.targetSha }}
+
+  pr:
+    if: needs.prepare.outputs.pr
+    name: PR
+    needs: [prepare]
+    uses: ./.github/workflows/pull-request-target.yml
+    # Those are actually only used on the pull_request_target event, but will throw an error if not set.
+    permissions:
+      issues: write
+      pull-requests: write
+      statuses: write
+    secrets:
+      NIXPKGS_CI_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
+    with:
+      artifact-prefix: pr-

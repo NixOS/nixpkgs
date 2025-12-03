@@ -1,0 +1,15 @@
+https://build.opensuse.org/package/view_file/openSUSE:13.1/checkinstall/checkinstall-set_buildroot.patch
+
+Index: checkinstall
+===================================================================
+--- a/checkinstall	2009-12-26 20:17:24.000000000 +0100
++++ b/checkinstall	2011-01-31 18:17:56.171593541 +0100
+@@ -2463,7 +2463,7 @@ cd "$DIRECTORIO_FUENTE"
+ 
+ echo
+ echogn "Building RPM package..."
+-$RPMBUILD -bb ${RPM_TARGET_FLAG}${ARCHITECTURE} "$SPEC_PATH" &> ${TMP_DIR}/rpmbuild.log
++$RPMBUILD --buildroot ${BUILDROOT} -bb ${RPM_TARGET_FLAG}${ARCHITECTURE} "$SPEC_PATH" &> ${TMP_DIR}/rpmbuild.log
+ okfail
+ 
+ if [ $? -gt 0 ]; then

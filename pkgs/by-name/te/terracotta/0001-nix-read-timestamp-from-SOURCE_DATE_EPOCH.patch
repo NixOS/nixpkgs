@@ -1,0 +1,35 @@
+From f89d1d20a773cff73dd5856af4c84bccaea549ac Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Sat, 8 Nov 2025 15:18:44 +0800
+Subject: [PATCH 1/2] nix: read timestamp from SOURCE_DATE_EPOCH
+
+---
+ timestamp/src/lib.rs | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/timestamp/src/lib.rs b/timestamp/src/lib.rs
+index 142abf3..3935272 100644
+--- a/timestamp/src/lib.rs
++++ b/timestamp/src/lib.rs
+@@ -1,15 +1,11 @@
+ extern crate proc_macro;
+ use proc_macro::TokenStream;
+-use std::time::{SystemTime, UNIX_EPOCH};
+ 
+ #[proc_macro]
+ pub fn compile_time(_: TokenStream) -> TokenStream {
+     lazy_static::lazy_static! {
+-        static ref TIMESTAMP: u128 = SystemTime::now()
+-            .duration_since(UNIX_EPOCH)
+-            .unwrap()
+-            .as_millis();
++        static ref TIMESTAMP: u128 = std::fs::read_to_string("SOURCE_DATE_EPOCH").ok().and_then(|s| s.trim().parse().ok()).unwrap_or(0);
+     }
+ 
+     return format!("({}u128)", *TIMESTAMP).parse().unwrap();
+-}
+\ No newline at end of file
++}
+-- 
+2.51.0
+

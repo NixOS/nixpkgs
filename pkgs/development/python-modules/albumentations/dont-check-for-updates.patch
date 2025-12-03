@@ -1,0 +1,12 @@
+diff --git a/albumentations/__init__.py b/albumentations/__init__.py
+index 44ee9b9..ea3bc50 100644
+--- a/albumentations/__init__.py
++++ b/albumentations/__init__.py
+@@ -22,7 +22,3 @@ from .core.transforms_interface import *
+ 
+ with suppress(ImportError):
+     from .pytorch import *
+-
+-# Perform the version check after all other initializations
+-if os.getenv("NO_ALBUMENTATIONS_UPDATE", "").lower() not in {"true", "1"}:
+-    check_for_updates()

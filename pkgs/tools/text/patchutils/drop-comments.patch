@@ -1,0 +1,84 @@
+From 58987954647f51dc42fb13b7759923c6170dd905 Mon Sep 17 00:00:00 2001
+From: Tim Waugh <twaugh@redhat.com>
+Date: Fri, 9 May 2014 16:23:27 +0100
+Subject: Make --clean drop comments after '@@' lines as well (trac #29).
+
+
+diff --git a/Makefile.am b/Makefile.am
+index 99ad2a3..f3c6dbc 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -198,6 +198,7 @@ TESTS = tests/newline1/run-test \
+ 	tests/convert1/run-test \
+ 	tests/convert2/run-test \
+ 	tests/clean1/run-test \
++	tests/clean2/run-test \
+ 	tests/stdin/run-test
+ 
+ # These ones don't work yet.
+diff --git a/src/filterdiff.c b/src/filterdiff.c
+index 383e72b..6ca2316 100644
+--- a/src/filterdiff.c
++++ b/src/filterdiff.c
+@@ -2,7 +2,7 @@
+  * filterdiff - extract (or exclude) a diff from a diff file
+  * lsdiff - show which files are modified by a patch
+  * grepdiff - show files modified by a patch containing a regexp
+- * Copyright (C) 2001, 2002, 2003, 2004, 2008, 2009, 2011 Tim Waugh <twaugh@redhat.com>
++ * Copyright (C) 2001, 2002, 2003, 2004, 2008, 2009, 2011, 2013, 2014 Tim Waugh <twaugh@redhat.com>
+  *
+  * This program is free software; you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+@@ -408,7 +408,8 @@ do_unified (FILE *f, char *header[2], int match, char **line,
+ 							 " Hunk #%lu, %s",
+ 							 hunknum, bestname);
+ 
+-					fputs (trailing, output_to);
++					fputs (clean_comments ? "\n" : trailing,
++					       output_to);
+ 					break;
+ 				case Before:
+ 					// Note the initial line number
+diff --git a/tests/clean2/run-test b/tests/clean2/run-test
+new file mode 100755
+index 0000000..42320df
+--- /dev/null
++++ b/tests/clean2/run-test
+@@ -0,0 +1,34 @@
++#!/bin/sh
++
++# This is a filterdiff(1) testcase.
++# Test: Make sure --clean removes hunk-level comments.
++
++
++. ${top_srcdir-.}/tests/common.sh
++
++cat << EOF > diff
++non-diff line
++--- a/file1
+++++ b/file1
++@@ -0,0 +1 @@ this is a hunk-level comment
+++a
++EOF
++
++${FILTERDIFF} --clean diff 2>errors >filtered || exit 1
++[ -s errors ] && exit 1
++
++cat << EOF | cmp - filtered || exit 1
++--- a/file1
+++++ b/file1
++@@ -0,0 +1 @@
+++a
++EOF
++
++${FILTERDIFF} --clean -x file1 diff 2>errors >filtered || exit 1
++[ -s errors ] && exit 1
++cat << EOF | cmp - filtered || exit 1
++--- a/file1
+++++ b/file1
++@@ -0,0 +1 @@
+++a
++EOF
+-- 
+cgit v0.10.1
+

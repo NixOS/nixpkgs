@@ -1,0 +1,14 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 86905287dc..19214e8f2d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -623,5 +623,9 @@ if (USE_VTK)
+   add_definitions (-DHAVE_VTK)
+   set (OCCT_VTK_USED_TARGETS "" CACHE INTERNAL "" FORCE)
+   OCCT_INCLUDE_CMAKE_FILE ("adm/cmake/vtk")
++  if (DEFINED VTK_USE_X AND NOT VTK_USE_X)
++      message (STATUS "Info: TKIVtkDraw toolkits excluded due to VTK has no glx support")
++      list (REMOVE_ITEM BUILD_TOOLKITS TKIVtkDraw)
++  endif()
+ else()
+   OCCT_CHECK_AND_UNSET_GROUP ("3RDPARTY_VTK")

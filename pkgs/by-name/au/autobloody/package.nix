@@ -1,0 +1,47 @@
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+}:
+
+python3.pkgs.buildPythonApplication rec {
+  pname = "autobloody";
+  version = "1.1.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "CravateRouge";
+    repo = "autobloody";
+    tag = "v${version}";
+    hash = "sha256-iv2Al5FQMZNVrAxvrwYjglPBxEUUZ9Jn1wFd5B4b9WY=";
+  };
+
+  nativeBuildInputs = with python3.pkgs; [
+    hatchling
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+    bloodyad
+    neo4j
+  ];
+
+  # Tests require a test file which is not available in the current release
+  doCheck = false;
+
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "autobloody"
+  ];
+
+  meta = {
+    description = "Tool to automatically exploit Active Directory privilege escalation paths";
+    homepage = "https://github.com/CravateRouge/autobloody";
+    changelog = "https://github.com/CravateRouge/autobloody/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "autobloody";
+  };
+}
