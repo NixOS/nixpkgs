@@ -22,13 +22,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoPatchelfHook ];
 
 
-  meta = with lib; {
+  meta = with lib; rec {
     homepage = "https://software.intel.com/content/www/us/en/develop/articles/intelr-memory-latency-checker.html";
     description = "Intel Memory Latency Checker";
+    changelog = "${homepage}#ChangeLog";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ basvandijk ];
-    platforms = with platforms; linux;
+    maintainers = with lib.maintainers; [ basvandijk ];
+    platforms = with lib.platforms; linux;
     mainProgram = "mlc";
   };
 }
