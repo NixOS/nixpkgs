@@ -7,12 +7,12 @@
   lua,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ansifilter";
   version = "2.22";
 
   src = fetchurl {
-    url = "http://www.andre-simon.de/zip/ansifilter-${version}.tar.bz2";
+    url = "http://www.andre-simon.de/zip/ansifilter-${finalAttrs.version}.tar.bz2";
     hash = "sha256-zP9BynQLgTv5EDhotQAPQkPTKnUwTqkpohTEm5Q+zJM=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = platforms.linux ++ platforms.darwin;
   };
-}
+})
