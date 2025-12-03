@@ -32,7 +32,7 @@ fi
 
 for EXT_NAME in "${EXT_NAMES[@]}"; do
   echo "Updating extension $EXT_NAME..."
-  URL="mirror://sourceforge/geoserver/GeoServer/${UPDATE_NIX_NEW_VERSION}/extensions/geoserver-${UPDATE_NIX_NEW_VERSION}-${EXT_NAME}-plugin.zip"
+  URL="https://sourceforge.net/projects/geoserver/files/GeoServer/${UPDATE_NIX_NEW_VERSION}/extensions/geoserver-${UPDATE_NIX_NEW_VERSION}-${EXT_NAME}-plugin.zip"
   HASH=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url --unpack "$URL")")
   sed -i "s@version = \".*\"; # $EXT_NAME@version = \"$UPDATE_NIX_NEW_VERSION\"; # $EXT_NAME@" ./extensions.nix
   sed -i "s@hash = \".*\"; # $EXT_NAME@hash = \"$HASH\"; # $EXT_NAME@" ./extensions.nix

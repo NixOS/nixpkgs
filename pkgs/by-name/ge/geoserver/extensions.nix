@@ -21,7 +21,7 @@ let
       inherit buildInputs version;
 
       src = fetchzip {
-        url = "mirror://sourceforge/geoserver/GeoServer/${version}/extensions/geoserver-${version}-${name}-plugin.zip";
+        url = "https://sourceforge.net/projects/geoserver/files/GeoServer/${version}/extensions/geoserver-${version}-${name}-plugin.zip";
         inherit hash;
         # We expect several files.
         stripRoot = false;
