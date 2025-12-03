@@ -18,7 +18,6 @@
   speexdsp,
   hamlib_4,
   wxGTK32,
-  sioclient,
   dbus,
   apple-sdk_15,
   nix-update-script,
@@ -115,7 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     speexdsp
     hamlib_4
     wxGTK32
-    sioclient
     python3.pkgs.numpy
   ]
   ++ (
