@@ -46,6 +46,16 @@ rustPlatform.buildRustPackage rec {
     description = "Break timer that forces you to take a break";
     mainProgram = "break-time";
     homepage = "https://github.com/cdepillabout/break-time";
+    knownVulnerabilities = [
+      "Unmaintained upstream, and has the following issues in dependencies:"
+      "GHSA-8qv2-5vq6-g2g7"
+      "GHSA-2xpg-3hx4-fm9r"
+      "GHSA-3288-cwgw-ch86"
+      "GHSA-3cj3-jrrp-9rxf"
+      "GHSA-mp6r-fgw2-rxfx"
+      "GHSA-5h46-h7hh-c6x9"
+      "and others"
+    ];
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ cdepillabout ];
     platforms = platforms.linux;
