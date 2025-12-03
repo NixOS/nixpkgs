@@ -11,6 +11,7 @@
   pkg-config,
   pnpm,
 
+  alsa-lib,
   glib-networking,
   libappindicator-gtk3,
   openssl,
@@ -18,27 +19,28 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin-desktop";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jBCf6Wq7xTgI2VjhQ+RZ3uN7LVh+ZlQ3TDJ0epsGj0M=";
+    hash = "sha256-XuPbfD6yEt82kHOIiKyxXyKcOkXEF/AsuE7Cde6QNNA=";
   };
 
   cargoRoot = "./.";
-  cargoHash = "sha256-329uNcc8LSNreD8CgPCpEhGCR2PebpmFoaRwZn+oscE=";
+  cargoHash = "sha256-nmxF7IKmdLr2l6y///7pqcEBe7ijTYWSmB3cy6tTf9E=";
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
-    hash = "sha256-2i1mL4HwwiXrmM1qaWvHhm27U2/oElbOpnXh09ziamo=";
+    hash = "sha256-Tdcdghhc4cH+cYIeUy3inChgPfb1i9E7F1mpxxWoW4Q=";
   };
 
   nativeBuildInputs = [
     cargo-tauri.hook
     pnpm.configHook
+    rustPlatform.bindgenHook
 
     nodejs
     pkg-config
@@ -46,6 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook4 ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
     glib-networking
     libappindicator-gtk3
     openssl
