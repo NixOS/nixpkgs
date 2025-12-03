@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  asio,
+  asio_1_32_0,
   boost,
   check,
   openssl,
@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    asio
+    # depends on io_service
+    asio_1_32_0
     boost.dev
     check
     openssl
