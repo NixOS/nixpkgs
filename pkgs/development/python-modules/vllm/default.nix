@@ -175,8 +175,8 @@ let
       name = "flash-attention-source";
       owner = "vllm-project";
       repo = "flash-attention";
-      rev = "58e0626a692f09241182582659e3bf8f16472659";
-      hash = "sha256-ewdZd7LuBKBV0y3AaGRWISJzjg6cu59D2OtgqoDjrbM=";
+      rev = "86f8f157cf82aa2342743752b97788922dd7de43";
+      hash = "sha256-+h43jMte/29kraNtPiloSQFfCay4W3NNIlzvs47ygyM=";
     };
 
     patches = [
@@ -304,7 +304,7 @@ in
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.11.2";
+  version = "0.12.0";
   pyproject = true;
 
   stdenv = torch.stdenv;
@@ -313,7 +313,7 @@ buildPythonPackage rec {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${version}";
-    hash = "sha256-DoSlkFmR3KKEtfSfdRB++0CZeeXgxmM3zZjONlxbe8U=";
+    hash = "sha256-ioAgZZbMv99UudaHtb3KQFAdjJv9GqeNDXDAqQOIMN8=";
   };
 
   patches = [
