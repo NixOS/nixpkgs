@@ -13,43 +13,45 @@
   pkg-config,
   cairo,
   pango,
-  bash,
   openssl,
-  jq,
+  turbo,
+  cacert,
   callPackage,
+  makeWrapper,
 }:
 let
-  pname = "documenso";
-  version = "2.1.0";
   skia-canvas = callPackage ./skia-canvas.nix { };
 in
-buildNpmPackage {
-
-  inherit version pname;
+buildNpmPackage (finalAttrs: {
+  pname = "documenso";
+  version = "2.2.6";
 
   src = fetchFromGitHub {
     owner = "documenso";
     repo = "documenso";
-    rev = "v${version}";
-    hash = "sha256-UNuRjm6fr1fW37SvLahkVC3hKEzarta6nMPZBF5lUiY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-dqsxqdhbh6OZ/rWdXMSZ/XQiZvyM4ugJslMoBE4HY7M=";
   };
 
-  npmDepsHash = "sha256-wUKb2jCy9ooOcKvz4Owk744oVwcXLbQltBj3nobgq5w=";
+  npmDepsHash = "sha256-aV8MnJDr70lKumKteOgqGepcchPoFjw+r0s245LbV3M=";
 
-  env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
+  env = {
+    PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
 
-  env.PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines}/lib/libquery_engine.node";
-  env.PRISMA_QUERY_ENGINE_BINARY = "${prisma-engines}/bin/query-engine";
-  env.PRISMA_SCHEMA_ENGINE_BINARY = "${prisma-engines}/bin/schema-engine";
-  env.TURBO_NO_UPDATE_NOTIFIER = "true";
-  env.TURBO_FORCE = "true";
-  env.TURBO_REMOTE_CACHE_ENABLED = "false";
+    PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines}/lib/libquery_engine.node";
+    PRISMA_QUERY_ENGINE_BINARY = "${prisma-engines}/bin/query-engine";
+    PRISMA_SCHEMA_ENGINE_BINARY = "${prisma-engines}/bin/schema-engine";
+    TURBO_FORCE = "true";
+    TURBO_REMOTE_CACHE_ENABLED = "false";
+  };
 
   nativeBuildInputs = [
+    cacert # required by turbo
+    turbo
     pkg-config
     vips
     node-gyp
-    jq
+    makeWrapper
   ];
 
   buildInputs = [
@@ -69,67 +71,46 @@ buildNpmPackage {
 
   npmFlags = [ "--ignore-scripts" ];
 
-  postPatch = ''
-    jq '. | .envMode="loose" | .["tasks"] = .pipeline | del(.pipeline)' turbo.json > turbo-patched.json
-    mv turbo-patched.json turbo.json
-  '';
-
   buildPhase = ''
     runHook preBuild
 
     cp ${skia-canvas}/lib/libskia_canvas.* node_modules/skia-canvas/lib/skia.node
 
+    # rebuild and run install scripts after skia binary is inplace,
+    # otherwise package will try to fetch it
     npm rebuild
     patchShebangs node_modules
 
     patchShebangs apps/remix/.bin/build.sh
-    npm exec turbo -- telemetry disable
-    npm exec turbo -- build --filter=@documenso/remix
+    turbo build --filter=@documenso/remix
 
     runHook postBuild
   '';
 
   installPhase = ''
-          runHook preInstall
+    runHook preInstall
 
-          mkdir -p $out/bin
-          cp -r . $out/
+    mkdir -p $out/bin
+    cp -r . $out/
 
-          cat > $out/bin/${pname} <<EOF
-    #!${bash}/bin/bash
-    export PKG_CONFIG_PATH=${openssl.dev}/lib/pkgconfig;
-    export PRISMA_QUERY_ENGINE_LIBRARY=${prisma-engines}/lib/libquery_engine.node
-    export PRISMA_QUERY_ENGINE_BINARY=${prisma-engines}/bin/query-engine
-    export PRISMA_SCHEMA_ENGINE_BINARY=${prisma-engines}
-    cd $out/apps/remix
-    ${prisma}/bin/prisma migrate deploy --schema ../../packages/prisma/schema.prisma
-    ${nodejs}/bin/node build/server/main.js
-    EOF
-          chmod +x $out/bin/${pname}
+    makeWrapper ${prisma}/bin/prisma $out/bin/${finalAttrs.pname}-prima-migrate \
+      --chdir $out/apps/remix \
+      --set PKG_CONFIG_PATH ${openssl.dev}/lib/pkgconfig \
+      --set PRISMA_QUERY_ENGINE_LIBRARY ${finalAttrs.env.PRISMA_QUERY_ENGINE_LIBRARY} \
+      --set PRISMA_QUERY_ENGINE_BINARY ${finalAttrs.env.PRISMA_QUERY_ENGINE_BINARY} \
+      --set PRISMA_SCHEMA_ENGINE_BINARY ${finalAttrs.env.PRISMA_SCHEMA_ENGINE_BINARY} \
+      --add-flags "migrate deploy --schema ../../packages/prisma/schema.prisma"
 
-          runHook postInstall
-  '';
+    makeWrapper ${nodejs}/bin/node $out/bin/${finalAttrs.pname} \
+      --run $out/bin/${finalAttrs.pname}-prima-migrate \
+      --chdir $out/apps/remix \
+      --set PKG_CONFIG_PATH ${openssl.dev}/lib/pkgconfig \
+      --set PRISMA_QUERY_ENGINE_LIBRARY ${finalAttrs.env.PRISMA_QUERY_ENGINE_LIBRARY} \
+      --set PRISMA_QUERY_ENGINE_BINARY ${finalAttrs.env.PRISMA_QUERY_ENGINE_BINARY} \
+      --set PRISMA_SCHEMA_ENGINE_BINARY ${finalAttrs.env.PRISMA_SCHEMA_ENGINE_BINARY} \
+      --add-flag build/server/main.js
 
-  # cleanup dangling symlinks for workspaces
-  preFixup = ''
-    rm -Rf $out/lib/node_modules/@documenso/root/node_modules/@documenso/assets
-    rm -Rf $out/lib/node_modules/@documenso/root/node_modules/@documenso/lib
-    rm -Rf $out/lib/node_modules/@documenso/root/node_modules/@documenso/documentation
-    rm -Rf $out/lib/node_modules/@documenso/root/node_modules/@documenso/prettier-config
-    rm -Rf $out/lib/node_modules/@documenso/root/node_modules/@documenso/signing
-    rm -Rf $out/lib/node_modules/@documenso/root/node_modules/@documenso/ui
-    rm -Rf $out/lib/node_modules/@documenso/root/node_modules/@documenso/eslint-config
-    rm -Rf $out/lib/node_modules/@documenso/root/node_modules/@documenso/tailwind-config
-    rm -Rf $out/lib/node_modules/@documenso/root/node_modules/@documenso/email
-    rm -Rf $out/lib/node_modules/@documenso/root/node_modules/@documenso/prisma
-    rm -Rf $out/lib/node_modules/@documenso/root/node_modules/@documenso/remix
-    rm -Rf $out/lib/node_modules/@documenso/root/node_modules/@documenso/openpage-api
-    rm -Rf $out/lib/node_modules/@documenso/root/node_modules/@documenso/api
-    rm -Rf $out/lib/node_modules/@documenso/root/node_modules/@documenso/tsconfig
-    rm -Rf $out/lib/node_modules/@documenso/root/node_modules/@documenso/app-tests
-    rm -Rf $out/lib/node_modules/@documenso/root/node_modules/@documenso/trpc
-    rm -Rf $out/lib/node_modules/@documenso/root/node_modules/@documenso/ee
-    rm -Rf $out/lib/node_modules/@documenso/root/node_modules/@documenso/auth
+    runHook postInstall
   '';
 
   passthru = {
@@ -143,6 +124,6 @@ buildNpmPackage {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ happysalada ];
     platforms = lib.platforms.unix;
-    mainProgram = pname;
+    mainProgram = finalAttrs.pname;
   };
-}
+})
