@@ -10,18 +10,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zerofs";
-  version = "0.18.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "Barre";
     repo = "ZeroFS";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G+kXAlPfo3YhAGy9nkKCL7384dWUvPr4cZ+WIX99OSc=";
+    hash = "sha256-FUy6S9IM+ge+7+MRdS/6hgiuQnHk9A4e/P06FXFXQ5k=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/zerofs";
 
-  cargoHash = "sha256-XbjtlWQkXanOo7SbbgsZNXj5SKy0PQAd2eRM/9f9gLs=";
+  cargoHash = "sha256-OlcXUf0r79TBwkIwMiYt/uDlO1mjBHWipgQeMt+jhwM=";
 
   buildInputs = [ rust-jemalloc-sys ];
 
