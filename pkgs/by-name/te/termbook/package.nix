@@ -50,6 +50,14 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Runner for `mdbooks` to keep your documentation tested";
     mainProgram = "termbook";
+    knownVulnerabilities = [
+      "Unmaintained upstream; dependencies have security issues like:"
+      "CVE-2020-26297"
+      "CVE-2022-24713"
+      "CVE-2024-58266"
+      "CVE-2020-26235"
+      "and 6 others"
+    ];
     homepage = "https://github.com/Byron/termbook/";
     changelog = "https://github.com/Byron/termbook/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
