@@ -34,6 +34,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # https://github.com/sphinx-extensions2/sphinx-pytest/issues/28
+    "test_no_transforms"
+  ];
+
   meta = {
     changelog = "https://github.com/sphinx-extensions2/sphinx-pytest/releases/tag/v${version}";
     description = "Helpful pytest fixtures for Sphinx extensions";
