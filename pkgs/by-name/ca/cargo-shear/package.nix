@@ -8,15 +8,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-shear";
-  version = "1.6.6";
+  version = "1.7.1";
 
   src = fetchCrate {
     pname = "cargo-shear";
     version = finalAttrs.version;
-    hash = "sha256-cLUR3q5/wBWI9eeDjpKtO1/mJZwgRA79iQ0tyRICX7A=";
+    hash = "sha256-GvkIXk0Ry3bm5A+PwdH4zrDtxzfJt4pd8gF/PPGsyDs=";
   };
 
-  cargoHash = "sha256-BiGNZJw0H2I4j8wtoI67iR7n/vns1gwBxeE1eXeESn0=";
+  cargoHash = "sha256-3PIdxoLoe9cgjr53lu7X1cGNT9wHgIG0E4jld7TK3b4=";
 
   env = {
     # https://github.com/Boshen/cargo-shear/blob/v1.6.2/src/lib.rs#L51-L54
