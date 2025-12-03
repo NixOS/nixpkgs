@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  config,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -30,14 +31,14 @@
   xorg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ueberzugpp";
   version = "2.9.8";
 
   src = fetchFromGitHub {
     owner = "jstkdng";
     repo = "ueberzugpp";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BTOuOS0zCdYTTc47UHaGI6wqFEv6e71cD2XBZtnKGLU=";
   };
 
@@ -81,25 +82,21 @@ stdenv.mkDerivation rec {
     xorg.xcbutilimage
   ];
 
-  cmakeFlags =
-    lib.optionals (!enableOpencv) [
-      "-DENABLE_OPENCV=OFF"
-    ]
-    ++ lib.optionals enableWayland [
-      "-DENABLE_WAYLAND=ON"
-    ]
-    ++ lib.optionals (!enableX11) [
-      "-DENABLE_X11=OFF"
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_OPENCV" enableOpencv)
+    (lib.cmakeBool "ENABLE_WAYLAND" enableWayland)
+    (lib.cmakeBool "ENABLE_X11" enableX11)
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Drop in replacement for ueberzug written in C++";
     homepage = "https://github.com/jstkdng/ueberzugpp";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/jstkdng/ueberzugpp/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       aleksana
       wegank
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})
