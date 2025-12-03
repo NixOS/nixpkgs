@@ -38,7 +38,7 @@ let
       )
     else
       # it's a file, so the result is the contents of the file itself
-      import path;
+      [ (import path) ];
 in
 if pathOverlays != "" && builtins.pathExists pathOverlays then
   overlays pathOverlays
