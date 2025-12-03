@@ -62,11 +62,8 @@ buildPythonPackage rec {
       );
     })
 
-    # Can be removed with the next SDL3 bump.
+    # Can be removed after the SDL 3.4.0 bump.
     ./skip-rle-tests.patch
-
-    # https://github.com/pygame-community/pygame-ce/pull/3639
-    ./0001-Use-SDL_AllocFormat-instead-of-creating-it-manually.patch
   ];
 
   postPatch = ''
