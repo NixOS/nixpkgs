@@ -1376,6 +1376,7 @@
   ./services/networking/supybot.nix
   ./services/networking/suricata/default.nix
   ./services/networking/syncplay.nix
+  ./services/networking/syncthing-multi.nix
   ./services/networking/syncthing-relay.nix
   ./services/networking/syncthing.nix
   ./services/networking/tailscale-auth.nix

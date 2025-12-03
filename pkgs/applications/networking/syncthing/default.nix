@@ -73,6 +73,7 @@ let
             syncthing-init
             syncthing-no-settings
             syncthing-relay
+            syncthing-multi
             ;
         };
         updateScript = nix-update-script { };
