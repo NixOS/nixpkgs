@@ -394,7 +394,7 @@ in
             # TLS identity property
             || (
               builtins.hasAttr "identity" host
-              && builtins.length host.identity > 0
+              && host.identity != [ ]
               && builtins.all hasKeyPlusCert host.listen.ssl.identity
             )
             # TLS short-hand (was manually specified)

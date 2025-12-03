@@ -481,7 +481,7 @@ let
     assertKeysValid "${prefix}.settings" freeformBridgeKeys bridge.settings
     ++ [
       {
-        assertion = lib.length bridge.addresses > 0;
+        assertion = bridge.addresses != [ ];
         message = "Bridge ${prefix} needs remote broker addresses";
       }
     ];

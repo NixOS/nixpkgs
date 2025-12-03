@@ -26,7 +26,7 @@ let
     # regenerated.
     libc_restart='/run/current-system/systemd/bin/systemctl try-restart --no-block nscd.service 2> /dev/null'
   ''
-  + lib.optionalString (lib.length resolvconfOptions > 0) ''
+  + lib.optionalString (resolvconfOptions != [ ]) ''
     # Options as described in resolv.conf(5)
     resolv_conf_options='${lib.concatStringsSep " " resolvconfOptions}'
   ''

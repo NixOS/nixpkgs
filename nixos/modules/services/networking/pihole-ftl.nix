@@ -229,7 +229,7 @@ in
       }
 
       {
-        assertion = builtins.length cfg.lists == 0 || cfg.webserverEnabled;
+        assertion = cfg.lists == [ ] || cfg.webserverEnabled;
         message = ''
           The Pi-hole webserver must be enabled for lists set in services.pihole-ftl.lists to be automatically loaded on startup via the web API.
           services.pihole-ftl.settings.port must be defined, e.g. by enabling services.pihole-web.enable and defining services.pihole-web.port.
@@ -238,7 +238,7 @@ in
 
       {
         assertion =
-          builtins.length cfg.lists == 0
+          cfg.lists == [ ]
           || !(hasAttrByPath [ "webserver" "api" "cli_pw" ] cfg.settings)
           || cfg.settings.webserver.api.cli_pw == true;
         message = ''
@@ -361,7 +361,7 @@ in
 
       pihole-ftl-setup = {
         description = "Pi-hole FTL setup";
-        enable = builtins.length cfg.lists > 0;
+        enable = cfg.lists != [ ];
 
         # Wait for network so lists can be downloaded
         after = [ "network-online.target" ];

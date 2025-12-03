@@ -55,7 +55,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     wrapProgram $out/bin/ani-cli \
       --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeInputs} \
-      ${lib.optionalString (builtins.length players > 0) "--suffix PATH : ${lib.makeBinPath players}"}
+      ${lib.optionalString (players != [ ]) "--suffix PATH : ${lib.makeBinPath players}"}
 
     runHook postInstall
   '';

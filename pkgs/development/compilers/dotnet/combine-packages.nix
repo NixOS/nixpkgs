@@ -15,7 +15,7 @@ let
   cli = builtins.head dotnetPackages;
   mkWrapper = callPackage ./wrapper.nix { };
 in
-assert lib.assertMsg ((builtins.length dotnetPackages) > 0) ''
+assert lib.assertMsg (dotnetPackages != [ ]) ''
   You must include at least one package, e.g
         `with dotnetCorePackages; combinePackages [
             sdk_9_0 aspnetcore_8_0

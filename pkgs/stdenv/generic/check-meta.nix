@@ -79,7 +79,7 @@ let
   hasListedLicense =
     assert areLicenseListsValid;
     list: attrs:
-    length list > 0
+    list != [ ]
     && hasLicense attrs
     && (
       if isList attrs.meta.license then
@@ -478,7 +478,7 @@ let
       actualOutputs = attrs.outputs or [ "out" ];
       missingOutputs = builtins.filter (output: !builtins.elem output actualOutputs) expectedOutputs;
     in
-    if config.checkMeta then builtins.length missingOutputs > 0 else false;
+    if config.checkMeta then missingOutputs != [ ] else false;
 
   # Check if a derivation is valid, that is whether it passes checks for
   # e.g brokenness or license.

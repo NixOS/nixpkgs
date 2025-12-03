@@ -25,7 +25,7 @@ let
     rule:
     if (rule.args == null) then
       ""
-    else if (lib.length rule.args == 0) then
+    else if (rule.args == [ ]) then
       "args"
     else
       "args ${lib.concatStringsSep " " rule.args}";
@@ -41,11 +41,11 @@ let
 
       args = mkArgs rule;
     in
-    lib.optionals (lib.length cfg.extraRules > 0) [
-      (lib.optionalString (lib.length rule.users > 0) (
+    lib.optionals (cfg.extraRules != [ ]) [
+      (lib.optionalString (rule.users != [ ]) (
         map (usr: "permit ${opts} ${mkUsrString usr} ${as} ${cmd} ${args}") rule.users
       ))
-      (lib.optionalString (lib.length rule.groups > 0) (
+      (lib.optionalString (rule.groups != [ ]) (
         map (grp: "permit ${opts} ${mkGrpString grp} ${as} ${cmd} ${args}") rule.groups
       ))
     ];

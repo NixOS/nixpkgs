@@ -84,7 +84,7 @@ buildPythonPackage rec {
     ${python.interpreter} runtests.py -j$NIX_BUILD_CORES \
       --no-code-style \
       ${lib.optionalString (
-        builtins.length excludedTests != 0
+        excludedTests != [ ]
       ) ''--exclude="(${builtins.concatStringsSep "|" excludedTests})"''}
   '';
 

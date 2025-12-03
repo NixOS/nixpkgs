@@ -12,7 +12,7 @@ let
   toGroupString = group: if (lib.isInt group) then "%#${toString group}" else "%${group}";
 
   toCommandOptionsString =
-    options: "${lib.concatStringsSep ":" options}${lib.optionalString (lib.length options != 0) ":"} ";
+    options: "${lib.concatStringsSep ":" options}${lib.optionalString (options != [ ]) ":"} ";
 
   toCommandsString =
     commands:
@@ -257,7 +257,7 @@ in
           # or ‘security.sudo-rs.extraRules’ instead.
         ''
         (lib.pipe cfg.extraRules [
-          (lib.filter (rule: lib.length rule.commands != 0))
+          (lib.filter (rule: rule.commands != [ ]))
           (map (rule: [
             (map (
               user: "${toUserString user}     ${rule.host}=(${rule.runAs})    ${toCommandsString rule.commands}"

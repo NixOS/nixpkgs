@@ -8,11 +8,11 @@ let
   cfg = config.services.zapret;
 
   whitelist = lib.optionalString (
-    (builtins.length cfg.whitelist) != 0
+    cfg.whitelist != [ ]
   ) "--hostlist ${pkgs.writeText "zapret-whitelist" (lib.concatStringsSep "\n" cfg.whitelist)}";
 
   blacklist =
-    lib.optionalString ((builtins.length cfg.blacklist) != 0)
+    lib.optionalString (cfg.blacklist != [ ])
       "--hostlist-exclude ${pkgs.writeText "zapret-blacklist" (lib.concatStringsSep "\n" cfg.blacklist)}";
 
   params = lib.concatStringsSep " " cfg.params;
@@ -134,15 +134,15 @@ in
       {
         assertions = [
           {
-            assertion = (builtins.length cfg.whitelist) == 0 || (builtins.length cfg.blacklist) == 0;
+            assertion = cfg.whitelist == [ ] || cfg.blacklist == [ ];
             message = "Can't specify both whitelist and blacklist.";
           }
           {
-            assertion = (builtins.length cfg.params) != 0;
+            assertion = cfg.params != [ ];
             message = "You have to specify zapret parameters. See the params option's description.";
           }
           {
-            assertion = cfg.udpSupport -> (builtins.length cfg.udpPorts) != 0;
+            assertion = cfg.udpSupport -> cfg.udpPorts != [ ];
             message = "You have to specify UDP ports or disable UDP support.";
           }
           {

@@ -190,7 +190,7 @@ in
           files = builtins.attrNames (builtins.readDir path);
           matches = builtins.filter (match: match != null) (map (builtins.match pattern) files);
         in
-        if builtins.length matches != 0 then
+        if matches != [ ] then
           { inherit path matches; }
         else if path == /. then
           null

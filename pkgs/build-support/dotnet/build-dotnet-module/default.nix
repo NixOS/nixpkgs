@@ -157,7 +157,7 @@ let
               (lib.filter (x: (lib.toIntBase10 x) < 65535)) # one version component in dotnet has to fit in 16 bits
             ];
           in
-          if (lib.length components) == 0 then
+          if components == [ ] then
             null
           else
             lib.concatStringsSep "." (

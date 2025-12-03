@@ -27,7 +27,7 @@ lib.extendMkDerivation {
     in
     # You have to have at least `meson.build.in` when using xcodeHash to trigger the Meson
     # build support in `mkAppleDerivation`.
-    assert args ? xcodeHash -> lib.length mesonFiles > 0;
+    assert args ? xcodeHash -> mesonFiles != [ ];
     {
       pname = args.pname or releaseName;
       inherit (info) version;

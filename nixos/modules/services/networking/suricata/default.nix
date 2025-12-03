@@ -170,7 +170,7 @@ in
     mkIf cfg.enable {
       assertions = [
         {
-          assertion = (builtins.length captureInterfaces) > 0;
+          assertion = captureInterfaces != [ ];
           message = ''
             At least one capture interface must be configured:
             - `services.suricata.settings.af-packet`

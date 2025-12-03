@@ -152,8 +152,7 @@ let
         };
       usersWithKeys = lib.attrValues (
         lib.flip lib.filterAttrs config.users.users (
-          n: u:
-          lib.length u.openssh.authorizedKeys.keys != 0 || lib.length u.openssh.authorizedKeys.keyFiles != 0
+          n: u: u.openssh.authorizedKeys.keys != [ ] || u.openssh.authorizedKeys.keyFiles != [ ]
         )
       );
     in
@@ -168,7 +167,7 @@ let
           text = lib.concatStringsSep "\n" u.openssh.authorizedPrincipals;
         };
       usersWithPrincipals = lib.attrValues (
-        lib.flip lib.filterAttrs config.users.users (n: u: lib.length u.openssh.authorizedPrincipals != 0)
+        lib.flip lib.filterAttrs config.users.users (n: u: u.openssh.authorizedPrincipals != [ ])
       );
     in
     lib.listToAttrs (map mkAuthPrincipalsFile usersWithPrincipals);
@@ -903,7 +902,7 @@ in
           ) duplicates;
         in
         {
-          assertion = lib.length duplicates == 0;
+          assertion = duplicates == [ ];
           message = ''Duplicate sshd config key; does your capitalization match the option's? Duplicate keys: ${formattedDuplicates}'';
         }
       )

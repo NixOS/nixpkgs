@@ -14,7 +14,7 @@ let
   children = lib.mapAttrs (
     childName: childConfig: childConfig.configuration.system.build.toplevel
   ) config.specialisation;
-  hasAtLeastOneInitrdSecret = lib.length (lib.attrNames config.boot.initrd.secrets) > 0;
+  hasAtLeastOneInitrdSecret = config.boot.initrd.secrets != { };
   schemas = {
     v1 = rec {
       filename = "boot.json";

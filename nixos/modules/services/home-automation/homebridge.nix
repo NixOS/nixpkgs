@@ -74,7 +74,7 @@ let
     let
       conflictingPlatforms = builtins.filter (p: p.platform == "config") platforms;
     in
-    if builtins.length conflictingPlatforms > 0 then
+    if conflictingPlatforms != [ ] then
       throw "The platforms list must not contain any platform with platform type 'config'.  Use the uiSettings attribute instead."
     else
       platforms;

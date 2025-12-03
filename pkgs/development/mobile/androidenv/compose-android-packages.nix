@@ -185,7 +185,7 @@ let
           ) value;
           packageInfo = lib.attrByPath (lib.sublist 0 (builtins.length path - 1) path) null attrSet;
         in
-        lib.optionals (builtins.length validArchives > 0) (
+        lib.optionals (validArchives != [ ]) (
           lib.last (
             map (
               archive:
@@ -306,8 +306,7 @@ let
       false
     else if check == "if-supported" then
       let
-        hasSrc =
-          package: package.src != null && (builtins.isList package.src -> builtins.length package.src > 0);
+        hasSrc = package: package.src != null && (builtins.isList package.src -> package.src != [ ]);
       in
       packages != [ ] && lib.all hasSrc packages
     else

@@ -22,10 +22,10 @@ in
         "bpf"
       ];
     }
-    (lib.mkIf (lib.lists.length cfg.lsm > 0) {
+    (lib.mkIf (cfg.lsm != [ ]) {
       assertions = [
         {
-          assertion = builtins.length (lib.filter (lib.hasPrefix "security=") config.boot.kernelParams) == 0;
+          assertion = lib.filter (lib.hasPrefix "security=") config.boot.kernelParams == [ ];
           message = "security parameter in boot.kernelParams cannot be used when security.lsm is used";
         }
       ];

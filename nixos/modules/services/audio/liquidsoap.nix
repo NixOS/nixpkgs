@@ -60,7 +60,7 @@ in
   };
   ##### implementation
 
-  config = lib.mkIf (builtins.length streams != 0) {
+  config = lib.mkIf (streams != [ ]) {
 
     users.users.liquidsoap = {
       uid = config.ids.uids.liquidsoap;

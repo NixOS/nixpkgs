@@ -18,10 +18,7 @@ let
     "additionalMount \"${mount.hostPath}\" \"${mount.containerPath}\" '${builtins.toJSON mount.mountOptions}'";
   mountsToCommands =
     mounts:
-    if (builtins.length mounts) == 0 then
-      "cat"
-    else
-      (lib.strings.concatMapStringsSep " | \\\n" mountToCommand mounts);
+    if mounts == [ ] then "cat" else (lib.strings.concatMapStringsSep " | \\\n" mountToCommand mounts);
 in
 writeScriptBin "nvidia-cdi-generator" ''
   #! ${runtimeShell}
@@ -30,7 +27,7 @@ writeScriptBin "nvidia-cdi-generator" ''
     ${lib.getExe' nvidia-container-toolkit "nvidia-ctk"} cdi generate \
       --format json \
       ${
-        if (builtins.length csv-files) > 0 then
+        if csv-files != [ ] then
           lib.concatMapStringsSep "\n" (file: "--csv.file ${file} \\") csv-files
         else
           "\\"
