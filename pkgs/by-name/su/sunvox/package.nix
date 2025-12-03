@@ -68,21 +68,58 @@ stdenv.mkDerivation (finalAttrs: {
     libjack2
   ];
 
-  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
-    (makeDesktopItem {
-      name = "sunvox";
-      exec = "sunvox";
-      desktopName = "SunVox";
-      genericName = "Modular Synthesizer";
-      comment = "Modular synthesizer with pattern-based sequencer";
-      icon = "sunvox";
-      categories = [
-        "AudioVideo"
-        "Audio"
-        "Midi"
-      ];
-    })
-  ];
+  desktopItems =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      # exec: sunvox
+      (makeDesktopItem {
+        name = "sunvox";
+        exec = "sunvox";
+        desktopName = "SunVox";
+        genericName = "Modular Synthesizer";
+        comment = "Modular synthesizer with pattern-based sequencer";
+        icon = "sunvox";
+        categories = [
+          "AudioVideo"
+          "Audio"
+          "Midi"
+        ];
+      })
+    ]
+    # exec: sunvox_opengl (x86_64-linux, aarch64-linux)
+    ++
+      lib.optionals
+        (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux")
+        [
+          (makeDesktopItem {
+            name = "sunvox-opengl";
+            exec = "sunvox_opengl";
+            desktopName = "SunVox (OpenGL)";
+            genericName = "Modular Synthesizer";
+            comment = "Modular synthesizer with pattern-based sequencer";
+            icon = "sunvox";
+            categories = [
+              "AudioVideo"
+              "Audio"
+              "Midi"
+            ];
+          })
+        ]
+    # exec: sunvox_lofi (i686-linux)
+    ++ lib.optionals (stdenv.hostPlatform.system == "i686-linux") [
+      (makeDesktopItem {
+        name = "sunvox-lofi";
+        exec = "sunvox_lofi";
+        desktopName = "SunVox (LoFi)";
+        genericName = "Modular Synthesizer";
+        comment = "Modular synthesizer with pattern-based sequencer";
+        icon = "sunvox";
+        categories = [
+          "AudioVideo"
+          "Audio"
+          "Midi"
+        ];
+      })
+    ];
 
   dontConfigure = true;
   dontBuild = true;
