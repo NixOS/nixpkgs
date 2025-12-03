@@ -7,7 +7,7 @@
   fetchFromGitHub,
   jax,
   lib,
-  llvmPackages, # TODO: use llvm 21 in 1.10, see python-packages.nix
+  llvmPackages,
   numpy,
   pkgsBuildHost,
   python,
@@ -39,7 +39,7 @@ let
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else args.stdenv;
   stdenv = throw "Use effectiveStdenv instead of stdenv directly, as it may be replaced by cudaPackages.backendStdenv";
 
-  version = "1.10.0";
+  version = "1.10.1";
 
   libmathdx = callPackage ./libmathdx.nix { };
 in
@@ -59,7 +59,7 @@ buildPythonPackage {
     owner = "NVIDIA";
     repo = "warp";
     tag = "v${version}";
-    hash = "sha256-9OEyYdVq+/SzxHfNT+sa/YeBKklaUfpKUiJZuiuzxhQ=";
+    hash = "sha256-knVkMlD3zNvayc7WBBFjbx1bwY4S+u+STiA7odm+8UQ=";
   };
 
   patches = lib.optionals standaloneSupport [
