@@ -6,19 +6,19 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  version = "0.16.6.1";
+  version = "0.16.8.2";
   format = "setuptools";
   pname = "gita";
 
   src = fetchFromGitHub {
-    sha256 = "sha256-kPyk13yd4rc63Nh73opuHsCTj4DgYAVfro8To96tteA=";
+    sha256 = "sha256-JzfGj17YCYXmpGV2jSsGLsG1oqO5ynj7r3u/mkSBRBg=";
     rev = "v${version}";
     repo = "gita";
     owner = "nosarthur";
   };
 
   dependencies = with python3Packages; [
-    pyyaml
+    argcomplete
     setuptools
   ];
 
@@ -28,8 +28,8 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   postInstall = ''
-    installShellCompletion --bash --name gita ${src}/.gita-completion.bash
-    installShellCompletion --zsh --name gita ${src}/.gita-completion.zsh
+    installShellCompletion --bash --name gita auto-completion/bash/.gita-completion.bash
+    installShellCompletion --zsh --name gita auto-completion/zsh/.gita-completion.zsh
   '';
 
   meta = {
