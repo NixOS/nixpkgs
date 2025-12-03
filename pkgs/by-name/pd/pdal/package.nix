@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdal";
-  version = "2.9.2";
+  version = "2.9.3";
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
     tag = finalAttrs.version;
-    hash = "sha256-W3HTgdLHzETfmp/DZ5s9pWXQeBaic4/O55ckGzDDtxs=";
+    hash = "sha256-htuvNheRwzpdSKc4FbwugBWWaCNC7/20TSKwRpLr+7Y=";
   };
 
   nativeBuildInputs = [
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   disabledTests = [
     # Tests failing due to TileDB library implementation, disabled also
     # by upstream CI.
-    # See: https://github.com/PDAL/PDAL/blob/2.9.2/.github/workflows/linux.yml#L81
+    # See: https://github.com/PDAL/PDAL/blob/2.9.3/.github/workflows/linux.yml#L81
     "pdal_io_tiledb_writer_test"
     "pdal_io_tiledb_reader_test"
     "pdal_io_tiledb_time_writer_test"
