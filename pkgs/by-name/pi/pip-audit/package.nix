@@ -2,18 +2,19 @@
   lib,
   fetchFromGitHub,
   python3,
+  writableTmpDirAsHomeHook,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pip-audit";
-  version = "2.9.0";
+  version = "2.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "pip-audit";
     tag = "v${version}";
-    hash = "sha256-j8ZKqE7PEwaCTUNnJunqM0A2eyuWfx8zG5i3nmZERow=";
+    hash = "sha256-fnIwtXFswKcfz/8VssL4UVukwkq6CC63NCyqqbqziO8=";
   };
 
   pythonRelaxDeps = [ "cyclonedx-python-lib" ];
@@ -31,20 +32,18 @@ python3.pkgs.buildPythonApplication rec {
       pip-requirements-parser
       platformdirs
       rich
-      toml
+      tomli
+      tomli-w
     ]
     ++ cachecontrol.optional-dependencies.filecache;
 
   nativeCheckInputs = with python3.pkgs; [
     pretend
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [ "pip_audit" ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   disabledTestPaths = [
     # Tests require network access
@@ -54,11 +53,12 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   disabledTests = [
-    # Tests requrire network access
+    # Tests require network access
+    "test_esms"
     "test_get_pip_cache"
-    "test_virtual_env"
-    "test_pyproject_source"
     "test_pyproject_source_duplicate_deps"
+    "test_pyproject_source"
+    "test_virtual_env"
   ];
 
   meta = with lib; {
