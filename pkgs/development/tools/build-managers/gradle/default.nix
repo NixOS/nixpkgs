@@ -68,8 +68,8 @@ let
               ''
                 cp -a $src/* .
                 substituteInPlace ./build.gradle --replace-fail '@JAVA_VERSION@' '${javaMajorVersion}'
-                env GRADLE_USER_HOME=$TMPDIR/gradle org.gradle.native.dir=$TMPDIR/native \
-                gradle run --no-daemon --quiet --console plain > $out
+                env GRADLE_USER_HOME=$TMPDIR/gradle GRADLE_OPTS=-Dorg.gradle.native.dir=$TMPDIR/native \
+                  gradle run --no-daemon --quiet --console plain > $out
                 actual="$(<$out)"
                 if [[ "${javaVersion}" != "$actual"* ]]; then
                   echo "Error: Expected '${javaVersion}', to start with '$actual'" >&2
@@ -275,7 +275,7 @@ let
         version = testers.testVersion {
           package = finalAttrs.finalPackage;
           command = ''
-            env GRADLE_USER_HOME=$TMPDIR/gradle org.gradle.native.dir=$TMPDIR/native \
+            env GRADLE_USER_HOME=$TMPDIR/gradle GRADLE_OPTS=-Dorg.gradle.native.dir=$TMPDIR/native \
               gradle --version
           '';
         };
@@ -291,7 +291,11 @@ let
               }
               ''
                 cp -a $src/* .
-                env GRADLE_USER_HOME=$TMPDIR/gradle org.gradle.native.dir=$TMPDIR/native \
+
+                # Make sure GRADLE_OPTS works.
+                env \
+                  GRADLE_USER_HOME=$TMPDIR/gradle \
+                  GRADLE_OPTS="-Dorg.gradle.native.dir=$TMPDIR/native -Dnix.test.mainClass=Main" \
                   gradle run --no-daemon --quiet --console plain > $out
               '';
         };
