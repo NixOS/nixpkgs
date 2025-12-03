@@ -18,7 +18,7 @@
   packaging,
   pygments,
   requests,
-  roman-numerals-py,
+  roman-numerals,
   snowballstemmer,
   sphinxcontrib-applehelp,
   sphinxcontrib-devhelp,
@@ -74,7 +74,7 @@ buildPythonPackage rec {
     packaging
     pygments
     requests
-    roman-numerals-py
+    roman-numerals
     snowballstemmer
     sphinxcontrib-applehelp
     sphinxcontrib-devhelp
