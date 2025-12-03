@@ -14997,6 +14997,8 @@ self: super: with self; {
 
   pytest_8_3 = callPackage ../development/python-modules/pytest/8_3.nix { };
 
+  pytest_9 = callPackage ../development/python-modules/pytest/9.nix { };
+
   pytestcache = callPackage ../development/python-modules/pytestcache { };
 
   pythinkingcleaner = callPackage ../development/python-modules/pythinkingcleaner { };
