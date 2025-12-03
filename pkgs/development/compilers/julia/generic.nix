@@ -165,5 +165,10 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "aarch64-linux"
     ];
+    knownVulnerabilities = lib.optionals (lib.versions.majorMinor version == "1.11") [
+      ''
+        julia 1.11 has reached its end-of-life. Please use a supported version.
+      ''
+    ];
   };
 }
