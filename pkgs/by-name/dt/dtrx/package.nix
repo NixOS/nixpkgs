@@ -23,14 +23,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "dtrx";
-  version = "8.5.3";
+  version = "8.7.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dtrx-py";
     repo = "dtrx";
     rev = version;
-    sha256 = "sha256-LB3F6jcqQPRsjFO4L2fPAPnacDAdtcaadgGbwXA9LAw=";
+    sha256 = "sha256-wk+TPUXFLKqfUbjV/ALCTLXUacpLa8WhqR7VawaPWQM=";
   };
 
   makeWrapperArgs =
