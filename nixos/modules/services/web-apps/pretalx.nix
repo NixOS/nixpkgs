@@ -299,7 +299,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # https://docs.pretalx.org/administrator/installation.html
+    # https://docs.pretalx.org/administrator/installation/
 
     environment.systemPackages = [
       (pkgs.writeScriptBin "pretalx-manage" ''
@@ -331,7 +331,7 @@ in
         recommendedTlsSettings = lib.mkDefault true;
         upstreams.pretalx.servers."unix:/run/pretalx/pretalx.sock" = { };
         virtualHosts.${cfg.nginx.domain} = {
-          # https://docs.pretalx.org/administrator/installation.html#step-7-ssl
+          # https://docs.pretalx.org/administrator/installation/#step-8-reverse-proxy
           extraConfig = ''
             more_set_headers "Referrer-Policy: same-origin";
             more_set_headers "X-Content-Type-Options: nosniff";
