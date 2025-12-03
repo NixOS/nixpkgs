@@ -29,6 +29,7 @@ let
       attr
       bash
       btrfs-progs
+      bzip2
       cdrkit
       coreutils
       criu
@@ -48,6 +49,7 @@ let
       kmod
       libxfs
       lvm2
+      lz4
       lxcfs
       minio
       minio-client
