@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "urdfdom-headers";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "ros";
     repo = "urdfdom_headers";
     tag = finalAttrs.version;
-    hash = "sha256-K05pVi+s3x7trzQRPHLuxSMK5FRnmcPArkDsZ19BwWo=";
+    hash = "sha256-tBNoG5gH3haZETUlI4Pn1mg14T/sMil9n/iSzjJC+Rg=";
   };
 
   patches = [
