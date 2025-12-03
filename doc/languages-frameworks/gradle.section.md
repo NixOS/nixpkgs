@@ -138,7 +138,7 @@ The update script does the following:
   downstream, non-nixpkgs projects)
 - `data` - path to the dependencies lockfile (can be relative to the
   package, can be absolute). In nixpkgs, it's discouraged to have the
-  lockfiles be named anything other than `deps.json`, consider creating
+  lockfiles be named anything other than `deps.json`. Consider creating
   subdirectories if your package requires multiple `deps.json` files.
 
 ## Environment {#gradle-environment}
