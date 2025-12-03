@@ -187,6 +187,12 @@ goBuild (finalAttrs: {
   postPatch = ''
     substituteInPlace version/version.go \
       --replace-fail 0.0.0 '${finalAttrs.version}'
+    rm -r app
+  ''
+  # disable tests that fail in sandbox due to Metal init failure
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    rm ml/backend/ggml/ggml_test.go
+    rm ml/nn/pooling/pooling_test.go
   '';
 
   overrideModAttrs = (
