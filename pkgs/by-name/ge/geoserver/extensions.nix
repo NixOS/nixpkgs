@@ -197,12 +197,15 @@ in
   #  hash = "sha256-sLUgsMXymnTuceCRLzqIAPmk4/Q3BO+A+7BLQoc3iP0="; # jp2k
   #};
 
-  libjpeg-turbo = mkGeoserverExtension {
-    name = "libjpeg-turbo";
-    version = "2.28.1"; # libjpeg-turbo
-    hash = "sha256-fn1ItYvLMfvRLpCE8rEpTpBmkk8zkN3QtBO/RN4RXfo="; # libjpeg-turbo
-    buildInputs = [ libjpeg.out ];
-  };
+  # Throws "java.lang.UnsatisfiedLinkError: 'void org.libjpegturbo.turbojpeg.TJDecompressor.init()'"
+  # as of 2.28.1.
+  # NOTE: When re-enabling this, RE-ENABLE THE CORRESPONDING TEST, TOO! (See tests/geoserver.nix)
+  #libjpeg-turbo = mkGeoserverExtension {
+  #  name = "libjpeg-turbo";
+  #  version = "2.28.1"; # libjpeg-turbo
+  #  hash = "sha256-fn1ItYvLMfvRLpCE8rEpTpBmkk8zkN3QtBO/RN4RXfo="; # libjpeg-turbo
+  #  buildInputs = [ libjpeg.out ];
+  #};
 
   mapml = mkGeoserverExtension {
     name = "mapml";
