@@ -41,9 +41,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    changelog = "https://github.com/facelessuser/pyspelling/blob/${version}/docs/src/markdown/about/changelog.md";
     description = "Spell checker";
     homepage = "https://pypi.org/project/pyspelling";
     license = lib.licenses.mit;
+    mainProgram = "pyspelling";
     maintainers = [ ];
   };
 }
