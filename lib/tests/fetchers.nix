@@ -89,10 +89,10 @@ let
       };
     };
 
-    "test${n}RejectsSha1ByDefault" = testingThrow (f { } { sha1 = ""; });
-    "test${n}RejectsSha512ByDefault" = testingThrow (f { } { sha512 = ""; });
+    "test${n}RejectsSha1ByDefault" = testingThrow (f { } { sha1 = ""; }).outputHash;
+    "test${n}RejectsSha512ByDefault" = testingThrow (f { } { sha512 = ""; }).outputHash;
 
-    "test${n}ThrowsOnMissing" = testingThrow (f { } { gibi = false; });
+    "test${n}ThrowsOnMissing" = testingThrow (f { } { gibi = false; }).outputHash;
   };
 in
 runTests (unionOfDisjoints [
@@ -159,7 +159,9 @@ runTests (unionOfDisjoints [
       };
     };
 
-    testRejectsMissingHashArg = testingThrow (withNormalizedHash { } ({ outputHashAlgo }: { }));
-    testRejectsMissingAlgoArg = testingThrow (withNormalizedHash { } ({ outputHash }: { }));
+    testRejectsMissingHashArg =
+      testingThrow
+        (withNormalizedHash { } ({ outputHashAlgo }: { })).outputHash;
+    testRejectsMissingAlgoArg = testingThrow (withNormalizedHash { } ({ outputHash }: { })).outputHash;
   }
 ])
