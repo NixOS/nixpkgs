@@ -29,6 +29,8 @@
   wayland-scanner,
   enableX11 ? stdenv.hostPlatform.isLinux,
   xorg,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,6 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableWayland [
     wayland-scanner
+  ]
+  # Required by opencv when cudaSupport is enabled
+  ++ lib.optionals cudaSupport [
+    (lib.getBin cudaPackages.cuda_nvcc)
   ];
 
   buildInputs = [
@@ -80,6 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableX11 [
     xorg.libX11
     xorg.xcbutilimage
+  ]
+  # Required by opencv when cudaSupport is enabled
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
   ];
 
   cmakeFlags = [
