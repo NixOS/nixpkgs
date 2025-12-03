@@ -16254,8 +16254,6 @@ self: super: with self; {
 
   readme-renderer = callPackage ../development/python-modules/readme-renderer { };
 
-  readthedocs-sphinx-ext = callPackage ../development/python-modules/readthedocs-sphinx-ext { };
-
   realtime = callPackage ../development/python-modules/realtime { };
 
   rebulk = callPackage ../development/python-modules/rebulk { };
