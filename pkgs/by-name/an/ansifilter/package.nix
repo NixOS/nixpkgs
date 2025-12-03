@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
       (HTML, TeX, LaTeX, RTF, Pango or BBCode)
     '';
     homepage = "http://www.andre-simon.de/doku/ansifilter/en/ansifilter.html";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ doronbehar ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
