@@ -1,8 +1,10 @@
 {
   lib,
+  git,
   python3Packages,
   fetchFromGitHub,
   installShellFiles,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -23,8 +25,28 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  # 3 of the tests are failing
-  doCheck = false;
+  nativeCheckInputs = [
+    git
+    python3Packages.pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  enabledTestPaths = [
+    "${src}/tests"
+  ];
+
+  disabledTests = [
+    # This test fails as it tries to write to the Nix store.
+    "test_set_first_time"
+  ];
+
+  # The test suite assumes that it is ran from a directory called "gita" that is
+  # a git repository.
+  preCheck = ''
+    mkdir $TMPDIR/gita
+    git init $TMPDIR/gita
+    cd $TMPDIR/gita
+  '';
 
   postInstall = ''
     installShellCompletion --bash --name gita auto-completion/bash/.gita-completion.bash
