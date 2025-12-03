@@ -43,8 +43,6 @@ stdenv.mkDerivation {
     homepage = "https://invent.kde.org/sdk/elf-dissector";
     description = "Tools for inspecting, analyzing and optimizing ELF files";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [
-      philiptaron
-    ];
+    maintainers = [ lib.maintainers.philiptaron ];
   };
 }
