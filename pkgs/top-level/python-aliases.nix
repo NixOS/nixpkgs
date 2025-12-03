@@ -427,6 +427,7 @@ mapAliases {
   radio_beam = throw "'radio_beam' has been renamed to/replaced by 'radio-beam'"; # Converted to throw 2025-10-29
   random-user-agent = throw "random-user-agent has been removed as it was abandoned upstream in 2018; use fake-useragent instead"; # Added 2025-10-17
   readme_renderer = throw "'readme_renderer' has been renamed to/replaced by 'readme-renderer'"; # Converted to throw 2025-10-29
+  readthedocs-sphinx-ext = throw "'readthedocs-sphinx-ext' has been removed because it was archived upstream."; # added 2025-12-03
   recursivePthLoader = throw "'recursivePthLoader' has been renamed to/replaced by 'recursive-pth-loader'"; # Converted to throw 2025-10-29
   repeated_test = throw "'repeated_test' has been renamed to/replaced by 'repeated-test'"; # Converted to throw 2025-10-29
   repoze_lru = throw "'repoze_lru' has been renamed to/replaced by 'repoze-lru'"; # Converted to throw 2025-10-29
