@@ -39,7 +39,7 @@ let
   chronyFlags = [
     "-n"
     "-u"
-    "chrony"
+    "${cfg.user}"
     "-f"
     "${configFile}"
   ]
@@ -161,6 +161,18 @@ in
         description = "Directory where chrony state is stored.";
       };
 
+      group = mkOption {
+        type = types.str;
+        default = "chrony";
+        description = "Group to run chronyd under.";
+      };
+
+      user = mkOption {
+        type = types.str;
+        default = "chrony";
+        description = "User to run chronyd under.";
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -187,13 +199,17 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ chronyPkg ];
 
-    users.groups.chrony.gid = config.ids.gids.chrony;
+    users.groups = lib.optionalAttrs (cfg.group == "chrony") {
+      chrony.gid = config.ids.gids.chrony;
+    };
 
-    users.users.chrony = {
-      uid = config.ids.uids.chrony;
-      group = "chrony";
-      description = "chrony daemon user";
-      home = stateDir;
+    users.users = lib.optionalAttrs (cfg.user == "chrony") {
+      chrony = {
+        uid = config.ids.uids.chrony;
+        group = cfg.group;
+        description = "chrony daemon user";
+        home = stateDir;
+      };
     };
 
     services.timesyncd.enable = mkForce false;
@@ -208,12 +224,12 @@ in
     };
 
     systemd.tmpfiles.rules = [
-      "d ${stateDir} 0750 chrony chrony - -"
-      "f ${driftFile} 0640 chrony chrony - -"
-      "f ${keyFile} 0640 chrony chrony - -"
+      "d ${stateDir} 0750 ${cfg.user} ${cfg.group} - -"
+      "f ${driftFile} 0640 ${cfg.user} ${cfg.group} - -"
+      "f ${keyFile} 0640 ${cfg.user} ${cfg.group} - -"
     ]
     ++ lib.optionals cfg.enableRTCTrimming [
-      "f ${rtcFile} 0640 chrony chrony - -"
+      "f ${rtcFile} 0640 ${cfg.user} ${cfg.group} - -"
     ];
 
     systemd.services.chronyd = {
