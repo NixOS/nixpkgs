@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://www.andre-simon.de/doku/ansifilter/en/ansifilter.html";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ doronbehar ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
