@@ -18,8 +18,7 @@
   udevCheckHook,
   withUtils ? true,
   withGUI ? true,
-  # BPF support fail to cross compile, unable to find `linux/lirc.h`
-  withBPF ? stdenv.hostPlatform == stdenv.buildPlatform,
+  withBPF ? true,
   alsa-lib,
   libGLU,
   qt6Packages,
