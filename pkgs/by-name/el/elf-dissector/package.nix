@@ -4,13 +4,12 @@
   fetchFromGitLab,
   cmake,
   elfutils,
-  extra-cmake-modules,
-  kitemmodels,
+  kdePackages,
   libiberty,
   libdwarf,
   libopcodes,
-  wrapQtAppsHook,
   qt6,
+  qt6Packages,
 }:
 
 stdenv.mkDerivation {
@@ -27,14 +26,13 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
-    wrapQtAppsHook
+    kdePackages.extra-cmake-modules
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs = [
     qt6.qtbase
     qt6.qttools
-    kitemmodels
     libiberty
     elfutils
     libopcodes
