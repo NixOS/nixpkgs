@@ -10,23 +10,20 @@
   libdwarf,
   libopcodes,
   wrapQtAppsHook,
+  qt6,
 }:
 
 stdenv.mkDerivation {
   pname = "elf-dissector";
-  version = "unstable-2023-12-24";
+  version = "0.0.1-unstable-2025-11-05";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "sdk";
     repo = "elf-dissector";
-    rev = "613538bd1d87ce72d5115646551a49cf7ff2ee34";
-    hash = "sha256-fQFGFw8nZHMs8J1W2CcHAJCdcvaY2l2/CySyBSsKpyE=";
+    rev = "37aa18d16e0f1a4fca5a276473ae37b2b93f623d";
+    hash = "sha256-O9b6lgJt5SwTwIEohkYpwWxnN0R0w7oEZGrDgj3aGOs=";
   };
-
-  patches = [
-    ./fix_build_for_src_lib_disassembler_disassembler.diff
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -35,6 +32,8 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
+    qt6.qtbase
+    qt6.qttools
     kitemmodels
     libiberty
     elfutils
