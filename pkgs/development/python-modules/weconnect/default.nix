@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "weconnect";
-  version = "0.60.10";
+  version = "0.60.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tillsteinbach";
     repo = "WeConnect-python";
     tag = "v${version}";
-    hash = "sha256-ZvJoZ4mUNkUJ5sOxOHDsuxGZO2s3PSEfidt3aDfmBeg=";
+    hash = "sha256-llAWCjhP/fwI+H8BRpMYxba8jC+WDc66xkUDwT3NHcA=";
   };
 
   postPatch = ''
