@@ -54,6 +54,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
+    # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
+    broken = true;
     description = "Blazing fast and lightweight PostGIS vector tiles server";
     homepage = "https://martin.maplibre.org/";
     license = with licenses; [

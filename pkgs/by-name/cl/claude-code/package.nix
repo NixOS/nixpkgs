@@ -11,14 +11,14 @@ buildNpmPackage (finalAttrs: {
   # ```sh
   # nix-shell maintainers/scripts/update.nix --argstr commit true --argstr package vscode-extensions.anthropic.claude-code && nix-shell maintainers/scripts/update.nix --argstr commit true --argstr package claude-code
   # ```
-  version = "2.0.56";
+  version = "2.0.57";
 
   src = fetchzip {
     url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${finalAttrs.version}.tgz";
-    hash = "sha256-HuT2y0pyVc9wFrWBLffqCrrpN60YN1cl5NPwzOK0q98=";
+    hash = "sha256-mnSM1FFLrVQwmS3MgRoLg3lIDPJ7ERiWHLDsQoxRIxA=";
   };
 
-  npmDepsHash = "sha256-yoVNRg7XdVBHGJPlmZ3g/vQ/0qSroKUVaN91N2XWtEs=";
+  npmDepsHash = "sha256-wVhKqeyFSIvPSb9jx+qUKWAfp7ZX8nvzvyv0A/XxnR8=";
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
