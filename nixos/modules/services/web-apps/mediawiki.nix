@@ -257,7 +257,7 @@ in
 
       # https://www.mediawiki.org/wiki/Compatibility
       phpPackage = mkPackageOption pkgs "php" {
-        default = "php82";
+        default = "php83";
       };
 
       finalPackage = mkOption {
