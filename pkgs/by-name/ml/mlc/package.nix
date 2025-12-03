@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with lib.maintainers; [ basvandijk ];
-    platforms = with lib.platforms; linux;
+    platforms = [ "x86_64-linux" ];
     mainProgram = "mlc";
   };
 })
