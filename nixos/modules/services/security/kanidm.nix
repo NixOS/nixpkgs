@@ -29,6 +29,7 @@ let
     mkIf
     mkMerge
     mkOption
+    mkOrder
     mkPackageOption
     optional
     optionals
@@ -1052,8 +1053,9 @@ in
 
     system.nssModules = mkIf cfg.enablePam [ cfg.package ];
 
-    system.nssDatabases.group = optional cfg.enablePam "kanidm";
-    system.nssDatabases.passwd = optional cfg.enablePam "kanidm";
+    # Needs to be before "files" which is `mkBefore`
+    system.nssDatabases.group = mkOrder 490 (optional cfg.enablePam "kanidm");
+    system.nssDatabases.passwd = mkOrder 490 (optional cfg.enablePam "kanidm");
 
     users.groups = mkMerge [
       (mkIf cfg.enableServer { kanidm = { }; })
