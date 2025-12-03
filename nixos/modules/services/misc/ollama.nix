@@ -8,7 +8,7 @@ let
   inherit (lib) literalExpression types;
 
   cfg = config.services.ollama;
-  ollamaPackage = cfg.package.override { inherit (cfg) acceleration; };
+  ollama = lib.getExe cfg.package;
 
   staticUser = cfg.user != null && cfg.group != null;
 in
@@ -32,12 +32,33 @@ in
       ]
       "The `models` directory is now always writable. To make other directories writable, use `systemd.services.ollama.serviceConfig.ReadWritePaths`."
     )
+    (lib.mkRemovedOptionModule [
+      "services"
+      "ollama"
+      "acceleration"
+    ] "Set `services.ollama.package` to one of `pkgs.ollama[,-vulkan,-rocm,-cuda,-cpu]` instead.")
   ];
 
   options = {
     services.ollama = {
       enable = lib.mkEnableOption "ollama server for local large language models";
-      package = lib.mkPackageOption pkgs "ollama" { };
+      package = lib.mkPackageOption pkgs "ollama" {
+        example = "pkgs.ollama-rocm";
+        extraDescription = ''
+          Different packages use different hardware acceleration.
+
+          - `ollama`: default behavior; usually equivalent to `ollama-cpu`
+            - if `nixpkgs.config.rocmSupport` is enabled, is equivalent to `ollama-rocm`
+            - if `nixpkgs.config.cudaSupport` is enabled, is equivalent to `ollama-cuda`
+            - otherwise defaults to `false`
+          - `ollama-cpu`: disable GPU; only use CPU
+          - `ollama-rocm`: supported by most modern AMD GPUs
+            - may require overriding gpu type with `services.ollama.rocmOverrideGfx`
+              if rocm doesn't detect your AMD gpu
+          - `ollama-cuda`: supported by most modern NVIDIA GPUs
+          - `ollama-vulkan`: supported by most GPUs
+        '';
+      };
 
       user = lib.mkOption {
         type = with types; nullOr str;
@@ -97,32 +118,6 @@ in
         '';
       };
 
-      acceleration = lib.mkOption {
-        type = types.nullOr (
-          types.enum [
-            false
-            "rocm"
-            "cuda"
-            "vulkan"
-          ]
-        );
-        default = null;
-        example = "rocm";
-        description = ''
-          What interface to use for hardware acceleration.
-
-          - `null`: default behavior
-            - if `nixpkgs.config.rocmSupport` is enabled, uses `"rocm"`
-            - if `nixpkgs.config.cudaSupport` is enabled, uses `"cuda"`
-            - otherwise defaults to `false`
-          - `false`: disable GPU, only use CPU
-          - `"rocm"`: supported by most modern AMD GPUs
-            - may require overriding gpu type with `services.ollama.rocmOverrideGfx`
-              if rocm doesn't detect your AMD gpu
-          - `"cuda"`: supported by most modern NVIDIA GPUs
-          - `"vulkan"`: supported by most modern GPUs on Linux
-        '';
-      };
       rocmOverrideGfx = lib.mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -152,6 +147,7 @@ in
           Since `ollama run` is mostly a shell around the ollama server, this is usually sufficient.
         '';
       };
+
       loadModels = lib.mkOption {
         type = types.listOf types.str;
         apply = builtins.filter (model: model != "");
@@ -180,6 +176,7 @@ in
           removing any models that are installed but not currently declared there.
         '';
       };
+
       openFirewall = lib.mkOption {
         type = types.bool;
         default = false;
@@ -224,7 +221,7 @@ in
         // {
           Type = "exec";
           DynamicUser = true;
-          ExecStart = "${lib.getExe ollamaPackage} serve";
+          ExecStart = "${ollama} serve";
           WorkingDirectory = cfg.home;
           StateDirectory = [ "ollama" ];
           ReadWritePaths = [
@@ -309,13 +306,11 @@ in
       script =
         let
           binaryInputs = lib.mapAttrs (_: lib.getExe) {
-            ollama = ollamaPackage;
             parallel = pkgs.parallel;
             awk = pkgs.gawk;
             sed = pkgs.gnused;
           };
           inherit (binaryInputs)
-            ollama
             parallel
             awk
             sed
@@ -355,7 +350,7 @@ in
 
     networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
 
-    environment.systemPackages = [ ollamaPackage ];
+    environment.systemPackages = [ cfg.package ];
   };
 
   meta.maintainers = with lib.maintainers; [
