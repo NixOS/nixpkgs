@@ -46,6 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://zubanls.com/blog/";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
+      bew
       mcjocobe
     ];
     platforms = lib.platforms.all;
