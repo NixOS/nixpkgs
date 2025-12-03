@@ -1580,7 +1580,6 @@ mapAliases {
   tomcat_connectors = throw "'tomcat_connectors' has been renamed to/replaced by 'apacheHttpdPackages.mod_jk'"; # Converted to throw 2025-10-27
   tooling-language-server = deputy; # Added 2025-06-22
   tor-browser-bundle-bin = throw "'tor-browser-bundle-bin' has been renamed to/replaced by 'tor-browser'"; # Converted to throw 2025-10-27
-  tracker = throw "'tracker' has been renamed to/replaced by 'tinysparql'"; # Converted to throw 2025-10-27
   tracker-miners = throw "'tracker-miners' has been renamed to/replaced by 'localsearch'"; # Converted to throw 2025-10-27
   transfig = throw "'transfig' has been renamed to/replaced by 'fig2dev'"; # Converted to throw 2025-10-27
   transifex-client = throw "'transifex-client' has been renamed to/replaced by 'transifex-cli'"; # Converted to throw 2025-10-27
