@@ -103,7 +103,7 @@ There are 2 ways to package backend dependencies. With mix2nix and with a fixed-
 
 `mix2nix` is a cli tool available in Nixpkgs. It will generate a Nix expression from a `mix.lock` file. It is quite standard in the 2nix tool series.
 
-Note that currently mix2nix can't handle git dependencies inside the mix.lock file. If you have git dependencies, you can either add them manually (see [example](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/pleroma/default.nix#L20)) or use the FOD method.
+Note that currently mix2nix can't handle git dependencies inside the mix.lock file. If you have git dependencies, you can either add them manually (see [example](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/pl/pleroma/package.nix#L35)) or use the FOD method.
 
 The advantage of using mix2nix is that nix will know your whole dependency graph. On a dependency update, this won't trigger a full rebuild and download of all the dependencies, where FOD will do so.
 
