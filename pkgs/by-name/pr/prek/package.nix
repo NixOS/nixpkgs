@@ -15,17 +15,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "j178";
     repo = "prek";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-/B7Z4d4GEJKhEDRznVzeqeB2Qrsz/dAVV3Syo8EhfvM=";
+    hash = "sha256-/B7Z4d4GEJKhEDRznVzeqeB2Qrsz/dAVV3Syo8EhfvM=";
   };
 
   cargoHash = "sha256-quWyPdFEBYylhi1gugdew9KXhHldTkIAbea7GmVhH5g=";
-
-  preBuild = ''
-    version312_str=$(${python312}/bin/python -c 'import sys; print(sys.version_info[:3])')
-
-    substituteInPlace ./tests/languages/python.rs \
-      --replace '(3, 12, 11)' "$version312_str"
-  '';
 
   nativeCheckInputs = [
     git
