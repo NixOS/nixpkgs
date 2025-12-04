@@ -314,14 +314,13 @@ in
         '';
 
         serviceConfig = {
-          LoadCredential =
-            [
-              "secret:${cfg.server.settings.secretFile}"
-              "database:${cfg.database.passwordFile}"
-            ]
-            ++ (lib.optionals (cfg.server.settings.smtp.passFile != null) [
-              "smtp:${cfg.server.settings.smtp.passFile}"
-            ]);
+          LoadCredential = [
+            "secret:${cfg.server.settings.secretFile}"
+            "database:${cfg.database.passwordFile}"
+          ]
+          ++ (lib.optionals (cfg.server.settings.smtp.passFile != null) [
+            "smtp:${cfg.server.settings.smtp.passFile}"
+          ]);
 
           User = cfg.user;
           Group = cfg.group;
