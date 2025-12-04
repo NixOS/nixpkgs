@@ -2,22 +2,19 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyroute2";
-  version = "0.9.4";
+  version = "0.9.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "svinota";
     repo = "pyroute2";
     tag = version;
-    hash = "sha256-D603ZrLbc/6REx6X0bMvZzeyo0fgTsFL7J+iRTiQLgQ=";
+    hash = "sha256-KPXDXRQWonuTyy1SsvgO7jXjawiRj1XJ3zte5ZHanRw=";
   };
 
   build-system = [ setuptools ];
