@@ -15946,6 +15946,16 @@
     githubId = 117918464;
     keys = [ { fingerprint = "B5ED 595C 8C7E 133C 6B68  63C8 CFEF 1E35 0351 F72D"; } ];
   };
+  malix = {
+    name = "Malix - Alix Brunet";
+    github = "Malix-Labs";
+    githubId = 76160668;
+    email = "alixbrunetcontact+nixpkgs@gmail.com";
+    keys = [
+      { fingerprint = "cgtiI0dV+OGTuIFFuuCPWZPgF5OaiSkmZzobIdoWQO0"; } # SSH
+      { fingerprint = "369E2AB995539B6F30AAC24C600394C79ED874E5"; } # OpenPGP
+    ];
+  };
   malo = {
     email = "mbourgon@gmail.com";
     github = "malob";
