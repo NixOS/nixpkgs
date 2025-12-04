@@ -649,6 +649,10 @@ let
 
         fpath = callPackage ../development/ocaml-modules/fpath { };
 
+        frama-c = callPackage ../development/ocaml-modules/frama-c {
+          framac = pkgs.framac.override { ocamlPackages = self; };
+        };
+
         frei0r = callPackage ../development/ocaml-modules/frei0r {
           inherit (pkgs) frei0r;
         };
