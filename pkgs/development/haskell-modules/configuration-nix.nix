@@ -2129,4 +2129,7 @@ builtins.intersectAttrs super {
   cpython = doJailbreak super.cpython;
 
   botan-bindings = super.botan-bindings.override { botan = pkgs.botan3; };
+
+  # Workaround for flaky test: https://github.com/basvandijk/threads/issues/10
+  threads = appendPatch ./patches/threads-flaky-test.patch super.threads;
 }

@@ -2144,8 +2144,6 @@ with pkgs;
     inherit (gst_all_1) gstreamer gst-plugins-base;
   };
 
-  mpd-sima = python3Packages.callPackage ../tools/audio/mpd-sima { };
-
   nltk-data = recurseIntoAttrs (callPackage ../tools/text/nltk-data { });
 
   seabios-coreboot = seabios.override { ___build-type = "coreboot"; };
@@ -3218,9 +3216,12 @@ with pkgs;
   nodejs-slim_24 = callPackage ../development/web/nodejs/v24.nix { enableNpm = false; };
   corepack_24 = callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_24; };
 
+  nodejs_25 = callPackage ../development/web/nodejs/v25.nix { };
+  nodejs-slim_25 = callPackage ../development/web/nodejs/v25.nix { enableNpm = false; };
+
   # Update this when adding the newest nodejs major version!
-  nodejs_latest = nodejs_24;
-  nodejs-slim_latest = nodejs-slim_24;
+  nodejs_latest = nodejs_25;
+  nodejs-slim_latest = nodejs-slim_25;
 
   buildNpmPackage = callPackage ../build-support/node/build-npm-package { };
 
@@ -7474,6 +7475,7 @@ with pkgs;
     icu75
     icu76
     icu77
+    icu78
     ;
 
   icu = icu76;

@@ -24,26 +24,16 @@ let
         };
         build-system = with final; [ uv-build ];
       });
-
-      django-tables2 = prev.django-tables2.overridePythonAttrs (oldAttrs: rec {
-        version = "2.7.0";
-        src = fetchFromGitHub {
-          owner = "jieter";
-          repo = "django-tables2";
-          tag = "v${version}";
-          hash = "sha256-Cb8XhCLqhc2Dx/5uAHnN9zTVL6/1+WekC4qTloBurzM=";
-        };
-      });
     };
   };
 
-  version = "2025.2.0";
+  version = "2025.2.1";
 
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx";
     tag = "v${version}";
-    hash = "sha256-em5bPKKlT3qUAv4zGGjOkjDPY7U8vbuqMZ8NQXwZg4k=";
+    hash = "sha256-zjRtAy9Tpu5dGbpEteg+TMLgrYKSzK0wrGLQImubx7I=";
   };
 
   meta = {
@@ -57,8 +47,8 @@ let
     platforms = lib.platforms.linux;
   };
 
-  frontend = buildNpmPackage {
-    pname = "pretalx-frontend";
+  pretix-schedule-editor = buildNpmPackage {
+    pname = "pretalx-schedule-editorc";
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretalx/frontend/schedule-editor";
@@ -66,6 +56,15 @@ let
     npmDepsHash = "sha256-voHiml0nFWZIST39D5ErB0xTiWAOHN9OZinYutuQcdg=";
 
     npmBuildScript = "build";
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      cp dist/** $out/
+
+      runHook postInstall
+    '';
 
     inherit meta;
   };
@@ -80,10 +79,11 @@ python.pkgs.buildPythonApplication rec {
     "static"
   ];
 
-  postPatch = ''
-    substituteInPlace src/pretalx/common/management/commands/rebuild.py \
-      --replace 'subprocess.check_call(["npm", "run", "build"], cwd=frontend_dir, env=env)' ""
-  '';
+  patches = [
+    # don't run npm during rebuild command, we already use a separate derivation
+    # to build static assets
+    ./rebuild-no-npm.patch
+  ];
 
   nativeBuildInputs = [
     gettext
@@ -169,8 +169,8 @@ python.pkgs.buildPythonApplication rec {
   };
 
   postBuild = ''
-    rm -r ./src/pretalx/frontend/schedule-editor
-    ln -s ${frontend}/lib/node_modules/@pretalx/schedule-editor ./src/pretalx/frontend/schedule-editor
+    # link schedule-editor so it can be picked up in staticfiles lookups
+    ln -s ${pretix-schedule-editor}/** ./src/pretalx/static/
 
     # Generate all static files, see https://docs.pretalx.org/administrator/commands.html#python-m-pretalx-rebuild
     PYTHONPATH=$PYTHONPATH:./src python -m pretalx rebuild
@@ -180,19 +180,14 @@ python.pkgs.buildPythonApplication rec {
     mkdir -p $out/bin
     cp ./src/manage.py $out/bin/pretalx-manage
 
-    # The processed source files are in the static output, except for fonts, which are duplicated.
-    # See <https://github.com/pretalx/pretalx/issues/1585> for more details.
-    find $out/${python.sitePackages}/pretalx/static \
-      -mindepth 1 \
-      -not -path "$out/${python.sitePackages}/pretalx/static/fonts*" \
-      -delete
-
-    # Copy generated static files into dedicated output
+    # Copy and merge static files
     mkdir -p $static
     cp -r ./src/static.dist/** $static/
+    cp -r ${pretix-schedule-editor}/** $static/
 
-    # Copy frontend files
-    ln -s ${frontend}/lib/node_modules/@pretalx/schedule-editor/dist/* $static
+    # And link them into the package for staticfiles lookups
+    rm -rf $out/${python.sitePackages}/pretalx/static
+    ln -s $static/ $out/${python.sitePackages}/pretalx/static
   '';
 
   preCheck = ''
