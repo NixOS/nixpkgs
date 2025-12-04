@@ -10,7 +10,6 @@
   libGLU,
   libGL,
   pango,
-  pixman,
   pkg-config,
   docbook_xsl,
   libxslt,
@@ -19,16 +18,20 @@
   check,
   buildPackages,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kmscon";
-  version = "9.0.0-unstable-2025-01-09";
+  version = "9.1.0-unstable-2025-12-04";
 
   src = fetchFromGitHub {
     owner = "Aetf";
     repo = "kmscon";
-    rev = "a81941f4464e6f9cee75bfb8a1db88c253ede33d";
-    sha256 = "sha256-l7Prt7CsYi4VCnp9xktvqqNT+4djSdO2GvP1JdxhNSI=";
+    rev = "04dca3ce1453c186a9020d64fadf8d984d2143bc";
+    sha256 = "sha256-bwmXXSBV+j4mpnAAmZ9SwFqWNY4LKwLYvh2zVJMO0fU=";
   };
+
+  patches = [
+    ./sandbox.patch # Generate system units where they should be (nix store) instead of /etc/systemd/system
+  ];
 
   strictDeps = true;
 
@@ -43,7 +46,6 @@ stdenv.mkDerivation {
     libtsm
     libxkbcommon
     pango
-    pixman
     systemdLibs
     libgbm
     check
@@ -63,10 +65,6 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  patches = [
-    ./sandbox.patch # Generate system units where they should be (nix store) instead of /etc/systemd/system
-  ];
-
   meta = with lib; {
     description = "KMS/DRM based System Console";
     mainProgram = "kmscon";
@@ -75,4 +73,4 @@ stdenv.mkDerivation {
     maintainers = [ ];
     platforms = platforms.linux;
   };
-}
+})
