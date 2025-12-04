@@ -93,7 +93,7 @@ there are 3 steps: frontend dependencies (javascript), backend dependencies (eli
 
 ##### mixRelease - Frontend dependencies (javascript) {#mix-release-javascript-deps}
 
-For phoenix projects, inside of Nixpkgs you can either use yarn2nix (mkYarnModule) or node2nix. An example with yarn2nix can be found [here](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix#L39). An example with node2nix will follow. To package something outside of nixpkgs, you have alternatives like [npmlock2nix](https://github.com/nix-community/npmlock2nix) or [nix-npm-buildpackage](https://github.com/serokell/nix-npm-buildpackage)
+For phoenix projects, inside of Nixpkgs you can either use yarn2nix (mkYarnModule) or node2nix. An example with yarn2nix can be found [here](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/sh/sharedown/package.nix#L59). An example with node2nix will follow. To package something outside of nixpkgs, you have alternatives like [npmlock2nix](https://github.com/nix-community/npmlock2nix) or [nix-npm-buildpackage](https://github.com/serokell/nix-npm-buildpackage)
 
 ##### mixRelease - backend dependencies (mix) {#mix-release-mix-deps}
 
