@@ -4374,6 +4374,8 @@ self: super: with self; {
 
   django_5_2 = callPackage ../development/python-modules/django/5_2.nix { };
 
+  django_6 = callPackage ../development/python-modules/django/6.nix { };
+
   djangocms-admin-style = callPackage ../development/python-modules/djangocms-admin-style { };
 
   djangocms-alias = callPackage ../development/python-modules/djangocms-alias { };
