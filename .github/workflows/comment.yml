@@ -19,7 +19,7 @@ jobs:
   # a reaction to these comments.
   react:
     name: React with eyes
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-slim
     timeout-minutes: 2
     if: contains(github.event.comment.body, '@NixOS/nixpkgs-merge-bot merge')
     steps:

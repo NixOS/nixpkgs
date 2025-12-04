@@ -35,8 +35,9 @@ body:
         If you are using an older or stable version, please update to the latest **unstable** version and check if the module still does not exist before continuing this request.
       options:
         - "Please select a version."
-        - "- Unstable (25.11)"
-        - "- Stable (25.05)"
+        - "- Unstable (26.05)"
+        - "- Stable (25.11)"
+        - "- Old Stable (25.05)"
       default: 0
     validations:
       required: true

@@ -1293,9 +1293,13 @@ self: super: with self; {
 
   ayla-iot-unofficial = callPackage ../development/python-modules/ayla-iot-unofficial { };
 
+  azure-ai-agents = callPackage ../development/python-modules/azure-ai-agents { };
+
   azure-ai-documentintelligence =
     callPackage ../development/python-modules/azure-ai-documentintelligence
       { };
+
+  azure-ai-projects = callPackage ../development/python-modules/azure-ai-projects { };
 
   azure-ai-vision-imageanalysis =
     callPackage ../development/python-modules/azure-ai-vision-imageanalysis
@@ -1776,8 +1780,6 @@ self: super: with self; {
 
   basiciw = callPackage ../development/python-modules/basiciw { };
 
-  basswood-av = callPackage ../development/python-modules/basswood-av { };
-
   batchgenerators = callPackage ../development/python-modules/batchgenerators { };
 
   batchspawner = callPackage ../development/python-modules/batchspawner { };
@@ -1827,6 +1829,8 @@ self: super: with self; {
   beancount-docverif = callPackage ../development/python-modules/beancount-docverif { };
 
   beancount-parser = callPackage ../development/python-modules/beancount-parser { };
+
+  beancount-periodic = callPackage ../development/python-modules/beancount-periodic { };
 
   beancount-plugin-utils = callPackage ../development/python-modules/beancount-plugin-utils { };
 
@@ -2790,6 +2794,8 @@ self: super: with self; {
 
   cltk = callPackage ../development/python-modules/cltk { };
 
+  clu = callPackage ../development/python-modules/clu { };
+
   clustershell = callPackage ../development/python-modules/clustershell { };
 
   clx-sdk-xms = callPackage ../development/python-modules/clx-sdk-xms { };
@@ -2872,13 +2878,19 @@ self: super: with self; {
 
   colcon-cd = callPackage ../development/python-modules/colcon-cd { };
 
+  colcon-coveragepy-result = callPackage ../development/python-modules/colcon-coveragepy-result { };
+
   colcon-defaults = callPackage ../development/python-modules/colcon-defaults { };
+
+  colcon-devtools = callPackage ../development/python-modules/colcon-devtools { };
 
   colcon-installed-package-information =
     callPackage ../development/python-modules/colcon-installed-package-information
       { };
 
   colcon-library-path = callPackage ../development/python-modules/colcon-library-path { };
+
+  colcon-metadata = callPackage ../development/python-modules/colcon-metadata { };
 
   colcon-mixin = callPackage ../development/python-modules/colcon-mixin { };
 
@@ -2890,13 +2902,21 @@ self: super: with self; {
     callPackage ../development/python-modules/colcon-package-information
       { };
 
+  colcon-package-selection = callPackage ../development/python-modules/colcon-package-selection { };
+
   colcon-parallel-executor = callPackage ../development/python-modules/colcon-parallel-executor { };
+
+  colcon-python-setup-py = callPackage ../development/python-modules/colcon-python-setup-py { };
 
   colcon-recursive-crawl = callPackage ../development/python-modules/colcon-recursive-crawl { };
 
   colcon-ros-domain-id-coordinator =
     callPackage ../development/python-modules/colcon-ros-domain-id-coordinator
       { };
+
+  colcon-test-result = callPackage ../development/python-modules/colcon-test-result { };
+
+  colcon-zsh = callPackage ../development/python-modules/colcon-zsh { };
 
   collections-extended = callPackage ../development/python-modules/collections-extended { };
 
@@ -3821,6 +3841,8 @@ self: super: with self; {
 
   dissect = callPackage ../development/python-modules/dissect { };
 
+  dissect-apfs = callPackage ../development/python-modules/dissect-apfs { };
+
   dissect-archive = callPackage ../development/python-modules/dissect-archive { };
 
   dissect-btrfs = callPackage ../development/python-modules/dissect-btrfs { };
@@ -3834,6 +3856,8 @@ self: super: with self; {
   dissect-cramfs = callPackage ../development/python-modules/dissect-cramfs { };
 
   dissect-cstruct = callPackage ../development/python-modules/dissect-cstruct { };
+
+  dissect-database = callPackage ../development/python-modules/dissect-database { };
 
   dissect-esedb = callPackage ../development/python-modules/dissect-esedb { };
 
@@ -4105,6 +4129,8 @@ self: super: with self; {
 
   django-mfa3 = callPackage ../development/python-modules/django-mfa3 { };
 
+  django-minify-html = callPackage ../development/python-modules/django-minify-html { };
+
   django-model-utils = callPackage ../development/python-modules/django-model-utils { };
 
   django-modelcluster = callPackage ../development/python-modules/django-modelcluster { };
@@ -4275,8 +4301,6 @@ self: super: with self; {
   django_4 = callPackage ../development/python-modules/django/4.nix { };
 
   django_5 = self.django_5_2;
-
-  django_5_1 = callPackage ../development/python-modules/django/5_1.nix { };
 
   django_5_2 = callPackage ../development/python-modules/django/5_2.nix { };
 
@@ -4550,6 +4574,8 @@ self: super: with self; {
 
   ds-reporting-lib = callPackage ../development/python-modules/ds-reporting-lib { };
 
+  ds-server-lib = callPackage ../development/python-modules/ds-server-lib { };
+
   ds-store = callPackage ../development/python-modules/ds-store { };
 
   ds-xbom-lib = callPackage ../development/python-modules/ds-xbom-lib { };
@@ -4810,6 +4836,8 @@ self: super: with self; {
   emcee = callPackage ../development/python-modules/emcee { };
 
   emoji = callPackage ../development/python-modules/emoji { };
+
+  emoji-country-flag = callPackage ../development/python-modules/emoji-country-flag { };
 
   emojis = callPackage ../development/python-modules/emojis { };
 
@@ -5226,6 +5254,8 @@ self: super: with self; {
   fasttext = callPackage ../development/python-modules/fasttext { };
 
   fasttext-predict = callPackage ../development/python-modules/fasttext-predict { };
+
+  fastuuid = callPackage ../development/python-modules/fastuuid { };
 
   fatrop = toPythonModule (
     pkgs.fatrop.override {
@@ -11059,7 +11089,11 @@ self: super: with self; {
 
   onlykey-solo-python = callPackage ../development/python-modules/onlykey-solo-python { };
 
-  onnx = callPackage ../development/python-modules/onnx { };
+  onnx = callPackage ../development/python-modules/onnx {
+    onnx = pkgs.onnx.override {
+      python3Packages = self;
+    };
+  };
 
   onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common { };
 
@@ -12005,8 +12039,6 @@ self: super: with self; {
     inherit (pkgs.xorg) libxcb;
   };
 
-  pillow-avif-plugin = callPackage ../development/python-modules/pillow-avif-plugin { };
-
   pillow-heif = callPackage ../development/python-modules/pillow-heif { };
 
   pillow-jpls = callPackage ../development/python-modules/pillow-jpls { };
@@ -12470,6 +12502,8 @@ self: super: with self; {
   protonup-ng = callPackage ../development/python-modules/protonup-ng { };
 
   prov = callPackage ../development/python-modules/prov { };
+
+  prowlpy = callPackage ../development/python-modules/prowlpy { };
 
   prox-tv = callPackage ../development/python-modules/prox-tv { };
 
@@ -13093,6 +13127,8 @@ self: super: with self; {
 
   pydispatcher = callPackage ../development/python-modules/pydispatcher { };
 
+  pydle = callPackage ../development/python-modules/pydle { };
+
   pydmd = callPackage ../development/python-modules/pydmd { };
 
   pydo = callPackage ../development/python-modules/pydo { };
@@ -13627,8 +13663,6 @@ self: super: with self; {
   pylint-venv = callPackage ../development/python-modules/pylint-venv { };
 
   pylion = callPackage ../development/python-modules/pylion { };
-
-  pylit = callPackage ../development/python-modules/pylit { };
 
   pylitejet = callPackage ../development/python-modules/pylitejet { };
 
@@ -15801,17 +15835,11 @@ self: super: with self; {
 
   qiskit-finance = callPackage ../development/python-modules/qiskit-finance { };
 
-  qiskit-ibmq-provider = callPackage ../development/python-modules/qiskit-ibmq-provider { };
-
-  qiskit-ignis = callPackage ../development/python-modules/qiskit-ignis { };
-
   qiskit-machine-learning = callPackage ../development/python-modules/qiskit-machine-learning { };
 
   qiskit-nature = callPackage ../development/python-modules/qiskit-nature { };
 
   qiskit-optimization = callPackage ../development/python-modules/qiskit-optimization { };
-
-  qiskit-terra = callPackage ../development/python-modules/qiskit-terra { };
 
   qnap-qsw = callPackage ../development/python-modules/qnap-qsw { };
 
@@ -19688,10 +19716,6 @@ self: super: with self; {
   typesentry = callPackage ../development/python-modules/typesentry { };
 
   typeshed-client = callPackage ../development/python-modules/typeshed-client { };
-
-  typesystem = callPackage ../development/python-modules/typesystem { };
-
-  typical = callPackage ../development/python-modules/typical { };
 
   typing = null;
 

@@ -230,8 +230,8 @@ in
       "sha256-1gKMYZN5MDiJNiI2a9f7P1XhR4ncKR+jakJLMqLtmik=";
 
   mypy-boto3-cloudfront =
-    buildMypyBoto3Package "cloudfront" "1.41.1"
-      "sha256-ccQGB53br+K60woFky3RkNM0WtwtKsY+ECRCFq9x/q4=";
+    buildMypyBoto3Package "cloudfront" "1.41.3"
+      "sha256-EToB3g6IDQpvSmRoKZtO6l5IU5hHucDjMMTOADbWsY8=";
 
   mypy-boto3-cloudhsm =
     buildMypyBoto3Package "cloudhsm" "1.41.0"
@@ -330,8 +330,8 @@ in
       "sha256-9Y9OF18s2axyp0PTKD7azjTTq0PK34OkYeXPlWSYdxg=";
 
   mypy-boto3-compute-optimizer =
-    buildMypyBoto3Package "compute-optimizer" "1.41.0"
-      "sha256-S50+Wjro9Wzcq4PvaUbVfwxj0CLLqJ/Z+4D/qr6ojq4=";
+    buildMypyBoto3Package "compute-optimizer" "1.41.5"
+      "sha256-rspxHjYg99vV9GACUhQFZybbTzuLYza/EziWElWJn9c=";
 
   mypy-boto3-config =
     buildMypyBoto3Package "config" "1.41.0"
@@ -446,8 +446,8 @@ in
       "sha256-8fFnQpctLyNEZrsKI94tcpy7XAN8+ULGsih2oihHcyg=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.41.2"
-      "sha256-kypq0vZuo4Z5uX/D8EygX1nnp4qTnzaD8n2q52AhReE=";
+    buildMypyBoto3Package "ec2" "1.41.4"
+      "sha256-HK0keScSTKQHCP7jMHT2RPPZuS+Yz1Si4+3vHTXULnc=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.41.0"
@@ -809,8 +809,8 @@ in
       "sha256-S9Wy0uqdlvqRmaheZBWFcHVFjCyhLuHmRb8Vk1wgpHI=";
 
   mypy-boto3-logs =
-    buildMypyBoto3Package "logs" "1.41.0"
-      "sha256-y4nhdq4Q7Z5kepbajnw9CQgmuwLFcjgqDMot795EM8c=";
+    buildMypyBoto3Package "logs" "1.41.3"
+      "sha256-4ScSAQrnibU/s//gYq41hoHURd+Om+YzTDgNRGGDuOQ=";
 
   mypy-boto3-lookoutequipment =
     buildMypyBoto3Package "lookoutequipment" "1.41.0"
@@ -949,8 +949,8 @@ in
       "sha256-C/z9M2aQFWjZVY34bz6D7PbUpkKv3qd7DqByt48FRnk=";
 
   mypy-boto3-network-firewall =
-    buildMypyBoto3Package "network-firewall" "1.41.0"
-      "sha256-0rtTR067/fJ9ZocM6QNDqA5x0CEqjO4uKA8WMB/wOtE=";
+    buildMypyBoto3Package "network-firewall" "1.41.4"
+      "sha256-iv7MyS9Y2XOR+IpiGvx2mRv2VCaOotymzqCp7mNTJeo=";
 
   mypy-boto3-networkmanager =
     buildMypyBoto3Package "networkmanager" "1.41.1"
@@ -985,8 +985,8 @@ in
       "sha256-JEuEjo0htTuDCZx2nNJK2Zq59oSUqkMf4BrNamerfVk=";
 
   mypy-boto3-organizations =
-    buildMypyBoto3Package "organizations" "1.41.2"
-      "sha256-UMEF3/xgRCMSS68sRFSx2wRVtdGaPtPg6TvKT247Loc=";
+    buildMypyBoto3Package "organizations" "1.41.4"
+      "sha256-b18Pyrr4d6Dk4eKDVGoSRzel7VYPsdi0WYDQ7nfMKMY=";
 
   mypy-boto3-osis =
     buildMypyBoto3Package "osis" "1.41.0"
@@ -1133,8 +1133,8 @@ in
       "sha256-wcYk7NsqlkHelo0ai/ZdsRz+HVANcf+kWYFbnGpOdzE=";
 
   mypy-boto3-route53 =
-    buildMypyBoto3Package "route53" "1.41.0"
-      "sha256-+TVcIYCzHq1BxuyfRtih8EYpr5WIth4vl+i9UfIPFcE=";
+    buildMypyBoto3Package "route53" "1.41.4"
+      "sha256-r8UZFvlCMHoKJOCUN28kb9OSYNBi0bX7aNp7UZdbkFU=";
 
   mypy-boto3-route53-recovery-cluster =
     buildMypyBoto3Package "route53-recovery-cluster" "1.41.0"

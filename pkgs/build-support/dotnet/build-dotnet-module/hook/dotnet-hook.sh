@@ -420,13 +420,15 @@ dotnetInstallPhase() {
     done
   }
 
-  if (( ${#projectFiles[@]} == 0 )); then
-    dotnetPublish
-  else
-    local projectFile
-    for projectFile in "${projectFiles[@]}"; do
-      dotnetPublish "$projectFile"
-    done
+  if [[ -z "${dontPublish-}" ]]; then
+    if (( ${#projectFiles[@]} == 0 )); then
+      dotnetPublish
+    else
+      local projectFile
+      for projectFile in "${projectFiles[@]}"; do
+        dotnetPublish "$projectFile"
+      done
+    fi
   fi
 
   if [[ -n ${packNupkg-} ]]; then

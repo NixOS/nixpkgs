@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pywaze";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "eifinger";
     repo = "pywaze";
     tag = "v${version}";
-    hash = "sha256-XE+VdxUjq8KBSIU6rUlBweKEkZD3gqJuy9J4u9JVy7Q=";
+    hash = "sha256-INjVspha4AbxKPMQtL/4BUavFisrQXUGofZ3nuz39UU=";
   };
 
   build-system = [ hatchling ];

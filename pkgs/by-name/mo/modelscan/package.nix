@@ -41,7 +41,7 @@ python3.pkgs.buildPythonApplication rec {
       dill
       pytestCheckHook
     ]
-    ++ lib.flatten (builtins.attrValues optional-dependencies);
+    ++ lib.concatAttrValues optional-dependencies;
 
   # tensorflow doesn0t support Python 3.12
   doCheck = false;

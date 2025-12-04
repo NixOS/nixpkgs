@@ -2,10 +2,6 @@
   lib,
   fetchFromGitHub,
   telegram-desktop,
-  alsa-lib,
-  jemalloc,
-  libopus,
-  libpulseaudio,
   withWebkit ? true,
 }:
 
@@ -14,26 +10,15 @@ telegram-desktop.override {
   inherit withWebkit;
   unwrapped = telegram-desktop.unwrapped.overrideAttrs (old: rec {
     pname = "64gram-unwrapped";
-    version = "1.1.84";
+    version = "1.1.88";
 
     src = fetchFromGitHub {
       owner = "TDesktop-x64";
       repo = "tdesktop";
       tag = "v${version}";
-      hash = "sha256-CtDCrgKZpaTdR+Eh9H1uq7EmO0SFIgHKlW/zeeWBaCM=";
+      hash = "sha256-zC51hlfi4EwqaDBTQev7KAYvQmUMJl1RBWh5/By2GUU=";
       fetchSubmodules = true;
     };
-
-    buildInputs = (old.buildInputs or [ ]) ++ [
-      alsa-lib
-      jemalloc
-      libopus
-      libpulseaudio
-    ];
-
-    cmakeFlags = (old.cmakeFlags or [ ]) ++ [
-      (lib.cmakeBool "DESKTOP_APP_DISABLE_AUTOUPDATE" true)
-    ];
 
     meta = {
       description = "Unofficial Telegram Desktop providing Windows 64bit build and extra features";

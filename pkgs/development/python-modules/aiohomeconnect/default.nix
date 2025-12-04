@@ -54,7 +54,7 @@ buildPythonPackage rec {
     pytest-httpx
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "aiohomeconnect" ];
 

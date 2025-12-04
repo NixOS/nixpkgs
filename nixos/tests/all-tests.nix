@@ -522,7 +522,7 @@ in
   };
   ergo = runTest ./ergo.nix;
   ergochat = runTest ./ergochat.nix;
-  ersatztv = handleTest ./ersatztv.nix { };
+  ersatztv = runTest ./ersatztv.nix;
   espanso = import ./espanso.nix {
     inherit (pkgs) lib;
     inherit runTest;
@@ -569,6 +569,7 @@ in
     imports = [ ./firefox.nix ];
     _module.args.firefoxPackage = pkgs.firefox-esr-140;
   };
+  firefox-syncserver = runTest ./firefox-syncserver.nix;
   firefoxpwa = runTest ./firefoxpwa.nix;
   firejail = runTest ./firejail.nix;
   firewall = runTest {
@@ -751,6 +752,7 @@ in
   iftop = runTest ./iftop.nix;
   image-contents = handleTest ./image-contents.nix { };
   immich = runTest ./web-apps/immich.nix;
+  immich-kiosk = runTest ./web-apps/immich-kiosk.nix;
   immich-public-proxy = runTest ./web-apps/immich-public-proxy.nix;
   immich-vectorchord-migration = runTest ./web-apps/immich-vectorchord-migration.nix;
   immich-vectorchord-reindex = runTest ./web-apps/immich-vectorchord-reindex.nix;
@@ -982,7 +984,6 @@ in
   mpd = runTest ./mpd.nix;
   mpv = runTest ./mpv.nix;
   mtp = runTest ./mtp.nix;
-  multipass = runTest ./multipass.nix;
   mumble = runTest ./mumble.nix;
   munge = runTest ./munge.nix;
   munin = runTest ./munin.nix;
@@ -1660,6 +1661,10 @@ in
   whoami = runTest ./whoami.nix;
   whoogle-search = runTest ./whoogle-search.nix;
   wiki-js = runTest ./wiki-js.nix;
+  windmill = import ./windmill {
+    inherit pkgs runTest;
+    inherit (pkgs) lib;
+  };
   wine = handleTest ./wine.nix { };
   wireguard = import ./wireguard {
     inherit pkgs runTest;

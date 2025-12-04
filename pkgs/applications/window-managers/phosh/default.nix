@@ -49,8 +49,8 @@ let
     group = "World";
     owner = "Phosh";
     repo = "libcall-ui";
-    tag = "v0.1.4";
-    hash = "sha256-6fiqdvagcMnvaZ9UxC05haBwObcsqwgJL/V03LuSMF8=";
+    tag = "v0.1.5";
+    hash = "sha256-4lSTwSRZditK51N/4s3tmIOgffe5+WyKxVq2IGqWRn4=";
   };
 
   # Derived from subprojects/gvc.wrap
@@ -64,7 +64,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "phosh";
-  version = "0.50.0";
+  version = "0.51.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Phosh";
     repo = "phosh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AvnMiLapHKSObz6x/fkLxqreksBkwLbcG6myj5xMuwc=";
+    hash = "sha256-bM1eKa5/aBjAHOFYyqjs6pLmr3R/WoK3590yGiLVNM4=";
   };
 
   nativeBuildInputs = [
@@ -162,7 +162,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.gnome.org/World/Phosh/phosh/-/blob/v${finalAttrs.version}/debian/changelog";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
-      masipcat
       zhaofengli
       armelclo
     ];

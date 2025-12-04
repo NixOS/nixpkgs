@@ -38,7 +38,6 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/jlu5/icoextract/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      bryanasdev000
       donovanglover
     ];
     mainProgram = "icoextract";

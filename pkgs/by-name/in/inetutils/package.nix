@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/inetutils/";
     license = licenses.gpl3Plus;
 
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = [ ];
     platforms = platforms.unix;
 
     /**

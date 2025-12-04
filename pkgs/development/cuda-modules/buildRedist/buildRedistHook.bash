@@ -29,6 +29,12 @@ buildRedistHookRegistration() {
 
   postFixupHooks+=(fixupCudaPropagatedBuildOutputsToOut)
   nixLog "added fixupCudaPropagatedBuildOutputsToOut to postFixupHooks"
+
+  # NOTE: We need to do this in postFixup since we don't write the dependency on removeStubsFromRunpathHook until
+  # postFixup -- recall recordPropagatedDependencies happens during fixupPhase.
+  # NOTE: Iff is shorthand for "if and only if" -- the logical biconditional.
+  postFixupHooks+=(checkCudaHasStubsIffIncludeRemoveStubsFromRunpathHook)
+  nixLog "added checkCudaHasStubsIffIncludeRemoveStubsFromRunpathHook to postFixupHooks"
 }
 
 buildRedistHookRegistration
@@ -108,7 +114,7 @@ checkCudaFhsRefs() {
   local -a outputPaths=()
   local firstMatches
 
-  mapfile -t outputPaths < <(for o in $(getAllOutputNames); do echo "${!o}"; done)
+  mapfile -t outputPaths < <(for outputName in $(getAllOutputNames); do echo "${!outputName:?}"; done)
   firstMatches="$(grep --max-count=5 --recursive --exclude=LICENSE /usr/ "${outputPaths[@]}")" || true
   if [[ -n $firstMatches ]]; then
     nixErrorLog "detected references to /usr: $firstMatches"
@@ -119,21 +125,68 @@ checkCudaFhsRefs() {
 }
 
 checkCudaNonEmptyOutputs() {
-  local output
+  local outputName
   local dirs
-  local -a failingOutputs=()
+  local -a failingOutputNames=()
 
-  for output in $(getAllOutputNames); do
-    [[ ${!output:?} == "out" || ${!output:?} == "${!outputDev:?}" ]] && continue
-    dirs="$(find "${!output:?}" -mindepth 1 -maxdepth 1)" || true
-    if [[ -z $dirs || $dirs == "${!output:?}/nix-support" ]]; then
-      failingOutputs+=("$output")
+  for outputName in $(getAllOutputNames); do
+    # NOTE: Reminder that outputDev is the name of the dev output, so we compare it as-is against outputName rather
+    # than using !outputDev, which would give us the path to the dev output.
+    [[ ${outputName:?} == "out" || ${outputName:?} == "${outputDev:?}" ]] && continue
+    dirs="$(find "${!outputName:?}" -mindepth 1 -maxdepth 1)" || true
+    if [[ -z $dirs || $dirs == "${!outputName:?}/nix-support" ]]; then
+      failingOutputNames+=("${outputName:?}")
     fi
   done
 
-  if ((${#failingOutputs[@]})); then
-    nixErrorLog "detected empty (excluding nix-support) outputs: ${failingOutputs[*]}"
+  if ((${#failingOutputNames[@]})); then
+    nixErrorLog "detected empty (excluding nix-support) outputs: ${failingOutputNames[*]}"
     nixErrorLog "this typically indicates a failure in packaging or moveToOutput ordering"
+    exit 1
+  fi
+
+  return 0
+}
+
+checkCudaHasStubsIffIncludeRemoveStubsFromRunpathHook() {
+  local outputName
+  local -i hasStubs
+  local -i hasRemoveStubsFromRunpathHook
+  local -a outputNamesWronglyExcludingHook=()
+  local -a outputNamesWronglyIncludingHook=()
+
+  for outputName in $(getAllOutputNames); do
+    hasStubs=0
+    if [[ $outputName == "stubs" ]] ||
+      find "${!outputName:?}" -mindepth 1 -type d -name stubs -print -quit | grep --silent .; then
+      hasStubs=1
+    fi
+
+    hasRemoveStubsFromRunpathHook=0
+    if grep --silent --no-messages removeStubsFromRunpathHook "${!outputName:?}/nix-support/propagated-build-inputs"; then
+      hasRemoveStubsFromRunpathHook=1
+    fi
+
+    if ((hasStubs && !hasRemoveStubsFromRunpathHook)); then
+      outputNamesWronglyExcludingHook+=("${outputName:?}")
+    elif ((!hasStubs && hasRemoveStubsFromRunpathHook)); then
+      outputNamesWronglyIncludingHook+=("${outputName:?}")
+    fi
+  done
+
+  if ((${#outputNamesWronglyExcludingHook[@]})); then
+    nixErrorLog "we detected outputs containing a stubs directory without a dependency on" \
+      "removeStubsFromRunpathHook: ${outputNamesWronglyExcludingHook[*]}"
+    nixErrorLog "ensure redistributables providing stubs set includeRemoveStubsFromRunpathHook to true"
+  fi
+
+  if ((${#outputNamesWronglyIncludingHook[@]})); then
+    nixErrorLog "we detected outputs without a stubs directory with a dependency on" \
+      "removeStubsFromRunpathHook: ${outputNamesWronglyIncludingHook[*]}"
+    nixErrorLog "ensure redistributables without stubs do not set includeRemoveStubsFromRunpathHook to true"
+  fi
+
+  if ((${#outputNamesWronglyExcludingHook[@]} || ${#outputNamesWronglyIncludingHook[@]})); then
     exit 1
   fi
 

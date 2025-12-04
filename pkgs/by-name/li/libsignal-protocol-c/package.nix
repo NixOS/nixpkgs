@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/signalapp/libsignal-protocol-c";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
   };
 }

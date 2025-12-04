@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtorrent";
-  version = "0.16.2";
+  version = "0.16.4";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "rtorrent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WXH5Op8P+UlcrbHri4yOTjQJSqc39fxxxOXpMmC7DHE=";
+    hash = "sha256-ut1R73UfkpDk/Y5Fq8kSavxIB3Y2jbYEQ8J/559Ech0=";
   };
 
   outputs = [

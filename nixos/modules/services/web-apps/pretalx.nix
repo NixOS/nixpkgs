@@ -12,9 +12,7 @@ let
 
   configFile = format.generate "pretalx.cfg" cfg.settings;
 
-  finalPackage = cfg.package.override {
-    inherit (cfg) plugins;
-  };
+  inherit (cfg) finalPackage;
 
   pythonEnv = finalPackage.python.buildEnv.override {
     extraLibs =
@@ -40,6 +38,22 @@ in
     enable = lib.mkEnableOption "pretalx";
 
     package = lib.mkPackageOption pkgs "pretalx" { };
+
+    finalPackage = lib.mkOption {
+      type = lib.types.package;
+      default = cfg.package.override {
+        inherit (cfg) plugins;
+      };
+      defaultText = ''
+        config.services.package.override {
+          inherit (config.services.pretalx) plugins;
+        }
+      '';
+      readOnly = true;
+      description = ''
+        The effective pretalx package used. This is the base package with the selected plugins applied.
+      '';
+    };
 
     group = lib.mkOption {
       type = lib.types.str;
@@ -220,8 +234,8 @@ in
             };
             static = lib.mkOption {
               type = lib.types.path;
-              default = "${cfg.package.static}/";
-              defaultText = lib.literalExpression "\${config.services.pretalx.package}.static}/";
+              default = "${finalPackage.static}/";
+              defaultText = "\${config.services.pretalx.finalPackage.static}/";
               readOnly = true;
               description = ''
                 Path to the directory that contains static files.
@@ -299,7 +313,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # https://docs.pretalx.org/administrator/installation.html
+    # https://docs.pretalx.org/administrator/installation/
 
     environment.systemPackages = [
       (pkgs.writeScriptBin "pretalx-manage" ''
@@ -331,7 +345,7 @@ in
         recommendedTlsSettings = lib.mkDefault true;
         upstreams.pretalx.servers."unix:/run/pretalx/pretalx.sock" = { };
         virtualHosts.${cfg.nginx.domain} = {
-          # https://docs.pretalx.org/administrator/installation.html#step-7-ssl
+          # https://docs.pretalx.org/administrator/installation/#step-8-reverse-proxy
           extraConfig = ''
             more_set_headers "Referrer-Policy: same-origin";
             more_set_headers "X-Content-Type-Options: nosniff";
@@ -442,7 +456,7 @@ in
           preStart =
             let
               versionString = lib.concatStringsSep "\n" (
-                [ "pretalx-${cfg.package.version}" ]
+                [ "pretalx-${cfg.finalPackage.version}" ]
                 ++ map (plugin: "${plugin.pname}-${plugin.version}") cfg.plugins
               );
             in

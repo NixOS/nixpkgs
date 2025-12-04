@@ -73,6 +73,7 @@ mapAliases {
   inherit (pkgs) asar; # added 2023-08-26
   inherit (pkgs) auto-changelog; # added 2024-06-25
   inherit (pkgs) aws-azure-login; # added 2023-09-30
+  awesome-lint = throw "'awesome-lint' has been removed because it was unmaintainable in nixpkgs"; # Added 2025-11-17
   balanceofsatoshis = pkgs.balanceofsatoshis; # added 2023-07-31
   inherit (pkgs) bash-language-server; # added 2024-06-07
   bibtex-tidy = pkgs.bibtex-tidy; # added 2023-07-30
@@ -86,6 +87,7 @@ mapAliases {
   inherit (pkgs) cdk8s-cli; # Added 2025-11-10
   inherit (pkgs) cdktf-cli; # added 2025-10-02
   inherit (pkgs) clean-css-cli; # added 2023-08-18
+  clipboard-cli = throw "'clipboard-cli' has been removed because it was unmaintainable in nixpkgs"; # Added 2025-11-17
   inherit (pkgs) coc-clangd; # added 2024-06-29
   inherit (pkgs) coc-cmake; # Added 2025-11-05
   inherit (pkgs) coc-css; # added 2024-06-29
@@ -142,6 +144,7 @@ mapAliases {
   inherit (pkgs) conventional-changelog-cli; # Added 2025-11-08
   copy-webpack-plugin = throw "copy-webpack-plugin was removed because it is a JS library, so your project should lock it with a JS package manager instead."; # Added 2024-12-16
   inherit (pkgs) cordova; # added 2023-08-18
+  cpy-cli = throw "'cpy-cli' has been removed because it was unmaintainable in nixpkgs"; # Added 2025-11-17
   create-cycle-app = throw "create-cycle-app has been removed because it is unmaintained and has issues installing with recent nodejs versions."; # Added 2025-11-01
   create-react-native-app = throw "create-react-native-app was removed because it was deprecated. Upstream suggests using a framework for React Native."; # added 2024-12-08
   inherit (pkgs) cspell;
@@ -157,14 +160,18 @@ mapAliases {
   inherit (pkgs.elmPackages) elm-test;
   inherit (pkgs.elmPackages) elm-review;
   elm-oracle = throw "'elm-oracle' has been removed, since it doesn't work with modern versions of Elm."; # Added 2025-11-07
+  emoj = throw "'emoj' has been removed because it was unmaintainable in nixpkgs"; # Added 2025-11-17
   emojione = throw "emojione was archived and abandoned upstream, so it has been removed"; # Added 2025-11-06
   escape-string-regexp = throw "escape-string-regexp was removed because it provides no executable"; # added 2025-03-12
   inherit (pkgs) eslint; # Added 2024-08-28
   inherit (pkgs) eslint_d; # Added 2023-05-26
   inherit (pkgs) eas-cli; # added 2025-01-08
   expo-cli = throw "expo-cli was removed because it was deprecated upstream. Use `npx expo` or eas-cli instead."; # added 2024-12-02
+  fast-cli = throw "'fast-cli' has been removed because it was unmaintainable in nixpkgs"; # Added 2025-11-17
+  inherit (pkgs) fauna-shell; # Added 2025-11-27
   inherit (pkgs) firebase-tools; # added 2023-08-18
   inherit (pkgs) fixjson; # added 2024-06-26
+  fkill-cli = throw "'fkill-cli' has been removed because it was unmaintainable in nixpkgs"; # Added 2025-11-17
   fleek-cli = throw "'fleek-cli' was removed because the upstream source code repo has been deleted."; # Added 2025-11-07
   flood = pkgs.flood; # Added 2023-07-25
   forever = throw "'forever' has been removed because it was unmaintained upstream"; # Added 2025-11-14
@@ -246,11 +253,13 @@ mapAliases {
   near-cli = throw "'near-cli' has been removed as upstream has deprecated it and archived the source code repo"; # Added 2025-11-10
   neovim = pkgs.neovim-node-client; # added 2024-11-13
   nijs = throw "'nijs' has been removed as it was unmaintained upstream"; # Added 2025-11-14
+  inherit (pkgs) node-gyp-build; # Added 2025-11-27
   node-inspector = throw "node-inspector was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) node-gyp; # added 2024-08-13
   inherit (pkgs) node-pre-gyp; # added 2024-08-05
   inherit (pkgs) node-red; # added 2024-10-06
   inherit (pkgs) nodemon; # added 2024-06-28
+  np = throw "'np' has been removed because it was unmaintainable in nixpkgs"; # Added 2025-11-17
   npm = pkgs.nodejs.overrideAttrs (old: {
     meta = old.meta // {
       mainProgram = "npm";
@@ -294,6 +303,7 @@ mapAliases {
   inherit (pkgs) serve; # added 2025-08-27
   inherit (pkgs) serverless; # Added 2023-11-29
   shout = throw "shout was removed because it was deprecated upstream in favor of thelounge."; # Added 2024-10-19
+  inherit (pkgs) sloc; # Added 2025-11-28
   smartdc = throw "'smartdc' was removed because it was unmaintained upstream"; # Added 2025-11-14
   inherit (pkgs) snyk; # Added 2023-08-30
   "socket.io" = throw "socket.io was removed because it provides no executable"; # added 2025-03-23

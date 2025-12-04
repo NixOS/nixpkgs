@@ -263,18 +263,6 @@ let
         };
       };
 
-      # xmltodict>=1.0 not compatible with georss-client and aio-georss-client
-      # https://github.com/exxamalte/python-aio-georss-client/issues/63
-      xmltodict = super.xmltodict.overridePythonAttrs rec {
-        version = "0.15.1";
-        src = fetchFromGitHub {
-          owner = "martinblech";
-          repo = "xmltodict";
-          tag = "v${version}";
-          hash = "sha256-j3shoXjAoAWFd+7k+0w6eoNygS2wkbhDkIq7QG+TmSM=";
-        };
-      };
-
       # internal python packages only consumed by home-assistant itself
       hass-web-proxy-lib = self.callPackage ./python-modules/hass-web-proxy-lib { };
       home-assistant-frontend = self.callPackage ./frontend.nix { };
@@ -373,6 +361,10 @@ python.pkgs.buildPythonApplication rec {
       --replace-fail "setuptools==78.1.1" setuptools
   '';
 
+  pythonRemoveDeps = [
+    "uv"
+  ];
+
   dependencies = with python.pkgs; [
     # Only packages required in pyproject.toml
     aiodns
@@ -418,7 +410,6 @@ python.pkgs.buildPythonApplication rec {
     typing-extensions
     ulid-transform
     urllib3
-    uv
     voluptuous
     voluptuous-openapi
     voluptuous-serialize

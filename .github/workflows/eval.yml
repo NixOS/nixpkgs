@@ -33,7 +33,7 @@ defaults:
 jobs:
   versions:
     if: inputs.testVersions
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-slim
     outputs:
       versions: ${{ steps.versions.outputs.versions }}
     steps:
@@ -257,7 +257,7 @@ jobs:
 
   # Creates a matrix of Eval performance for various versions and systems.
   report:
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-slim
     needs: [versions, eval]
     steps:
       - name: Download output paths and eval stats for all versions

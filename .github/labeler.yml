@@ -332,6 +332,7 @@
       - changed-files:
           - any-glob-to-any-file:
               - pkgs/os-specific/linux/musl/**/*
+              - pkgs/by-name/mu/musl/**/*
 
 "6.topic: nim":
   - any:

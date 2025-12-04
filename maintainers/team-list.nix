@@ -137,7 +137,6 @@ with lib.maintainers;
 
   c = {
     members = [
-      matthewbauer
       mic92
     ];
     scope = "Maintain C libraries and tooling.";
@@ -641,7 +640,6 @@ with lib.maintainers;
   matrix = {
     members = [
       ma27
-      fadenb
       mguentner
       dandellion
       nickcao

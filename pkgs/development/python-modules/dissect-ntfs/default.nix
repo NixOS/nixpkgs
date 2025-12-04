@@ -7,21 +7,18 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-ntfs";
-  version = "3.14";
+  version = "3.15";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.ntfs";
     tag = version;
-    hash = "sha256-C2tve1RVR8Q7t1Xz7Of1xRZH6IuLP9nL2l1cHbycFQ4=";
+    hash = "sha256-dd0AGkOXd+7VB6RIGiLoq1AFi4Uns1axW4V8MN8W7ao=";
   };
 
   build-system = [
@@ -41,6 +38,14 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Test is very time consuming
     "tests/test_index.py"
+  ];
+
+  disabledTests = [
+    # Issue with archive
+    "test_mft"
+    "test_ntfs"
+    "test_secure"
+    "test_fragmented_mft"
   ];
 
   meta = with lib; {

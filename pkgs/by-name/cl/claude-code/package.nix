@@ -7,14 +7,18 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "claude-code";
-  version = "2.0.50";
+  # NOTE: Use the following command to update the package
+  # ```sh
+  # nix-shell maintainers/scripts/update.nix --argstr commit true --argstr package vscode-extensions.anthropic.claude-code && nix-shell maintainers/scripts/update.nix --argstr commit true --argstr package claude-code
+  # ```
+  version = "2.0.58";
 
   src = fetchzip {
     url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${finalAttrs.version}.tgz";
-    hash = "sha256-mZQkqeL/F/9u5esy1j1pUjcyzeaShREx+vMuvZ5Zrz8=";
+    hash = "sha256-6BLpBNqNR2qrKBcXINqvfl2dgaQA6NmxsEsk1ILqeT8=";
   };
 
-  npmDepsHash = "sha256-/5Qh99vAcTiFz6FrzJgm26RserqxVjLYqOOx5q5hkgc=";
+  npmDepsHash = "sha256-XOIuOQUJ0HB86pwuUnrv0B121lO9em9XG1DAK0/L4js=";
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
@@ -49,6 +53,7 @@ buildNpmPackage (finalAttrs: {
     downloadPage = "https://www.npmjs.com/package/@anthropic-ai/claude-code";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
+      adeci
       malo
       markus1189
       omarjatoi

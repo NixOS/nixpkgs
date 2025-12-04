@@ -5,20 +5,18 @@
   xmlm,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ezxmlm";
   version = "1.1.0";
 
-  useDune2 = true;
-
   src = fetchurl {
-    url = "https://github.com/mirage/ezxmlm/releases/download/v${version}/ezxmlm-v${version}.tbz";
-    sha256 = "123dn4h993mlng9gzf4nc6mw75ja7ndcxkbkwfs48j5jk1z05j6d";
+    url = "https://github.com/mirage/ezxmlm/releases/download/v${finalAttrs.version}/ezxmlm-v${finalAttrs.version}.tbz";
+    hash = "sha256-zcgCfpiySES043PNzpo9SpbDq2GWuP/Ss7SOlCCxbYg=";
   };
 
   propagatedBuildInputs = [ xmlm ];
 
-  meta = with lib; {
+  meta = {
     description = "Combinators to use with xmlm for parsing and selection";
     longDescription = ''
       An "easy" interface on top of the xmlm library. This version provides
@@ -31,8 +29,8 @@ buildDunePackage rec {
       types in this library are more specific than Xmlm, it should interoperate
       just fine with it if you decide to switch over.
     '';
-    maintainers = [ maintainers.carlosdagos ];
+    maintainers = [ lib.maintainers.carlosdagos ];
     homepage = "https://github.com/mirage/ezxmlm/";
-    license = licenses.isc;
+    license = lib.licenses.isc;
   };
-}
+})

@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "dbus-fast";
-  version = "2.46.3";
+  version = "3.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "dbus-fast";
     tag = "v${version}";
-    hash = "sha256-Z/TuYRpmMTU86pJAFDY2J9RG4YfsDcOJsl+71yEVgSI=";
+    hash = "sha256-WmVtJ/hTFTohsbxwXpBbOvDE8/pdPHX2rBurxtW+ct0=";
   };
 
   postPatch = ''
@@ -72,7 +72,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Faster version of dbus-next";
     homepage = "https://github.com/bluetooth-devices/dbus-fast";
-    changelog = "https://github.com/Bluetooth-Devices/dbus-fast/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Bluetooth-Devices/dbus-fast/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

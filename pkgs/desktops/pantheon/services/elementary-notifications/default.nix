@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-notifications";
-  version = "8.1.1";
+  version = "8.1.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "notifications";
     tag = version;
-    hash = "sha256-V884jv7bleDMsuZDkodyeNBhStIoNPNxfT6mz1YjHXE=";
+    hash = "sha256-qod76RSsCO9NvjnYTLRW6P1UyR1K6Uu9fEjU2WgHUWk=";
   };
 
   strictDeps = true;

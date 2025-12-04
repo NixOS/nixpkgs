@@ -29,9 +29,7 @@ in
       capabilities = "cap_dac_override+p";
       owner = "root";
       group = "root";
-      source = lib.getExe (
-        pkgs.espanso-wayland.override { securityWrapperPath = config.security.wrapperDir; }
-      );
+      source = lib.getExe (cfg.package.override { securityWrapperPath = config.security.wrapperDir; });
     };
     systemd.user.services.espanso = {
       description = "Espanso daemon";

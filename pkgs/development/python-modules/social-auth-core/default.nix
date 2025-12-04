@@ -63,7 +63,7 @@ buildPythonPackage rec {
     responses
     typing-extensions
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     # missing google-auth-stubs

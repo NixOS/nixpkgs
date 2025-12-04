@@ -15,20 +15,21 @@
   kconfig,
   kinit,
   kjobwidgets,
+  kcmutils,
   plasma-framework,
   libgit2,
 }:
 
 stdenv.mkDerivation rec {
   pname = "kup";
-  version = "0.9.1";
+  version = "0.10.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     repo = "kup";
     owner = "system";
     rev = "kup-${version}";
-    sha256 = "1s180y6vzkxxcjpfdvrm90251rkaf3swzkjwdlpm6m4vnggq0hvs";
+    hash = "sha256-G/GXmcQI1OBnCE7saPHeHDAMeL2WR6nVttMlKV2e01I=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +51,7 @@ stdenv.mkDerivation rec {
     kjobwidgets
     plasma-framework
     libgit2
+    kcmutils
   ];
 
   meta = with lib; {

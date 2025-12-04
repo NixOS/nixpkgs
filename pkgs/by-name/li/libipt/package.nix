@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/intel/libipt";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
   };
 }

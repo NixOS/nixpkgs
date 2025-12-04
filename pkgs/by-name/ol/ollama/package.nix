@@ -57,7 +57,7 @@ let
 
   rocmRequested = shouldEnable "rocm" config.rocmSupport;
   cudaRequested = shouldEnable "cuda" config.cudaSupport;
-  vulkanRequested = shouldEnable "vulkan" false;
+  vulkanRequested = acceleration == "vulkan";
 
   enableRocm = rocmRequested && stdenv.hostPlatform.isLinux;
   enableCuda = cudaRequested && stdenv.hostPlatform.isLinux;
@@ -138,13 +138,13 @@ in
 goBuild (finalAttrs: {
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.12.11";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-o6jjn9VyLRwD1wFoUv8nNwf5QC6TOVipmMrcHtikNjI=";
+    hash = "sha256-VhBPYf/beWkeFCdBTC2UpxqQUgEX8TCkbiWBPg8gDb4=";
   };
 
   vendorHash = "sha256-rKRRcwmon/3K2bN7iQaMap5yNYKMCZ7P0M1C2hv4IlQ=";
@@ -187,6 +187,12 @@ goBuild (finalAttrs: {
   postPatch = ''
     substituteInPlace version/version.go \
       --replace-fail 0.0.0 '${finalAttrs.version}'
+    rm -r app
+  ''
+  # disable tests that fail in sandbox due to Metal init failure
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    rm ml/backend/ggml/ggml_test.go
+    rm ml/nn/pooling/pooling_test.go
   '';
 
   overrideModAttrs = (

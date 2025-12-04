@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "osmnx";
-  version = "2.0.6";
+  version = "2.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "gboeing";
     repo = "osmnx";
     tag = "v${version}";
-    hash = "sha256-y2gKToDzG1IIcLN+hK/WeS+/z6MNabiIr+8Em1Ct72Q=";
+    hash = "sha256-XIvwLUvpl+AgrtR9mOkRXhxLc8mtSPk3+5779i/F+2s=";
   };
 
   build-system = [ uv-build ];

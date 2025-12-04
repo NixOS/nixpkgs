@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "katana";
-  version = "1.2.2";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "katana";
     tag = "v${version}";
-    hash = "sha256-q7uOtfxSS6cLZKjnObLAzn+JpC2myEkoTd2TINBhYcU=";
+    hash = "sha256-zqcQBRF03TOldfMw/Yw6fdryfW2N5SHOikuliSL0v+A=";
   };
 
-  vendorHash = "sha256-9RoL6gpAJXO2/0UCmpRnh8roZw/txNgb/H0kVTKVxWs=";
+  vendorHash = "sha256-ZcukX+x0csNUxdIERS3ACw728+TsVicsbOqdL6DxgkA=";
 
   subPackages = [ "cmd/katana" ];
 

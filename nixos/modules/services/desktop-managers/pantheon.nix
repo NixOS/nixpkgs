@@ -193,6 +193,7 @@ in
         pantheon.gala
         pantheon.gnome-settings-daemon
         pantheon.elementary-session-settings
+        pantheon.elementary-settings-daemon
       ];
       programs.dconf.enable = true;
       networking.networkmanager.enable = mkDefault true;

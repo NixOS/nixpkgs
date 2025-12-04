@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "subfinder";
-  version = "2.10.0";
+  version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "subfinder";
     tag = "v${version}";
-    hash = "sha256-bzDBxxTa90L0wbihdT7i06I7EdAi/UA+upwXVrC9K34=";
+    hash = "sha256-elv3FPJigd7xhJiTv+eutjBUqMzG50H8Agf5DenwvyU=";
   };
 
-  vendorHash = "sha256-sqcSkqp5X3ItAXL6///MU5ghJDCnnZFuFh6Kqa/38sA=";
+  vendorHash = "sha256-ss1lcdqBni5SmHVLDQpFFVTQ3/nL8qPTl5zul1GQpBM=";
 
   patches = [
     # Disable automatic version check
@@ -39,6 +39,7 @@ buildGoModule rec {
       useful for bug bounties and safe for penetration testing.
     '';
     homepage = "https://github.com/projectdiscovery/subfinder";
+    changelog = "https://github.com/projectdiscovery/subfinder/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [
       fpletz

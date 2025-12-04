@@ -10,7 +10,7 @@
   python3,
   xorg,
   fontconfig,
-  nodePackages,
+  node-gyp-build,
   ripgrep,
   pkg-config,
   libsecret,
@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "marktext";
-  version = "0.17.1-unstable-2024-06-10";
+  version = "0.17.0-unstable-2025-11-19";
 
   src = fetchFromGitHub {
     owner = "marktext";
     repo = "marktext";
-    rev = "11c8cc1e1929a7975df39fa5f4503130fef53547";
-    hash = "sha256-5PIOTg4/RBave/b3CArQSLvmA64ME9++3O1JT4lgKm0=";
+    rev = "aa71e33e07845419533d767ad0d260a7c267cec7";
+    hash = "sha256-c/MxYGFFCfC5KcvtBYuxSqeZ4WuAq5zPuBfYqXczicU=";
     postFetch = ''
       cd $out
       patch -p1 < ${./0001-update-electron.patch}
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages (ps: with ps; [ packaging ]))
     pkg-config
     nodejs
-    nodePackages.node-gyp-build
+    node-gyp-build
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild

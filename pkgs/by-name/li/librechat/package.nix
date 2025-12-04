@@ -1,6 +1,7 @@
 {
   lib,
   buildNpmPackage,
+  fetchNpmDeps,
   fetchFromGitHub,
   pkg-config,
   node-gyp,
@@ -10,13 +11,13 @@
 
 buildNpmPackage rec {
   pname = "librechat";
-  version = "0.7.8";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "danny-avila";
     repo = "LibreChat";
     tag = "v${version}";
-    hash = "sha256-bo26EzpRjE2hbbx6oUo0tDsLMdVpWcazCIzA5sm5L34=";
+    hash = "sha256-DTmb9J2nsMy6f+V6BgRtFgpTwOi9OQnvikSx4QZQ0HI=";
   };
 
   patches = [
@@ -35,9 +36,20 @@ buildNpmPackage rec {
     # directory as well. Again, we patch this to be relative to the current working
     # directory instead.
     ./0003-upload-paths.patch
+    # The npm dependencies are causing issues with the build. The package @testing-library/react
+    # appears to not be included in NPM deps, even though it is present in the project
+    # This patch fixes this by placing the dependency in different files and regenerating the
+    # lock file.
+    ./0004-fix-deps-v080.patch
   ];
 
-  npmDepsHash = "sha256-knmS2I6AiSdV2bSnNBThbVHdkpk6iXiRuk4adciDK1M=";
+  npmDepsHash = "sha256-97cEw6VD7FoVayrxClHuS1iUcQmDw7/aUoUV6ektvOY=";
+  npmDeps = fetchNpmDeps {
+    inherit src;
+    name = "${pname}-${version}-npm-deps-patched";
+    hash = npmDepsHash;
+    patches = [ ./0004-fix-deps-v080.patch ];
+  };
 
   nativeBuildInputs = [
     pkg-config
@@ -52,7 +64,18 @@ buildNpmPackage rec {
   makeCacheWritable = true;
 
   npmBuildScript = "frontend";
-  npmPruneFlags = [ "--omit=dev" ];
+  npmPruneFlags = [ "--production" ];
+
+  # For reasons beyond my understanding, the api and client directory disappears after the build finishes.
+  # Hence, the build fails with broken symlinks and if the symlink is removed,
+  # starting LibreChat fails with a "module not found" error.
+  # This is a fixup that copies the missing files to the appropriate location.
+  preFixup = ''
+    mkdir -p $out/lib/node_modules/LibreChat/packages/api
+    cp -R packages/api/dist/. $out/lib/node_modules/LibreChat/packages/api
+    mkdir -p $out/lib/node_modules/LibreChat/packages/client
+    cp -R packages/client/dist/. $out/lib/node_modules/LibreChat/packages/client
+  '';
 
   passthru = {
     updateScript = nix-update-script {

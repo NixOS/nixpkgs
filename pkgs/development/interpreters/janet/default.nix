@@ -69,7 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://janet-lang.org/";
     license = licenses.mit;
     maintainers = with maintainers; [
-      andrewchambers
       peterhoeg
     ];
     platforms = platforms.all;

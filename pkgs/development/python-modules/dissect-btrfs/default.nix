@@ -6,7 +6,6 @@
   fetchFromGitHub,
   google-crc32c,
   python-lzo,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   zstandard,
@@ -14,16 +13,14 @@
 
 buildPythonPackage rec {
   pname = "dissect-btrfs";
-  version = "1.7";
+  version = "1.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.btrfs";
     tag = version;
-    hash = "sha256-BREkGrQ1khz+uPahHeMwD0V8JytQY1K/oYa7nxP+bR0=";
+    hash = "sha256-qOyPMDZtudrvZNlyiL16gv513zuTCd2O14Q4QwHMmoc=";
   };
 
   nativeBuildInputs = [

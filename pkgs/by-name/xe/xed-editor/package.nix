@@ -10,6 +10,7 @@
   gtksourceview4,
   gspell,
   xapp,
+  xapp-symbolic-icons,
   pkg-config,
   python3,
   meson,
@@ -22,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xed-editor";
-  version = "3.8.4";
+  version = "3.8.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xed";
     rev = version;
-    hash = "sha256-pI9gjAA5dn0QwZKGungQ1xpQJmnfCxmqWR0VBEQ5v84=";
+    hash = "sha256-iPD9SawHA0bwnZvC+IyMq9cFE1YOYLISehUJjTXiqGw=";
   };
 
   patches = [
@@ -63,6 +64,12 @@ stdenv.mkDerivation rec {
     gspell
     xapp
   ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${lib.makeSearchPath "share" [ xapp-symbolic-icons ]}"
+    )
+  '';
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/xed";

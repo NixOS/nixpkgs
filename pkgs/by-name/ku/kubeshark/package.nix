@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "kubeshark";
-  version = "52.9.0";
+  version = "52.10.0";
 
   src = fetchFromGitHub {
     owner = "kubeshark";
     repo = "kubeshark";
     rev = "v${version}";
-    hash = "sha256-avXEBOjxTfrWxyq3PQVs7DD+1Wo6fRPboUrpt/4Ud/U=";
+    hash = "sha256-7T23cdPIE7X5Hx03sY93z/qrqRMGUTMObWvwdH6Hj5U=";
   };
 
   vendorHash = "sha256-4s1gxJo2w5BibZ9CJP7Jl9Z8Zzo8WpBokBnRN+zp8b4=";
@@ -71,7 +71,6 @@ buildGoModule rec {
       capturing, dissecting and monitoring all traffic and payloads going in, out and across containers, pods, nodes and clusters.
     '';
     maintainers = with lib.maintainers; [
-      bryanasdev000
       qjoly
     ];
   };

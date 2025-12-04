@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "n64recomp";
-  version = "0-unstable-2025-10-07";
+  version = "0-unstable-2025-11-25";
 
   src = fetchFromGitHub {
     owner = "N64Recomp";
     repo = "N64Recomp";
-    rev = "c39a9b6c7e7596bf8917778d9c15ba78e491b34d";
-    hash = "sha256-SpPUXD0zZVcWPgmZnH+5gLDc5qYgGcIhYYtfXKiVAHY=";
+    rev = "0fab168437a564c1fc93786acdaadcd6bb8c52f1";
+    hash = "sha256-Cuw9922HLjiF1viYe1qCtmncEZDHTjIz4acffxNZ/ss=";
     fetchSubmodules = true;
   };
 

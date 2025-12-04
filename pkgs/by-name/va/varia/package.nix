@@ -42,6 +42,7 @@ python3Packages.buildPythonApplication rec {
     pygobject3
     aria2p
     yt-dlp
+    emoji-country-flag
   ];
 
   postInstall = ''

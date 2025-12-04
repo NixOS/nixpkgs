@@ -14,22 +14,14 @@
 
 let
   inherit (stdenv) hostPlatform;
-
-  sources =
-    (lib.importJSON ./sources.json)."${hostPlatform.system}"
+  information = (lib.importJSON ./information.json);
+  source =
+    information.sources."${hostPlatform.system}"
       or (throw "antigravity: unsupported system ${hostPlatform.system}");
-
-  version = "1.11.3";
-  vscodeVersion = "1.104.0";
 in
 (callPackage vscode-generic {
-  inherit
-    commandLineArgs
-    useVSCodeRipgrep
-    version
-    vscodeVersion
-    ;
-
+  inherit commandLineArgs useVSCodeRipgrep;
+  inherit (information) version vscodeVersion;
   pname = "antigravity";
 
   executableName = "antigravity";
@@ -38,9 +30,7 @@ in
   libraryName = "antigravity";
   iconName = "antigravity";
 
-  src = fetchurl {
-    inherit (sources) url hash;
-  };
+  src = fetchurl { inherit (source) url sha256; };
 
   sourceRoot = if hostPlatform.isDarwin then "Antigravity.app" else "Antigravity";
 
@@ -68,9 +58,7 @@ in
     );
 
   tests = { };
-  updateScript = ./update.sh;
-
-  dontFixup = hostPlatform.isDarwin;
+  updateScript = ./update.js;
 
   meta = {
     mainProgram = "antigravity";

@@ -71,6 +71,16 @@ in
       "programs"
       "gnome-documents"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule
+      [
+        "services"
+        "preload"
+      ]
+      ''
+        The corresponding package was removed from nixpkgs,
+        due to lack of usage and being broken since its introduction.
+      ''
+    ) # added 2025-11-29
     (mkRemovedOptionModule [
       "programs"
       "goldwarden"
@@ -430,6 +440,9 @@ in
       as an hardware RNG, as it will automatically run the krngd task
       to periodically collect random data from the device and mix it
       into the kernel's RNG.
+    '')
+    (mkRemovedOptionModule [ "virtualisation" "multipass" ] ''
+      virtualisation.multipass has been removed since it was unmaintained in nixpkgs
     '')
     # Do NOT add any option renames here, see top of the file
   ];

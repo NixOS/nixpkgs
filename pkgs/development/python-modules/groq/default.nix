@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "groq";
-  version = "0.34.1";
+  version = "0.36.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "groq";
     repo = "groq-python";
     tag = "v${version}";
-    hash = "sha256-PXkql+YE0sXkJrgooGUnIsEnIRvqZ8RZGUx5nRJY6Qw=";
+    hash = "sha256-qN1DMJN5bp5Cnea161ePONsD6V0avAt/oavKHkm/Ec4=";
   };
 
   postPatch = ''
@@ -67,7 +67,7 @@ buildPythonPackage rec {
     pytestCheckHook
     respx
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "groq" ];
 

@@ -74,6 +74,7 @@ mapAliases {
   autotrash = throw "'autotrash' has been renamed to/replaced by 'super.pkgs.autotrash'"; # Converted to throw 2025-10-29
   Babel = throw "'Babel' has been renamed to/replaced by 'babel'"; # Converted to throw 2025-10-29
   backports_shutil_get_terminal_size = throw "'backports_shutil_get_terminal_size' has been renamed to/replaced by 'backports-shutil-get-terminal-size'"; # Converted to throw 2025-10-29
+  basewood-av = throw "'basewood-av' has been removed due to being archived upstream and unused"; # added 2025-11-26
   bash_kernel = throw "'bash_kernel' has been renamed to/replaced by 'bash-kernel'"; # Converted to throw 2025-10-29
   beancount_docverif = throw "'beancount_docverif' has been renamed to/replaced by 'beancount-docverif'"; # Converted to throw 2025-10-29
   beets-stable = lib.warn "beets-stable was aliased to beets, since upstream releases are frequent nowadays" self.beets; # added 2025-10-16
@@ -114,7 +115,8 @@ mapAliases {
   django-crispy-bootstrap3 = crispy-bootstrap3; # added 2025-06-11
   django-crispy-bootstrap4 = crispy-bootstrap4; # added 2025-06-11
   django-crispy-bootstrap5 = crispy-bootstrap5; # added 2025-06-11
-  django_3 = throw "Django 3 has reached it#s EOL in 2024-04 and has therefore been removed."; # added 2025-01-25
+  django_3 = throw "Django 3 has reached it's EOL in 2024-04 and has therefore been removed."; # added 2025-01-25
+  django_5_1 = throw "Django 5.1 has reached it's EOL in 2025-12 and has therefore been removed."; # added 2025-11-30"
   django_appconf = throw "'django_appconf' has been renamed to/replaced by 'django-appconf'"; # Converted to throw 2025-10-29
   django_classytags = throw "'django_classytags' has been renamed to/replaced by 'django-classy-tags'"; # Converted to throw 2025-10-29
   django_colorful = throw "'django_colorful' has been renamed to/replaced by 'django-colorful'"; # Converted to throw 2025-10-29
@@ -298,6 +300,7 @@ mapAliases {
   pdfminer = throw "'pdfminer' has been renamed to/replaced by 'pdfminer-six'"; # Converted to throw 2025-10-29
   pep257 = throw "'pep257' has been renamed to/replaced by 'pydocstyle'"; # Converted to throw 2025-10-29
   percol = throw "percol has been removed because it hasn't been updated since 2019"; # added 2025-05-25
+  pillow-avif-plugin = throw "'pillow-avif-plugin' has been removed because 'pillow' has native avif support since 11.3"; # added 2025-11-26
   plumlightpad = throw "plumlightpad has been removed because the API was shut down"; # added 2025-11-04
   Polygon3 = throw "'Polygon3' has been renamed to/replaced by 'polygon3'"; # Converted to throw 2025-10-29
   posix_ipc = throw "'posix_ipc' has been renamed to/replaced by 'posix-ipc'"; # Converted to throw 2025-10-29
@@ -333,6 +336,7 @@ mapAliases {
   PyICU = throw "'PyICU' has been renamed to/replaced by 'pyicu'"; # Converted to throw 2025-10-29
   PyLD = throw "'PyLD' has been renamed to/replaced by 'pyld'"; # Converted to throw 2025-10-29
   pyliblo = throw "pyliblo is unmaintained upstream and was removed from nixpkgs. Please use pyliblo3 instead"; # added 2025-06-23
+  pylit = throw "'pylit' has been removed as it was broken and unmaintained upstream"; # Added 2025-11-29
   pymc3 = throw "'pymc3' has been renamed to/replaced by 'pymc'"; # Converted to throw 2025-10-29
   pymelcloud = throw "'pymelcloud' has been renamed to/replaced by 'python-melcloud'"; # Converted to throw 2025-10-29
   PyMVGLive = throw "'PyMVGLive' has been renamed to/replaced by 'pymvglive'"; # Converted to throw 2025-10-29
@@ -396,6 +400,9 @@ mapAliases {
   PyVirtualDisplay = throw "'PyVirtualDisplay' has been renamed to/replaced by 'pyvirtualdisplay'"; # Converted to throw 2025-10-29
   pyvoro = throw "pyvoro has been removed because it is unmaintained upstream and has been marked as broken since 2023."; # Added 2025-10-11
   qds_sdk = throw "'qds_sdk' has been renamed to/replaced by 'qds-sdk'"; # Converted to throw 2025-10-29
+  qiskit-ibmq-provider = throw "qiskit-imbq-provider has been removed, since it was deprecated upstream"; # added 2025-09-13
+  qiskit-ignis = throw "qiskit-ignis has been removed, since it was deprecated upstream"; # added 2025-09-13
+  qiskit-terra = throw "qiskit-terra has been removed, since it was deprecated upstream."; # added 2025-09-13
   Quandl = throw "'Quandl' has been renamed to/replaced by 'quandl'"; # Converted to throw 2025-10-29
   querystring_parser = throw "'querystring_parser' has been renamed to/replaced by 'querystring-parser'"; # Converted to throw 2025-10-29
   radian = throw "radian has been promoted to a top-level attribute name: `pkgs.radian`"; # added 2025-05-02
@@ -477,6 +484,8 @@ mapAliases {
   tweedledum = throw "'tweedledum' has been removed due to lack of upstream maintenance."; # Added 2025-11-22
   typed-ast = throw "typed-ast was removed because it went end of life in July 2023"; # added 2025-05-24
   types-typed-ast = throw "types-typed-ast was removed because so was typed-ast"; # added 2025-05-24
+  typesystem = throw "'typesystem' has been removed as it was broken, unmaintained, and archived upstream"; # Added 2025-11-27
+  typical = throw "'typical' has been removed as it was broken and archived upstream"; # Added 2025-11-27
   uamqp = throw "'uamqp' has been removed because it is broken and unmaintained."; # added 2025-06-11
   ufoLib2 = throw "'ufoLib2' has been renamed to/replaced by 'ufolib2'"; # Converted to throw 2025-10-29
   unicode-slugify = throw "'unicode-slugify' has been removed becaues it was broken and unmaintained. Consider using 'python-slugify' instead."; # added 2025-10-05

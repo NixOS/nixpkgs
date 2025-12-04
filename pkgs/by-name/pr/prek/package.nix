@@ -9,23 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prek";
-  version = "0.2.17";
+  version = "0.2.19";
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = "prek";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-7GTp1UBAnxLVEQFTQbBxGiKSvZwEVVMA7oa3Iz5Ifzk=";
+    hash = "sha256-/B7Z4d4GEJKhEDRznVzeqeB2Qrsz/dAVV3Syo8EhfvM=";
   };
 
-  cargoHash = "sha256-i09ZcG3xUt+qFZge/8MiZ5yKxIeBd3l0BYlY5OFf3l8=";
-
-  preBuild = ''
-    version312_str=$(${python312}/bin/python -c 'import sys; print(sys.version_info[:3])')
-
-    substituteInPlace ./tests/languages/python.rs \
-      --replace '(3, 12, 11)' "$version312_str"
-  '';
+  cargoHash = "sha256-quWyPdFEBYylhi1gugdew9KXhHldTkIAbea7GmVhH5g=";
 
   nativeCheckInputs = [
     git

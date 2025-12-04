@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qdigidoc";
-  version = "4.9.0";
+  version = "4.9.1";
 
   src = fetchFromGitHub {
     owner = "open-eid";
     repo = "DigiDoc4-Client";
     tag = "v${version}";
-    hash = "sha256-lVx8Sqj9c8fvsPKjt3JDa59h44fvv6n7+odjrb00TPo=";
+    hash = "sha256-sp+qlWtsMZHyoG0OVKbhalgak5KIx7C7Rpp0PbKVxK8=";
     fetchSubmodules = true;
   };
 

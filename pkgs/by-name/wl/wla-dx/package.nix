@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.villehelin.com/wla.html";
     description = "Yet Another GB-Z80/Z80/6502/65C02/6510/65816/HUC6280/SPC-700 Multi Platform Cross Assembler Package";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ matthewbauer ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

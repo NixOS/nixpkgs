@@ -11,12 +11,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "7.5.0";
+  version = "8.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wJG8d6PMjhKaIy2z4sjYuuLf75aBP83sYu4CB5QGj7k=";
+    hash = "sha256-+2JSuHyx1NFN/Fvx9K3RAB6HAWsVC3SV4i6Xrq4mRlU=";
   };
 
   patches = [
@@ -35,6 +35,7 @@ python3Packages.buildPythonApplication rec {
     requests-mock
     freezegun
     pytest-trio
+    pytest-cov-stub
   ];
 
   disabledTests = [

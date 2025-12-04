@@ -57,7 +57,7 @@ buildPythonPackage rec {
     trio
     typing-extensions
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pytestFlags = [
     "-Wignore::DeprecationWarning"

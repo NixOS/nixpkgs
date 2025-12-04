@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdaq";
-  version = "3.0.22";
+  version = "3.0.23";
 
   src = fetchFromGitHub {
     owner = "snort3";
     repo = "libdaq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bx+NBUz+LpX4kOvCOCN+6rRilMreMAGeFGD33xLdfv0=";
+    hash = "sha256-P57eH301oOSY43LyryFar1aoPcDrd+WNxTResWGOD/I=";
   };
 
   nativeBuildInputs = [

@@ -13,12 +13,12 @@
 }:
 let
   pname = "opencode";
-  version = "1.0.105";
+  version = "1.0.126";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
     tag = "v${version}";
-    hash = "sha256-mwiEOsJ2prQYzN0gd0+iEfelNt1qv+K7slbF2Rk9eng=";
+    hash = "sha256-eW/+MoGh5V1t+4m+EDAm7dhTwJ+yqYmbLkZ9blYeXqQ=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -62,12 +62,7 @@ let
       runHook preInstall
 
       mkdir -p $out
-      while IFS= read -r dir; do
-        rel="''${dir#./}"
-        dest="$out/$rel"
-        mkdir -p "$(dirname "$dest")"
-        cp -R "$dir" "$dest"
-      done < <(find . -type d -name node_modules -prune | sort)
+      find . -type d -name node_modules -exec cp -R --parents {} $out \;
 
       runHook postInstall
     '';
@@ -75,7 +70,7 @@ let
     # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-3N7iWxc5vt81EhyTDWYHMVTZ1KbLz1y4wzSYJt5fQCE=";
+    outputHash = "sha256-/AP7wVUGO/LlYaQPglYIZ3/w0WKuO25PZNWEV7lKjGM=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };

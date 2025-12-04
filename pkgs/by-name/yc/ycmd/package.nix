@@ -135,7 +135,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/ycm-core/ycmd";
     license = licenses.gpl3;
     maintainers = with maintainers; [
-      rasendubi
       lnl7
       mel
       S0AndS0

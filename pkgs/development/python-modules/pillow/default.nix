@@ -109,7 +109,7 @@ buildPythonPackage rec {
     pytestCheckHook
     numpy
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Code quality mismathch 9 vs 10

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "aioice";
-  version = "0.10.1";
+  version = "0.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aiortc";
     repo = "aioice";
     tag = version;
-    hash = "sha256-KFYPzGPm+d1QrFAW9OhTDxroV/MnFusmfy5qcYCfDiM=";
+    hash = "sha256-UEXkTxcpe6mlA2FmMSfDmtcEYE9zwuitpi2Eh188xZc=";
   };
 
   build-system = [

@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.38";
+  version = "0.6.41";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-3FVH/8DMkoS5wlc7cBGpoM3+6nzxIOaqmOBL+W92AZs=";
+    hash = "sha256-/RpLiTz8WiI2fTJuLcksbB0pa5HOR13ci4G2LjdZu7Y=";
   };
 
   frontend = buildNpmPackage rec {
@@ -32,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-WxgxGgpWVSNfTBx9cXU0id7ZGqg2QTOoubvWUyDpK0U=";
+    npmDepsHash = "sha256-n31+P5QU0XsuyNvipUU2A9f7CE3jKQa8ZAfwFuS3SXg=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -108,6 +108,7 @@ python3Packages.buildPythonApplication rec {
       beautifulsoup4
       black
       boto3
+      chardet
       chromadb
       cryptography
       ddgs

@@ -41,7 +41,7 @@ buildPythonPackage rec {
     pytest-django
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # won't run in sandbox
   disabledTestPaths = [

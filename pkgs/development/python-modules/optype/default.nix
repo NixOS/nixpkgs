@@ -11,7 +11,7 @@
   pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "optype";
   version = "0.14.0";
   pyproject = true;
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jorenham";
     repo = "optype";
-    tag = "v${version}";
-    hash = "sha256-0CE6dU4Vt3UP8ZfNcmP2Th7ixceCa0ItYUmNcEU7mgw=";
+    rev = "5f16def3546222caf81a3411a27b007a00819172";
+    hash = "sha256-52cY+u0wjhJFQDLsjND/h6cfln4rCTtcy+HqaoH/re0=";
   };
 
   disabled = pythonOlder "3.11";

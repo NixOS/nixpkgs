@@ -309,8 +309,7 @@
     "description": "",
     "id": 2516946,
     "maintainers": {
-      "jian-lin": 75130626,
-      "matthewbauer": 19036
+      "jian-lin": 75130626
     },
     "members": {
       "AndersonTorres": 5954806,
@@ -346,6 +345,18 @@
       "sternenseemann": 3154475
     },
     "name": "exotic-platform-maintainers"
+  },
+  "feel-co": {
+    "description": "Managing packages related to https://github.com/feel-co",
+    "id": 15169000,
+    "maintainers": {
+      "NotAShelf": 62766066,
+      "eclairevoyant": 848000
+    },
+    "members": {
+      "Gerg-L": 88247690
+    },
+    "name": "feel-co"
   },
   "flutter": {
     "description": "Maintain Flutter and Dart-related packages and build tools",
@@ -631,8 +642,7 @@
     "description": "Marketing team [leader=@djacu]",
     "id": 7709512,
     "maintainers": {
-      "djacu": 7043297,
-      "tomberek": 178444
+      "djacu": 7043297
     },
     "members": {
       "flyfloh": 74379,
@@ -687,7 +697,8 @@
       "0x4A6F": 9675338,
       "MattSturgeon": 5046562,
       "Sereja313": 112060595,
-      "dasJ": 4971975
+      "dasJ": 4971975,
+      "dyegoaurelio": 42411160
     },
     "name": "nix-formatting"
   },
@@ -695,11 +706,12 @@
     "description": "",
     "id": 174820,
     "maintainers": {
+      "Ericson2314": 1055245,
       "tomberek": 178444
     },
     "members": {
-      "Ericson2314": 1055245,
       "Mic92": 96200,
+      "Radvendii": 1239929,
       "edolstra": 1148549,
       "xokdvium": 145775305
     },

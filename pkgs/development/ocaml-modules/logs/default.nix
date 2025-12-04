@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   ocaml,
-  version ? if lib.versionAtLeast ocaml.version "4.14" then "0.9.0" else "0.8.0",
+  version ? if lib.versionAtLeast ocaml.version "4.14" then "0.10.0" else "0.8.0",
   topkg,
   buildTopkgPackage,
   cmdlinerSupport ? true,
@@ -20,11 +20,11 @@ let
     {
       "0.8.0" = {
         minimalOCamlVersion = "4.03";
-        sha512 = "c34c67b00d6a989a2660204ea70db8521736d6105f15d1ee0ec6287a662798fe5c4d47075c6e7c84f5d5372adb5af5c4c404f79db70d69140af5e0ebbea3b6a5";
+        hash = "sha256-mmFRQJX6QvMBIzJiO2yNYF1Ce+qQS2oNF3+OwziCNtg=";
       };
-      "0.9.0" = {
+      "0.10.0" = {
         minimalOCamlVersion = "4.14";
-        sha512 = "b75fb28e83f33461b06b5c9b60972c4a9a9a1599d637b4a0c7b1e86a87f34fe5361e817cb31f42ad7e7cbb822473b28fab9f58a02870eb189ebe88dae8e045ff";
+        hash = "sha256-dg7CkcEo11t0gmCRM3dk+SW1ykFLAuLTNqCze/MN9Oo=";
       };
     }
     .${version};
@@ -66,20 +66,18 @@ buildTopkgPackage {
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    inherit (param) sha512;
+    inherit (param) hash;
   };
 
-  buildInputs = [ topkg ] ++ optional_buildInputs;
-
-  strictDeps = true;
+  buildInputs = optional_buildInputs;
 
   buildPhase = "${topkg.run} build ${lib.escapeShellArgs enable_flags}";
 
-  meta = with lib; {
+  meta = {
     description = "Logging infrastructure for OCaml";
     homepage = webpage;
     inherit (ocaml.meta) platforms;
-    maintainers = [ maintainers.sternenseemann ];
-    license = licenses.isc;
+    maintainers = with lib.maintainers; [ sternenseemann ];
+    license = lib.licenses.isc;
   };
 }

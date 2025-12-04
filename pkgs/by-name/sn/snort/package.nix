@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snort";
-  version = "3.9.7.0";
+  version = "3.10.0.0";
 
   src = fetchFromGitHub {
     owner = "snort3";
     repo = "snort3";
     tag = finalAttrs.version;
-    hash = "sha256-oJTRTcPQ3ByC2v9yM3yp7UVZqcX84StP4Ii96ZX/sIQ=";
+    hash = "sha256-vxiZeJByZGS7rXtvPMgNjb94E/oju+mmEuzJ7tA+hE4=";
   };
 
   nativeBuildInputs = [

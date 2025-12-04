@@ -12,13 +12,13 @@
 }:
 ocamlPackages.buildDunePackage rec {
   pname = "cerberus";
-  version = "0-unstable-2025-11-12";
+  version = "0-unstable-2025-11-26";
 
   src = fetchFromGitHub {
     owner = "rems-project";
     repo = "cerberus";
-    rev = "35d1ec8919c9813dd1b3770dccf53260ac5b7f73";
-    hash = "sha256-OQo/w49Z7+SGyKdePsSXplglo1gSNfnxNw85lcv0nc0=";
+    rev = "6d60ef25944ebcdab892158c949a8e05501557dc";
+    hash = "sha256-RucW01xuW5b6F9/O1OL99YJn3rSMCP7l7Cwjuv4PNIc=";
   };
 
   patches = [
