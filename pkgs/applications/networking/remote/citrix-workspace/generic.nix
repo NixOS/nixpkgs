@@ -11,7 +11,6 @@
   cairo,
   dconf,
   enchant2,
-  fetchurl,
   file,
   fontconfig,
   freetype,
@@ -58,6 +57,7 @@
   openssl,
   pango,
   pcsclite,
+  perl,
   sane-backends,
   speex,
   symlinkJoin,
@@ -241,9 +241,9 @@ stdenv.mkDerivation rec {
           ${lib.optionalString (icaFlag program != null) ''--add-flags "${icaFlag program} $ICAInstDir"''} \
           --set ICAROOT "$ICAInstDir" \
           --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
-          --prefix LD_LIBRARY_PATH : "$ICAInstDir:$ICAInstDir/lib" \
+          --prefix LD_LIBRARY_PATH : "$ICAInstDir:$ICAInstDir/lib:$ICAInstDir/usr/lib/x86_64-linux-gnu:$ICAInstDir/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0/injected-bundle" \
           --set LD_PRELOAD "${libredirect}/lib/libredirect.so ${lib.getLib pcsclite}/lib/libpcsclite.so" \
-          --set NIX_REDIRECTS "/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAInstDir/timezone"
+          --set NIX_REDIRECTS "/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAInstDir/timezone:/usr/lib/x86_64-linux-gnu=$ICAInstDir/usr/lib/x86_64-linux-gnu"
       '';
       wrapLink = program: ''
         ${wrap program}
@@ -319,8 +319,13 @@ stdenv.mkDerivation rec {
   # Make sure that `autoPatchelfHook` is executed before
   # running `ctx_rehash`.
   dontAutoPatchelf = true;
+  # Null out hardcoded webkit bundle path so it falls back to LD_LIBRARY_PATH
   postFixup = ''
+    ${lib.getExe perl} -0777 -pi -e 's{/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0/injected-bundle/}{"\0" x length($&)}e' \
+      $out/opt/citrix-icaclient/usr/lib/x86_64-linux-gnu/libwebkit2gtk-4.0.so.37.56.4
+
     autoPatchelf -- "$out"
+
     $out/opt/citrix-icaclient/util/ctx_rehash
   '';
 
