@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "mcpo";
-  version = "0.0.17";
+  version = "0.0.18";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "open-webui";
     repo = "mcpo";
     tag = "v${version}";
-    hash = "sha256-oubMRHiG6JbfMI5MYmRt4yNDI8Moi4h7iBZPgkdPGd4=";
+    hash = "sha256-wTLQx6ws2inpmV+o7uFmjLzRKaipM6DZy+QxumzvSkw=";
   };
 
   build-system = [
@@ -60,6 +60,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Tests failing in sandbox
+    "test_reload_config_handler"
+    "test_validate_server_config_disabled_tools_invalid"
   ];
 
   pythonImportsCheck = [ "mcpo" ];
