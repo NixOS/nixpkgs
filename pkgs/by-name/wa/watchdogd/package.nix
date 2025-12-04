@@ -11,13 +11,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "watchdogd";
-  version = "4.0";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "watchdogd";
     rev = version;
-    hash = "sha256-JNJj0CJGJXuIRpob2RXYqDRrU4Cn20PRxOjQ6TFsVYQ=";
+    hash = "sha256-Q3j16hxDwusZdmIjHm/CVi7VrwRziPGERAvJ3F/Bvdg=";
   };
 
   nativeBuildInputs = [
