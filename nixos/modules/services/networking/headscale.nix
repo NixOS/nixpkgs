@@ -370,6 +370,13 @@ in
                 description = ''
                   Extra DNS records to expose to clients.
                 '';
+                example = ''
+                  [ {
+                    name = "grafana.tailnet.example.com";
+                    type = "A";
+                    example = "100.64.0.3";
+                  } ]
+                '';
               };
 
               search_domains = lib.mkOption {
