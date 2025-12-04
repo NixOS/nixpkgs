@@ -6324,8 +6324,6 @@ with pkgs;
     ];
   };
 
-  cmake-format = python3Packages.callPackage ../development/tools/cmake-format { };
-
   # Does not actually depend on Qt 5
   inherit (plasma5Packages) extra-cmake-modules;
 
@@ -6911,12 +6909,6 @@ with pkgs;
     c-blosc
     c-blosc2
     ;
-
-  cachix = (lib.getBin haskellPackages.cachix).overrideAttrs (old: {
-    meta = (old.meta or { }) // {
-      mainProgram = old.meta.mainProgram or "cachix";
-    };
-  });
 
   niv = lib.getBin (haskell.lib.compose.justStaticExecutables haskellPackages.niv);
 

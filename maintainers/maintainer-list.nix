@@ -15295,6 +15295,12 @@
     githubId = 1104419;
     name = "Lucas Hoffmann";
   };
+  luckshiba = {
+    email = "luckshiba@protonmail.com";
+    github = "luckshiba";
+    githubId = 43530291;
+    name = "LuckShiba";
+  };
   lucperkins = {
     email = "lucperkins@gmail.com";
     github = "lucperkins";
