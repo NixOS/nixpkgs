@@ -227,6 +227,10 @@ stdenv.mkDerivation (finalAttrs: {
     export XDG_CACHE_HOME=$(mktemp -d)
   '';
 
+  postInstall = ''
+    install -Dm444 -t ''${!outputDev}/lib/pkgconfig gst*.pc
+  '';
+
   doInstallCheck =
     (lib.elem "webp" selectedPlugins) && !stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isElf;
   installCheckPhase = ''
