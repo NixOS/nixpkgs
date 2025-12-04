@@ -1,0 +1,34 @@
+From 1a24a500a59f0b70d6ee78c90acea21b737cb21f Mon Sep 17 00:00:00 2001
+From: Simonas Kazlauskas <git@kazlauskas.me>
+Date: Sat, 1 Nov 2025 01:21:06 +0200
+Subject: [PATCH] use constexpr for constexpr things
+
+ref https://github.com/microsoft/onnxruntime/issues/26283
+---
+ include/onnxruntime/core/framework/ortdevice.h | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/include/onnxruntime/core/framework/ortdevice.h b/include/onnxruntime/core/framework/ortdevice.h
+index adade482f6..5ba2a3e405 100644
+--- a/include/onnxruntime/core/framework/ortdevice.h
++++ b/include/onnxruntime/core/framework/ortdevice.h
+@@ -13,11 +13,11 @@ struct OrtDevice {
+   using DeviceId = int16_t;
+ 
+   // Pre-defined device types.
+-  static const DeviceType CPU = 0;
+-  static const DeviceType GPU = 1;  // Nvidia or AMD
+-  static const DeviceType FPGA = 2;
+-  static const DeviceType NPU = 3;  // Ascend
+-  static const DeviceType DML = 4;
++  static constexpr DeviceType CPU = 0;
++  static constexpr DeviceType GPU = 1;  // Nvidia or AMD
++  static constexpr DeviceType FPGA = 2;
++  static constexpr DeviceType NPU = 3;  // Ascend
++  static constexpr DeviceType DML = 4;
+ 
+   struct MemType {
+     // Pre-defined memory types.
+-- 
+2.51.0
+
