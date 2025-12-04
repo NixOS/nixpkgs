@@ -67,7 +67,9 @@ let
       biometryd = callPackage ./services/biometryd { };
       lomiri-content-hub = callPackage ./services/lomiri-content-hub { };
       hfd-service = callPackage ./services/hfd-service { };
-      lomiri-download-manager = callPackage ./services/lomiri-download-manager { };
+      lomiri-download-manager = callPackage ./services/lomiri-download-manager {
+        withDocumentation = !useQt6;
+      };
       lomiri-history-service = callPackage ./services/lomiri-history-service { };
       lomiri-indicator-datetime = ayatana-indicator-datetime.override { enableLomiriFeatures = true; };
       lomiri-indicator-network = callPackage ./services/lomiri-indicator-network { };
