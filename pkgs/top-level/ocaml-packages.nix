@@ -651,6 +651,8 @@ let
 
         frama-c = callPackage ../development/ocaml-modules/frama-c { };
 
+        frama-c-lannotate = callPackage ../development/ocaml-modules/frama-c-lannotate { };
+
         frei0r = callPackage ../development/ocaml-modules/frei0r {
           inherit (pkgs) frei0r;
         };
