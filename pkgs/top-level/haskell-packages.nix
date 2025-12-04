@@ -134,6 +134,13 @@ in
         inherit buildTargetLlvmPackages llvmPackages;
       };
       ghc912 = compiler.ghc9122;
+      ghc9141 = callPackage ../development/compilers/ghc/9.14.1.nix {
+        bootPkgs = bb.packges.ghc984Binary;
+        inherit (buildPackages.python3Packages) sphinx;
+        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+        inherit buildTargetLlvmPackages llvmPackages;
+      };
+      ghc914 = compiler.ghc9141;
       ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
         bootPkgs = bb.packages.ghc984Binary;
         inherit (buildPackages.python3Packages) sphinx;
@@ -221,6 +228,12 @@ in
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.12.x.nix { };
       };
       ghc912 = packages.ghc9122;
+      ghc9141 = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.ghc9141;
+        ghc = bh.compiler.ghc9141;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.14.x.nix { };
+      };
+      ghc914 = packages.ghc9141;
       ghcHEAD = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghcHEAD;
         ghc = bh.compiler.ghcHEAD;
