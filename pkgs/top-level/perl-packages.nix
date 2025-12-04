@@ -38718,8 +38718,9 @@ with self;
       XMLNamespaceSupport
       XMLSAXBase
     ];
-    postInstall = ''
-      perl -MXML::SAX -e "XML::SAX->add_parser(q(XML::SAX::PurePerl))->save_parsers()"
+    postPatch = ''
+      substituteInPlace Makefile.PL \
+        --replace-fail "\$(PERL)" "${lib.getExe perl.perlOnBuild}"
     '';
     meta = {
       description = "Simple API for XML";

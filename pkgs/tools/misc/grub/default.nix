@@ -495,6 +495,52 @@ stdenv.mkDerivation rec {
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=348cd416a3574348f4255bf2b04ec95938990997";
       hash = "sha256-WBLYQxv8si2tvdPAvbm0/4NNqYWBMJpFV4GC0HhN/kE=";
     })
+    (fetchpatch {
+      name = "CVE-2025-4382.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=c448f511e74cb7c776b314fcb7943f98d3f22b6d";
+      hash = "sha256-64gMhCEW0aYHt46crX/qN/3Hj8MgvWLazgQlVXqe8LE=";
+    })
+    # https://lists.gnu.org/archive/html/grub-devel/2025-11/msg00155.html
+    (fetchpatch {
+      name = "1_commands_test_fix_error_in_recursion_depth_calculation.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=cc9d621dd06bfa12eac511b37b4ceda5bd2f8246";
+      hash = "sha256-GpLpqTKr2ke/YaxnZIO1Kh9wpde44h2mvwcODcAL/nk=";
+    })
+    (fetchpatch {
+      name = "2_CVE-2025-54771.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=c4fb4cbc941981894a00ba8e75d634a41967a27f";
+      hash = "sha256-yWowlAMVXdfIyC+BiB00IZvTwIybvaPhxAyz0MPjQuY=";
+    })
+    (fetchpatch {
+      name = "3_CVE-2025-54770.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=10e58a14db20e17d1b6a39abe38df01fef98e29d";
+      hash = "sha256-1ROc5n7sApw7aGr+y8gygFqVkifLdgOD3RPaW9b8aQQ=";
+    })
+    (fetchpatch {
+      name = "4_CVE-2025-61662.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=8ed78fd9f0852ab218cc1f991c38e5a229e43807";
+      hash = "sha256-mG+vcZHbF4duY2YoYAzPBQRHfWvp5Fvgtm0XBk7JqqM=";
+    })
+    (fetchpatch {
+      name = "5_CVE-2025-61663_CVE-2025-61664.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=05d3698b8b03eccc49e53491bbd75dba15f40917";
+      hash = "sha256-kgtXhZmAQpassEf8+RzqkghAzLrCcRoRMMnfunF/0J8=";
+    })
+    (fetchpatch {
+      name = "6_tests_lib_functional_test_unregister_commands_on_module_unload.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=9df1e693e70c5a274b6d60dc76efe2694b89c2fc";
+      hash = "sha256-UzyYkpP7vivx2jzxi7BMP9h9OB2yraswrMW4g9UWsbI=";
+    })
+    (fetchpatch {
+      name = "7_CVE-2025-61661.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=549a9cc372fd0b96a4ccdfad0e12140476cc62a3";
+      hash = "sha256-2mlDoVXY7Upwx4QBeAMOHUtoUlyx1MDDmabnrwK1gEY=";
+    })
+    (fetchpatch {
+      name = "8_commands_usbtest_ensure_string_length_is_sufficient_in_usb_string_processing.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=7debdce1e98907e65223a4b4c53a41345ac45e53";
+      hash = "sha256-2ALvrmwxvpjQYjGNrQ0gyGotpk0kgmYlJXMF1xXrnEw=";
+    })
   ];
 
   postPatch =
