@@ -178,7 +178,7 @@ lib.makeOverridable (
                 leaveDotGit
               else
                 deepClone || fetchTags;
-            nonConeMode = lib.defaultTo (rootDir != "") nonConeMode;
+            nonConeMode = lib.defaultTo (finalAttrs.rootDir != "") nonConeMode;
             inherit tag;
             revCustom = rev;
             rev = getRevWithTag {
