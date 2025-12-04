@@ -109,7 +109,7 @@ maven.buildMavenPackage rec {
 
       or by adding the package manually to udev packages:
 
-      `services.udev.packages = [ pkgs.quark-goldleaf ];
+      `services.udev.packages = [ pkgs.quark-goldleaf ];`
     '';
     license = lib.licenses.gpl3Only;
     mainProgram = "quark-goldleaf";
