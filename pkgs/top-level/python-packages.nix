@@ -3136,6 +3136,8 @@ self: super: with self; {
 
   cot = callPackage ../development/python-modules/cot { inherit (pkgs) qemu; };
 
+  country-list = callPackage ../development/python-modules/country-list { };
+
   countryguess = callPackage ../development/python-modules/countryguess { };
 
   courlan = callPackage ../development/python-modules/courlan { };
