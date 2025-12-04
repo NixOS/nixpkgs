@@ -2,33 +2,39 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  gitUpdater,
+  testers,
+  glib,
+  gobject-introspection,
   pkg-config,
   qmake,
   qtbase,
   qtdeclarative,
-  wrapQtAppsHook,
-  glib,
-  gobject-introspection,
-  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gsettings-qt";
   version = "0.2";
 
   src = fetchFromGitLab {
-    group = "ubports";
-    owner = "core";
-    repo = "gsettings-qt";
-    rev = "v${version}";
-    sha256 = "14l8xphw4jd9ckqba13cyxq0i362x8lfsd0zlfawwi2z1q1vqm92";
+    owner = "ubports";
+    repo = "development/core/gsettings-qt";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-IlW8Aw5fRM6Vox807SjqwowIcPdsBLXwZKlJwuHtiJI=";
   };
+
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  # Current version still uses QMake
+  strictDeps = false;
 
   nativeBuildInputs = [
     pkg-config
     qmake
     gobject-introspection
-    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -36,7 +42,10 @@ stdenv.mkDerivation rec {
     qtdeclarative
   ];
 
-  patchPhase = ''
+  # Library
+  dontWrapQtApps = true;
+
+  postPatch = ''
     # force ordered build of subdirs
     sed -i -e "\$aCONFIG += ordered" gsettings-qt.pro
 
@@ -63,15 +72,29 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
+  postInstall =
+    # QMake-generated pkg-config files, hence fixes being done here
+    ''
+      substituteInPlace $out/lib/pkgconfig/gsettings-qt.pc \
+        --replace-fail 'prefix=${lib.getDev qtbase}' 'prefix=${placeholder "out"}' \
+        --replace-fail 'includedir=${placeholder "out"}' 'includedir=${placeholder "dev"}'
+    '';
+
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
   };
 
   meta = {
     description = "Library to access GSettings from Qt";
     homepage = "https://gitlab.com/ubports/core/gsettings-qt";
-    license = lib.licenses.lgpl3;
+    license = lib.licenses.lgpl3Only;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    pkgConfigModules = [
+      "gsettings-qt"
+    ];
   };
-}
+})
