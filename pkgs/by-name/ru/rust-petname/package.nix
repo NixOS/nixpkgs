@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     description = "Generate human readable random names";
     homepage = "https://github.com/allenap/rust-petname";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = [ maintainers.progrm_jarvis ];
     mainProgram = "petname";
   };
 }
