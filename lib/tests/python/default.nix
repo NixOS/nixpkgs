@@ -22,26 +22,43 @@ let
   textFilePath = ./default.nix;
   textFileData = lib.strings.readFile textFilePath;
 
-  pythonTestScript = pkgs.writers.writePython3Bin "reproduce-test-data-using-escapePythonBytes" { } ''
-    import pathlib
+  reproduceTestDataUsingEscapePythonBytes =
+    pkgs.writers.writePython3Bin "reproduce-test-data-using-escapePythonBytes" { }
+      ''
+        import pathlib
 
-    pathlib.Path("all-bytes-except-null-reproduction.bin").write_bytes(
-        ${lib.strings.escapePythonBytes allBytesExceptNullData}  # noqa: E501
-    )
-    pathlib.Path("empty-file-reproduction.bin").write_bytes(
-        ${lib.strings.escapePythonBytes emptyFileData}
-    )
-    pathlib.Path("default-reproduction.nix").write_bytes(
-        ${lib.strings.escapePythonBytes textFileData}  # noqa: E501
-    )
-  '';
+        pathlib.Path("all-bytes-except-null-reproduction.bin").write_bytes(
+            ${lib.strings.escapePythonBytes allBytesExceptNullData}  # noqa: E501
+        )
+        pathlib.Path("empty-file-reproduction.bin").write_bytes(
+            ${lib.strings.escapePythonBytes emptyFileData}
+        )
+        pathlib.Path("default-reproduction.nix").write_bytes(
+            ${lib.strings.escapePythonBytes textFileData}  # noqa: E501
+        )
+      '';
+  scriptWithRuntimeDependencyFromEscapePythonBytes =
+    pkgs.writers.writePython3Bin "script-with-runtime-dependency-from-escapePythonBytes" { }
+      ''
+        import os
+        import pathlib
+
+        hello_out_path = pathlib.Path(os.fsdecode(${lib.strings.escapePythonBytes "${pkgs.hello}"}))  # noqa: E501
+
+        print(f"Contents of {hello_out_path}:")
+        for subpath in hello_out_path.iterdir():
+            print(f"\t{subpath}")
+      '';
 in
 pkgs.runCommandWith
   {
     name = "test-escapePythonBytes";
     derivationArgs = {
       inherit allBytesExceptNullPath emptyFilePath textFilePath;
-      nativeBuildInputs = [ pythonTestScript ];
+      nativeBuildInputs = [
+        reproduceTestDataUsingEscapePythonBytes
+        scriptWithRuntimeDependencyFromEscapePythonBytes
+      ];
     };
   }
   ''
@@ -57,6 +74,8 @@ pkgs.runCommandWith
     compare_original_and_reproduction "$allBytesExceptNullPath" all-bytes-except-null-reproduction.bin
     compare_original_and_reproduction "$emptyFilePath" empty-file-reproduction.bin
     compare_original_and_reproduction "$textFilePath" default-reproduction.nix
+
+    script-with-runtime-dependency-from-escapePythonBytes
 
     # Normally, I wouldn’t bother creating a directory (I would make "$out" a
     # file), but I have to create a directory or else the call to symlinkJoin
