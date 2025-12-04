@@ -2643,11 +2643,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "xkbcomp";
-      version = "1.4.7";
+      version = "1.5.0";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/app/xkbcomp-1.4.7.tar.xz";
-        sha256 = "0xqzz209m9i43jbyrf2lh4xdbyhzzzn9mis2f2c32kplwla82a0a";
+        url = "mirror://xorg/individual/app/xkbcomp-1.5.0.tar.xz";
+        sha256 = "0q3092w42w9wyfr5zf3ymkmzlqr24z6kz6ypkinxnxh7c0k1zhra";
       };
       hardeningDisable = [
         "bindnow"
