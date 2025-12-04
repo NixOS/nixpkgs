@@ -9,7 +9,7 @@
   rustPlatform,
   cargo,
   rustc,
-  setuptoolsRustBuildHook,
+  setuptools-rust,
   openssl,
   Security ? null,
   isPyPy,
@@ -74,9 +74,12 @@ buildPythonPackage rec {
 
   cargoRoot = "src/rust";
 
+  build-system = [
+    setuptools-rust
+  ];
+
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
-    setuptoolsRustBuildHook
     cargo
     rustc
     pkg-config
