@@ -5,16 +5,16 @@
   setuptools,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "pretalx-pages";
-  version = "1.7.0-unstable-2025-10-10";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx-pages";
-    rev = "58cfe9b227a5cf5597c30285500546d2d3d84b8a";
-    hash = "sha256-kfGdb7vcUvK4yXqJd1XftTNWPLvjE4zrZSy4xgrmkMg=";
+    tag = "v${version}";
+    hash = "sha256-iRmDYjq08UkA/2pyUUK/DUuNbLNn/KSNQGiU1o1gTWw=";
   };
 
   build-system = [ setuptools ];
