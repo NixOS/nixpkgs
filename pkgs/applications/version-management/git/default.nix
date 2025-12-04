@@ -565,6 +565,7 @@ stdenv.mkDerivation (finalAttrs: {
       kashw2
       me-and
       philiptaron
+      zivarah
     ];
     mainProgram = "git";
   };
