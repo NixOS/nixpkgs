@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.chromium;
@@ -17,9 +22,10 @@ let
   chromiumEtcConfig = {
     # Plasma integration
     "chromium/native-messaging-hosts/org.kde.plasma.browser_integration.json" =
-      lib.mkIf (cfg.enablePlasmaBrowserIntegration) {
-        source = "${cfg.plasmaBrowserIntegrationPackage}/etc/chromium/native-messaging-hosts/org.kde.plasma.browser_integration.json";
-      };
+      lib.mkIf (cfg.enablePlasmaBrowserIntegration)
+        {
+          source = "${cfg.plasmaBrowserIntegrationPackage}/etc/chromium/native-messaging-hosts/org.kde.plasma.browser_integration.json";
+        };
 
     # Managed policy files
     "chromium/policies/managed/default.json" = lib.mkIf (defaultProfile != { }) {
@@ -37,8 +43,6 @@ let
   };
 in
 {
-  disabledModules = [ "programs/chromium.nix" ];
-
   options.programs.chromium = {
     enable = lib.mkEnableOption "Enable Chromium browser";
 
@@ -68,21 +72,33 @@ in
     homepageLocation = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
+      description = ''
+        Sets the URL that Chromium will load when the Home button is clicked or when a new window/tab is opened (depending on user settings). This corresponds to the Chromium HomepageLocation [Managed Policy](https://chromeenterprise.google/policies/#HomepageLocation). Setting it to null allows the user to configure the value or uses Chromium's internal defaults.
+      '';
     };
 
     defaultSearchProviderEnabled = lib.mkOption {
       type = lib.types.nullOr lib.types.bool;
       default = null;
+      description = ''
+        Controls whether the default search provider is enforced. This corresponds to the Chromium DefaultSearchProviderEnabled [Managed Policy](https://chromeenterprise.google/policies/#DefaultSearchProviderEnabled). Setting to true enables the provider configured by defaultSearchProviderSearchURL, and false disables it. Set to null to use Chromium's default behavior (which is typically enabled).
+      '';
     };
 
     defaultSearchProviderSearchURL = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
+      description = ''
+        Sets the URL pattern to be used by the default search provider when performing a search. This corresponds to the Chromium DefaultSearchProviderSearchURL [Managed Policy](https://chromeenterprise.google/policies/#DefaultSearchProviderSearchURL). This option only takes effect if programs.chromium.defaultSearchProviderEnabled is set to true. The URL must include the placeholder {searchTerms}.
+      '';
     };
 
     defaultSearchProviderSuggestURL = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
+      description = ''
+        Sets the URL pattern for fetching search suggestions from the default search provider as the user types. This corresponds to the Chromium DefaultSearchProviderSuggestURL [Managed Policy](https://chromeenterprise.google/policies/#DefaultSearchProviderSuggestURL). This option only takes effect if programs.chromium.defaultSearchProviderEnabled is set to true. The URL must include the placeholder {searchTerms}.
+      '';
     };
 
     extraOpts = lib.mkOption {
@@ -101,7 +117,11 @@ in
       type = lib.types.attrsOf lib.types.attrs;
       default = { };
       description = "Browser-specific policy tree (Chromium only).";
-      example = { chromium = { SyncDisabled = true; }; };
+      example = {
+        chromium = {
+          SyncDisabled = true;
+        };
+      };
     };
   };
 
@@ -112,4 +132,3 @@ in
     };
   };
 }
-
