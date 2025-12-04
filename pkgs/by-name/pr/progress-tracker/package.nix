@@ -1,6 +1,6 @@
 {
   lib,
-  catch2_3,
+  catch2,
   cmake,
   fetchFromGitHub,
   gtkmm4,
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    catch2_3
+    catch2
     gtkmm4
     libadwaita
     libuuid

@@ -8,7 +8,7 @@
   buildPackages,
   pkg-config,
   icu,
-  catch2_3,
+  catch2,
   testers,
   enableManpages ? buildPackages.pandoc.compiler.bootstrapAvailable,
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional enableManpages buildPackages.pandoc;
 
   strictDeps = true;
-  buildInputs = [ catch2_3 ];
+  buildInputs = [ catch2 ];
 
   propagatedBuildInputs = [ icu ];
 

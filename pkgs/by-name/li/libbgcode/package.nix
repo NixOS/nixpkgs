@@ -7,7 +7,7 @@
   heatshrink,
   zlib,
   boost,
-  catch2_3,
+  catch2,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libbgcode";
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   checkInputs = [
-    catch2_3
+    catch2
   ];
 
   doCheck = true;

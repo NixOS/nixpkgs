@@ -21,7 +21,7 @@
   pinocchio,
 
   # checkInputs
-  catch2_3,
+  catch2,
   gbenchmark,
 }:
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   checkInputs = [
-    catch2_3
+    catch2
     gbenchmark
   ];
 

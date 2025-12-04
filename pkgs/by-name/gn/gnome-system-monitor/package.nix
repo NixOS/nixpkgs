@@ -6,7 +6,7 @@
   pkg-config,
   gtkmm4,
   bash,
-  catch2_3,
+  catch2,
   gtk4,
   libadwaita,
   glib,
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     bash
-    catch2_3
+    catch2
     gtk4
     libadwaita
     glib

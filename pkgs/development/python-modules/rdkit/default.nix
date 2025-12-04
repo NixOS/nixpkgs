@@ -8,7 +8,7 @@
   cmake,
   comic-neue,
   boost,
-  catch2_3,
+  catch2,
   cairo,
   eigen,
   python,
@@ -145,7 +145,7 @@ buildPythonPackage rec {
   buildInputs = [
     boost'
     cairo
-    catch2_3
+    catch2
     coordgenlibs
     eigen
     maeparser

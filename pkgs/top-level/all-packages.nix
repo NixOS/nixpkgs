@@ -360,9 +360,7 @@ with pkgs;
 
   dnf4 = python3Packages.callPackage ../development/python-modules/dnf4/wrapper.nix { };
 
-  ebpf-verifier = callPackage ../tools/networking/ebpf-verifier {
-    catch2 = catch2_3;
-  };
+  ebpf-verifier = callPackage ../tools/networking/ebpf-verifier { };
 
   eff = callPackage ../by-name/ef/eff/package.nix { ocamlPackages = ocaml-ng.ocamlPackages_5_2; };
 

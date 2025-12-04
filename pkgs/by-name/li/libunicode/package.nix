@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchzip,
   cmake,
-  catch2_3,
+  catch2,
   fmt,
   python3,
 }:
@@ -37,7 +37,7 @@ stdenv.mkDerivation (final: {
     python3
   ];
   buildInputs = [
-    catch2_3
+    catch2
     fmt
   ];
 

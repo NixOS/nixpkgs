@@ -12,7 +12,7 @@
   kahip,
   adios2,
   python3Packages,
-  catch2_3,
+  catch2,
   withParmetis ? false,
 }:
 let
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       buildInputs = [ finalAttrs.finalPackage ];
 
-      nativeCheckInputs = [ catch2_3 ];
+      nativeCheckInputs = [ catch2 ];
 
       doCheck = true;
 

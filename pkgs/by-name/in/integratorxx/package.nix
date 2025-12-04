@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   cmake,
-  catch2_3,
+  catch2,
 }:
 
 stdenv.mkDerivation {
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
 
-  checkInputs = [ catch2_3 ];
+  checkInputs = [ catch2 ];
 
   doCheck = true;
 
