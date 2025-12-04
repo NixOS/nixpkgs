@@ -63,8 +63,7 @@ let
   inherit (lib.strings)
     makeBinPath
     optionalString
-    mesonBool
-    mesonEnable
+    cmakeBool
     ;
   inherit (lib.trivial)
     importJSON
@@ -129,12 +128,13 @@ customStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     hyprwayland-scanner
     makeWrapper
+    cmake
+    # meson + ninja are used to build the hyprland-protocols submodule
     meson
     ninja
     pkg-config
     wayland-scanner
     # for udis86
-    cmake
     python3
   ];
 
@@ -181,24 +181,20 @@ customStdenv.mkDerivation (finalAttrs: {
     (optionals withSystemd [ systemd ])
   ];
 
-  mesonBuildType = if debug then "debug" else "release";
+  cmakeBuildType = if debug then "Debug" else "RelWithDebInfo";
 
   dontStrip = debug;
   strictDeps = true;
 
-  mesonFlags = concatLists [
-    (mapAttrsToList mesonEnable {
-      "xwayland" = enableXWayland;
-      "systemd" = withSystemd;
-      "uwsm" = false;
-      "hyprpm" = false;
-    })
-    (mapAttrsToList mesonBool {
-      # PCH provides no benefits when building with Nix
-      "b_pch" = false;
-      "tracy_enable" = false;
-    })
-  ];
+  cmakeFlags = mapAttrsToList cmakeBool {
+    "NO_XWAYLAND" = !enableXWayland;
+    "NO_SYSTEMD" = !withSystemd;
+    "CMAKE_DISABLE_PRECOMPILE_HEADERS" = true;
+    "NO_UWSM" = true;
+    "NO_HYPRPM" = true;
+    "TRACY_ENABLE" = false;
+    "BUILD_HYPRTESTER" = true;
+  };
 
   postInstall = ''
     ${optionalString wrapRuntimeDeps ''
