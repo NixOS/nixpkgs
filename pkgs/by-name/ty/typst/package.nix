@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typst";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "typst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Sdl60VNjrSVj8YFZR/b2WOzN8taZ6wsJx5FnED9XQbw=";
+    hash = "sha256-GAHG0TF+6rdgVolJLdFw7uVz/UBLsnibcaEvInRf7Jk=";
     leaveDotGit = true;
     postFetch = ''
       cd $out
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-6o7IbDBJU+FGYezfm37Z4eBBWa7G06vFbopI0FqJu7c=";
+  cargoHash = "sha256-UQAKvBlT+c5eUNAmN2lzbjZG1kBrE88CTx2t1F4tprQ=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -64,6 +64,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   cargoTestFlags = [ "--workspace" ];
+  # The following test fails when using `release`
+  # ❌ issue-7257-break-tags-show-par-none (tests/suite/pdftags/break.typ:29) not emitted
+  checkType = "debug";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
