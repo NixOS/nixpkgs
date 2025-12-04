@@ -33,7 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://github.com/regina-normal/regina/releases/download/regina-${version}/SHA256SUMS-signed.txt";
         hash = "sha256-uXbyHnmkosMg2/9ikNaN7vKA2IZSxSGg2TdimD/YsXU=";
       };
-      publicKey = ./publickey.asc; # Benjamin Burton's PGP key (https://people.debian.org/~bab/regina-key.txt)
+      # Benjamin Burton's PGP key
+      publicKey = fetchurl {
+        url = "https://keybase.io/benjaminburton/pgp_keys.asc";
+        hash = "sha256-uuFOj6O4Xz4SoxdqjpgaD6QZjfcyKkZFUQjBZnTGuSg=";
+      };
     in
     fetchurl {
       url = "https://github.com/regina-normal/regina/releases/download/regina-${version}/regina-${version}.tar.gz";
