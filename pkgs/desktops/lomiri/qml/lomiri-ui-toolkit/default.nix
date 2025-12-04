@@ -5,10 +5,14 @@
   gitUpdater,
   replaceVars,
   testers,
+  bluez,
+  cmake,
   dbus-test-runner,
   dpkg,
   gdb,
   glib,
+  kdePackages,
+  libevdev,
   lttng-ust,
   mesa,
   perl,
@@ -17,13 +21,15 @@
   qmake,
   qtbase,
   qtdeclarative,
-  qtfeedback,
-  qtgraphicaleffects,
-  qtpim,
-  qtquickcontrols2,
+  qtfeedback ? null,
+  qtgraphicaleffects ? null,
+  qtpim ? null,
+  qtquickcontrols2 ? null,
   qtsvg,
-  qtsystems,
+  qtsystems ? null,
   qttools,
+  qt5compat ? null,
+  spirv-tools,
   suru-icon-theme,
   validatePkgConfig,
   wrapQtAppsHook,
@@ -31,6 +37,7 @@
 }:
 
 let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
   listToQtVar = suffix: lib.makeSearchPathOutput "bin" suffix;
   qtPluginPaths = listToQtVar qtbase.qtPluginPrefix [
     qtbase
@@ -45,18 +52,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-ui-toolkit";
-  version = "1.3.5110";
+  version = "1.3.5900";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-ui-toolkit";
     rev = finalAttrs.version;
-    hash = "sha256-j2Fowwj+ArdfJacqBSWksPk+wXRoTpL/Jrgme2tUSC8=";
+    hash = "sha256-R7yKjProbUTc/mCeKUEPUn/Zr5s6oXkg6ZfdZWHpYqI=";
   };
 
   outputs = [
     "out"
     "dev"
+  ]
+  ++ lib.optionals (!withQt6) [
     "doc"
   ];
 
@@ -70,23 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs documentation/docs.sh tests/
-
-    for subproject in po app-launch-profiler lomiri-ui-toolkit-launcher; do
-      substituteInPlace $subproject/$subproject.pro \
-        --replace-fail "\''$\''$[QT_INSTALL_PREFIX]" "$out" \
-        --replace-warn "\''$\''$[QT_INSTALL_LIBS]" "$out/lib"
-    done
-
-    # Install apicheck tool into bin
-    substituteInPlace apicheck/apicheck.pro \
-      --replace-fail "\''$\''$[QT_INSTALL_LIBS]/lomiri-ui-toolkit" "$out/bin"
-
-    substituteInPlace documentation/documentation.pro \
-      --replace-fail '/usr/share/doc' '$$PREFIX/share/doc' \
-      --replace-fail '$$[QT_INSTALL_DOCS]' '$$PREFIX/share/doc/lomiri-ui-toolkit'
-
-    # Causes redefinition error with our own fortify hardening
-    sed -i '/DEFINES += _FORTIFY_SOURCE/d' features/lomiri_common.prf
 
     # Reverse dependencies (and their reverse dependencies too) access the function patched here to register their gettext catalogues,
     # so hardcoding any prefix here will make only catalogues in that prefix work. APP_DIR envvar will override this, but with domains from multiple derivations being
@@ -113,19 +105,44 @@ stdenv.mkDerivation (finalAttrs: {
       tests/unit/visual/tst_icon.{11,13}.qml \
       tests/unit/visual/tst_imageprovider.11.qml \
       --replace-fail '/usr/share' '${suru-icon-theme}/share'
+  ''
+  + lib.optionalString (!withQt6) ''
+    for subproject in po app-launch-profiler lomiri-ui-toolkit-launcher; do
+      substituteInPlace $subproject/$subproject.pro \
+        --replace-fail "\''$\''$[QT_INSTALL_PREFIX]" "$out" \
+        --replace-warn "\''$\''$[QT_INSTALL_LIBS]" "$out/lib"
+    done
+
+    # Install apicheck tool into bin
+    substituteInPlace apicheck/apicheck.pro \
+      --replace-fail "\''$\''$[QT_INSTALL_LIBS]/lomiri-ui-toolkit" "$out/bin"
+
+    substituteInPlace documentation/documentation.pro \
+      --replace-fail '/usr/share/doc' '$$PREFIX/share/doc' \
+      --replace-fail '$$[QT_INSTALL_DOCS]' '$$PREFIX/share/doc/lomiri-ui-toolkit'
+
+    # Causes redefinition error with our own fortify hardening
+    sed -i '/DEFINES += _FORTIFY_SOURCE/d' features/lomiri_common.prf
   '';
 
   # With strictDeps, QMake only picks up Qt dependencies from nativeBuildInputs
-  strictDeps = false;
+  strictDeps = withQt6;
 
   nativeBuildInputs = [
     perl
     pkg-config
     python3
-    qmake
     qttools # qdoc, qhelpgenerator
     validatePkgConfig
     wrapQtAppsHook
+  ]
+  ++ lib.optionals withQt6 [
+    cmake
+    qt5compat
+    spirv-tools
+  ]
+  ++ lib.optionals (!withQt6) [
+    qmake
   ];
 
   buildInputs = [
@@ -136,6 +153,11 @@ stdenv.mkDerivation (finalAttrs: {
     qtpim
     qtquickcontrols2
     qtsystems
+  ]
+  ++ lib.optionals withQt6 [
+    bluez
+    kdePackages.extra-cmake-modules
+    libevdev
   ];
 
   propagatedBuildInputs = [
@@ -152,7 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
     xvfb-run
   ];
 
-  qmakeFlags = [
+  qmakeFlags = lib.optionals (!withQt6) [
     # Ubuntu UITK compatibility, for older / not-yet-migrated applications
     "CONFIG+=ubuntu-uitk-compat"
     "QMAKE_PKGCONFIG_PREFIX=${placeholder "out"}"
@@ -178,12 +200,16 @@ stdenv.mkDerivation (finalAttrs: {
     export QT_PLUGIN_PATH=${qtPluginPaths}
     export XDG_DATA_DIRS=${suru-icon-theme}/share
 
-    tests/xvfb.sh make check ''${enableParallelChecking:+-j''${NIX_BUILD_CORES}}
+    export UITK_BUILD_ROOT=$PWD
+
+    ${lib.optionalString withQt6 "../"}tests/xvfb.sh make ${
+      if withQt6 then "test" else "check"
+    } ''${enableParallelChecking:+-j''${NIX_BUILD_CORES}}
 
     runHook postCheck
   '';
 
-  preInstall = ''
+  preInstall = lib.optionalString (!withQt6) ''
     # wrapper script calls qmlplugindump, crashes due to lack of minimal platform plugin
     # Could not find the Qt platform plugin "minimal" in ""
     # Available platform plugins are: wayland-egl, wayland, wayland-xcomposite-egl, wayland-xcomposite-glx.
@@ -196,20 +222,24 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  postInstall = ''
-    # Code loads Qt's qt_module.prf, which force-overrides all QMAKE_PKGCONFIG_* variables except PREFIX for QMake-generated pkg-config files
-    for pcFile in Lomiri{Gestures,Metrics,Toolkit}.pc; do
-      substituteInPlace $out/lib/pkgconfig/$pcFile \
-        --replace-fail "${lib.getLib qtbase}/lib" "\''${prefix}/lib" \
-        --replace-fail "${lib.getDev qtbase}/include" "\''${prefix}/include"
-    done
-
-    # These are all dev-related tools, but declaring a bin output also moves around the QML modules
-    moveToOutput "bin" "$dev"
-  '';
+  postInstall =
+    lib.optionalString (!withQt6) ''
+      # Code loads Qt's qt_module.prf, which force-overrides all QMAKE_PKGCONFIG_* variables except PREFIX for QMake-generated pkg-config files
+      for pcFile in Lomiri{Gestures,Metrics,Toolkit}${lib.optionalString withQt6 "-Qt6"}.pc; do
+        substituteInPlace $out/lib/pkgconfig/$pcFile \
+          --replace-fail "${lib.getLib qtbase}/lib" "\''${prefix}/lib" \
+          --replace-fail "${lib.getDev qtbase}/include" "\''${prefix}/include"
+      done
+    ''
+    + ''
+      # These are all dev-related tools, but declaring a bin output also moves around the QML modules
+      moveToOutput "bin" "$dev"
+    '';
 
   postFixup = ''
-    for qtBin in $dev/bin/{apicheck,lomiri-ui-toolkit-launcher}; do
+    for qtBin in ${
+      if withQt6 then "$out/libexec/lomiri-ui-toolkit/qt6" else "$dev/bin"
+    }/apicheck $dev/bin/lomiri-ui-toolkit-launcher${lib.optionalString withQt6 "-qt6"}; do
       wrapQtApp $qtBin
     done
   '';
@@ -244,9 +274,9 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
-      "LomiriGestures"
-      "LomiriMetrics"
-      "LomiriToolkit"
+      "LomiriGestures${lib.optionalString withQt6 "-Qt6"}"
+      "LomiriMetrics${lib.optionalString withQt6 "-Qt6"}"
+      "LomiriToolkit${lib.optionalString withQt6 "-Qt6"}"
     ];
   };
 })
