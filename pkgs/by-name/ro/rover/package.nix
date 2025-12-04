@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rover";
-  version = "0.36.2";
+  version = "0.37.0";
 
   src = fetchFromGitHub {
     owner = "apollographql";
     repo = "rover";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-26XhJQqvmPTJGDkhcUumLhna0SL23jrJBO919zXc3no=";
+    hash = "sha256-r/uVaj1+J8wQhc/mTCr9RaMMzEIXdJoRU5iX7/eYZMA=";
   };
 
-  cargoHash = "sha256-tPXLAyAcuTa4h9+D/xlFEsmzQJrjGqg6ftp0BdDOBbY=";
+  cargoHash = "sha256-Z9B9DKu6t78Xd75EAKXfB+nr1Au4ylYkZojiENxSykQ=";
 
   buildInputs = [
     openssl
