@@ -329,6 +329,49 @@ in
                 };
               };
 
+              split = lib.mkOption {
+                type = lib.types.attrsOf (lib.types.listOf lib.types.str);
+                default = { };
+                description = ''
+                  Split DNS configuration (map of domains and which DNS server to use for each).
+                  See <https://tailscale.com/kb/1054/dns/>.
+                '';
+                example = {
+                  "foo.bar.com" = [ "1.1.1.1" ];
+                };
+              };
+
+              extra_records = lib.mkOption {
+                type = lib.types.listOf (
+                  lib.types.submodule {
+                    options = {
+                      name = lib.mkOption {
+                        type = lib.types.str;
+                        description = "DNS record name.";
+                        example = "grafana.tailnet.example.com";
+                      };
+                      type = lib.mkOption {
+                        type = lib.types.enum [
+                          "A"
+                          "AAAA"
+                        ];
+                        description = "DNS record type.";
+                        example = "A";
+                      };
+                      value = lib.mkOption {
+                        type = lib.types.str;
+                        description = "DNS record value (IP address).";
+                        example = "100.64.0.3";
+                      };
+                    };
+                  }
+                );
+                default = [ ];
+                description = ''
+                  Extra DNS records to expose to clients.
+                '';
+              };
+
               search_domains = lib.mkOption {
                 type = lib.types.listOf lib.types.str;
                 default = [ ];
