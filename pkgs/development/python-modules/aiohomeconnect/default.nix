@@ -11,7 +11,6 @@
   pytest-cov-stub,
   pytest-httpx,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typer,
   uvicorn,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "aiohomeconnect";
   version = "0.24.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
