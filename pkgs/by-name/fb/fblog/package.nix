@@ -22,6 +22,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "fblog";
     homepage = "https://github.com/brocode/fblog";
     license = licenses.wtfpl;
-    maintainers = [ ];
+    maintainers = [ maintainers.progrm_jarvis ];
   };
 }
