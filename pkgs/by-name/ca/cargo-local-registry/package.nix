@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-local-registry";
-  version = "0.2.8";
+  version = "0.2.9";
 
   src = fetchFromGitHub {
     owner = "dhovart";
     repo = "cargo-local-registry";
     rev = "v${version}";
-    hash = "sha256-XZ/OHcu3viS6LPQMyBDhxlpnC2oSgWQp7XtnKZCfMEw=";
+    hash = "sha256-DzBD7N7GQZ9nhF22DnxRse0P8MUGReOcXHQ56KOqW6I=";
   };
 
-  cargoHash = "sha256-d3gWy2OR6mWluaT9Vl7UWzjHsTmTXzyts50PWVibI0o=";
+  cargoHash = "sha256-9DW6DkWXoGvdHjxIwgXaQP9a5Kc90SdNDRNRq6G6pLg=";
 
   nativeBuildInputs = [
     curl
