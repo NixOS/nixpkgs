@@ -4811,6 +4811,8 @@ self: super: with self; {
 
   emoji = callPackage ../development/python-modules/emoji { };
 
+  emoji-country-flag = callPackage ../development/python-modules/emoji-country-flag { };
+
   emojis = callPackage ../development/python-modules/emojis { };
 
   empty-files = callPackage ../development/python-modules/empty-files { };
