@@ -43,9 +43,9 @@
   libpulseaudio,
   cups,
   pcsclite,
-  SDL2,
-  SDL2_ttf,
-  SDL2_image,
+  sdl3,
+  sdl3-ttf,
+  sdl3-image,
   systemd,
   libjpeg_turbo,
   libkrb5,
@@ -79,10 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace "libfreerdp/freerdp.pc.in" \
       --replace-fail "Requires:" "Requires: @WINPR_PKG_CONFIG_FILENAME@"
-
-    substituteInPlace client/SDL/SDL2/dialogs/{sdl_input.cpp,sdl_select.cpp,sdl_widget.cpp,sdl_widget.hpp} \
-      --replace-fail "<SDL_ttf.h>" "<SDL2/SDL_ttf.h>"
   ''
+
   + lib.optionalString (pcsclite != null) ''
     substituteInPlace "winpr/libwinpr/smartcard/smartcard_pcsc.c" \
       --replace-fail "libpcsclite.so" "${lib.getLib pcsclite}/lib/libpcsclite.so"
@@ -134,9 +132,9 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
     pcsclite
     pkcs11helper
-    SDL2
-    SDL2_ttf
-    SDL2_image
+    sdl3
+    sdl3-ttf
+    sdl3-image
     uriparser
     zlib
   ]
