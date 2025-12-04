@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kaidan";
-  version = "0.13.0";
+  version = "0.13.0-unstable-2025-12-03";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "network";
     repo = "kaidan";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-4+jW3fuUi1OpwbcGccxvrPro/fiW9yBOlhc2KUbUExc=";
+    rev = "f9d9d236aa0fc584771524c1078ab899a9cd5822";
+    hash = "sha256-O3L3VEB7HsPYF0FyJtma98SlxgFIADZd/uhfJyEucGQ=";
   };
 
   patches = [
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "User-friendly and modern chat app, using XMPP";
