@@ -38,7 +38,15 @@ mkDerivation {
   ];
 
   # hardeningDisable = stackprotector doesn't seem to be enough, put it in cflags too
-  NIX_CFLAGS_COMPILE = "-fno-stack-protector";
+  NIX_CFLAGS_COMPILE = [
+    "-fno-stack-protector"
+    "-Wno-unneeded-internal-declaration" # some openzfs code trips this
+    "-Wno-default-const-init-field-unsafe" # added in clang 21
+    "-Wno-uninitialized-const-pointer" # added in clang 21
+    "-Wno-format" # error: passing 'printf' format string where 'freebsd_kprintf' format string is expected
+    "-Wno-sometimes-uninitialized" # this one is actually kind of concerning but it does trip
+    "-Wno-unused-function"
+  ];
 
   env = sys.passthru.env;
   SYSDIR = "${sys.src}/sys";
