@@ -12323,6 +12323,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  oil-lsp-diagnostics-nvim = buildVimPlugin {
+    pname = "oil-lsp-diagnostics.nvim";
+    version = "2025-01-22";
+    src = fetchFromGitHub {
+      owner = "JezerM";
+      repo = "oil-lsp-diagnostics.nvim";
+      rev = "e04e3c387262b958fee75382f8ff66eae9d037f4";
+      sha256 = "1l87cs6ffd1rlsw7sb9cimnqa2zlm1q5rf5ihbfp1wf8gn8fxj0k";
+    };
+    meta.homepage = "https://github.com/JezerM/oil-lsp-diagnostics.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   oklch-color-picker-nvim = buildVimPlugin {
     pname = "oklch-color-picker.nvim";
     version = "2025-11-11";
