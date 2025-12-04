@@ -18306,6 +18306,12 @@
     githubId = 144328493;
     keys = [ { fingerprint = "D89F 440C 6CD7 4753 090F  EC7A 4682 C5CB 4D9D EA3C"; } ];
   };
+  naomieow = {
+    name = "Naomi Roberts";
+    email = "mia@naomieow.xyz";
+    github = "naomieow";
+    githubId = 79906167;
+  };
   naora = {
     name = "Joris Gundermann";
     email = "jorisgundermann@gmail.com";
