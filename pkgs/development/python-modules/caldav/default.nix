@@ -4,8 +4,10 @@
   fetchFromGitHub,
   icalendar,
   lxml,
+  manuel,
   pytestCheckHook,
   python,
+  radicale,
   recurring-ical-events,
   requests,
   hatchling,
@@ -21,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "2.0.1";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = "caldav";
     tag = "v${version}";
-    hash = "sha256-n7ZKTBXg66firbS34J41NrTM/PL/OrKMnS4iguRz4Ho=";
+    hash = "sha256-iVM3dBG2CNaMOUlEM0nGVKYUZHfX0LKjars7HJ1QWC0=";
   };
 
   build-system = [
@@ -37,7 +39,6 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    vobject
     lxml
     requests
     icalendar
@@ -45,17 +46,15 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    manuel
     proxy-py
     pyfakefs
     pytestCheckHook
+    (toPythonModule (radicale.override { python3 = python; }))
     tzlocal
-    (toPythonModule (xandikos.override { python3Packages = python.pkgs; }))
+    vobject
     writableTmpDirAsHomeHook
-  ];
-
-  disabledTestPaths = [
-    "tests/test_docs.py"
-    "tests/test_examples.py"
+    (toPythonModule (xandikos.override { python3Packages = python.pkgs; }))
   ];
 
   pythonImportsCheck = [ "caldav" ];

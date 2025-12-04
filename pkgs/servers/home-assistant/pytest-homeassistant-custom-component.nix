@@ -50,6 +50,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTests = [
+    # incompatible with Home Assistant 2025.12.0
+    "test_entry_diagnostics"
+  ];
+
   meta = {
     changelog = "https://github.com/MatthewFlamm/pytest-homeassistant-custom-component/blob/${src.tag}/CHANGELOG.md";
     description = "Package to automatically extract testing plugins from Home Assistant for custom component testing";
