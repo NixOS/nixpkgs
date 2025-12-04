@@ -4224,19 +4224,6 @@ with pkgs;
   runtimeShell = "${runtimeShellPackage}${runtimeShellPackage.shellPath}";
   runtimeShellPackage = bashNonInteractive;
 
-  bash = callPackage ../shells/bash/5.nix { };
-  bashNonInteractive = lowPrio (
-    callPackage ../shells/bash/5.nix {
-      interactive = false;
-    }
-  );
-  # WARNING: this attribute is used by nix-shell so it shouldn't be removed/renamed
-  bashInteractive = bash;
-  bashFHS = callPackage ../shells/bash/5.nix {
-    forFHSEnv = true;
-  };
-  bashInteractiveFHS = bashFHS;
-
   wrapFish = callPackage ../shells/fish/wrapper.nix { };
 
   fishPlugins = recurseIntoAttrs (callPackage ../shells/fish/plugins { });
