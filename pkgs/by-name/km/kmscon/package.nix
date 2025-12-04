@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  bash,
   meson,
   libtsm,
   systemdLibs,
@@ -49,6 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     systemdLibs
     libgbm
     check
+    # Needed for autoPatchShebangs when strictDeps = true
+    bash
   ];
 
   nativeBuildInputs = [
