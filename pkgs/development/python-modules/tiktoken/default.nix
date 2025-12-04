@@ -8,7 +8,7 @@
   cargo,
   rustc,
   setuptools,
-  setuptools-rust,
+  setuptoolsRustBuildHook,
   libiconv,
   requests,
   regex,
@@ -38,7 +38,6 @@ buildPythonPackage {
 
   build-system = [
     setuptools
-    setuptools-rust
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -53,7 +52,7 @@ buildPythonPackage {
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
-    setuptools-rust
+    setuptoolsRustBuildHook # setuptools-rust is not sufficient for cross
     cargo
     rustc
   ];
