@@ -59,6 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Don't override default theme search path (which honours XDG_DATA_DIRS) with a FHS assumption
     substituteInPlace import/Lomiri/Content/contenthubplugin.cpp \
       --replace-fail 'QIcon::setThemeSearchPaths(QStringList() << ("/usr/share/icons/"));' ""
+
+    # https://gitlab.com/ubports/development/core/lomiri-content-hub/-/merge_requests/54
+    substituteInPlace src/com/lomiri/content/service/registry.h \
+      --replace-fail '<QGSettings/QGSettings>' '<QGSettings>'
   '';
 
   strictDeps = true;
