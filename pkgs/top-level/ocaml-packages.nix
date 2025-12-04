@@ -649,6 +649,8 @@ let
 
         fpath = callPackage ../development/ocaml-modules/fpath { };
 
+        frama-c = callPackage ../development/ocaml-modules/frama-c { };
+
         frei0r = callPackage ../development/ocaml-modules/frei0r {
           inherit (pkgs) frei0r;
         };
