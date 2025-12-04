@@ -148,7 +148,7 @@ lib.makeOverridable (
           inherit outputHash outputHashAlgo;
           outputHashMode = "recursive";
 
-          sparseCheckout = lib.defaultTo (lib.optional (rootDir != "") rootDir) sparseCheckout;
+          sparseCheckout = lib.defaultTo (lib.optional (finalAttrs.rootDir != "") finalAttrs.rootDir) sparseCheckout;
           sparseCheckoutText =
             # Changed to throw on 2023-06-04
             assert (
