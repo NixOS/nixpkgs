@@ -35,6 +35,7 @@
   harfbuzz,
   libepoxy,
   pango,
+  gst_all_1,
   libX11,
   xorgproto,
   libdeflate,
@@ -93,6 +94,8 @@ let
     harfbuzz
     libepoxy
     pango
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
     libX11
     libdeflate
   ];
@@ -120,6 +123,9 @@ let
   # They must be manually included.
   appStaticBuildDeps =
     (lib.optionals supportsLinuxDesktopTarget [
+      glib
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
       libX11
       xorgproto
       zlib
