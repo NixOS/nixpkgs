@@ -157,7 +157,11 @@ let
     # "snappy"
     "flac"
     "libjpeg"
+  ]
+  ++ lib.optionals needsLibpng [
     "libpng"
+  ]
+  ++ [
     # Use the vendored libwebp for M124+ until we figure out how to solve:
     # Running phase: configurePhase
     # ERROR Unresolved dependencies.
@@ -217,6 +221,9 @@ let
 
   isElectron = packageName == "electron";
   rustcVersion = buildPackages.rustc.version;
+  # libpng has been replaced by the png rust crate
+  # https://github.com/image-rs/image-png/discussions/562
+  needsLibpng = !chromiumVersionAtLeast "143";
 
   chromiumDeps = lib.mapAttrs (
     path: args:
@@ -321,8 +328,10 @@ let
     # maintain a separate list of buildPlatform-dependencies, we
     # simply throw in the kitchen sink.
     # ** Because of overrides, we have to copy the list as it otherwise mess with splicing **
-    ++ [
+    ++ lib.optionals needsLibpng [
       (buildPackages.libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
+    ]
+    ++ [
       (buildPackages.libopus.override { withCustomModes = true; })
       bzip2
       flac
@@ -378,7 +387,11 @@ let
     ++ lib.optional pulseSupport libpulseaudio;
 
     buildInputs = [
+    ]
+    ++ lib.optionals needsLibpng [
       (libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
+    ]
+    ++ [
       (libopus.override { withCustomModes = true; })
       bzip2
       flac
@@ -543,7 +556,7 @@ let
       # exact version or even running a newer version.
       ./patches/chromium-136-nodejs-assert-minimal-version-instead-of-exact-match.patch
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "140") [
+    ++ lib.optionals (chromiumVersionAtLeast "140" && lib.versionOlder rustcVersion "1.89.0") [
       # Fix building with too old Rust (< 1.89)
       # ld.lld: error: undefined symbol: __rust_no_alloc_shim_is_unstable
       (fetchpatch {

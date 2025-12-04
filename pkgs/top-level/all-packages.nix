@@ -2990,8 +2990,6 @@ with pkgs;
 
   fluentd = callPackage ../tools/misc/fluentd { };
 
-  gemstash = callPackage ../development/tools/gemstash { };
-
   lpd8editor = libsForQt5.callPackage ../applications/audio/lpd8editor { };
 
   lp_solve = callPackage ../applications/science/math/lp_solve {
@@ -7777,8 +7775,6 @@ with pkgs;
   texinfoInteractive = texinfo.override { interactive = true; };
 
   tflint-plugins = recurseIntoAttrs (callPackage ../development/tools/analysis/tflint-plugins { });
-
-  travis = callPackage ../development/tools/misc/travis { };
 
   tree-sitter = makeOverridable (callPackage ../development/tools/parsing/tree-sitter) { };
 
@@ -12761,8 +12757,6 @@ with pkgs;
   hpack = haskell.lib.compose.justStaticExecutables haskellPackages.hpack;
 
   hpmyroom = libsForQt5.callPackage ../applications/networking/hpmyroom { };
-
-  hue-cli = callPackage ../tools/networking/hue-cli { };
 
   hugin = callPackage ../applications/graphics/hugin {
     wxGTK = wxGTK32;
