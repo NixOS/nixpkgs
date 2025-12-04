@@ -19,17 +19,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin-desktop";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XuPbfD6yEt82kHOIiKyxXyKcOkXEF/AsuE7Cde6QNNA=";
+    hash = "sha256-VDIC1BGgaFTiTnydJdEhVeUgVrH43MzpF4VkfgQ+Nas=";
   };
 
   cargoRoot = "./.";
-  cargoHash = "sha256-nmxF7IKmdLr2l6y///7pqcEBe7ijTYWSmB3cy6tTf9E=";
+  cargoHash = "sha256-gYYmtxMWst0ZB/YzJf/0FGOedoVpMgTq5qq+3m2R7T8=";
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
