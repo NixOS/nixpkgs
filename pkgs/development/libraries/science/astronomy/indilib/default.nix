@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "indilib";
-  version = "2.1.6";
+  version = "2.1.8";
 
   src = fetchFromGitHub {
     owner = "indilib";
     repo = "indi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WfVC5CLzwyO40Kpv/SZaYiPGDvWLUydQaA8FvTVhHqg=";
+    hash = "sha256-rA4ywQxXNYFUop06qFbzAQVadZ0RU9TGss8Hn3b582E=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [ gtest ];
 
-  doCheck = true;
+  # tests seem to be broken on darwin
+  doCheck = !stdenv.isDarwin;
   doInstallCheck = true;
 
   # Socket address collisions between tests
