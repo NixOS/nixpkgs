@@ -59,6 +59,8 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
+    # Fix build with gcc15
+    "CFLAGS=-std=gnu17"
     (if threadSupport then "--enable-threads" else "--disable-threads")
     "--with-gmp-incdir=${lib.getDev gmp}/include"
     "--with-gmp-libdir=${lib.getLib gmp}/lib"

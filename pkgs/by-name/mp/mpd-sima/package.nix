@@ -1,13 +1,12 @@
 {
   lib,
-  buildPythonApplication,
   fetchFromGitLab,
-  python-musicpd,
-  requests,
+  python3Packages,
   sphinxHook,
+  nix-update-script,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "mpd-sima";
   version = "0.18.2";
 
@@ -30,7 +29,7 @@ buildPythonApplication rec {
 
   sphinxBuilders = [ "man" ];
 
-  propagatedBuildInputs = [
+  dependencies = with python3Packages; [
     requests
     python-musicpd
   ];
@@ -41,11 +40,13 @@ buildPythonApplication rec {
     export HOME="$(mktemp -d)"
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Autoqueuing mpd client";
     homepage = "https://kaliko.me/mpd-sima/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ apfelkuchen6 ];
     mainProgram = "mpd-sima";
   };

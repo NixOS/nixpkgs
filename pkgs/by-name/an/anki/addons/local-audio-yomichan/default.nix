@@ -7,13 +7,13 @@
 }:
 anki-utils.buildAnkiAddon (finalAttrs: {
   pname = "local-audio-yomichan";
-  version = "0-unstable-2025-04-26";
+  version = "0-unstable-2025-08-07";
   src = fetchFromGitHub {
     owner = "yomidevs";
     repo = "local-audio-yomichan";
-    rev = "34750f1d8ca1cb473128fea7976a4d981e5e78a4";
+    rev = "14d33271303d0f6c99675a0b91f3041c49aba125";
     sparseCheckout = [ "plugin" ];
-    hash = "sha256-2gyggcvxParay+1B7Sg2COKyocoxaRO1WTz+ymdRp4w=";
+    hash = "sha256-Ce0ejEWTDMpbhPnOlY18I/hQD4VodkLncvg15VCJ0gI=";
   };
   sourceRoot = "${finalAttrs.src.name}/plugin";
   processUserFiles = ''
