@@ -24,26 +24,16 @@ let
         };
         build-system = with final; [ uv-build ];
       });
-
-      django-tables2 = prev.django-tables2.overridePythonAttrs (oldAttrs: rec {
-        version = "2.7.0";
-        src = fetchFromGitHub {
-          owner = "jieter";
-          repo = "django-tables2";
-          tag = "v${version}";
-          hash = "sha256-Cb8XhCLqhc2Dx/5uAHnN9zTVL6/1+WekC4qTloBurzM=";
-        };
-      });
     };
   };
 
-  version = "2025.2.0";
+  version = "2025.2.1";
 
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx";
     tag = "v${version}";
-    hash = "sha256-em5bPKKlT3qUAv4zGGjOkjDPY7U8vbuqMZ8NQXwZg4k=";
+    hash = "sha256-zjRtAy9Tpu5dGbpEteg+TMLgrYKSzK0wrGLQImubx7I=";
   };
 
   meta = {
