@@ -50,7 +50,7 @@ in
           - `ollama`: default behavior; usually equivalent to `ollama-cpu`
             - if `nixpkgs.config.rocmSupport` is enabled, is equivalent to `ollama-rocm`
             - if `nixpkgs.config.cudaSupport` is enabled, is equivalent to `ollama-cuda`
-            - otherwise defaults to `false`
+            - otherwise defaults to `ollama-cpu`
           - `ollama-cpu`: disable GPU; only use CPU
           - `ollama-rocm`: supported by most modern AMD GPUs
             - may require overriding gpu type with `services.ollama.rocmOverrideGfx`
