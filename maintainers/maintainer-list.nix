@@ -18924,6 +18924,12 @@
     github = "nosewings";
     githubId = 24929858;
   };
+  not-a-cowfr = {
+    name = "Andrew Gielow";
+    email = "agielow@proton.me";
+    github = "not-a-cowfr";
+    githubId = 104355555;
+  };
   not-my-segfault = {
     email = "michal@tar.black";
     matrix = "@michal:tar.black";
