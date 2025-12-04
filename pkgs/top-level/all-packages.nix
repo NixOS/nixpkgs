@@ -1065,11 +1065,6 @@ with pkgs;
     }
   );
 
-  inherit (callPackages ../tools/networking/ivpn/default.nix { })
-    ivpn
-    ivpn-service
-    ;
-
   kanata-with-cmd = kanata.override { withCmd = true; };
 
   linux-router-without-wifi = linux-router.override { useWifiDependencies = false; };
