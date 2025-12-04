@@ -456,7 +456,7 @@ in
           preStart =
             let
               versionString = lib.concatStringsSep "\n" (
-                [ "pretalx-${cfg.finalPackage.version}" ]
+                [ "pretalx-${finalPackage.version}" ]
                 ++ map (plugin: "${plugin.pname}-${plugin.version}") cfg.plugins
               );
             in
