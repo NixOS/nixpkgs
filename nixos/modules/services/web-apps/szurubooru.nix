@@ -305,8 +305,9 @@ in
             export SZURUBOORU_SMTP_PASS=$(<$CREDENTIALS_DIRECTORY/smtp)
           ''}
           install -m0640 ${cfg.server.package.src}/config.yaml.dist ${cfg.dataDir}/config.yaml.dist
+          touch ${cfg.dataDir}/config.yaml
+          chmod 0640 ${cfg.dataDir}/config.yaml
           envsubst -i ${configFile} -o ${cfg.dataDir}/config.yaml
-          chmod 0640 config.yaml
           sed 's|script_location = |script_location = ${cfg.server.package.src}/|' ${cfg.server.package.src}/alembic.ini > ${cfg.dataDir}/alembic.ini
           alembic upgrade head
           waitress-serve --port ${toString cfg.server.port} --threads ${toString cfg.server.threads} szurubooru.facade:app
