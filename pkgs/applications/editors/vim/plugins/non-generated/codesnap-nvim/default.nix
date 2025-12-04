@@ -2,19 +2,20 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  nix-update-script,
-  pkg-config,
   rustPlatform,
-  vimUtils,
+  pkg-config,
   libuv,
+  openssl,
+  vimUtils,
+  nix-update-script,
 }:
 let
-  version = "1.6.3";
+  version = "2.0.0";
   src = fetchFromGitHub {
     owner = "mistricky";
     repo = "codesnap.nvim";
     tag = "v${version}";
-    hash = "sha256-VHH1jQczzNFiH+5YflhU9vVCkEUoKciV/Z/n9DEZwiY=";
+    hash = "sha256-gpsNug6lSc/AifW8DeJy9R3LYuiTStuYZV02MiIZhq8=";
   };
   codesnap-lib = rustPlatform.buildRustPackage {
     pname = "codesnap-lib";
@@ -22,18 +23,28 @@ let
 
     sourceRoot = "${src.name}/generator";
 
-    cargoHash = "sha256-tg4BO4tPzHhJTowL7RiAuBo4i440FehpGmnz9stTxfI=";
+    cargoHash = "sha256-tV0Mi+SgdVWkY0fSQ3ZfQnHa8mM8f/49Zy8iv94qBjA=";
 
     nativeBuildInputs = [
       pkg-config
       rustPlatform.bindgenHook
     ];
 
-    # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime
-    env.RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-arg=-undefined -C link-arg=dynamic_lookup";
+    env = {
+      # Use system openssl
+      OPENSSL_NO_VENDOR = 1;
+
+      # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime
+      RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-arg=-undefined -C link-arg=dynamic_lookup";
+    };
+
+    postInstall = ''
+      echo "${version}" > $out/lib/.version
+    '';
 
     buildInputs = [
       libuv.dev
+      openssl
     ];
   };
 in
@@ -41,17 +52,18 @@ vimUtils.buildVimPlugin {
   pname = "codesnap.nvim";
   inherit version src;
 
-  # - Remove the shipped pre-built binaries
-  # - Copy the resulting binary from the codesnap-lib derivation
-  # Note: the destination should be generator.so, even on darwin
-  # https://github.com/mistricky/codesnap.nvim/blob/main/scripts/build_generator.sh
-  postInstall =
+  postPatch =
     let
       extension = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
     in
     ''
-      rm -r $out/lua/*.so
-      cp ${codesnap-lib}/lib/libgenerator.${extension} $out/lua/generator.so
+      substituteInPlace lua/codesnap/fetch.lua \
+        --replace-fail \
+          "local lib_name = get_platform_lib_name()" \
+          "local lib_name = 'libgenerator.${extension}'" \
+        --replace-fail \
+          'local lib_dir = path_utils.join(sep, vim.fn.fnamemodify(debug.getinfo(1).source:sub(2), ":p:h:h"), "libs")' \
+          'local lib_dir = "${codesnap-lib}/lib"'
     '';
 
   passthru = {

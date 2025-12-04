@@ -1965,8 +1965,8 @@ let
         mktplcRef = {
           name = "gitlab-workflow";
           publisher = "gitlab";
-          version = "6.58.0";
-          hash = "sha256-kkPLa+xviFUuCmB/+BE3p4tPFSi90aCXO6GcjwHurFI=";
+          version = "6.58.3";
+          hash = "sha256-3m77Z3UpP1cIXdnyFZ7EikwsCZ5jVBw9K8PIZbBwFhM=";
         };
         meta = {
           description = "GitLab extension for Visual Studio Code";
@@ -3234,8 +3234,8 @@ let
         mktplcRef = {
           name = "datawrangler";
           publisher = "ms-toolsai";
-          version = "1.22.0";
-          hash = "sha256-gUlb48g12RW4j2HS9jfpZROgtFM9zEPg4ozLM7hOaLk=";
+          version = "1.24.0";
+          hash = "sha256-FWzrxf5uaPcbu1JCiYxsbkju1mY3n3F2vGLvfMuZxlc=";
         };
 
         meta = {
@@ -3852,8 +3852,8 @@ let
         mktplcRef = {
           publisher = "redhat";
           name = "java";
-          version = "1.49.0";
-          hash = "sha256-4uBn2NHd32ZsooTJ0c9PWJ14YHIq7RgXb+KdaH4vuCo=";
+          version = "1.50.0";
+          hash = "sha256-QF9CTfhhwq+Ld3M31VRaZaAUsBDiUTNdbbOwjlE66Zk=";
         };
         buildInputs = [ jdk ];
         meta = {
@@ -3937,8 +3937,8 @@ let
         mktplcRef = {
           publisher = "rocq-prover";
           name = "vsrocq";
-          version = "2.3.2";
-          hash = "sha256-S3rKCzdGb5/UAJC6Z5GGC1Brib9PKiqQv8dRANYbp70=";
+          version = "2.3.4";
+          hash = "sha256-2zYoCUtyhboQt68UJEmWOvrTrIOV2QmpaXU5mUhJfsA=";
         };
         meta = {
           description = "VsRocq is an extension for Visual Studio Code with support for the Rocq Prover";
@@ -4083,8 +4083,8 @@ let
         mktplcRef = {
           name = "sas-lsp";
           publisher = "SAS";
-          version = "1.17.0";
-          hash = "sha256-lhvSAPbvRmNwrAB0Lk4oKVu7+o3H7TJSQbBlURH2SCA=";
+          version = "1.18.0";
+          hash = "sha256-OP0UUANqoQoxr+10/NkwveEULKWFrDn/dmEg0CHMZp0=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/SAS.sas-lsp/changelog";
@@ -5142,8 +5142,8 @@ let
         mktplcRef = {
           name = "vim";
           publisher = "vscodevim";
-          version = "1.32.1";
-          hash = "sha256-c88Mf3yzo2SJ4lmyzoiVm6ioMY0jkkH+N1EkVZBGzrQ=";
+          version = "1.32.2";
+          hash = "sha256-4anCgd8+D3SjO+3zfz9xrL9p8JoHNi4dux3rWLtWWDs=";
         };
         meta = {
           license = lib.licenses.mit;
