@@ -5,7 +5,7 @@
   rustPlatform,
   rustc,
   setuptools,
-  setuptools-rust,
+  setuptoolsRustBuildHook,
   fetchFromGitHub,
   pytestCheckHook,
   # for passthru.tests
@@ -41,10 +41,10 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    setuptools-rust
   ];
 
   nativeBuildInputs = [
+    setuptoolsRustBuildHook # setuptools-rust is insufficient for cross
     rustPlatform.cargoSetupHook
     cargo
     rustc
