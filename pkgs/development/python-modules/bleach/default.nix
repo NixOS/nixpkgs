@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "bleach";
-  version = "6.2.0";
+  version = "6.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ej6JQRi4pZn9gNPsGm1Mx85OWIKxMXp+G6abVulfmR8=";
+    hash = "sha256-bzuRscCgK7mni1pFTJJQaqD98Zfh1eEU0uAMb2QwbSI=";
   };
 
   nativeBuildInputs = [ setuptools ];
