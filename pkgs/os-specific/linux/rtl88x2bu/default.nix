@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "rtl88x2bu";
-  version = "${kernel.version}-unstable-2025-05-29";
+  version = "${kernel.version}-unstable-2025-12-4";
 
   src = fetchFromGitHub {
     owner = "RinCat";
