@@ -574,6 +574,8 @@ let
 
         extlib-1-7-7 = callPackage ../development/ocaml-modules/extlib/1.7.7.nix { };
 
+        extunix = callPackage ../development/ocaml-modules/extunix/default.nix { };
+
         ezjsonm = callPackage ../development/ocaml-modules/ezjsonm { };
 
         ezjsonm-encoding = callPackage ../development/ocaml-modules/ezjsonm-encoding { };
