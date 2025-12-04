@@ -1,168 +1,115 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 let
   cfg = config.programs.chromium;
 
-  defaultProfile = lib.filterAttrs (k: v: v != null) {
+  defaultProfile = lib.filterAttrs (_: v: v != null) {
     HomepageLocation = cfg.homepageLocation;
     DefaultSearchProviderEnabled = cfg.defaultSearchProviderEnabled;
     DefaultSearchProviderSearchURL = cfg.defaultSearchProviderSearchURL;
     DefaultSearchProviderSuggestURL = cfg.defaultSearchProviderSuggestURL;
     ExtensionInstallForcelist = cfg.extensions;
   };
+
+  mergedExtraOpts = browserPolicies // cfg.extraOpts;
+  browserPolicies = cfg.policies.chromium or { };
+
+  chromiumEtcConfig = {
+    # Plasma integration
+    "chromium/native-messaging-hosts/org.kde.plasma.browser_integration.json" =
+      lib.mkIf (cfg.enablePlasmaBrowserIntegration) {
+        source = "${cfg.plasmaBrowserIntegrationPackage}/etc/chromium/native-messaging-hosts/org.kde.plasma.browser_integration.json";
+      };
+
+    # Managed policy files
+    "chromium/policies/managed/default.json" = lib.mkIf (defaultProfile != { }) {
+      text = builtins.toJSON defaultProfile;
+    };
+
+    "chromium/policies/managed/extra.json" = lib.mkIf (mergedExtraOpts != { }) {
+      text = builtins.toJSON mergedExtraOpts;
+    };
+
+    # First-run preferences
+    "chromium/initial_preferences" = lib.mkIf (cfg.initialPrefs != { }) {
+      text = builtins.toJSON cfg.initialPrefs;
+    };
+  };
 in
-
 {
-  ###### interface
+  disabledModules = [ "programs/chromium.nix" ];
 
-  options = {
-    programs.chromium = {
-      enable = lib.mkEnableOption "policies for chromium based browsers like Chromium, Google Chrome or Brave";
+  options.programs.chromium = {
+    enable = lib.mkEnableOption "Enable Chromium browser";
 
-      enablePlasmaBrowserIntegration = lib.mkEnableOption "Native Messaging Host for Plasma Browser Integration";
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.chromium;
+      description = "Chromium browser package to install.";
+      defaultText = lib.literalExpression "pkgs.chromium";
+    };
 
-      plasmaBrowserIntegrationPackage = lib.mkPackageOption pkgs [
-        "kdePackages"
-        "plasma-browser-integration"
-      ] { };
+    enablePlasmaBrowserIntegration = lib.mkEnableOption "Native Messaging Host for Plasma Browser Integration";
 
-      extensions = lib.mkOption {
-        type = with lib.types; nullOr (listOf str);
-        description = ''
-          List of chromium extensions to install.
-          For list of plugins ids see id in url of extensions on
-          [chrome web store](https://chrome.google.com/webstore/category/extensions)
-          page. To install a chromium extension not included in the chrome web
-          store, append to the extension id a semicolon ";" followed by a URL
-          pointing to an Update Manifest XML file. See
-          [ExtensionInstallForcelist](https://cloud.google.com/docs/chrome-enterprise/policies/?policy=ExtensionInstallForcelist)
-          for additional details.
-        '';
-        default = null;
-        example = lib.literalExpression ''
-          [
-            "chlffgpmiacpedhhbkiomidkjlcfhogd" # pushbullet
-            "mbniclmhobmnbdlbpiphghaielnnpgdp" # lightshot
-            "gcbommkclmclpchllfjekcdonpmejbdp" # https everywhere
-            "cjpalhdlnbpafiamejdnhcphjbkeiagm" # ublock origin
-          ]
-        '';
-      };
+    plasmaBrowserIntegrationPackage = lib.mkPackageOption pkgs [
+      "kdePackages"
+      "plasma-browser-integration"
+    ] { };
 
-      homepageLocation = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        description = "Chromium default homepage";
-        default = null;
-        example = "https://nixos.org";
-      };
+    extensions = lib.mkOption {
+      type = with lib.types; nullOr (listOf str);
+      default = null;
+      description = ''
+        Chromium extension force-install list.
+        Extension IDs come from Chrome Web Store URLs.
+      '';
+    };
 
-      defaultSearchProviderEnabled = lib.mkOption {
-        type = lib.types.nullOr lib.types.bool;
-        description = "Enable the default search provider.";
-        default = null;
-        example = true;
-      };
+    homepageLocation = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+    };
 
-      defaultSearchProviderSearchURL = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        description = "Chromium default search provider url.";
-        default = null;
-        example = "https://encrypted.google.com/search?q={searchTerms}&{google:RLZ}{google:originalQueryForSuggestion}{google:assistedQueryStats}{google:searchFieldtrialParameter}{google:searchClient}{google:sourceId}{google:instantExtendedEnabledParameter}ie={inputEncoding}";
-      };
+    defaultSearchProviderEnabled = lib.mkOption {
+      type = lib.types.nullOr lib.types.bool;
+      default = null;
+    };
 
-      defaultSearchProviderSuggestURL = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        description = "Chromium default search provider url for suggestions.";
-        default = null;
-        example = "https://encrypted.google.com/complete/search?output=chrome&q={searchTerms}";
-      };
+    defaultSearchProviderSearchURL = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+    };
 
-      extraOpts = lib.mkOption {
-        type = lib.types.attrs;
-        description = ''
-          Extra chromium policy options. A list of available policies
-          can be found in the Chrome Enterprise documentation:
-          <https://cloud.google.com/docs/chrome-enterprise/policies/>
-          Make sure the selected policy is supported on Linux and your browser version.
-        '';
-        default = { };
-        example = lib.literalExpression ''
-          {
-            "BrowserSignin" = 0;
-            "SyncDisabled" = true;
-            "PasswordManagerEnabled" = false;
-            "SpellcheckEnabled" = true;
-            "SpellcheckLanguage" = [
-              "de"
-              "en-US"
-            ];
-          }
-        '';
-      };
+    defaultSearchProviderSuggestURL = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+    };
 
-      initialPrefs = lib.mkOption {
-        type = lib.types.attrs;
-        description = ''
-          Initial preferences are used to configure the browser for the first run.
-          Unlike {option}`programs.chromium.extraOpts`, initialPrefs can be changed by users in the browser settings.
-          More information can be found in the Chromium documentation:
-          <https://www.chromium.org/administrators/configuring-other-preferences/>
-        '';
-        default = { };
-        example = lib.literalExpression ''
-          {
-            "first_run_tabs" = [
-              "https://nixos.org/"
-            ];
-          }
-        '';
-      };
+    extraOpts = lib.mkOption {
+      type = lib.types.attrs;
+      default = { };
+      description = "Additional Chromium enterprise policy settings.";
+    };
+
+    initialPrefs = lib.mkOption {
+      type = lib.types.attrs;
+      default = { };
+      description = "Initial (first-run) Chromium preferences.";
+    };
+
+    policies = lib.mkOption {
+      type = lib.types.attrsOf lib.types.attrs;
+      default = { };
+      description = "Browser-specific policy tree (Chromium only).";
+      example = { chromium = { SyncDisabled = true; }; };
     };
   };
 
-  ###### implementation
-
-  config = {
-    environment.etc = lib.mkIf cfg.enable {
-      # for chromium
-      "chromium/native-messaging-hosts/org.kde.plasma.browser_integration.json" =
-        lib.mkIf cfg.enablePlasmaBrowserIntegration
-          {
-            source = "${cfg.plasmaBrowserIntegrationPackage}/etc/chromium/native-messaging-hosts/org.kde.plasma.browser_integration.json";
-          };
-      "chromium/policies/managed/default.json" = lib.mkIf (defaultProfile != { }) {
-        text = builtins.toJSON defaultProfile;
-      };
-      "chromium/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != { }) {
-        text = builtins.toJSON cfg.extraOpts;
-      };
-      "chromium/initial_preferences" = lib.mkIf (cfg.initialPrefs != { }) {
-        text = builtins.toJSON cfg.initialPrefs;
-      };
-      # for google-chrome https://www.chromium.org/administrators/linux-quick-start
-      "opt/chrome/native-messaging-hosts/org.kde.plasma.browser_integration.json" =
-        lib.mkIf cfg.enablePlasmaBrowserIntegration
-          {
-            source = "${cfg.plasmaBrowserIntegrationPackage}/etc/opt/chrome/native-messaging-hosts/org.kde.plasma.browser_integration.json";
-          };
-      "opt/chrome/policies/managed/default.json" = lib.mkIf (defaultProfile != { }) {
-        text = builtins.toJSON defaultProfile;
-      };
-      "opt/chrome/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != { }) {
-        text = builtins.toJSON cfg.extraOpts;
-      };
-      # for brave
-      "brave/policies/managed/default.json" = lib.mkIf (defaultProfile != { }) {
-        text = builtins.toJSON defaultProfile;
-      };
-      "brave/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != { }) {
-        text = builtins.toJSON cfg.extraOpts;
-      };
+  config = lib.mkIf cfg.enable {
+    environment = {
+      etc = chromiumEtcConfig;
+      systemPackages = [ cfg.package ];
     };
   };
 }
+
