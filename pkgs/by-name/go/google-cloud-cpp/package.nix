@@ -48,6 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace cmake/GoogleCloudCppFeatures.cmake \
+      --replace-fail \
+        "bigtable;bigquery;iam;logging;pubsub;spanner;storage" \
+        "bigtable;bigquery;iam;logging;pubsub;spanner;storage;universe_domain" \
+  '';
+
   nativeBuildInputs = [
     cmake
     ninja
@@ -125,6 +132,15 @@ stdenv.mkDerivation (finalAttrs: {
     # this adds a good chunk of time to the build
     (lib.cmakeBool "BUILD_TESTING" true)
     (lib.cmakeBool "GOOGLE_CLOUD_CPP_ENABLE_EXAMPLES" false)
+
+    # After 30acc3c, the configPhase fails with:
+    # Target "spanner_database_admin_client_samples" links to:
+    #   google-cloud-cpp::universe_domain
+    # but the target was not found.
+    #
+    # Adding both `universe_domain` to the list `GOOGLE_CLOUD_CPP_ENABLE_UNIVERSE_DOMAIN`
+    # https://github.com/googleapis/google-cloud-cpp/commit/30acc3c57ab19aed3f94f2fa673ff255c32c6b70
+    (lib.cmakeBool "GOOGLE_CLOUD_CPP_ENABLE_UNIVERSE_DOMAIN" true)
   ]
   ++ lib.optionals (apis != [ "*" ]) [
     (lib.cmakeFeature "GOOGLE_CLOUD_CPP_ENABLE" (lib.concatStringsSep ";" apis))
