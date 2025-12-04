@@ -1,16 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchPypi,
-  autopep8,
-  flake8,
-  jinja2,
-  pylint,
-  pyyaml,
-  six,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "cmake-format";
   version = "0.6.13";
   # The source distribution does not build because of missing files.
@@ -18,12 +12,11 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit version format;
-    python = "py3";
     pname = "cmakelang";
     sha256 = "0kmggnfbv6bba75l3zfzqwk0swi90brjka307m2kcz2w35kr8jvn";
   };
 
-  propagatedBuildInputs = [
+  dependencies = with python3Packages; [
     autopep8
     flake8
     jinja2
@@ -34,12 +27,11 @@ buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Source code formatter for cmake listfiles";
     homepage = "https://github.com/cheshirekow/cmake_format";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.tobim ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ tobim ];
     mainProgram = "cmake-format";
-    platforms = platforms.all;
   };
 }
