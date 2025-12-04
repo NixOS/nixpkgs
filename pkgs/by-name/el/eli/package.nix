@@ -34,18 +34,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "eli";
-  version = "4.8.1";
+  version = "4.9.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/eli-project/Eli/Eli%20${finalAttrs.version}/eli-${finalAttrs.version}.tar.bz2";
-    sha256 = "1vran8583hbwrr5dciji4zkhz3f88w4mn8n9sdpr6zw0plpf1whj";
+    hash = "sha256-evEdDSc0QxntMHwgC6e53PLC4O1ZZTvUN3y9i8DB+8I=";
   };
-
-  patches = [
-    # Newer GCC will reject function parameters with an implicit type of `int` and undefined
-    # references to undeclared functions.
-    ./function-declarations.patch
-  ];
 
   buildInputs = [
     ncurses
