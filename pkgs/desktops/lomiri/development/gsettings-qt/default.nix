@@ -4,23 +4,23 @@
   fetchFromGitLab,
   gitUpdater,
   testers,
+  cmake,
+  cmake-extras,
   glib,
-  gobject-introspection,
   pkg-config,
-  qmake,
   qtbase,
   qtdeclarative,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gsettings-qt";
-  version = "0.2";
+  version = "1.1.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/gsettings-qt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IlW8Aw5fRM6Vox807SjqwowIcPdsBLXwZKlJwuHtiJI=";
+    hash = "sha256-NUrJ3xQnef7TwPa7AIZaiI7TAkMe+nhuEQ/qC1H1Ves=";
   };
 
   outputs = [
@@ -28,57 +28,53 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  # Current version still uses QMake
-  strictDeps = false;
+  strictDeps = true;
 
   nativeBuildInputs = [
+    cmake
     pkg-config
-    qmake
-    gobject-introspection
+    qtdeclarative
   ];
 
   buildInputs = [
+    cmake-extras
     glib
-    qtdeclarative
   ];
 
   # Library
   dontWrapQtApps = true;
 
-  postPatch = ''
-    # force ordered build of subdirs
-    sed -i -e "\$aCONFIG += ordered" gsettings-qt.pro
-
-    # It seems that there is a bug in qtdeclarative: qmlplugindump fails
-    # because it can not find or load the Qt platform plugin "minimal".
-    # A workaround is to set QT_PLUGIN_PATH and QML2_IMPORT_PATH explicitly.
-    export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
-    export QML2_IMPORT_PATH=${qtdeclarative.bin}/${qtbase.qtQmlPrefix}
-
-    substituteInPlace GSettings/gsettings-qt.pro \
-      --replace '$$[QT_INSTALL_QML]' "$out/$qtQmlPrefix" \
-      --replace '$$[QT_INSTALL_BINS]/qmlplugindump' "qmlplugindump"
-
-    substituteInPlace src/gsettings-qt.pro \
-      --replace '$$[QT_INSTALL_LIBS]' "$out/lib" \
-      --replace '$$[QT_INSTALL_HEADERS]' "$out/include"
-  '';
-
-  preInstall = ''
-    # do not install tests
-    for f in tests/Makefile{,.cpptest}; do
-      substituteInPlace $f \
-        --replace "install: install_target" "install: "
-    done
-  '';
-
-  postInstall =
-    # QMake-generated pkg-config files, hence fixes being done here
+  postPatch =
+    # Upstream renamed WERROR option to ENABLE_WERROR, but forgot this line
     ''
-      substituteInPlace $out/lib/pkgconfig/gsettings-qt.pc \
-        --replace-fail 'prefix=${lib.getDev qtbase}' 'prefix=${placeholder "out"}' \
-        --replace-fail 'includedir=${placeholder "out"}' 'includedir=${placeholder "dev"}'
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'if (WERROR)' 'if (ENABLE_WERROR)'
+    ''
+    # The usual pkg-config fix
+    # + Drop QGSettings addition in includedir, QGSettings/QGSettings is used by projects
+    + ''
+      substituteInPlace src/gsettings-qt.pc.in \
+        --replace-fail "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" '@CMAKE_INSTALL_FULL_LIBDIR@' \
+        --replace-fail "\''${prefix}/@QT_INCLUDE_DIR@/QGSettings" '@QT_FULL_INCLUDE_DIR@/QGSettings'
+    ''
+    # Adjust to where we keep QML modules
+    + ''
+      substituteInPlace GSettings/CMakeLists.txt \
+        --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" '${placeholder "out"}/${qtbase.qtQmlPrefix}'
     '';
+
+  preBuild =
+    # For qmlplugindump
+    ''
+      export QT_PLUGIN_PATH=${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
+    '';
+
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
+    (lib.cmakeBool "ENABLE_WERROR" true)
+  ];
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
