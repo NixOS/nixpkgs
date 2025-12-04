@@ -16,8 +16,8 @@
   qqc2-suru-style,
   qtbase,
   qtdeclarative,
-  qtquickcontrols2,
-  qtsystems,
+  qtquickcontrols2 ? null,
+  qtsystems ? null,
   qttools,
   qtwebengine,
   wrapQtAppsHook,
@@ -25,6 +25,7 @@
 }:
 
 let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
   listToQtVar = suffix: lib.makeSearchPathOutput "bin" suffix;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -80,9 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri-content-hub
     lomiri-ui-extras
     lomiri-ui-toolkit
-    qqc2-suru-style
     qtquickcontrols2
     qtsystems
+  ]
+  ++ lib.optionals (!withQt6) [
+    qqc2-suru-style
   ];
 
   nativeCheckInputs = [
@@ -112,13 +115,17 @@ stdenv.mkDerivation (finalAttrs: {
     export QT_PLUGIN_PATH=${listToQtVar qtbase.qtPluginPrefix [ qtbase ]}
     export QML2_IMPORT_PATH=${
       listToQtVar qtbase.qtQmlPrefix (
-        [
-          lomiri-ui-toolkit
-          qtwebengine
-          qtdeclarative
-          qtquickcontrols2
-          qtsystems
-        ]
+        (
+          [
+            lomiri-ui-toolkit
+            qtwebengine
+            qtdeclarative
+          ]
+          ++ lib.optionals (!withQt6) [
+            qtquickcontrols2
+            qtsystems
+          ]
+        )
         ++ lomiri-ui-toolkit.propagatedBuildInputs
       )
     }
