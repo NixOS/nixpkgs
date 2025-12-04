@@ -31,7 +31,7 @@ GEM
     net-ssh (7.3.0)
     net-telnet (0.2.0)
     nio4r (2.7.4)
-    oxidized (0.34.3)
+    oxidized (0.35.0)
       asetus (~> 0.4)
       bcrypt_pbkdf (~> 1.0)
       ed25519 (~> 1.2)
@@ -49,16 +49,16 @@ GEM
     oxidized-script (0.7.0)
       oxidized (~> 0.29)
       slop (~> 4.6)
-    oxidized-web (0.17.1)
+    oxidized-web (0.18.0)
       charlock_holmes (>= 0.7.5, < 0.8.0)
       emk-sinatra-url-for (~> 0.2)
-      haml (>= 6.0.0, < 6.4.0)
-      htmlentities (>= 4.3.0, < 4.4.0)
-      json (>= 2.3.0, < 2.14.0)
-      oxidized (~> 0.34.1)
-      puma (~> 6.6.0)
-      sinatra (~> 4.1.1)
-      sinatra-contrib (~> 4.1.1)
+      haml (>= 6.0.0, < 7.0.0)
+      htmlentities (>= 4.3.0, < 4.5.0)
+      json (>= 2.3.0, < 2.17.0)
+      oxidized (>= 0.34.1)
+      puma (>= 6.6, < 7.2)
+      sinatra (>= 4.1.1, < 4.3.0)
+      sinatra-contrib (>= 4.1.1, < 4.3.0)
     psych (5.2.6)
       date
       stringio
@@ -105,9 +105,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  oxidized (= 0.34.3)
+  oxidized (= 0.35.0)
   oxidized-script (= 0.7.0)
-  oxidized-web (= 0.17.1)
+  oxidized-web (= 0.18.0)
   psych (~> 5.0)
 
 BUNDLED WITH
