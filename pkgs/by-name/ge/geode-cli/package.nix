@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/geode-sdk/cli";
     changelog = "https://github.com/geode-sdk/cli/releases/tag/v${version}";
     license = lib.licenses.boost;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ not-a-cow ];
     mainProgram = "geode";
   };
