@@ -48,7 +48,7 @@ let
   };
 
   pretix-schedule-editor = buildNpmPackage {
-    pname = "pretalx-schedule-editorc";
+    pname = "pretalx-schedule-editor";
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretalx/frontend/schedule-editor";
