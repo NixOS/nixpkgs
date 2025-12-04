@@ -10,6 +10,7 @@
   cryptography,
   fetchFromGitHub,
   freezegun,
+  grpcio,
   josepy,
   litellm,
   pycognito,
@@ -31,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "1.6.1";
+  version = "1.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -40,7 +41,7 @@ buildPythonPackage rec {
     owner = "nabucasa";
     repo = "hass-nabucasa";
     tag = version;
-    hash = "sha256-LBJPzMosSgfdONu2preIBKmlKhY4P+jFTmR8u2BKCZI=";
+    hash = "sha256-22DCn6ITrpH4bevAvfogA1f4llwuk5vIn3rKieedVfg=";
   };
 
   postPatch = ''
@@ -63,6 +64,7 @@ buildPythonPackage rec {
     attrs
     ciso8601
     cryptography
+    grpcio
     josepy
     litellm
     pycognito

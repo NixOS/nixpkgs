@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   poetry-core,
@@ -40,16 +39,14 @@
 
 buildPythonPackage rec {
   pname = "uiprotect";
-  version = "7.23.0";
+  version = "7.32.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "uilibs";
     repo = "uiprotect";
     tag = "v${version}";
-    hash = "sha256-UScv0RAIgkFYl3yJZDuSzXXV3iI/3maV42hN4EtfUio=";
+    hash = "sha256-nZSOOdck7OFjw6r2Jau4H2vX1PLxk5H0SMf2/wplZdo=";
   };
 
   build-system = [ poetry-core ];
@@ -92,17 +89,6 @@ buildPythonPackage rec {
   ];
 
   pytestFlags = [ "--benchmark-disable" ];
-
-  disabledTests = [
-    # https://127.0.0.1 vs https://127.0.0.1:0
-    "test_base_url"
-    "test_bootstrap"
-  ];
-
-  disabledTestPaths = [
-    # hangs the test suite
-    "tests/test_api_ws.py"
-  ];
 
   pythonImportsCheck = [ "uiprotect" ];
 

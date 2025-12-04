@@ -4859,6 +4859,8 @@ self: super: with self; {
 
   energyflow = callPackage ../development/python-modules/energyflow { };
 
+  energyid-webhooks = callPackage ../development/python-modules/energyid-webhooks { };
+
   energyzero = callPackage ../development/python-modules/energyzero { };
 
   enlighten = callPackage ../development/python-modules/enlighten { };
@@ -4944,6 +4946,8 @@ self: super: with self; {
   esphome-glyphsets = callPackage ../development/python-modules/esphome-glyphsets { };
 
   esprima = callPackage ../development/python-modules/esprima { };
+
+  essent-dynamic-pricing = callPackage ../development/python-modules/essent-dynamic-pricing { };
 
   essentials = callPackage ../development/python-modules/essentials { };
 
@@ -5377,6 +5381,8 @@ self: super: with self; {
   fireworks-ai = callPackage ../development/python-modules/fireworks-ai { };
 
   first = callPackage ../development/python-modules/first { };
+
+  fiscalyear = callPackage ../development/python-modules/fiscalyear { };
 
   fissix = callPackage ../development/python-modules/fissix { };
 
@@ -6978,6 +6984,8 @@ self: super: with self; {
   httpx-ws = callPackage ../development/python-modules/httpx-ws { };
 
   huawei-lte-api = callPackage ../development/python-modules/huawei-lte-api { };
+
+  hueble = callPackage ../development/python-modules/hueble { };
 
   huepy = callPackage ../development/python-modules/huepy { };
 
@@ -12110,8 +12118,6 @@ self: super: with self; {
 
   pixelmatch = callPackage ../development/python-modules/pixelmatch { };
 
-  pizzapi = callPackage ../development/python-modules/pizzapi { };
-
   pjsua2 =
     (toPythonModule (
       pkgs.pjsip.override {
@@ -12795,6 +12801,8 @@ self: super: with self; {
 
   pyairnow = callPackage ../development/python-modules/pyairnow { };
 
+  pyairobotrest = callPackage ../development/python-modules/pyairobotrest { };
+
   pyairports = callPackage ../development/python-modules/pyairports { };
 
   pyairtable = callPackage ../development/python-modules/pyairtable { };
@@ -12812,6 +12820,8 @@ self: super: with self; {
   pyaml = callPackage ../development/python-modules/pyaml { };
 
   pyaml-env = callPackage ../development/python-modules/pyaml-env { };
+
+  pyanglianwater = callPackage ../development/python-modules/pyanglianwater { };
 
   pyannotate = callPackage ../development/python-modules/pyannotate { };
 
@@ -13278,8 +13288,6 @@ self: super: with self; {
   pyflexit = callPackage ../development/python-modules/pyflexit { };
 
   pyflic = callPackage ../development/python-modules/pyflic { };
-
-  pyflick = callPackage ../development/python-modules/pyflick { };
 
   pyflipper = callPackage ../development/python-modules/pyflipper { };
 
@@ -15472,6 +15480,8 @@ self: super: with self; {
       xapp
       ;
   };
+
+  python-xbox = callPackage ../development/python-modules/python-xbox { };
 
   python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
 
@@ -20582,8 +20592,6 @@ self: super: with self; {
   xarray-einstats = callPackage ../development/python-modules/xarray-einstats { };
 
   xattr = callPackage ../development/python-modules/xattr { };
-
-  xbox-webapi = callPackage ../development/python-modules/xbox-webapi { };
 
   xboxapi = callPackage ../development/python-modules/xboxapi { };
 
