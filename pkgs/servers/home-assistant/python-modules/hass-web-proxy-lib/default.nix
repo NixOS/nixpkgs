@@ -52,7 +52,8 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-homeassistant-custom-component
     pytest-timeout
-    pytestCheckHook
+    # https://github.com/dermotduffy/hass-web-proxy-lib/issues/110
+    # pytestCheckHook
   ];
 
   disabledTests = [
