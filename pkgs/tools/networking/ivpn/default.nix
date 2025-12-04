@@ -22,7 +22,7 @@ builtins.mapAttrs
       attrs
       // rec {
         inherit pname;
-        version = "3.14.34";
+        version = "3.15.0";
 
         buildInputs = [
           wirelesstools
@@ -32,7 +32,7 @@ builtins.mapAttrs
           owner = "ivpn";
           repo = "desktop-app";
           tag = "v${version}";
-          hash = "sha256-Q96G5mJahJnXxpqJ8IF0oFie7l0Nd1p8drHH9NSpwEw=";
+          hash = "sha256-Y+oW/2WDkH/YydR+xSzEHPdCNKTmmsV4yEsju+OmDYE=";
         };
 
         proxyVendor = true; # .c file
