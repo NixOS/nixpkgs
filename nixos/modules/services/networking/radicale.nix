@@ -26,6 +26,9 @@ let
 
   bindLocalhost = cfg.settings != { } && !hasAttrByPath [ "server" "hosts" ] cfg.settings;
 
+  storageSet =
+    (hasAttrByPath [ "storage" "filesystem_folder" ] cfg.settings)
+    && cfg.settings.storage.filesystem_folder != "/var/lib/radicale/collections";
 in
 {
   options.services.radicale = {
@@ -178,8 +181,8 @@ in
         );
         User = "radicale";
         Group = "radicale";
-        StateDirectory = "radicale/collections";
-        StateDirectoryMode = "0750";
+        StateDirectory = lib.mkIf (!storageSet) "radicale/collections";
+        StateDirectoryMode = lib.mkIf (!storageSet) "0750";
         # Hardening
         CapabilityBoundingSet = [ "" ];
         DeviceAllow = [
@@ -205,10 +208,7 @@ in
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
         ProtectSystem = "strict";
-        ReadWritePaths = lib.optional (hasAttrByPath [
-          "storage"
-          "filesystem_folder"
-        ] cfg.settings) cfg.settings.storage.filesystem_folder;
+        ReadWritePaths = lib.optional storageSet cfg.settings.storage.filesystem_folder;
         RemoveIPC = true;
         RestrictAddressFamilies = [
           "AF_INET"
@@ -225,7 +225,8 @@ in
           "~@resources"
         ];
         UMask = "0027";
-        WorkingDirectory = "/var/lib/radicale";
+        WorkingDirectory =
+          if storageSet then cfg.settings.storage.filesystem_folder else "/var/lib/radicale";
       };
     };
   };
