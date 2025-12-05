@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "rancher";
-  version = "2.12.3";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "rancher";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-i+l+vs+uD6h0GruvxhkQtb7DYCJ3uysa/rZ8hGmmu7Y=";
+    hash = "sha256-L3ts6MpaVf5+0V1t51CLcZOT4myywquZ0DmzotWTfLI=";
   };
 
   env.CGO_ENABLED = 0;
@@ -25,7 +25,7 @@ buildGoModule rec {
     "-static"
   ];
 
-  vendorHash = "sha256-mObfou6JXQ+ZWvxWMpdcC1ymngFJZ8k9I+rCYCFvDg4=";
+  vendorHash = "sha256-CyCq5lLVOm9nDT5ywuq39IaVwNTSLGsWpXdB009fH2M=";
 
   postInstall = ''
     mv $out/bin/cli $out/bin/rancher
