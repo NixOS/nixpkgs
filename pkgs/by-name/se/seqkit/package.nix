@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "seqkit";
-  version = "2.11.0";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "shenwei356";
     repo = "seqkit";
     rev = "v${version}";
-    sha256 = "sha256-8AffU5u7Pw3WX+MaLioPKVwg3WnTLjHcY6Yvo5lrHwk=";
+    sha256 = "sha256-9+eu4M58nG/tOdEW7fO8f+dMJewMjQsWfzH/KpSBDB8=";
   };
 
   vendorHash = "sha256-TsL7iYZoxCGR2gl2YlNCnmssVui8TLKN8JTtLAzgvH4=";
