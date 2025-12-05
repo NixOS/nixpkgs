@@ -629,8 +629,8 @@ in
       "sha256-IKwZ61X8n8l9uwMEDicCK25g/Va77+xrpd6qLMal0z0=";
 
   mypy-boto3-internetmonitor =
-    buildMypyBoto3Package "internetmonitor" "1.41.0"
-      "sha256-/8GwJ1D03NOALWKr4fOa3lCvgyQNePatBLNTT5Eyc2c=";
+    buildMypyBoto3Package "internetmonitor" "1.42.3"
+      "sha256-rXXlHFkPI9DeMO2j+a0kLrieNt73t8//2UnUM2JskfI=";
 
   mypy-boto3-iot =
     buildMypyBoto3Package "iot" "1.41.0"
