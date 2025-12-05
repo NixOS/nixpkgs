@@ -39,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "langchain-classic";
-  version = "1.0.0-unstable-2025-11-11";
+  version = "langchain-core==1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
