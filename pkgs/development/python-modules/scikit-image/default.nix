@@ -105,10 +105,13 @@ let
       rm -r skimage
     '';
 
-    pytestFlagsArray = [
-      "${installedPackageRoot}"
+    pytestFlags = [
       "--pyargs"
       "skimage"
+    ];
+
+    enabledTestPaths = [
+      installedPackageRoot
     ];
 
     disabledTestPaths = [
