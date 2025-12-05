@@ -2,37 +2,19 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  pkg-config,
-  fontconfig,
-  freetype,
 }:
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "figma-agent";
-  version = "0.3.2-unstable-2024-11-16";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "neetly";
     repo = "figma-agent-linux";
-    rev = "6709a1b7ffcbfb227472d8f017bfbbda77ddca7d";
-    sha256 = "sha256-Cq+ivyrj6wt7DEUM730BG44sMkpOMt4qxb+J3itVar4=";
+    tag = finalAttrs.version;
+    sha256 = "sha256-eP2C/u4CWdf7ABHdxapFcrmI1Un405wIHE0kpvz7y7A=";
   };
 
-  cargoHash = "sha256-QdEs1zaQ2CQT50nIhKxtp7zpJfa64xQgOy3sTOUGmxk=";
-
-  nativeBuildInputs = [
-    pkg-config
-    rustPlatform.bindgenHook
-  ];
-
-  buildInputs = [
-    fontconfig
-    freetype
-  ];
-
-  checkFlags = [
-    # All tests fail due to unavailable bindings
-    "--skip=figma-agent-freetype-sys"
-  ];
+  cargoHash = "sha256-KmoTsriLnYvEI+yOOV9sLQ6qPRKqYRDzaYj7Kp72sP0=";
 
   meta = {
     description = "Figma Agent for Linux with a focus on performance";
@@ -42,4 +24,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "figma-agent";
     platforms = lib.platforms.linux;
   };
-}
+})
