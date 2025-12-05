@@ -174,8 +174,8 @@ in
       "sha256-eRAaTJBaTMpyZO0VbJgVF6GIa2Xi06o3vtKptU24oXQ=";
 
   mypy-boto3-braket =
-    buildMypyBoto3Package "braket" "1.41.1"
-      "sha256-vkaaGr3aFi+v+g41Np4vwhZGggG/l4W4Ps/rih0JhSQ=";
+    buildMypyBoto3Package "braket" "1.42.3"
+      "sha256-p8bdld0zrW6NzBndSczyHclvkhKb4VW8npiAKz+8Ge4=";
 
   mypy-boto3-budgets =
     buildMypyBoto3Package "budgets" "1.41.1"
