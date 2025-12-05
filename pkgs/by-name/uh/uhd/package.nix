@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  llvmPackages_20,
   substitute,
   fetchpatch,
   fetchurl,
@@ -36,9 +37,15 @@
 
 let
   inherit (lib) optionals cmakeBool;
+  stdenv' = (
+    if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
+      llvmPackages_20.stdenv
+    else
+      stdenv
+  );
 in
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv'.mkDerivation (finalAttrs: {
   pname = "uhd";
   # NOTE: Use the following command to update the package, and the uhdImageSrc attribute:
   #
@@ -148,7 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
     # ABI differences GCC 7.1
     # /nix/store/wd6r25miqbk9ia53pp669gn4wrg9n9cj-gcc-7.3.0/include/c++/7.3.0/bits/vector.tcc:394:7: note: parameter passing for argument of type 'std::vector<uhd::range_t>::iterator {aka __gnu_cxx::__normal_iterator<uhd::range_t*, std::vector<uhd::range_t> >}' changed in GCC 7.1
   ]
-  ++ optionals stdenv.hostPlatform.isAarch32 [
+  ++ optionals stdenv'.hostPlatform.isAarch32 [
     "-DCMAKE_CXX_FLAGS=-Wno-psabi"
   ];
 
@@ -181,7 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # many tests fails on darwin, according to ofborg
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck = !stdenv'.hostPlatform.isDarwin;
 
   doInstallCheck = true;
 
@@ -192,7 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
     "installFirmware"
     "removeInstalledTests"
   ]
-  ++ optionals (enableUtils && stdenv.hostPlatform.isLinux) [
+  ++ optionals (enableUtils && stdenv'.hostPlatform.isLinux) [
     "moveUdevRules"
   ];
 
