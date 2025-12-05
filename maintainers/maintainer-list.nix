@@ -11142,6 +11142,11 @@
     githubId = 3698237;
     name = "ImUrX";
   };
+  Inarizxc = {
+    name = "Inarizxc";
+    github = "Inarizxc";
+    githubId = 128096405;
+  };
   inclyc = {
     email = "i@lyc.dev";
     github = "inclyc";
