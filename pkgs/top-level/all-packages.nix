@@ -5899,7 +5899,7 @@ with pkgs;
     spidermonkey_140
     ;
 
-  supercollider = libsForQt5.callPackage ../development/interpreters/supercollider {
+  supercollider = qt6Packages.callPackage ../development/interpreters/supercollider {
     fftw = fftwSinglePrec;
   };
 
