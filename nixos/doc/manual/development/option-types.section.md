@@ -254,6 +254,66 @@ Users must still be careful about how they reference these paths.
 :   A string wrapped using `lib.mkLuaInline`. Allows embedding lua expressions
     inline within generated lua. Multiple definitions cannot be merged.
 
+`types.rawRon`
+
+:   A RON (Rusty Object Notation) raw value. This type accepts attribute sets
+    with `_type = "ron-raw"` and a `value` field containing a string that will be
+    injected directly as raw RON syntax. Use `lib.ron.mkRaw` to create values of
+    this type. Useful for injecting complex RON expressions or features not natively
+    supported by the RON builder. Multiple definitions cannot be merged.
+
+`types.ronChar`
+
+:   A RON (Rusty Object Notation) character value. This type accepts attribute sets
+    with `_type = "ron-char"` and a `value` field containing a single character string.
+    Use `lib.ron.mkChar` to create values of this type. Multiple definitions cannot be merged.
+
+`types.ronEnum` *`variants`*
+
+:   A RON (Rusty Object Notation) enum value restricted to simple variants (without associated data).
+    This type accepts attribute sets with `_type = "ron-enum"`, a `variant` field containing one
+    of the allowed variant names from *`variants`*, and no `values` field. Use `lib.ron.mkEnum`
+    to create values of this type. Similar to `types.enum` but for RON enum values.
+    Multiple definitions cannot be merged.
+
+`types.ronMapOf` *`keyType`* *`valueType`*
+
+:   A RON map of *`keyType`* to *`valueType`*. This type accepts attribute sets with `_type = "ron-map"`
+    and an `attrs` field containing a list of key-value pairs, where each pair is an attribute set with
+    `key` and `value` fields. Multiple definitions are concatenated. Use `lib.ron.mkMap` to create values
+    of this type, e.g. `types.ronMapOf str int`.
+
+`types.ronNamedStructOf` *`elemType`*
+
+:   A RON named struct where all fields are of *`elemType`* type. This type accepts attribute sets with
+    `_type = "ron-named-struct"`, a `name` field containing the struct type name, and a `value`
+    field containing an attribute set. Multiple definitions with the same name are merged by joining
+    their field attribute sets. Use `lib.ron.mkNamedStruct` to create values of this type, e.g.
+    `types.ronNamedStructOf int`.
+
+`types.ronOptionalOf` *`elemType`*
+
+:   RON optional of *`elemType`* type. This type accepts attribute sets with `_type = "ron-optional"`
+    and a `value` field that is either `null` (representing `None`) or a value of type *`elemType`*
+    (representing `Some`). If all definitions are `None`, the merged value is `None`. If any
+    definitions are `Some`, they must all be `Some` and their values are merged through *`elemType`*.
+    Use `lib.ron.mkOptional` to create values of this type, e.g. `types.ronOptionalOf int`.
+
+`types.ronTupleEnumOf` *`elemType`* *`variants`* *`size`*
+
+:   A RON (Rusty Object Notation) tuple enum where all tuple values are of *`elemType`* type.
+    This type accepts attribute sets with `_type = "ron-enum"`, a `variant` field containing
+    one of the allowed variant names from *`variants`*, and a `values` field containing exactly
+    *`size`* elements. Multiple definitions cannot be merged. Use `lib.ron.mkEnum` to create
+    values of this type, e.g. `types.ronTupleEnumOf int [ "Point" "Line" ] 2`.
+
+`types.ronTupleOf` *`elemType`* *`size`*
+
+:   A RON tuple where all *`size`* values are of *`elemType`* type. This type accepts attribute sets
+    with `_type = "ron-tuple"` and a `values` field containing exactly *`size`* elements. Multiple
+    definitions cannot be merged. Use `lib.ron.mkTuple` to create values of this type, e.g.
+    `types.ronTupleOf int 3`.
+
 ## Submodule types {#sec-option-types-submodule}
 
 Submodules are detailed in [Submodule](#section-option-types-submodule).
