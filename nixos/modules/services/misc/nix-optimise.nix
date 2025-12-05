@@ -65,9 +65,17 @@ in
     systemd = lib.mkIf config.nix.enable {
       services.nix-optimise = {
         description = "Nix Store Optimiser";
-        # No point this if the nix daemon (and thus the nix store) is outside
-        unitConfig.ConditionPathIsReadWrite = "/nix/var/nix/daemon-socket";
-        serviceConfig.ExecStart = "${config.nix.package}/bin/nix-store --optimise";
+        unitConfig = {
+          ConditionACPower = true;
+          # No point this if the nix daemon (and thus the nix store) is outside
+          ConditionPathIsReadWrite = "/nix/var/nix/daemon-socket";
+        };
+        serviceConfig = {
+          ExecStart = "${lib.getExe' config.nix.package "nix-store"} --optimise";
+          Nice = 19;
+          CPUSchedulingPolicy = "idle";
+          IOSchedulingClass = "idle";
+        };
         startAt = lib.optionals cfg.automatic cfg.dates;
         # do not start and delay when switching
         restartIfChanged = false;
