@@ -897,8 +897,8 @@ in
       "sha256-y8iE6GChPXn+MfCa/k8syDRZmhQ8Aaz2uMNdkxMYq1A=";
 
   mypy-boto3-memorydb =
-    buildMypyBoto3Package "memorydb" "1.41.0"
-      "sha256-cnn4QL7eeCiZWP0kcETuM+mCiz1rAmUWwq1TyZjoLXg=";
+    buildMypyBoto3Package "memorydb" "1.42.3"
+      "sha256-7e9/QHJJbdGyNnpxVZZCdbxdc0ncJ7a2UsBiVF629VA=";
 
   mypy-boto3-meteringmarketplace =
     buildMypyBoto3Package "meteringmarketplace" "1.41.2"
