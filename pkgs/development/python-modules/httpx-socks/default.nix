@@ -11,7 +11,6 @@
   pytest-trio,
   pytestCheckHook,
   python-socks,
-  pythonOlder,
   setuptools,
   starlette,
   tiny-proxy,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "httpx-socks";
   version = "0.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "romis2012";
