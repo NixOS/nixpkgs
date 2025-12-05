@@ -8,15 +8,15 @@
 
 buildGoModule rec {
   pname = "stayrtr";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "bgp";
     repo = "stayrtr";
     rev = "v${version}";
-    hash = "sha256-QdPp+AHOVn/L4lArhwUNNu3OP2ALEFzs/hVnfSxaEbg=";
+    hash = "sha256-WZsRewstMITRxtBwaaIxmFV2wbSeIhARo/+X5JgG2E8=";
   };
-  vendorHash = "sha256-m1CHpmTUQVkBjkjg2bjl9llU1Le1GLRKKLGT4h7MbnE=";
+  vendorHash = "sha256-ACfCBbW42tic/m86/pAUquqzK1k05VUtH61mRD4Hu+4=";
 
   ldflags = [
     "-s"
