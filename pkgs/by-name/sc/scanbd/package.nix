@@ -40,6 +40,12 @@ stdenv.mkDerivation rec {
     "ac_cv_func_realloc_0_nonnull=yes"
   ];
 
+  postInstall = ''
+     mkdir -p $out/share/dbus-1/{system.d,system-services}
+     cp integration/scanbd_dbus.conf $out/share/dbus-1/system.d/scanbd.conf
+     cp integration/systemd/de.kmux.scanbd.server.service $out/share/dbus-1/system-services/
+    '';
+
   enableParallelBuilding = true;
 
   installFlags = [
