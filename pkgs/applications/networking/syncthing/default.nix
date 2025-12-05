@@ -19,13 +19,13 @@ let
     }:
     buildGoModule rec {
       pname = stname;
-      version = "2.0.10";
+      version = "2.0.11";
 
       src = fetchFromGitHub {
         owner = "syncthing";
         repo = "syncthing";
         tag = "v${version}";
-        hash = "sha256-N0+i5sj/cTPDv6q428b3Y0hsPRxIl96+RIuS1AyeTbc=";
+        hash = "sha256-Z2cU+HLWWQeu8fvSRWAcU6hrF2KHgIvsvAPus+9tkHM=";
       };
 
       vendorHash = "sha256-iYTAnEy0MqJaTz/cdpteealyviwVrpwDzVigo8nnXqs=";
