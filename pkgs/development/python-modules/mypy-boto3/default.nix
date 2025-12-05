@@ -873,8 +873,8 @@ in
       "sha256-AfhNnU0FEAARqIOysN3XEsNXQN9hhoXNTkRT4oiP56Q=";
 
   mypy-boto3-mediapackage-vod =
-    buildMypyBoto3Package "mediapackage-vod" "1.41.0"
-      "sha256-uynBhFk0Abwv36DI41tKnYZ4J9NNKogdMqvD3+goUOE=";
+    buildMypyBoto3Package "mediapackage-vod" "1.42.3"
+      "sha256-ZbxRVZaTcS4k2d0+qAT8GOK5tieYduZ4FqXd/k+CElk=";
 
   mypy-boto3-mediapackagev2 =
     buildMypyBoto3Package "mediapackagev2" "1.41.2"
