@@ -1417,8 +1417,8 @@ in
       "sha256-AgK4Xg1dloJmA+h4+mcBQQVTvYKjLCk5tPDbl/ItCVQ=";
 
   mypy-boto3-workmail =
-    buildMypyBoto3Package "workmail" "1.41.0"
-      "sha256-PYBPSv6tOC6GuP+L1SGs9xHdf6bfcwMpzPQ+RS2t9qc=";
+    buildMypyBoto3Package "workmail" "1.42.3"
+      "sha256-wTEMdjr8c14xH1KDPLnSnD3eg/TkOt5eF2ooGxzcIoc=";
 
   mypy-boto3-workmailmessageflow =
     buildMypyBoto3Package "workmailmessageflow" "1.41.0"
