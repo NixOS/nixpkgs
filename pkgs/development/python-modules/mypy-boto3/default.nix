@@ -609,8 +609,8 @@ in
       "sha256-Ha75FFv3QmeZetRqX4CtjVTvtuQxiIe5ohao2qFYJ74=";
 
   mypy-boto3-identitystore =
-    buildMypyBoto3Package "identitystore" "1.41.0"
-      "sha256-WsohLrGnt4ZMcOEdjbjK5057XeLwZ0ujbJD8AqajxW8=";
+    buildMypyBoto3Package "identitystore" "1.42.3"
+      "sha256-6Gq7zphConwwzuBGtzPR5Id/QGJEvjIVLbzj3OI1YPU=";
 
   mypy-boto3-imagebuilder =
     buildMypyBoto3Package "imagebuilder" "1.41.1"
