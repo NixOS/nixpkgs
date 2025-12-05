@@ -6,6 +6,7 @@
   nixosTests,
   versionCheckHook,
   nix-update-script,
+  git,
 }:
 
 let
@@ -17,7 +18,7 @@ let
     # The following tests were introduced in 9.x with the inclusion of act
     # the pkgs/by-name/ac/act/package.nix just sets doCheck = false;
 
-    # Requires running docker install
+    # Requires running Docker daemon
     "TestDocker"
     "TestJobExecutor"
     "TestRunner"
@@ -29,7 +30,7 @@ let
     # Reaches out to different websites
     "TestFindGitRemoteURL"
     "TestGitFindRef"
-    "TestGitCloneExecutor"
+    "TestClone"
     "TestCloneIfRequired"
     "TestActionCache"
     "TestRunContext_GetGitHubContext"
@@ -46,17 +47,17 @@ let
 in
 buildGoModule rec {
   pname = "forgejo-runner";
-  version = "11.3.1";
+  version = "12.2.0";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-jvHnTCkRvYaejeCiPpr18ldEmxcAkrEIaOLVVBY11eg=";
+    hash = "sha256-UzBRIa+mhynJDYHzssApMPyLeHdFVSAZ6SZtPbtJpB4=";
   };
 
-  vendorHash = "sha256-7Ybh5qzkqT3CvGtRXiPkc5ShTYGlyvckTxg4EFagM/c=";
+  vendorHash = "sha256-ReGxoPvW4G6DbFfR2OeeT3tupZkpLpX80zK824oeyVg=";
 
   # See upstream Makefile
   # https://code.forgejo.org/forgejo/runner/src/branch/main/Makefile
@@ -68,15 +69,17 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X code.forgejo.org/forgejo/runner/v11/internal/pkg/ver.version=${src.rev}"
+    "-X code.forgejo.org/forgejo/runner/v12/internal/pkg/ver.version=${src.rev}"
   ];
 
   checkFlags = [
     "-skip ${lib.concatStringsSep "|" disabledTests}"
   ];
 
+  nativeCheckInputs = [ git ];
+
   postInstall = ''
-    # fix up go-specific executable naming derived from package name, upstream
+    # Fix up go-specific executable naming derived from package name, upstream
     # also calls it `forgejo-runner`
     mv $out/bin/runner $out/bin/forgejo-runner
     # provide old binary name for compatibility
