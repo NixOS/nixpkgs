@@ -266,13 +266,18 @@
   },
   {
     "pname": "Microsoft.EntityFrameworkCore",
+    "version": "9.0.1",
+    "hash": "sha256-Cq1tZz2WWDEFy7D2xJ6YaBv+ifGwIFHWgKgsVXwbWSA="
+  },
+  {
+    "pname": "Microsoft.EntityFrameworkCore",
     "version": "9.0.8",
     "hash": "sha256-QJNiGeyZh2AHpm6CumccWYImYXHHoi3pSVBMk0Z0oto="
   },
   {
     "pname": "Microsoft.EntityFrameworkCore.Abstractions",
-    "version": "9.0.0",
-    "hash": "sha256-8SPpC6uTLl3TryFCTb2qqqLW4AsF/mTkOQteZ76dcfU="
+    "version": "9.0.1",
+    "hash": "sha256-BWXdOWIbtz0Si6D7aOTxtrq1jTH55l9OEPUWi6HfBsY="
   },
   {
     "pname": "Microsoft.EntityFrameworkCore.Abstractions",
@@ -281,8 +286,8 @@
   },
   {
     "pname": "Microsoft.EntityFrameworkCore.Analyzers",
-    "version": "9.0.0",
-    "hash": "sha256-TzAFoT3LEHcyD7sjoGMXOV7BVWNPSDIn+5+QQg4BYGs="
+    "version": "9.0.1",
+    "hash": "sha256-OO3ynTCMbWP2CaR9LOd6iGV85j/kirUc6hPdx+UgFZk="
   },
   {
     "pname": "Microsoft.EntityFrameworkCore.Analyzers",
@@ -298,6 +303,11 @@
     "pname": "Microsoft.EntityFrameworkCore.Relational",
     "version": "9.0.0",
     "hash": "sha256-b7YR7J6mv7IN0+TQIIm6xKw4heEPol0dLDgxVHAUu7s="
+  },
+  {
+    "pname": "Microsoft.EntityFrameworkCore.Relational",
+    "version": "9.0.1",
+    "hash": "sha256-6F6oYj654ceTg9247WgjmOFh7um3Silp/Ziwx5f8CqY="
   },
   {
     "pname": "Microsoft.EntityFrameworkCore.Relational",
@@ -331,6 +341,11 @@
   },
   {
     "pname": "Microsoft.Extensions.Caching.Memory",
+    "version": "9.0.1",
+    "hash": "sha256-NZV/R7g0CszBcE5Tjhfb2xX9i2rHT+Xc5QaxbhzRsg8="
+  },
+  {
+    "pname": "Microsoft.Extensions.Caching.Memory",
     "version": "9.0.8",
     "hash": "sha256-nZu6Qmwzcd5NJhgwjDIT18A1KttaFXMZ3E+f09Iq5Ng="
   },
@@ -348,6 +363,11 @@
     "pname": "Microsoft.Extensions.Configuration.Abstractions",
     "version": "9.0.0",
     "hash": "sha256-xtG2USC9Qm0f2Nn6jkcklpyEDT3hcEZOxOwTc0ep7uc="
+  },
+  {
+    "pname": "Microsoft.Extensions.Configuration.Abstractions",
+    "version": "9.0.1",
+    "hash": "sha256-r3iWP+kwKo4Aib8SGo91kKWR5WusLrbFHUAw5uKQeNA="
   },
   {
     "pname": "Microsoft.Extensions.Configuration.Abstractions",
@@ -388,6 +408,11 @@
     "pname": "Microsoft.Extensions.DependencyInjection",
     "version": "9.0.8",
     "hash": "sha256-fJOwbtlmP6mXGYqHRCqtb7e08h5mFza6Wmd1NbNq3ug="
+  },
+  {
+    "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
+    "version": "8.0.2",
+    "hash": "sha256-UfLfEQAkXxDaVPC7foE/J3FVEXd31Pu6uQIhTic3JgY="
   },
   {
     "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
@@ -446,8 +471,18 @@
   },
   {
     "pname": "Microsoft.Extensions.Logging",
+    "version": "9.0.1",
+    "hash": "sha256-IjszwetJ/r1NvwVyh+/SlavabNt9UXf3ZSGP9gGwnkk="
+  },
+  {
+    "pname": "Microsoft.Extensions.Logging",
     "version": "9.0.8",
     "hash": "sha256-SEVCMpVwjcQtTSs4lirb89A36MxLQwwqdDFWbr1VvP8="
+  },
+  {
+    "pname": "Microsoft.Extensions.Logging.Abstractions",
+    "version": "8.0.2",
+    "hash": "sha256-cHpe8X2BgYa5DzulZfq24rg8O2K5Lmq2OiLhoyAVgJc="
   },
   {
     "pname": "Microsoft.Extensions.Logging.Abstractions",
@@ -518,6 +553,16 @@
     "pname": "Newtonsoft.Json",
     "version": "13.0.3",
     "hash": "sha256-hy/BieY4qxBWVVsDqqOPaLy1QobiIapkbrESm6v2PHc="
+  },
+  {
+    "pname": "Npgsql",
+    "version": "9.0.3",
+    "hash": "sha256-X3F05GNj3vNVl++VOV5TMYE5dvEe6cx0k+5yWo2Q/+o="
+  },
+  {
+    "pname": "Npgsql.EntityFrameworkCore.PostgreSQL",
+    "version": "9.0.4",
+    "hash": "sha256-jBgcWTQ2Y84rA04OBSzVLzKzYsFC+a1olwbb01wnd0w="
   },
   {
     "pname": "NPOI",
