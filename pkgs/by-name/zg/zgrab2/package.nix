@@ -23,8 +23,8 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Fast Application Layer Scanner";
-    mainProgram = "zgrab2";
     homepage = "https://github.com/zmap/zgrab2";
+    changelog = "https://github.com/zmap/zgrab2/releases/tag/vv${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       isc
@@ -33,5 +33,6 @@ buildGoModule (finalAttrs: {
       fab
       juliusrickert
     ];
+    mainProgram = "zgrab2";
   };
 })
