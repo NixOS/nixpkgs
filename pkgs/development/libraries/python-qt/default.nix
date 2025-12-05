@@ -1,37 +1,94 @@
 {
   lib,
   stdenv,
+
   fetchFromGitHub,
+
   python3,
   qmake,
-  qtwebengine,
-  qtxmlpatterns,
+
+  qt5compat ? null,
+  qtbase,
+  qtdeclarative,
+  qtsvg,
   qttools,
+  qtwebengine,
+  qtxmlpatterns ? null,
+
+  qt6Support ? false,
 }:
 
+let
+  qtVersion = lib.getVersion qtbase;
+  pyVersion = lib.getVersion python3;
+  versions = "Qt${lib.versions.major qtVersion}-Python${lib.versions.majorMinor pyVersion}";
+in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "python-qt";
-  version = "3.6.1";
+  pname = "python${lib.versions.majorMinor pyVersion}-qt${lib.versions.major qtVersion}";
+  version = "3.6.1-unstable-2025-11-20";
 
   src = fetchFromGitHub {
     owner = "MeVisLab";
     repo = "pythonqt";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-OYFQtDGq+d32RQ0vChRKH//O9QgQPLMd1he8X3zCi+U=";
+    # tag = "v${finalAttrs.version}";
+    rev = "fd97b4b2ca5fc94a3219b002aadfbe2e8c89f59d";
+    hash = "sha256-BAuvs23VBKt6g5gpAtMUPyikL+D3sMEpch1BLICUotc=";
   };
 
   nativeBuildInputs = [
     qmake
-    qttools
-    qtxmlpatterns
-    qtwebengine
   ];
 
-  buildInputs = [ python3 ];
+  buildInputs = [
+    python3
+    qtdeclarative
+    qtsvg
+    qttools
+  ]
+  ++ lib.optionals qt6Support [
+    qt5compat
+    qtwebengine # optional and vulnerable in Qt5
+  ]
+  ++ lib.optionals (!qt6Support) [
+    qtxmlpatterns
+  ];
+
+  env.QTDIR = "${qtbase}"; # Used to find qtcoreversion.h
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/src.pro --replace-fail \
+      "QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64" \
+      "QMAKE_APPLE_DEVICE_ARCHS = ${stdenv.hostPlatform.darwinArch}"
+  '';
+
+  # generated cpp is available for many Qt5 versions but not Qt6
+  # ref. https://github.com/MeVisLab/pythonqt#binding-generator
+  preConfigure = lib.optionalString qt6Support (
+    let
+      includePaths = lib.concatMapStringsSep ":" (p: "${p}/include") [
+        qtbase
+        qtdeclarative
+        qtsvg
+        qttools
+        qtwebengine
+      ];
+    in
+    ''
+      pushd generator
+      qmake $qmakeFlags CONFIG+=Release generator.pro
+      make -j $NIX_BUILD_CORES
+      ./pythonqt_generator \
+        --include-paths=${includePaths} \
+        --qt-version=${qtVersion} \
+        qtscript_masterinclude.h \
+        build_all.txt
+      popd
+    ''
+  );
 
   qmakeFlags = [
     "PYTHON_DIR=${python3}"
-    "PYTHON_VERSION=3.${python3.sourceVersion.minor}"
+    "PYTHON_VERSION=${lib.versions.majorMinor pyVersion}"
   ];
 
   dontWrapQtApps = true;
@@ -45,22 +102,27 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    install_name_tool -id \
-      $out/lib/libPythonQt-Qt5-Python3.${python3.sourceVersion.minor}.dylib \
-      $out/lib/libPythonQt-Qt5-Python3.${python3.sourceVersion.minor}.dylib
-    install_name_tool -change \
-               libPythonQt-Qt5-Python3.${python3.sourceVersion.minor}.3.dylib \
-      $out/lib/libPythonQt-Qt5-Python3.${python3.sourceVersion.minor}.3.dylib \
-      -id \
-      $out/lib/libPythonQt_QtAll-Qt5-Python3.${python3.sourceVersion.minor}.dylib \
-      $out/lib/libPythonQt_QtAll-Qt5-Python3.${python3.sourceVersion.minor}.dylib
+    install_name_tool \
+      -id $out/lib/libPythonQt-${versions}.dylib \
+          $out/lib/libPythonQt-${versions}.dylib
+
+    install_name_tool \
+      -change      libPythonQt-${versions}.3.dylib \
+          $out/lib/libPythonQt-${versions}.3.dylib \
+      -id $out/lib/libPythonQt_QtAll-${versions}.dylib \
+          $out/lib/libPythonQt_QtAll-${versions}.dylib
   '';
 
   meta = with lib; {
     description = "PythonQt is a dynamic Python binding for the Qt framework. It offers an easy way to embed the Python scripting language into your C++ Qt applications";
-    homepage = "https://pythonqt.sourceforge.net/";
+    homepage = "https://mevislab.github.io/pythonqt/";
     license = licenses.lgpl21;
     platforms = platforms.all;
-    maintainers = with maintainers; [ hlolli ];
+    maintainers = with maintainers; [
+      hlolli
+      nim65s
+    ];
+    # ref. https://github.com/MeVisLab/pythonqt/issues/276
+    broken = stdenv.hostPlatform.isDarwin && qt6Support;
   };
 })
