@@ -17,13 +17,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "radiance";
-  version = "5.4";
+  version = "6.0.1";
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";
 
   src = fetchFromGitHub {
     owner = "LBNL-ETA";
     repo = "radiance";
-    tag = "rad${lib.versions.major finalAttrs.version}R${lib.versions.minor finalAttrs.version}";
-    hash = "sha256-21lVWqO8uJefnm/dyfrjQJYbGck0fIRr2j0A+7WlZbM=";
+    tag = "rad6R0P1a";
+    hash = "sha256-W3Ss5R4qYVvtp7m2hcXv+0zH3C7//KAMATJHdQR+b8w=";
   };
 
   nativeBuildInputs = [
