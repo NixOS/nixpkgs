@@ -1,0 +1,267 @@
+diff -ruN cmtk-3.3.2.orig/CMakeLists.txt cmtk-3.3.2/CMakeLists.txt
+--- cmtk-3.3.2.orig/CMakeLists.txt	2025-10-23 21:10:38.480244740 -0400
++++ cmtk-3.3.2/CMakeLists.txt	2025-10-23 20:55:59.324784102 -0400
+@@ -694,9 +694,14 @@
+   SET(CMAKE_SKIP_RPATH TRUE)
+ ENDIF(CMTK_BUILD_SHARED_LIBS)
+ 
+-# Save library dependencies.
+-EXPORT_LIBRARY_DEPENDENCIES(${CMTK_BINARY_DIR}/CMTKLibraryDepends.cmake)
+-INSTALL(FILES ${CMTK_BINARY_DIR}/CMTKLibraryDepends.cmake DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT libraries)
++# Export installed targets for build and install trees.
++export(EXPORT CMTKTargets FILE ${CMTK_BINARY_DIR}/CMTKTargets.cmake)
++INSTALL(
++  EXPORT CMTKTargets
++  DESTINATION ${CMTK_INSTALL_LIB_DIR}
++  COMPONENT libraries
++  FILE CMTKTargets.cmake
++  )
+ 
+ #-----------------------------------------------------------------------------
+ # After everything else is done, do we want to build man pages?
+diff -ruN cmtk-3.3.2.orig/CMTKConfig.cmake.in cmtk-3.3.2/CMTKConfig.cmake.in
+--- cmtk-3.3.2.orig/CMTKConfig.cmake.in	2025-10-23 21:10:38.452244332 -0400
++++ cmtk-3.3.2/CMTKConfig.cmake.in	2025-10-23 20:57:58.250276213 -0400
+@@ -63,8 +63,12 @@
+ # The build settings file.
+ SET(CMTK_BUILD_SETTINGS_FILE "@CMTK_CONFIG_PREFIX_CONFIG@/@CMTK_BUILD_SETTINGS_FILE@")
+ 
+-# The library dependencies file.
+-SET(CMTK_LIBRARY_DEPENDS_FILE "@CMTK_CONFIG_PREFIX_CONFIG@/@CMTK_LIBRARY_DEPENDS_FILE@")
++# Load exported CMTK targets if available.
++SET(_CMTK_TARGETS_FILE "@CMTK_CONFIG_PREFIX_CONFIG@/@CMTK_TARGETS_FILE@")
++IF(EXISTS "${_CMTK_TARGETS_FILE}")
++  INCLUDE("${_CMTK_TARGETS_FILE}")
++ENDIF()
++UNSET(_CMTK_TARGETS_FILE)
+ 
+ # Whether CMTK was built with shared libraries.
+ SET(CMTK_BUILD_SHARED "@BUILD_SHARED_LIBS@")
+@@ -72,10 +76,3 @@
+ # A list of all libraries for CMTK.  Those listed here should
+ # automatically pull in their dependencies.
+ SET(CMTK_LIBRARIES cmtkQt cmtkPipeline cmtkRegistration cmtkSegmentation cmtkIO cmtkBase cmtkSystem)
+-
+-# The CMTK library dependencies.
+-IF(NOT CMTK_NO_LIBRARY_DEPENDS AND
+-    EXISTS "${CMTK_LIBRARY_DEPENDS_FILE}")
+-  INCLUDE("${CMTK_LIBRARY_DEPENDS_FILE}")
+-ENDIF(NOT CMTK_NO_LIBRARY_DEPENDS AND
+-  EXISTS "${CMTK_LIBRARY_DEPENDS_FILE}")
+diff -ruN cmtk-3.3.2.orig/cmtkGenerateCMTKConfig.cmake cmtk-3.3.2/cmtkGenerateCMTKConfig.cmake
+--- cmtk-3.3.2.orig/cmtkGenerateCMTKConfig.cmake	2025-10-23 21:10:38.452244332 -0400
++++ cmtk-3.3.2/cmtkGenerateCMTKConfig.cmake	2025-10-23 20:57:43.637973187 -0400
+@@ -52,8 +52,8 @@
+ # Config file prefix is the root of the build tree itself.
+ SET(CMTK_CONFIG_PREFIX_CONFIG ${CMTK_BINARY_DIR})
+ 
+-# The library dependencies file.
+-SET(CMTK_LIBRARY_DEPENDS_FILE       CMTKLibraryDepends.cmake)
++# The exported targets file.
++SET(CMTK_TARGETS_FILE CMTKTargets.cmake)
+ 
+ # Library directory.
+ SET(CMTK_LIBRARY_DIRS_CONFIG ${CMTK_LIBRARY_PATH})
+@@ -89,8 +89,8 @@
+ # Config prefix is under install tree.
+ SET(CMTK_CONFIG_PREFIX_CONFIG ${CMAKE_INSTALL_PREFIX}/${CMTK_INSTALL_LIB_DIR})
+ 
+-# The library dependencies file.
+-SET(CMTK_LIBRARY_DEPENDS_FILE      CMTKLibraryDepends.cmake)
++# The exported targets file.
++SET(CMTK_TARGETS_FILE CMTKTargets.cmake)
+ 
+ # Include directories.
+ SET(CMTK_INCLUDE_DIRS_CONFIG \${CMTK_INSTALL_PREFIX}/${CMTK_INSTALL_INCLUDE_DIR})
+diff -ruN cmtk-3.3.2.orig/libs/Base/CMakeLists.txt cmtk-3.3.2/libs/Base/CMakeLists.txt
+--- cmtk-3.3.2.orig/libs/Base/CMakeLists.txt	2025-10-23 21:10:38.498245003 -0400
++++ cmtk-3.3.2/libs/Base/CMakeLists.txt	2025-10-23 20:56:25.585339727 -0400
+@@ -141,6 +141,7 @@
+ ENDIF(CMTK_LIBRARY_PROPERTIES)
+ 
+ INSTALL(TARGETS cmtkBase
++  EXPORT CMTKTargets
+   RUNTIME DESTINATION ${CMTK_INSTALL_BIN_DIR} COMPONENT runtime
+   LIBRARY DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT runtime
+   ARCHIVE DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT libraries)
+diff -ruN cmtk-3.3.2.orig/libs/GPU/CMakeLists.txt cmtk-3.3.2/libs/GPU/CMakeLists.txt
+--- cmtk-3.3.2.orig/libs/GPU/CMakeLists.txt	2025-10-23 21:10:38.486244827 -0400
++++ cmtk-3.3.2/libs/GPU/CMakeLists.txt	2025-10-23 20:57:09.454260970 -0400
+@@ -60,10 +60,11 @@
+   SET_TARGET_PROPERTIES(cmtkGPU PROPERTIES ${CMTK_LIBRARY_PROPERTIES})
+ ENDIF(CMTK_LIBRARY_PROPERTIES)
+ 
+-INSTALL(TARGETS cmtkGPU
+-  RUNTIME DESTINATION ${CMTK_INSTALL_BIN_DIR} COMPONENT runtime
+-  LIBRARY DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT runtime
+-  ARCHIVE DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT libraries)
++  INSTALL(TARGETS cmtkGPU
++    EXPORT CMTKTargets
++    RUNTIME DESTINATION ${CMTK_INSTALL_BIN_DIR} COMPONENT runtime
++    LIBRARY DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT runtime
++    ARCHIVE DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT libraries)
+ 
+ FILE(GLOB files_h "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+ FILE(GLOB files_txx "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
+diff -ruN cmtk-3.3.2.orig/libs/IO/CMakeLists.txt cmtk-3.3.2/libs/IO/CMakeLists.txt
+--- cmtk-3.3.2.orig/libs/IO/CMakeLists.txt	2025-10-23 21:10:38.509245163 -0400
++++ cmtk-3.3.2/libs/IO/CMakeLists.txt	2025-10-23 20:56:41.198668573 -0400
+@@ -91,6 +91,7 @@
+ ENDIF(CMTK_LIBRARY_PROPERTIES)
+ 
+ INSTALL(TARGETS cmtkIO
++  EXPORT CMTKTargets
+   RUNTIME DESTINATION ${CMTK_INSTALL_BIN_DIR} COMPONENT runtime
+   LIBRARY DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT runtime
+   ARCHIVE DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT libraries)
+diff -ruN cmtk-3.3.2.orig/libs/Numerics/CMakeLists.txt cmtk-3.3.2/libs/Numerics/CMakeLists.txt
+--- cmtk-3.3.2.orig/libs/Numerics/CMakeLists.txt	2025-10-23 21:10:38.494244945 -0400
++++ cmtk-3.3.2/libs/Numerics/CMakeLists.txt	2025-10-23 20:56:37.681594593 -0400
+@@ -65,6 +65,7 @@
+ ENDIF(CMTK_LIBRARY_PROPERTIES)
+ 
+ INSTALL(TARGETS cmtkNumerics
++  EXPORT CMTKTargets
+   RUNTIME DESTINATION ${CMTK_INSTALL_BIN_DIR} COMPONENT runtime
+   LIBRARY DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT runtime
+   ARCHIVE DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT libraries)
+diff -ruN cmtk-3.3.2.orig/libs/Pipeline/CMakeLists.txt cmtk-3.3.2/libs/Pipeline/CMakeLists.txt
+--- cmtk-3.3.2.orig/libs/Pipeline/CMakeLists.txt	2025-10-23 21:10:38.493244929 -0400
++++ cmtk-3.3.2/libs/Pipeline/CMakeLists.txt	2025-10-23 20:56:45.544759916 -0400
+@@ -49,6 +49,7 @@
+ ENDIF(CMTK_LIBRARY_PROPERTIES)
+ 
+ INSTALL(TARGETS cmtkPipeline
++  EXPORT CMTKTargets
+   RUNTIME DESTINATION ${CMTK_INSTALL_BIN_DIR} COMPONENT runtime
+   LIBRARY DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT runtime
+   ARCHIVE DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT libraries)
+diff -ruN cmtk-3.3.2.orig/libs/Qt/CMakeLists.txt cmtk-3.3.2/libs/Qt/CMakeLists.txt
+--- cmtk-3.3.2.orig/libs/Qt/CMakeLists.txt	2025-10-23 21:10:38.497244988 -0400
++++ cmtk-3.3.2/libs/Qt/CMakeLists.txt	2025-10-23 20:57:05.674181918 -0400
+@@ -72,6 +72,7 @@
+ ENDIF(CMTK_LIBRARY_PROPERTIES)
+ 
+ INSTALL(TARGETS cmtkQt
++  EXPORT CMTKTargets
+   RUNTIME DESTINATION ${CMTK_INSTALL_BIN_DIR} COMPONENT runtime
+   LIBRARY DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT runtime
+   ARCHIVE DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT libraries)
+diff -ruN cmtk-3.3.2.orig/libs/Recon/CMakeLists.txt cmtk-3.3.2/libs/Recon/CMakeLists.txt
+--- cmtk-3.3.2.orig/libs/Recon/CMakeLists.txt	2025-10-23 21:10:38.493244929 -0400
++++ cmtk-3.3.2/libs/Recon/CMakeLists.txt	2025-10-23 20:57:01.219088669 -0400
+@@ -43,6 +43,7 @@
+ ENDIF(CMTK_LIBRARY_PROPERTIES)
+ 
+ INSTALL(TARGETS cmtkRecon
++  EXPORT CMTKTargets
+   RUNTIME DESTINATION ${CMTK_INSTALL_BIN_DIR} COMPONENT runtime
+   LIBRARY DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT runtime
+   ARCHIVE DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT libraries)
+diff -ruN cmtk-3.3.2.orig/libs/Registration/CMakeLists.txt cmtk-3.3.2/libs/Registration/CMakeLists.txt
+--- cmtk-3.3.2.orig/libs/Registration/CMakeLists.txt	2025-10-23 21:10:38.487244843 -0400
++++ cmtk-3.3.2/libs/Registration/CMakeLists.txt	2025-10-23 20:56:49.948852394 -0400
+@@ -108,6 +108,7 @@
+ ENDIF(CMTK_LIBRARY_PROPERTIES)
+ 
+ INSTALL(TARGETS cmtkRegistration
++  EXPORT CMTKTargets
+   RUNTIME DESTINATION ${CMTK_INSTALL_BIN_DIR} COMPONENT runtime
+   LIBRARY DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT runtime
+   ARCHIVE DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT libraries)
+diff -ruN cmtk-3.3.2.orig/libs/Segmentation/CMakeLists.txt cmtk-3.3.2/libs/Segmentation/CMakeLists.txt
+--- cmtk-3.3.2.orig/libs/Segmentation/CMakeLists.txt	2025-10-23 21:10:38.485244813 -0400
++++ cmtk-3.3.2/libs/Segmentation/CMakeLists.txt	2025-10-23 20:56:54.627950554 -0400
+@@ -66,6 +66,7 @@
+ ENDIF(CMTK_LIBRARY_PROPERTIES)
+ 
+ INSTALL(TARGETS cmtkSegmentation
++  EXPORT CMTKTargets
+   RUNTIME DESTINATION ${CMTK_INSTALL_BIN_DIR} COMPONENT runtime
+   LIBRARY DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT runtime
+   ARCHIVE DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT libraries)
+diff -ruN cmtk-3.3.2.orig/libs/System/CMakeLists.txt cmtk-3.3.2/libs/System/CMakeLists.txt
+--- cmtk-3.3.2.orig/libs/System/CMakeLists.txt	2025-10-23 21:10:38.507245134 -0400
++++ cmtk-3.3.2/libs/System/CMakeLists.txt	2025-10-23 20:56:32.920494356 -0400
+@@ -88,6 +88,7 @@
+ ENDIF(CMTK_LIBRARY_PROPERTIES)
+ 
+ INSTALL(TARGETS cmtkSystem
++  EXPORT CMTKTargets
+   RUNTIME DESTINATION ${CMTK_INSTALL_BIN_DIR} COMPONENT runtime
+   LIBRARY DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT runtime
+   ARCHIVE DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT libraries)
+diff -ruN cmtk-3.3.2.orig/libs/Unstable/CMakeLists.txt cmtk-3.3.2/libs/Unstable/CMakeLists.txt
+--- cmtk-3.3.2.orig/libs/Unstable/CMakeLists.txt	2025-10-23 21:10:38.484244799 -0400
++++ cmtk-3.3.2/libs/Unstable/CMakeLists.txt	2025-10-23 20:57:13.260340507 -0400
+@@ -41,6 +41,7 @@
+ ENDIF(CMTK_LIBRARY_PROPERTIES)
+ 
+ INSTALL(TARGETS cmtkUnstable
++  EXPORT CMTKTargets
+   RUNTIME DESTINATION ${CMTK_INSTALL_BIN_DIR} COMPONENT runtime
+   LIBRARY DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT runtime
+   ARCHIVE DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT libraries)
+diff -ruN cmtk-3.3.2.orig/Utilities/dcmtk/CMakeLists.txt cmtk-3.3.2/Utilities/dcmtk/CMakeLists.txt
+--- cmtk-3.3.2.orig/Utilities/dcmtk/CMakeLists.txt	2025-10-23 21:10:38.474244653 -0400
++++ cmtk-3.3.2/Utilities/dcmtk/CMakeLists.txt	2025-10-23 20:56:21.552254602 -0400
+@@ -346,6 +346,7 @@
+ ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+   
+ INSTALL(TARGETS D4CMTK
++  EXPORT CMTKTargets
+   RUNTIME DESTINATION ${CMTK_INSTALL_BIN_DIR} COMPONENT runtime
+   LIBRARY DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT runtime
+   ARCHIVE DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT libraries)
+diff -ruN cmtk-3.3.2.orig/Utilities/mxml/CMakeLists.txt cmtk-3.3.2/Utilities/mxml/CMakeLists.txt
+--- cmtk-3.3.2.orig/Utilities/mxml/CMakeLists.txt	2025-10-23 21:10:38.467244550 -0400
++++ cmtk-3.3.2/Utilities/mxml/CMakeLists.txt	2025-10-23 20:56:05.363912169 -0400
+@@ -64,6 +64,7 @@
+ TARGET_LINK_LIBRARIES(cmtkMxml)
+ 
+ INSTALL(TARGETS cmtkMxml
++  EXPORT CMTKTargets
+   RUNTIME DESTINATION ${CMTK_INSTALL_BIN_DIR} COMPONENT runtime
+   LIBRARY DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT runtime
+   ARCHIVE DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT libraries)
+diff -ruN cmtk-3.3.2.orig/Utilities/NrrdIO/CMakeLists.txt cmtk-3.3.2/Utilities/NrrdIO/CMakeLists.txt
+--- cmtk-3.3.2.orig/Utilities/NrrdIO/CMakeLists.txt	2025-10-23 21:10:38.472244624 -0400
++++ cmtk-3.3.2/Utilities/NrrdIO/CMakeLists.txt	2025-10-23 20:56:16.408145919 -0400
+@@ -91,6 +91,7 @@
+ TARGET_LINK_LIBRARIES(NrrdIO ${ZLIB_LIBRARIES})
+ 
+ INSTALL(TARGETS NrrdIO
++  EXPORT CMTKTargets
+   RUNTIME DESTINATION ${CMTK_INSTALL_BIN_DIR} COMPONENT runtime
+   LIBRARY DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT runtime
+   ARCHIVE DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT libraries)
+diff -ruN cmtk-3.3.2.orig/Utilities/sqlite3/CMakeLists.txt cmtk-3.3.2/Utilities/sqlite3/CMakeLists.txt
+--- cmtk-3.3.2.orig/Utilities/sqlite3/CMakeLists.txt	2025-10-23 21:10:38.460244448 -0400
++++ cmtk-3.3.2/Utilities/sqlite3/CMakeLists.txt	2025-10-23 20:56:11.147034641 -0400
+@@ -44,6 +44,7 @@
+ TARGET_LINK_LIBRARIES(cmtksqlite3)
+ 
+ INSTALL(TARGETS cmtksqlite3
++  EXPORT CMTKTargets
+   RUNTIME DESTINATION ${CMTK_INSTALL_BIN_DIR} COMPONENT runtime
+   LIBRARY DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT runtime
+   ARCHIVE DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT libraries)
+@@ -54,6 +55,7 @@
+ ADD_EXECUTABLE(sqlite shell.c)
+ TARGET_LINK_LIBRARIES(sqlite cmtksqlite3)
+ INSTALL(TARGETS sqlite
++  EXPORT CMTKTargets
+   RUNTIME DESTINATION ${CMTK_INSTALL_BIN_DIR} COMPONENT runtime
+   LIBRARY DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT runtime
+   ARCHIVE DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT libraries)
+diff -ruN cmtk-3.3.2.orig/Utilities/zlib/CMakeLists.txt cmtk-3.3.2/Utilities/zlib/CMakeLists.txt
+--- cmtk-3.3.2.orig/Utilities/zlib/CMakeLists.txt	2025-10-23 21:10:38.454244361 -0400
++++ cmtk-3.3.2/Utilities/zlib/CMakeLists.txt	2025-10-23 20:57:26.678620432 -0400
+@@ -137,6 +137,7 @@
+ 
+ if(NOT SKIP_INSTALL_LIBRARIES AND NOT SKIP_INSTALL_ALL )
+     install(TARGETS cmtkZlib
++      EXPORT CMTKTargets
+       RUNTIME DESTINATION ${CMTK_INSTALL_BIN_DIR} COMPONENT runtime
+       LIBRARY DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT runtime
+       ARCHIVE DESTINATION ${CMTK_INSTALL_LIB_DIR} COMPONENT libraries)
