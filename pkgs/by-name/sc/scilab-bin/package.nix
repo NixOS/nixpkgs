@@ -8,24 +8,34 @@
   alsa-lib,
   ncurses5,
   xorg,
+  libgbm,
+  expat,
+  libxkbcommon,
+  pango,
+  cairo,
+  systemd,
+  at-spi2-core,
+  nss,
+  nspr,
+  cups,
 }:
 
 let
   pname = "scilab-bin";
-  version = "6.1.1";
+  version = "2026.0.0";
 
   srcs = {
     aarch64-darwin = fetchurl {
-      url = "https://www.utc.fr/~mottelet/scilab/download/${version}/scilab-${version}-accelerate-arm64.dmg";
-      sha256 = "sha256-L4dxD8R8bY5nd+4oDs5Yk0LlNsFykLnAM+oN/O87SRI=";
+      url = "https://www.scilab.org/download/${version}/scilab-${version}-arm64.dmg";
+      sha256 = "sha256-omfxtzQfkwmApDxbGlTKnzcptfdhjFJRlwW9oGWw1Ko=";
     };
     x86_64-darwin = fetchurl {
-      url = "https://www.utc.fr/~mottelet/scilab/download/${version}/scilab-${version}-x86_64.dmg";
-      sha256 = "sha256-tBeqzllMuogrGcJxGqEl2DdNXaiwok3yhzWSdlWY5Fc=";
+      url = "https://www.scilab.org/download/${version}/scilab-${version}-x86_64.dmg";
+      sha256 = "sha256-avnob3gFVS/6yMQnb6NBeKeQogX8n6hJIWijSQEGbxs=";
     };
     x86_64-linux = fetchurl {
-      url = "https://www.scilab.org/download/${version}/scilab-${version}.bin.linux-x86_64.tar.gz";
-      sha256 = "sha256-PuGnz2YdAhriavwnuf5Qyy0cnCeRHlWC6dQzfr7bLHk=";
+      url = "https://www.scilab.org/download/${version}/scilab-${version}.bin.x86_64-linux-gnu.tar.xz";
+      sha256 = "sha256-gAtaj1weThztFhjiRbfmqdQg0XMquU6LX5E/BeG+ilc=";
     };
   };
   src =
@@ -80,25 +90,35 @@ let
       meta
       ;
 
-    nativeBuildInputs = [
-      autoPatchelfHook
-    ];
+    nativeBuildInputs = [ autoPatchelfHook ];
 
     buildInputs = [
       alsa-lib
       ncurses5
       stdenv.cc.cc
+      # for JCEF
+      libgbm
+      expat
+      libxkbcommon
+      pango
+      cairo
+      systemd
+      at-spi2-core
+      nss
+      nspr
+      cups
     ]
     ++ (with xorg; [
       libX11
-      libXcursor
       libXext
-      libXft
       libXi
-      libXrandr
       libXrender
       libXtst
       libXxf86vm
+      libXrandr
+      libXcursor
+      libXcomposite
+      libXdamage
     ]);
 
     installPhase = ''
