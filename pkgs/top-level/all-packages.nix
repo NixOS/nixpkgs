@@ -13314,12 +13314,6 @@ with pkgs;
 
   ### SCIENCE/CHEMISTY
 
-  avogadrolibs = libsForQt5.callPackage ../development/libraries/science/chemistry/avogadrolibs { };
-
-  molequeue = libsForQt5.callPackage ../development/libraries/science/chemistry/molequeue { };
-
-  avogadro2 = libsForQt5.callPackage ../applications/science/chemistry/avogadro2 { };
-
   libxc_7 = pkgs.libxc.override { version = "7.0.0"; };
 
   molbar = with python3Packages; toPythonApplication molbar;
