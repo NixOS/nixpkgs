@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  pytest,
   pytestCheckHook,
 }:
 
@@ -26,6 +27,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_lazyfixture" ];
 
+  buildInputs = [ pytest ];
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
