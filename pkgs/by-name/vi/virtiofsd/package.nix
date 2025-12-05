@@ -5,6 +5,7 @@
   fetchFromGitLab,
   libcap_ng,
   libseccomp,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -37,6 +38,11 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     install -Dm644 50-virtiofsd.json "$out/share/qemu/vhost-user/50-virtiofsd.json"
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = with lib; {
     homepage = "https://gitlab.com/virtio-fs/virtiofsd";
