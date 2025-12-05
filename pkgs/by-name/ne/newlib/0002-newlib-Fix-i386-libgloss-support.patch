@@ -1,0 +1,74 @@
+# From: ROUSSARIE Killian <oss@xtrm.me>
+# Date: Sat, 13 Sep 2025 00:34:07 +0200
+# Subject: [PATCH] Fix i386 support in libgloss
+
+diff --git a/libgloss/i386/cygmon-gmon.c b/libgloss/i386/cygmon-gmon.c
+index 3c15b70..6f5f1b7 100644
+--- a/libgloss/i386/cygmon-gmon.c
++++ b/libgloss/i386/cygmon-gmon.c
+@@ -85,7 +85,7 @@ static int	s_scale;
+ 
+ extern int errno;
+ 
+-int
++void
+ monstartup(lowpc, highpc)
+      char	*lowpc;
+      char	*highpc;
+@@ -187,7 +187,7 @@ _mcleanup()
+ 	  rawarc.raw_frompc = (unsigned long) frompc;
+ 	  rawarc.raw_selfpc = (unsigned long) tos[toindex].selfpc;
+ 	  rawarc.raw_count = tos[toindex].count;
+-	  profil_write (2, &rawarc, sizeof (rawarc));
++	  profil_write (2, (char*) &rawarc, sizeof (rawarc));
+ 	}
+     }
+   profil_write (3, 0, 0);
+@@ -195,7 +195,7 @@ _mcleanup()
+ 
+ static char already_setup = 0;
+ 
+-_mcount()
++void _mcount()
+ {
+   register char			*selfpc;
+   register unsigned short	*frompcindex;
+@@ -217,8 +217,8 @@ _mcount()
+ 
+   if (! already_setup) 
+     {
+-      extern _etext();
+-      extern _ftext();
++      extern void *_etext;
++      extern void *_ftext;
+       already_setup = 1;
+       monstartup(_ftext, _etext);
+       atexit(_mcleanup);
+@@ -337,7 +337,7 @@ overflow:
+  *	profiling is what mcount checks to see if
+  *	all the data structures are ready.
+  */
+-moncontrol(mode)
++void moncontrol(mode)
+     int mode;
+ {
+   if (mode)
+diff --git a/libgloss/i386/cygmon-gmon.h b/libgloss/i386/cygmon-gmon.h
+index f35ae33..b2380cb 100644
+--- a/libgloss/i386/cygmon-gmon.h
++++ b/libgloss/i386/cygmon-gmon.h
+@@ -1,6 +1,14 @@
+ #ifndef GMON_CYGMON_H
+ #define GMON_CYGMON_H
+ 
++#include <stdlib.h>
++#include <unistd.h>
++
++int profil(unsigned short *buf, size_t bufsiz, size_t offset, unsigned int scale);
++void profil_write (int type, char *buffer, int len);
++void moncontrol(int mode);
++void bzero(void *s, size_t n);
++
+ struct phdr 
+ {
+   char    *lpc;
