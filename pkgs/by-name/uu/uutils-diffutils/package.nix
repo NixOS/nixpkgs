@@ -25,6 +25,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=ed_diff::tests::test_permutations_empty_lines"
   ];
 
+  postInstall = ''
+    ln -s $out/bin/diffutils $out/bin/diff
+  '';
+
   passthru = {
     updateScript = nix-update-script { };
   };
