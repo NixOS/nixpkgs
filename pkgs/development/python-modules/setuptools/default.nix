@@ -21,11 +21,16 @@ buildPythonPackage rec {
 
   patches = [
     ./tag-date.patch
+    ./reproducible-wheel.patch
   ];
 
   # Drop dependency on coherent.license, which in turn requires coherent.build
   postPatch = ''
     sed -i "/coherent.licensed/d" pyproject.toml
+
+    # Substitute version for reproducible builds
+    substituteInPlace setuptools/version.py \
+      --replace-fail '@version@' '${version}'
   '';
 
   preBuild = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
