@@ -1,0 +1,69 @@
+From 319c6a2ae1ea033d5aea09a43acbc8d451764869 Mon Sep 17 00:00:00 2001
+From: "Miss Islington (bot)"
+ <31488909+miss-islington@users.noreply.github.com>
+Date: Thu, 4 Dec 2025 01:03:18 +0100
+Subject: [PATCH] [3.14] gh-142218: Fix split table dictionary crash
+ (gh-142229) (gh-142244)
+
+This fixes a regression introduced in gh-140558. The interpreter would
+crash if we inserted a non `str` key into a split table that matches an
+existing key.
+(cherry picked from commit 547d8daf780646e2800bec598ed32085817c8606)
+
+Co-authored-by: Sam Gross <colesbury@gmail.com>
+---
+ Lib/test/test_dict.py                                  |  8 ++++++++
+ .../2025-12-03-11-03-35.gh-issue-142218.44Fq_J.rst     |  2 ++
+ Objects/dictobject.c                                   | 10 +++++++---
+ 3 files changed, 17 insertions(+), 3 deletions(-)
+ create mode 100644 Misc/NEWS.d/next/Core_and_Builtins/2025-12-03-11-03-35.gh-issue-142218.44Fq_J.rst
+
+diff --git a/Lib/test/test_dict.py b/Lib/test/test_dict.py
+index 2e6c2bbdf19409..665b3e843dd3a5 100644
+--- a/Lib/test/test_dict.py
++++ b/Lib/test/test_dict.py
+@@ -1621,6 +1621,14 @@ def __eq__(self, other):
+ 
+         self.assertEqual(len(d), 1)
+ 
++    def test_split_table_update_with_str_subclass(self):
++        class MyStr(str): pass
++        class MyClass: pass
++        obj = MyClass()
++        obj.attr = 1
++        obj.__dict__[MyStr('attr')] = 2
++        self.assertEqual(obj.attr, 2)
++
+ 
+ class CAPITest(unittest.TestCase):
+ 
+diff --git a/Misc/NEWS.d/next/Core_and_Builtins/2025-12-03-11-03-35.gh-issue-142218.44Fq_J.rst b/Misc/NEWS.d/next/Core_and_Builtins/2025-12-03-11-03-35.gh-issue-142218.44Fq_J.rst
+new file mode 100644
+index 00000000000000..a8ce0fc65267d5
+--- /dev/null
++++ b/Misc/NEWS.d/next/Core_and_Builtins/2025-12-03-11-03-35.gh-issue-142218.44Fq_J.rst
+@@ -0,0 +1,2 @@
++Fix crash when inserting into a split table dictionary with a non
++:class:`str` key that matches an existing key.
+diff --git a/Objects/dictobject.c b/Objects/dictobject.c
+index 1b4640f9649569..0eb00410cf41eb 100644
+--- a/Objects/dictobject.c
++++ b/Objects/dictobject.c
+@@ -1863,10 +1863,14 @@ insertdict(PyInterpreterState *interp, PyDictObject *mp,
+     if (old_value != value) {
+         _PyDict_NotifyEvent(interp, PyDict_EVENT_MODIFIED, mp, key, value);
+         assert(old_value != NULL);
+-        assert(!_PyDict_HasSplitTable(mp));
+         if (DK_IS_UNICODE(mp->ma_keys)) {
+-            PyDictUnicodeEntry *ep = &DK_UNICODE_ENTRIES(mp->ma_keys)[ix];
+-            STORE_VALUE(ep, value);
++            if (_PyDict_HasSplitTable(mp)) {
++                STORE_SPLIT_VALUE(mp, ix, value);
++            }
++            else {
++                PyDictUnicodeEntry *ep = &DK_UNICODE_ENTRIES(mp->ma_keys)[ix];
++                STORE_VALUE(ep, value);
++            }
+         }
+         else {
+             PyDictKeyEntry *ep = &DK_ENTRIES(mp->ma_keys)[ix];
