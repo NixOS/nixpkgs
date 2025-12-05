@@ -276,6 +276,11 @@ in
                 ];
                 description = "What actions can be performed with this SSH key. See ssh_filter_btrbk(1) for details";
               };
+              extraArgs = mkOption {
+                type = str;
+                description = "Additional arguments to pass to ssh_filter_btrbk";
+                example = "--log --restrict-path <path>";
+              };
             };
           });
         default = [ ];
@@ -336,7 +341,7 @@ in
         in
         ''command="${pkgs.util-linux}/bin/ionice -t -c ${toString ioniceClass} ${
           optionalString (cfg.niceness >= 1) "${pkgs.coreutils}/bin/nice -n ${toString cfg.niceness}"
-        } ${pkgs.btrbk}/share/btrbk/scripts/ssh_filter_btrbk.sh ${sudo_doas_flag} ${options}" ${v.key}''
+        } ${pkgs.btrbk}/share/btrbk/scripts/ssh_filter_btrbk.sh ${sudo_doas_flag} ${options} ${v.extraArgs}" ${v.key}''
       ) cfg.sshAccess;
     };
     users.groups.btrbk = { };
