@@ -20203,6 +20203,11 @@
     github = "peret";
     githubId = 617977;
   };
+  perihelion = {
+    name = "perihelion";
+    github = "perihelion00";
+    githubId = 218501404;
+  };
   periklis = {
     email = "theopompos@gmail.com";
     github = "periklis";
