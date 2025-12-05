@@ -1,0 +1,58 @@
+diff --git a/install/linux-install/vnd.gamebryo-kf.xml b/install/linux-install/vnd.gamebryo-kf.xml
+index 289c6fd4..e1adc689 100644
+--- a/install/linux-install/vnd.gamebryo-kf.xml
++++ b/install/linux-install/vnd.gamebryo-kf.xml
+@@ -1,6 +1,8 @@
+-<?xml version="1.0"?>
+-<mime-type xmlns="http://www.freedesktop.org/standards/shared-mime-info" type="application/vnd.gamebryo-kf">  
+-  <comment>Gamebryo game engine animation</comment>
+-  <glob-deleteall/>
+-  <glob pattern="*.kf"/>
+-</mime-type>
++<?xml version="1.0" encoding="UTF-8"?>
++<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
++    <mime-type type="application/vnd.gamebryo-kf">
++        <comment>Gamebryo game engine animation</comment>
++        <glob-deleteall/>
++        <glob pattern="*.kf"/>
++    </mime-type>
++</mime-info>
+diff --git a/install/linux-install/vnd.gamebryo-kfm.xml b/install/linux-install/vnd.gamebryo-kfm.xml
+index 0ef06db4..00537bca 100644
+--- a/install/linux-install/vnd.gamebryo-kfm.xml
++++ b/install/linux-install/vnd.gamebryo-kfm.xml
+@@ -1,6 +1,8 @@
+-<?xml version="1.0"?>
+-<mime-type xmlns="http://www.freedesktop.org/standards/shared-mime-info" type="application/vnd.gamebryo-kfm">  
+-  <comment>Gamebryo (NetImmerse) game engine animation</comment>
+-  <glob-deleteall/>
+-  <glob pattern="*.kfm"/>
+-</mime-type>
++<?xml version="1.0" encoding="UTF-8"?>
++<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
++    <mime-type type="application/vnd.gamebryo-kfm">
++        <comment>Gamebryo (NetImmerse) game engine animation</comment>
++        <glob-deleteall/>
++        <glob pattern="*.kfm"/>
++    </mime-type>
++</mime-info>
+diff --git a/install/linux-install/vnd.gamebryo-nif.xml b/install/linux-install/vnd.gamebryo-nif.xml
+index 93db6eaa..b9655b80 100644
+--- a/install/linux-install/vnd.gamebryo-nif.xml
++++ b/install/linux-install/vnd.gamebryo-nif.xml
+@@ -1,6 +1,8 @@
+-<?xml version="1.0"?>
+-<mime-type xmlns="http://www.freedesktop.org/standards/shared-mime-info" type="application/vnd.gamebryo-nif">  
+-  <comment>Gamebryo (NetImmerse) game engine mesh</comment>
+-  <glob-deleteall/>
+-  <glob pattern="*.nif"/>
+-</mime-type>
++<?xml version="1.0" encoding="UTF-8"?>
++<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
++    <mime-type type="application/vnd.gamebryo-nif">
++        <comment>Gamebryo (NetImmerse) game engine mesh</comment>
++        <glob-deleteall/>
++        <glob pattern="*.nif"/>
++    </mime-type>
++</mime-info>
+
