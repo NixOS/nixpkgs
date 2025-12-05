@@ -114,6 +114,7 @@ let
 
   cygwinCommon = {
     hello = nativePlatforms;
+    nix = nativePlatforms;
   };
 
   wasiCommon = {
