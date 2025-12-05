@@ -2,16 +2,16 @@
   lib,
   stdenvNoCC,
   fetchFromGitLab,
-  breeze-icons,
   gtk3,
   gnome-icon-theme,
   hicolor-icon-theme,
   mint-x-icons,
   pantheon,
   jdupes,
+  libsForQt5,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "BeautyLine";
   version = "2.4";
 
@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation rec {
 
   # ubuntu-mono is also required but missing in ubuntu-themes (please add it if it is packaged at some point)
   propagatedBuildInputs = [
-    breeze-icons
+    libsForQt5.breeze-icons
     gnome-icon-theme
     hicolor-icon-theme
     mint-x-icons
@@ -44,20 +44,20 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/icons/${pname}
-    cp -r * $out/share/icons/${pname}/
-    gtk-update-icon-cache $out/share/icons/${pname}
+    mkdir -p $out/share/icons/BeautyLine
+    cp -r * $out/share/icons/BeautyLine/
+    gtk-update-icon-cache $out/share/icons/BeautyLine
 
     jdupes --link-soft --recurse $out/share
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "BeautyLine icon theme";
     homepage = "https://www.gnome-look.org/p/1425426/";
-    platforms = platforms.linux;
-    license = [ licenses.publicDomain ];
-    maintainers = with maintainers; [ lwb-2021 ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ lwb-2021 ];
   };
 }

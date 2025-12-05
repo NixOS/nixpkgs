@@ -1707,10 +1707,6 @@ with pkgs;
 
   bat-extras = recurseIntoAttrs (lib.makeScope newScope (import ../tools/misc/bat-extras));
 
-  beauty-line-icon-theme = callPackage ../data/icons/beauty-line-icon-theme {
-    inherit (plasma5Packages) breeze-icons;
-  };
-
   beautysh = with python3.pkgs; toPythonApplication beautysh;
 
   inherit (callPackages ../misc/logging/beats/7.x.nix { })
