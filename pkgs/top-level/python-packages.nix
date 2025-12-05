@@ -16709,6 +16709,8 @@ self: super: with self; {
 
   scanpy = callPackage ../development/python-modules/scanpy { };
 
+  scantree = callPackage ../development/python-modules/scantree { };
+
   scapy = callPackage ../development/python-modules/scapy {
     inherit (pkgs) libpcap; # Avoid confusion with python package of the same name
   };
