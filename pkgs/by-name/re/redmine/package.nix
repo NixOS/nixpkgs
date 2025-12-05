@@ -3,17 +3,17 @@
   stdenvNoCC,
   fetchurl,
   bundlerEnv,
-  ruby_3_3,
+  ruby_3_4,
   makeWrapper,
   nixosTests,
 }:
 
 let
-  version = "6.0.7";
+  version = "6.1.0";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
-    inherit ruby_3_3;
+    inherit ruby_3_4;
     gemdir = ./.;
     groups = [
       "development"
@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.redmine.org/releases/redmine-${finalAttrs.version}.tar.gz";
-    hash = "sha256-iCRWCgdnPce1nxygv5182FTGxMl9D+VVpdvrozK43+g=";
+    hash = "sha256-vEg9oZXyRESR2HDkD3/JCa51D3uo0OKIMebWxHiBK4g=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -40,10 +40,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     rubyEnv.wrappedRuby
     rubyEnv.bundler
   ];
-
-  # taken from https://www.redmine.org/issues/33784
-  # can be dropped when the upstream bug is closed and the fix is present in the upstream release
-  patches = [ ./0001-python3.patch ];
 
   buildPhase = ''
     mv config config.dist
