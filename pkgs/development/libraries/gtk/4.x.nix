@@ -124,25 +124,25 @@ stdenv.mkDerivation (finalAttrs: {
   ++ finalAttrs.setupHooks;
 
   buildInputs = [
-    libxkbcommon
     libpng
     libtiff
     librsvg
     libjpeg
     (libepoxy.override { inherit x11Support; })
     isocodes
-  ]
-  ++ lib.optionals vulkanSupport [
-    vulkan-headers
-    libdrm
-  ]
-  ++ [
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-bad
     fribidi
     harfbuzz
   ]
-  ++ (with xorg; [
+  ++ lib.optionals vulkanSupport [
+    vulkan-headers
+    libdrm
+  ]
+  ++ lib.optionals (x11Support || waylandSupport) [
+    libxkbcommon
+  ]
+  ++ lib.optionals x11Support (with xorg; [
     libICE
     libSM
     libXcursor
@@ -172,11 +172,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     # Required by pkg-config files.
-    cairo
+    (cairo.override { inherit x11Support; })
     gdk-pixbuf
     glib
     graphene
-    pango
+    (pango.override { inherit x11Support; })
   ]
   ++ lib.optionals waylandSupport [
     wayland
