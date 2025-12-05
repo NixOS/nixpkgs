@@ -1,6 +1,20 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7dbc2c3..cfdd98d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -11,7 +11,6 @@ project(Crow
+ 
+ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+ 
+-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CPM.cmake)
+ 
+ # Make sure Findasio.cmake module is found
+ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 67c458c..2873530 100644
 --- a/tests/CMakeLists.txt
 +++ b/tests/CMakeLists.txt
-@@ -5,18 +5,9 @@
+@@ -5,18 +5,9 @@ set(CMAKE_POLICY_DEFAULT_CMP0077 new)
  set(CMAKE_POLICY_WARNING_CMP0126 new)
  
  include(${CMAKE_SOURCE_DIR}/cmake/compiler_options.cmake)
@@ -9,7 +23,7 @@
 +find_package(Catch2 REQUIRED)
  
 -CPMAddPackage(Catch2
--  VERSION 3.7.0
+-  VERSION 3.10.0
 -  GITHUB_REPOSITORY catchorg/Catch2
 -  OPTIONS
 -  "CATCH_INSTALL_DOCS Off"
@@ -19,4 +33,4 @@
 -  
  enable_testing()
  
- set(TEST_SRCS
+ # list the test sources
