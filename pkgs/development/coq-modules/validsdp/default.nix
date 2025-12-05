@@ -37,8 +37,8 @@ let
       ]
       null;
   release = {
-    "1.1.0".sha256 = "sha256-lbESAFBEBpOShNFh6RZQYPLRhdqYvdKBrxJOMy2L+Ws=";
-    "1.1.1".sha256 = "sha256-B+Gy16WjBqqNHvjLE6nBV/ulfDVZUWwA5FO07XnqC60=";
+    "1.1.0".hash = "sha256-lbESAFBEBpOShNFh6RZQYPLRhdqYvdKBrxJOMy2L+Ws=";
+    "1.1.1".hash = "sha256-B+Gy16WjBqqNHvjLE6nBV/ulfDVZUWwA5FO07XnqC60=";
   };
   releaseRev = v: "v${v}";
 

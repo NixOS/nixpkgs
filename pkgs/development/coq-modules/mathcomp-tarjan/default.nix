@@ -38,11 +38,11 @@ mkCoqDerivation {
         (case (range "8.10" "8.16") (range "1.12.0" "1.17.0") "1.0.0")
       ]
       null;
-  release."1.0.4".sha256 = "sha256-fvE53jJe7/kQUI+lhO6lKdWfsFfRjOk2YGOcHUoJ6BU=";
-  release."1.0.3".sha256 = "sha256-5lpOCDyH6NFzGLvnXHHAnR7Qv5oXsUyC8TLBFrIiBag=";
-  release."1.0.2".sha256 = "sha256-U20xgA+e9KTRdvILD1cxN6ia+dlA8uBTIbc4QlKz9ss=";
-  release."1.0.1".sha256 = "sha256-utNjFCAqC5xOuhdyKhfMZkRYJD0xv9Gt6U3ZdQ56mek=";
-  release."1.0.0".sha256 = "sha256:0r459r0makshzwlygw6kd4lpvdjc43b3x5y9aa8x77f2z5gymjq1";
+  release."1.0.4".hash = "sha256-fvE53jJe7/kQUI+lhO6lKdWfsFfRjOk2YGOcHUoJ6BU=";
+  release."1.0.3".hash = "sha256-5lpOCDyH6NFzGLvnXHHAnR7Qv5oXsUyC8TLBFrIiBag=";
+  release."1.0.2".hash = "sha256-U20xgA+e9KTRdvILD1cxN6ia+dlA8uBTIbc4QlKz9ss=";
+  release."1.0.1".hash = "sha256-utNjFCAqC5xOuhdyKhfMZkRYJD0xv9Gt6U3ZdQ56mek=";
+  release."1.0.0".hash = "sha256:0r459r0makshzwlygw6kd4lpvdjc43b3x5y9aa8x77f2z5gymjq1";
 
   propagatedBuildInputs = [
     mathcomp-ssreflect

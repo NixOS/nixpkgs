@@ -11,15 +11,15 @@
 
   releaseRev = v: "v${v}";
 
-  release."10.2.0".sha256 = "sha256-xLi3uRQBKL9KiLd4FBnbTPxh8TjdN8IEW/1D7n2B+xY=";
-  release."9.0.0".sha256 = "sha256:03lgy53xg9pmrdd3d8qb4087k5qjnk260655svp6d79x4p2lxr8c";
-  release."8.11.0".sha256 = "sha256-2Hf7YwRcFmP/DqwFtF1p78MCNV50qUWfMVQtZbwKd0k=";
-  release."8.10.0".sha256 = "sha256-qLPLK2ZLJQ4SmJX2ADqFiP4kgHuQFJTeNXkBbjiFS+4=";
-  release."8.9.0".sha256 = "sha256-lEh978cXehglFX9D92RVltEuvN8umfPo/hvmFZm2NGo=";
-  release."8.8.0".sha256 = "sha256-ikXGzABu8VW7O0xNtCNvIq29c+mlDUm4k/ygVcsgDOI=";
-  release."8.7.0".sha256 = "sha256-jozvkkKLFBllN6K4oeYD0lNG+MdnOuKrDUPDocHUG6c=";
-  release."8.6.0".sha256 = "sha256-jozvkkKLFBllN6K4oeYD0lNG+MdnOuKrDUPDocHUG6c=";
-  release."8.5.0".sha256 = "sha256-mH/v02ObMjbVPYx2H+Jhz+Xp0XRKN67iMAdA1VNFzso=";
+  release."10.2.0".hash = "sha256-xLi3uRQBKL9KiLd4FBnbTPxh8TjdN8IEW/1D7n2B+xY=";
+  release."9.0.0".hash = "sha256:03lgy53xg9pmrdd3d8qb4087k5qjnk260655svp6d79x4p2lxr8c";
+  release."8.11.0".hash = "sha256-2Hf7YwRcFmP/DqwFtF1p78MCNV50qUWfMVQtZbwKd0k=";
+  release."8.10.0".hash = "sha256-qLPLK2ZLJQ4SmJX2ADqFiP4kgHuQFJTeNXkBbjiFS+4=";
+  release."8.9.0".hash = "sha256-lEh978cXehglFX9D92RVltEuvN8umfPo/hvmFZm2NGo=";
+  release."8.8.0".hash = "sha256-ikXGzABu8VW7O0xNtCNvIq29c+mlDUm4k/ygVcsgDOI=";
+  release."8.7.0".hash = "sha256-jozvkkKLFBllN6K4oeYD0lNG+MdnOuKrDUPDocHUG6c=";
+  release."8.6.0".hash = "sha256-jozvkkKLFBllN6K4oeYD0lNG+MdnOuKrDUPDocHUG6c=";
+  release."8.5.0".hash = "sha256-mH/v02ObMjbVPYx2H+Jhz+Xp0XRKN67iMAdA1VNFzso=";
 
   inherit version;
   defaultVersion =

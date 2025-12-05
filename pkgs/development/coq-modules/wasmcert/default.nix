@@ -36,8 +36,8 @@ mkCoqDerivation {
       ]
       null;
 
-  release."2.1.0".sha256 = "sha256-k094mxDLLeelYP+ABm+dm6Y5YrachrbhNeZhfwLHNRo=";
-  release."2.2.0".sha256 = "sha256-GsfNpXgCG6XGqDE+bekzwZsWIHyjDTzWRuNnjCtS/88=";
+  release."2.1.0".hash = "sha256-k094mxDLLeelYP+ABm+dm6Y5YrachrbhNeZhfwLHNRo=";
+  release."2.2.0".hash = "sha256-GsfNpXgCG6XGqDE+bekzwZsWIHyjDTzWRuNnjCtS/88=";
 
   mlPlugin = true;
   useDune = true;
