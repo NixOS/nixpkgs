@@ -149,7 +149,6 @@ let
       license = lib.licenses.asl20;
       maintainers = with lib.maintainers; [
         kalekseev
-        marie
       ];
       inherit (nodejs.meta) platforms;
     };
