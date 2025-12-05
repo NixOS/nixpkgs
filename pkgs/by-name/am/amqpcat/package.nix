@@ -9,13 +9,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "amqpcat";
-  version = "1.0.0";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "cloudamqp";
     repo = "amqpcat";
     tag = "v${version}";
-    hash = "sha256-QLVFAcymj7dERbUiRcseiDuuKgrQ8n4LbkdhUyXPcWw=";
+    hash = "sha256-fdDdMjeAlJ0H05LNVdRxwq6RK41d6rXLFQMw6RSlXZM=";
   };
 
   format = "shards";
