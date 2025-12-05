@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "httpx-socks";
-  version = "0.10.1";
+  version = "0.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "romis2012";
     repo = "httpx-socks";
     tag = "v${version}";
-    hash = "sha256-1NDsIKJ8lWpjaTnlv5DrwTsEJU4gYwEUuqKpn+2QVhg=";
+    hash = "sha256-/8nz/5LqEuSr8A8/BWzJM9vHuum6fOYIS2rozr4Omi4=";
   };
 
   build-system = [ setuptools ];
