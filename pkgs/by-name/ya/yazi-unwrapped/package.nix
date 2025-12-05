@@ -14,7 +14,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   sourceRoot = finalAttrs.passthru.srcs.code_src.name;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-5oNhqiQYkzaNZ1vK3hV5vWQCNr6D9VPNoqkS8ZOLf/4=";
 
   env.YAZI_GEN_COMPLETIONS = true;
@@ -26,9 +25,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     installShellCompletion --cmd yazi \
-      --bash ./yazi-boot/completions/yazi.bash \
-      --fish ./yazi-boot/completions/yazi.fish \
-      --zsh  ./yazi-boot/completions/_yazi
+      --nushell ./yazi-boot/completions/yazi.nu \
+      --bash    ./yazi-boot/completions/yazi.bash \
+      --fish    ./yazi-boot/completions/yazi.fish \
+      --zsh     ./yazi-boot/completions/_yazi
 
     installManPage ../${finalAttrs.passthru.srcs.man_src.name}/yazi{.1,-config.5}
 

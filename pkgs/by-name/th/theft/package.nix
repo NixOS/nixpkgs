@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "1n2mkawfl2bpd4pwy3mdzxwlqjjvb5bdrr2x2gldlyqdwbk7qjhd";
   };
 
+  patches = [ ./disable-failing-test.patch ];
+
   postPatch = ''
     substituteInPlace Makefile \
       --replace "ar -rcs" "${stdenv.cc.targetPrefix}ar -rcs"

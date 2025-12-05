@@ -6,19 +6,18 @@
   zstd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-deny";
-  version = "0.18.3";
+  version = "0.18.6";
 
   src = fetchFromGitHub {
     owner = "EmbarkStudios";
     repo = "cargo-deny";
-    rev = version;
-    hash = "sha256-cFgc3bdNVLeuie4sVC+klmQ1/C6W3LkTgORMCfOte4Q=";
+    tag = finalAttrs.version;
+    hash = "sha256-w3SFU0FSX7nmqzyxey0erJfq8YsFEEukfNhDg5g0I04=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-3TfyFsBSjo8VEDrUehoV2ccXh+xY+iQ9xihj1Bl2MhI=";
+  cargoHash = "sha256-yrVSXrxfJ4vB85rARq6g71AswRMXhn25tfYZqXm1zoo=";
 
   nativeBuildInputs = [
     pkg-config
@@ -39,15 +38,14 @@ rustPlatform.buildRustPackage rec {
     description = "Cargo plugin for linting your dependencies";
     mainProgram = "cargo-deny";
     homepage = "https://github.com/EmbarkStudios/cargo-deny";
-    changelog = "https://github.com/EmbarkStudios/cargo-deny/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/EmbarkStudios/cargo-deny/blob/${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20 # or
       mit
     ];
     maintainers = with lib.maintainers; [
-      figsoda
       matthiasbeyer
       jk
     ];
   };
-}
+})

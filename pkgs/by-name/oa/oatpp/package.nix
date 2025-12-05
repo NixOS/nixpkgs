@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
   # Tests fail on darwin. See https://github.com/NixOS/nixpkgs/pull/105419#issuecomment-735826894
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = with lib; {
     homepage = "https://oatpp.io/";
     description = "Light and powerful C++ web framework for highly scalable and resource-efficient web applications";

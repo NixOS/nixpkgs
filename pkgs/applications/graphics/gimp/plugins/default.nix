@@ -227,19 +227,25 @@ lib.makeScope pkgs.newScope (
         Filters/Render/Texture...
       */
       pname = "resynthesizer";
-      version = "2.0.3";
+      version = "3.0";
       buildInputs = with pkgs; [ fftw ];
-      nativeBuildInputs = with pkgs; [ autoreconfHook ];
+      nativeBuildInputs = with pkgs; [
+        meson
+        ninja
+      ];
       makeFlags = [ "GIMP_LIBDIR=${placeholder "out"}/${gimp.targetLibDir}" ];
       src = fetchFromGitHub {
         owner = "bootchk";
         repo = "resynthesizer";
-        rev = "v${version}";
-        sha256 = "1jwc8bhhm21xhrgw56nzbma6fwg59gc8anlmyns7jdiw83y0zx3j";
+        tag = "v${version}";
+        hash = "sha256-/Py5R1RxiftTR0z++mQzgTn/J9v4p8efuGZSfhe6FfA=";
       };
 
       meta = {
-        broken = gimp.majorVersion != "2.0";
+        broken = lib.versionOlder gimp.version "3";
+        description = "Suite of gimp plugins for texture synthesis";
+        homepage = "https://github.com/bootchk/resynthesizer";
+        license = [ lib.licenses.gpl3Plus ];
       };
     };
 
@@ -361,16 +367,6 @@ lib.makeScope pkgs.newScope (
     };
 
     # =============== simple script files ====================
-
-    # also have a look at enblend-enfuse in all-packages.nix
-    exposureBlend = scriptDerivation {
-      name = "exposure-blend";
-      src = fetchurl {
-        url = "http://tir.astro.utoledo.edu/jdsmith/code/eb/exposure-blend.scm";
-        sha256 = "1b6c9wzpklqras4wwsyw3y3jp6fjmhnnskqiwm5sabs8djknfxla";
-      };
-      meta.broken = true;
-    };
 
     lightning = scriptDerivation {
       name = "Lightning";

@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-Jfi2Q6551g58dfOqtHtWxkbxwYV71f7MIuLB8RbaR94=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-10tBbn4XtdUNhfzb+KpwFGZAc7YVIEQRaqNLzJC1GGI=";
 
   dontUseCargoParallelTests = true;
@@ -34,7 +33,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/orhun/rustypaste/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
       seqizz
     ];
     mainProgram = "rustypaste";

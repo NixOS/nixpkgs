@@ -7,13 +7,13 @@
 
 buildNpmPackage rec {
   pname = "nezha-theme-admin";
-  version = "1.13.0";
+  version = "1.14.4";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "admin-frontend";
     tag = "v${version}";
-    hash = "sha256-9/lrbVfC+CRQCSJNx7dwKWPgemM6hbd6ZR5xG3tj8wA=";
+    hash = "sha256-bQJGAw6q7yJoPDKOEqx35iTpyD/jGtATIjDi8C9D8dA=";
   };
 
   # TODO: Switch to the bun build function once available in nixpkgs
@@ -21,7 +21,7 @@ buildNpmPackage rec {
     cp ${./package-lock.json} package-lock.json
   '';
 
-  npmDepsHash = "sha256-2iX3/Pw6i2zXH+cpMC6ttn5D/C8G/P9WgRApO7Br5p4=";
+  npmDepsHash = "sha256-ZXEBSrQsZ6e18LK/LFttEmZY4nK9+vrQ3ryw5xw/5YE=";
 
   npmPackFlags = [ "--ignore-scripts" ];
 

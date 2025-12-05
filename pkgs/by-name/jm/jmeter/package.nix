@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       Applications but has since expanded to other test functions.
     '';
     license = licenses.asl20;
-    maintainers = [ maintainers.bryanasdev000 ];
+    maintainers = [ ];
     priority = 1;
     platforms = platforms.unix;
   };

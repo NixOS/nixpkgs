@@ -64,7 +64,7 @@ buildPythonPackage rec {
     description = "Python utils and helpers library for Gradient";
     homepage = "https://github.com/Paperspace/gradient-utils";
     license = licenses.mit;
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

@@ -39,7 +39,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Dp0WI1Cl+m7oxZ/4zEi0TtOwqRX681jZht9bNMFnmsU=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-DJtk8xLppXdl9sSt6GcaXwZ5MEIY/s/z/bdcdr8YdLw=";
 
   # Needed to get openssl-sys to use pkg-config

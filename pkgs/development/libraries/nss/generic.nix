@@ -1,4 +1,9 @@
-{ version, hash }:
+{
+  version,
+  hash,
+  filename,
+  versionRegex,
+}:
 {
   lib,
   stdenv,
@@ -19,6 +24,7 @@
   enableFIPS ? false,
   nixosTests,
   nss_latest,
+  nix-update-script,
 }:
 
 let
@@ -229,7 +235,14 @@ stdenv.mkDerivation rec {
       runHook postInstall
     '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--override-filename"
+      "pkgs/development/libraries/nss/${filename}"
+      "--version-regex"
+      versionRegex
+    ];
+  };
 
   passthru.tests =
     lib.optionalAttrs (lib.versionOlder version nss_latest.version) {

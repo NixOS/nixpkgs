@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Simple xargs and apply replacement";
     homepage = "https://github.com/leahneukirchen/xe";
-    license = lib.licenses.publicDomain;
+    license = lib.licenses.cc0;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.pbsds ];
     mainProgram = "xe";

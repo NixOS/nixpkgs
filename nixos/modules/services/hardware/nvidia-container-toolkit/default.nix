@@ -188,6 +188,10 @@
         ])
       ];
 
+      services.udev.extraRules = ''
+        KERNEL=="nvidia", RUN+="${lib.getExe' config.systemd.package "systemctl"} restart nvidia-container-toolkit-cdi-generator.service'"
+      '';
+
       virtualisation = {
         containers.containersConf.settings = {
           engine = {
@@ -232,12 +236,8 @@
                 containerPath = pkgs.addDriverRunpath.driverLink;
               }
               {
-                hostPath = "${lib.getLib nvidia-driver}/etc";
-                containerPath = "${lib.getLib nvidia-driver}/etc";
-              }
-              {
-                hostPath = "${lib.getLib nvidia-driver}/share";
-                containerPath = "${lib.getLib nvidia-driver}/share";
+                hostPath = "${lib.getLib nvidia-driver}";
+                containerPath = "${lib.getLib nvidia-driver}";
               }
               {
                 hostPath = "${lib.getLib pkgs.glibc}/lib";
@@ -289,8 +289,12 @@
 
       systemd.services.nvidia-container-toolkit-cdi-generator = {
         description = "Container Device Interface (CDI) for Nvidia generator";
-        wantedBy = [ "multi-user.target" ];
         after = [ "systemd-udev-settle.service" ];
+        requiredBy = lib.mkMerge [
+          (lib.mkIf config.virtualisation.docker.enable [ "docker.service" ])
+          (lib.mkIf config.virtualisation.podman.enable [ "podman.service" ])
+        ];
+        wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           RuntimeDirectory = "cdi";
           RemainAfterExit = true;

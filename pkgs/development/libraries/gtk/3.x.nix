@@ -62,7 +62,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk+3";
-  version = "3.24.49";
+  version = "3.24.51";
 
   outputs = [
     "out"
@@ -82,12 +82,18 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-      hash = "sha256-XqUsaijw5ezy6aPC+suzDQQLc4cfzV8zzRMX6QGKFG4=";
+      hash = "sha256-ABOHfGvSPC2+Qq18cKBT0ORJvmZzZXTjeGfEnF+QWk8=";
     };
 
   patches = [
     ./patches/3.0-immodules.cache.patch
     ./patches/3.0-Xft-setting-fallback-compute-DPI-properly.patch
+    # Backport of MR 5531 to fix sincos detection with clang
+    # Adds proper headers and -D_GNU_SOURCE to function checks
+    # MR 5531 was only merged into GTK 4, never backported to gtk-3-24
+    # See: https://github.com/NixOS/nixpkgs/pull/449689
+    # Upstream: https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/5531
+    ./patches/3.0-mr5531-backport.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin
@@ -129,27 +135,35 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
 
-  buildInputs = [
-    libxkbcommon
-    (libepoxy.override { inherit x11Support; })
-    isocodes
-  ]
-  ++ lib.optionals trackerSupport [
-    tinysparql
-  ];
+  buildInputs =
+    lib.optionals (x11Support || waylandSupport) [
+      # TODO: Reorder me on `staging`.
+      libxkbcommon
+    ]
+    ++ [
+      (libepoxy.override { inherit x11Support; })
+    ]
+    ++ lib.optionals (x11Support || waylandSupport) [
+      isocodes
+    ]
+    ++ lib.optionals trackerSupport [
+      tinysparql
+    ];
   #TODO: colord?
 
-  propagatedBuildInputs =
+  propagatedBuildInputs = [
+    at-spi2-atk
+    atk
+    cairo
+    expat
+    fribidi
+    gdk-pixbuf
+    glib
+    gsettings-desktop-schemas
+  ]
+  ++ lib.optionals x11Support (
     with xorg;
     [
-      at-spi2-atk
-      atk
-      cairo
-      expat
-      fribidi
-      gdk-pixbuf
-      glib
-      gsettings-desktop-schemas
       libICE
       libSM
       libXcomposite
@@ -159,19 +173,23 @@ stdenv.mkDerivation (finalAttrs: {
       libXi
       libXrandr
       libXrender
-      pango
     ]
-    ++ lib.optionals waylandSupport [
-      libGL
-      wayland
-      wayland-protocols
-    ]
-    ++ lib.optionals xineramaSupport [
-      libXinerama
-    ]
-    ++ lib.optionals cupsSupport [
-      cups
-    ];
+  )
+  ++ [
+    # TODO: Reorder me on `staging`.
+    pango
+  ]
+  ++ lib.optionals waylandSupport [
+    libGL
+    wayland
+    wayland-protocols
+  ]
+  ++ lib.optionals xineramaSupport [
+    xorg.libXinerama
+  ]
+  ++ lib.optionals cupsSupport [
+    cups
+  ];
 
   mesonFlags = [
     "-Dgtk_doc=${lib.boolToString withIntrospection}"

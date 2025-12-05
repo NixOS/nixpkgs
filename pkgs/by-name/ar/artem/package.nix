@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-C3Co+hXstVN/WADIpzqr7f3muAgQL0Zbnz6VI1XNo4U=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-OPcT2iMZPx1mXXtghznq65YQtfxsOV1etgqZMMLzkmo=";
 
   nativeBuildInputs = [
@@ -43,7 +42,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/finefindus/artem";
     changelog = "https://github.com/finefindus/artem/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "artem";
   };
 }

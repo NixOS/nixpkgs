@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "flame";
     repo = "blis";
-    rev = version;
+    tag = version;
     sha256 = "sha256-+n8SbiiEJDN4j1IPmZfI5g1i2J+jWrUXh7S48JEDTAE=";
   };
 

@@ -10,18 +10,18 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "eas-cli";
-  version = "16.4.0";
+  version = "16.23.1";
 
   src = fetchFromGitHub {
     owner = "expo";
     repo = "eas-cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cHayMBhqiLY//t/ljjwJm4qMuVn531z7x2cqJE4z6hQ=";
+    hash = "sha256-hMUDtl5lMAZzlvPdzO7J3JTw0B5/fjssuqQlg1MUO3w=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock"; # Point to the root lockfile
-    hash = "sha256-qDUwAdShpKjIUyYvtA6/hgGdO1z1xLqdsJkL3oqkMSw=";
+    hash = "sha256-ybctj6TgW9JluDIsSaNm18wUXSBPuIT45te5HoQuz5s=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +30,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     nodejs
     jq
   ];
+
+  postPatch = ''
+    # Disable Nx integration in Lerna to avoid the native pseudo terminal panic in the sandbox.
+    tmpfile="$(mktemp)"
+    jq '.useNx = false' lerna.json > "$tmpfile"
+    mv "$tmpfile" lerna.json
+  '';
 
   # yarnInstallHook strips out build outputs within packages/eas-cli resulting in most commands missing from eas-cli.
   installPhase = ''

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "This is a port of the ‘MIT Scmutils’ library to Chez Scheme";
+    description = "Port of the 'MIT Scmutils' library to Chez Scheme";
     homepage = "https://github.com/fedeinthemix/chez-scmutils/";
     maintainers = [ maintainers.jitwit ];
     license = licenses.gpl3;

@@ -79,6 +79,7 @@ let
         "jitsi"
         "json"
         "junos-czerwonk"
+        "kafka"
         "kea"
         "keylight"
         "klipper"
@@ -123,8 +124,10 @@ let
         "snmp"
         "sql"
         "statsd"
+        "storagebox"
         "surfboard"
         "systemd"
+        "tailscale"
         "tibber"
         "unbound"
         "unpoller"
@@ -342,7 +345,7 @@ let
         "-m comment --comment ${name}-exporter -j nixos-fw-accept"
       ]);
       networking.firewall.extraInputRules = mkIf (conf.openFirewall && nftables) conf.firewallRules;
-      systemd.services."prometheus-${name}-exporter" = mkMerge ([
+      systemd.services."prometheus-${name}-exporter" = mkMerge [
         {
           wantedBy = [ "multi-user.target" ];
           after = [ "network.target" ];
@@ -379,14 +382,14 @@ let
           serviceConfig.UMask = "0077";
         }
         serviceOpts
-      ]);
+      ];
     };
 in
 {
 
   options.services.prometheus.exporters = mkOption {
     type = types.submodule {
-      options = (mkSubModules);
+      options = mkSubModules;
       imports = [
         ../../../misc/assertions.nix
         (lib.mkRenamedOptionModule [ "unifi-poller" ] [ "unpoller" ])

@@ -27,7 +27,6 @@
   plymouth,
   coreutils,
   xorgserver,
-  xwayland,
   dbus,
   nixos-icons,
   runCommand,
@@ -44,7 +43,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdm";
-  version = "48.0";
+  version = "49.2";
 
   outputs = [
     "out"
@@ -53,18 +52,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdm/${lib.versions.major finalAttrs.version}/gdm-${finalAttrs.version}.tar.xz";
-    hash = "sha256-G8Btr/CT7HteN+y0+S5do0dKGxugdu25FR7pZ9HDCt8=";
+    hash = "sha256-mBNjH59fD4YOoUpDeGbmDvx77TAjt8O3Zcxd4d5ZegY=";
   };
 
   mesonFlags = [
     "-Dgdm-xsession=true"
     # TODO: Setup a default-path? https://gitlab.gnome.org/GNOME/gdm/-/blob/6fc40ac6aa37c8ad87c32f0b1a5d813d34bf7770/meson_options.txt#L6
-    "-Dinitial-vt=${finalAttrs.passthru.initialVT}"
+    "-Dinitial-vt=1"
     "-Dudev-dir=${placeholder "out"}/lib/udev/rules.d"
     "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
+    (lib.mesonOption "run-dir" "/run/gdm")
   ];
 
   nativeBuildInputs = [
@@ -111,7 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
         coreutils
         plymouth
         xorgserver
-        xwayland
         dbus
         ;
     })
@@ -144,6 +143,10 @@ stdenv.mkDerivation (finalAttrs: {
     # installed (mostly just because .passthru.tests can make use of it).
     substituteInPlace meson.build \
       --replace-fail "dconf_prefix = dconf_dep.get_variable(pkgconfig: 'prefix')" "dconf_prefix = gdm_prefix"
+
+    # Disable userdb dynamic users for now
+    substituteInPlace meson.build \
+      --replace-fail 'have_userdb = libsystemd_dep' 'have_userdb = false #'
   '';
 
   doInstallCheck = true;
@@ -185,9 +188,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript { packageName = "gdm"; };
 
-    # Used in GDM NixOS module
-    # Don't remove.
-    initialVT = "7";
     dconfDb = "${finalAttrs.finalPackage}/share/gdm/greeter-dconf-defaults";
     dconfProfile = "user-db:user\nfile-db:${finalAttrs.passthru.dconfDb}";
 

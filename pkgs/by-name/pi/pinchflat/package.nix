@@ -3,34 +3,38 @@
   fetchFromGitHub,
   fetchYarnDeps,
   beamPackages,
+  sqlite,
   yarn,
   nodejs,
   esbuild,
   tailwindcss,
   fixup-yarn-lock,
   apprise,
+  nix-update-script,
   yt-dlp,
 }:
 beamPackages.mixRelease rec {
   pname = "pinchflat";
-  version = "2025.6.6";
+  version = "2025.9.26";
   src = fetchFromGitHub {
     owner = "kieraneglin";
     repo = "pinchflat";
     rev = "v${version}";
-    hash = "sha256-5hHueaA0QGTDr4wViZMBpBFhPnl8uAaxy72LMHgZdWU=";
+    hash = "sha256-45lw/48WTlfwTMWsCryNY3g3W9Ff31vMvw0W9znAJGk=";
 
   };
 
-  mixNixDeps = import ./mix.nix {
-    inherit beamPackages lib;
-    overrides = _: super: {
-      exqlite = super.exqlite.overrideAttrs (_: {
-        preConfigure = ''
-          export ELIXIR_MAKE_CACHE_DIR="$TMPDIR/.cache"
-        '';
-      });
-    };
+  # force compile exqlite using our version
+  env = {
+    EXQLITE_USE_SYSTEM = "1";
+    EXQLITE_SYSTEM_CFLAGS = "-I${sqlite.dev}/include";
+    EXQLITE_SYSTEM_LDFLAGS = "-L${sqlite.out}/lib -lsqlite3";
+  };
+
+  mixFodDeps = beamPackages.fetchMixDeps {
+    pname = "mix-deps-${pname}";
+    inherit src version;
+    hash = "sha256-7zLlOzBJcvookYX/4SNC0O1Yr62LIKH9R8rONl3diSs=";
   };
   removeCookie = false;
 
@@ -72,9 +76,12 @@ beamPackages.mixRelease rec {
     }
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Your next YouTube media manager";
     homepage = "https://github.com/kieraneglin/pinchflat";
+    changelog = "https://github.com/kieraneglin/pinchflat/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ charludo ];
     platforms = lib.platforms.unix;

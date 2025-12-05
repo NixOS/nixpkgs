@@ -55,5 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ stv0g ];
     mainProgram = "hello";
     platforms = lib.platforms.all;
+    identifiers.cpeParts.vendor = "gnu";
   };
 })

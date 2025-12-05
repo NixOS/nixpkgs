@@ -12,15 +12,15 @@
   xbitmaps,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wallutils";
-  version = "5.12.9";
+  version = "5.14.2";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "wallutils";
-    rev = version;
-    hash = "sha256-kayzaNOV2xTjbMeGUJ1jMLGxcVZzYkMLr6qWlAupPKM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mcleLQIBG8L5cpA4QYZpDsBdZbJlyDx7XXwDtAV4sjU=";
   };
 
   vendorHash = null;
@@ -68,10 +68,10 @@ buildGoModule rec {
 
   meta = {
     description = "Utilities for handling monitors, resolutions, and (timed) wallpapers";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.bsd3;
     maintainers = [ ];
     inherit (wayland.meta) platforms;
     badPlatforms = lib.platforms.darwin;
   };
-}
+})

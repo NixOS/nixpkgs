@@ -21,10 +21,15 @@
 let
   pname = "melange";
   versionHash =
-    if lib.versionAtLeast ocaml.version "5.3" then
+    if lib.versionAtLeast ocaml.version "5.4" then
       {
-        version = "5.1.0-53";
-        hash = "sha256-96rDDzul/v+Dc+IWTNtbOKWUV8rf7HS1ZMK2LQNcpKk=";
+        version = "6.0.1-54";
+        hash = "sha256-bV5TD8qlLt7wQdm9W0TyhDDBFFo/PdJXGgiscnsBFmc=";
+      }
+    else if lib.versionAtLeast ocaml.version "5.3" then
+      {
+        version = "6.0.1-53";
+        hash = "sha256-e1/RIsFsKeAbc2wgQf1Hhta+nyAXIuEP7uatXrU9cLs=";
       }
     else if lib.versionAtLeast ocaml.version "5.2" then
       {

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   langchain-core,
@@ -23,19 +23,19 @@
 
 buildPythonPackage rec {
   pname = "langchain-perplexity";
-  version = "0.1.1";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-perplexity==${version}";
-    hash = "sha256-s20AnDsyLCzpG45QqgZp0WzlbdVrHNfpUQsMPUaF1qs=";
+    hash = "sha256-bm7sIa62CIvsYNDdaN+XZKpRnCv5bg9kPZ1Ym8utFcM=";
   };
 
   sourceRoot = "${src.name}/libs/partners/perplexity";
 
-  build-system = [ pdm-backend ];
+  build-system = [ hatchling ];
 
   dependencies = [
     langchain-core
@@ -56,12 +56,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langchain_perplexity" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-perplexity==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-perplexity==";
+    };
   };
 
   meta = {
@@ -69,8 +73,8 @@ buildPythonPackage rec {
     description = "Build LangChain applications with Perplexity";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/perplexity";
     license = lib.licenses.mit;
-    maintainers = [
-      lib.maintainers.sarahec
+    maintainers = with lib.maintainers; [
+      sarahec
     ];
   };
 }

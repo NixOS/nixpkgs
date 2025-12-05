@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fatrace";
-  version = "0.18.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "martinpitt";
     repo = "fatrace";
     rev = version;
-    sha256 = "sha256-QkavhxORENQSLUg4tq+W1WB7zSYYinWOOYPqNbv+pEI=";
+    sha256 = "sha256-ncLmO7DwkB2nC4K/40ctwRheVVSPDK+zfcGJZvYyuVI=";
   };
 
   buildInputs = [

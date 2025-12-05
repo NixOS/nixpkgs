@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  withPython ? false,
+  python ? null,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +20,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [ "-DCLINGO_BUILD_WITH_PYTHON=OFF" ];
+  cmakeFlags =
+    if withPython then
+      [
+        "-DCLINGO_BUILD_WITH_PYTHON=ON"
+        "-DPYTHON_EXECUTABLE=${lib.getExe python.pythonOnBuildForHost}"
+      ]
+    else
+      [ "-DCLINGO_BUILD_WITH_PYTHON=OFF" ];
+
+  propagatedBuildInputs = lib.optionals withPython (
+    with python.pkgs;
+    [
+      python
+      cffi
+    ]
+  );
+
+  pythonImportsCheck = [
+    "clingo"
+  ];
 
   meta = {
     description = "ASP system to ground and solve logic programs";

@@ -8,16 +8,15 @@
   openssl,
   irssi,
 }:
-
 stdenv.mkDerivation {
   pname = "fish-irssi";
-  version = "unstable-2021-04-16";
+  version = "unstable-2023-08-05";
 
   src = fetchFromGitHub {
     owner = "falsovsky";
     repo = "FiSH-irssi";
-    rev = "fcc484f09ce6941ba2e499605270593ddd13b81a";
-    hash = "sha256-KIPnz17a0CFfoPO2dZz90j+wG/dR4pv5d0iZMRf7Vkc=";
+    rev = "75f754fbcc3c68a078d23ae3e2baab71acc8ed9b";
+    hash = "sha256-fFu0E9uLQXPYrbBjEneXSEKm2uipwRE4A3D54XYLczE=";
   };
 
   patches = [ ./irssi-include-dir.patch ];

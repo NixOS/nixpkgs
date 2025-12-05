@@ -1,12 +1,12 @@
 {
   lib,
-  buildGoModule,
+  buildGo124Module,
   fetchFromGitLab,
 }:
 
-buildGoModule rec {
+buildGo124Module rec {
   pname = "gitlab-container-registry";
-  version = "4.25.0";
+  version = "4.32.0";
   rev = "v${version}-gitlab";
 
   # nixpkgs-update: no auto update
@@ -14,10 +14,10 @@ buildGoModule rec {
     owner = "gitlab-org";
     repo = "container-registry";
     inherit rev;
-    hash = "sha256-7jzKFC29NAHi5iag6aA/5LzH6IyqMa3yAxtzV9OsBnQ=";
+    hash = "sha256-LrrLNggb9OAhYCZ3STgBVJEY6m4bDo7aH3FO66s6Ge8=";
   };
 
-  vendorHash = "sha256-z9IlfyJ48FQzhbY38GbZaeQjg3cMDU8tLCXKhazP64A=";
+  vendorHash = "sha256-zynz4btCcaTPTaBwMQdHB6rardrIvKKvmlo4wR0YIgI=";
 
   checkFlags =
     let
@@ -42,5 +42,6 @@ buildGoModule rec {
       cyberus
     ];
     platforms = platforms.unix;
+    mainProgram = "registry";
   };
 }

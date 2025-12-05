@@ -8,7 +8,9 @@
   gdk-pixbuf,
   libappindicator,
   librsvg,
+  upower,
   udevCheckHook,
+  acl,
 }:
 
 # Although we copy in the udev rules here, you probably just want to use
@@ -16,14 +18,14 @@
 # instead of adding this to `services.udev.packages` on NixOS,
 python3Packages.buildPythonApplication rec {
   pname = "solaar";
-  version = "1.1.14";
+  version = "1.1.16";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pwr-Solaar";
     repo = "Solaar";
     tag = version;
-    hash = "sha256-cAM4h0OOXxItSf0Gb9PfHn385FXMKwvIUuYTrjgABwA=";
+    hash = "sha256-PhZoDRsckJXk2t2qR8O3ZGGeMUhmliqSpibfQDO7BeA=";
   };
 
   outputs = [
@@ -41,6 +43,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     libappindicator
     librsvg
+    upower
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -61,6 +64,11 @@ python3Packages.buildPythonApplication rec {
     pytest-mock
     pytest-cov-stub
   ];
+
+  preConfigure = ''
+    substituteInPlace lib/solaar/listener.py \
+      --replace-fail /usr/bin/getfacl "${lib.getExe' acl "getfacl"}"
+  '';
 
   # the -cli symlink is just to maintain compabilility with older versions where
   # there was a difference between the GUI and CLI versions.

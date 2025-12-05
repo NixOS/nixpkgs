@@ -6,17 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dupe-krill";
-  version = "1.4.9";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "kornelski";
     repo = "dupe-krill";
     rev = "v${version}";
-    hash = "sha256-ze9OQHNtujzn2rY24bmFUkz5AYsjoMrwqm4jyQoF53Y=";
+    hash = "sha256-Udj5Uc1P/c/wiF42m/qPrTtSvMpNsXjqP0LR08zslNI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-OMXxMWMQIYXe41sxM+KQRMRicH61dIXUe51zdXn8ZYM=";
+  cargoHash = "sha256-iNkuhohlqjbcn/R6tCkI5rvSbyZw4Ynac27Lb8tycp8=";
 
   meta = with lib; {
     description = "Fast file deduplicator";

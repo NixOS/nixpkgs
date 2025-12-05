@@ -69,6 +69,6 @@ stdenv.mkDerivation rec {
       "CVE-2023-6378"
       "CVE-2023-4218"
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

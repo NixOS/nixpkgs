@@ -5,22 +5,26 @@
   ppxlib,
   ppx_deriving,
   result,
+  version ? if lib.versionAtLeast ppxlib.version "0.36" then "20251010" else "20250212",
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "visitors";
-  version = "20250212";
-
-  duneVersion = "3";
+  inherit version;
 
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitLab {
     owner = "fpottier";
-    repo = pname;
-    rev = version;
+    repo = "visitors";
+    tag = version;
     domain = "gitlab.inria.fr";
-    sha256 = "sha256-AFD4+vriwVGt6lzDyIDuIMadakcgB4j235yty5qqFgQ=";
+    hash =
+      {
+        "20250212" = "sha256-AFD4+vriwVGt6lzDyIDuIMadakcgB4j235yty5qqFgQ=";
+        "20251010" = "sha256-3CHXECMHf/UWtLvy7fiOaxx6EizRRtm9HpqRxcRjH3I=";
+      }
+      ."${version}";
   };
 
   propagatedBuildInputs = [

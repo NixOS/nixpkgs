@@ -20,7 +20,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python logging handler for Logstash";
     homepage = "https://github.com/vklochan/python-logstash";
-    maintainers = with maintainers; [ peterromfeldhk ];
     license = licenses.mit;
   };
 }

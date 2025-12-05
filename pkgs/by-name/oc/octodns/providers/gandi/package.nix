@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "octodns-gandi";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "octodns";
     repo = "octodns-gandi";
     tag = "v${version}";
-    hash = "sha256-+0djfrlKAb9Rv6eaybGAg5YpS5PK3EHFbG/3bxa6WhQ=";
+    hash = "sha256-0wtG/W5pkatLQ0rXTnbHDoycWOUzOK3fcDQzt93opCc=";
   };
 
   build-system = [

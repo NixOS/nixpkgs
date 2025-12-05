@@ -27,14 +27,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "gdtoolkit";
-  version = "4.3.3";
+  version = "4.5.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Scony";
     repo = "godot-gdscript-toolkit";
     tag = version;
-    hash = "sha256-GS1bCDOKtdJkzgP3+CSWEUeHQ9lUcAHDT09QmPOOeVc=";
+    hash = "sha256-Jam7Txm+Fq5zEkJZMmbWW5Ok4ThsPyi6NIeawQot0RE=";
   };
 
   disabled = python.pythonOlder "3.7";
@@ -43,6 +43,7 @@ python.pkgs.buildPythonApplication rec {
     docopt
     lark
     pyyaml
+    radon
     setuptools
   ];
 
@@ -62,12 +63,13 @@ python.pkgs.buildPythonApplication rec {
   # The tests are not working on NixOS
   disabledTestPaths = [
     "tests/generated/test_expression_parsing.py"
-    "tests/gdradon/test_executable.py"
   ];
 
   pythonImportsCheck = [
     "gdtoolkit"
     "gdtoolkit.formatter"
+    "gdtoolkit.gd2py"
+    "gdtoolkit.gdradon"
     "gdtoolkit.linter"
     "gdtoolkit.parser"
   ];

@@ -17,9 +17,10 @@
   libopus,
   curl,
   gtk3,
-  webkitgtk_4_0,
+  nix-update-script,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "sonobus";
   version = "1.7.2";
@@ -27,15 +28,31 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "sonosaurus";
     repo = "sonobus";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-NOdmHFKrV7lb8XbeG5GdLKYZ0c/vcz3fcqYj9JvE+/Q=";
     fetchSubmodules = true;
   };
+
+  desktopItems = [
+    (makeDesktopItem {
+      type = "Application";
+      name = "sonobus";
+      desktopName = "Sonobus";
+      comment = "High-quality network audio streaming";
+      icon = "sonobus";
+      exec = "sonobus";
+      categories = [
+        "Audio"
+        "AudioVideo"
+      ];
+    })
+  ];
 
   nativeBuildInputs = [
     autoPatchelfHook
     cmake
     pkg-config
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -45,7 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     libopus
     curl
     gtk3
-    webkitgtk_4_0
   ];
 
   runtimeDependencies = [
@@ -72,16 +88,23 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
     cd ../linux
     ./install.sh "$out"
+
+    install -Dm444 $src/images/sonobus_logo_96.png $out/share/pixmaps/sonobus.png
+
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "High-quality network audio streaming";
     homepage = "https://sonobus.net/";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ PowerUser64 ];
-    platforms = platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      PowerUser64
+      l1npengtul
+    ];
+    platforms = lib.platforms.unix;
     mainProgram = "sonobus";
   };
 })

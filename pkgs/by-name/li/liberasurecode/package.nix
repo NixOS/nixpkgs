@@ -50,7 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     # remove useless man pages about directories
     rm doc/man/man*/_*
-    installManPage doc/man/man*/*
+    # avoid installing doc/man/man3/noname
+    installManPage doc/man/man*/*.*
 
     moveToOutput share/liberasurecode/ $doc
   '';

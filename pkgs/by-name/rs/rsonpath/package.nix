@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
     tagPrefix = "v";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-9pSn0f0VWsBg1z1UYGRtMb1z23htRm7qLmO80zvSjN8=";
 
   cargoBuildFlags = [ "-p=rsonpath" ];
@@ -31,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/v0ldek/rsonpath";
     changelog = "https://github.com/v0ldek/rsonpath/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "rq";
   };
 }

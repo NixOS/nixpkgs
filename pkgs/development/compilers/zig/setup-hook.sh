@@ -11,7 +11,16 @@ function zigSetGlobalCacheDir {
 function zigBuildPhase {
     runHook preBuild
 
-    local flagsArray=()
+    local buildCores=1
+
+    # Parallel building is enabled by default.
+    if [ "${enableParallelBuilding-1}" ]; then
+        buildCores="$NIX_BUILD_CORES"
+    fi
+
+    local flagsArray=(
+      "-j$buildCores"
+    )
     concatTo flagsArray zigDefaultFlagsArray \
         zigBuildFlags zigBuildFlagsArray
 
@@ -24,7 +33,16 @@ function zigBuildPhase {
 function zigCheckPhase {
     runHook preCheck
 
-    local flagsArray=()
+    local buildCores=1
+
+    # Parallel building is enabled by default.
+    if [ "${enableParallelChecking-1}" ]; then
+        buildCores="$NIX_BUILD_CORES"
+    fi
+
+    local flagsArray=(
+      "-j$buildCores"
+    )
     concatTo flagsArray zigDefaultFlagsArray \
         zigCheckFlags zigCheckFlagsArray
 
@@ -37,7 +55,16 @@ function zigCheckPhase {
 function zigInstallPhase {
     runHook preInstall
 
-    local flagsArray=()
+    local buildCores=1
+
+    # Parallel building is enabled by default.
+    if [ "${enableParallelInstalling-1}" ]; then
+        buildCores="$NIX_BUILD_CORES"
+    fi
+
+    local flagsArray=(
+      "-j$buildCores"
+    )
     concatTo flagsArray zigDefaultFlagsArray \
         zigBuildFlags zigBuildFlagsArray \
         zigInstallFlags zigInstallFlagsArray

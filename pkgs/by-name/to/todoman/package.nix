@@ -5,18 +5,19 @@
   lib,
   python3,
   sphinxHook,
+  writableTmpDirAsHomeHook,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "todoman";
-  version = "4.5.0";
+  version = "4.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = "todoman";
     tag = "v${version}";
-    hash = "sha256-sk5LgFNo5Dc+oHCLu464Q1g0bk1QGsA7xMtMiits/8c=";
+    hash = "sha256-WMIXPPtW1227iDXLqG/JIYdNp5bxHxTlqpFtcIvZ8Aw=";
   };
 
   nativeBuildInputs = [
@@ -31,17 +32,19 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   dependencies = with python3.pkgs; [
-    atomicwrites
     click
     click-log
-    click-repl
     humanize
     icalendar
     parsedatetime
+    python-dateutil
     pyxdg
-    tabulate
     urwid
   ];
+
+  optional-dependencies = with python3.pkgs; {
+    repl = [ click-repl ];
+  };
 
   nativeCheckInputs = with python3.pkgs; [
     freezegun
@@ -49,6 +52,7 @@ python3.pkgs.buildPythonApplication rec {
     pytest-cov-stub
     pytestCheckHook
     pytz
+    writableTmpDirAsHomeHook
   ];
 
   outputs = [
@@ -111,7 +115,6 @@ python3.pkgs.buildPythonApplication rec {
     }";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
-      leenaars
       antonmosich
     ];
     mainProgram = "todo";

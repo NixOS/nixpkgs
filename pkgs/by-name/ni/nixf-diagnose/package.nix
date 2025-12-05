@@ -3,23 +3,25 @@
   rustPlatform,
   fetchFromGitHub,
   nixf,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixf-diagnose";
-  version = "0.1.2";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "inclyc";
     repo = "nixf-diagnose";
     tag = finalAttrs.version;
-    hash = "sha256-gkeU3EwAl9810eRRp5/ddf1h0qpV6FrBBdntNBpBtsM=";
+    hash = "sha256-vHW2AnUxBuG9mlpMB0f9eK4M1VlJPm5YtwjXksx/uik=";
   };
 
   env.NIXF_TIDY_PATH = lib.getExe nixf;
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-nrr2/lTWPyH7MsG2hSMJjbFCpHsKWINEP8jwSYPhocg=";
+  cargoHash = "sha256-L6wiYUzlzginjhu23EBPAteZ2nTIqUE6mC2q1yfKWs4=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CLI wrapper for nixf-tidy with fancy diagnostic output";

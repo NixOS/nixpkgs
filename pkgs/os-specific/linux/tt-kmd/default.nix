@@ -3,19 +3,22 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tt-kmd";
-  version = "2.0.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "tt-kmd";
     tag = "ttkmd-${finalAttrs.version}";
-    hash = "sha256-Y85857oWzsltRyRWpK8Wi0H38mBFwqM3+iXkwVK4DPY=";
+    hash = "sha256-edpBUXhWAtcmHAgNPMAomexXfuIIqRvGipnr30VvsPE=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
+
+  makeFlags = kernelModuleMakeFlags;
 
   buildFlags = [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"

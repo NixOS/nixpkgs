@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # dependencies
   cmake,
@@ -14,7 +15,7 @@
   python,
   rpm,
   sphinx,
-  systemd,
+  systemd-python,
 }:
 
 let
@@ -38,6 +39,14 @@ buildPythonPackage rec {
     hash = "sha256-nZyM61bQ9L4t3/fa9cP+xo9ke00e6w2Obt80OpqOG8A=";
   };
 
+  patches = [
+    # Fix building with CMake 4
+    (fetchpatch {
+      url = "https://github.com/rpm-software-management/dnf-plugins-core/commit/1f5d725d857b61760174dd09165e885dd63762c5.patch?full_index=1";
+      hash = "sha256-dI6tVokgenb4aaLH5YuG3EZ1Ehgf/NwwPprcDWcHt2Q=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail "SYSCONFDIR /etc" "SYSCONFDIR $out/etc" \
@@ -59,7 +68,7 @@ buildPythonPackage rec {
     libcomps
     libdnf
     rpm
-    systemd
+    systemd-python
   ];
 
   cmakeFlags = [

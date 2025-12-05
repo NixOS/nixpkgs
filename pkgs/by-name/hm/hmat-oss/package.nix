@@ -20,22 +20,21 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cmakeFlags = [
-    "-DHMAT_GIT_VERSION=OFF"
+    (lib.cmakeBool "HMAT_GIT_VERSION" false)
+    # Find BLAS/LAPACK via pkg-config to avoid linking against Accelerate on Darwin.
+    (lib.cmakeBool "BLA_PREFER_PKGCONFIG" true)
+    (lib.cmakeFeature "CBLAS_INCLUDE_DIR" "${lib.getDev blas}/include")
   ];
 
   nativeBuildInputs = [
     cmake
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    pkg-config # used to find the LAPACK
+    pkg-config
   ];
 
   buildInputs = [
     blas
     lapack
   ];
-
-  enableParallelBuilding = true;
 
   meta = {
     description = "Hierarchical matrix C/C++ library";

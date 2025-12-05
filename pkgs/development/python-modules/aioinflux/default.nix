@@ -4,20 +4,23 @@
   fetchPypi,
   aiohttp,
   ciso8601,
+  setuptools,
   pandas,
 }:
 
 buildPythonPackage rec {
   pname = "aioinflux";
   version = "0.9.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1jy5mcg9wdz546s9wdwsgkxhm2ac4dmphd9vz243db39j1m0a3bj";
+    hash = "sha256-cg0FapBprDaI+Ds1eGsjTIkK+3yaN560IeU3nh6rxcs=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     ciso8601
     pandas
@@ -31,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Asynchronous Python client for InfluxDB";
     homepage = "https://github.com/gusutabopb/aioinflux";
+    changelog = "https://github.com/gusutabopb/aioinflux/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [
       liamdiprose

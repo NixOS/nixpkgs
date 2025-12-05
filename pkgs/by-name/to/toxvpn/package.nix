@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation {
   pname = "toxvpn";
-  version = "unstable-2024-08-21";
+  version = "0-unstable-2024-08-21";
 
   src = fetchFromGitHub {
     owner = "cleverca22";
@@ -36,6 +36,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isLinux [ "-DSYSTEMD=1" ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   postInstall = "cp ${./bootstrap.json} $out/share/toxvpn/";
 

@@ -36,12 +36,12 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.13.4";
+  version = "3.14.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KoZ2V0M4ezW58c65wc9vJHrYMZ2ywKUjCOietKYS94Q=";
+    hash = "sha256-68bjR5lf1sKxShM4p3Fm7ff8HvmTk2Fdz53CwfHI9Q8=";
   };
 
   build-system = [ hatchling ];
@@ -73,7 +73,7 @@ buildPythonPackage rec {
     requests
     sure
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # Skip http tests, they require network access
   env.SKIP_TRUE_HTTP = true;

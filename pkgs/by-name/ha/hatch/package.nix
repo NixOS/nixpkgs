@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "hatch";
-  version = "1.14.1";
+  version = "1.16.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "hatch";
     tag = "hatch-v${version}";
-    hash = "sha256-101R5x4jAfMYrdE3OWWqGmkPWRI9rSMYr+Lye9NCbA4=";
+    hash = "sha256-HreVb+RZzQV3p9TaoHDZLHBQFifyH+hocP01u5yU+ms=";
   };
 
   patches = [ (replaceVars ./paths.patch { uv = lib.getExe python3Packages.uv; }) ];
@@ -33,28 +33,34 @@ python3Packages.buildPythonApplication rec {
 
   pythonRemoveDeps = [ "uv" ];
 
-  dependencies = with python3Packages; [
-    click
-    hatchling
-    httpx
-    hyperlink
-    keyring
-    packaging
-    pexpect
-    platformdirs
-    rich
-    shellingham
-    tomli-w
-    tomlkit
-    userpath
-    virtualenv
-    zstandard
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      click
+      hatchling
+      httpx
+      hyperlink
+      keyring
+      packaging
+      pexpect
+      platformdirs
+      pyproject-hooks
+      rich
+      shellingham
+      tomli-w
+      tomlkit
+      userpath
+      virtualenv
+    ]
+    ++ lib.optionals (pythonOlder "3.14") [
+      backports-zstd
+    ];
 
   nativeCheckInputs =
     with python3Packages;
     [
       binary
+      flit-core
       git
       pytestCheckHook
       pytest-mock
@@ -71,33 +77,6 @@ python3Packages.buildPythonApplication rec {
     ];
 
   versionCheckProgramArg = "--version";
-
-  pytestFlagsArray = [
-    # AssertionError on the version metadata
-    # https://github.com/pypa/hatch/issues/1877
-    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV21::test_all"
-    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV21::test_license_expression"
-    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV22::test_all"
-    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV22::test_license_expression"
-    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV23::test_all"
-    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV23::test_license_expression"
-    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV23::test_license_files"
-    "--deselect=tests/backend/metadata/test_spec.py::TestProjectMetadataFromCoreMetadata::test_license_files"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Dependency/versioning errors in the CLI tests, only seem to show up on Darwin
-    # https://github.com/pypa/hatch/issues/1893
-    "--deselect=tests/cli/env/test_create.py::test_sync_dependencies_pip"
-    "--deselect=tests/cli/env/test_create.py::test_sync_dependencies_uv"
-    "--deselect=tests/cli/project/test_metadata.py::TestBuildDependenciesMissing::test_no_compatibility_check_if_exists"
-    "--deselect=tests/cli/run/test_run.py::TestScriptRunner::test_dependencies"
-    "--deselect=tests/cli/run/test_run.py::TestScriptRunner::test_dependencies_from_tool_config"
-    "--deselect=tests/cli/run/test_run.py::test_dependency_hash_checking"
-    "--deselect=tests/cli/run/test_run.py::test_sync_dependencies"
-    "--deselect=tests/cli/run/test_run.py::test_sync_project_dependencies"
-    "--deselect=tests/cli/run/test_run.py::test_sync_project_features"
-    "--deselect=tests/cli/version/test_version.py::test_no_compatibility_check_if_exists"
-  ];
 
   disabledTests = [
     # AssertionError: assert (1980, 1, 2, 0, 0, 0) == (2020, 2, 2, 0, 0, 0)
@@ -150,10 +129,34 @@ python3Packages.buildPythonApplication rec {
   ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_resolve" ];
 
   disabledTestPaths = [
-    # ModuleNotFoundError: No module named 'hatchling.licenses.parse'
-    # https://github.com/pypa/hatch/issues/1850
-    "tests/backend/licenses/test_parse.py"
-    "tests/backend/licenses/test_supported.py"
+    # httpx.ConnectError: [Errno -3] Temporary failure in name resolution
+    "tests/workspaces/test_config.py"
+
+    # additional comment `-*- coding: utf-8 -*-` in output
+    "tests/backend/builders/test_sdist.py"
+
+    # missing output `Syncing dependencies`
+    "tests/cli/build/test_build.py"
+    "tests/cli/project/test_metadata.py"
+    "tests/cli/version/test_version.py"
+
+    # AttributeError: 'WheelBuilderConfig' object has no attribute 'sbom_files'
+    "tests/backend/builders/test_wheel.py::TestSBOMFiles"
+
+    # some issue with the version of `binary`
+    "tests/dep/test_sync.py::test_dependency_not_found"
+    "tests/dep/test_sync.py::test_marker_unmet"
+
+    # AssertionError on the version metadata
+    # https://github.com/pypa/hatch/issues/1877
+    "tests/backend/metadata/test_spec.py::TestCoreMetadataV21::test_all"
+    "tests/backend/metadata/test_spec.py::TestCoreMetadataV21::test_license_expression"
+    "tests/backend/metadata/test_spec.py::TestCoreMetadataV22::test_all"
+    "tests/backend/metadata/test_spec.py::TestCoreMetadataV22::test_license_expression"
+    "tests/backend/metadata/test_spec.py::TestCoreMetadataV23::test_all"
+    "tests/backend/metadata/test_spec.py::TestCoreMetadataV23::test_license_expression"
+    "tests/backend/metadata/test_spec.py::TestCoreMetadataV23::test_license_files"
+    "tests/backend/metadata/test_spec.py::TestProjectMetadataFromCoreMetadata::test_license_files"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: assert [call('test h...2p32/bin/sh')] == [call('test h..., shell=True)]
@@ -162,6 +165,19 @@ python3Packages.buildPythonApplication rec {
     # != call('test hatch-test.py3.10', shell=True)
     "tests/cli/fmt/test_fmt.py"
     "tests/cli/test/test_test.py"
+
+    # Dependency/versioning errors in the CLI tests, only seem to show up on Darwin
+    # https://github.com/pypa/hatch/issues/1893
+    "tests/cli/env/test_create.py::test_sync_dependencies_pip"
+    "tests/cli/env/test_create.py::test_sync_dependencies_uv"
+    "tests/cli/project/test_metadata.py::TestBuildDependenciesMissing::test_no_compatibility_check_if_exists"
+    "tests/cli/run/test_run.py::TestScriptRunner::test_dependencies"
+    "tests/cli/run/test_run.py::TestScriptRunner::test_dependencies_from_tool_config"
+    "tests/cli/run/test_run.py::test_dependency_hash_checking"
+    "tests/cli/run/test_run.py::test_sync_dependencies"
+    "tests/cli/run/test_run.py::test_sync_project_dependencies"
+    "tests/cli/run/test_run.py::test_sync_project_features"
+    "tests/cli/version/test_version.py::test_no_compatibility_check_if_exists"
   ];
 
   passthru = {

@@ -31,6 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-IH2X0B3HwEG0/wvKacLVPBQad14W0HBy5VFHjk8vgJk=";
   };
 
+  patches = [
+    # <https://github.com/nba-emu/NanoBoyAdvance/pull/410>
+    ./fix-toml11-4.0.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     python3Packages.jinja2

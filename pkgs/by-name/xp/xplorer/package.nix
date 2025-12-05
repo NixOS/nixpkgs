@@ -14,7 +14,6 @@
   openssl,
   pkg-config,
   rustPlatform,
-  webkitgtk_4_0,
 }:
 
 let
@@ -54,7 +53,6 @@ rustPlatform.buildRustPackage {
 
   sourceRoot = "${src.name}/src-tauri";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-D7qgmxDYQEgOkEYKDSLA875bXeTKDvAntF7kB4esn24=";
 
   # copy the frontend static resources to final build directory
@@ -76,7 +74,7 @@ rustPlatform.buildRustPackage {
     freetype
     libsoup_2_4
     gtk3
-    webkitgtk_4_0
+    # webkitgtk_4_0
   ];
 
   checkFlags = [
@@ -89,6 +87,8 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = with lib; {
+    # webkitgtk_4_0 was removed
+    broken = true;
     description = "Customizable, modern file manager";
     homepage = "https://xplorer.space";
     license = licenses.asl20;

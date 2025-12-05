@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "sudo-font";
-  version = "3.3";
+  version = "3.4";
 
   src = fetchzip {
     url = "https://github.com/jenskutilek/sudo-font/releases/download/v${version}/sudo.zip";
-    hash = "sha256-Y4+bRIXzN40RIij9mQT0GqONi7aMi13rhl5zd2f+7Uk=";
+    hash = "sha256-sSLY94wY9+AYAqWDq+Xy+KctUfJVS0jeS3baF8mLO9I=";
   };
 
   installPhase = ''
@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://www.kutilek.de/sudo-font/";
     changelog = "https://github.com/jenskutilek/sudo-font/raw/v${version}/sudo/FONTLOG.txt";
     license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

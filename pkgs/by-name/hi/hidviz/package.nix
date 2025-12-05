@@ -8,22 +8,25 @@
   qt6,
   libusb1,
   protobuf,
-  asio,
+  asio_1_32_0,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hidviz";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "hidviz";
     repo = "hidviz";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ThDDQ3FN+cLCbdQCrC5zhL4dgg2zAbRWvtei7+qmQg8=";
   };
 
-  preConfigure = ''
-    substituteInPlace libhidx/cmake_modules/Findasio.cmake --replace-fail '/usr/include/asio' '${lib.getDev asio}/include/asio'
+  postPatch = ''
+    substituteInPlace {hidviz,libhidx{,/libhidx{,_server{,_daemon}}}}/CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 3.2)' 'cmake_minimum_required(VERSION 3.10)'
+    substituteInPlace libhidx/cmake_modules/Findasio.cmake --replace-fail '/usr/include/asio' '${lib.getDev asio_1_32_0}/include/asio'
+    substituteInPlace libhidx/libhidx/src/Connector.cc --replace-fail '/usr/local/libexec' "$out/libexec"
   '';
 
   nativeBuildInputs = [
@@ -36,7 +39,8 @@ stdenv.mkDerivation rec {
     qt6.qtwebengine
     libusb1
     protobuf
-    asio
+    # depends on io_service
+    asio_1_32_0
   ];
 
   meta = with lib; {
@@ -46,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ ];
   };
-}
+})

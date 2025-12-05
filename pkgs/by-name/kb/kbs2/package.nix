@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-X+NhUQzxfok9amqAiim/vjkee45hjdPedsZc3zwcOXA=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Auk/6ltjfXE1VzlxmKikcV6MHDczpuRqKJrg6UGgJZE=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.hostPlatform.isLinux [ python3 ];
@@ -52,6 +51,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/woodruffw/kbs2";
     changelog = "https://github.com/woodruffw/kbs2/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

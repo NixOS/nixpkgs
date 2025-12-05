@@ -2,9 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  llvmPackages,
   libsForQt5,
   libGLU,
   lib3ds,
+  lib3mf,
   bzip2,
   muparser,
   eigen,
@@ -17,33 +19,52 @@
   boost,
   mpfr,
   xercesc,
-  tbb,
+  onetbb,
   embree,
   vcg,
   libigl,
   corto,
   openctm,
   structuresynth,
+  vclab-nexus,
 }:
 
 let
-  tinygltf-src = fetchFromGitHub {
-    owner = "syoyo";
-    repo = "tinygltf";
-    rev = "v2.6.3";
-    hash = "sha256-IyezvHzgLRyc3z8HdNsQMqDEhP+Ytw0stFNak3C8lTo=";
-  };
+  downloads = [
+    "DLL_EMBREE"
+    "SOURCE_BOOST"
+    "SOURCE_CGAL"
+    "SOURCE_EMBREE"
+    "SOURCE_LEVMAR"
+    "SOURCE_LIB3DS"
+    "SOURCE_LIBE57"
+    "SOURCE_LIBIGL"
+    "SOURCE_MUPARSER"
+    "SOURCE_NEXUS"
+    "SOURCE_OPENCTM"
+    "SOURCE_QHULL"
+    "SOURCE_STRUCTURE_SYNTH"
+    "SOURCE_TINYGLTF"
+    "SOURCE_U3D"
+    "SOURCE_XERCE"
+  ];
+  cmakeFlagsDisallowDownload = lib.map (x: "-DMESHLAB_ALLOW_DOWNLOAD_${x}=OFF") downloads;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "meshlab";
-  version = "2023.12";
+  version = "2025.07";
 
   src = fetchFromGitHub {
     owner = "cnr-isti-vclab";
     repo = "meshlab";
-    rev = "MeshLab-${version}";
-    sha256 = "sha256-AdUAWS741RQclYaSE3Tz1/I0YSinNAnfSaqef+Tib8Y=";
+    tag = "MeshLab-${finalAttrs.version}";
+    hash = "sha256-6BozYzPCbBZ+btL4FCdzKlwKqTsvFWDfOXizzJSYo9s=";
   };
+
+  nativeBuildInputs = [
+    cmake
+    libsForQt5.wrapQtAppsHook
+  ];
 
   buildInputs = [
     libGLU
@@ -51,6 +72,7 @@ stdenv.mkDerivation rec {
     libsForQt5.qtscript
     libsForQt5.qtxmlpatterns
     lib3ds
+    lib3mf
     bzip2
     muparser
     eigen
@@ -62,58 +84,76 @@ stdenv.mkDerivation rec {
     boost
     mpfr
     xercesc
-    tbb
+    onetbb
     embree
     vcg
     libigl
     corto
     openctm
     structuresynth
+    vclab-nexus
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
   ];
 
-  nativeBuildInputs = [
-    cmake
-    libsForQt5.wrapQtAppsHook
+  patches = [
+    # CMake: use system dependencies, install exports
+    # ref. https://github.com/cnr-isti-vclab/meshlab/pull/1617
+    # merged upstream
+    ./1617_cmake-use-system-dependencies-install-exports.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ./no-plist.patch
   ];
 
-  preConfigure = ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteAll ${./meshlab.desktop} resources/linux/meshlab.desktop
-    substituteInPlace src/external/tinygltf.cmake \
-      --replace-fail '$'{MESHLAB_EXTERNAL_DOWNLOAD_DIR}/tinygltf-2.6.3 ${tinygltf-src}
-    substituteInPlace src/external/libigl.cmake \
-      --replace-fail '$'{MESHLAB_EXTERNAL_DOWNLOAD_DIR}/libigl-2.4.0 ${libigl}
-    substituteInPlace src/external/nexus.cmake \
-      --replace-fail '$'{NEXUS_DIR}/src/corto ${corto.src}
-    substituteInPlace src/external/levmar.cmake \
-      --replace-fail '$'{LEVMAR_LINK} ${levmar.src} \
-      --replace-warn "MD5 ''${LEVMAR_MD5}" ""
-    substituteInPlace src/external/ssynth.cmake \
-      --replace-fail '$'{SSYNTH_LINK} ${structuresynth.src} \
-      --replace-warn "MD5 ''${SSYNTH_MD5}" ""
-    substituteInPlace src/common_gui/CMakeLists.txt \
-      --replace-warn "MESHLAB_LIB_INSTALL_DIR" "CMAKE_INSTALL_LIBDIR"
   '';
 
-  cmakeFlags = [
-    "-DVCGDIR=${vcg.src}"
-  ];
+  cmakeFlags = cmakeFlagsDisallowDownload;
 
-  postFixup = ''
-    patchelf --add-needed $out/lib/meshlab/libmeshlab-common.so $out/bin/.meshlab-wrapped
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/{Applications,bin,lib}
+    mv $out/meshlab.app $out/Applications/
+    ln $out/Applications/meshlab.app/Contents/Frameworks/libmeshlab-common{,-gui}.dylib $out/lib/
+    makeWrapper $out/{Applications/meshlab.app/Contents/MacOS,bin}/meshlab
+    substituteInPlace $out/lib/cmake/meshlab/meshlabTargets-release.cmake --replace-fail \
+      "{_IMPORT_PREFIX}/meshlab.app" \
+      "{_IMPORT_PREFIX}/Applications/meshlab.app"
   '';
+
+  # The hook will wrap all the plugin binaries, make they are not a
+  # valid plugin. So we have to wrap the main app manually.
+  # See: https://github.com/NixOS/nixpkgs/pull/396295#issuecomment-3137779781
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
   # display a black screen on wayland, so force XWayland for now.
   # Might be fixed when upstream will be ready for Qt6.
-  qtWrapperArgs = [
-    "--set QT_QPA_PLATFORM xcb"
-  ];
+  qtWrapperArgs = lib.optional stdenv.hostPlatform.isLinux "--set QT_QPA_PLATFORM xcb";
+
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf \
+        --add-needed $out/lib/meshlab/libmeshlab-common.so \
+        --add-needed $out/lib/meshlab/libmeshlab-common-gui.so \
+        $out/bin/.meshlab-wrapped
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      wrapQtApp "$out/Applications/meshlab.app/Contents/MacOS/meshlab"
+      install_name_tool -change libopenctm.dylib "${lib.getOutput "out" openctm}/lib/libopenctm.dylib" \
+        "$out/Applications/meshlab.app/Contents/PlugIns/libio_ctm.so"
+    '';
 
   meta = {
     description = "System for processing and editing 3D triangular meshes";
     mainProgram = "meshlab";
     homepage = "https://www.meshlab.net/";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
-    platforms = with lib.platforms; linux;
+    maintainers = with lib.maintainers; [
+      nim65s
+      yzx9
+    ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

@@ -32,14 +32,14 @@ stdenv.mkDerivation rec {
     patchShebangs data/themes/hungarian/scripts/sed-linux.sh
 
     substituteInPlace Makefile.am \
-      --replace "\$(MKDIR_P) -m 2755 " "\$(MKDIR_P) -m 755 " \
-      --replace "chown root:games \$(DESTDIR)\$(pkglocalstatedir)/words" " "
+      --replace-fail "\$(MKDIR_P) -m 2755 " "\$(MKDIR_P) -m 755 " \
+      --replace-fail "chown root:games \$(DESTDIR)\$(pkglocalstatedir)/words" " "
 
     # required until the following has been merged:
     # https://salsa.debian.org/tux4kids-pkg-team/tuxtype/merge_requests/1
     substituteInPlace configure.ac \
-      --replace 'CFLAGS="$CFLAGS $SDL_IMAGE"' 'CFLAGS="$CFLAGS $SDL_IMAGE_CFLAGS"' \
-      --replace 'PKG_CHECK_MODULES([SDL_ttf],' 'PKG_CHECK_MODULES([SDL_TTF],'
+      --replace-fail 'CFLAGS="$CFLAGS $SDL_IMAGE"' 'CFLAGS="$CFLAGS $SDL_IMAGE_CFLAGS"' \
+      --replace-fail 'PKG_CHECK_MODULES([SDL_ttf],' 'PKG_CHECK_MODULES([SDL_TTF],'
   '';
 
   nativeBuildInputs = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     mainProgram = "tuxtype";
     homepage = "https://github.com/tux4kids/tuxtype";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.aanderse ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

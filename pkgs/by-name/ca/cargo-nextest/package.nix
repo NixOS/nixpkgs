@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
@@ -7,17 +8,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-nextest";
-  version = "0.9.101";
+  version = "0.9.114";
 
   src = fetchFromGitHub {
     owner = "nextest-rs";
     repo = "nextest";
     rev = "cargo-nextest-${version}";
-    hash = "sha256-yaRwHQopkkZ8gLEhuJuzAiY/enWNdL3B+POGV2ykOWA=";
+    hash = "sha256-0l8+YKIdKhvwdEbvSgYcX1deq+aRZkxXUCw2zMSO4cU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-F26/IDq3/Il6BBCkKUy59T47sI20DAabeSjt3Kdqu+Y=";
+  # FIXME: we don't support dtrace probe generation on macOS until we have a dtrace build: https://github.com/NixOS/nixpkgs/pull/392918
+  patches = lib.optionals stdenv.isDarwin [
+    ./no-dtrace-macos.patch
+  ];
+
+  cargoHash = "sha256-3KiPuDck8THwrOPRpIKhaRZIFO4EoppMDfsm1H4SBoI=";
 
   cargoBuildFlags = [
     "-p"
@@ -41,7 +46,6 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with maintainers; [
       ekleog
-      figsoda
       matthiasbeyer
     ];
   };

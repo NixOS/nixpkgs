@@ -5,21 +5,21 @@
   lib,
   stdenv,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "devbox";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "jetify-com";
-    repo = pname;
-    rev = version;
-    hash = "sha256-LAYGjpaHxlolzzpilD3DOvd+J0eNJ0p+VdRayGQvUWo=";
+    repo = "devbox";
+    tag = finalAttrs.version;
+    hash = "sha256-+OsFKBtc4UkkI37YJM9uKIJZC1+KkuDJJKjipRzyF7k=";
   };
 
   ldflags = [
     "-s"
     "-w"
-    "-X go.jetify.com/devbox/internal/build.Version=${version}"
+    "-X go.jetify.com/devbox/internal/build.Version=${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/devbox" ];
@@ -27,7 +27,7 @@ buildGoModule rec {
   # integration tests want file system access
   doCheck = false;
 
-  vendorHash = "sha256-cBRdJUviqtzX1W85/rZr23W51mdjoEPCwXxF754Dhqw=";
+  vendorHash = "sha256-0lDPK9InxoQzndmQvhKCYvqEt2NL2A+rt3sGg+o1HTY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -38,14 +38,14 @@ buildGoModule rec {
       --zsh <($out/bin/devbox completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Instant, easy, predictable shells and containers";
     homepage = "https://www.jetify.com/devbox";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       urandom
       lagoja
       madeddie
     ];
   };
-}
+})

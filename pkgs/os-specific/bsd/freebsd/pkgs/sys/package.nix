@@ -70,7 +70,7 @@ let
   // (lib.flip lib.mapAttrs' extraFlags (
     name: value: {
       name = "MK_${lib.toUpper name}";
-      value = if value then "yes" else "no";
+      value = lib.boolToYesNo value;
     }
   ));
 in
@@ -119,11 +119,11 @@ mkDerivation rec {
   inherit env;
   passthru.env = env;
 
-  KODIR = "${builtins.placeholder "out"}/kernel";
-  KMODDIR = "${builtins.placeholder "out"}/kernel";
-  DTBDIR = "${builtins.placeholder "out"}/dbt";
+  KODIR = "${placeholder "out"}/kernel";
+  KMODDIR = "${placeholder "out"}/kernel";
+  DTBDIR = "${placeholder "out"}/dbt";
 
-  KERN_DEBUGDIR = "${builtins.placeholder "debug"}/lib/debug";
+  KERN_DEBUGDIR = "${placeholder "debug"}/lib/debug";
   KERN_DEBUGDIR_KODIR = "${KERN_DEBUGDIR}/kernel";
   KERN_DEBUGDIR_KMODDIR = "${KERN_DEBUGDIR}/kernel";
 

@@ -48,6 +48,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/luceneplusplus/LucenePlusPlus/commit/e6a376836e5c891577eae6369263152106b9bc02.patch";
       hash = "sha256-0mdVvrS0nTxSJXRzVdx2Zb/vm9aVxGfARG/QliRx7tA=";
     })
+    (fetchpatch {
+      name = "Bump-minimum-required-cmake-version-to-3_10.patch";
+      url = "https://github.com/luceneplusplus/LucenePlusPlus/commit/2857419531c45e542afdc52001a65733f4f9b128.patch";
+      hash = "sha256-qgXnDhJIa32vlw3MRLbOWsBMj67d9n+ZFLn+yHpU9Hk=";
+    })
   ];
 
   # Don't use the built in gtest - but the nixpkgs one requires C++14.
@@ -76,6 +81,6 @@ stdenv.mkDerivation rec {
       lgpl3Plus
     ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ rewine ];
+    maintainers = with lib.maintainers; [ wineee ];
   };
 }

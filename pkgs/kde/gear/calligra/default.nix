@@ -1,6 +1,7 @@
 {
   mkKdeDerivation,
   lib,
+  fetchpatch,
   boost,
   eigen,
   gsl,
@@ -25,6 +26,14 @@
 
 mkKdeDerivation {
   pname = "calligra";
+
+  patches = [
+    # Fix build with Poppler 25.10
+    (fetchpatch {
+      url = "https://invent.kde.org/office/calligra/-/commit/45e8b302bce1d318f310ea13599d7ce84acc477e.patch";
+      hash = "sha256-TECB3eo24+gI8TXL8gw9BIdFWqw0JBKCWpoNVqBSan8=";
+    })
+  ];
 
   extraBuildInputs = [
     boost

@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "sha2wordlist";
-  version = "unstable-2023-02-20";
+  version = "0-unstable-2023-02-20";
 
   src = fetchFromGitHub {
     owner = "kirei";

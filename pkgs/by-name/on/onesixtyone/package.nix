@@ -2,17 +2,18 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
   pname = "onesixtyone";
-  version = "unstable-2019-12-26";
+  version = "0.3.4-unstable-2025-08-30";
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "onesixtyone";
-    rev = "9ce1dcdad73d45c8694086a4f90d7713be1cbdd7";
-    sha256 = "111nxn4pcbx6p9j8cjjxv1j1s7dgf7f4dix8acsmahwbpzinzkg3";
+    rev = "3bedd7cab7fe1bcfc2def208f87fbf10a013efc7";
+    hash = "sha256-9gvulDEaEFZdGl/x5oNHTuMNbBK56dgOydQRyzGO29Q=";
   };
 
   buildPhase = ''
@@ -22,6 +23,12 @@ stdenv.mkDerivation {
   installPhase = ''
     install -D onesixtyone $out/bin/onesixtyone
   '';
+
+  passthru.updateScript = unstableGitUpdater {
+    url = "https://github.com/trailofbits/onesixtyone";
+    tagPrefix = "v";
+    branch = "master"; # optional, defaults to default branch
+  };
 
   meta = with lib; {
     description = "Fast SNMP Scanner";

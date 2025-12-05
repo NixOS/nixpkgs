@@ -15,6 +15,12 @@ buildGoModule rec {
     sha256 = "sha256-FTUPARckpecz1V/Io4rY6SXhlih3VJr/rTGAiik4ALA=";
   };
 
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=v${version}"
+  ];
+
   vendorHash = null;
 
   meta = with lib; {

@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "tootik";
-  version = "0.17.1";
+  version = "0.20.2";
 
   src = fetchFromGitHub {
     owner = "dimkr";
     repo = "tootik";
-    tag = version;
-    hash = "sha256-C3jljz1ftpSlgmwY5ktTJSiZ2DVxbctFT7LZXBow73s=";
+    tag = "v${version}";
+    hash = "sha256-zkKkHzgIBHg0FH07KNr7jGNZU4QUbl6udoD7hLaDOL0=";
   };
 
-  vendorHash = "sha256-Imnh/f+6pybALRnefxaTyZ95orhAQfLWdMsIIkOOurc=";
+  vendorHash = "sha256-UZQw63KPs7GzOv5Ls69DLqJqc/taWwC5UCYdNlq9fXc=";
 
   nativeBuildInputs = [ openssl ];
 
@@ -30,6 +30,8 @@ buildGoModule rec {
   tags = [ "fts5" ];
 
   doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Federated nanoblogging service with a Gemini frontend";

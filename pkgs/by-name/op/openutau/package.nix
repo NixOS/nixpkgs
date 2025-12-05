@@ -1,4 +1,5 @@
 {
+  alsa-lib,
   lib,
   stdenv,
   buildDotnetModule,
@@ -7,19 +8,20 @@
   dbus,
   fontconfig,
   portaudio,
+  libXi,
   copyDesktopItems,
   makeDesktopItem,
 }:
 
 buildDotnetModule rec {
   pname = "OpenUtau";
-  version = "0.1.529";
+  version = "0.1.565";
 
   src = fetchFromGitHub {
     owner = "stakira";
     repo = "OpenUtau";
-    rev = "build/${version}";
-    hash = "sha256-HE0KxPKU7tYZbYiCL8sm6I/NZiX0MJktt+5d6qB1A2E=";
+    tag = version;
+    hash = "sha256-tjW1xmt409AlEmw/N1RG46oigP4mWAoTecQGV/hwMo4=";
   };
 
   nativeBuildInputs = [ copyDesktopItems ];
@@ -33,7 +35,10 @@ buildDotnetModule rec {
       genericName = "Utau";
       comment = "Open source UTAU successor";
       exec = "OpenUtau";
-      categories = [ "Music" ];
+      categories = [
+        "AudioVideo"
+        "Music"
+      ];
     })
   ];
 
@@ -52,23 +57,17 @@ buildDotnetModule rec {
   runtimeDeps = [
     dbus
     portaudio
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    fontconfig
+    libXi
   ];
 
   dotnetInstallFlags = [ "-p:PublishReadyToRun=false" ];
 
   # socket cannot bind to localhost on darwin for tests
   doCheck = !stdenv.hostPlatform.isDarwin;
-
-  # net8.0 replacement needed until upstream bumps to dotnet 8
-  postPatch = ''
-    substituteInPlace OpenUtau/OpenUtau.csproj OpenUtau.Test/OpenUtau.Test.csproj --replace \
-      '<TargetFramework>net6.0</TargetFramework>' \
-      '<TargetFramework>net8.0</TargetFramework>'
-
-    substituteInPlace OpenUtau/Program.cs --replace \
-      '/usr/bin/fc-match' \
-      '${lib.getExe' fontconfig "fc-match"}'
-  '';
 
   # need to make sure proprietary worldline resampler is copied
   postInstall =

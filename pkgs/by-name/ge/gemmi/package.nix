@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gemmi";
-  version = "0.7.3";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "project-gemmi";
     repo = "gemmi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-T7vmQEP7+3yNkQ7l36xbeLJsm5eYZvt7oRq/ksy6zQU=";
+    hash = "sha256-0MAY3mNHTv0ydtoVcJQKbOcSxCTvzH5S/5O82PjumKE=";
   };
 
   nativeBuildInputs = [

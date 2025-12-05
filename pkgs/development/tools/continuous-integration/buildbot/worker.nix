@@ -21,7 +21,7 @@
   nixosTests,
 }:
 
-buildPythonPackage ({
+buildPythonPackage {
   pname = "buildbot_worker";
   inherit (buildbot) src version;
   format = "setuptools";
@@ -58,4 +58,4 @@ buildPythonPackage ({
     teams = [ teams.buildbot ];
     license = licenses.gpl2;
   };
-})
+}

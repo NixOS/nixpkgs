@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlang";
-  version = "0.6.3";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprlang";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-kVQ0bHVtX6baYxRWWIh4u3LNJZb9Zcm2xBeDPOGz5BY=";
+    hash = "sha256-54ltTSbI6W+qYGMchAgCR6QnC1kOdKXN6X6pJhOWxFg=";
   };
 
   nativeBuildInputs = [
@@ -39,9 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Official implementation library for the hypr config language";
     license = lib.licenses.lgpl3Only;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
-      iogamaster
-    ];
     teams = [ lib.teams.hyprland ];
   };
 })

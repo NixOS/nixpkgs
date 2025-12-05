@@ -59,7 +59,7 @@ let
       attrs
       // {
         inherit system;
-        name = attrs.name or (builtins.baseNameOf (builtins.elemAt attrs.paths 0));
+        name = attrs.name or (baseNameOf (builtins.elemAt attrs.paths 0));
         src = bootstrapArchive;
         builder = "${bootstrapArchive}/bin/bash";
         # this script will prefer to link files instead of copying them.
@@ -404,7 +404,7 @@ let
       fetchurlBoot = import ../../build-support/fetchurl {
         inherit lib stdenvNoCC;
         inherit (prevStage) curl;
-        inherit (config) rewriteURL;
+        inherit (config) hashedMirrors rewriteURL;
       };
       stdenv = import ../generic {
         inherit
@@ -497,12 +497,12 @@ in
           bzip2
           xz
           ;
-        binutils-unwrapped = builtins.removeAttrs bootstrapTools.binutils-unwrapped [ "src" ];
+        binutils-unwrapped = removeAttrs bootstrapTools.binutils-unwrapped [ "src" ];
         fetchurl = import ../../build-support/fetchurl {
           inherit lib;
           inherit (self) stdenvNoCC;
           inherit (prevStage) curl;
-          inherit (config) rewriteURL;
+          inherit (config) hashedMirrors rewriteURL;
         };
         gettext = super.gettext.overrideAttrs {
           NIX_CFLAGS_COMPILE = "-DHAVE_ICONV=1"; # we clearly have iconv. what do you want?

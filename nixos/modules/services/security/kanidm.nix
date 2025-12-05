@@ -59,6 +59,7 @@ let
     cfg.serverSettings.tls_key
   ]
   ++ optionals cfg.provision.enable provisionSecretFiles;
+  enableServerBackup = cfg.enableServer && (cfg.serverSettings.online_backup.versions != 0);
 
   # Merge bind mount paths and remove paths where a prefix is already mounted.
   # This makes sure that if e.g. the tls_chain is in the nix store and /nix/store is already in the mount
@@ -201,7 +202,7 @@ let
         echo "Tried for at least 30 seconds, giving up..."
         exit 1
       fi
-      count=$((count++))
+      count=$((++count))
     done
 
     ${recoverIdmAdmin}
@@ -548,7 +549,7 @@ in
                 description = "The redirect URL of the service. These need to exactly match the OAuth2 redirect target";
                 type =
                   let
-                    originStrType = types.strMatching ".*://.*$";
+                    originStrType = types.strMatching ".*://?.*$";
                   in
                   types.either originStrType (types.nonEmptyListOf originStrType);
                 example = "https://someservice.example.com/auth/login";
@@ -671,6 +672,8 @@ in
   };
 
   config = mkIf (cfg.enableClient || cfg.enableServer || cfg.enablePam) {
+    warnings = lib.optionals (cfg.package.eolMessage != "") [ cfg.package.eolMessage ];
+
     assertions =
       let
         entityList =
@@ -871,7 +874,7 @@ in
 
     environment.systemPackages = mkIf cfg.enableClient [ cfg.package ];
 
-    systemd.tmpfiles.settings."10-kanidm" = {
+    systemd.tmpfiles.settings."10-kanidm" = mkIf enableServerBackup {
       ${cfg.serverSettings.online_backup.path}.d = {
         mode = "0700";
         user = "kanidm";
@@ -888,7 +891,14 @@ in
         (
           defaultServiceConfig
           // {
-            BindReadOnlyPaths = mergePaths (defaultServiceConfig.BindReadOnlyPaths ++ secretPaths);
+            BindReadOnlyPaths = mergePaths (
+              defaultServiceConfig.BindReadOnlyPaths
+              ++ secretPaths
+              ++ (lib.optionals (cfg.provision.enable && !cfg.provision.acceptInvalidCerts) [
+                "-/etc/ssl"
+                "-/etc/static/ssl"
+              ])
+            );
           }
         )
         {
@@ -900,13 +910,13 @@ in
           User = "kanidm";
           Group = "kanidm";
 
-          BindPaths = [
+          BindPaths =
+            [ ]
             # To store backups
-            cfg.serverSettings.online_backup.path
-          ]
-          ++ optional (
-            cfg.enablePam && cfg.unixSettings ? home_mount_prefix
-          ) cfg.unixSettings.home_mount_prefix;
+            ++ optional enableServerBackup cfg.serverSettings.online_backup.path
+            ++ optional (
+              cfg.enablePam && cfg.unixSettings ? home_mount_prefix
+            ) cfg.unixSettings.home_mount_prefix;
 
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
           CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
@@ -987,6 +997,9 @@ in
           "-/etc/resolv.conf"
           "-/etc/nsswitch.conf"
           "-/etc/hosts"
+          "-/etc/passwd"
+          "-/etc/group"
+          "-/etc/shadow"
           "-/etc/localtime"
           "-/etc/kanidm"
           "-/etc/static/kanidm"

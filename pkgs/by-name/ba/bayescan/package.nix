@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   sourceRoot = "BayeScan${version}/source";
 
   postPatch = ''
-    substituteInPlace Makefile --replace "-static" "" \
-                               --replace "g++" "c++"
+    substituteInPlace Makefile --replace-fail "-static" "" \
+                               --replace-fail "g++" "${stdenv.cc.targetPrefix}c++"
   '';
 
   installPhase = ''

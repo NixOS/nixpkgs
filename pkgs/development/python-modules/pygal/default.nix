@@ -50,7 +50,7 @@ buildPythonPackage rec {
     pyquery
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     # necessary on darwin to pass the testsuite

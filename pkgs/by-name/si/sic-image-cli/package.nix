@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
@@ -17,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-PFbHHO3m4mnV5s8DVev/iao9sC3FYht0whTHYzO25Yo=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-HL/KCC8Y42OFL1LXoewmH1Bxp6FICuDjkTnK5DE94Ms=";
 
   nativeBuildInputs = [
@@ -42,7 +42,9 @@ rustPlatform.buildRustPackage rec {
       asl20 # or
       mit
     ];
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "sic";
+    # The last successful Darwin Hydra build was in 2024
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   libICE,
   libXext,
   libXi,
@@ -21,6 +22,22 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://sourceforge/freeglut/freeglut-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-nD1NZRb7+gKA7ck8d2mPtzA+RDwaqvN9Jp4yiKbD6lI=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "freeglut-fix-cmake-4.patch";
+      url = "https://github.com/freeglut/freeglut/commit/2294389397912c9a6505a88221abb7dca0a4fb79.patch";
+      hash = "sha256-buNhlVUbDekklnar6KFWN/GUKE+jMEqTGrY3LY0LwVs=";
+    })
+
+    # Fix build with gcc15
+    # https://github.com/freeglut/freeglut/pull/187
+    (fetchpatch {
+      name = "freeglut-fix-fgPlatformDestroyContext-prototype-for-C23.patch";
+      url = "https://github.com/freeglut/freeglut/commit/800772e993a3ceffa01ccf3fca449d3279cde338.patch";
+      hash = "sha256-agXw3JHq81tx5514kkorvuU5mX4E3AV930hy1OJl4L0=";
+    })
+  ];
 
   outputs = [
     "out"

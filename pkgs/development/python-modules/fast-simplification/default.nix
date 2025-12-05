@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "fast-simplification";
-  version = "0.1.11";
+  version = "0.1.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyvista";
     repo = "fast-simplification";
     tag = "v${version}";
-    hash = "sha256-3mqcFTNrq1W376ctJJumzeQccaB4cvoTNW8BHEnv5t8=";
+    hash = "sha256-OhVJKYmJR+A6JDaM/7Bfkc4PNlhsc6NgRNU+SokCg1U=";
   };
 
   build-system = [

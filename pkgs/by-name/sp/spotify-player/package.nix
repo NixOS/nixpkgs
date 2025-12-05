@@ -22,7 +22,7 @@
   # build options
   withStreaming ? true,
   withDaemon ? true,
-  withAudioBackend ? "rodio", # alsa, pulseaudio, rodio, portaudio, jackaudio, rodiojack, sdl
+  withAudioBackend ? "rodio", # alsa, pulseaudio, rodio, portaudio, jackaudio, rodiojack, sdl, gstreamer
   withMediaControl ? true,
   withImage ? true,
   withNotify ? true,
@@ -49,17 +49,16 @@ assert lib.assertOneOf "withAudioBackend" withAudioBackend [
 
 rustPlatform.buildRustPackage rec {
   pname = "spotify-player";
-  version = "0.20.6";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "aome510";
     repo = "spotify-player";
     tag = "v${version}";
-    hash = "sha256-PYf8Ms0hmG4EWDjb+er6YvY/UFiQbIF6dtCL87O4rOs=";
+    hash = "sha256-2LOsFcFZRdgH4TqtmVDqf8dxsPwZVQKsQbjyuDHwP/4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ec4rIYZsIvYIezDm956aYSM75e/GEoNilVjm40691Ys=";
+  cargoHash = "sha256-JgPf68KpRE8z+2webU99cR0+6xmaplcVwgFcgvHiwrs=";
 
   nativeBuildInputs = [
     pkg-config

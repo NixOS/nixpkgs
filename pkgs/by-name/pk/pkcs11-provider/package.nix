@@ -6,6 +6,8 @@
   nss,
   p11-kit,
   opensc,
+  softhsm,
+  kryoptic,
   gnutls,
   expect,
   which,
@@ -22,14 +24,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "pkcs11-provider";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "latchset";
     repo = "pkcs11-provider";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-Q9dmzYDBco+LLVWdORFTjRyk0RX8qhmZ1m+Kgfeyr04=";
+    hash = "sha256-QXEwDl6pk8G5ba8lD4uYw2QuD3qS/sgd1od8crHct2s=";
   };
 
   buildInputs = [
@@ -44,20 +46,35 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  # don't add SoftHSM to here: https://github.com/openssl/openssl/issues/22508
   nativeCheckInputs = [
     p11-kit.bin
     opensc
+    kryoptic
     nss.tools
     gnutls
     openssl.bin
     expect
     valgrind
     pkcs11ProviderPython3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    # softokn and kryoptic are OK; softhsm is pretty flaky.
+    # This fails with a `pkcs11-provider:softhsm / tls - FAIL - exit status 1`.
+    # Considering that kryoptic is the Rust replacement, we can rely on it instead:
+    # https://github.com/softhsm/SoftHSMv2/issues/803
+    softhsm
   ];
 
+  env = {
+    KRYOPTIC = "${lib.getLib kryoptic}/lib";
+  };
+
+  # Fix a typo in the Kryoptic test (remove this in v1.2).
   postPatch = ''
     patchShebangs --build .
+    substituteInPlace tests/kryoptic-init.sh \
+      --replace-fail /usr/local/lib/kryoptic "\\''${KRYOPTIC}" \
+      --replace-fail "libkryoptic_pkcs11so" libkryoptic_pkcs11.so
   '';
 
   preInstall = ''

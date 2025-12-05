@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   go-swag,
   versionCheckHook,
@@ -14,7 +14,7 @@
 
 let
   pname = "nezha";
-  version = "1.13.0";
+  version = "1.14.9";
 
   frontendName = lib.removePrefix "nezha-theme-";
 
@@ -51,14 +51,14 @@ let
       ++ map mkTemplate withThemes
     );
 in
-buildGo124Module {
+buildGoModule {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "nezha";
     tag = "v${version}";
-    hash = "sha256-lZN9ZH70AzDCtvFnr2dxjXSKhGd/+HvN9hCydlOYpKU=";
+    hash = "sha256-q4LxqoelZ0Haz8rArINOPvopQQKGnkqIMZ2INo/2C3c=";
   };
 
   proxyVendor = true;
@@ -96,7 +96,7 @@ buildGo124Module {
     GOROOT=''${GOROOT-$(go env GOROOT)} swag init --pd -d . -g ./cmd/dashboard/main.go -o ./cmd/dashboard/docs --parseGoList=false
   '';
 
-  vendorHash = "sha256-Pj5HfrwIuWt3Uwt2Y9Tz96B2kL7Svq5rzU1hKf/RZ4s=";
+  vendorHash = "sha256-Q+ur9hIG0xVJHdi79K5e4sV8xuR45qp195ptEDbHAvc=";
 
   ldflags = [
     "-s"

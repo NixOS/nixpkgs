@@ -12,17 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "innernet";
-  version = "1.6.1";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "tonarino";
     repo = "innernet";
     tag = "v${version}";
-    hash = "sha256-dFMAzLvPO5xAfJqUXdiLf13uh5H5ay+CI9aop7Fhprk=";
+    hash = "sha256-wGxTdoWMHVUldW+bjli+5zqo3PRU/8tn7fxAeVrynjs=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-gTFvxmnh+d1pNqG0sEHFpl0m9KKCQ78sai//iiJ0aGs=";
+  cargoHash = "sha256-vDPs+EEl/ZbKxOrNHc86N7+5ij+4YmsZRo5/Sxja6ms=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook

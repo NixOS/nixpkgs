@@ -72,7 +72,7 @@ buildNpmPackage rec {
 
   src = fetchFromGitHub {
     owner = "mrxdst";
-    repo = pname;
+    repo = "webtorrent-mpv-hook";
     rev = "v${version}";
     hash = "sha256-qFeQBVPZZFKkxz1fhK3+ah3TPDovklhhQwtv09TiSqo=";
   };

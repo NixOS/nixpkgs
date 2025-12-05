@@ -4,21 +4,18 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pynordpool";
-  version = "0.3.0";
+  version = "0.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "gjohansson-ST";
     repo = "pynordpool";
     tag = "v${version}";
-    hash = "sha256-K9rZ7PJhmG7PiNGpnAgC3tX6ZygQdQoae5DnboNgMcs=";
+    hash = "sha256-3yMVhdfjl2l56WzI+uRMUwFuYafSH3YfabYqKSK25Y4=";
   };
 
   build-system = [ poetry-core ];

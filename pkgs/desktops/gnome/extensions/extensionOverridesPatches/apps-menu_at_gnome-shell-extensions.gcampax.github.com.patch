@@ -9,7 +9,7 @@ index c608441..2b25335 100644
 -import GMenu from 'gi://GMenu';
 +
 +import GIRepository from 'gi://GIRepository';
-+GIRepository.Repository.prepend_search_path('@gmenu_path@');
++GIRepository.Repository.dup_default().prepend_search_path('@gmenu_path@');
 +const {default: GMenu} = await import('gi://GMenu');
 +
  import GObject from 'gi://GObject';

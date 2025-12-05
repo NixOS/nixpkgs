@@ -8,11 +8,11 @@
   fixup-yarn-lock,
   python3,
   npmHooks,
-  cctools,
   sqlite,
   srcOnly,
   buildPackages,
   nixosTests,
+  xcbuild,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.distutils
     npmHooks.npmInstallHook
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
   buildInputs = [ sqlite ];
 
   configurePhase = ''
@@ -78,9 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Build the sqlite3 package.
     npm_config_nodedir="${srcOnly nodejs}" npm_config_node_gyp="${buildPackages.nodejs}/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js" npm rebuild --verbose --sqlite=${sqlite.dev}
+  '';
 
-    # These files seemingly aren't needed, and also might not exist when the Darwin sandbox is disabled?
-    rm -rf node_modules/sqlite3/build-tmp-napi-v6/{Release/obj.target,node_sqlite3.target.mk}
+  postInstall = ''
+    rm -r $out/lib/node_modules/thelounge/node_modules/sqlite3/build/
   '';
 
   dontNpmPrune = true;

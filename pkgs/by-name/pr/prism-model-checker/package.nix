@@ -1,7 +1,7 @@
 {
   lib,
-  #  stdenv,
-  gcc13Stdenv,
+  stdenv,
+  gccStdenv,
   coreutils,
   fetchFromGitHub,
   openjdk,
@@ -13,22 +13,17 @@
 }:
 
 let
-  # The current version of prism does not build with gcc > 13
-  # it should be fixed in the upcoming version of prism.
-  # at that point revert stdenv' to :
-  #
-  # stdenv' = if stdenv.hostPlatform.isDarwin then gccStdenv else stdenv;
-  stdenv' = gcc13Stdenv;
+  stdenv' = if stdenv.hostPlatform.isDarwin then gccStdenv else stdenv;
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "prism-model-checker";
-  version = "4.8.1";
+  version = "4.9";
 
   src = fetchFromGitHub {
     owner = "prismmodelchecker";
     repo = "prism";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-igFRIjPfx0BFpQjaW/vgMEnH2HLC06aL3IMHh+ELB6U=";
+    hash = "sha256-eoyMGrXta49j2h/bStPuzrF6OZd/l2aQBngPbTZEvAo=";
   };
 
   nativeBuildInputs = [

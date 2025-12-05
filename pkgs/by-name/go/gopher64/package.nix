@@ -42,6 +42,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # make the build script use the @GIT_REV@ string that will be substituted in the logic below
     ./set-git-rev.patch
+
+    # enum CicType is not used, but dead code is treated as an error
+    ./allow-unused-type.patch
   ];
 
   postPatch = ''
@@ -50,7 +53,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "@GIT_REV@" $(cat GIT_REV)
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-31kEYwlDA6iYcwPZyQU4gM/VLfPNeYcDKhhBqzNp/QE=";
 
   env.ZSTD_SYS_USE_PKG_CONFIG = true;

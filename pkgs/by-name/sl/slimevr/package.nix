@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   stdenv,
   replaceVars,
   makeWrapper,
@@ -17,30 +16,31 @@
   webkitgtk_4_1,
   gst_all_1,
   libayatana-appindicator,
+  udevCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "slimevr";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "SlimeVR";
     repo = "SlimeVR-Server";
-    rev = "v${version}";
-    hash = "sha256-ZYL+aBrADbzSXnhFzxNk8xRrY0WHmHCtVaC6VfXfLJw=";
+    tag = "v${version}";
+    hash = "sha256-/7SQstUWnQcdzRZjY64PL2gfdstUqXhDmwUkCd6bhY4=";
     # solarxr
     fetchSubmodules = true;
   };
 
   buildAndTestSubdir = "gui/src-tauri";
 
-  cargoHash = "sha256-+WrBVL4/XslJSOwuxs4IzqXG9l1/lMSbKil/8OHc9Xw=";
+  cargoHash = "sha256-E825/tkIGphqSPHplDglQPHxPaz8+ZAICuQ/eYZuez4=";
 
   pnpmDeps = pnpm_9.fetchDeps {
     pname = "${pname}-pnpm-deps";
     inherit version src;
     fetcherVersion = 1;
-    hash = "sha256-lh5IKdBXuH9GZFUTrzaQFDWCEYj0UJhKwCdPmsiwfCs=";
+    hash = "sha256-EeIwEej2WiD2HGbZTgNoJTDL0t9H3mJ3+8qrPvgn8vY=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +50,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     wrapGAppsHook3
     makeWrapper
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -68,7 +69,7 @@ rustPlatform.buildRustPackage rec {
   patches = [
     # Upstream code uses Git to find the program version.
     (replaceVars ./gui-no-git.patch {
-      version = src.rev;
+      version = src.tag;
     })
     # By default, SlimeVR will give a big warning about our `JAVA_TOOL_OPTIONS` changes.
     ./no-java-tool-options-warning.patch
@@ -85,17 +86,6 @@ rustPlatform.buildRustPackage rec {
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
     substituteInPlace gui/src-tauri/src/tray.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
-
-    # tao < version 0.31 has a GTK crash. Manually apply the fix.
-    pushd $cargoDepsCopy/tao-0.30.*
-    patch -p1 < ${
-      fetchpatch {
-        name = "fix-gtk-crash.patch";
-        url = "https://github.com/tauri-apps/tao/commit/83e35e961f4893790b913ee2efc15ae33fd16fb2.diff";
-        hash = "sha256-FNXWzsg4lO6VbLsqS6NevX8kVj26YtcYdKbbFejq9hM=";
-      }
-    }
-    popd
   '';
 
   # solarxr needs to be installed after compiling its Typescript files. This isn't
@@ -105,11 +95,14 @@ rustPlatform.buildRustPackage rec {
   '';
 
   doCheck = false; # No tests
+  doInstallCheck = true; # Check udev
 
   # Get rid of placeholder slimevr.jar
   postInstall = ''
     rm $out/share/slimevr/slimevr.jar
     rm -d $out/share/slimevr
+
+    install -Dm644 -t $out/lib/udev/rules.d/ gui/src-tauri/69-slimevr-devices.rules
   '';
 
   # `JAVA_HOME`, `JAVA_TOOL_OPTIONS`, and `--launch-from-path` are so the GUI can
@@ -125,6 +118,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     homepage = "https://slimevr.dev";
+    changelog = "https://github.com/SlimeVR/SlimeVR-Server/releases/tag/v${version}";
     description = "App for facilitating full-body tracking in virtual reality";
     longDescription = ''
       App for SlimeVR ecosystem. It orchestrates communication between multiple sensors and integrations, like SteamVR.

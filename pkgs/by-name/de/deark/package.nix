@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "deark";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "jsummers";
     repo = "deark";
     tag = "v${version}";
-    hash = "sha256-dyX41gWZnZ/07Vyxo1x4Y8neGHS5ev+YyBJ0cUH+gKY=";
+    hash = "sha256-EnolN4uSHDm1sIkbwCmZUe70DdHyXP3Si4QwGaMtN0A=";
   };
 
   nativeBuildInputs = [

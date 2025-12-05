@@ -21,14 +21,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gSpeech";
-  version = "0.11.0";
+  version = "0.13.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mothsart";
     repo = "gSpeech";
     rev = version;
-    sha256 = "0z11yxvgi8m2xjmmf56zla91jpmf0a4imwi9qqz6bp51pw4sk8gp";
+    sha256 = "sha256-IR7acxstJXueIrtBqVBqznEG3Avke7m1qfv7058u59g=";
   };
 
   nativeBuildInputs = [

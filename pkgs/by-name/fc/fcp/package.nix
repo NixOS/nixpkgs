@@ -30,7 +30,6 @@ rustPlatform.buildRustPackage rec {
     ./0001-update-Cargo.lock.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-WcbrHAgFTP5OtLI+T0d0BoIxG0MBJzPgjjgCWL2nPus=";
 
   nativeBuildInputs = [ expect ];
@@ -48,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/svetlitski/fcp/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "fcp";
   };
 }

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "PREFIX=${builtins.placeholder "out"}"
+    "PREFIX=${placeholder "out"}"
   ];
 
   postPatch = ''

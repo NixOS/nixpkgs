@@ -67,7 +67,7 @@ in
         ...
       }:
       let
-        mailserverIP = nodes.mailserver.config.networking.primaryIPAddress;
+        mailserverIP = nodes.mailserver.networking.primaryIPAddress;
       in
       {
         services.matrix-synapse = {
@@ -169,45 +169,40 @@ in
       };
 
     # test mail delivery
-    mailserver =
-      args:
-      let
-      in
-      {
-        security.pki.certificateFiles = [
-          mailerCerts.ca.cert
-        ];
+    mailserver = args: {
+      security.pki.certificateFiles = [
+        mailerCerts.ca.cert
+      ];
 
-        networking.firewall.enable = false;
+      networking.firewall.enable = false;
 
-        services.postfix = {
-          enable = true;
-          hostname = "${mailerDomain}";
+      services.postfix = {
+        enable = true;
+        enableSubmission = true;
+
+        # blackhole transport
+        transport = "example.com discard:silently";
+
+        settings.main = {
+          myhostname = "${mailerDomain}";
           # open relay for subnet
-          networksStyle = "subnet";
-          enableSubmission = true;
-          tlsTrustedAuthorities = "${mailerCerts.ca.cert}";
+          mynetworks_style = "subnet";
+          debug_peer_level = "10";
+          smtpd_relay_restrictions = [
+            "permit_mynetworks"
+            "reject_unauth_destination"
+          ];
 
-          # blackhole transport
-          transport = "example.com discard:silently";
-
-          config = {
-            debug_peer_level = "10";
-            smtpd_relay_restrictions = [
-              "permit_mynetworks"
-              "reject_unauth_destination"
-            ];
-
-            # disable obsolete protocols, something old versions of twisted are still using
-            smtpd_tls_protocols = "TLSv1.3, TLSv1.2, !TLSv1.1, !TLSv1, !SSLv2, !SSLv3";
-            smtpd_tls_mandatory_protocols = "TLSv1.3, TLSv1.2, !TLSv1.1, !TLSv1, !SSLv2, !SSLv3";
-            smtpd_tls_chain_files = [
-              "${mailerCerts.${mailerDomain}.key}"
-              "${mailerCerts.${mailerDomain}.cert}"
-            ];
-          };
+          # disable obsolete protocols, something old versions of twisted are still using
+          smtpd_tls_protocols = "TLSv1.3, TLSv1.2, !TLSv1.1, !TLSv1, !SSLv2, !SSLv3";
+          smtpd_tls_mandatory_protocols = "TLSv1.3, TLSv1.2, !TLSv1.1, !TLSv1, !SSLv2, !SSLv3";
+          smtpd_tls_chain_files = [
+            "${mailerCerts.${mailerDomain}.key}"
+            "${mailerCerts.${mailerDomain}.cert}"
+          ];
         };
       };
+    };
 
     serversqlite = args: {
       services.matrix-synapse = {

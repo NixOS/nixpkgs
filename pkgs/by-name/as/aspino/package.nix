@@ -10,13 +10,13 @@
 let
   glucose' = fetchurl {
     url = "http://www.labri.fr/perso/lsimon/downloads/softwares/glucose-syrup.tgz";
-    sha256 = "0bq5l2jabhdfhng002qfk0mcj4pfi1v5853x3c7igwfrgx0jmfld";
+    hash = "sha256-jboqQX/Z8RcPG30UVHaI7hLJKpgOCwCeha7BpaSgBS8=";
   };
 in
 
 stdenv.mkDerivation {
   pname = "aspino";
-  version = "unstable-2018-03-24";
+  version = "0-unstable-2018-03-24";
 
   src = fetchFromGitHub {
     owner = "alviano";
@@ -51,11 +51,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "SAT/PseudoBoolean/MaxSat/ASP solver using glucose";
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
-    license = licenses.asl20;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
     homepage = "https://alviano.net/software/maxino/";
   };
 }

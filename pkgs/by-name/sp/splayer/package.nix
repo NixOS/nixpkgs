@@ -12,22 +12,22 @@
 }:
 stdenv.mkDerivation (final: {
   pname = "splayer";
-  version = "3.0.0-beta.1";
+  version = "3.0.0-beta.5";
 
   src = fetchFromGitHub {
     owner = "imsyy";
     repo = "SPlayer";
     tag = "v${final.version}";
     fetchSubmodules = false;
-    hash = "sha256-Sw5L474gowpOVkIc3CHWVEzknMgJvBmtNXRCxzwY8BA=";
+    hash = "sha256-glYq0rHEV2xWoKznpMIU6klUxk1lXYOq4TBRuyTQgOM=";
   };
 
   pnpm = pnpm_10;
 
   pnpmDeps = final.pnpm.fetchDeps {
     inherit (final) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-mC1iJtkZpTd2Vte5DLI3ntZ7vSO5Gka2qOk7ihQd3Gs=";
+    fetcherVersion = 2;
+    hash = "sha256-ZyQcuZYwfc0a5PgfYgvp2GdfV3cBf5sb8oxJtI4+kp4=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation (final: {
 
     npm exec electron-builder -- \
         --dir \
-        --config electron-builder.yml \
+        --config electron-builder.config.ts \
         -c.electronDist=${electron.dist} \
         -c.electronVersion=${electron.version}
 
@@ -96,7 +96,7 @@ stdenv.mkDerivation (final: {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
     description = "Simple Netease Cloud Music player";

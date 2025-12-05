@@ -1,14 +1,16 @@
 import platform
 import re
 import subprocess
+from argparse import Namespace
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
 from typing import Any, ClassVar, Self, TypedDict, override
 
 from .process import Remote, run_wrapper
+from .utils import Args
 
-type ImageVariants = list[str]
+type ImageVariants = dict[str, str]
 
 
 class NixOSRebuildError(Exception):
@@ -77,7 +79,7 @@ def _get_hostname(target_host: Remote | None) -> str | None:
 
 @dataclass(frozen=True)
 class Flake:
-    path: Path | str
+    path: str
     attr: str
     _re: ClassVar = re.compile(r"^(?P<path>[^\#]*)\#?(?P<attr>[^\#\"]*)$")
 
@@ -97,10 +99,7 @@ class Flake:
             f'nixosConfigurations."{attr or _get_hostname(target_host) or "default"}"'
         )
         path = m.group("path")
-        if ":" in path:
-            return cls(path, nixos_attr)
-        else:
-            return cls(Path(path), nixos_attr)
+        return cls(path, nixos_attr)
 
     @classmethod
     def from_arg(cls, flake_arg: Any, target_host: Remote | None) -> Self | None:  # noqa: ANN401
@@ -121,6 +120,12 @@ class Flake:
                 else:
                     return None
 
+    def resolve_path_if_exists(self) -> str:
+        try:
+            return str(Path(self.path).resolve(strict=True))
+        except FileNotFoundError:
+            return self.path
+
 
 @dataclass(frozen=True)
 class Generation:
@@ -138,6 +143,35 @@ class GenerationJson(TypedDict):
     configurationRevision: str
     specialisations: list[str]
     current: bool
+
+
+@dataclass(frozen=True)
+class GroupedNixArgs:
+    build_flags: Args
+    common_flags: Args
+    copy_flags: Args
+    flake_build_flags: Args
+    flake_common_flags: Args
+
+    @classmethod
+    def from_parsed_args_groups(cls, args_groups: dict[str, Namespace]) -> Self:
+        common_flags = vars(args_groups["common_flags"])
+        common_build_flags = common_flags | vars(args_groups["common_build_flags"])
+        build_flags = common_build_flags | vars(args_groups["classic_build_flags"])
+        flake_common_flags = common_flags | vars(args_groups["flake_common_flags"])
+        flake_build_flags = common_build_flags | flake_common_flags
+        copy_flags = common_flags | vars(args_groups["copy_flags"])
+        # --no-build-output -> --no-link
+        if build_flags.get("no_build_output"):
+            flake_build_flags["no_link"] = True
+
+        return cls(
+            build_flags=build_flags,
+            common_flags=common_flags,
+            copy_flags=copy_flags,
+            flake_build_flags=flake_build_flags,
+            flake_common_flags=flake_common_flags,
+        )
 
 
 @dataclass(frozen=True)

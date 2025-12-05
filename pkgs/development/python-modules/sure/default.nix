@@ -42,7 +42,7 @@ buildPythonPackage rec {
     "tests/test_old_api.py" # require nose
   ];
 
-  disabledTests = lib.optionals (isPyPy) [
+  disabledTests = lib.optionals isPyPy [
     # test extension of 'dict' object is broken
     "test_should_compare_dict_with_non_orderable_key_types"
     "test_should_compare_dict_with_enum_keys"

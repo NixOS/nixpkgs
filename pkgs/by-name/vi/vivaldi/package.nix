@@ -66,7 +66,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "7.5.3735.54";
+  version = "7.7.3851.58";
 
   suffix =
     {
@@ -79,8 +79,8 @@ stdenv.mkDerivation rec {
     url = "https://downloads.vivaldi.com/stable/vivaldi-stable_${version}-1_${suffix}.deb";
     hash =
       {
-        aarch64-linux = "sha256-wgvqNeRrwPHmv4DNlo69mCJ+/cNOv2ZwvEnijTZke+s=";
-        x86_64-linux = "sha256-Wey4X3GUN1HnJsrEo0E/Zr7ozZiw8DyVYh2jQ67wFM0=";
+        aarch64-linux = "sha256-WPJB2wMS9F1WqCxZzAnonA5YkqHnnEmW/SJ4qYJImtU=";
+        x86_64-linux = "sha256-w10CX3j7Iq1kthLvklynN17k6A77VIkkRl0QT5ui+Bk=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
@@ -202,7 +202,7 @@ stdenv.mkDerivation rec {
     substituteInPlace "$out"/share/applications/*.desktop \
       --replace-fail vivaldi-stable vivaldi
     local d
-    for d in 16 22 24 32 48 64 128 256; do
+    for d in 16 24 32 48 64 128 256; do
       mkdir -p "$out"/share/icons/hicolor/''${d}x''${d}/apps
       ln -s \
         "$out"/opt/vivaldi/product_logo_''${d}.png \
@@ -233,7 +233,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       marcusramberg
       max06
-      rewine
+      wineee
     ];
     platforms = [
       "x86_64-linux"

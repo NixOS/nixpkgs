@@ -30,14 +30,14 @@ let
       # https://dldir1.qq.com/weixin/mac/mac-release.xml
       any-darwin =
         let
-          version = "4.0.6.25-29387";
+          version = "4.1.5.17-31953";
           version' = lib.replaceString "-" "_" version;
         in
         {
           inherit version;
           src = fetchurl {
             url = "https://dldir1v6.qq.com/weixin/Universal/Mac/xWeChatMac_universal_${version'}.dmg";
-            hash = "sha256-vdeUUJdbIxT8tX5Xo9QIzbWTwRjtSXwrNoImMwt5xkY=";
+            hash = "sha256-eItxPcvlzxwqXG7IxN001aoR+9SqyVOA7y71Sh83jYI=";
           };
         };
     in
@@ -45,17 +45,17 @@ let
       aarch64-darwin = any-darwin;
       x86_64-darwin = any-darwin;
       aarch64-linux = {
-        version = "4.0.1.11";
+        version = "4.1.0.13";
         src = fetchurl {
-          url = "https://web.archive.org/web/20250512112413if_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.AppImage";
-          hash = "sha256-Rg+FWNgOPC02ILUskQqQmlz1qNb9AMdvLcRWv7NQhGk=";
+          url = "https://web.archive.org/web/20251106024910/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.AppImage";
+          hash = "sha256-/d5crM6IGd0k0fSlBSQx4TpIVX/8iib+an0VMkWMNdw=";
         };
       };
       x86_64-linux = {
-        version = "4.0.1.11";
+        version = "4.1.0.13";
         src = fetchurl {
-          url = "https://web.archive.org/web/20250512110825if_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_x86_64.AppImage";
-          hash = "sha256-gBWcNQ1o1AZfNsmu1Vi1Kilqv3YbR+wqOod4XYAeVKo=";
+          url = "https://web.archive.org/web/20251106024907/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_x86_64.AppImage";
+          hash = "sha256-+r5Ebu40GVGG2m2lmCFQ/JkiDsN/u7XEtnLrB98602w=";
         };
       };
     };

@@ -24,6 +24,6 @@ stdenv.mkDerivation {
     license = licenses.gpl3Plus;
 
     platforms = platforms.all;
-    maintainers = [ maintainers.abbradar ];
+    maintainers = [ ];
   };
 }

@@ -42,14 +42,14 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
-  version = "1.13.0";
+  version = "1.13.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = "python-lsp-server";
     tag = "v${version}";
-    hash = "sha256-NIqBIB4IG4xo7zDhaafWvT1RUnkqup1gm9WQhdtpIfc=";
+    hash = "sha256-uW4q/uwEkKASZBPQ994s5+t5Urg7/nZIaIv4hqyIffM=";
   };
 
   pythonRelaxDeps = [
@@ -114,7 +114,6 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ]
   ++ optional-dependencies.all;
-  versionCheckProgram = "${placeholder "out"}/bin/pylsp";
   versionCheckProgramArg = "--version";
 
   disabledTests = [
@@ -123,6 +122,9 @@ buildPythonPackage rec {
 
     # Flaky: ValueError: I/O operation on closed file
     "test_concurrent_ws_requests"
+
+    # AttributeError: 'NoneType' object has no attribute 'plugin_manager'
+    "test_missing_message"
   ];
 
   pythonImportsCheck = [

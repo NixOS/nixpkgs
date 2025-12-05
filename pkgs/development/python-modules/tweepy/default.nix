@@ -43,7 +43,7 @@ buildPythonPackage rec {
     pytestCheckHook
     vcrpy
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "tweepy" ];
 

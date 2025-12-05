@@ -16,7 +16,7 @@
   libosinfo,
   pcre2,
   libxml2,
-  jansson,
+  json_c,
   glib,
   libguestfs-with-appliance,
   cdrkit,
@@ -24,21 +24,23 @@
   withWindowsGuestSupport ? true,
   pkgsCross, # for rsrvany
   virtio-win,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "virt-v2v";
-  version = "2.6.0";
+  version = "2.8.1";
 
   src = fetchurl {
     url = "https://download.libguestfs.org/virt-v2v/${lib.versions.majorMinor finalAttrs.version}-stable/virt-v2v-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-W7t/n1QO9UebyH85abtnSY5i7kH/6h8JIAlFQoD1vkU=";
+    sha256 = "sha256-RJPwtI6GHN+W+Pw8jdEAgQMbR42aGqTYW2rPtAYBPYM=";
   };
 
   postPatch = ''
-    substituteInPlace common/mlv2v/uefi.ml \
-        --replace-fail '/usr/share/OVMF/OVMF_CODE.fd' "${OVMF.firmware}" \
-        --replace-fail '/usr/share/OVMF/OVMF_VARS.fd' "${OVMF.variables}"
+    # TODO: allow guest != host CPU ISA
+    substituteInPlace output/output_qemu.ml \
+        --replace-fail '/usr/share/OVMF' ""${OVMF.fd}/FV/" \
+        --replace-fail '/usr/share/AAVMF' ""${OVMF.fd}/FV/"
 
     patchShebangs .
   '';
@@ -61,10 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   buildInputs = [
+    json_c
     libosinfo
     pcre2
     libxml2
-    jansson
     glib
   ]
   ++ (with ocamlPackages; [
@@ -92,6 +94,12 @@ stdenv.mkDerivation (finalAttrs: {
   PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR = "${placeholder "out"}/share/bash-completion/completions";
 
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/libguestfs/guestfs-tools";
+    rev-prefix = "v";
+    odd-unstable = true;
+  };
 
   meta = {
     homepage = "https://github.com/libguestfs/virt-v2v";

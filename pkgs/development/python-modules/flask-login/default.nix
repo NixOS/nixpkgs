@@ -53,6 +53,6 @@ buildPythonPackage rec {
     description = "User session management for Flask";
     homepage = "https://github.com/maxcountryman/flask-login";
     license = licenses.mit;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

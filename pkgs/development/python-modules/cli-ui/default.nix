@@ -11,7 +11,7 @@
 }:
 buildPythonPackage rec {
   pname = "cli-ui";
-  version = "0.18.0";
+  version = "0.19.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8.1";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "your-tools";
     repo = "python-cli-ui";
     tag = "v${version}";
-    hash = "sha256-kEML+V15bjSMoSf2NFc48A0ADsZ3nagllBpEXesMccc=";
+    hash = "sha256-BLc55LkVQwZ18V/fD/lBYw6jgchE8n0ijDTSr8/Jkdk=";
   };
 
   pythonRelaxDeps = [ "tabulate" ];

@@ -5,51 +5,45 @@
   cython,
   joblib,
   matplotlib,
+  meson-python,
   numpy,
   pandas,
   scikit-learn,
   scipy,
   statsmodels,
   urllib3,
-  pythonOlder,
   python,
-  pytest7CheckHook,
-  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pmdarima";
-  version = "2.0.4";
+  version = "2.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "alkaline-ml";
     repo = "pmdarima";
     tag = "v${version}";
-    hash = "sha256-LHwPgQRB/vP3hBM8nqafoCrN3ZSRIMWLzqTqDOETOEc=";
+    hash = "sha256-NSBmii+2AQidZo8sPARxtLELk5Ec6cHaZddswifFqwQ=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy==" "numpy>=" \
-      --replace-fail "scipy==" "scipy>=" \
-      --replace-fail "statsmodels==" "statsmodels>="
+    patchShebangs build_tools/get_tag.py
   '';
 
   env = {
     GITHUB_REF = "refs/tags/v${version}";
   };
 
-  preBuild = ''
-    python build_tools/get_tag.py
-  '';
-
-  nativeBuildInputs = [ cython ];
-
   build-system = [
-    setuptools
+    cython
+    meson-python
+  ];
+
+  pythonRemoveDeps = [
+    # https://github.com/alkaline-ml/pmdarima/pull/616
+    "setuptools"
   ];
 
   dependencies = [
@@ -70,7 +64,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     matplotlib
-    pytest7CheckHook
+    pytestCheckHook
   ];
 
   disabledTests = [

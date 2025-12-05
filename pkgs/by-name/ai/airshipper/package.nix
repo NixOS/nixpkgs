@@ -68,7 +68,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-MHwyXCAqdBzdJlYzSeUXr6bJdTVHcjJ/kGcuAsZCCW8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-TkeB939zV5VvqICFqJd/7uX+ydXyEQOJ3sYQbHbZhP0=";
 
   buildInputs = [
@@ -113,8 +112,11 @@ rustPlatform.buildRustPackage {
       ];
     in
     ''
-      patchelf --set-rpath "${libPath}" "$out/bin/airshipper"
-      wrapProgram "$out/bin/airshipper" --set VELOREN_PATCHER "${patch}"
+      # We set LD_LIBRARY_PATH instead of using patchelf in order to propagate the libs
+      # to both Airshipper itself as well as the binaries downloaded by Airshipper.
+      wrapProgram "$out/bin/airshipper" \
+        --set VELOREN_PATCHER "${patch}" \
+        --prefix LD_LIBRARY_PATH : "${libPath}"
     '';
 
   doCheck = false;

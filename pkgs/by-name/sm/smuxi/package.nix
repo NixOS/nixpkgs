@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     mono
     stfl
   ]
-  ++ lib.optionals (guiSupport) [
+  ++ lib.optionals guiSupport [
     gtk-sharp-2_0
     # loaded at runtime by GTK#
     gdk-pixbuf

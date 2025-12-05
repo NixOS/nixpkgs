@@ -14,6 +14,8 @@
   apis ? [ "*" ],
   # Whether to enable AWS' custom memory management.
   customMemoryManagement ? true,
+  # Builds in 2+h with 2 cores, and ~10m with a big-parallel builder.
+  requiredSystemFeatures ? [ "big-parallel" ],
 }:
 
 let
@@ -33,13 +35,13 @@ in
 stdenv.mkDerivation rec {
   pname = "aws-sdk-cpp";
   # nixpkgs-update: no auto update
-  version = "1.11.448";
+  version = "1.11.647";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-cpp";
-    rev = version;
-    hash = "sha256-K0UFs7vOeZeQIs3G5L4FfEWXDGTXT9ssr/vQwa1l2lw=";
+    tag = version;
+    hash = "sha256-RJKR0xw3HTNItaLGyYCjibmfK3UBDA4hfAZzQ0xYg9U=";
   };
 
   postPatch = ''
@@ -116,8 +118,7 @@ stdenv.mkDerivation rec {
 
   __darwinAllowLocalNetworking = true;
 
-  # Builds in 2+h with 2 cores, and ~10m with a big-parallel builder.
-  requiredSystemFeatures = [ "big-parallel" ];
+  inherit requiredSystemFeatures;
 
   passthru = {
     tests = {
@@ -160,7 +161,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/aws/aws-sdk-cpp";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
     # building ec2 runs out of memory: cc1plus: out of memory allocating 33554372 bytes after a total of 74424320 bytes
     broken = stdenv.buildPlatform.is32bit && ((builtins.elem "ec2" apis) || (builtins.elem "*" apis));
   };

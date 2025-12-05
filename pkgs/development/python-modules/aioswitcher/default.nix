@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "aioswitcher";
-  version = "6.0.1";
+  version = "6.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "TomerFi";
     repo = "aioswitcher";
     tag = version;
-    hash = "sha256-w1gTLieZkn4iGrswyqRjwMrHX9ZtEMPB2zaKblJFlSw=";
+    hash = "sha256-6wBeAbBiuAZW9kHq/bKC0FMJxkLxM6RZN7RLwbF1ig4=";
   };
 
   __darwinAllowLocalNetworking = true;

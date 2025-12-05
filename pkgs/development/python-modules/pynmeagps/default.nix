@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pynmeagps";
-  version = "1.0.50";
+  version = "1.0.54";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "semuconsulting";
     repo = "pynmeagps";
     tag = "v${version}";
-    hash = "sha256-ApZoltkqbbBVqbVouLNJj80FlQhAJIf2qCiGLgwrZbk=";
+    hash = "sha256-EpEhojwsbvjZnz+V8mQ1H/g2RIfXR8hZPv3XI3OBVOg=";
   };
 
   build-system = [ setuptools ];

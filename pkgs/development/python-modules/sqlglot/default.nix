@@ -13,18 +13,20 @@
   # tests
   pytestCheckHook,
   duckdb,
+  numpy,
+  pandas,
 }:
 
 buildPythonPackage rec {
   pname = "sqlglot";
-  version = "26.16.2";
+  version = "27.28.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "sqlglot";
     owner = "tobymao";
     tag = "v${version}";
-    hash = "sha256-uX72AHr4IC+u5AYkW/3myruVPs5NZ1V3THVg+9GWxpg=";
+    hash = "sha256-DGpxKIlSRwKKXhZGDTTQb8a3iAzy8a7h9/PKHPCuq+g=";
   };
 
   build-system = [
@@ -40,6 +42,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     duckdb
+    numpy
+    pandas
   ];
 
   pythonImportsCheck = [ "sqlglot" ];

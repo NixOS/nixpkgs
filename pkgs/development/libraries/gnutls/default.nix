@@ -59,11 +59,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnutls";
-  version = "3.8.9";
+  version = "3.8.10";
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
-    hash = "sha256-aeET2ALRZwxNWsG5kECx8tXHwF2uxQA4E8BJtRhIIO0=";
+    hash = "sha256-23+rfM55Hncn677yM0MByCHXmlUOxVye8Ja2ELA+trc=";
   };
 
   outputs = [
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   #  - fastopen: no idea; it broke between 3.6.2 and 3.6.3 (3437fdde6 in particular)
   #  - trust-store: default trust store path (/etc/ssl/...) is missing in sandbox (3.5.11)
   #  - psk-file: no idea; it broke between 3.6.3 and 3.6.4
-  #  - ktls: requires tls module loaded into kernel
+  #  - ktls: requires tls module loaded into kernel and ktls-utils which depends on gnutls
   # Change p11-kit test to use pkg-config to find p11-kit
   postPatch = ''
     sed '2iexit 77' -i tests/{pkgconfig,fastopen}.sh
@@ -102,6 +102,13 @@ stdenv.mkDerivation rec {
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     sed '2iexit 77' -i tests/{ktls,ktls_keyupdate}.sh
+    sed '/-DUSE_KTLS/d' -i tests/Makefile.{am,in}
+    sed '/gnutls_ktls/d' -i tests/Makefile.am
+    sed '/ENABLE_KTLS_TRUE/d' -i tests/Makefile.in
+  ''
+  # https://gitlab.com/gnutls/gnutls/-/issues/1721
+  + ''
+    sed '2iexit 77' -i tests/system-override-compress-cert.sh
   '';
 
   preConfigure = "patchShebangs .";

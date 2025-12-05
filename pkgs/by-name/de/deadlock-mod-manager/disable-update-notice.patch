@@ -1,0 +1,20 @@
+diff --git a/apps/desktop/src/app.tsx b/apps/desktop/src/app.tsx
+index 70dcbe5ff5..91ac4deb73 100644
+--- a/apps/desktop/src/app.tsx
++++ b/apps/desktop/src/app.tsx
+@@ -68,14 +68,6 @@
+                     <Outlet />
+                   </Layout>
+                   <GlobalPluginRenderer />
+-                  <UpdateDialog
+-                    downloadProgress={downloadProgress}
+-                    isDownloading={isDownloading}
+-                    onOpenChange={handleDismiss}
+-                    onUpdate={handleUpdate}
+-                    open={showUpdateDialog}
+-                    update={update}
+-                  />
+                   <OnboardingWizard
+                     open={showOnboarding}
+                     onComplete={completeOnboarding}
+

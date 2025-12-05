@@ -1,6 +1,6 @@
 # Maven {#maven}
 
-Maven is a well-known build tool for the Java ecosystem however it has some challenges when integrating into the Nix build system.
+Maven is a well-known build tool for the Java ecosystem; however, it has some challenges when integrating into the Nix build system.
 
 The following provides a list of common patterns with how to package a Maven project (or any JVM language that can export to Maven) as a Nix package.
 
@@ -354,7 +354,7 @@ Some additional files are deleted that would cause the output hash to change pot
 │       │   ├── classworlds-1.1.jar
 ```
 
-If your package uses _SNAPSHOT_ dependencies or _version ranges_; there is a strong likelihood that over-time your output hash will change since the resolved dependencies may change. Hence this method is less recommended then using `buildMaven`.
+If your package uses _SNAPSHOT_ dependencies or _version ranges_; there is a strong likelihood that over time, your output hash will change since the resolved dependencies may change. Hence this method is less recommended than using `buildMaven`.
 
 ### Building a JAR {#building-a-jar}
 
@@ -374,7 +374,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "maven-demo";
   version = "1.0";
 
-  src = builtins.fetchTarball "https://github.com/fzakaria/nixos-maven-example/archive/main.tar.gz";
+  src = fetchTarball "https://github.com/fzakaria/nixos-maven-example/archive/main.tar.gz";
   buildInputs = [ maven ];
 
   buildPhase = ''
@@ -445,7 +445,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "maven-demo";
   version = "1.0";
 
-  src = builtins.fetchTarball "https://github.com/fzakaria/nixos-maven-example/archive/main.tar.gz";
+  src = fetchTarball "https://github.com/fzakaria/nixos-maven-example/archive/main.tar.gz";
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ maven ];
 
@@ -538,7 +538,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "maven-demo";
   version = "1.0";
 
-  src = builtins.fetchTarball "https://github.com/fzakaria/nixos-maven-example/archive/main.tar.gz";
+  src = fetchTarball "https://github.com/fzakaria/nixos-maven-example/archive/main.tar.gz";
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ maven ];
 

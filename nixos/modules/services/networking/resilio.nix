@@ -113,7 +113,7 @@ in
       };
 
       listeningPort = mkOption {
-        type = types.int;
+        type = types.port;
         default = 0;
         example = 44444;
         description = ''
@@ -139,7 +139,7 @@ in
       };
 
       downloadLimit = mkOption {
-        type = types.int;
+        type = types.ints.unsigned;
         default = 0;
         example = 1024;
         description = ''
@@ -148,7 +148,7 @@ in
       };
 
       uploadLimit = mkOption {
-        type = types.int;
+        type = types.ints.unsigned;
         default = 0;
         example = 1024;
         description = ''
@@ -166,7 +166,7 @@ in
       };
 
       httpListenPort = mkOption {
-        type = types.int;
+        type = types.port;
         default = 9000;
         description = ''
           HTTP port to bind on.
@@ -297,7 +297,7 @@ in
 
     users.groups.rslsync.gid = config.ids.gids.rslsync;
 
-    systemd.services.resilio = with pkgs; {
+    systemd.services.resilio = {
       description = "Resilio Sync Service";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];

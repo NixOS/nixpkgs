@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "python-mystrom";
-  version = "2.4.0";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-mystrom";
     tag = version;
-    hash = "sha256-zG1T+wC0GznNwP3fi8GKtY9Csq9hyX0vw+h7ARVPQFQ=";
+    hash = "sha256-G3LbaEF7e61woa1Y3J1OmR0krIfjk2t6nX13lil+4G0=";
   };
 
   build-system = [ poetry-core ];

@@ -19,22 +19,25 @@
   rrtypes ? false,
   zoneStats ? false,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
-
   configFile ? "/etc/nsd/nsd.conf",
 }:
 
 stdenv.mkDerivation rec {
   pname = "nsd";
-  version = "4.11.1";
+  version = "4.12.0";
 
   src = fetchurl {
     url = "https://www.nlnetlabs.nl/downloads/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-aW5QBSAI3k+nqx2BjVt362MkfuovBXURTJWS/5GIphQ=";
+    sha256 = "sha256-+ezCz3m6UFgPLfYpGO/EQAhMW/EQV9tEwZqpZDzUteg=";
   };
 
   prePatch = ''
     substituteInPlace nsd-control-setup.sh.in --replace openssl ${openssl}/bin/openssl
   '';
+
+  nativeBuildInputs = lib.optionals withSystemd [
+    pkg-config
+  ];
 
   buildInputs = [
     libevent
@@ -42,7 +45,6 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withSystemd [
     systemdMinimal
-    pkg-config
   ];
 
   enableParallelBuilding = true;

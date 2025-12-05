@@ -165,7 +165,7 @@ let
 
   llm = buildPythonPackage rec {
     pname = "llm";
-    version = "0.26";
+    version = "0.27.1";
     pyproject = true;
 
     build-system = [ setuptools ];
@@ -176,7 +176,7 @@ let
       owner = "simonw";
       repo = "llm";
       tag = version;
-      hash = "sha256-KTlNajuZrR0kBX3LatepsNM3PfRVsQn+evEfXTu6juE=";
+      hash = "sha256-HWzuPhI+oiCKBeiHK7x9Sc54ZB88Py60FzprMLlZGrY=";
     };
 
     patches = [ ./001-disable-install-uninstall-commands.patch ];
@@ -220,9 +220,23 @@ let
       cp ${llm-echo.src}/llm_echo.py llm_echo.py
     '';
 
-    pytestFlagsArray = [
+    pytestFlags = [
       "-svv"
+    ];
+
+    enabledTestPaths = [
       "tests/"
+    ];
+
+    disabledTests = [
+      # AssertionError: The following responses are mocked but not requested:
+      # - Match POST request on https://api.openai.com/v1/chat/completions
+      # https://github.com/simonw/llm/issues/1292
+      "test_gpt4o_mini_sync_and_async"
+
+      # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr
+      # https://github.com/simonw/llm/issues/1293
+      "test_embed_multi_files_encoding"
     ];
 
     pythonImportsCheck = [ "llm" ];

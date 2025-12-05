@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccache";
-  version = "4.11.3";
+  version = "4.12.2";
 
   src = fetchFromGitHub {
     owner = "ccache";
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
         exit 1
       fi
     '';
-    hash = "sha256-w41e73Zh5HhYhgLPtaaSiJ48BklBNtnK9S859tol5wc=";
+    hash = "sha256-oWzVCrNgYtOeN4+KJmIynT3jiFZfxrsLkoIm0lK3MBo=";
   };
 
   outputs = [
@@ -60,6 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
       objdump = "${binutils.bintools}/bin/${binutils.targetPrefix}objdump";
     })
   ];
+
+  postPatch = ''
+    patchShebangs --build test/fake-compilers
+  '';
 
   strictDeps = true;
 
@@ -158,6 +162,10 @@ stdenv.mkDerivation (finalAttrs: {
               ln -s ${unwrappedCC}/$file $out/$file
             done
           '';
+
+        meta = {
+          inherit (unwrappedCC.meta) mainProgram;
+        };
       };
 
     updateScript = nix-update-script { };

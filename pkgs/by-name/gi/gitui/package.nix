@@ -9,6 +9,7 @@
   cmake,
   xclip,
   nix-update-script,
+  fetchpatch,
 }:
 let
   pname = "gitui";
@@ -24,7 +25,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-jKJ1XnF6S7clyFGN2o3bHnYpC4ckl/lNXscmf6GRLbI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Le/dD8bTd5boz1IeEq4ItJZYC3MRW8uiT/3Zy1yv5L0=";
 
   nativeBuildInputs = [
@@ -38,6 +38,16 @@ rustPlatform.buildRustPackage {
   ++ lib.optional stdenv.hostPlatform.isLinux xclip
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
+  ];
+
+  patches = [
+    # Fixes the build for rust 1.89
+    # Upstream PR: https://github.com/gitui-org/gitui/pull/2663
+    # TOREMOVE for gitui > 0.27.0
+    (fetchpatch {
+      url = "https://github.com/gitui-org/gitui/commit/950e703cab1dd37e3d02e7316ec99cc0dc70513c.patch";
+      sha256 = "sha256-KDgOPLKGuJaF0Nc6rw9FPFmcI07I8Gyp/KNX8x6+2xw=";
+    })
   ];
 
   postPatch = ''

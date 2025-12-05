@@ -10,21 +10,18 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-monitoring";
-  version = "2.27.2";
+  version = "2.28.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_monitoring";
     inherit version;
-    hash = "sha256-0PACBaX5RTDccsO5b2gb4Uq98dYUTa5dK5IrVKkMQ/o=";
+    hash = "sha256-JRdVkJB+A4rdZEtbdElB0iF3Y0KSRjcJWoeZc6fArDc=";
   };
 
   build-system = [ setuptools ];

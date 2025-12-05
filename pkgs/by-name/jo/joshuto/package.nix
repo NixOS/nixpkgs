@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-hfu3Verbrq0to3I5/gX6ZhVr7ewjHNamzvaUcmcUIRU=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-K/++/NdOLSvhxQ8LBS+jnthCRJxScoOjWSp7pmfHVaQ=";
 
   nativeBuildInputs = [ installShellFiles ];
@@ -35,7 +34,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/kamiyaa/joshuto/releases/tag/${src.rev}";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [
-      figsoda
       totoroot
       xrelkd
     ];

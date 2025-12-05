@@ -17,24 +17,25 @@
   # checks
   pytestCheckHook,
   pytest-xdist,
-
-  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "blackjax";
-  version = "1.2.5";
+  version = "1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blackjax-devs";
     repo = "blackjax";
     tag = version;
-    hash = "sha256-2GTjKjLIWFaluTjdWdUF9Iim973y81xv715xspghRZI=";
+    hash = "sha256-ystvPfIsnMFYkC+LNtcRQsI19i/y/905SnPSApM8v4E=";
   };
 
   build-system = [ setuptools-scm ];
 
+  pythonRelaxDeps = [
+    "jaxopt"
+  ];
   dependencies = [
     fastprogress
     jax
@@ -75,11 +76,6 @@ buildPythonPackage rec {
     "test_nuts__without_device"
     "test_nuts__without_jit"
     "test_smc_waste_free__with_jit"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-    # Numerical test (AssertionError)
-    # https://github.com/blackjax-devs/blackjax/issues/668
-    "test_chees_adaptation"
   ];
 
   pythonImportsCheck = [ "blackjax" ];

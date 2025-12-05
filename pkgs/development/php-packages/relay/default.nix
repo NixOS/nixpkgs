@@ -15,36 +15,36 @@
 }:
 
 let
-  version = "0.11.0";
+  version = "0.20.0";
   hashes = {
     "aarch64-darwin" = {
       platform = "darwin-arm64";
       hash = {
-        "8.1" = "sha256-/yaUulwiT+y7WZHPTdOWUgMsOnSwGrzMeVuT5W0XFsY=";
-        "8.2" = "sha256-AFisp5/LsCoVjHQ8VA9d4vUDPutYi26PzsPVton0Gjw=";
-        "8.3" = "dAJKUU5NED6QHFNrgRTLshkdT6ZtlRlcZh10rGQTON0=";
-        "8.4" = "sha256-cx2IcRRfD6PyQzZJaWgS4d5Mf70w0uJAwl9hTkr6cDo=";
-        "8.5" = "8ZfP++7jKcHdm89P+LOQj+ZsXbp2E3b3yuTQx6bOkmE=";
+        "8.1" = "sha256-v+28oH/7Dp7mSsIgC/IQAn3Pp0gZ43vBMHb/1xBhiVY=";
+        "8.2" = "sha256-OXWMn71XCECh5q1kPxKyo7v/dzCT2it7S8NIKbjBli8=";
+        "8.3" = "7mlpqSPI34DTMJe6gw+77aJGOr12CXHHw+kBmy/nBI4=";
+        "8.4" = "sha256-FpkzCsak8RZBOgOT90VA5iLcfp5FOxpaOqWQJoV0HEY=";
+        "8.5" = "bMHjDJf5/prqUjVR6xOTsHl9iFGrBTL6b42KxyogWbQ=";
       };
     };
     "aarch64-linux" = {
       platform = "debian-aarch64+libssl3";
       hash = {
-        "8.1" = "sha256-VYIWr0PyEzP3HHpnLI1X8NC48Oz9VWi1D70y7xT0WMw=";
-        "8.2" = "sha256-wF4BiiSRro0R6OUpintAas6WSFuyWiUSVc4yHjBkFRo=";
-        "8.3" = "sha256-LvIaYShHy4S7McpRX4EoWXpfNSkg2TV587IGbLaeMfg=";
-        "8.4" = "56Yzuu4JWwnKPabxU0stuLjz3N4AHeRuHeLc8OsdfxU=";
-        "8.5" = "lcSpj+VgT0soIzN0NX3S9JDO/gHSugKfRL5C3oLvg2w=";
+        "8.1" = "sha256-Bbm+KURBJbzdyuV2RvnxYnLXLS6VN1osME6ZYCJLBhs=";
+        "8.2" = "sha256-niNBiZYOQVBg8CA/HCHkXdVJKBbbb/64Z1tjVo0m/2M=";
+        "8.3" = "sha256-CcuZ36K6nEFVIrdqHMQ5zp1zDDRXP55VKfqT3vx2+NA=";
+        "8.4" = "rvySgiePXFOctBBJqamBgn2XYQSQzeZAU2i1yCa5/lI=";
+        "8.5" = "4nkaXp2ArpndcG4BlPU7IlBrVrOEb/Tn7hSZ+0Vsm7k=";
       };
     };
     "x86_64-linux" = {
       platform = "debian-x86-64+libssl3";
       hash = {
-        "8.1" = "sha256-0gdkrhG/YSl6tjhrQnpIxC6YQj+NJqte6UNDdPv5YvE=";
-        "8.2" = "sha256-8vQ3Le3ssgb0jTxY2vUmriAHSFJXFlZxcYHcTHFkXDc=";
-        "8.3" = "sha256-VqtIugl5LZgc/VB7lmXewV3SxagD9l2C966W24sz3Qo=";
-        "8.4" = "3LjLX+zSjsCmnSWq2xD6wfnHf1dCY/Dl5CXJ3A8DY6Y=";
-        "8.5" = "TaJQcmxs7baH1pMnSvAoZqPaTiSujFQu1VBTB6h3fA0=";
+        "8.1" = "sha256-1UJMs1lhXMVLbyxQIOIF8S+p9lMMx5WzMwdYUs3eN6U=";
+        "8.2" = "sha256-zg+LSZdm3qIJ6DoRPSGRSEmKkn5uNPErlC5kMUQhxmM=";
+        "8.3" = "sha256-kvE4MavRxqQgkWHjaSBwx87r336pmqEwsIpC9CYwPxI=";
+        "8.4" = "pvYJHfkKvdyIrSrvxezwX2QWQw3kj6nPe/sHlJKys+Q=";
+        "8.5" = "Aw3oQXYjVNaDHl/qffhTmNHLTWi5bTjF1r4SKyu8nC0=";
       };
     };
   };
@@ -90,10 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
       let
         args =
           lib.strings.concatMapStrings
-            (
-              v:
-              " -change ${v.name}" + " ${lib.strings.makeLibraryPath [ v.value ]}/${builtins.baseNameOf v.name}"
-            )
+            (v: " -change ${v.name}" + " ${lib.strings.makeLibraryPath [ v.value ]}/${baseNameOf v.name}")
             (
               with lib.attrsets;
               [

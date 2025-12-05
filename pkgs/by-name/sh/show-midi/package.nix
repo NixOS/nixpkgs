@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "gbevin";
     repo = "ShowMIDI";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-jANrFZqJZZMTGyNa0sIthoQzaDMdLzpGZqHfxNw8hDg=";
     fetchSubmodules = true;
   };

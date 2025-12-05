@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "mednaffe";
     homepage = "https://github.com/AmatCoder/mednaffe";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   boost,
   zlib,
-  botan2,
   libidn,
   lua,
   pcre,
@@ -19,11 +18,14 @@
   autoreconfHook,
   texinfo,
   fetchpatch,
+  callPackage,
 }:
 
 let
   version = "1.1-unstable-2021-05-01";
   perlVersion = lib.getVersion perl;
+
+  botan = callPackage ./botan2.nix { enableForMonotone = true; };
 in
 
 assert perlVersion != "";
@@ -79,7 +81,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost
     zlib
-    botan2
+    botan
     libidn
     lua
     pcre

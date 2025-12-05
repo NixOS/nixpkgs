@@ -1,33 +1,45 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "fx";
-  version = "37.0.1";
+  version = "39.2.0";
 
   src = fetchFromGitHub {
     owner = "antonmedv";
     repo = "fx";
     tag = finalAttrs.version;
-    hash = "sha256-n2Jaw8ffRnMQ89OsV5HhRGkjD3n8p49N2jYyx3SUrjU=";
+    hash = "sha256-sQnawn5My511IsxBMh6r06R2aLKGmF0ndP1alr/Y8vw=";
   };
 
-  vendorHash = "sha256-yVAoswClpf5+1nwLyrLKLYFt9Noh2HRemif1e1nWm7M=";
+  vendorHash = "sha256-C4TqFRECIFzc6TyAJ2yj97t2BVHXBovIV3iIjNhm7ek=";
 
   ldflags = [ "-s" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd fx \
       --bash <($out/bin/fx --comp bash) \
       --fish <($out/bin/fx --comp fish) \
       --zsh <($out/bin/fx --comp zsh)
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   meta = {
     changelog = "https://github.com/antonmedv/fx/releases/tag/${finalAttrs.src.tag}";
@@ -35,6 +47,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/antonmedv/fx";
     license = lib.licenses.mit;
     mainProgram = "fx";
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ phanirithvij ];
   };
 })

@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-AxaJK39QkhTTATKh+lYzS3zxAlIElJUyOaUCi2pjXhQ=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-sXqUbG6GlesC6NtM+xwzopuyswIezr8CLzidCx6fMQk=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -29,7 +28,7 @@ rustPlatform.buildRustPackage rec {
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "star-history";
   };
 }

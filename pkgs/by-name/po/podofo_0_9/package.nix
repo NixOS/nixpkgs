@@ -62,6 +62,9 @@ stdenv.mkDerivation rec {
         -e 's/LIBDIRNAME/CMAKE_INSTALL_LIBDIR/' -e "$failNoMatches"
     sed -ni src/podofo/libpodofo.pc.in \
         -e 's/^libdir=.*/libdir=@CMAKE_INSTALL_LIBDIR@/' -e "$failNoMatches"
+
+    substituteInPlace {src/podofo/,./}CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   meta = {

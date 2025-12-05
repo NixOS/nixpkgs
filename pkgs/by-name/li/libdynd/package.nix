@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "-DDYND_BUILD_BENCHMARKS=OFF"
   ];
 
-  env.NIX_CFLAGS_COMPILE = builtins.toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     # added to fix build with gcc7+
     "-Wno-error=implicit-fallthrough"
     "-Wno-error=nonnull"

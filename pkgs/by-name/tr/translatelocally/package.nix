@@ -38,6 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     echo '#define GIT_REVISION "${rev} ${finalAttrs.version}"' > \
       3rd_party/bergamot-translator/3rd_party/marian-dev/src/common/git_revision.h
+
+    substituteInPlace 3rd_party/bergamot-translator/3rd_party/marian-dev/src/3rd_party/sentencepiece/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+
+    substituteInPlace 3rd_party/bergamot-translator/3rd_party/marian-dev/src/3rd_party/ruy/third_party/cpuinfo/deps/clog/CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 3.1 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   # https://github.com/XapaJIaMnu/translateLocally/blob/81ed8b9/.github/workflows/build.yml#L330

@@ -51,7 +51,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-timeout
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "powerapi" ];
 

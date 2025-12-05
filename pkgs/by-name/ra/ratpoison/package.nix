@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl2Plus;
     mainProgram = "ratpoison";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (libX11.meta) platforms;
   };
 })

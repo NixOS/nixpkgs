@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "wireguard-vanity-keygen";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "axllent";
     repo = "wireguard-vanity-keygen";
     rev = version;
-    hash = "sha256-LibNWnjm52iPwrPKAA5v3krADvHcewKuLe9k5HhJgzg=";
+    hash = "sha256-IF5z0qkVOzcwVQNfem18DTn6KbEjjPspGfneG1ekGJI=";
   };
 
-  vendorHash = "sha256-sHVdR1zuewT9B4UlPrEWU5V9MjgkwPBh/hkSsn2PQKw=";
+  vendorHash = "sha256-dYpkAdOjiXm1REGsUUTRb8de6okdZ9GpKppBnb6oo9g=";
 
   ldflags = [
     "-s"

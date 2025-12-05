@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "SystemdJournal2Gelf";
-  version = "unstable-2023-03-10";
+  version = "0-unstable-2023-03-10";
 
   src = fetchFromGitHub {
     owner = "parse-nl";
@@ -29,7 +29,6 @@ buildGoModule {
     homepage = "https://github.com/parse-nl/SystemdJournal2Gelf";
     license = licenses.bsd2;
     maintainers = with maintainers; [
-      fadenb
       fpletz
     ];
     mainProgram = "SystemdJournal2Gelf";

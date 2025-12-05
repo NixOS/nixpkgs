@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "gollama";
-  version = "v1.34.1";
+  version = "v1.37.5";
 
   src = fetchFromGitHub {
     owner = "sammcj";
     repo = "gollama";
     tag = "v${version}";
-    hash = "sha256-Zysy8UTpUzIb4ekg9tAg5Wj7LRIIw8axENYqK8z2TdY=";
+    hash = "sha256-UBvnWHk/txjz/RCIDmdXW64qPy0K0OkZEv/M24LFg8c=";
   };
 
-  vendorHash = "sha256-7e1wM2FDaQGAIhb0gERy/RgJupra1B52SgTV0EHD570=";
+  vendorHash = "sha256-kHWBFSp9JrlSVVmAcvH1MX6rBMRD7Ka5HTZZXPALciw=";
 
   doCheck = false;
 

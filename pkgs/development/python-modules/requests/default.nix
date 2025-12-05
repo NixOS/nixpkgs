@@ -18,10 +18,10 @@
 
 buildPythonPackage rec {
   pname = "requests";
-  version = "2.32.4";
+  version = "2.32.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   __darwinAllowLocalNetworking = true;
 
@@ -29,14 +29,8 @@ buildPythonPackage rec {
     owner = "psf";
     repo = "requests";
     tag = "v${version}";
-    hash = "sha256-sD9GLCAa3y9L1J+fcd+ZXBtW4jNL40hOesKXORhcjGQ=";
+    hash = "sha256-cEBalMFoYFaGG8M48k+OEBvzLegzrTNP1NxH2ljP6qg=";
   };
-
-  patches = [
-    # https://github.com/psf/requests/issues/6730
-    # https://github.com/psf/requests/pull/6731
-    ./ca-load-regression.patch
-  ];
 
   build-system = [ setuptools ];
 

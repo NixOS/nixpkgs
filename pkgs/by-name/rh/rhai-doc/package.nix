@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-GZq5C8Q95OHKftEkps4Y6X6sAc4pzSfSq3ELUW/kPWI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Lk/vbYxBcK676qusl6mWO38RAkCuiyHwZLcJpcHrdO4=";
 
   meta = with lib; {
@@ -26,7 +25,7 @@ rustPlatform.buildRustPackage rec {
       asl20
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "rhai-doc";
   };
 }

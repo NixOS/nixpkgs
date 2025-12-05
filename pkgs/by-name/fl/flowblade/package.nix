@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flowblade";
-  version = "2.22";
+  version = "2.22.1.1";
 
   src = fetchFromGitHub {
     owner = "jliljebl";
     repo = "flowblade";
     rev = "v${version}";
-    sha256 = "sha256-0puu0S4zONapjXaVBpPG5mH3UidQwre9yCSkjJVhdkc=";
+    sha256 = "sha256-I9sh3FCN8zr5TF449rv/Xs8+Sb1xNWBmFcB7aKW3jVQ=";
   };
 
   buildInputs = [
@@ -57,6 +57,8 @@ stdenv.mkDerivation rec {
     makeWrapper $out/flowblade/flowblade $out/bin/flowblade \
       --set FREI0R_PATH ${frei0r}/lib/frei0r-1 \
       --set LADSPA_PATH ${ladspaPlugins}/lib/ladspa \
+      --set GDK_BACKEND x11 \
+      --set SDL_VIDEODRIVER x11 \
       --prefix PATH : "${lib.makeBinPath [ ffmpeg ]}" \
       ''${gappsWrapperArgs[@]}
 

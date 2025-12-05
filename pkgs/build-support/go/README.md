@@ -13,7 +13,7 @@ If `gopls` is compiled for Go 1.23, it won't work for projects that require Go 1
 
 Go only ever has two supported toolchains. With a new minor release, the second last Go toolchain is automatically end of life, meaning it won't receive security updates anymore.
 
-Based on this, we align on the following policy for toolchain/builder upgrades:
+Based on this, we align on the following policy for toolchain/builder upgrades for the unstable release:
 
 1. Default toolchain (the `go` package) and builder (`buildGoModule`) are upgraded to the latest minor release of Go as soon as it is released.
   As it is a mass rebuild, this package will be made against the `staging` branch.
@@ -39,7 +39,11 @@ Based on this, we align on the following policy for toolchain/builder upgrades:
 
     When an end-of-life toolchain is removed, builders that pin the EOL version (according to 3.) will automatically be bumped to the then oldest pinned builder (e.g. Go 1.22 is EOL, `buildGo122Module` is bumped to `buildGo123Module`).
 
-    If the package won't build with anymore with that builder, the package is marked broken.
+    If the package won't build with that builder anymore, the package is marked broken.
     It is the package maintainers responsibility to fix the package and get it working with a supported Go toolchain.
+
+For the stable release, we recognize that (1) removing a Go version, or updating the `go_latest` or `go` packages to a new Go minor release, would be a breaking change, and (2) some packages will need backports (e.g. for security reasons) that require the latest Go version.
+Therefore, on the stable release, new Go versions will be backported to the `release-2x.xx` branch, but the old versions will remain, and `go`, `buildGoModule`, `go_latest`, and `buildGoLatestModule` will remain unchanged.
+However, `rc` versions should not be backported to the stable branch.
 
 [1]: http://go.dev/doc/go1compat

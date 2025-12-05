@@ -8,22 +8,29 @@
   libjpeg,
   libpng,
   libtiff,
+  libwebp,
+  libjxl,
+  libheif,
+  libultrahdr,
   opencolorio,
   openexr,
+  openjph,
   robin-map,
   unzip,
   fmt,
+  bzip2,
+  ptex,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openimageio";
-  version = "3.0.8.1";
+  version = "3.1.7.0";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenImageIO";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GbjkFij8d5a/pxNYckCs+McMAHh+NiGAaxAaZYjj7jY=";
+    hash = "sha256-7yZez5oXeAghwhi/AFaPjCuwwIsMrPJzc8k/oR4v19Y=";
   };
 
   outputs = [
@@ -41,12 +48,19 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     giflib
+    libheif
     libjpeg
+    libjxl
     libpng
     libtiff
+    libwebp
+    libultrahdr
     opencolorio
     openexr
+    openjph
     robin-map
+    bzip2
+    ptex
   ];
 
   propagatedBuildInputs = [

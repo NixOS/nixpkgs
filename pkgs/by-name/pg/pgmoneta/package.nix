@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pgmoneta";
-  version = "0.17.2";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "pgmoneta";
     repo = "pgmoneta";
     rev = version;
-    hash = "sha256-d0F+gbYZ9qWRvbOXdKRQS0Rkcvsa5zzu2kiqwLiXpxw=";
+    hash = "sha256-qsKjUFCuxKSc7klB/S2N3TG+jqnS4NW0RZC6e9JQXtA=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     homepage = "https://pgmoneta.github.io/";
     changelog = "https://github.com/pgmoneta/pgmoneta/releases/tag/${version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

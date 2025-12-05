@@ -1,6 +1,7 @@
 {
   stdenv,
-  bazel_5,
+  #bazel_5,
+  bazel,
   buildBazelPackage,
   lib,
   fetchFromGitHub,
@@ -111,7 +112,8 @@ let
   # use compatible cuDNN (https://www.tensorflow.org/install/source#gpu)
   # cudaPackages.cudnn led to this:
   # https://github.com/tensorflow/tensorflow/issues/60398
-  cudnnAttribute = "cudnn_8_6";
+  #cudnnAttribute = "cudnn_8_6";
+  cudnnAttribute = "cudnn";
   cudnnMerged = symlinkJoin {
     name = "cudnn-merged";
     paths = [
@@ -284,7 +286,8 @@ let
 
   _bazel-build = buildBazelPackage.override { inherit stdenv; } {
     name = "${pname}-${version}";
-    bazel = bazel_5;
+    #bazel = bazel_5;
+    bazel = bazel;
 
     src = fetchFromGitHub {
       owner = "tensorflow";
@@ -495,7 +498,7 @@ let
       # workaround for https://github.com/bazelbuild/bazel/issues/15359
       "--spawn_strategy=sandboxed"
     ]
-    ++ lib.optionals (mklSupport) [ "--config=mkl" ];
+    ++ lib.optionals mklSupport [ "--config=mkl" ];
 
     bazelTargets = [
       "//tensorflow/tools/pip_package:build_pip_package //tensorflow/tools/lib_package:libtensorflow"
@@ -581,10 +584,14 @@ let
       description = "Computation using data flow graphs for scalable machine learning";
       homepage = "http://tensorflow.org";
       license = lib.licenses.asl20;
-      maintainers = with lib.maintainers; [ abbradar ];
+      maintainers = [ ];
       platforms = with lib.platforms; linux ++ darwin;
       broken =
-        stdenv.hostPlatform.isDarwin
+        # Dependencies are EOL and have been removed; an update
+        # to a newer TensorFlow version will be required to fix the
+        # source build.
+        true
+        || stdenv.hostPlatform.isDarwin
         || !(xlaSupport -> cudaSupport)
         || !(cudaSupport -> builtins.hasAttr cudnnAttribute cudaPackages)
         || !(cudaSupport -> cudaPackages ? cudatoolkit);
@@ -598,7 +605,7 @@ in
 buildPythonPackage {
   __structuredAttrs = true;
   inherit version pname format;
-  disabled = pythonAtLeast "3.12";
+  disabled = pythonAtLeast "3.13";
 
   src = bazel-build.python;
 
@@ -606,7 +613,7 @@ buildPythonPackage {
   # - Drop tensorflow-io dependency until we get it to build
   # - Relax flatbuffers and gast version requirements
   # - The purpose of python3Packages.libclang is not clear at the moment and we don't have it packaged yet
-  # - keras and tensorlow-io-gcs-filesystem will be considered as optional for now.
+  # - keras will be considered as optional for now.
   postPatch = ''
     sed -i setup.py \
       -e '/tensorflow-io-gcs-filesystem/,+1d' \
@@ -614,7 +621,6 @@ buildPythonPackage {
       -e "s/'gast[^']*',/'gast',/" \
       -e "/'libclang[^']*',/d" \
       -e "/'keras[^']*')\?,/d" \
-      -e "/'tensorflow-io-gcs-filesystem[^']*',/d" \
       -e "s/'protobuf[^']*',/'protobuf',/" \
   '';
 

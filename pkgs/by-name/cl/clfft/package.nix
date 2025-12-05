@@ -28,6 +28,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i '/-m64/d;/-m32/d' CMakeLists.txt
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required( VERSION 2.6 )' \
+      'cmake_minimum_required( VERSION 3.5 ) '
   '';
 
   nativeBuildInputs = [ cmake ];

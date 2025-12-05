@@ -26,10 +26,12 @@
       boot.loader.limine.secureBoot.enable = true;
       boot.loader.limine.secureBoot.createAndEnrollKeys = true;
       boot.loader.timeout = 0;
+
+      environment.systemPackages = [ pkgs.mokutil ];
     };
 
   testScript = ''
     machine.start()
-    assert "Secure Boot: enabled (user)" in machine.succeed("bootctl status")
+    assert "SecureBoot enabled" in machine.succeed("mokutil --sb-state")
   '';
 }

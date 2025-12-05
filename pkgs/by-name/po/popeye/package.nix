@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -27,7 +28,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd popeye \
       --bash <($out/bin/popeye completion bash) \
       --fish <($out/bin/popeye completion fish) \
@@ -45,6 +46,6 @@ buildGoModule rec {
     homepage = "https://github.com/derailed/popeye";
     changelog = "https://github.com/derailed/popeye/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.bryanasdev000 ];
+    maintainers = [ ];
   };
 }

@@ -3,51 +3,44 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
-  mock,
   pytestCheckHook,
   requests,
-  pythonOlder,
+  setuptools,
   websocket-client,
 }:
 
 buildPythonPackage rec {
   pname = "waterfurnace";
-  version = "1.1.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sdague";
     repo = "waterfurnace";
     tag = "v${version}";
-    sha256 = "1ba247fw1fvi7zy31zj2wbjq7fajrbxhp139cl9jj67rfvxfv8xf";
+    sha256 = "sha256-lix8dU9PxlsXIzKNFuUJkd80cUYXfTXSnFLu1ULACkE=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'pytest-runner'," ""
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     requests
     websocket-client
   ];
 
   nativeCheckInputs = [
-    mock
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "waterfurnace" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to waterfurnace geothermal systems";
-    mainProgram = "waterfurnace-debug";
+    mainProgram = "waterfurnace";
     homepage = "https://github.com/sdague/waterfurnace";
-    changelog = "https://github.com/sdague/waterfurnace/blob/v${version}/HISTORY.rst";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/sdague/waterfurnace/blob/${src.tag}/HISTORY.rst";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-rss-plugin";
-  version = "1.17.3";
+  version = "1.17.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "Guts";
     repo = "mkdocs-rss-plugin";
     tag = version;
-    hash = "sha256-wgR0uwme7fXNZHx7xdm0HNfXG6qT4qpTJgR2SaXDel4=";
+    hash = "sha256-K+cqBJmTz4WzkeXp3pGQoizfLMuxR17Q33Fc0xc5eWo=";
   };
 
   build-system = [ setuptools ];

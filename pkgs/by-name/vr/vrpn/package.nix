@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vrpn";
-  version = "07.35";
+  version = "07.36";
 
   src = fetchFromGitHub {
     owner = "vrpn";
     repo = "vrpn";
     rev = "version_${version}";
-    hash = "sha256-vvlwhm5XHWD4Nh1hwY427pe36RQaqTDJiEtkCxHeCig=";
+    hash = "sha256-eXmj9Wqm+ytsnypC+MrOLnJg9zlri5y0puavamZqFmY=";
   };
 
   nativeBuildInputs = [

@@ -1,10 +1,11 @@
 { callPackage, fetchurl }:
 
 callPackage ./generic.nix {
-  version = "3.6.3";
-  hash = "sha256-FJuezgVTxzLRz0Jzk2XnSnpO5sTc8q6QgzkCwlqQ+EU=";
+  version = "3.6.5";
+  hash = "sha256-CAMksh7i4mg5zVTYLB/SZWFVmgQBMhPnislLCD9j7+o=";
+
   patches = [
-    # Fixes the build with GCC 14.
+    # Fixes the build with GCC 14 on aarch64.
     #
     # See:
     # * <https://github.com/openwrt/openwrt/pull/15479>

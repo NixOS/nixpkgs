@@ -20,7 +20,7 @@ let
 
   activationScript = ''
     # will be rebuilt automatically
-    rm -fv "$HOME/.cache/ksycoca"*
+    rm -fv "''${XDG_CACHE_HOME:-$HOME/.cache}/ksycoca"*
   '';
 in
 {
@@ -68,13 +68,6 @@ in
   ];
 
   config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = cfg.enable -> !config.services.xserver.desktopManager.plasma5.enable;
-        message = "Cannot enable plasma5 and plasma6 at the same time!";
-      }
-    ];
-
     qt.enable = true;
     programs.xwayland.enable = true;
     environment.systemPackages =
@@ -98,6 +91,7 @@ in
           kio-admin # managing files as admin
           kio-extras # stuff for MTP, AFC, etc
           kio-fuse # fuse interface for KIO
+          knighttime # night mode switching daemon
           kpackage # provides kpackagetool tool
           kservice # provides kbuildsycoca6 tool
           kunifiedpush # provides a background service and a KCM
@@ -173,7 +167,6 @@ in
           spectacle
           ffmpegthumbs
           krdp
-          xwaylandvideobridge # exposes Wayland windows to X11 screen capture
         ]
         ++ lib.optionals config.hardware.sensor.iio.enable [
           # This is required for autorotation in Plasma 6
@@ -190,7 +183,7 @@ in
       ++ lib.optionals config.services.desktopManager.plasma6.enableQt5Integration [
         breeze.qt5
         plasma-integration.qt5
-        pkgs.plasma5Packages.kwayland-integration
+        kwayland-integration
         (
           # Only symlink the KIO plugins, so we don't accidentally pull any services
           # like KCMs or kcookiejar
@@ -274,6 +267,8 @@ in
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
     services.libinput.enable = mkDefault true;
+    services.geoclue2.enable = mkDefault true;
+    services.fwupd.enable = mkDefault true;
 
     # Extra UDEV rules used by Solid
     services.udev.packages = [

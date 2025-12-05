@@ -97,9 +97,9 @@ buildPythonPackage rec {
     pytest-lazy-fixtures
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   disabledTests = [
     "test_moving_window_memcached"

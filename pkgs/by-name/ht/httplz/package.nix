@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-uxEMgSrcxMZD/3GQuH9S/oYtMUPzgMR61ZzLcb65zXU=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-DXSHaiiIRdyrlX4UYPFD3aTAv65k3x/PU2VW047odH0=";
 
   nativeBuildInputs = [
@@ -50,6 +49,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/thecoshman/http";
     changelog = "https://github.com/thecoshman/http/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

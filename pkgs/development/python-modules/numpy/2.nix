@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchPypi,
+  fetchFromGitHub,
   python,
   numpy_2,
   pythonAtLeast,
@@ -19,6 +19,7 @@
 
   # native dependencies
   blas,
+  coreutils,
   lapack,
 
   # Reverse dependency
@@ -59,15 +60,17 @@ let
 in
 buildPythonPackage rec {
   pname = "numpy";
-  version = "2.3.1";
+  version = "2.3.4";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
-  src = fetchPypi {
-    inherit pname version;
-    extension = "tar.gz";
-    hash = "sha256-HsmuIKQibaN0NizKPGLNdT+vL5UUQLDjuY6TwjVEHSs=";
+  src = fetchFromGitHub {
+    owner = "numpy";
+    repo = "numpy";
+    tag = "v${version}";
+    fetchSubmodules = true;
+    hash = "sha256-MfL7UQeSuxJIEQzY/0LIuScyBCilINt8e+zAeUNPmH0=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
@@ -81,6 +84,10 @@ buildPythonPackage rec {
     # remove needless reference to full Python path stored in built wheel
     substituteInPlace numpy/meson.build \
       --replace-fail 'py.full_path()' "'python'"
+
+    # Test_POWER_Features::test_features - FileNotFoundError: [Errno 2] No such file or directory: '/bin/true'
+    substituteInPlace numpy/_core/tests/test_cpu_features.py \
+      --replace-fail '/bin/true' '${lib.getExe' coreutils "true"}'
   '';
 
   build-system = [
@@ -130,9 +137,8 @@ buildPythonPackage rec {
   '';
 
   # https://github.com/numpy/numpy/blob/a277f6210739c11028f281b8495faf7da298dbef/numpy/_pytesttester.py#L180
-  pytestFlagsArray = [
-    "-m"
-    "not\\ slow" # fast test suite
+  disabledTestMarks = [
+    "slow" # fast test suite
   ];
 
   disabledTests = [
@@ -160,6 +166,10 @@ buildPythonPackage rec {
     # AssertionError: (np.int64(0), np.longdouble('9.9999999999999994515e-21'), np.longdouble('3.9696755572509052902e+20'), 'arctanh')
     "test_loss_of_precision"
   ]
+  ++ lib.optionals (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian) [
+    # https://github.com/numpy/numpy/issues/29918
+    "test_sq_cases"
+  ]
   ++ lib.optionals (stdenv.hostPlatform ? gcc.arch) [
     # remove if https://github.com/numpy/numpy/issues/27460 is resolved
     "test_validate_transcendentals"
@@ -177,7 +187,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/numpy/numpy/releases/tag/v${version}";
+    changelog = "https://github.com/numpy/numpy/releases/tag/${src.tag}";
     description = "Scientific tools for Python";
     homepage = "https://numpy.org/";
     license = lib.licenses.bsd3;

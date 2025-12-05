@@ -30,7 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "C library for creating MusicBrainz DiscIDs from audio CDs";
     homepage = "https://musicbrainz.org/doc/libdiscid";
-    maintainers = with maintainers; [ ehmry ];
     license = licenses.lgpl21;
     platforms = platforms.all;
   };

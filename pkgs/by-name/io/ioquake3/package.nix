@@ -127,8 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "ioquake3";
     maintainers = with lib.maintainers; [
-      abbradar
-      drupol
       rvolosatovs
     ];
     platforms = lib.platforms.unix;

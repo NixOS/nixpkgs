@@ -7,7 +7,7 @@
 
 buildGoModule {
   pname = "icebreaker";
-  version = "unstable-2023-08-13";
+  version = "0-unstable-2023-08-13";
 
   src = fetchFromGitHub {
     owner = "jonhoo";
@@ -41,7 +41,7 @@ buildGoModule {
     description = "Web app that allows students to ask real-time, anonymous questions during class";
     homepage = "https://github.com/jonhoo/icebreaker";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "icebreaker";
   };
 }

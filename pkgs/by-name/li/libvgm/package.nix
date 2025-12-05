@@ -38,13 +38,13 @@ assert enableTools -> enableAudio && enableEmulation && enableLibplayer;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libvgm";
-  version = "0-unstable-2025-07-14";
+  version = "0-unstable-2025-11-28";
 
   src = fetchFromGitHub {
     owner = "ValleyBell";
     repo = "libvgm";
-    rev = "7cad78367fa35c3f7b3ae16a296d31063cd3a7e4";
-    hash = "sha256-8Hnr9VeVkrvRe1mwCUBGhSwYYYXxbby+aQU+KBrSyRM=";
+    rev = "1aed079c8c9c3f3f4bc52080690e513db3ebaf25";
+    hash = "sha256-U7QvLKrgGaBLe7GkDsRYi9fXypxTEWx1l1X6QEx9vCQ=";
   };
 
   outputs = [
@@ -106,9 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "More modular rewrite of most components from VGMPlay";
     homepage = "https://github.com/ValleyBell/libvgm";
     license =
-      if
-        (enableEmulation && (withAllEmulators || (lib.lists.any (core: core == "WSWAN_ALL") emulators)))
-      then
+      if (enableEmulation && (withAllEmulators || (lib.lists.elem "WSWAN_ALL" emulators))) then
         lib.licenses.unfree # https://github.com/ValleyBell/libvgm/issues/43
       else
         lib.licenses.gpl2Only;

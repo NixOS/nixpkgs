@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "safecloset";
-  version = "1.4.0";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "safecloset";
     rev = "v${version}";
-    hash = "sha256-1NvBNITb/KmUC2c+vchvyL9yZbK9xj5Es7AXYg0U9mE=";
+    hash = "sha256-ZLAgSD03Qfoz+uGjVJF7vCkV1pUWqw6yG/9+redbQQ8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-VXxDD/2FFg3uQBdKdHsWOeLfOoCTYdaF+OZJVeQC6gE=";
+  cargoHash = "sha256-BSWUWB8OrdmDtU+cGCVp75hakpdd9G3cs9ythDn4nnY=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     xorg.libxcb
@@ -34,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Canop/safecloset";
     changelog = "https://github.com/Canop/safecloset/blob/${src.rev}/CHANGELOG.md";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "safecloset";
   };
 }

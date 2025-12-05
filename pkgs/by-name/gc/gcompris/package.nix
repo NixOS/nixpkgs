@@ -18,11 +18,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Y23pFov1/WKPrwYYRfGI8sOF0tp/ksSwRJE5zmxtoSo=";
   };
 
-  # fix concatenation of absolute paths like
-  # /nix/store/77zcv3vmndif01d4wh1rh0d1dyvyqzpy-gcompris-25.1.1/bin/..//nix/store/77zcv3vmndif01d4wh1rh0d1dyvyqzpy-gcompris-25.1.1/share/gcompris-qt/rcc/core.rcc
   postPatch = ''
+    # fix concatenation of absolute paths like
+    # /nix/store/77zcv3vmndif01d4wh1rh0d1dyvyqzpy-gcompris-25.1.1/bin/..//nix/store/77zcv3vmndif01d4wh1rh0d1dyvyqzpy-gcompris-25.1.1/share/gcompris-qt/rcc/core.rcc
     substituteInPlace src/core/config.h.in  --replace-fail \
       "../@_data_dest_dir@" "../share/gcompris-qt"
+
+    # Fix private Qt6 targets search for Qt 6.10
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "set(QT_COMPONENTS Qml Quick Gui Multimedia Core Svg Network LinguistTools Sensors QuickControls2 QuickTemplates2 Charts Widgets QmlWorkerScript)" \
+      "set(QT_COMPONENTS Qml Quick Gui Multimedia Core Svg Network LinguistTools Sensors QuickControls2 QuickTemplates2 Charts Widgets QmlWorkerScript CorePrivate QuickControls2BasicPrivate WaylandClientPrivate)"
   '';
 
   cmakeFlags = [

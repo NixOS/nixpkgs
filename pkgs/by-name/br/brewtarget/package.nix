@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "brewtarget";
-  version = "4.1.2";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "Brewtarget";
     repo = "brewtarget";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-a22XXxCuJuaGyRPj15JlLErA7ANrCgzy1vqy+IHzxDk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/BEVnAtuwDnJXra9EAMD3LhA/93nFJ5ObCSgSy3CJnk=";
     fetchSubmodules = true;
   };
 

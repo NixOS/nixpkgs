@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/mwitmer/guile-xcb";
     description = "XCB bindings for Guile";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ vyp ];
+    maintainers = [ ];
     platforms = guile.meta.platforms;
   };
 }

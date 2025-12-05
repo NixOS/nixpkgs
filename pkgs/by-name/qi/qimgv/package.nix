@@ -10,13 +10,13 @@
   opencv4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qimgv";
   version = "1.0.3-unstable-2024-10-11";
 
   src = fetchFromGitHub {
     owner = "easymodo";
-    repo = pname;
+    repo = "qimgv";
     rev = "a4d475fae07847be7c106cb628fb97dad51ab920";
     sha256 = "sha256-iURUJiPe8hbCnpaf6lk8OVSzVqrJKGab889yOic5yLI=";
   };

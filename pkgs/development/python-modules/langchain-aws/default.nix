@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  pdm-backend,
 
   # dependencies
   boto3,
@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-aws";
-  version = "0.2.28";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-aws";
     tag = "langchain-aws==${version}";
-    hash = "sha256-sfdijQxcw0TNK1/IOmHQTHznDIMDTvXqMWBb58cTPlI=";
+    hash = "sha256-Y4r9a7EiyOACcU41+1Lo89jguu1QmijWsNeoNqKF3cY=";
   };
 
   postPatch = ''
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/libs/aws";
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
 
   dependencies = [
     boto3
@@ -69,8 +69,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_aws" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-aws==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-aws==";
+    };
   };
 
   meta = {
@@ -79,7 +83,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/langchain-ai/langchain-aws/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      drupol
       natsukium
       sarahec
     ];

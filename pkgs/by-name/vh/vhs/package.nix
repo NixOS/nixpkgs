@@ -44,6 +44,8 @@ buildGoModule rec {
         ]
       )
     }
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $out/bin/vhs man > vhs.1
     installManPage vhs.1
     installShellCompletion --cmd vhs \
@@ -58,9 +60,6 @@ buildGoModule rec {
     homepage = "https://github.com/charmbracelet/vhs";
     changelog = "https://github.com/charmbracelet/vhs/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      maaslalani
-      penguwin
-    ];
+    maintainers = with lib.maintainers; [ maaslalani ];
   };
 }

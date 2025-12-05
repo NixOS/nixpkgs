@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/rust/userborn";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-oLw/I8PEv75tz+KxbIJrwl8Wr0I/RzDh1SDZ6mRQpL8=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];

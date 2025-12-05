@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     udevCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Device database and the rules file for 'multi-mode' USB devices";
     inherit (usb-modeswitch.meta) license maintainers platforms;
   };

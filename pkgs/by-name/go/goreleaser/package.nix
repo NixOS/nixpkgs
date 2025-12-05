@@ -1,25 +1,25 @@
 {
   stdenv,
   lib,
-  buildGoModule,
+  buildGo125Module,
   fetchFromGitHub,
   installShellFiles,
   buildPackages,
   testers,
   goreleaser,
 }:
-buildGoModule rec {
+buildGo125Module rec {
   pname = "goreleaser";
-  version = "2.11.0";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "goreleaser";
     repo = "goreleaser";
     rev = "v${version}";
-    hash = "sha256-YneVW3oyDGhyliQefpqEsS9VLDGm+/chSxCyDifNrtk=";
+    hash = "sha256-Z0DadF4wiDwykr0NIhL/IbwARwTjMXQDYmQevvjN2W8=";
   };
 
-  vendorHash = "sha256-+6Icafqyig0xm5qZARn1a7Yu7UGi6ejJmzyvOIHsfH0=";
+  vendorHash = "sha256-pDu3ZYQQEhSugOUGD2Xi5mBJRjOWr3AWKS/PPy1MEvs=";
 
   ldflags = [
     "-s"

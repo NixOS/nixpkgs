@@ -14,7 +14,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-+2eXTkn9yOMhvS8cFwAorLBNIPvIRwsPOsGCl3gtRSE=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-SgfgoMqr2Cc7+qhf9Ejl4Ect1JR9RqI9I0b+PrdvdOs=";
 
   env = {
@@ -29,7 +28,7 @@ rustPlatform.buildRustPackage rec {
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "rune";
   };
 }

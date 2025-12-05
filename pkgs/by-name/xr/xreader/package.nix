@@ -11,6 +11,7 @@
   libarchive,
   libxml2,
   xapp,
+  xapp-symbolic-icons,
   meson,
   pkg-config,
   cairo,
@@ -36,13 +37,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xreader";
-  version = "4.2.7";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xreader";
     rev = version;
-    hash = "sha256-APBVrrvLS5CFtfi0UlIDtYyg4pfCS8qLc2a4KDOU1Zk=";
+    hash = "sha256-cp/pZ42AS98AD78BVMeY3SHQHkYA2h4o0kddr/H+kUA=";
   };
 
   nativeBuildInputs = [
@@ -76,6 +77,12 @@ stdenv.mkDerivation rec {
     nodePackages.mathjax
     djvulibre
   ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${lib.makeSearchPath "share" [ xapp-symbolic-icons ]}"
+    )
+  '';
 
   meta = with lib; {
     description = "Document viewer capable of displaying multiple and single page

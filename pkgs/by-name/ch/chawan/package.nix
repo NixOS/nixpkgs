@@ -3,36 +3,25 @@
   stdenv,
   fetchFromSourcehut,
   makeBinaryWrapper,
-  curlMinimal,
-  mandoc,
-  ncurses,
+  openssl,
+  libssh2,
   nim,
-  pandoc,
   pkg-config,
   brotli,
-  zlib,
   gitUpdater,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chawan";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-n0hyAT6XuNJTpjLlYiiDER1xrz8nwT+Q2kSkg28Y8zE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-y1z1MlwbKGpvtgt4OZtfvxvsOSE6RhnsWUeaRvu7etU=";
   };
-
-  patches = [ ./mancha-augment-path.diff ];
-
-  # Include chawan's man pages in mancha's search path
-  postPatch = ''
-    # As we need the $out reference, we can't use `replaceVars` here.
-    substituteInPlace adapter/protocol/man.nim \
-      --replace-fail '@out@' "$out"
-  '';
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optional stdenv.cc.isClang "-Wno-error=implicit-function-declaration"
@@ -41,20 +30,17 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeBinaryWrapper
     nim
-    pandoc
     pkg-config
     brotli
   ];
 
   buildInputs = [
-    curlMinimal
-    ncurses
-    zlib
+    openssl
+    libssh2
   ];
 
   buildFlags = [
     "all"
-    "manpage"
   ];
   installFlags = [
     "DESTDIR=$(out)"
@@ -64,14 +50,18 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall =
     let
       makeWrapperArgs = ''
-        --set MANCHA_CHA $out/bin/cha \
-        --set MANCHA_MAN ${mandoc}/bin/man
+        --set MANCHA_CHA $out/bin/cha
       '';
     in
     ''
-      wrapProgram $out/bin/cha ${makeWrapperArgs}
       wrapProgram $out/bin/mancha ${makeWrapperArgs}
     '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
@@ -79,9 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Lightweight and featureful terminal web browser";
     homepage = "https://sr.ht/~bptato/chawan/";
     changelog = "https://git.sr.ht/~bptato/chawan/refs/v${finalAttrs.version}";
-    license = lib.licenses.publicDomain;
+    license = lib.licenses.unlicense;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "cha";
   };
 })

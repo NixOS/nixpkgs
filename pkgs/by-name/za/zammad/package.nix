@@ -20,7 +20,7 @@
 
 let
   pname = "zammad";
-  version = "6.5.0";
+  version = "6.5.2";
 
   src = applyPatches {
     src = fetchFromGitHub (lib.importJSON ./source.json);
@@ -37,7 +37,7 @@ let
   };
 
   rubyEnv = bundlerEnv {
-    name = "${pname}-gems-${version}";
+    name = "zammad-gems-${version}";
     inherit version;
 
     # Which ruby version to select:
@@ -108,11 +108,12 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     cp -R . $out
     rm -rf $out/config/database.yml $out/config/secrets.yml $out/tmp $out/log
-    # dataDir will be set in the module, and the package gets overriden there
+    # dataDir will be set in the module, and the package gets overridden there
     ln -s ${dataDir}/config/database.yml $out/config/database.yml
     ln -s ${dataDir}/config/secrets.yml $out/config/secrets.yml
-    ln -s ${dataDir}/tmp $out/tmp
     ln -s ${dataDir}/log $out/log
+    ln -s ${dataDir}/storage $out/storage
+    ln -s ${dataDir}/tmp $out/tmp
   '';
 
   passthru = {
@@ -127,15 +128,15 @@ stdenvNoCC.mkDerivation {
     };
   };
 
-  meta = with lib; {
-    description = "Zammad, a web-based, open source user support/ticketing solution";
+  meta = {
+    description = "Web-based, open source user support/ticketing solution";
     homepage = "https://zammad.org";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       taeer
       netali
     ];

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pytibber";
-  version = "0.31.6";
+  version = "0.33.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pyTibber";
     tag = version;
-    hash = "sha256-G5Ljg7t+j17qkqsliH5qwRIIsC8gQuxviaopHGkhquQ=";
+    hash = "sha256-UzPS7EukcnBWfsAANgpmOmWWI9Nv8eKocceVrmlISJg=";
   };
 
   build-system = [ setuptools ];
@@ -38,8 +38,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Tests access network
-  doCheck = false;
+  disabledTestPaths = [
+    # Tests access network
+    "test/test_tibber.py"
+  ];
 
   pythonImportsCheck = [ "tibber" ];
 

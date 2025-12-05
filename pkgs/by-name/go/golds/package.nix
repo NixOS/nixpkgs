@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "golds";
-  version = "0.7.6";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "go101";
     repo = "golds";
     tag = "v${version}";
-    hash = "sha256-j6k68+hiXsXW5WLnmbN/iFLFpyU64z/1+DKuaAnNbac=";
+    hash = "sha256-6jtBwET3JSSh2DQq9MtLn2YokfK9ODYtYrcfI0W8m5I=";
   };
 
   # nixpkgs is not using the go distpack archive and missing a VERSION file in the source
@@ -22,7 +22,7 @@ buildGoModule rec {
   # https://github.com/NixOS/nixpkgs/pull/358316#discussion_r1855322027
   patches = [ ./info_module-gover.patch ];
 
-  vendorHash = "sha256-Sy9O23iCW8voImPFQkqczPxqGyD5rf0/tKxaRDFgbSs=";
+  vendorHash = "sha256-CL9CdLGeMTxXazJUr2+syQYJZXafX6ARzmEOHn7l14I=";
 
   ldflags = [ "-s" ];
 

@@ -20,25 +20,17 @@ let
 
   cfg = config.virtualisation;
 
-  opt = options.virtualisation;
-
   qemu = cfg.qemu.package;
 
   hostPkgs = cfg.host.pkgs;
 
   consoles = lib.concatMapStringsSep " " (c: "console=${c}") cfg.qemu.consoles;
 
-  driveOpts =
+  driveOptions =
     { ... }:
     {
 
       options = {
-
-        file = mkOption {
-          type = types.str;
-          description = "The file image used for this drive.";
-        };
-
         driveExtraOpts = mkOption {
           type = types.attrsOf types.str;
           default = { };
@@ -137,21 +129,27 @@ let
     NIX_DISK_IMAGE=$(readlink -f "''${NIX_DISK_IMAGE:-${toString config.virtualisation.diskImage}}") || test -z "$NIX_DISK_IMAGE"
 
     if test -n "$NIX_DISK_IMAGE" && ! test -e "$NIX_DISK_IMAGE"; then
-        echo "Disk image do not exist, creating the virtualisation disk image..."
+        echo "Disk image does not exist, creating the virtualisation disk image..."
 
         ${
           if (cfg.useBootLoader && cfg.useDefaultFilesystems) then
             ''
               # Create a writable qcow2 image using the systemImage as a backing
               # image.
+              BACKING_SIZE_MB=$(( $(${lib.getExe' qemu "qemu-img"} info ${systemImage}/nixos.qcow2 --output=json | ${lib.getExe hostPkgs.jq} -r '."virtual-size"') / 1024 / 1024 ))
+              DISK_SIZE_MB=${toString cfg.diskSize}
+              if (( DISK_SIZE_MB < BACKING_SIZE_MB )); then
+                OVERLAY_SIZE_MB=$BACKING_SIZE_MB
+              else
+                OVERLAY_SIZE_MB=$DISK_SIZE_MB
+              fi
 
-              # CoW prevent size to be attributed to an image.
-              # FIXME: raise this issue to upstream.
               ${qemu}/bin/qemu-img create \
                 -f qcow2 \
                 -b ${systemImage}/nixos.qcow2 \
                 -F qcow2 \
-                "$NIX_DISK_IMAGE"
+                "$NIX_DISK_IMAGE" \
+                 ''${OVERLAY_SIZE_MB}M
             ''
           else if cfg.useDefaultFilesystems then
             ''
@@ -299,7 +297,9 @@ let
 
     ${lib.pipe cfg.emptyDiskImages [
       (lib.imap0 (
-        idx: size: ''
+        idx:
+        { size, ... }:
+        ''
           test -e "empty${builtins.toString idx}.qcow2" || ${qemu}/bin/qemu-img create -f qcow2 "empty${builtins.toString idx}.qcow2" "${builtins.toString size}M"
         ''
       ))
@@ -477,7 +477,21 @@ in
     };
 
     virtualisation.emptyDiskImages = mkOption {
-      type = types.listOf types.ints.positive;
+      type = types.listOf (
+        types.coercedTo types.ints.positive (size: { inherit size; }) (
+          types.submodule {
+            options.size = mkOption {
+              type = types.ints.positive;
+              description = "The size of the disk in MiB";
+            };
+            options.driveConfig = mkOption {
+              type = lib.types.submodule driveOptions;
+              default = { };
+              description = "Drive configuration to pass to {option}`virtualisation.qemu.drives`";
+            };
+          }
+        )
+      );
       default = [ ];
       description = ''
         Additional disk images to provide to the VM. The value is
@@ -829,7 +843,18 @@ in
       };
 
       drives = mkOption {
-        type = types.listOf (types.submodule driveOpts);
+        type = types.listOf (
+          types.submodule {
+            imports = [ driveOptions ];
+
+            options = {
+              file = mkOption {
+                type = types.str;
+                description = "The file image used for this drive.";
+              };
+            };
+          }
+        );
         description = "Drives passed to qemu.";
       };
 
@@ -889,6 +914,23 @@ in
       defaultText = literalExpression "!cfg.useNixStoreImage && !cfg.useBootLoader";
       description = ''
         Mount the host Nix store as a 9p mount.
+      '';
+    };
+
+    virtualisation.nixStore9pCache = mkOption {
+      type = types.enum [
+        "loose"
+        "none"
+        "fscache"
+      ];
+      default = "loose";
+      description = ''
+        Type of 9p cache to use when mounting host nix store. "none" provides
+        no caching. "loose" enables Linux's local VFS cache. "fscache" uses Linux's
+        fscache subsystem.
+
+        This option is only respected when {option}`virtualisation.mountHostNixStore`
+        is enabled.
       '';
     };
 
@@ -1310,10 +1352,16 @@ in
           driveExtraOpts.format = "raw";
         }
       ])
-      (imap0 (idx: _: {
-        file = "$(pwd)/empty${toString idx}.qcow2";
-        driveExtraOpts.werror = "report";
-      }) cfg.emptyDiskImages)
+      (imap0 (
+        idx: imgCfg:
+        lib.mkMerge [
+          {
+            file = "$(pwd)/empty${toString idx}.qcow2";
+            driveExtraOpts.werror = "report";
+          }
+          imgCfg.driveConfig
+        ]
+      ) cfg.emptyDiskImages)
     ];
 
     # By default, use mkVMOverride to enable building test VMs (e.g. via
@@ -1338,7 +1386,7 @@ in
             "msize=${toString cfg.msize}"
             "x-systemd.requires=modprobe@9pnet_virtio.service"
           ]
-          ++ lib.optional (tag == "nix-store") "cache=loose";
+          ++ lib.optional (tag == "nix-store") "cache=${cfg.nixStore9pCache}";
         };
       in
       lib.mkMerge [

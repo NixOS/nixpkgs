@@ -94,6 +94,6 @@ buildNpmPackage rec {
     platforms = electron.meta.platforms;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "lx-music-desktop";
-    maintainers = with lib.maintainers; [ oosquare ];
+    maintainers = [ ];
   };
 }

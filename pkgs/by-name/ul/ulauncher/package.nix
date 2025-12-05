@@ -1,6 +1,7 @@
 {
   lib,
   fetchurl,
+  fetchpatch,
   nix-update-script,
   python3Packages,
   gdk-pixbuf,
@@ -9,7 +10,7 @@
   gobject-introspection,
   gtk3,
   wrapGAppsHook3,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   libnotify,
   keybinder3,
   libappindicator,
@@ -18,6 +19,8 @@
   xvfb-run,
   librsvg,
   libX11,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -35,6 +38,7 @@ python3Packages.buildPythonApplication rec {
     intltool
     wrapGAppsHook3
     gdk-pixbuf
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -45,7 +49,7 @@ python3Packages.buildPythonApplication rec {
     libappindicator
     libnotify
     librsvg
-    webkitgtk_4_0
+    webkitgtk_4_1
     wmctrl
   ];
 
@@ -77,6 +81,11 @@ python3Packages.buildPythonApplication rec {
   patches = [
     ./fix-path.patch
     ./fix-extensions.patch
+    (fetchpatch {
+      name = "support-gir1.2-webkit2-4.1.patch";
+      url = "https://src.fedoraproject.org/rpms/ulauncher/raw/rawhide/f/support-gir1.2-webkit2-4.1.patch";
+      hash = "sha256-w1c+Yf6SA3fyMrMn1LXzCXf5yuynRYpofkkUqZUKLS8=";
+    })
   ];
 
   postPatch = ''
@@ -122,6 +131,16 @@ python3Packages.buildPythonApplication rec {
   passthru = {
     updateScript = nix-update-script { };
   };
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ulauncher";
+      desktopName = "Ulauncher";
+      exec = "ulauncher";
+      categories = [ "Utility" ];
+      icon = "ulauncher";
+    })
+  ];
 
   meta = with lib; {
     description = "Fast application launcher for Linux, written in Python, using GTK";

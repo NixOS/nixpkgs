@@ -4,7 +4,7 @@
 { pkgs, lib, ... }:
 {
   name = "ipv6";
-  meta = with pkgs.lib.maintainers; {
+  meta = {
     maintainers = [ ];
   };
 

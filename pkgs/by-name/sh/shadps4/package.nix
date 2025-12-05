@@ -21,31 +21,34 @@
   pipewire,
   pkg-config,
   pugixml,
-  qt6,
   rapidjson,
   renderdoc,
   robin-map,
   sdl3,
   sndio,
   stb,
+  toml11,
+  util-linux,
   vulkan-headers,
   vulkan-loader,
   vulkan-memory-allocator,
+  xbyak,
   xorg,
   xxHash,
   zlib-ng,
+  zydis,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.10.0";
+  version = "0.12.5";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-0wvxvKw2XHhnXiM5DiiiY+nWPoze0fvNCJeTsKzoCn0=";
+    hash = "sha256-H/GOnArWxMe/90qgyLb9fXbeJabUOV8CjLtpGokoStQ=";
     fetchSubmodules = true;
   };
 
@@ -68,32 +71,29 @@ stdenv.mkDerivation (finalAttrs: {
     libgbm
     pipewire
     pugixml
-    qt6.qtbase
-    qt6.qtdeclarative
-    qt6.qtmultimedia
-    qt6.qttools
-    qt6.qtwayland
     rapidjson
     renderdoc
     robin-map
     sdl3
     sndio
     stb
+    toml11
+    util-linux
     vulkan-headers
     vulkan-loader
     vulkan-memory-allocator
+    xbyak
     xxHash
     zlib-ng
+    zydis
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    qt6.wrapQtAppsHook
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_QT_GUI" true)
     (lib.cmakeBool "ENABLE_UPDATER" false)
   ];
 

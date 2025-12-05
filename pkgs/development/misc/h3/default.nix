@@ -36,7 +36,8 @@ let
         (lib.cmakeBool "ENABLE_FORMAT" false)
         (lib.cmakeBool "ENABLE_LINTING" false)
         (lib.cmakeBool "BUILD_FILTERS" withFilters)
-      ];
+      ]
+      ++ (lib.optionals (lib.versionOlder version "4.0.0") [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ]);
 
       meta = {
         homepage = "https://h3geo.org/";
@@ -55,7 +56,7 @@ in
   };
 
   h3_4 = generic {
-    version = "4.2.0";
-    hash = "sha256-SzuxoYjsXCLhlAhQS7JoKvH8C3vquXttf58d4LnkeVM=";
+    version = "4.3.0";
+    hash = "sha256-DUILKZ1QvML6qg+WdOxir6zRsgTvk+En6yjeFf6MQBg=";
   };
 }

@@ -7,25 +7,31 @@
   ninja,
   pkg-config,
   vala,
-  gtk3,
+  gtk4,
   glib,
-  granite,
-  libgee,
-  libhandy,
-  libcanberra-gtk3,
-  wrapGAppsHook3,
+  granite7,
+  libadwaita,
+  libcanberra,
+  wayland-scanner,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-notifications";
-  version = "8.1.0";
+  version = "8.1.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "notifications";
-    rev = version;
-    sha256 = "sha256-2+LV3O2V42gI+ysVoeO9KpLqmAj/Zk5F8LzO2RNZ1ZY=";
+    tag = version;
+    hash = "sha256-qod76RSsCO9NvjnYTLRW6P1UyR1K6Uu9fEjU2WgHUWk=";
   };
+
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     glib # for glib-compile-schemas
@@ -33,16 +39,16 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook3
+    wayland-scanner
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     glib
-    granite
-    gtk3
-    libcanberra-gtk3
-    libgee
-    libhandy
+    granite7
+    gtk4
+    libadwaita
+    libcanberra
   ];
 
   passthru = {

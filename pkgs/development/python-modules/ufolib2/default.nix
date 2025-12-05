@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "ufolib2";
-  version = "0.17.1";
+  version = "0.18.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "fonttools";
     repo = "ufoLib2";
     tag = "v${version}";
-    hash = "sha256-pVwQOVtUUDphBZIUoiIf19DdZ+t7uS32Ery8+e2ZLlE=";
+    hash = "sha256-YFGgPpiEurPaTUFaSMsVBKS4Ob+vPyZhputfRE39wtg=";
   };
 
   build-system = [ setuptools-scm ];
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "ufoLib2" ];
 

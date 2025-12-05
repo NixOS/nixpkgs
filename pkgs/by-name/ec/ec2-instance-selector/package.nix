@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "ec2-instance-selector";
-  version = "3.1.1";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-ec2-instance-selector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4J66/LiFFeUW20du2clqjz9ozLV+Sn2VVqF9VISXpb0=";
+    hash = "sha256-8tSZkh2ngOgfwup2nCiNXHFX2GhIVVW9PtLuGNP5yoo=";
   };
 
-  vendorHash = "sha256-ocysHrbkmFQ96dEVJvc5YuuBiaXToAcMUUPFiLpMCpU=";
+  vendorHash = "sha256-qrxYLnj8DEGNtIq6sC7xvNBLgguG/lj9YLqgLFumQtE=";
 
   ldflags = [
     "-s"
@@ -41,7 +41,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Recommends instance types based on resource criteria like vcpus and memory";
     homepage = "https://github.com/aws/amazon-ec2-instance-selector";
-    changelog = "https://github.com/aws/amazon-ec2-instance-selector/tags/v${finalAttrs.version}";
+    changelog = "https://github.com/aws/amazon-ec2-instance-selector/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ wcarlsen ];
     mainProgram = "ec2-instance-selector";

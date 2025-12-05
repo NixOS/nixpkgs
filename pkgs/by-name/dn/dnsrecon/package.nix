@@ -6,21 +6,29 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dnsrecon";
-  version = "1.4.0";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "darkoperator";
     repo = "dnsrecon";
     tag = version;
-    hash = "sha256-uBb19JNlbevwqFSNzLzUmmDw063Hl7RPbu453tYZ3Gc=";
+    hash = "sha256-RX7A/vF19wTcvm+kP4ynarzGY+pUIj84zQJIM3tO/2M=";
   };
+
+  pythonRelaxDeps = true;
 
   build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
     dnspython
     loguru
+    httpx
+    fastapi
+    uvicorn
+    slowapi
+    stamina
+    ujson
     lxml
     netaddr
     requests

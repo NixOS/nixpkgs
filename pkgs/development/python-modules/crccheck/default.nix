@@ -2,32 +2,36 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy3k,
   unittestCheckHook,
+  setuptools,
+  setuptools-scm,
 }:
 
-let
+buildPythonPackage rec {
   pname = "crccheck";
-  version = "1.3.0";
-in
-buildPythonPackage {
-  inherit pname version;
-  format = "setuptools";
-
-  disabled = !isPy3k;
+  version = "1.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MartinScharrer";
     repo = "crccheck";
     tag = "v${version}";
-    hash = "sha256-nujt3RWupvCtk7gORejtSwqqVjW9VwztOVGXBHW9T+k=";
+    hash = "sha256-hT+8+moni7turn5MK719b4Xy336htyWWmoMnhgxKkYo=";
   };
 
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
   nativeCheckInputs = [ unittestCheckHook ];
+
+  pythonImportsCheck = [ "crccheck" ];
 
   meta = with lib; {
     description = "Python library for CRCs and checksums";
     homepage = "https://github.com/MartinScharrer/crccheck";
+    changelog = "https://github.com/MartinScharrer/crccheck/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = [ ];
     platforms = platforms.linux;

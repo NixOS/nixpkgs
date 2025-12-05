@@ -1,6 +1,7 @@
 {
   lib,
   clangStdenv,
+  callPackage,
   fetchFromGitHub,
 }:
 
@@ -21,23 +22,23 @@ let
 in
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "julec";
-  version = "0.1.5";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "julelang";
     repo = "jule";
     tag = "jule${finalAttrs.version}";
     name = "jule-${finalAttrs.version}";
-    hash = "sha256-gFlca9XdRNv2CI3jfMiWejcmGGzabP0VGs4vlvFs72o=";
+    hash = "sha256-7py8QrNMX8LwpI7LCp5XgRFUzgltFP1rTbuzqw/1D8o=";
   };
 
   irSrc = fetchFromGitHub {
     owner = "julelang";
     repo = "julec-ir";
     # revision determined by the upstream commit hash in julec-ir/README.md
-    rev = "4a3bf4fc84b53aa607855df6635d95d3e310f7ad";
+    rev = "81ddbed06a715428a90d3645f7242fa4e522ea16";
     name = "jule-ir-${finalAttrs.version}";
-    hash = "sha256-Wl5AYRGYcQpj/R9nynxNC5r1HK1EmImwkLokdZfp9sE=";
+    hash = "sha256-Az9RDrwRY2kuMgL/Lf/x6YctfySr96/imWZeOa+J/rM=";
   };
 
   dontConfigure = true;
@@ -65,13 +66,21 @@ clangStdenv.mkDerivation (finalAttrs: {
       -Wno-everything \
       -fwrapv \
       -ffloat-store \
+      -fno-fast-math \
+      -fno-rounding-math \
+      -ffp-contract=fast \
+      -fexcess-precision=standard \
       -DNDEBUG \
       -fomit-frame-pointer \
       -fno-strict-aliasing \
       -o "bin/${finalAttrs.meta.mainProgram}-bootstrap"
 
     echo "Building ${finalAttrs.meta.mainProgram} v${finalAttrs.version} for ${clangStdenv.hostPlatform.system}..."
-    bin/${finalAttrs.meta.mainProgram}-bootstrap --opt L2 -p -o "bin/${finalAttrs.meta.mainProgram}" "src/${finalAttrs.meta.mainProgram}"
+    bin/${finalAttrs.meta.mainProgram}-bootstrap build \
+      -p \
+      --opt L2 \
+      -o "bin/${finalAttrs.meta.mainProgram}" \
+      "src/${finalAttrs.meta.mainProgram}"
 
     runHook postBuild
   '';
@@ -88,6 +97,12 @@ clangStdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    # see doc/hooks/julec.section.md
+    hook = callPackage ./hook.nix { julec = finalAttrs.finalPackage; };
+    tests.hello-jule = callPackage ./test { julec = finalAttrs.finalPackage; };
+  };
 
   meta = {
     description = "Jule Programming Language Compiler";

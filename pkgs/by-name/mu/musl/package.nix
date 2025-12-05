@@ -1,11 +1,17 @@
 {
   stdenv,
+  stdenvNoLibc,
   lib,
   fetchurl,
   linuxHeaders ? null,
   useBSDCompatHeaders ? true,
 }:
 let
+  stdenv' = if stdenv.hostPlatform != stdenv.buildPlatform then stdenvNoLibc else stdenv;
+in
+let
+  stdenv = stdenv';
+
   cdefs_h = fetchurl {
     name = "sys-cdefs.h";
     url = "https://git.alpinelinux.org/aports/plain/main/libc-dev/sys-cdefs.h?id=7ca0ed62d4c0d713d9c7dd5b9a077fba78bce578";
@@ -88,6 +94,10 @@ stdenv.mkDerivation rec {
       url = "https://www.openwall.com/lists/musl/2025/02/13/1/2";
       hash = "sha256-BiD87k6KTlLr4ep14rUdIZfr2iQkicBYaSTq+p6WBqE=";
     })
+    # required for systemd user namespacing and oomd to work correctly on musl
+    # drop next release
+    # https://git.musl-libc.org/cgit/musl/commit/?id=fde29c04adbab9d5b081bf6717b5458188647f1c
+    ./stdio-skip-empty-iovec-when-buffering-is-disabled.patch
   ];
   CFLAGS = [
     "-fstack-protector-strong"
@@ -183,6 +193,7 @@ stdenv.mkDerivation rec {
       "mips64-linux"
       "mips64el-linux"
       "mipsel-linux"
+      "powerpc-linux"
       "powerpc64-linux"
       "powerpc64le-linux"
       "riscv32-linux"

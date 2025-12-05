@@ -1,37 +1,39 @@
 {
+  lib,
   buildPythonPackage,
   coapthon3,
   fetchFromGitHub,
-  isPy27,
-  lib,
   pycryptodomex,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "py-air-control";
-  version = "2.1.0";
-  format = "setuptools";
-  disabled = isPy27;
+  version = "2.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rgerganov";
     repo = "py-air-control";
-    rev = "v${version}";
-    sha256 = "0mkggl5hwmj90djxbbz4svim6iv7xl8k324cb4rlc75p5rgcdwmh";
+    tag = "v${version}";
+    hash = "sha256-3Qk1cmF31vJhUEckjfbYM9IDgD+gVkZtQlXel8iP/b8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pycryptodomex
     coapthon3
   ];
 
   # tests sometimes hang forever on tear-down
   doCheck = false;
+
   pythonImportsCheck = [ "pyairctrl" ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
     description = "Command Line App for Controlling Philips Air Purifiers";
+    homepage = "https://github.com/rgerganov/py-air-control";
     license = licenses.mit;
     maintainers = with maintainers; [ urbas ];
   };

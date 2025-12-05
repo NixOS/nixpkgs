@@ -1,29 +1,31 @@
 {
-  lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  testers,
-  tbls,
+  lib,
+  stdenv,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
   pname = "tbls";
-  version = "1.86.1";
+  version = "1.91.4";
 
   src = fetchFromGitHub {
     owner = "k1LoW";
     repo = "tbls";
     tag = "v${version}";
-    hash = "sha256-v7tZTg2tTL21YLCrdk6O8rw1/czsq7JTcpMpBHwrnyk=";
+    hash = "sha256-h1FDCC6+KYkrtJoGuBnoVnLgumb3kk720XXm+Pd0koE=";
   };
 
-  vendorHash = "sha256-9IvnIFOlLdqmntisNomO5K6PU8gw7CSuEb46zG5ox2A=";
+  vendorHash = "sha256-3Y3GsVMImo0oCigAyQ2SPOucllrfkD9oj9o3ESk47eA=";
 
   excludedPackages = [ "scripts/jsonschema" ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    versionCheckHook
+  ];
 
   ldflags = [
     "-s"
@@ -46,11 +48,9 @@ buildGoModule rec {
       --zsh <($out/bin/tbls completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = tbls;
-    command = "tbls version";
-    inherit version;
-  };
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "version";
 
   meta = {
     description = "Tool to generate documentation based on a database structure";

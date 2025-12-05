@@ -1,12 +1,10 @@
 {
   lib,
   stdenv,
-  addDriverRunpath,
   cudaPackages,
   buildPythonPackage,
   fetchurl,
   python,
-  pythonOlder,
   autoPatchelfHook,
   filelock,
   lit,
@@ -15,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "triton";
-  version = "3.3.1";
+  version = "3.5.1";
   format = "wheel";
 
   src =
@@ -65,6 +63,9 @@ buildPythonPackage rec {
       mit
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ junjihashimoto ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      junjihashimoto
+    ];
   };
 }

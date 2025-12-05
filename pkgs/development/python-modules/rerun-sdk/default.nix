@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  pkgs,
   buildPythonPackage,
   rerun,
   python,
@@ -18,7 +19,9 @@
   typing-extensions,
 
   # tests
+  datafusion,
   pytestCheckHook,
+  tomli,
   torch,
 }:
 
@@ -34,9 +37,10 @@ buildPythonPackage {
     ;
 
   nativeBuildInputs = [
+    pkgs.protobuf # for protoc
+    rerun
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
-    rerun
   ];
 
   dependencies = [
@@ -64,25 +68,21 @@ buildPythonPackage {
   pythonImportsCheck = [ "rerun" ];
 
   nativeCheckInputs = [
+    datafusion
     pytestCheckHook
+    tomli
     torch
   ];
 
   inherit (rerun) addDlopenRunpaths addDlopenRunpathsPhase;
   postPhases = lib.optionals stdenv.hostPlatform.isLinux [ "addDlopenRunpathsPhase" ];
 
-  disabledTests = [
-    # numpy 2 incompatibility: AssertionError / IndexError
-    # Issue: https://github.com/rerun-io/rerun/issues/9105
-    # PR: https://github.com/rerun-io/rerun/pull/9109
-    "test_any_value"
-    "test_bad_any_value"
-    "test_none_any_value"
-  ];
-
   disabledTestPaths = [
     # "fixture 'benchmark' not found"
     "tests/python/log_benchmark/test_log_benchmark.py"
+
+    # ValueError: Failed to start Rerun server: Error loading RRD: couldn't decode "/build/source/tests/assets/rrd/dataset/file4.rrd"
+    "rerun_py/tests/e2e_redap_tests"
   ];
 
   meta = {

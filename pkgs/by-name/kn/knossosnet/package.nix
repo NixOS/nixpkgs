@@ -4,6 +4,8 @@
   lib,
   openal,
   dotnetCorePackages,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 buildDotnetModule rec {
@@ -24,6 +26,23 @@ buildDotnetModule rec {
   executables = [ "Knossos.NET" ];
 
   runtimeDeps = [ openal ];
+
+  nativeBuildInputs = [ copyDesktopItems ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "knossos";
+      exec = "Knossos.NET";
+      icon = "knossos";
+      desktopName = "Knossos.NET";
+      comment = "Multi-platform launcher for Freespace 2 Open";
+      categories = [ "Game" ];
+    })
+  ];
+
+  postInstall = ''
+    install -Dm644 $src/packaging/linux/knossos-512.png $out/share/icons/hicolor/512x512/apps/knossos.png
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/KnossosNET/Knossos.NET";

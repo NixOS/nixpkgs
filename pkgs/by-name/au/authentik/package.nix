@@ -5,23 +5,23 @@
   cacert,
   fetchFromGitHub,
   buildGoModule,
-  runCommand,
   bash,
   chromedriver,
-  openapi-generator-cli,
-  nodejs,
+  nodejs_24,
   python312,
   makeWrapper,
 }:
 
 let
-  version = "2025.6.4";
+  nodejs = nodejs_24;
+
+  version = "2025.10.1";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
-    rev = "version/${version}";
-    hash = "sha256-bs/ThY3YixwBObahcS7BrOWj0gsaUXI664ldUQlJul8=";
+    tag = "version/${version}";
+    hash = "sha256-HowB6DTGCqz770fKYbnE+rQ11XRV0WSNkLD+HSWZwz8=";
   };
 
   meta = {
@@ -48,10 +48,10 @@ let
 
     outputHash =
       {
-        "aarch64-linux" = "sha256-+UObt/FhHkEzZUR24ND6phSDqvuzaOuUiyoW0dolsiY=";
-        "x86_64-linux" = "sha256-1qlJf4mVYM5znF3Ifi7CpGMfinUsb/YoXGeM6QLYMis=";
+        "aarch64-linux" = "sha256-aXXlzTsZp5mOrsxy9oHNzcc+1cFSnbC9RmtawBohmLI=";
+        "x86_64-linux" = "sha256-Hi0HXzwTLuer0v4IKF3aim0tVe7AVLi67DiMimrIq5s=";
       }
-      .${stdenvNoCC.hostPlatform.system} or (throw "authentik-website-deps: unsupported hust platform");
+      .${stdenvNoCC.hostPlatform.system} or (throw "authentik-website-deps: unsupported host platform");
 
     outputHashMode = "recursive";
 
@@ -66,10 +66,15 @@ let
       rm -r ./cache node_modules/.package-lock.json
     '';
 
+    # dependencies of workspace projects are installed into separate node_modules folders with
+    # symlinks between them, so we have to copy all of them
     installPhase = ''
-      mv node_modules $out
+      mkdir $out
+      echo "Copying node_modules folders:"
+      find -type d -name node_modules -prune -print -exec mkdir -p $out/{} \; -exec cp -rT {} $out/{} \;
     '';
 
+    dontCheckForBrokenSymlinks = true;
     dontPatchShebangs = true;
   };
 
@@ -79,56 +84,29 @@ let
 
     nativeBuildInputs = [ nodejs ];
 
-    postPatch = ''
-      substituteInPlace package.json --replace-fail 'cross-env ' ""
-      substituteInPlace ../packages/docusaurus-config/lib/common.js \
-        --replace-fail 'title: "authentik",' 'title: "authentik", future: { experimental_faster : { rspackBundler: false }},'
-    '';
-
     sourceRoot = "${src.name}/website";
 
     buildPhase = ''
       runHook preBuild
 
-      cp -r ${website-deps} node_modules
+      buildRoot=$PWD
+      pushd ${website-deps}
+      find -type d -name node_modules -prune -print -exec cp -rT {} $buildRoot/{} \;
+      popd
+
       chmod -R +w node_modules
 
       pushd node_modules/.bin
-      patchShebangs $(readlink docusaurus)
+      patchShebangs $(readlink docusaurus) $(readlink run-s)
       popd
-      npm run build:schema
       npm run build:api
-      npm run build:docusaurus
 
       runHook postBuild
     '';
 
     installPhase = ''
       mkdir $out
-      cp -r build $out/help
-    '';
-  };
-
-  clientapi = stdenvNoCC.mkDerivation {
-    pname = "authentik-client-api";
-    inherit version src meta;
-
-    postPatch = ''
-      rm Makefile
-
-      substituteInPlace ./scripts/api-ts-config.yaml \
-        --replace-fail '/local' "$(pwd)/"
-    '';
-
-    nativeBuildInputs = [ openapi-generator-cli ];
-    buildPhase = ''
-      runHook preBuild
-      openapi-generator-cli generate -i ./schema.yml \
-      -g typescript-fetch -o $out \
-      -c ./scripts/api-ts-config.yaml \
-        --additional-properties=npmVersion="$(${lib.getExe' nodejs "npm"} --version)" \
-        --git-repo-id authentik --git-user-id goauthentik
-      runHook postBuild
+      cp -r api/build $out/help
     '';
   };
 
@@ -141,10 +119,10 @@ let
 
     outputHash =
       {
-        "aarch64-linux" = "sha256-e4v7f3+/e++CI9xa9G2/47y8Dga+vluyUtBXGyaWFcI=";
-        "x86_64-linux" = "sha256-m0vYUevOz6pof8XqiZHXzgPhkQLUUFOdblmfOjHJUJc=";
+        "aarch64-linux" = "sha256-t/jyzG3ibTW3fu8Gl1tWkSjMG6Lek/7JDccDrZX6sD0=";
+        "x86_64-linux" = "sha256-8I1YAKvgWjM3p9O1mCetZvhZelrfB31w0ZwkZBUEoh4=";
       }
-      .${stdenvNoCC.hostPlatform.system} or (throw "authentik-webui-deps: unsupported hust platform");
+      .${stdenvNoCC.hostPlatform.system} or (throw "authentik-webui-deps: unsupported host platform");
     outputHashMode = "recursive";
 
     nativeBuildInputs = [
@@ -152,52 +130,35 @@ let
       cacert
     ];
 
-    postPatch = ''
-      substituteInPlace packages/core/version/node.js \
-        --replace-fail 'import PackageJSON from "../../../../package.json" with { type: "json" };' "" \
-        --replace-fail '(PackageJSON.version);' '"${version}";'
-    '';
-
     buildPhase = ''
-      npm ci --cache ./cache
-
-      rm -r node_modules/chromedriver node_modules/.bin/chromedriver
+      npm ci --cache ./cache --ignore-scripts
 
       rm -r ./cache node_modules/.package-lock.json
-      rm node_modules/@goauthentik/{core,web-sfe,esbuild-plugin-live-reload}
-      cp -r packages/core node_modules/@goauthentik/
-      cp -r packages/sfe node_modules/@goauthentik/web-sfe
     '';
 
+    # dependencies of workspace projects are installed into separate node_modules folders with
+    # symlinks between them, so we have to copy all of them
     installPhase = ''
-      mv node_modules $out
+      mkdir $out
+      echo "Copying node_modules folders:"
+      find -type d -name node_modules -prune -print -exec mkdir -p $out/{} \; -exec cp -rT {} $out/{} \;
     '';
 
+    dontCheckForBrokenSymlinks = true;
     dontPatchShebangs = true;
   };
 
   webui = stdenvNoCC.mkDerivation {
     pname = "authentik-webui";
-    inherit version meta;
+    inherit src version meta;
 
-    src = runCommand "authentik-webui-source" { } ''
-      mkdir $out
-      cp -r ${src}/web $out/
-      ln -s ${src}/package.json $out/
-      chmod -R +w $out/web
-      ln -s ${src}/website $out/web/
-      cp -r ${webui-deps} $out/web/node_modules
-      chmod -R +w $out/web/node_modules
-      ln -s ${clientapi} $out/web/node_modules/@goauthentik/api
-    '';
+    sourceRoot = "${src.name}/web";
 
     nativeBuildInputs = [
       nodejs
     ];
 
     postPatch = ''
-      cd web
-
       substituteInPlace packages/core/version/node.js \
         --replace-fail 'import PackageJSON from "../../../../package.json" with { type: "json" };' "" \
         --replace-fail '(PackageJSON.version);' '"${version}";'
@@ -205,6 +166,11 @@ let
 
     buildPhase = ''
       runHook preBuild
+
+      buildRoot=$PWD
+      pushd ${webui-deps}
+      find -type d -name node_modules -prune -print -exec cp -rT {} $buildRoot/{} \;
+      popd
 
       pushd node_modules/.bin
       patchShebangs $(readlink rollup)
@@ -239,13 +205,73 @@ let
   python = python312.override {
     self = python;
     packageOverrides = final: prev: {
-      # https://github.com/goauthentik/authentik/pull/14709
-      django = final.django_5_1;
+      # https://github.com/goauthentik/authentik/pull/16324
+      django = final.django_5_2;
+
+      django-channels-postgres = final.buildPythonPackage {
+        pname = "django-channels-postgres";
+        inherit version src meta;
+        pyproject = true;
+
+        sourceRoot = "${src.name}/packages/django-channels-postgres";
+
+        build-system = with final; [ hatchling ];
+
+        propagatedBuildInputs =
+          with final;
+          [
+            channels
+            django
+            django-pgtrigger
+            msgpack
+            psycopg
+            structlog
+          ]
+          ++ psycopg.optional-dependencies.pool;
+      };
+
+      django-dramatiq-postgres = final.buildPythonPackage {
+        pname = "django-dramatiq-postgres";
+        inherit version src meta;
+        pyproject = true;
+
+        sourceRoot = "${src.name}/packages/django-dramatiq-postgres";
+
+        build-system = with final; [ hatchling ];
+
+        propagatedBuildInputs =
+          with final;
+          [
+            cron-converter
+            django
+            django-pglock
+            django-pgtrigger
+            dramatiq
+            structlog
+            tenacity
+          ]
+          ++ dramatiq.optional-dependencies.watch;
+      };
+
+      django-postgres-cache = final.buildPythonPackage {
+        pname = "django-postgres-cache";
+        inherit version src meta;
+        pyproject = true;
+
+        sourceRoot = "${src.name}/packages/django-postgres-cache";
+
+        build-system = with final; [ hatchling ];
+
+        propagatedBuildInputs = with final; [
+          django
+          django-postgres-extra
+        ];
+      };
 
       # Running authentik currently requires a custom version.
       # Look in `pyproject.toml` for changes to the rev in the `[tool.uv.sources]` section.
       # See https://github.com/goauthentik/authentik/pull/14057 for latest version bump.
-      djangorestframework = prev.buildPythonPackage {
+      djangorestframework = final.buildPythonPackage {
         pname = "djangorestframework";
         version = "3.16.0";
         format = "setuptools";
@@ -285,18 +311,20 @@ let
         pythonImportsCheck = [ "rest_framework" ];
       };
 
-      tenant-schemas-celery = prev.tenant-schemas-celery.overrideAttrs (_: rec {
-        version = "3.0.0";
+      # authentik is currently not compatible with v1.18 and fails with the following error:
+      # > AttributeError: 'Namespace' object has no attribute 'worker_fork_timeout'. Did you mean: 'worker_shutdown_timeout'?
+      dramatiq = prev.dramatiq.overrideAttrs (_: rec {
+        version = "1.17.1";
 
         src = fetchFromGitHub {
-          owner = "maciej-gol";
-          repo = "tenant-schemas-celery";
-          tag = version;
-          hash = "sha256-rGLrP8rE9SACMDVpNeBU85U/Sb2lNhsgEgHJhAsdKNM=";
+          owner = "Bogdanp";
+          repo = "dramatiq";
+          tag = "v${version}";
+          hash = "sha256-NeUGhG+H6r+JGd2qnJxRUbQ61G7n+3tsuDugTin3iJ4=";
         };
       });
 
-      authentik-django = prev.buildPythonPackage {
+      authentik-django = final.buildPythonPackage {
         pname = "authentik-django";
         inherit version src meta;
         pyproject = true;
@@ -308,8 +336,6 @@ let
           substituteInPlace authentik/lib/default.yml \
             --replace-fail '/blueprints' "$out/blueprints" \
             --replace-fail './media' '/var/lib/authentik/media'
-          substituteInPlace pyproject.toml \
-            --replace-fail 'djangorestframework-guardian' 'djangorestframework-guardian2'
           substituteInPlace authentik/stages/email/utils.py \
             --replace-fail 'web/' '${webui}/'
         '';
@@ -327,32 +353,34 @@ let
           with final;
           [
             argon2-cffi
-            celery
             channels
-            channels-redis
             cryptography
             dacite
             deepmerge
             defusedxml
             django
+            django-channels-postgres
             django-countries
             django-cte
+            django-dramatiq-postgres
             django-filter
             django-guardian
             django-model-utils
             django-pglock
+            django-pgtrigger
+            django-postgres-cache
+            django-postgres-extra
             django-prometheus
-            django-redis
             django-storages
             django-tenants
+            djangoql
             djangorestframework
-            djangorestframework-guardian2
+            djangorestframework-guardian
             docker
             drf-orjson-renderer
             drf-spectacular
             duo-client
             fido2
-            flower
             geoip2
             geopy
             google-api-python-client
@@ -381,7 +409,6 @@ let
             setproctitle
             structlog
             swagger-spec-validator
-            tenant-schemas-celery
             twilio
             ua-parser
             unidecode
@@ -394,7 +421,6 @@ let
             zxcvbn
           ]
           ++ django-storages.optional-dependencies.s3
-          ++ opencontainers.optional-dependencies.reggie
           ++ psycopg.optional-dependencies.c
           ++ psycopg.optional-dependencies.pool
           ++ uvicorn.optional-dependencies.standard;
@@ -429,7 +455,7 @@ let
 
     env.CGO_ENABLED = 0;
 
-    vendorHash = "sha256-7oX7e7Ni5I6zblEQIeXjYOt4+QNSjH4Rpn7B5Cr5LMc=";
+    vendorHash = "sha256-m2shrCwoVdbtr8B83ZcAyG+J6dEys2xdjtlfFFF4CDo=";
 
     postInstall = ''
       mv $out/bin/server $out/bin/authentik

@@ -1,14 +1,11 @@
 {
   lib,
   fetchgit,
-  fetchFromGitHub,
   rustPlatform,
   pkgconf,
   openssl,
   fuse3,
-  libuuid,
   acl,
-  libxcrypt,
   installShellFiles,
   sphinx,
   stdenv,
@@ -17,50 +14,41 @@
 
 let
   pname = "proxmox-backup-client";
-  version = "3.4.2";
+  version = "4.0.14";
 
   proxmox-backup_src = fetchgit {
     url = "git://git.proxmox.com/git/proxmox-backup.git";
-    rev = "37f1949335cad801f7cdaa0173cc114590a37e4e";
+    rev = "8b1b5f8e4d8216a0c45146b426dbfaff01ac0068";
     name = "proxmox-backup";
-    hash = "sha256-OW6GG/4IcEw8XOSSB5EoN+jyoOaL0ZtavJahnKOuAqI=";
+    hash = "sha256-aLiGJcCsHI4QFfMwgmQsXWabRyQ829itNsIDcaVW4FA=";
   };
 
   proxmox_src = fetchgit {
     url = "git://git.proxmox.com/git/proxmox.git";
-    rev = "e47fdf411be61b15382bc3baa3064f1e7cb03fa2";
+    rev = "56c4deb6309c41ff5afa5765b112be967c653857";
     name = "proxmox";
-    hash = "sha256-jSU00D75sx40VS8rgF+D6h120FMaD1Jfq4e8l+8D5BQ=";
+    hash = "sha256-mkGvfWWis1W8xBLb8Da/uIauPEMKPosPdZ+UcgMrvkk=";
   };
 
   proxmox-fuse_src = fetchgit {
     url = "git://git.proxmox.com/git/proxmox-fuse.git";
-    rev = "6faec3a52fcdb0df3ca13fee2977683824d62d01"; # 0.1.7-1
+    rev = "87dbf9bfef9169286263bccffaae3206635ca108"; # 1.0.0
     name = "proxmox-fuse";
-    hash = "sha256-FwkZ5L7gJr9xZTQkdVHmOP8vnzf+To5Wz2SbIEzGUOY=";
+    hash = "sha256-/8Xy6LTql3gHfHuxT0lK5mhLGc58YAb1W+eyusmEP8Y=";
   };
 
   proxmox-pxar_src = fetchgit {
     url = "git://git.proxmox.com/git/pxar.git";
-    rev = "410f326a08ef6c08141af5c7431beb2e16f0c666"; # 0.12.1
+    rev = "993c66fcb8819770f279cb9fb4d13f58f367606c"; # 1.0.0
     name = "pxar";
-    hash = "sha256-USvtrWTbP3VUiy9MB9Ym6s4wXBNZ4Ooyg4MRDwRVOtU=";
+    hash = "sha256-V5DkTIyPuopSILQoJt04E5G9ZEylQF1x5oXgWQJuDq8=";
   };
 
   proxmox-pathpatterns_src = fetchgit {
     url = "git://git.proxmox.com/git/pathpatterns.git";
-    rev = "5f625aacbd6f81d97a1c6f5476fb38769d069f26"; # 0.3.0
+    rev = "42e5e96e30297da878a4d4b3a7fa52b65c1be0ab"; # 1.0.0
     name = "pathpatterns";
-    hash = "sha256-717XSlvQdvP0Q516fEx04rsrLCk3QI8frTD5NMmkSr4=";
-  };
-
-  # needs a patched version
-  h2_src = fetchFromGitHub {
-    name = "h2";
-    owner = "hyperium";
-    repo = "h2";
-    rev = "v0.4.10";
-    hash = "sha256-PasHCbU466ByHIbDQpMMgzjg2dMRveOButHeVSknSEQ=";
+    hash = "sha256-U8EhTg/2iuArQvUNGNYrgVYn1T/jnxxqSKJxfsCMAjs=";
   };
 in
 
@@ -73,7 +61,6 @@ rustPlatform.buildRustPackage {
     proxmox-fuse_src
     proxmox-pxar_src
     proxmox-pathpatterns_src
-    h2_src
   ];
 
   sourceRoot = proxmox-backup_src.name;
@@ -85,32 +72,19 @@ rustPlatform.buildRustPackage {
     # Debian packages). This patch redirects all these dependencies to a local, relative path, which
     # works in combination with the other three repos being checked out.
     ./0001-cargo-re-route-dependencies-not-available-on-crates..patch
-    # `make docs` assumes that the binaries are located under `target/{debug,release}`, but due
-    # to how `buildRustPackage` works, they get put under `target/$RUSTC_TARGET/{debug,release}`.
-    # This patch simply fixes that up.
-    ./0002-docs-add-target-path-fixup-variable.patch
-    # Need to use a patched version of the `h2` crate (with a downgraded dependency, see also postPatch).
-    # This overrides it in the Cargo.toml as needed.
-    ./0003-cargo-use-local-patched-h2-dependency.patch
     # This patch prevents the generation of the man-pages for other components inside the repo,
     # which would require them too be built too. Thus avoid wasting resources and just skip them.
-    ./0004-docs-drop-all-but-client-man-pages.patch
-    # Upstream uses a patched version of the h2 crate (see [0]), which does not apply here.
-    # [0] https://git.proxmox.com/?p=debcargo-conf.git;a=blob;f=src/h2/debian/patches/add-legacy.patch;h=0913da317
-    ./0005-Revert-h2-switch-to-legacy-feature.patch
+    ./0002-docs-drop-all-but-client-man-pages.patch
   ];
 
   postPatch = ''
-    # need to downgrade the `http` crate for `h2`
-    # see https://aur.archlinux.org/cgit/aur.git/tree/0003-cargo-downgrade-http-to-0.2.12.patch?h=proxmox-backup-client
-    cp -r ../h2 .
-    chmod u+w ./h2
-    (cd h2 && sed -i 's/^http = "1"$/http = "0.2.12"/' Cargo.toml)
-
     cp ${./Cargo.lock} Cargo.lock
     rm .cargo/config.toml
 
-    # avoid some unnecessary dependendcies, stemming from greedy linkage by rustc
+    (cd ../pxar && chmod -R u+w . && patch -p1 <${./0003-decoder-fix-autoref-error-in-pointer-to-reference-co.patch})
+    (cd ../proxmox && chmod -R u+w . && patch -p1 <${./0004-pbs-api-types-crypto-fix-autoref-error-in-ptr-to-ref.patch})
+
+    # avoid some unnecessary dependencies, stemming from greedy linkage by rustc
     # see also upstream Makefile for similar workaround
     mkdir -p .dep-stubs
     echo '!<arch>' >.dep-stubs/libsystemd.a
@@ -121,7 +95,7 @@ rustPlatform.buildRustPackage {
   postBuild = ''
     make -C docs \
       DEB_VERSION=${version} DEB_VERSION_UPSTREAM=${version} \
-      RUSTC_TARGET=${stdenv.targetPlatform.rust.rustcTarget} \
+      DEB_HOST_RUST_TYPE=${stdenv.targetPlatform.rust.rustcTarget} \
       BUILD_MODE=release \
       proxmox-backup-client.1 pxar.1
   '';

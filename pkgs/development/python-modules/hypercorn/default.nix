@@ -57,7 +57,7 @@ buildPythonPackage rec {
     pytest-trio
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   __darwinAllowLocalNetworking = true;
 

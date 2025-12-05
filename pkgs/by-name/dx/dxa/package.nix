@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Andre Fachat's open-source 6502 disassembler";
     mainProgram = "dxa";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = with lib.platforms; unix;
   };
 })

@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "wavinsentio";
-  version = "0.5.0";
+  version = "0.5.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YSofEjDehuNlenkAsQzLkX67Um4pkMSeZmVZgNA06vw=";
+    hash = "sha256-Xw21JeQA0OMtyATey+LYmf3tRDcSME1bkQeAK0wFhHU=";
   };
 
   build-system = [ setuptools ];

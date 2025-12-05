@@ -16,16 +16,16 @@
 
 buildNpmPackage rec {
   pname = "teams-for-linux";
-  version = "2.1.0";
+  version = "2.6.18";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     tag = "v${version}";
-    hash = "sha256-lISDy721e3bfWMl56DlIxVKN2bW8Yonc5XSVL072OQk=";
+    hash = "sha256-hIFr+lJrM3FaCKQhUBzD8kzKaF1ZouCp+QLa558b35s=";
   };
 
-  npmDepsHash = "sha256-QcjXJcEIi/sUJLUF+wMqhXyLYPgjZKK6n4ngyvrH9NA=";
+  npmDepsHash = "sha256-brru6gsHwu2wS1Qe2AjjMW9QOVYd2HBUzUvSl1EJ87M=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -61,7 +61,8 @@ buildNpmPackage rec {
         -c.npmRebuild=true \
         -c.asarUnpack="**/*.node" \
         -c.electronDist=electron-dist \
-        -c.electronVersion=${electron_37.version}
+        -c.electronVersion=${electron_37.version} \
+        -c.mac.identity=null
 
     runHook postBuild
   '';
@@ -105,7 +106,7 @@ buildNpmPackage rec {
   desktopItems = [
     (makeDesktopItem {
       name = "teams-for-linux";
-      exec = "teams-for-linux";
+      exec = "teams-for-linux %U";
       icon = "teams-for-linux";
       desktopName = "Microsoft Teams for Linux";
       comment = meta.description;
@@ -114,6 +115,7 @@ buildNpmPackage rec {
         "InstantMessaging"
         "Chat"
       ];
+      mimeTypes = [ "x-scheme-handler/msteams" ];
     })
   ];
 
@@ -131,6 +133,7 @@ buildNpmPackage rec {
       qjoly
       chvp
       khaneliman
+      HarisDotParis
     ];
     platforms = with lib.platforms; darwin ++ linux;
   };

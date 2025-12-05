@@ -8,7 +8,7 @@
   llama-cloud,
   llama-index-core,
   platformdirs,
-  poetry-core,
+  hatchling,
   pydantic,
   pytest-asyncio,
   pytestCheckHook,
@@ -17,19 +17,21 @@
 
 buildPythonPackage rec {
   pname = "llama-cloud-services";
-  version = "0.6.51";
+  version = "0.6.79";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "run-llama";
     repo = "llama_cloud_services";
-    tag = "v${version}";
-    hash = "sha256-ImqAvi0y11m8GsxHnLjsrp/X+Es9XQ7ZqyzMKn5J2d8=";
+    tag = "llama-cloud-services-py%40${version}";
+    hash = "sha256-BjwXdv7ekehYGGnKk0ElVlxmGkmtam9RLECgxfM7lYc=";
   };
+
+  sourceRoot = "${src.name}/py";
 
   pythonRelaxDeps = [ "llama-cloud" ];
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     click

@@ -4,23 +4,22 @@
   fetchFromGitHub,
   pkg-config,
   libgit2,
-  openssl,
   zlib,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tui-journal";
-  version = "0.16.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "AmmarAbouZor";
     repo = "tui-journal";
-    rev = "v${version}";
-    hash = "sha256-hZpS0r3ky18XtDj4x8croKAZ+css1NmVy98NUuhtR/s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-crrh7lV5ZMKaxsrFmhXsUgBMbN5nmbf8wQ6croTqUKI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-XsrHNzTiYWqTDV9+soY5oC4UoE5OBC7Ow7qir2dKV/A=";
+  cargoHash = "sha256-PmQDLGOXvI0OJ+gMsYa/XLc0WgSH6++23X/b1+iU3JQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -28,16 +27,19 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libgit2
-    openssl
     zlib
   ];
 
-  meta = with lib; {
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  meta = {
     description = "Your journal app if you live in a terminal";
     homepage = "https://github.com/AmmarAbouZor/tui-journal";
-    changelog = "https://github.com/AmmarAbouZor/tui-journal/blob/${src.rev}/CHANGELOG.ron";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/AmmarAbouZor/tui-journal/blob/${finalAttrs.src.rev}/CHANGELOG.ron";
+    license = lib.licenses.mit;
     mainProgram = "tjournal";
+    maintainers = with lib.maintainers; [ phanirithvij ];
   };
-}
+})

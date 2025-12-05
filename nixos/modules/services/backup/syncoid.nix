@@ -31,39 +31,38 @@ let
   # datasets.
   buildAllowCommand =
     permissions: dataset:
-    (
-      "-+${pkgs.writeShellScript "zfs-allow-${dataset}" ''
-        # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
 
-        # Run a ZFS list on the dataset to check if it exists
-        if ${
-          lib.escapeShellArgs [
-            "/run/booted-system/sw/bin/zfs"
-            "list"
-            dataset
-          ]
-        } 2> /dev/null; then
+    "-+${pkgs.writeShellScript "zfs-allow-${dataset}" ''
+      # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
+
+      # Run a ZFS list on the dataset to check if it exists
+      if ${
+        lib.escapeShellArgs [
+          "/run/booted-system/sw/bin/zfs"
+          "list"
+          dataset
+        ]
+      } 2> /dev/null; then
+        ${lib.escapeShellArgs [
+          "/run/booted-system/sw/bin/zfs"
+          "allow"
+          cfg.user
+          (lib.concatStringsSep "," permissions)
+          dataset
+        ]}
+      ${lib.optionalString ((builtins.dirOf dataset) != ".") ''
+        else
           ${lib.escapeShellArgs [
             "/run/booted-system/sw/bin/zfs"
             "allow"
             cfg.user
             (lib.concatStringsSep "," permissions)
-            dataset
+            # Remove the last part of the path
+            (builtins.dirOf dataset)
           ]}
-        ${lib.optionalString ((builtins.dirOf dataset) != ".") ''
-          else
-            ${lib.escapeShellArgs [
-              "/run/booted-system/sw/bin/zfs"
-              "allow"
-              cfg.user
-              (lib.concatStringsSep "," permissions)
-              # Remove the last part of the path
-              (builtins.dirOf dataset)
-            ]}
-        ''}
-        fi
-      ''}"
-    );
+      ''}
+      fi
+    ''}";
 
   # Function to build "zfs unallow" commands for the filesystems we've
   # delegated permissions to. Here we unallow both the target but also
@@ -73,28 +72,27 @@ let
   # since the dataset should have been created at this point.
   buildUnallowCommand =
     permissions: dataset:
-    (
-      "-+${pkgs.writeShellScript "zfs-unallow-${dataset}" ''
-        # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
-        ${lib.escapeShellArgs [
+
+    "-+${pkgs.writeShellScript "zfs-unallow-${dataset}" ''
+      # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
+      ${lib.escapeShellArgs [
+        "/run/booted-system/sw/bin/zfs"
+        "unallow"
+        cfg.user
+        (lib.concatStringsSep "," permissions)
+        dataset
+      ]}
+      ${lib.optionalString ((builtins.dirOf dataset) != ".") (
+        lib.escapeShellArgs [
           "/run/booted-system/sw/bin/zfs"
           "unallow"
           cfg.user
           (lib.concatStringsSep "," permissions)
-          dataset
-        ]}
-        ${lib.optionalString ((builtins.dirOf dataset) != ".") (
-          lib.escapeShellArgs [
-            "/run/booted-system/sw/bin/zfs"
-            "unallow"
-            cfg.user
-            (lib.concatStringsSep "," permissions)
-            # Remove the last part of the path
-            (builtins.dirOf dataset)
-          ]
-        )}
-      ''}"
-    );
+          # Remove the last part of the path
+          (builtins.dirOf dataset)
+        ]
+      )}
+    ''}";
 in
 {
 

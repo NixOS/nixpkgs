@@ -6,46 +6,43 @@
   rocmUpdateScript,
   pkg-config,
   cmake,
-  ninja,
   xxd,
   rocm-device-libs,
   elfutils,
   libdrm,
   numactl,
-  valgrind,
-  libxml2,
-  rocm-merged-llvm,
+  llvm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-runtime";
-  version = "6.3.3";
+  version = "6.4.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "ROCR-Runtime";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-du20+5VNYgwchGO7W7FIVebBqLPtfSBnmPVbPpgEZjo=";
+    hash = "sha256-zs0nydwYUY+8uiPyJxgTfAiV7spUMbESb0jUUvFf+AU=";
   };
 
-  env.CFLAGS = "-I${numactl.dev}/include -I${elfutils.dev}/include -w";
-  env.CXXFLAGS = "-I${numactl.dev}/include -I${elfutils.dev}/include -w";
+  cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     pkg-config
     cmake
-    ninja
-    xxd
-    rocm-merged-llvm
+    xxd # used by create_hsaco_ascii_file.sh
+    llvm.rocm-toolchain
   ];
 
   buildInputs = [
+    llvm.clang-unwrapped
+    llvm.llvm
     elfutils
     libdrm
     numactl
-    # without valgrind, additional work for "kCodeCopyAligned11" is done in the installPhase
-    valgrind
-    libxml2
   ];
 
   cmakeFlags = [
@@ -56,16 +53,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
+    (fetchpatch {
+      # rocr: Extend HIP ISA compatibility check
+      sha256 = "sha256-8r2Lb5lBfFaZC3knCxfXGcnkzNv6JxOKyJn2rD5gus4=";
+      url = "https://github.com/GZGavinZhao/ROCR-Runtime/commit/7c63e7185d8fcf08537a278908946145f6231121.patch";
+    })
     # Patches for UB at runtime https://github.com/ROCm/ROCR-Runtime/issues/272
     (fetchpatch {
       # [PATCH] hsa-runtime: set underlying type of hsa_region_info_t and hsa_amd_region_info_t to int
       url = "https://github.com/ROCm/ROCR-Runtime/commit/39a6a168fa07e289a10f6e20e6ead4e303e99ba0.patch";
       hash = "sha256-CshJJDvII1nNyNmt+YjwMwfBHUTlrdsxkhwfgBwO+WE=";
-    })
-    (fetchpatch {
-      # [PATCH] rocr: refactor of runtime.cpp based on Coverity
-      url = "https://github.com/ROCm/ROCR-Runtime/commit/441bd9fe6c7bdb5c4c31f71524ed642786bc923e.patch";
-      hash = "sha256-7bQXxGkipzgT2aXRxCuh3Sfmo/zc/IOmA0x1zB+fMb0=";
     })
     (fetchpatch {
       # [PATCH] queues: fix UB due to 1 << 31
@@ -82,6 +79,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/ROCm/ROCR-Runtime/commit/41bfc66aef437a5b349f71105fa4b907cc7e17d5.patch";
       hash = "sha256-A7VhPR3eSsmjq2cTBSjBIz9i//WiNjoXm0EsRKtF+ns=";
     })
+    # This causes a circular dependency, aqlprofile relies on hsa-runtime64
+    # which is part of rocm-runtime
+    # Worked around by having rocprofiler load aqlprofile directly
     ./remove-hsa-aqlprofile-dep.patch
   ];
 
@@ -94,6 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace CMakeLists.txt \
       --replace 'hsa/include/hsa' 'include/hsa'
+
+    substituteInPlace runtime/hsa-runtime/image/blit_src/CMakeLists.txt \
+      --replace-fail 'COMMAND clang' "COMMAND ${llvm.rocm-toolchain}/bin/clang"
 
     export HIP_DEVICE_LIB_PATH="${rocm-device-libs}/amdgcn/bitcode"
   '';

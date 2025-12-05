@@ -18,7 +18,7 @@
         partitions = {
           "nix-store" = {
             storePaths = [ config.system.build.toplevel ];
-            stripNixStorePrefix = true;
+            nixStorePrefix = "/";
             repartConfig = {
               Type = "linux-generic";
               Label = "nix-store";
@@ -89,7 +89,7 @@
         "-f",
         "qcow2",
         "-b",
-        "${nodes.machine.system.build.image}/${nodes.machine.image.repart.imageFile}",
+        "${nodes.machine.system.build.image}/${nodes.machine.image.fileName}",
         "-F",
         "raw",
         tmp_disk_image.name,

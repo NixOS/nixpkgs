@@ -130,7 +130,7 @@ in
     passwordFile = lib.mkOption {
       default =
         if localMpd then
-          (lib.findFirst (c: lib.any (x: x == "read") c.permissions) {
+          (lib.findFirst (c: lib.elem "read" c.permissions) {
             passwordFile = null;
           } mpdCfg.credentials).passwordFile
         else

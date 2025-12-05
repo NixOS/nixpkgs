@@ -82,7 +82,7 @@ buildPythonPackage rec {
   ]
   ++ optional-dependencies.all;
 
-  pytestFlagsArray = [ "-m 'not network'" ];
+  disabledTestMarks = [ "network" ];
 
   disabledTests = [
     # AttributeError (fixes: https://github.com/opendatacube/odc-geo/pull/202)
@@ -111,7 +111,7 @@ buildPythonPackage rec {
       with geospatial metadata and geo-registered `xarray` rasters.
     '';
     homepage = "https://github.com/opendatacube/odc-geo/";
-    changelog = "https://github.com/opendatacube/odc-geo/tag/${src.tag}";
+    changelog = "https://github.com/opendatacube/odc-geo/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ daspk04 ];
   };

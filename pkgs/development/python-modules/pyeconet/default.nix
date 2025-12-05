@@ -4,22 +4,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   paho-mqtt,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyeconet";
-  version = "0.1.28";
+  version = "0.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "w1ll1am23";
     repo = "pyeconet";
     tag = "v${version}";
-    hash = "sha256-xGjQlOiA2SzSuhdD/jUYYtL8EiYj4jaIp85JqcGiaUI=";
+    hash = "sha256-Q0J1UUvifdf1ePFz4G3Tk0bn1TnnWaHQRABgsohHvB0=";
   };
 
   build-system = [ setuptools ];

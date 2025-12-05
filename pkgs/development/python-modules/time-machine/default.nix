@@ -2,25 +2,22 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
-  pythonOlder,
   setuptools,
   python-dateutil,
+  tokenize-rt,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "time-machine";
-  version = "2.16.0";
+  version = "2.19.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = "time-machine";
     tag = version;
-    hash = "sha256-xNoLtgON1dfKAgK0XhSMLHLsUr/nST3lepy15YWDEcE=";
+    hash = "sha256-bPpn+RNlvy/tkFrxDY4Q13fNlNuMFj1+br8M2uU3t9A=";
   };
 
   build-system = [ setuptools ];
@@ -29,9 +26,16 @@ buildPythonPackage rec {
     python-dateutil
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  optional-dependencies.cli = [
+    tokenize-rt
+  ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.9") [
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ optional-dependencies.cli;
+
+  disabledTests = [
     # https://github.com/adamchainz/time-machine/issues/405
     "test_destination_string_naive"
     # Assertion Errors related to Africa/Addis_Ababa

@@ -20,7 +20,7 @@
   vulkan-loader,
   wayland,
   zenity,
-  libsForQt5,
+  kdePackages,
   cairo,
   pango,
   atkmm,
@@ -28,21 +28,21 @@
   dbus-glib,
   gtk3,
   glib,
+  rclone,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ludusavi";
-  version = "0.29.1";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "mtkennerly";
     repo = "ludusavi";
-    rev = "v${version}";
-    hash = "sha256-IApPudo8oD6YkYJkGpowqpaqrsl2/Q2VFyYfYQI3mN0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tN0z9kSiSnbto8SyZE3y3pGBJObBksoRxAIKC5OBAxc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ixxUz+XJPzPu51sxHpXs92Tis2gj9SElqYtNiN+n2EY=";
+  cargoHash = "sha256-1zoG0UymnEMHMnVaboSDqYMZsObuuzxtwsjCfjeZaa0=";
 
   dontWrapGApps = true;
 
@@ -109,8 +109,9 @@ rustPlatform.buildRustPackage rec {
       patchelf --set-rpath "${libPath}" "$out/bin/ludusavi"
       wrapProgram $out/bin/ludusavi --prefix PATH : ${
         lib.makeBinPath [
+          rclone
           zenity
-          libsForQt5.kdialog
+          kdePackages.kdialog
         ]
       } \
         "''${gappsWrapperArgs[@]}"
@@ -119,7 +120,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Backup tool for PC game saves";
     homepage = "https://github.com/mtkennerly/ludusavi";
-    changelog = "https://github.com/mtkennerly/ludusavi/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/mtkennerly/ludusavi/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       pasqui23
@@ -127,4 +128,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "ludusavi";
   };
-}
+})

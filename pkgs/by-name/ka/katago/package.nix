@@ -61,6 +61,17 @@ stdenv'.mkDerivation rec {
     makeWrapper
   ];
 
+  # Included from release 1.16.2:
+  # https://github.com/lightvector/KataGo/commit/9030f72d152da42c1dd03590aa5116993ea842f6
+  # Doesn't apply cleanly as a patch so doing a quick replacement to the same effect.
+  prePatch = lib.optionalString (backend == "tensorrt") ''
+    nixLog "patching $PWD/cpp/CMakeLists.txt to work around outdated TensorRT version detection"
+    substituteInPlace "$PWD/cpp/CMakeLists.txt" \
+      --replace-fail \
+        'if(TENSORRT_VERSION VERSION_LESS 8.5)' \
+        'if(NOT TENSORRT_VERSION STREQUAL ".." AND TENSORRT_VERSION VERSION_LESS 8.5)'
+  '';
+
   buildInputs = [
     libzip
     boost

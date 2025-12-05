@@ -2,8 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
-  ffmpeg-headless,
-  librespot,
+  ffmpeg_7-headless,
   nixosTests,
   replaceVars,
   providers ? [ ],
@@ -16,13 +15,13 @@ let
       music-assistant-frontend = self.callPackage ./frontend.nix { };
 
       music-assistant-models = super.music-assistant-models.overridePythonAttrs (oldAttrs: rec {
-        version = "1.1.45";
+        version = "1.1.47";
 
         src = fetchFromGitHub {
           owner = "music-assistant";
           repo = "models";
           tag = version;
-          hash = "sha256-R1KkMe9dVl5J1DjDsFhSYVebpiqBkXZSqkLrd7T8gFg=";
+          hash = "sha256-NNKF61CRBe+N9kY+JUa77ClHSJ9RhpsiheMg7Ytyq2M=";
         };
 
         postPatch = ''
@@ -48,27 +47,30 @@ assert
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.5.2";
+  version = "2.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = version;
-    hash = "sha256-RkbU2MqQ7XSv7f6gvgS0AZ8jy63fUAomC41dEk8qyOI=";
+    hash = "sha256-vvhynBor5tj5n53Dm3K4ZOkFZ5LM7bFevOCdZjJsbbM=";
   };
 
   patches = [
     (replaceVars ./ffmpeg.patch {
-      ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
-      ffprobe = "${lib.getBin ffmpeg-headless}/bin/ffprobe";
+      ffmpeg = "${lib.getBin ffmpeg_7-headless}/bin/ffmpeg";
+      ffprobe = "${lib.getBin ffmpeg_7-headless}/bin/ffprobe";
     })
-    (replaceVars ./librespot.patch {
-      librespot = lib.getExe librespot;
-    })
+
+    # Look up librespot from PATH at runtime
+    ./librespot.patch
 
     # Disable interactive dependency resolution, which clashes with the immutable Python environment
     ./dont-install-deps.patch
+
+    # Fix running the built-in snapcast server
+    ./builtin-snapcast-server.patch
   ];
 
   postPatch = ''
@@ -91,14 +93,21 @@ python.pkgs.buildPythonApplication rec {
     "mashumaro"
     "orjson"
     "pillow"
+    "podcastparser"
     "xmltodict"
     "zeroconf"
+  ];
+
+  pythonRemoveDeps = [
+    # no runtime dependency resolution
+    "uv"
   ];
 
   dependencies =
     with python.pkgs;
     [
       aiohttp
+      chardet
       mashumaro
       orjson
     ]
@@ -145,15 +154,17 @@ python.pkgs.buildPythonApplication rec {
       syrupy
       pytest-timeout
     ]
-    ++ lib.flatten (lib.attrValues optional-dependencies)
+    ++ lib.concatAttrValues optional-dependencies
     ++ (providerPackages.jellyfin python.pkgs)
     ++ (providerPackages.opensubsonic python.pkgs);
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # blocks in poll()
-    "--deselect=tests/providers/jellyfin/test_init.py::test_initial_sync"
-    "--deselect=tests/core/test_server_base.py::test_start_and_stop_server"
-    "--deselect=tests/core/test_server_base.py::test_events"
+    "tests/providers/jellyfin/test_init.py::test_initial_sync"
+    "tests/core/test_server_base.py::test_start_and_stop_server"
+    "tests/core/test_server_base.py::test_events"
+    # not compatible with the required py-subsonic version
+    "tests/providers/opensubsonic/test_parsers.py"
   ];
 
   pythonImportsCheck = [ "music_assistant" ];
@@ -183,7 +194,10 @@ python.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/music-assistant/server";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ hexa ];
+    maintainers = with lib.maintainers; [
+      hexa
+      emilylange
+    ];
     mainProgram = "mass";
   };
 }

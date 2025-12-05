@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Cross-platform version of flock(1)";
     homepage = "https://github.com/discoteq/flock";
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = [ ];
     mainProgram = "flock";
     platforms = platforms.all;
     license = licenses.isc;

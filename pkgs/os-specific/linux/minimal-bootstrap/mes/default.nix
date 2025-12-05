@@ -138,7 +138,7 @@ let
 
   CC = toString ([ cc ] ++ ccArgs);
 
-  stripExt = source: lib.replaceStrings [ ".c" ] [ "" ] (builtins.baseNameOf source);
+  stripExt = source: lib.replaceStrings [ ".c" ] [ "" ] (baseNameOf source);
 
   compile =
     source:

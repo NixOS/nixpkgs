@@ -62,8 +62,8 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-gnome=${if withGnome then "yes" else "no"}"
-    "--with-gtk4=${if withGnome then "yes" else "no"}"
+    "--with-gnome=${lib.boolToYesNo withGnome}"
+    "--with-gtk4=${lib.boolToYesNo withGnome}"
     "--localstatedir=/var"
     "--enable-absolute-paths"
   ];
@@ -81,7 +81,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/nm-l2tp/network-manager-l2tp";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
-      abbradar
       obadz
     ];
   };

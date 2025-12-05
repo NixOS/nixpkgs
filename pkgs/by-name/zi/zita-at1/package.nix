@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     description = "Autotuner Jack application to correct the pitch of vocal tracks";
     homepage = "https://kokkinizita.linuxaudio.org/linuxaudio/index.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "zita-at1";
   };

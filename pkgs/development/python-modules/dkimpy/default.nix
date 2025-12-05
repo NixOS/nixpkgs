@@ -41,13 +41,12 @@ buildPythonPackage rec {
     description = "DKIM + ARC email signing/verification tools + Python module";
     longDescription = ''
       Python module that implements DKIM (DomainKeys Identified Mail) email
-      signing and verification. It also provides a number of convєnient tools
+      signing and verification. It also provides a number of convenient tools
       for command line signing and verification, as well as generating new DKIM
       records. This version also supports the experimental Authenticated
       Received Chain (ARC) protocol.
     '';
     homepage = "https://launchpad.net/dkimpy";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ leenaars ];
   };
 }

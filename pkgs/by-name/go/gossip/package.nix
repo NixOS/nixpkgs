@@ -9,6 +9,7 @@
   libGL,
   libxkbcommon,
   makeDesktopItem,
+  copyDesktopItems,
   openssl,
   pkg-config,
   rustPlatform,
@@ -17,6 +18,7 @@
   wayland-scanner,
   nix-update-script,
   libX11,
+  libxcb,
   libXcursor,
   libXi,
   libXrandr,
@@ -33,7 +35,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-nv/NMLAka62u0WzvHMEW9XBVXpg9T8bNJiUegS/oj48=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-rE7SErOhl2fcmvLairq+mvdnbDIk1aPo3eYqwRx5kkA=";
 
   # See https://github.com/mikedilger/gossip/blob/0.9/README.md.
@@ -50,6 +51,7 @@ rustPlatform.buildRustPackage rec {
     git
     pkg-config
     rustPlatform.bindgenHook
+    copyDesktopItems
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland-scanner
@@ -66,6 +68,7 @@ rustPlatform.buildRustPackage rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland
     libX11
+    libxcb
     libXcursor
     libXi
     libXrandr
@@ -109,6 +112,7 @@ rustPlatform.buildRustPackage rec {
         "InstantMessaging"
       ];
       startupWMClass = "gossip";
+      mimeTypes = [ "x-scheme-handler/nostr" ];
     })
   ];
 

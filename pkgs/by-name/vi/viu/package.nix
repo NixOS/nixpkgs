@@ -13,24 +13,23 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "atanunq";
     repo = "viu";
-    rev = "v${version}";
-    sha256 = "sha256-sx8BH01vTFsAEnMKTcVZTDMHiVi230BVVGRexoBNxeo=";
+    tag = "v${version}";
+    hash = "sha256-sx8BH01vTFsAEnMKTcVZTDMHiVi230BVVGRexoBNxeo=";
   };
 
   # tests need an interactive terminal
   doCheck = false;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-a9Z6/+/fMyJ2pFiKPexuiM5DAbk+Tcq3D9rDAyUwC84=";
 
   buildFeatures = lib.optional withSixel "sixel";
   buildInputs = lib.optional withSixel libsixel;
 
-  meta = with lib; {
+  meta = {
     description = "Command-line application to view images from the terminal written in Rust";
     homepage = "https://github.com/atanunq/viu";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       chuangzhu
       sigmanificient
     ];

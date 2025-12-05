@@ -10,15 +10,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-workspaces";
-  version = "0.4.0";
+  version = "0.4.2";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-kBjiRPEWHKhX6vTB48TjKYhlpaiieNzE1l0PjaLTL4k=";
+    hash = "sha256-/h7v5Wq7YsNMVzLHw3QQmcknbjARpI7HFPAUGX72wZ0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-vHLc738wFunyUDu6/B5foTE2/wExd2Yxcl638iqOWdw=";
+  cargoHash = "sha256-eaTLKQdz8Kyee7Bhub/OBueteeQ8jY36g4DgqctrToY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -45,7 +44,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/pksunkara/cargo-workspaces/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
       macalinao
       matthiasbeyer
     ];

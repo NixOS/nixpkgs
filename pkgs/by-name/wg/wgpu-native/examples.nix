@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   makeWrapperArgs = lib.optionals (finalAttrs.runtimeInputs != [ ]) [
-    "--prefix LD_LIBRARY_PATH : ${builtins.toString (lib.makeLibraryPath finalAttrs.runtimeInputs)}"
+    "--prefix LD_LIBRARY_PATH : ${toString (lib.makeLibraryPath finalAttrs.runtimeInputs)}"
   ];
 
   installPhase = ''

@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "pwdsafety";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "edoardottt";
     repo = "pwdsafety";
     tag = "v${version}";
-    hash = "sha256-cKxTcfNjvwcDEw0Z1b50A4u0DUYXlGMMfGWJLPaSkcw=";
+    hash = "sha256-qFYy22d8DqzsphdO1pCYiIKf1P2yQ4w+R1+K2sHI2kk=";
   };
 
-  vendorHash = "sha256-RoRq9JZ8lOMtAluz8TB2RRuDEWFOBtWVhz21aTkXXy4=";
+  vendorHash = "sha256-CUwgAkCYc3U86QJo4RyWGqTYdx21Ysct0HBnU9w4YyU=";
 
   ldflags = [
     "-w"

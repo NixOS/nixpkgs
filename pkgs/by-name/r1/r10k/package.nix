@@ -47,6 +47,6 @@ bundlerApp rec {
       anthonyroussel
     ];
     platforms = lib.platforms.unix;
-    mainProgram = pname;
+    mainProgram = "r10k";
   };
 }

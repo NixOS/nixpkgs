@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "arduino";
     repo = "arduinoOTA";
-    rev = version;
+    tag = version;
     hash = "sha256-HaNMkeV/PDEotYp8+rUKFaBxGbZO8qA99Yp2sa6glz8=";
   };
 

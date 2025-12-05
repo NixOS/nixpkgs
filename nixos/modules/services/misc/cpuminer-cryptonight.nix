@@ -43,7 +43,7 @@ in
         description = "Password for mining server";
       };
       threads = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.ints.unsigned;
         default = 0;
         description = "Number of miner threads, defaults to available processors";
       };

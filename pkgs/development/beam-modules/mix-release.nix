@@ -27,6 +27,7 @@
   meta ? { },
   enableDebugInfo ? false,
   mixEnv ? "prod",
+  mixTarget ? "host",
   compileFlags ? [ ],
   # Build a particular named release.
   # see https://hexdocs.pm/mix/1.12/Mix.Tasks.Release.html#content
@@ -85,7 +86,7 @@
 }@attrs:
 let
   # Remove non standard attributes that cannot be coerced to strings
-  overridable = builtins.removeAttrs attrs [
+  overridable = removeAttrs attrs [
     "compileFlags"
     "erlangCompilerOptions"
     "mixNixDeps"
@@ -123,8 +124,12 @@ stdenv.mkDerivation (
     buildInputs = buildInputs ++ lib.optionals (escriptBinName != null) [ erlang ];
 
     MIX_ENV = mixEnv;
+    MIX_TARGET = mixTarget;
+    MIX_BUILD_PREFIX = (if mixTarget == "host" then "" else "${mixTarget}_") + "${mixEnv}";
     MIX_DEBUG = if enableDebugInfo then 1 else 0;
     HEX_OFFLINE = 1;
+
+    __darwinAllowLocalNetworking = true;
 
     DEBUG = if enableDebugInfo then 1 else 0; # for Rebar3 compilation
     # The API with `mix local.rebar rebar path` makes a copy of the binary
@@ -190,7 +195,7 @@ stdenv.mkDerivation (
         # Symlink deps to build root. Similar to above, but allows for mixFodDeps
         # Phoenix projects to find javascript assets.
         ${lib.optionalString (mixFodDeps != null) ''
-          ln -s ../deps ./
+          ln -s "$MIX_DEPS_PATH" ./deps
         ''}
 
         runHook postConfigure

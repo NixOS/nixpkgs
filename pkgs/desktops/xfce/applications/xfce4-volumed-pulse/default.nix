@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.xfce.org/apps/xfce4-volumed-pulse";
     mainProgram = "xfce4-volumed-pulse";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ abbradar ];
+    maintainers = [ ];
     teams = [ lib.teams.xfce ];
     platforms = lib.platforms.linux;
   };

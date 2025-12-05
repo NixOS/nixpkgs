@@ -32,5 +32,8 @@ stdenv.mkDerivation {
     license = licenses.bsd2;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.unix;
+    # clang++: error: unsupported option '-mfpu=' for target 'arm64-apple-darwin'
+    # clang++: error: unsupported option '-mfloat-abi=' for target 'arm64-apple-darwin'
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

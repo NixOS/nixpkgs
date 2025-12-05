@@ -18,7 +18,7 @@ stdenvForCppNetlib.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cpp-netlib";
     repo = "cpp-netlib";
-    rev = "cpp-netlib-${version}";
+    tag = "cpp-netlib-${version}";
     sha256 = "18782sz7aggsl66b4mmi1i0ijwa76iww337fi9sygnplz2hs03a3";
     fetchSubmodules = true;
   };
@@ -27,6 +27,14 @@ stdenvForCppNetlib.mkDerivation rec {
     # 'u32_to_u8_iterator' was not declared
     ./0001-Compatibility-with-boost-1.83.patch
   ];
+
+  # CMake 2.8 is deprecated and is no longer supported by CMake > 4
+  # https://github.com/NixOS/nixpkgs/issues/445447
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.8)" \
+      "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [

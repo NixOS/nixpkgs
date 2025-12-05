@@ -2,7 +2,6 @@
   lib,
   stdenv,
   withoutTargetLibc,
-  langD ? false,
   libcCross,
   threadsCross,
 }:
@@ -18,8 +17,8 @@ in
   EXTRA_FLAGS_FOR_TARGET =
     let
       mkFlags =
-        dep: langD:
-        lib.optionals ((!lib.systems.equals targetPlatform hostPlatform) && dep != null && !langD) (
+        dep:
+        lib.optionals ((!lib.systems.equals targetPlatform hostPlatform) && dep != null) (
           [
             "-O2 -idirafter ${lib.getDev dep}${dep.incdir or "/include"}"
           ]
@@ -28,8 +27,9 @@ in
           ]
         );
     in
-    mkFlags libcCross langD
-    ++ lib.optionals (!withoutTargetLibc) (mkFlags (threadsCross.package or null) langD);
+    mkFlags libcCross
+    ++ lib.optionals (!withoutTargetLibc) (mkFlags (threadsCross.package or null))
+    ++ mkFlags (libcCross.w32api or null);
 
   EXTRA_LDFLAGS_FOR_TARGET =
     let
@@ -52,5 +52,7 @@ in
           )
         );
     in
-    mkFlags libcCross ++ lib.optionals (!withoutTargetLibc) (mkFlags (threadsCross.package or null));
+    mkFlags libcCross
+    ++ lib.optionals (!withoutTargetLibc) (mkFlags (threadsCross.package or null))
+    ++ mkFlags (libcCross.w32api or null);
 }

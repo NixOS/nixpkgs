@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-usage";
-  version = "48.rc";
+  version = "48.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-usage/${lib.versions.major finalAttrs.version}/gnome-usage-${finalAttrs.version}.tar.xz";
-    hash = "sha256-LUbc2QcKkY/sMUdxaaQDI2CdCFa5XHo3wBusqULTk+w=";
+    hash = "sha256-UB3jxtTWU9Wc4NcHdY3M+D3D6oGi7RSS0vMzFi/uChc=";
   };
 
   nativeBuildInputs = [

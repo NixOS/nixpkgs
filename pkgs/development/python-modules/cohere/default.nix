@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "cohere";
-  version = "5.15.0";
+  version = "5.20.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cohere-ai";
     repo = "cohere-python";
     tag = version;
-    hash = "sha256-X/6eAST9du6GT3j0d1xZuYfzN5p7rYlgGIIqv7V6vik=";
+    hash = "sha256-oX3TSFR/Z33SpolWsEIGt7zH/6hJJE5p/j6oEdBfX6I=";
   };
 
   build-system = [ poetry-core ];
@@ -43,6 +43,8 @@ buildPythonPackage rec {
     types-requests
     typing-extensions
   ];
+
+  pythonRelaxDeps = [ "httpx-sse" ];
 
   # tests require CO_API_KEY
   doCheck = false;

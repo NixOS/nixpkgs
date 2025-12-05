@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-zXYjR9ZFNX2guUSeMN/G77oBIlW3AowFWA4gwID2jQs=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-JM7m/VdaXpUlPOi+N7gue6mlQuxvRFU6++SaSq45Ntg=";
 
   nativeBuildInputs = [ installShellFiles ];
@@ -33,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/figsoda/sagoin";
     changelog = "https://github.com/figsoda/sagoin/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "sagoin";
   };
 }

@@ -15,6 +15,7 @@
   libadwaita,
   libgweather,
   libseccomp,
+  libglycin,
   glycin-loaders,
   gnome,
   common-updater-scripts,
@@ -24,18 +25,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "loupe";
-  version = "48.1";
+  version = "49.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/loupe/${lib.versions.major finalAttrs.version}/loupe-${finalAttrs.version}.tar.xz";
-    hash = "sha256-EHE9PpZ4nQd659M4lFKl9sOX3fQ6UMBxy/4tEnJZcN4=";
+    hash = "sha256-MAmLyXmhyHouyye0patyWr+QC9cQu5wrzAyULVFcUcU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "loupe-deps-${finalAttrs.version}";
-    hash = "sha256-PKkyZDd4FLWGZ/kDKWkaSV8p8NDniSQGcR9Htce6uCg=";
+    hash = "sha256-GqPHvUBA5aRUnRSP+PpdOCC9sL8axnEdfqtHFp2KYJc=";
   };
+
+  postPatch = ''
+    substituteInPlace src/meson.build --replace-fail \
+      "'src' / rust_target / meson.project_name()," \
+      "'src' / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()," \
+  '';
 
   nativeBuildInputs = [
     cargo
@@ -60,8 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     # Dirty approach to add patches after cargoSetupPostUnpackHook
     # We should eventually use a cargo vendor patch hook instead
-    pushd ../$(stripHash $cargoDeps)/glycin-2.*
-      patch -p3 < ${glycin-loaders.passthru.glycinPathsPatch}
+    pushd ../$(stripHash $cargoDeps)/glycin-3.*
+      patch -p3 < ${libglycin.passthru.glycin3PathsPatch}
     popd
   '';
 
@@ -72,6 +79,9 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
     )
   '';
+
+  # For https://gitlab.gnome.org/GNOME/loupe/-/blob/0e6ddb0227ac4f1c55907f8b43eaef4bb1d3ce70/src/meson.build#L34-35
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
   passthru = {
     updateScript =

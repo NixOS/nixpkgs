@@ -18,8 +18,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/v${finalAttrs.version}";
 
-  useFetchCargoVendor = true;
-
   cargoHash = "sha256-8hNuF5tD1PwdIJB0q3wxDOGDcppo0ac+zol3AHWGv0s=";
 
   passthru.updateScript = ./update.sh;

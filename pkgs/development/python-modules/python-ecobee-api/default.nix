@@ -2,23 +2,20 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-ecobee-api";
-  version = "0.3.0";
+  version = "0.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nkgilley";
     repo = "python-ecobee-api";
     tag = version;
-    hash = "sha256-dJ7dVceYfmJHvk2OEXtRW/U8h2jFDc2aC58WmqhyP+k=";
+    hash = "sha256-6uZc022C3EgEgsPGD302qAtFqubwQSETQr3SQSYXeb8=";
   };
 
   build-system = [ setuptools ];

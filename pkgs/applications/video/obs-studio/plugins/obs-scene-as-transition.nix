@@ -25,13 +25,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An OBS Studio plugin that will allow you to use a Scene as a transition";
+    description = "OBS Studio plugin that will allow you to use a Scene as a transition";
     homepage = "https://github.com/andilippi/obs-scene-as-transition";
     maintainers = with maintainers; [ flexiondotorg ];
     license = licenses.gpl2Plus;
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    inherit (obs-studio.meta) platforms;
   };
 }

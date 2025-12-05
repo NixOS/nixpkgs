@@ -42,7 +42,7 @@ buildGoModule rec {
     homepage = "https://github.com/muesli/deckmaster";
     changelog = "https://github.com/muesli/deckmaster/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

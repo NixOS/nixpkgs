@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "reflex-chakra";
-  version = "0.7.1";
+  version = "0.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,11 +19,12 @@ buildPythonPackage rec {
     owner = "reflex-dev";
     repo = "reflex-chakra";
     tag = "v${version}";
-    hash = "sha256-dAenwsFhRj9BzdGyaC38TwBWog95H0mSA0ullt4otHA=";
+    hash = "sha256-6KWIpTtr2tNBxXoj2hY0zuX0bpSUvsoA1Y7uwln3HDY=";
   };
 
-  build-system = [ hatchling ];
-
+  build-system = [
+    hatchling
+  ];
   dependencies = [ reflex ];
 
   pythonImportsCheck = [ "reflex_chakra" ];

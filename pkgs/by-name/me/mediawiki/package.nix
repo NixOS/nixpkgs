@@ -2,25 +2,21 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  imagemagick,
   nixosTests,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "mediawiki";
-  version = "1.44.0";
+  version = "1.44.2";
 
   src = fetchurl {
     url = "https://releases.wikimedia.org/mediawiki/${lib.versions.majorMinor version}/mediawiki-${version}.tar.gz";
-    hash = "sha256-eSF3gIw+CDGsy+IF1XtBMzma0UHw0KglRQohskAnWI8=";
+    hash = "sha256-59cCZpeWcfr9A3BeF6IfGFvRsoP/hD7XL+KQ6G+sQzE=";
   };
 
   postPatch = ''
-    sed -i 's|$vars = Installer::getExistingLocalSettings();|$vars = null;|' includes/installer/CliInstaller.php
-
-    # fix generating previews for SVGs
-    substituteInPlace includes/config-schema.php \
-      --replace-fail "\$path/convert" "${imagemagick}/bin/convert"
+    substituteInPlace includes/installer/CliInstaller.php \
+      --replace-fail '$vars = Installer::getExistingLocalSettings();' '$vars = null;'
   '';
 
   installPhase = ''

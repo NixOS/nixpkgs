@@ -57,5 +57,10 @@ stdenv.mkDerivation rec {
     description = "CanoKey QEMU Virt Card";
     license = licenses.asl20;
     maintainers = with maintainers; [ oxalica ];
+    # Uses a four‐year‐old patched vendored version of Mbed TLS for
+    # cryptography that doesn’t build with CMake 4. Doesn’t build with
+    # gurrent versions of `canokey-core`, either. No upstream
+    # development since 2023.
+    broken = true;
   };
 }

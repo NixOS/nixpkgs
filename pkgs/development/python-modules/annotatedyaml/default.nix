@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "annotatedyaml";
-  version = "0.4.5";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "annotatedyaml";
     tag = "v${version}";
-    hash = "sha256-AmgM5KF8O8/rkR/9PmTzcyQaSlEDcYBDDRq5ujwANR0=";
+    hash = "sha256-+4H3StCZ58TDV6LSXyeC6+Vn56W19+bIO4AdsJEfHI0=";
   };
 
   build-system = [
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = {
     description = "Annotated YAML that supports secrets for Python";
     homepage = "https://github.com/home-assistant-libs/annotatedyaml";
-    changelog = "https://github.com/home-assistant-libs/annotatedyaml/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/home-assistant-libs/annotatedyaml/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

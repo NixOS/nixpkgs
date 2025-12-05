@@ -25,6 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-AN6OpZQ2te4iVuh/kFHXzmLAWIMyuoj9FHTVicnbiPw=";
   };
 
+  patches = [
+    # Fix build with gcc15
+    ./gfxstream-add-include-cstdint.patch
+  ];
+
   # Ensure that meson can find an Objective-C compiler on Darwin.
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace meson.build \

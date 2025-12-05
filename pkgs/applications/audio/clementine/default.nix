@@ -32,7 +32,7 @@
   config,
   wrapQtAppsHook,
   gst_plugins,
-  util-linux,
+  util-linuxMinimal,
   libunwind,
   libselinux,
   elfutils,
@@ -49,20 +49,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clementine";
-  version = "1.4.1-45-g34eb666c0";
+  version = "1.4.1-58-gbae968a2f";
 
   src = fetchFromGitHub {
     owner = "clementine-player";
     repo = "Clementine";
     tag = finalAttrs.version;
-    hash = "sha256-5qZpQW8ZsyKpIww51sqghcrkhhh78TcpmMoctHgcoQo=";
+    hash = "sha256-Ni+nbi0bADIPo9rPtt06loJ3MNU+y9bs1EZSenLfJSU=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     wrapQtAppsHook
-    util-linux
+    util-linuxMinimal
     libunwind
     libselinux
     elfutils
@@ -96,14 +96,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   # gst_plugins needed for setup-hooks
   ++ gst_plugins
-  ++ lib.optionals (withIpod) [
+  ++ lib.optionals withIpod [
     libgpod
     libplist
     usbmuxd
   ]
-  ++ lib.optionals (withMTP) [ libmtp ]
-  ++ lib.optionals (withCD) [ libcdio ]
-  ++ lib.optionals (withCloud) [ sparsehash ];
+  ++ lib.optionals withMTP [ libmtp ]
+  ++ lib.optionals withCD [ libcdio ]
+  ++ lib.optionals withCloud [ sparsehash ];
 
   postPatch = ''
     sed -i src/CMakeLists.txt \
@@ -112,6 +112,21 @@ stdenv.mkDerivation (finalAttrs: {
       -e 's,-Wno-unused-private-field,,g'
     sed -i CMakeLists.txt \
       -e 's,libprotobuf.a,protobuf,g'
+
+    # CMake 3.0.0 is deprecated and no longer supported by CMake > 4
+    # https://github.com/NixOS/nixpkgs/issues/445447
+    substituteInPlace 3rdparty/{qsqlite,qtsingleapplication,qtiocompressor,qxt}/CMakeLists.txt \
+      cmake/{ParseArguments.cmake,Translations.cmake}                                          \
+      tests/CMakeLists.txt gst/moodbar/CMakeLists.txt                                          \
+      --replace-fail                                                                           \
+        "cmake_minimum_required(VERSION 3.0.0)" \
+        "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace 3rdparty/libmygpo-qt5/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required( VERSION 3.0.0 FATAL_ERROR )" \
+      "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace CMakeLists.txt --replace-fail \
+        "cmake_policy(SET CMP0053 OLD)" \
+        ""
   '';
 
   preConfigure = ''
@@ -119,9 +134,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    "-DFORCE_GIT_REVISION=1.3.1"
-    "-DUSE_SYSTEM_PROJECTM=ON"
-    "-DSPOTIFY_BLOB=OFF"
+    (lib.cmakeFeature "FORCE_GIT_REVISION" "1.3.1")
+    (lib.cmakeBool "USE_SYSTEM_PROJECTM" true)
+    (lib.cmakeBool "SPOTIFY_BLOB" false)
   ];
 
   dontWrapQtApps = true;
@@ -136,6 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Multiplatform music player";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+    mainProgram = "clementine";
     maintainers = with lib.maintainers; [ ttuegel ];
   };
 })

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.gtk-server.org/";
-    description = "gtk-server for interpreted GUI programming";
+    description = "Gtk-server for interpreted GUI programming";
     license = licenses.gpl2Plus;
     maintainers = [ ];
     platforms = platforms.linux;

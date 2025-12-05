@@ -3,38 +3,57 @@
   rustPlatform,
   buildNpmPackage,
   fetchFromGitHub,
+  pkg-config,
+  openssl,
+  nix-update-script,
 }:
 let
   pname = "sql-studio";
-  version = "0.1.35";
+  version = "0.1.45";
 
   src = fetchFromGitHub {
     owner = "frectonz";
     repo = "sql-studio";
-    rev = version;
-    hash = "sha256-ZWGV4DYf+85LIGVDc8hcWSEJsM6UisuCB2Wd2kiw/sk=";
+    tag = version;
+    hash = "sha256-LAPJPYHCIBRrnz03s3VhFaVfmGAoIj1UrsY+u2/FaRQ=";
   };
 
   ui = buildNpmPackage {
+    pname = "sql-studio-ui";
     inherit version src;
-    pname = "${pname}-ui";
-    npmDepsHash = "sha256-NCq8RuaC+dO6Zbgl1ucJxhJrVZ69Va3b2/gYn4fThAw=";
+    npmDepsHash = "sha256-RVVCmlfembWI+MLxt+96V2Xmczkscuw79aNPWtYlGG8=";
     sourceRoot = "${src.name}/ui";
     installPhase = ''
+      runHook preInstall
+
       cp -pr --reflink=auto -- dist "$out/"
+
+      runHook postInstall
     '';
   };
 in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  useFetchCargoVendor = true;
+  cargoHash = "sha256-Dtstp9xEWGau+OJ6471gCEC5eWneiPj03pBMxYBr7DI=";
 
-  cargoHash = "sha256-rWG5iPXiG7kCf0yLAqcQi8AM3qv/WTUiY4cVrjpUc/Y=";
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ openssl ];
 
   preBuild = ''
     cp -pr --reflink=auto -- ${ui} ui/dist
   '';
+
+  passthru = {
+    inherit ui;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "ui"
+      ];
+    };
+  };
 
   meta = {
     description = "SQL Database Explorer [SQLite, libSQL, PostgreSQL, MySQL/MariaDB, ClickHouse, Microsoft SQL Server]";

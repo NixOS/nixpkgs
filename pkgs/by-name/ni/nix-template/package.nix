@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-42u5FmTIKHpfQ2zZQXIrFkAN2/XvU0wWnCRrQkQzcNI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-cLSGWOyBQLv235TeYqSVg/f0Zmcnpj+RshINN69JYEU=";
 
   nativeBuildInputs = [
@@ -51,7 +50,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/jonringer/nix-template/";
     changelog = "https://github.com/jonringer/nix-template/releases/tag/v${version}";
     license = lib.licenses.cc0;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "nix-template";
   };
 }

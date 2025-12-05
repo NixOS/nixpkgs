@@ -7,16 +7,16 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "composer-require-checker";
-  version = "4.16.1";
+  version = "4.19.0";
 
   # Upstream no longer provides the composer.lock in their release artifact
   src = fetchgit {
     url = "https://github.com/maglnet/ComposerRequireChecker";
     tag = finalAttrs.version;
-    hash = "sha256-UAofdc8mqSnJXhCTABSf9JZERqur86lzNDI66EHgEQE=";
+    hash = "sha256-cTXXPsHI2yiHSakiWuuxripGLvkwmzIAADqKtwHOI7c=";
   };
 
-  vendorHash = "sha256-bNeQEfwXly3LFuEKeSK6J6pRfQF6TNwUqu3SdTswmFI=";
+  vendorHash = "sha256-ZUAXo4X4B7Z6wfcmv7L1DFvD4Lx1sSoMmw1gR5nDEP0=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -27,7 +27,7 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://github.com/maglnet/ComposerRequireChecker/";
     changelog = "https://github.com/maglnet/ComposerRequireChecker/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ drupol ];
     mainProgram = "composer-require-checker";
+    maintainers = [ lib.maintainers.patka ];
   };
 })

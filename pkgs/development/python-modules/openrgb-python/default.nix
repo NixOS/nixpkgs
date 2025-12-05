@@ -2,20 +2,17 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "openrgb-python";
-  version = "0.3.3";
+  version = "0.3.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XQnxYfs7VouABBNBg7mXT3XGfbEP3PNZzVO8TlTpSUc=";
+    hash = "sha256-86jy8hoOgQocdCeapjaRFO9PKx/TW9kcN16UKSWNVps=";
   };
 
   build-system = [ setuptools ];

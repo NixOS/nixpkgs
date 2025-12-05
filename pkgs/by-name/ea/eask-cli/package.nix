@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "eask-cli";
-  version = "0.11.7";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "emacs-eask";
     repo = "cli";
     rev = version;
-    hash = "sha256-k+toSvi7v3ABNR9rJMv2adQ9yMyCrEDl8WLdjpNt/vo=";
+    hash = "sha256-W7RteTkfQMOxMTfEfDr9cQCXpQ3yPExLwdlrh7iR0EI=";
   };
 
-  npmDepsHash = "sha256-d3YzVZFwlKN4OabSO4Reu+zxb59lA0zaYKDTsdpYguI=";
+  npmDepsHash = "sha256-C/5PZv732ZrnGXrlrWZmjJzdyJ+tGAJ5UAw96hh6gaU=";
 
   dontBuild = true;
 

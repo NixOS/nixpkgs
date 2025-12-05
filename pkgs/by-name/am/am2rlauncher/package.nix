@@ -5,7 +5,7 @@
   glibc,
   gtk3,
   libappindicator,
-  webkitgtk_4_0,
+  # webkitgtk_4_0,
   e2fsprogs,
   libnotify,
   libgit2,
@@ -67,7 +67,7 @@ buildDotnetModule {
     glibc
     gtk3
     libappindicator
-    webkitgtk_4_0
+    # webkitgtk_4_0
     e2fsprogs
     libnotify
     libgit2
@@ -116,6 +116,8 @@ buildDotnetModule {
   '';
 
   meta = with lib; {
+    # webkitgtk_4_0 was removed
+    broken = true;
     homepage = "https://github.com/AM2R-Community-Developers/AM2RLauncher";
     description = "Front-end for dealing with AM2R updates and mods";
     longDescription = ''

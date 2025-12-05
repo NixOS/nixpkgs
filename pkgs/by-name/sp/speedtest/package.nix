@@ -17,14 +17,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "speedtest";
-  version = "1.3.0";
+  version = "1.4.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Ketok4321";
     repo = "speedtest";
     tag = "v${version}";
-    hash = "sha256-BFPOumMuFKttw8+Jp4c2d9r9C2eIzEX52SNdASdNldw=";
+    hash = "sha256-00qHHCGXAzV38BLUIENwxmWUhp+t7BsM7w6xu1Xs/UA=";
   };
 
   postPatch = ''

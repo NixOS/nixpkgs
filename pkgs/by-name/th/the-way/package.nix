@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-zsfk5APxbnssMKud9xGc70N+57LSc+vk6sSb2XzFUyA=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-GBr0z2iJuk86xkgZd2sAz+ISTRfESDt99g6ssxXhzhI=";
 
   nativeBuildInputs = [ installShellFiles ];
@@ -41,7 +40,6 @@ rustPlatform.buildRustPackage rec {
     license = with lib.licenses; [ mit ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
-      figsoda
       numkem
     ];
   };

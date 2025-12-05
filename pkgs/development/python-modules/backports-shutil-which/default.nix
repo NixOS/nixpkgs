@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Backport of shutil.which from Python 3.3";
     homepage = "https://github.com/minrk/backports.shutil_which";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

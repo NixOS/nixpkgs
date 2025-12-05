@@ -22,6 +22,10 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-j6BFXx5cyjE3+fo1gGKlqpsxrm3i9HfQ9tJGNNjjLwo=";
   };
 
+  patches = [
+    ./fix-clippy.diff
+  ];
+
   nativeBuildInputs = [
     pkg-config
     asciidoctor
@@ -32,7 +36,6 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-8A0RLbFkh3fruZAbjJzipQvuFLchqIRovPcc6MSKdOc=";
 
   nativeCheckInputs = [ ansi2html ];

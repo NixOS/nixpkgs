@@ -5,7 +5,7 @@
   fetchFromGitHub,
   libcosmicAppHook,
   pkg-config,
-  libdisplay-info,
+  libdisplay-info_0_2,
   libgbm,
   libinput,
   pixman,
@@ -20,18 +20,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-comp";
-  version = "1.0.0-alpha.7";
+  version = "1.0.0-beta.9";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-comp";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-2AnGEUWumE1C4Mi5inN7enbxCdWCKbQdYpUvTK3jGQ4=";
+    hash = "sha256-ozymo6ucBEv4vEADIHyn/G+p5V8SMgsyW/TcEi3Dhxg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-fj6TIBuZ5hrds4WMHRa2krXN5fivKriO2Q/FWdnlGaA=";
+  cargoHash = "sha256-qlfCCHqjKX72hVj5Bgh1wKT7pMsy5vG1VEIqJk4prR8=";
 
   separateDebugInfo = true;
 
@@ -41,7 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    libdisplay-info
+    libdisplay-info_0_2
     libgbm
     libinput
     pixman

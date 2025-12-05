@@ -61,6 +61,23 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace bspinfo/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace bsputil/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace light/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace qbsp/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace vis/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace man/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = with lib; {
     homepage = "https://ericwa.github.io/ericw-tools/";
     description = "Map compile tools for Quake and Hexen 2";

@@ -30,19 +30,18 @@
   withShareSelection ? false,
   withTermion ? false,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ncspot";
-  version = "1.3.0";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "hrkfdn";
     repo = "ncspot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FSMQv2443oPQjMSv68ppfI2ZTUG79b+GcXmHNAmjPZk=";
+    hash = "sha256-nmy+KGwGDf3Pp0OHngBqflicASfQOnq81YGaEipv7RE=";
   };
 
-  cargoHash = "sha256-Qjsn3U9KZr5qZliJ/vbudfkH1uOng1N5c8dAyH+Y5vQ=";
+  cargoHash = "sha256-XmEiTUKb7ksPxQbjjDG8hZmIM/vJ6nnb30GSJp9F+18=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optional withClipboard python3;
 
@@ -95,6 +94,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       liff
       getchoo
+      sodagunz
     ];
     mainProgram = "ncspot";
   };

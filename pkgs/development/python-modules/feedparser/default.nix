@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "feedparser";
-  version = "6.0.11";
+  version = "6.0.12";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ydBAe2TG8qBl0OuyksKzXAEFDMDcM3V0Yaqr3ExBhNU=";
+    hash = "sha256-ZPds6Qrj6O9dHt4PjTtQzia8znHdiuXoKxzS1KX5Qig=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kurtmckee/feedparser";
     changelog = "https://feedparser.readthedocs.io/en/latest/changelog.html";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

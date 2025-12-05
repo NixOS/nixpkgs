@@ -6,7 +6,7 @@
 }:
 
 let
-  pihole = pkgs.pihole;
+  pihole = cfg.piholePackage;
   makePayload =
     list:
     builtins.toJSON {
@@ -15,6 +15,7 @@ let
       comment = list.description;
     };
   payloads = map makePayload cfg.lists;
+  macvendorURL = lib.strings.escapeShellArg cfg.macvendorURL;
 in
 ''
   # Can't use -u (unset) because api.sh uses API_URL before it is set
@@ -22,15 +23,17 @@ in
   pihole="${lib.getExe pihole}"
   jq="${lib.getExe pkgs.jq}"
 
+  ${lib.getExe pkgs.curl} --retry 3 --retry-delay 5 "${macvendorURL}" -o "${cfg.settings.files.macvendor}" || echo "Failed to download MAC database from ${macvendorURL}"
+
   # If the database doesn't exist, it needs to be created with gravity.sh
-  if [ ! -f '${cfg.stateDirectory}'/gravity.db ]; then
+  if [ ! -f '${cfg.settings.files.gravity}' ]; then
     $pihole -g
     # Send SIGRTMIN to FTL, which makes it reload the database, opening the newly created one
     ${lib.getExe' pkgs.procps "kill"} -s SIGRTMIN $(systemctl show --property MainPID --value ${config.systemd.services.pihole-ftl.name})
   fi
 
-  source ${pihole}/usr/share/pihole/advanced/Scripts/api.sh
-  source ${pihole}/usr/share/pihole/advanced/Scripts/utils.sh
+  source ${pihole}/share/pihole/advanced/Scripts/api.sh
+  source ${pihole}/share/pihole/advanced/Scripts/utils.sh
 
   any_failed=0
 

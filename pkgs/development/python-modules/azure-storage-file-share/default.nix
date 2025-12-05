@@ -5,22 +5,19 @@
   cryptography,
   fetchPypi,
   isodate,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-storage-file-share";
-  version = "12.21.0";
+  version = "12.23.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "azure_storage_file_share";
     inherit version;
-    hash = "sha256-20K/a0OzwMJ8kVIgKVUnffwmpZ9/rSbAWEMaaumVgM4=";
+    hash = "sha256-naU7VvgJD8U9kz7OWp+yRwEMO0p1/5CKlI4kje+yH64=";
   };
 
   build-system = [ setuptools ];

@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "talhelper";
-  version = "3.0.31";
+  version = "3.0.41";
 
   src = fetchFromGitHub {
     owner = "budimanjojo";
     repo = "talhelper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/cUW9TzUCNBa/J5GpadzZr+M1K0tIJoYe7g2T3z3kJo=";
+    hash = "sha256-m9BHf535wNSfDhttNKezwetf1tbblh01i00xP/OAuh0=";
   };
 
-  vendorHash = "sha256-MDl6HEUH4pL+Hin1iBzedIJelvGPwqgpsrREctfNlzk=";
+  vendorHash = "sha256-5cR2L/ex5efw6Wh+gNvZeyPZvTW/vX8LmqM74dwU2Bo=";
 
   ldflags = [
     "-s"

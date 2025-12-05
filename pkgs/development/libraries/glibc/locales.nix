@@ -31,13 +31,25 @@
   (
     finalAttrs: previousAttrs: {
 
-      builder = ./locales-builder.sh;
-
       outputs = [ "out" ];
 
-      LOCALEDEF_FLAGS = [
-        (if stdenv.hostPlatform.isLittleEndian then "--little-endian" else "--big-endian")
-      ];
+      env = (previousAttrs.env or { }) // {
+        LOCALEDEF_FLAGS = if stdenv.hostPlatform.isLittleEndian then "--little-endian" else "--big-endian";
+
+        # Glibc cannot have itself in its RPATH.
+        NIX_NO_SELF_RPATH = 1;
+      };
+
+      postConfigure = (previousAttrs.postConfigure or "") + ''
+        # Hack: get rid of the `-static' flag set by the bootstrap stdenv.
+        # This has to be done *after* `configure' because it builds some
+        # test binaries.
+        export NIX_CFLAGS_LINK=
+        export NIX_LDFLAGS_BEFORE=
+
+        export NIX_DONT_SET_RPATH=1
+        unset CFLAGS
+      '';
 
       preBuild =
         (previousAttrs.preBuild or "")
@@ -49,12 +61,14 @@
           # $TMPDIR/nix/store/...-glibc-.../lib/locale/locale-archive.
           LOCALEDEF_FLAGS+=" --prefix=$TMPDIR"
 
-          mkdir -p $TMPDIR/"${buildPackages.glibc.out}/lib/locale"
+          export inst_complocaledir="$TMPDIR/"${buildPackages.glibc.out}/lib/locale
+          mkdir -p "$inst_complocaledir"
 
           echo 'C.UTF-8/UTF-8 \' >> ../glibc-2*/localedata/SUPPORTED
 
           # Hack to allow building of the locales (needed since glibc-2.12)
-          sed -i -e 's,^$(rtld-prefix) $(common-objpfx)locale/localedef,localedef $(LOCALEDEF_FLAGS),' ../glibc-2*/localedata/Makefile
+          substituteInPlace ../glibc-2*/localedata/Makefile \
+            --replace-fail '$(rtld-prefix) $(common-objpfx)locale/localedef' 'localedef $(LOCALEDEF_FLAGS)'
         ''
         + lib.optionalString (!allLocales) ''
           # Check that all locales to be built are supported
@@ -75,15 +89,9 @@
           echo SUPPORTED-LOCALES='${toString locales}' > ../glibc-2*/localedata/SUPPORTED
         '';
 
-      # Current `nixpkgs` way of building locales is not compatible with
-      # parallel install. `locale-archive` is updated in parallel with
-      # multiple `localedef` processes and causes non-deterministic result:
-      #   https://github.com/NixOS/nixpkgs/issues/245360
-      enableParallelBuilding = false;
-
       makeFlags = (previousAttrs.makeFlags or [ ]) ++ [
         "localedata/install-locales"
-        "localedir=${builtins.placeholder "out"}/lib/locale"
+        "localedir=${placeholder "out"}/lib/locale"
       ];
 
       installPhase = ''

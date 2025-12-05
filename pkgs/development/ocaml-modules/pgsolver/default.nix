@@ -1,27 +1,36 @@
 {
   lib,
   fetchFromGitHub,
-  buildOasisPackage,
-  ounit,
-  tcslib,
+  buildDunePackage,
+  extlib,
   ocaml-sat-solvers,
+  tcs-lib,
 }:
 
-buildOasisPackage rec {
+buildDunePackage (finalAttrs: {
   pname = "pgsolver";
-  version = "4.1";
+  version = "4.4";
 
   src = fetchFromGitHub {
     owner = "tcsprojects";
     repo = "pgsolver";
-    rev = "v${version}";
-    sha256 = "16skrn8qql9djpray25xv66rjgfl20js5wqnxyq1763nmyizyj8a";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VQWXvZXfGHCfzz46aARyFXO/xlJ/7s39HFIfisEamXw=";
   };
 
-  buildInputs = [ ounit ];
+  # upstream missing `public_names` within `executables` stanza
+  # adding this back to automatically install binaries
+  patchPhase = ''
+    runHook prePatch
+    sed -i '/^ (names /{ p; s/names/public_names/ }' src/apps/pgsolver/dune
+    sed -i '/^ (names /{ p; s/names/public_names/ }' src/apps/tools/dune
+    runHook postPatch
+  '';
+
   propagatedBuildInputs = [
-    tcslib
+    extlib
     ocaml-sat-solvers
+    tcs-lib
   ];
 
   meta = {
@@ -29,6 +38,6 @@ buildOasisPackage rec {
     homepage = "https://github.com/tcsprojects/pgsolver";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mgttlinger ];
-    mainProgram = "pgsolver-bin";
+    mainProgram = "pgsolver";
   };
-}
+})

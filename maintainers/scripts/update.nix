@@ -120,7 +120,7 @@ let
     let
       maintainer =
         if !builtins.hasAttr maintainer' lib.maintainers then
-          builtins.throw "Maintainer with name `${maintainer'} does not exist in `maintainers/maintainer-list.nix`."
+          throw "Maintainer with name `${maintainer'} does not exist in `maintainers/maintainer-list.nix`."
         else
           builtins.getAttr maintainer' lib.maintainers;
     in
@@ -147,7 +147,7 @@ let
       pathContent = lib.attrByPath prefix null pkgs;
     in
     if pathContent == null then
-      builtins.throw "Attribute path `${path}` does not exist."
+      throw "Attribute path `${path}` does not exist."
     else
       packagesWithPath prefix (path: pkg: (get-script pkg != null)) pathContent;
 
@@ -158,9 +158,9 @@ let
       package = lib.attrByPath (lib.splitString "." path) null pkgs;
     in
     if package == null then
-      builtins.throw "Package with an attribute name `${path}` does not exist."
+      throw "Package with an attribute name `${path}` does not exist."
     else if get-script package == null then
-      builtins.throw "Package with an attribute name `${path}` does not have a `passthru.updateScript` attribute defined."
+      throw "Package with an attribute name `${path}` does not have a `passthru.updateScript` attribute defined."
     else
       {
         attrPath = path;
@@ -178,7 +178,7 @@ let
     else if path != null then
       packagesWithUpdateScript path pkgs
     else
-      builtins.throw "No arguments provided.\n\n${helpText}";
+      throw "No arguments provided.\n\n${helpText}";
 
   helpText = ''
     Please run:
@@ -242,7 +242,7 @@ let
       name = package.name;
       pname = lib.getName package;
       oldVersion = lib.getVersion package;
-      updateScript = map builtins.toString (lib.toList (updateScript.command or updateScript));
+      updateScript = map toString (lib.toList (updateScript.command or updateScript));
       supportedFeatures = updateScript.supportedFeatures or [ ];
       attrPath = updateScript.attrPath or attrPath;
     };

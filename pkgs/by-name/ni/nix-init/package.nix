@@ -35,8 +35,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-0RLEPVtYnwYH+pMnpO0/Evbp7x9d0RMobOVAqwgMJz4=";
   };
 
-  useFetchCargoVendor = true;
-
   cargoHash = "sha256-kk/SaP/ZtSorSSewAdf0Bq7tiMhB5dZb8v9MlsaUa0M=";
 
   nativeBuildInputs = [
@@ -98,6 +96,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/nix-community/nix-init";
     changelog = "https://github.com/nix-community/nix-init/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ lib.maintainers.eclairevoyant ];
   };
 })

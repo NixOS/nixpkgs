@@ -7,7 +7,7 @@
   mock,
   poetry-core,
   pyopenssl,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytestCheckHook,
   pytz,
 }:
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     imaplib2
     mock
     pyopenssl
-    pytest-asyncio
+    pytest-asyncio_0
     pytestCheckHook
     pytz
   ];

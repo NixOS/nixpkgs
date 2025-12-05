@@ -7,10 +7,10 @@
 
 let
   pname = "muffon";
-  version = "2.2.0";
+  version = "2.3.0";
   src = fetchurl {
     url = "https://github.com/staniel359/muffon/releases/download/v${version}/muffon-${version}-linux-x86_64.AppImage";
-    hash = "sha256-VzT/jlNmUYFmUUqi8EzE4ilawezqhSgXHz32+S3FMTo=";
+    hash = "sha256-C9oaRXS4w89i4tq/hWh5n5uHUETzaoEid49OII/+5dg=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname src version; };
 in

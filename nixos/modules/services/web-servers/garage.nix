@@ -74,7 +74,7 @@ in
             type = with types; either path (listOf attrs);
             description = ''
               The directory in which Garage will store the data blocks of objects. This folder can be placed on an HDD.
-              Since v0.9.0, Garage supports multiple data directories, refer to https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#data_dir for the exact format.
+              Since v0.9.0, Garage supports multiple data directories, refer to <https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#data_dir> for the exact format.
             '';
           };
         };
@@ -147,6 +147,8 @@ in
           NoNewPrivileges = true;
           EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
           ReadWritePaths = lib.filter (x: !(isDefault x)) (lib.flatten [ paths ]);
+          # Upstream recommendation https://garagehq.deuxfleurs.fr/documentation/cookbook/systemd/
+          LimitNOFILE = 42000;
         };
       environment = {
         RUST_LOG = lib.mkDefault "garage=${cfg.logLevel}";

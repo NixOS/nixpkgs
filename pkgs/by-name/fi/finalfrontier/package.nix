@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-bnRzXIYairlBjv2JxU16UXYc5BB3VeKZNiJ4+XDzub4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-AQiXRKOXV7kXiu9GbtPE0Rddy93t1Y5tuJmww4xFSaU=";
 
   nativeBuildInputs = [
@@ -51,5 +50,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/finalfusion/finalfrontier/";
     license = licenses.asl20;
     maintainers = [ ];
+    # The last successful Darwin Hydra build was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

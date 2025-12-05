@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   removeReferencesTo,
   gfortran,
   perl,
@@ -41,23 +40,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openmpi";
-  version = "5.0.6";
+  version = "5.0.9";
 
   src = fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${lib.versions.majorMinor finalAttrs.version}/downloads/openmpi-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-vUGD/LxDR3wlR5m0Kd8abldsBC50otL4s31Tey/5gVc=";
+    sha256 = "sha256-37cnYlMRcIR68+Sg8h1317I8829nznzpAzZZJzZ32As=";
   };
-
-  patches = [
-    # This patch can be removed with the next openmpi update (>5.0.6)
-    # See https://github.com/open-mpi/ompi/issues/12784 and https://github.com/open-mpi/ompi/pull/13003
-    # Fixes issue where the shared memory backing file cannot be created because directory trees are never created
-    (fetchpatch {
-      name = "fix-singletons-session-dir";
-      url = "https://github.com/open-mpi/ompi/commit/4d4f7212decd0d0ca719688b15dc9b3ee7553a52.patch";
-      hash = "sha256-Mb8qXtAUhAQ90v0SdL24BoTASsKRq2Gu8nYqoeSc9DI=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs ./
@@ -70,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
           substituteInPlace configure \
             --replace-fail \
               ompi_cv_op_avx_check_${option}=yes \
-              ompi_cv_op_avx_check_${option}=${if val then "yes" else "no"}
+              ompi_cv_op_avx_check_${option}=${lib.boolToYesNo val}
         ''
       ))
       (lib.concatStringsSep "\n")
@@ -82,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     USER = "nixbld";
     HOSTNAME = "localhost";
-    SOURCE_DATE_EPOCH = "0";
   };
 
   outputs = [
@@ -101,6 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
     libnl
     numactl
     pmix
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform ucx) [
     ucx
     ucc
   ]
@@ -134,7 +123,9 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
     # https://github.com/openucx/ucx
     # https://www.open-mpi.org/faq/?category=buildcuda
-    (lib.withFeatureAs cudaSupport "cuda" (lib.getDev cudaPackages.cuda_cudart))
+    # NOTE: Open MPI requires the header files specifically, which are in the `include` output.
+    (lib.withFeatureAs cudaSupport "cuda" (lib.getOutput "include" cudaPackages.cuda_cudart))
+    (lib.withFeatureAs cudaSupport "cuda-libdir" "${lib.getLib cudaPackages.cuda_cudart}/lib")
     (lib.enableFeature cudaSupport "dlopen")
     (lib.withFeatureAs fabricSupport "psm2" (lib.getDev libpsm2))
     (lib.withFeatureAs fabricSupport "ofi" (lib.getDev libfabric))
@@ -153,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
         p = [
           "mpi"
         ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [
+        ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform ucx) [
           "shmem"
           "osh"
         ];
@@ -201,7 +192,7 @@ stdenv.mkDerivation (finalAttrs: {
         part1 = [
           "mpi"
         ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [ "shmem" ];
+        ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform ucx) [ "shmem" ];
         part2 = builtins.attrNames wrapperDataSubstitutions;
       };
     in
@@ -237,14 +228,14 @@ stdenv.mkDerivation (finalAttrs: {
         ))
         (lib.concatStringsSep "\n")
       ]}
-      # A symlink to $\{lib.getDev pmix}/bin/pmixcc upstreeam puts here as well
-      # from some reason.
-      moveToOutput "bin/pcc" "''${!outputDev}"
 
       # Handle informative binaries about the compilation
-      for i in {prte,ompi,oshmem}_info; do
-        moveToOutput "bin/$i" "''${!outputDev}"
-      done
+      ${lib.pipe wrapperDataFileNames.part1 [
+        (map (name: ''
+          moveToOutput "bin/o${name}_info" "''${!outputDev}"
+        ''))
+        (lib.concatStringsSep "\n")
+      ]}
     '';
 
   postFixup = ''

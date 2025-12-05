@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-WPePzqZ2iGeJ7kzTj8eg7q1JEjw91WY7gViJJ46SLRY=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-wyuV+jWY7w4VDn314yRkqmeqgRijPb+XgmUiy73U3Zc=";
 
   nativeCheckInputs = [
@@ -32,6 +31,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/samwho/hmm";
     changelog = "https://github.com/samwho/hmm/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

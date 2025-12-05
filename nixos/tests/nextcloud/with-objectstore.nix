@@ -38,7 +38,7 @@ runTest (
           services.nextcloud.config.objectstore.s3 = {
             enable = true;
             bucket = "nextcloud";
-            autocreate = true;
+            verify_bucket_exists = true;
             key = accessKey;
             secretFile = "${pkgs.writeText "secretKey" secretKey}";
             hostname = "acme.test";
@@ -111,7 +111,6 @@ runTest (
     };
 
     test-helpers.init = ''
-      minio.start()
       minio.wait_for_open_port(9000)
       minio.wait_for_unit("nginx.service")
       minio.wait_for_open_port(443)

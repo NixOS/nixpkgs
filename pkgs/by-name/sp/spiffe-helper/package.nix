@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "spiffe-helper";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "spiffe";
     repo = "spiffe-helper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nakwTJBE8ICuRCmG+pjh1gZVFIXSOgsxTDjEeBrwufE=";
+    hash = "sha256-rP0qXSut+9m8wCzByO0CO6IobC1lphK/3Y1OhPgiAOw=";
   };
 
   vendorHash = "sha256-sAcmJNry3nuWyzt0Ee05JjROR/pDXxu2NVmltotSD0U=";

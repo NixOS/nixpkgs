@@ -1,25 +1,21 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   aiohttp,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiomusiccast";
-  version = "0.14.8";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "0.15.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vigonotion";
     repo = "aiomusiccast";
     tag = version;
-    hash = "sha256-V4xl2QY+pPEnJtx7dxSNj/aXqHvV9Z6uuWgbVHNyLjA=";
+    hash = "sha256-oFA8i/cdDqOQ9Fq0VWd8eiOg8F1+MNxWanNqoao5+pM=";
   };
 
   postPatch = ''
@@ -27,11 +23,10 @@ buildPythonPackage rec {
       --replace '"0.0.0"' '"${version}"'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
-    setuptools
   ];
 
   # upstream has no tests
@@ -39,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiomusiccast" ];
 
-  meta = with lib; {
+  meta = {
     description = "Companion library for musiccast devices intended for the Home Assistant integration";
     homepage = "https://github.com/vigonotion/aiomusiccast";
-    changelog = "https://github.com/vigonotion/aiomusiccast/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/vigonotion/aiomusiccast/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

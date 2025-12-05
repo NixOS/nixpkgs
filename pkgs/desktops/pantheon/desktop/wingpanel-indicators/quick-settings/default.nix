@@ -23,14 +23,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wingpanel-quick-settings";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "quick-settings";
     rev = finalAttrs.version;
-    hash = "sha256-G8nwEbMMHVaT7czDG1E/AMsMdSYtmh0oiMruGr2tMdg=";
+    hash = "sha256-82XlZDnXuUB0PPmInrSQh1vrwnOYt9RplKWwYxIirVo=";
   };
+
+  patches = [
+    # We no longer ship Pantheon X11 session in NixOS.
+    # https://github.com/elementary/session-settings/issues/91
+    # https://github.com/elementary/session-settings/issues/82
+    ./hide-onscreen-keyboard-settings.patch
+  ];
 
   nativeBuildInputs = [
     glib # glib-compile-resources

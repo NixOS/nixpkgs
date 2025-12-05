@@ -22,19 +22,18 @@
 
 buildDunePackage rec {
   pname = "stog";
-  version = "1.0.0";
+  version = "1.1.0";
   minimalOCamlVersion = "4.13";
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "zoggy";
     repo = "stog";
-    rev = version;
-    hash = "sha256-hMb6D6VSq2o2NjycwxZt3mZKy1FR+3afEwbOmTc991g=";
+    tag = version;
+    hash = "sha256-seaVco5AoOxjEuw8zYsrA25vcyo1Un3eUJUU9FT57WU=";
   };
 
   nativeBuildInputs = [ menhir ];
   buildInputs = [
-    fmt
     lwt_ppx
     ocf_ppx
     ppx_blob
@@ -43,11 +42,11 @@ buildDunePackage rec {
   propagatedBuildInputs = [
     dune-build-info
     dune-site
+    fmt
     higlo
     logs
     lwt
     ocf
-    ppx_blob
     ptime
     uri
     uutf

@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
     "-DUSE_MKL_IF_AVAILABLE=OFF"
     "-DUSE_CUDA=OFF"
     "-DUSE_CUDNN=OFF"
@@ -91,7 +92,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Lightweight, Portable, Flexible Distributed/Mobile Deep Learning with Dynamic, Mutation-aware Dataflow Dep Scheduler";
     homepage = "https://mxnet.incubator.apache.org/";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     license = licenses.asl20;
     platforms = platforms.linux;
   };

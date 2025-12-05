@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   clang,
-  ffmpeg-headless,
+  ffmpeg_6-headless,
   openssl,
   alsa-lib,
   opencv,
@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-JVkezG2bs99IFOTONeZZRljjbi0EhFf+DMxcfiWI4p4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-LHRTmjAwDPMOP6YQfL01leEzqRKtteU1cnUqL6UeWKk=";
   checkFlags = [
     # requires network access
@@ -41,13 +40,13 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl.dev
     alsa-lib.dev
-    ffmpeg-headless.dev
+    ffmpeg_6-headless.dev
     opencv
   ];
 
   postFixup = ''
     wrapProgram $out/bin/tplay \
-      --prefix PATH : "${lib.makeBinPath [ ffmpeg-headless ]}"
+      --prefix PATH : "${lib.makeBinPath [ ffmpeg_6-headless ]}"
   '';
 
   meta = {

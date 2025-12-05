@@ -19,6 +19,7 @@
   py,
   httpx,
   pyramid,
+  pytest-asyncio,
   pytestCheckHook,
   repoze-lru,
   setuptools,
@@ -80,6 +81,7 @@ buildPythonApplication rec {
     beautifulsoup4
     nginx
     py
+    pytest-asyncio
     pytestCheckHook
     webtest
   ];
@@ -91,12 +93,16 @@ buildPythonApplication rec {
     export PATH=$PATH:$out/bin
     export HOME=$TMPDIR
   '';
-  pytestFlagsArray = [
-    "./test_devpi_server"
+  pytestFlags = [
     "-rfsxX"
-    "--ignore=test_devpi_server/test_nginx_replica.py"
-    "--ignore=test_devpi_server/test_streaming_nginx.py"
-    "--ignore=test_devpi_server/test_streaming_replica_nginx.py"
+  ];
+  enabledTestPaths = [
+    "./test_devpi_server"
+  ];
+  disabledTestPaths = [
+    "test_devpi_server/test_nginx_replica.py"
+    "test_devpi_server/test_streaming_nginx.py"
+    "test_devpi_server/test_streaming_replica_nginx.py"
   ];
   disabledTests = [
     "root_passwd_hash_option"

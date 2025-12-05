@@ -120,7 +120,6 @@ buildPythonPackage rec {
     maintainers = with maintainers; [
       antono
       relrod
-      schneefux
     ];
   };
 }

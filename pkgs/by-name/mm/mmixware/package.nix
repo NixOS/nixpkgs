@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "mmixware";
-  version = "unstable-2021-06-18";
+  version = "1.0-unstable-2021-06-18";
 
   src = fetchFromGitLab {
     domain = "gitlab.lrz.de";

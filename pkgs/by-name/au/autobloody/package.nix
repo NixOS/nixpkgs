@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "autobloody";
-  version = "0.1.8";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CravateRouge";
     repo = "autobloody";
     tag = "v${version}";
-    hash = "sha256-0MwhdT9GYLcrdZSqszx1DC9lyz8K61lJZZCzeFfWB0E=";
+    hash = "sha256-iv2Al5FQMZNVrAxvrwYjglPBxEUUZ9Jn1wFd5B4b9WY=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

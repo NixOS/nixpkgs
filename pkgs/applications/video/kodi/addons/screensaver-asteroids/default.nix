@@ -27,7 +27,7 @@ buildKodiBinaryAddon rec {
 
   meta = with lib; {
     homepage = "https://github.com/xbmc/screensaver.asteroids";
-    description = "A screensaver that plays Asteroids";
+    description = "Screensaver that plays Asteroids";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     teams = [ teams.kodi ];

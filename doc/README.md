@@ -1,6 +1,6 @@
 # Contributing to the Nixpkgs reference manual
 
-This directory houses the sources files for the Nixpkgs reference manual.
+This directory houses the source files for the Nixpkgs reference manual.
 
 > [!IMPORTANT]
 > We are actively restructuring our documentation to follow the [Diátaxis framework](https://diataxis.fr/)
@@ -92,7 +92,7 @@ It uses the widely compatible [header attributes](https://github.com/jgm/commonm
 
 #### Inline Anchors
 
-Allow linking arbitrary place in the text (e.g. individual list items, sentences…).
+Allow linking to an arbitrary place in the text (e.g. individual list items, sentences…).
 
 They are defined using a hybrid of the link syntax with the attributes syntax known from headings, called [bracketed spans](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/bracketed_spans.md):
 
@@ -203,7 +203,7 @@ watermelon
 
 In an effort to keep the Nixpkgs manual in a consistent style, please follow the conventions below, unless they prevent you from properly documenting something.
 In that case, please open an issue about the particular documentation convention and tag it with a "needs: documentation" label.
-When needed, each convention explain why it exists, so you can make a decision whether to follow it or not based on your particular case.
+When needed, each convention explains why it exists, so you can make a decision whether to follow it or not based on your particular case.
 Note that these conventions are about the **structure** of the manual (and its source files), not about the content that goes in it.
 You, as the writer of documentation, are still in charge of its content.
 
@@ -212,6 +212,34 @@ You, as the writer of documentation, are still in charge of its content.
 Put each sentence in its own line.
 This makes reviews and suggestions much easier, since GitHub's review system is based on lines.
 It also helps identifying long sentences at a glance.
+
+### Writing Function Documentation
+
+Function documentation is *reference documentation*, for which
+[diataxis Reference documentation](https://diataxis.fr/reference/) (8 minutes) is **mandatory reading**.
+
+On top of the diataxis framework, which provides a balanced perspective on what reference documentation should contain, we apply a specific style rule to function documentation:
+the first sentence is in present tense, active voice, and the subject is omitted, referring implicitly to the name of the function.
+For example:
+
+```nix
+/**
+  Subtracts value `b` from value `a`.
+
+  Returns the difference as a number.
+*/
+subtractValues # ...elided code
+```
+
+Renders as:
+
+```md
+## `subtractValues`
+
+Subtracts value `b` from value `a`.
+
+Returns the difference as a number.
+```
 
 ### Callouts and examples
 
@@ -380,7 +408,7 @@ Though this is not shown in the rendered documentation on nixos.org.
 
 #### Footnotes
 
-To add a foonote explanation, use the following syntax:
+To add a footnote explanation, use the following syntax:
 
 ```markdown
 Sometimes it's better to add context [^context] in a footnote.
@@ -415,7 +443,7 @@ This syntax is taken from [CommonMark](https://spec.commonmark.org/0.30/#link-re
 #### Typographic replacements
 
 Typographic replacements are enabled.
-Check the [list of possible replacement patterns check](https://github.com/executablebooks/markdown-it-py/blob/3613e8016ecafe21709471ee0032a90a4157c2d1/markdown_it/rules_core/replacements.py#L1-L15).
+Check the [list of possible replacement patterns](https://github.com/executablebooks/markdown-it-py/blob/3613e8016ecafe21709471ee0032a90a4157c2d1/markdown_it/rules_core/replacements.py#L1-L15).
 
 ## Getting help
 

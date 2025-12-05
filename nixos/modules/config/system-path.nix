@@ -8,41 +8,47 @@
 }:
 let
 
-  requiredPackages =
-    map (pkg: lib.setPrio ((pkg.meta.priority or lib.meta.defaultPriority) + 3) pkg)
-      [
-        pkgs.acl
-        pkgs.attr
-        pkgs.bashInteractive # bash with ncurses support
-        pkgs.bzip2
-        pkgs.coreutils-full
-        pkgs.cpio
-        pkgs.curl
-        pkgs.diffutils
-        pkgs.findutils
-        pkgs.gawk
-        pkgs.stdenv.cc.libc
-        pkgs.getent
-        pkgs.getconf
-        pkgs.gnugrep
-        pkgs.gnupatch
-        pkgs.gnused
-        pkgs.gnutar
-        pkgs.gzip
-        pkgs.xz
-        pkgs.less
-        pkgs.libcap
-        pkgs.ncurses
-        pkgs.netcat
-        config.programs.ssh.package
-        pkgs.mkpasswd
-        pkgs.procps
-        pkgs.su
-        pkgs.time
-        pkgs.util-linux
-        pkgs.which
-        pkgs.zstd
-      ];
+  corePackageNames = [
+    "acl"
+    "attr"
+    "bashInteractive" # bash with ncurses support
+    "bzip2"
+    "coreutils-full"
+    "cpio"
+    "curl"
+    "diffutils"
+    "findutils"
+    "gawk"
+    "getent"
+    "getconf"
+    "gnugrep"
+    "gnupatch"
+    "gnused"
+    "gnutar"
+    "gzip"
+    "xz"
+    "less"
+    "libcap"
+    "ncurses"
+    "netcat"
+    "mkpasswd"
+    "procps"
+    "su"
+    "time"
+    "util-linux"
+    "which"
+    "zstd"
+  ];
+  corePackages =
+    (map (
+      n:
+      let
+        pkg = pkgs.${n};
+      in
+      lib.setPrio ((pkg.meta.priority or lib.meta.defaultPriority) + 3) pkg
+    ) corePackageNames)
+    ++ [ pkgs.stdenv.cc.libc ];
+  corePackagesText = "[ ${lib.concatMapStringsSep " " (n: "pkgs.${n}") corePackageNames} ]";
 
   defaultPackageNames = [
     "perl"
@@ -77,6 +83,28 @@ in
           configuration.  (The latter is the main difference with
           installing them in the default profile,
           {file}`/nix/var/nix/profiles/default`.
+        '';
+      };
+
+      corePackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        defaultText = lib.literalMD ''
+          these packages, with their `meta.priority` numerically increased
+          (thus lowering their installation priority):
+
+              ${corePackagesText}
+        '';
+        example = [ ];
+        description = ''
+          Set of core packages for a normal interactive system.
+
+          Only change this if you know what you're doing!
+
+          Like with systemPackages, packages are installed to
+          {file}`/run/current-system/sw`. They are
+          automatically available to all users, and are
+          automatically updated every time you rebuild the system
+          configuration.
         '';
       };
 
@@ -151,7 +179,11 @@ in
 
   config = {
 
-    environment.systemPackages = requiredPackages ++ config.environment.defaultPackages;
+    # Set this here so that it has the right priority and allows ergonomic
+    # merging.
+    environment.corePackages = corePackages;
+
+    environment.systemPackages = config.environment.corePackages ++ config.environment.defaultPackages;
 
     environment.pathsToLink = [
       "/bin"

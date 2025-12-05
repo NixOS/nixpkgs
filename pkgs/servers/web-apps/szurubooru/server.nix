@@ -20,10 +20,6 @@ let
         doCheck = false;
       });
 
-      pyheif = super.pyheif.overridePythonAttrs (oldAttrs: {
-        doCheck = false;
-      });
-
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.23";
         src = fetchPypi {
@@ -50,17 +46,20 @@ python.pkgs.buildPythonApplication {
 
   src = "${src}/server";
 
+  patches = [
+    ./001-server-pillow-heif.patch
+  ];
+
   nativeBuildInputs = with python.pkgs; [ setuptools ];
   propagatedBuildInputs = with python.pkgs; [
     alembic
     certifi
     coloredlogs
-    heif-image-plugin
+    legacy-cgi
     numpy
-    pillow-avif-plugin
     pillow
+    pillow-heif
     psycopg2-binary
-    pyheif
     pynacl
     pyrfc3339
     pytz

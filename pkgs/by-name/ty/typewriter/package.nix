@@ -63,6 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.gnome.org/JanGernert/typewriter/-/releases/v.${finalAttrs.version}";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.awwpotato ];
+    maintainers = [ lib.maintainers.da157 ];
   };
 })

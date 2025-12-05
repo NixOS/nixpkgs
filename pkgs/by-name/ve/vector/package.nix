@@ -20,24 +20,22 @@
   nixosTests,
   nix-update-script,
   darwin,
+  versionCheckHook,
   zlib,
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vector";
-  version = "0.48.0";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "0.51.1";
 
   src = fetchFromGitHub {
     owner = "vectordotdev";
     repo = "vector";
-    rev = "v${version}";
-    hash = "sha256-qgf3aMZc1cgPlsAzgtaXLUx99KwN5no1amdkwFVyl4Y=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EjG8FFz4PDAgCPTkHAxJieW+t6RAPx3MTSku8QGXjYg=";
   };
 
-  cargoHash = "sha256-t8mfZpLrzrxj1WUpJPqZWyfBf9XobcqZY/hAeVGzhcM=";
+  cargoHash = "sha256-17hmdom7ZZQQ4vYte3IKZnqlLEv7D7LY6tyWqdeuUHk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -62,11 +60,6 @@ rustPlatform.buildRustPackage {
     coreutils
     zlib
   ];
-
-  # Rust 1.80.0 introduced the unexepcted_cfgs lint, which requires crates to allowlist custom cfg options that they inspect.
-  # Upstream is working on fixing this in https://github.com/vectordotdev/vector/pull/20949, but silencing the lint lets us build again until then.
-  # TODO remove when upgrading Vector
-  RUSTFLAGS = "--allow dependency_on_unit_never_type_fallback --allow dead_code";
 
   # Without this, we get SIGSEGV failure
   RUST_MIN_STACK = 33554432;
@@ -119,6 +112,12 @@ rustPlatform.buildRustPackage {
       --replace-fail "#[tokio::test]" ""
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
   passthru = {
     tests = {
       inherit (nixosTests) vector;
@@ -129,6 +128,7 @@ rustPlatform.buildRustPackage {
   meta = with lib; {
     description = "High-performance observability data pipeline";
     homepage = "https://github.com/vectordotdev/vector";
+    changelog = "https://github.com/vectordotdev/vector/releases/tag/v${finalAttrs.version}";
     license = licenses.mpl20;
     maintainers = with maintainers; [
       thoughtpolice
@@ -137,4 +137,4 @@ rustPlatform.buildRustPackage {
     platforms = with platforms; all;
     mainProgram = "vector";
   };
-}
+})

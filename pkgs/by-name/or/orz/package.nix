@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-PVso4ufBwxhF1yhzIkIwSbRJdnH9h8gn3nreWQJDMn4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-vbhK4jHNhCI1nFv2pVOtjlxQe+b7NMP14z2Tk+no8Vs=";
 
   outputs = [
@@ -40,7 +39,7 @@ rustPlatform.buildRustPackage {
     description = "High performance, general purpose data compressor written in rust";
     homepage = "https://github.com/richox/orz";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "orz";
   };
 }

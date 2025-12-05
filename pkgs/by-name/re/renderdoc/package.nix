@@ -6,6 +6,7 @@
   bison,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   libXdmcp,
   libglvnd,
   libpthreadstubs,
@@ -13,7 +14,6 @@
   nix-update-script,
   pcre,
   pkg-config,
-  # python3Packages.shiboken2 is currently broken
   python312Packages,
   qt5,
   stdenv,
@@ -33,19 +33,30 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renderdoc";
-  version = "1.39";
+  version = "1.41";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UFaZtSA3oYOYKuV2loh5tX1rLnoKgRypaJe6H+j/uHU=";
+    hash = "sha256-1Us+hwvsHX2Zn0BCv8YkOCN1226gAXeZYsg4btyJi8w=";
   };
 
   outputs = [
     "out"
     "dev"
     "doc"
+  ];
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/baldurk/renderdoc/issues/2945
+      # https://github.com/baldurk/renderdoc/commit/adf8acbccd642c8bc62256fb5580795320364895
+      name = "devendor-pcre.patch";
+      url = "https://github.com/baldurk/renderdoc/commit/adf8acbccd642c8bc62256fb5580795320364895.patch?full_index=1";
+      hash = "sha256-uQoSVmgU09tw7ccTnH1MrisDisTUbaXTelA1YdsYPlM=";
+      revert = true;
+    })
   ];
 
   buildInputs = [
@@ -142,6 +153,8 @@ stdenv.mkDerivation (finalAttrs: {
       pbsds
       ShyAssassin
     ];
-    platforms = lib.intersectLists lib.platforms.linux (lib.platforms.x86_64 ++ lib.platforms.i686);
+    platforms = lib.intersectLists lib.platforms.linux (
+      lib.platforms.x86_64 ++ lib.platforms.i686 ++ lib.platforms.aarch64
+    );
   };
 })

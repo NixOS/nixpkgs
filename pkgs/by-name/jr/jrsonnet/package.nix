@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-OX+iJJ3vdCsWWr8x31psV9Vne6xWDZnJc83NbJqMK1A=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-DA31NatwQyf3RPpaI38DdAujpRyZfJvoHgr2CZSjH3s=";
 
   nativeBuildInputs = [ installShellFiles ];
@@ -45,7 +44,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/CertainLach/jrsonnet";
     license = licenses.mit;
     maintainers = with maintainers; [
-      figsoda
       lach
     ];
   };

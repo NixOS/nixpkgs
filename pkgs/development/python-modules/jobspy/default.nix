@@ -28,6 +28,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "numpy"
     "markdownify"
+    "regex"
   ];
 
   build-system = [ poetry-core ];

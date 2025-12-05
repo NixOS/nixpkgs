@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "zapzap";
-  version = "6.1.1-2";
+  version = "6.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rafatosta";
     repo = "zapzap";
     tag = version;
-    hash = "sha256-gd9DxTck0YG0ETmFMzsc/0osMTB4txr7pQ9Xw4dLP+A=";
+    hash = "sha256-8SUwb7W2K6jnj94LOt0vX8aI9EuOnMKR8nclWFhaTBw=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "WhatsApp desktop application written in Pyqt6 + PyQt6-WebEngine";
-    homepage = "https://rtosta.com/zapzap-web/";
+    homepage = "https://rtosta.com/zapzap/";
     mainProgram = "zapzap";
     license = licenses.gpl3Only;
     changelog = "https://github.com/rafatosta/zapzap/releases/tag/${src.tag}";

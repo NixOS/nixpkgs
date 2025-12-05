@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
   env.CONFIG_PFMLIB_SHARED = if enableShared then "y" else "n";
 
-  buildInputs = lib.optional stdenv.hostPlatform.isWindows windows.libgnurx;
+  buildInputs = lib.optional stdenv.hostPlatform.isMinGW windows.libgnurx;
 
   meta = with lib; {
     description = "Helper library to program the performance monitoring events";

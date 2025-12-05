@@ -74,11 +74,11 @@ let
           "PLATFORM=${platform}"
           "CFG_USER_TA_TARGETS=${taTarget}"
         ]
-        ++ (lib.optionals (is32bit) [
+        ++ (lib.optionals is32bit [
           "CFG_ARM32_core=y"
           "CROSS_COMPILE32=${stdenv.cc.targetPrefix}"
         ])
-        ++ (lib.optionals (is64bit) [
+        ++ (lib.optionals is64bit [
           "CFG_ARM64_core=y"
           "CROSS_COMPILE64=${stdenv.cc.targetPrefix}"
         ])
@@ -97,7 +97,7 @@ let
         meta =
           with lib;
           {
-            description = "A Trusted Execution Environment for ARM";
+            description = "Trusted Execution Environment for ARM";
             homepage = "https://github.com/OP-TEE/optee_os";
             changelog = "https://github.com/OP-TEE/optee_os/blob/${defaultVersion}/CHANGELOG.md";
             license = licenses.bsd2;

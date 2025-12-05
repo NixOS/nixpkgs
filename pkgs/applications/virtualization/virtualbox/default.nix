@@ -49,7 +49,6 @@
   open-watcom-bin,
   makeself,
   perl,
-  vulkan-loader,
   javaBindings ? true,
   jdk, # Almost doesn't affect closure size
   pythonBindings ? false,
@@ -73,12 +72,13 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  virtualboxVersion = "7.1.12";
+  virtualboxVersion = "7.2.4";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "6f9618f39168898134975f51df7c2d6d5129c0aa82b6ae11cf47f920c70df276";
+  virtualboxSha256 = "d281ec981b5f580211a0cedd1b75a1adcb0fbfcbb768d8c2bf4429f4763e8bbd";
 
-  kvmPatchVersion = "20250207";
-  kvmPatchHash = "sha256-GzRLIXhzWL1NLvaGKcWVBCdvay1IxgJUE4koLX1ze7Y=";
+  kvmPatchVboxVersion = "7.2.4";
+  kvmPatchVersion = "20251103";
+  kvmPatchHash = "sha256-VhSuRYiZLg8hIGatf27u/nBBBtB1zz4ePxtiRYy84Hw=";
 
   # The KVM build is not compatible to VirtualBox's kernel modules. So don't export
   # modsrc at all.
@@ -163,11 +163,11 @@ stdenv.mkDerivation (finalAttrs: {
     libtpms
     python3
     xz
+    libGL
   ]
   ++ optional javaBindings jdk
   ++ optional pythonBindings python3 # Python is needed even when not building bindings
   ++ optional pulseSupport libpulseaudio
-  ++ optionals headless [ libGL ]
   ++ optionals (!headless) [
     qtbase
     qttools
@@ -213,6 +213,9 @@ stdenv.mkDerivation (finalAttrs: {
     grep 'libasound\.so\.2'     src include -rI --files-with-match | xargs sed -i -e '
       s@"libasound\.so\.2"@"${alsa-lib.out}/lib/libasound.so.2"@g'
 
+    substituteInPlace src/VBox/Devices/Graphics/DevVGA-SVGA3d-glLdr.cpp \
+      --replace-fail \"libGL.so.1\" \"${libGL.out}/lib/libGL.so.1\"
+
     export USER=nix
     set +x
   '';
@@ -225,8 +228,8 @@ stdenv.mkDerivation (finalAttrs: {
       # No update patch disables check for update function
       # https://bugs.launchpad.net/ubuntu/+source/virtualbox-ose/+bug/272212
       (fetchpatch {
-        url = "https://salsa.debian.org/pkg-virtualbox-team/virtualbox/-/raw/42a1ca1291fde365bfba140cb21a8a074aaccce2/debian/patches/16-no-update.patch";
-        hash = "sha256-qM2e4DkkpmA18Z76OUsnY1MhcGb1dT2PG68JUy6fZEE=";
+        url = "https://salsa.debian.org/pkg-virtualbox-team/virtualbox/-/raw/8028d88e6876ca5977de13c58b54e243229efe98/debian/patches/16-no-update.patch";
+        hash = "sha256-AGtFsRjwd8Yw296eqX3NC2TUptAhpFTRaOMutiheQ6Y=";
       })
     ]
     ++ [ ./extra_symbols.patch ]
@@ -244,22 +247,20 @@ stdenv.mkDerivation (finalAttrs: {
     )
     # While the KVM patch should not break any other behavior if --with-kvm is not specified,
     # we don't take any chances and only apply it if people actually want to use KVM support.
-    ++ optional enableKvm (
-      let
-        patchVboxVersion =
-          # There is no updated patch for 7.1.12 yet, but the older one still applies.
-          if finalAttrs.virtualboxVersion == "7.1.12" then "7.1.6" else finalAttrs.virtualboxVersion;
-      in
-      fetchpatch {
-        name = "virtualbox-${finalAttrs.virtualboxVersion}-kvm-dev-${finalAttrs.kvmPatchVersion}.patch";
-        url = "https://github.com/cyberus-technology/virtualbox-kvm/releases/download/dev-${finalAttrs.kvmPatchVersion}/kvm-backend-${patchVboxVersion}-dev-${finalAttrs.kvmPatchVersion}.patch";
-        hash = finalAttrs.kvmPatchHash;
-      }
-    )
+    ++ optional enableKvm (fetchpatch {
+      name = "virtualbox-${finalAttrs.virtualboxVersion}-kvm-dev-${finalAttrs.kvmPatchVersion}.patch";
+      url = "https://github.com/cyberus-technology/virtualbox-kvm/releases/download/dev-${finalAttrs.kvmPatchVersion}/kvm-backend-${kvmPatchVboxVersion}-dev-${finalAttrs.kvmPatchVersion}.patch";
+      hash = finalAttrs.kvmPatchHash;
+    })
     ++ [
       ./qt-dependency-paths.patch
       # https://github.com/NixOS/nixpkgs/issues/123851
       ./fix-audio-driver-loading.patch
+      # curl 8.16 upgrade breakage
+      (fetchpatch {
+        url = "https://salsa.debian.org/pkg-virtualbox-team/virtualbox/-/raw/dbf9a6ef75380ebd2705df0198c6ac8073d0b4cb/debian/patches/new-curl.patch";
+        hash = "sha256-WWnCWdXlJo9jTr8yXA0NxcDQBScryuu/53wyX0rhszk=";
+      })
     ];
 
   postPatch = ''
@@ -315,7 +316,7 @@ stdenv.mkDerivation (finalAttrs: {
       ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
       ${optionalString enableWebService "--enable-webservice"} \
       ${optionalString (open-watcom-bin != null) "--with-ow-dir=${open-watcom-bin}"} \
-      ${optionalString (enableKvm) "--with-kvm"} \
+      ${optionalString enableKvm "--with-kvm"} \
       ${extraConfigureFlags} \
       --disable-kmods
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${glib.dev}/lib/pkgconfig@' \
@@ -394,8 +395,7 @@ stdenv.mkDerivation (finalAttrs: {
     # If hardening is disabled, wrap the VirtualBoxVM binary instead of patching
     # the source code (see postPatch).
     + optionalString (!headless && !enableHardening) ''
-      wrapQtApp $out/libexec/virtualbox/VirtualBoxVM \
-         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ vulkan-loader ]}"
+      wrapQtApp $out/libexec/virtualbox/VirtualBoxVM
     '';
 
   passthru = {

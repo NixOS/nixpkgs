@@ -124,7 +124,8 @@ stdenv.mkDerivation {
     "-DITK_USE_SYSTEM_SWIG=ON"
     "-DPY_SITE_PACKAGES_PATH=${placeholder "out"}/${python.sitePackages}"
   ]
-  ++ lib.optionals withVtk [ "-DModule_ITKVtkGlue=ON" ];
+  ++ lib.optionals withVtk [ "-DModule_ITKVtkGlue=ON" ]
+  ++ lib.optionals (lib.versionOlder version "5.4") [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ];
 
   nativeBuildInputs = [
     cmake

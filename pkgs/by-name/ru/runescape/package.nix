@@ -28,13 +28,13 @@ let
 
   runescape = stdenv.mkDerivation rec {
     pname = "runescape-launcher";
-    version = "2.2.10";
+    version = "2.2.11";
 
     # Packages: https://content.runescape.com/downloads/ubuntu/dists/trusty/non-free/binary-amd64/Packages
     # upstream is https://content.runescape.com/downloads/ubuntu/pool/non-free/r/${pname}/${pname}_${version}_amd64.deb
     src = fetchurl {
       url = "https://archive.org/download/${pname}_${version}_amd64/${pname}_${version}_amd64.deb";
-      sha256 = "1v96vjiblphhbqhpp3m7wbvdvcnp76ncdlf4pdcr2z1dz8nh6shg";
+      sha256 = "0dyilgbsr28zqpf711wygg706vn7sqxklnsnbghwkxfzzjppz2xw";
     };
 
     nativeBuildInputs = [

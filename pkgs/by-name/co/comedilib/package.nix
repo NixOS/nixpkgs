@@ -21,8 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Linux-Comedi";
     repo = "comedilib";
-    rev = "r${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    sha256 = "0kfs2dw62vjz8j7fgsxq6ky8r8kca726gyklbm6kljvgfh47lyfw";
+    tag = "r${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-3Hl6CHRvSzpNXXT6Z8RRbKKM/DS46+eORF9uYXgT2k0=";
   };
 
   nativeBuildInputs = [
@@ -56,11 +56,11 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Linux Control and Measurement Device Interface Library";
     homepage = "https://github.com/Linux-Comedi/comedilib";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.doronbehar ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ doronbehar ];
+    platforms = lib.platforms.linux;
   };
 })

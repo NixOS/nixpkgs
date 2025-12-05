@@ -6,25 +6,28 @@
   fetchPypi,
   hatchling,
   orjson,
-  pythonOlder,
+  python-dateutil,
   requests,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "elasticsearch8";
-  version = "8.17.2";
+  version = "8.19.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-j6FaQWPFJ8kqoTwjIPyMDcOZBg8mOO0BbKCFn4ESCAM=";
+    hash = "sha256-lDfI5RI8JgtZdmGDv9kVIGdyVChJtpf3inlEbsiQqA4=";
   };
 
   build-system = [ hatchling ];
 
-  dependencies = [ elastic-transport ];
+  dependencies = [
+    elastic-transport
+    python-dateutil
+    typing-extensions
+  ];
 
   optional-dependencies = {
     async = [ aiohttp ];

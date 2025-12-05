@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "photocollage";
-  version = "1.4.6";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adrienverge";
     repo = "PhotoCollage";
     rev = "v${version}";
-    hash = "sha256-jDb2mFsok8TNi9+A/FAieqo7YbAUsmrFRBGwdGv71Xg=";
+    hash = "sha256-YEkQ5yVFCBBFg8IL5ExvZIi0moaG/c0LtsIkphuzuog=";
   };
 
   build-system = with python3Packages; [ setuptools ];

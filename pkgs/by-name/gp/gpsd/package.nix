@@ -35,11 +35,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gpsd";
-  version = "3.26.1";
+  version = "3.27";
 
   src = fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-3H5GWWjBVA5hvFfHWG1qV6AEchKgFO/a00j5B7wuCZA=";
+    sha256 = "sha256-YZUpLdeRC+aMtwGNRRZig+rv0/nbl3P81umnjUnqyZk=";
   };
 
   # TODO: render & install HTML documentation using asciidoctor
@@ -74,7 +74,10 @@ stdenv.mkDerivation rec {
     pango
   ];
 
-  pythonPath = lib.optionals guiSupport [
+  pythonPath = [
+    python3Packages.pyserial
+  ]
+  ++ lib.optionals guiSupport [
     python3Packages.pygobject3
     python3Packages.pycairo
   ];
@@ -150,7 +153,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       bjornfor
-      rasendubi
     ];
   };
 }

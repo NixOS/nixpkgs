@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "aardwolf";
-  version = "0.2.12";
+  version = "0.2.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "skelsec";
     repo = "aardwolf";
     tag = version;
-    hash = "sha256-CMO3qhxYmwB9kWIiHWV/0gAfs/yCnHzpfNYLTy4wX78=";
+    hash = "sha256-8QXPvfVeT3qadxTvt/LQX3XM5tGj6SpfOhP/9xcZHW4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

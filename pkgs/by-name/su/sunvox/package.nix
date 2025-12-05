@@ -4,14 +4,17 @@
   fetchzip,
   alsa-lib,
   autoPatchelfHook,
+  copyDesktopItems,
   libglvnd,
   libjack2,
   libX11,
   libXi,
+  makeDesktopItem,
   makeWrapper,
   SDL2,
+  fetchurl,
+  imagemagick,
 }:
-
 let
   platforms = {
     "x86_64-linux" = "linux_x86_64";
@@ -24,23 +27,30 @@ let
   bindir =
     platforms."${stdenv.hostPlatform.system}"
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  icon = fetchurl {
+    url = "https://warmplace.ru/soft/sunvox/images/icon.png";
+    hash = "sha256-ld2GCOhBhMThuUYBNa+2iTdY2HsYBRyApWiHTPuVgKA=";
+  };
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sunvox";
-  version = "2.1.2b";
+  version = "2.1.3";
 
   src = fetchzip {
     urls = [
       "https://www.warmplace.ru/soft/sunvox/sunvox-${finalAttrs.version}.zip"
       # Upstream removes downloads of older versions, please save bumped versions to archive.org
-      "https://web.archive.org/web/20241215075639/https://www.warmplace.ru/soft/sunvox/sunvox-${finalAttrs.version}.zip"
+      "https://web.archive.org/web/20251019141206/https://www.warmplace.ru/soft/sunvox/sunvox-${finalAttrs.version}.zip"
     ];
-    hash = "sha256-RmGqko1OLkQb0Oeydpfy4wxzp6iz2MpS7R22d4qjEaE=";
+    hash = "sha256-egOaIZEyI5x2VV660qbO+pan22BFRaa4d+8sOpJhpBM=";
   };
 
   nativeBuildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
       autoPatchelfHook
+      copyDesktopItems
+      imagemagick
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       makeWrapper
@@ -56,6 +66,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
     libjack2
+  ];
+
+  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
+    (makeDesktopItem {
+      name = "sunvox";
+      exec = "sunvox";
+      desktopName = "SunVox";
+      genericName = "Modular Synthesizer";
+      comment = "Modular synthesizer with pattern-based sequencer";
+      icon = "sunvox";
+      categories = [
+        "AudioVideo"
+        "Audio"
+        "Midi"
+      ];
+    })
   ];
 
   dontConfigure = true;
@@ -79,6 +105,14 @@ stdenv.mkDerivation (finalAttrs: {
     # Cleanup, make sure we didn't miss anything
     find $out/share/sunvox/sunvox -type f -name readme.txt -delete
     rmdir $out/share/sunvox/sunvox/${bindir} $out/share/sunvox/sunvox
+
+    # Resize & install icons
+    for size in 16 24 32 48 64 128 256; do
+      mkdir -p $out/share/icons/hicolor/''${size}x''${size}/apps
+      magick ${icon} -resize ''${size}x''${size} \
+      $out/share/icons/hicolor/''${size}x''${size}/apps/sunvox.png
+    done
+
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications

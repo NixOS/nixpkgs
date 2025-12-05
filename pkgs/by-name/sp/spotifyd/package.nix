@@ -3,7 +3,6 @@
   stdenv,
   config,
   alsa-lib,
-  apple-sdk_11,
   cmake,
   dbus,
   fetchFromGitHub,
@@ -33,7 +32,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-IqJlqcau0AZAqQjlaEKzinqTdVUA48/m2Y3ioFP/4Zw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-wZ/JJZDo+Iz5vg4XawcZFvjOEqpD5I0jTfg1JyH3+MA=";
 
   nativeBuildInputs = [
@@ -43,8 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+    lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
     # The `dbus_mpris` feature works on other platforms, but only requires `dbus` on Linux
     ++ lib.optional (withMpris && stdenv.hostPlatform.isLinux) dbus
     ++ lib.optional (withALSA || withJack) alsa-lib

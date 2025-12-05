@@ -8,7 +8,6 @@
   python3,
   vala,
   wrapGAppsHook3,
-  xapp,
   lightdm,
   gtk3,
   pixman,
@@ -19,17 +18,18 @@
   linkFarm,
   lightdm-slick-greeter,
   numlockx,
+  xapp-symbolic-icons,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lightdm-slick-greeter";
-  version = "2.0.9";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "slick-greeter";
     rev = version;
-    sha256 = "sha256-YSSAFH6azXVk527CmZ6RM2hBdzziTdXeOmYZKusF/DQ=";
+    hash = "sha256-htyFH1Q8RFyvkW75NMpjajNJDzv/87k/Dr8+R5beT2w=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    xapp
     lightdm
     gtk3
     pixman
@@ -87,6 +86,7 @@ stdenv.mkDerivation rec {
     buildPythonPath "$out $pythonPath"
     gappsWrapperArgs+=(
       --prefix PYTHONPATH : "$program_PYTHONPATH"
+      --prefix XDG_DATA_DIRS : "${lib.makeSearchPath "share" [ xapp-symbolic-icons ]}"
     )
   '';
 

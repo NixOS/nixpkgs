@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       publicDomain
       wtfpl
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

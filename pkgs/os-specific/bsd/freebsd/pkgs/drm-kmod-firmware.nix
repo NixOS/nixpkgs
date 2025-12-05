@@ -40,7 +40,7 @@ mkDerivation rec {
   env = sys.passthru.env;
   SYSDIR = "${sys.src}/sys";
 
-  KMODDIR = "${builtins.placeholder "out"}/kernel";
+  KMODDIR = "${placeholder "out"}/kernel";
 
   meta = {
     description = "GPU firmware for FreeBSD drm-kmod";

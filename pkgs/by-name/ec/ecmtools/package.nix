@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/alucryd/ecm-tools";
     license = lib.licenses.gpl3Plus;
     mainProgram = "bin2ecm";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

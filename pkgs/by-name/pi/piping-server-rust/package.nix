@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-8kYaANVWmBOncTdhtjjbaYnEFQeuWjemdz/kTjwj2fw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-m6bYkewBE0ZloDVUhUslS+dgPyoK+eay7rrP3+c00mo=";
 
   meta = {
@@ -23,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nwtgck/piping-server-rust";
     changelog = "https://github.com/nwtgck/piping-server-rust/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "piping-server";
   };
 }

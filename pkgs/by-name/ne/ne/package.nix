@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   ncurses,
-  texinfo6,
+  texinfo,
   texliveMedium,
   perl,
   ghostscript,
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     texliveMedium
-    texinfo6
+    texinfo
     perl
     ghostscript
   ];

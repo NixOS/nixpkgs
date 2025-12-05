@@ -49,7 +49,7 @@ lib.checkListOfEnum "colloid-icon-theme: scheme variants"
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "colloid-icon-theme";
-      rev = version;
+      tag = version;
       hash = "sha256-x2SSaIkKm1415avO7R6TPkpghM30HmMdjMFUUyPWZsk=";
     };
 
@@ -77,8 +77,8 @@ lib.checkListOfEnum "colloid-icon-theme: scheme variants"
       runHook preInstall
 
       name= ./install.sh \
-        ${lib.optionalString (schemeVariants != [ ]) ("--scheme " + builtins.toString schemeVariants)} \
-        ${lib.optionalString (colorVariants != [ ]) ("--theme " + builtins.toString colorVariants)} \
+        ${lib.optionalString (schemeVariants != [ ]) ("--scheme " + toString schemeVariants)} \
+        ${lib.optionalString (colorVariants != [ ]) ("--theme " + toString colorVariants)} \
         --dest $out/share/icons
 
       jdupes --quiet --link-soft --recurse $out/share

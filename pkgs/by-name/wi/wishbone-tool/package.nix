@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage {
 
   sourceRoot = "${src.name}/wishbone-tool";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-YJEsTGnBUkQ35VOwZQeBbO3RZqglLYm2xecmIS4jiZM=";
 
   buildInputs = [ libusb-compat-0_1 ];

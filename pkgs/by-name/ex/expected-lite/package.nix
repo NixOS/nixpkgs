@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "expected-lite";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "martinmoene";
     repo = "expected-lite";
     rev = "v${version}";
-    hash = "sha256-LRXxUaDQT5q9dXK2uYFvCgEuGWEHKr95lfdGTGjke0g=";
+    hash = "sha256-nxwdymBNbd+RuL8rKi2Fx2gC68TnJe7WnoN0O01lecQ=";
   };
 
   nativeBuildInputs = [

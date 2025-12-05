@@ -17,8 +17,8 @@ in
     (lib.mkRemovedOptionModule [ "services" "tumbler" "package" ] "")
   ];
 
-  meta = with lib; {
-    maintainers = with lib.maintainers; [ ] ++ lib.teams.pantheon.members;
+  meta = {
+    maintainers = [ ] ++ lib.teams.pantheon.members;
   };
 
   ###### interface

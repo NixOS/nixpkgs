@@ -1,28 +1,31 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   py,
   pytest,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-random-order";
-  version = "1.1.1";
+  version = "1.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-RHLX008fHF86NZxP/FwT7QZSMvMeyhnIhEwatAbnkIA=";
+  src = fetchFromGitHub {
+    owner = "jbasko";
+    repo = "pytest-random-order";
+    tag = "v${version}";
+    hash = "sha256-c282PrdXxG7WChnkpLWe059OmtTOl1Mn6yWgMRfCjBA=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   buildInputs = [ pytest ];
 

@@ -10,18 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "surface-control";
-  version = "0.4.8-1";
+  version = "0.4.9-1";
 
   src = fetchFromGitHub {
     owner = "linux-surface";
     repo = "surface-control";
     tag = "v${version}";
-    hash = "sha256-ZooqPlvxx+eBFEIf9Y1iU6zhhgafGUw28G5cwdF/E78=";
+    hash = "sha256-CcLHaakWhrzfDrNoXGQom9LkdlkTUkTui7djn3m+vhI=";
   };
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-gv/ipOQ1kmLc9YxxwuXc/rq6YUdVw2FhrI9C+DHxIDM=";
+  cargoHash = "sha256-46JqH3FIO1zMeWqNEL8NcfU+Tiaanr99EBMjnr9tE+g=";
 
   nativeBuildInputs = [
     pkg-config

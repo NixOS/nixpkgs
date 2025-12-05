@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sentencepiece";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "sentencepiece";
     tag = "v${version}";
-    sha256 = "sha256-tMt6UBDqpdjAhxAJlVOFFlE3RC36/t8K0gBAzbesnsg=";
+    sha256 = "sha256-q0JgMxoD9PLqr6zKmOdrK2A+9RXVDub6xy7NOapS+vs=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -42,5 +42,8 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ pashashocky ];
+    # sentencepiece 0.2.1 segfaults on darwin when instantiated
+    # See https://github.com/NixOS/nixpkgs/issues/466092
+    badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];
   };
 }

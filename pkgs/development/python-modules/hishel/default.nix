@@ -50,7 +50,7 @@ buildPythonPackage rec {
     pytestCheckHook
     trio
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "hishel" ];
 

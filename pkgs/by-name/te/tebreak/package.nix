@@ -50,12 +50,17 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "tebreak" ];
 
-  meta = with lib; {
+  meta = {
     description = "Find and characterise transposable element insertions";
     mainProgram = "tebreak";
     homepage = "https://github.com/adamewing/tebreak";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jbedo ];
-    platforms = platforms.x86_64;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jbedo ];
+    platforms = lib.platforms.x86_64;
+    # Several tests are failing:
+    # - AttributeError: module 'skbio.alignment' has no attribute 'local_pairwise_align_ssw'.
+    #   Did you mean: 'local_pairwise_align'?
+    # - AssertionError: 6 != 0
+    broken = true;
   };
 }

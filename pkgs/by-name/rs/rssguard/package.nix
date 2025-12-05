@@ -3,35 +3,44 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  qt6,
   kdePackages,
   wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rssguard";
-  version = "4.8.5";
+  version = "4.8.6";
 
   src = fetchFromGitHub {
     owner = "martinrotter";
     repo = "rssguard";
     tag = version;
-    sha256 = "sha256-JSw3zuKUPqxWbgzLVjLs41fOihQZcfU6PJGb4m6ua90=";
+    sha256 = "sha256-2gwzk23t9WRHrXlASzba9HQRijHjH0nfWsBjMcqgq68=";
   };
 
   buildInputs = [
-    kdePackages.qtwebengine
-    kdePackages.qttools
+    qt6.qtbase
+    qt6.qtmultimedia
+    qt6.qtwebengine
+    qt6.qttools
+    qt6.qt5compat
     kdePackages.mpvqt
-    kdePackages.full
   ];
   nativeBuildInputs = [
     cmake
     wrapGAppsHook4
-    kdePackages.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
   cmakeFlags = with lib; [
     (cmakeFeature "CMAKE_BUILD_TYPE" "\"Release\"")
   ];
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   meta = {
     description = "Simple RSS/Atom feed reader with online synchronization";

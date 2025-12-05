@@ -25,7 +25,7 @@ buildGoModule rec {
 
   checkFlags = [
     # Requires network access or fluky
-    "-skip=^Test(_MainWithPlugin|_MainWithSSL|_Main|Http_health|Http_matchHandler|Http_withBasicAuth|File_Events|File_Events_BusyListener)$"
+    "-skip=^Test(_MainWithPlugin|_MainWithSSL|_Main|Http_DoWithRedirects|Http_health|Http_matchHandler|Http_withBasicAuth|File_Events|File_Events_BusyListener|Service_ScheduleHealthCheck)$"
   ];
 
   postInstall = ''

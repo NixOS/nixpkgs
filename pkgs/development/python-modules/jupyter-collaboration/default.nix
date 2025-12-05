@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "jupyter-collaboration";
-  version = "4.1.0";
+  version = "4.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyterlab";
     repo = "jupyter-collaboration";
     tag = "v${version}";
-    hash = "sha256-PnfUWtOXdXYG5qfzAW5kATSQr2sWKDBNiINA8/G4ZX4=";
+    hash = "sha256-/NFx76jqByPhzFKYFIcVctJv9+WQeuoUQaqNt+tUs8o=";
   };
 
   sourceRoot = "${src.name}/projects/jupyter-collaboration";
@@ -55,11 +55,18 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # pytest.PytestCacheWarning: could not create cache path /build/source/.pytest_cache/v/cache/nodeids: [Errno 13] Permission denied: '/build/source/pytest-cache-files-plraagdr'
-    "-p"
-    "no:cacheprovider"
-    "$src/tests"
+    "-pno:cacheprovider"
+  ];
+
+  preCheck = ''
+    appendToVar enabledTestPaths "$src/tests"
+  '';
+
+  disabledTests = [
+    # Failed: Timeout (>300.0s) from pytest-timeout
+    "test_document_ttl_from_settings"
   ];
 
   __darwinAllowLocalNetworking = true;

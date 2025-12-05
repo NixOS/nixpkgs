@@ -33,11 +33,11 @@
 
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "3.4.7";
+  version = "3.5.2";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "sha256-3TRspvOvq83F6boJ3WZ7AQWQu2akL0VBAh+51vBz2sw=";
+    sha256 = "6f577c247ef870a55fe3377246bc1c2d643c673cd32de6c26231ff51d3fc7093";
   };
 
   outputs = [
@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
   # FIXME: sphinx is needed for now to get man-pages
   nativeBuildInputs = [
     pkg-config
+    protobufc # dnstap support
     autoreconfHook
     sphinx
   ];
@@ -94,6 +95,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.hostPlatform.isDarwin zlib; # perhaps due to gnutls
 
   enableParallelBuilding = true;
+  strictDeps = true;
 
   CFLAGS = [
     "-O2"
@@ -133,7 +135,7 @@ stdenv.mkDerivation rec {
     description = "Authoritative-only DNS server from .cz domain registry";
     homepage = "https://knot-dns.cz";
     changelog = "https://gitlab.nic.cz/knot/knot-dns/-/releases/v${version}";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.vcunat ];
     mainProgram = "knotd";

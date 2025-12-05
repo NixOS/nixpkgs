@@ -8,11 +8,11 @@
 }:
 
 let
-  suitesparseVersion = "7.8.3";
+  suitesparseVersion = "7.12.1";
 in
 stdenv.mkDerivation {
   pname = "mongoose";
-  version = "3.3.4";
+  version = "3.3.6";
 
   outputs = [
     "bin"
@@ -23,8 +23,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "DrTimothyAldenDavis";
     repo = "SuiteSparse";
-    rev = "v${suitesparseVersion}";
-    hash = "sha256-ai3Xne1ByP2hcM9L236pUyVsVohW6k0BX0DRXPq/jhw=";
+    tag = "v${suitesparseVersion}";
+    hash = "sha256-6EMPEH5dcNT1qtuSlzR26RhpfN7MbYJdSKcrsQ0Pzow=";
   };
 
   nativeBuildInputs = [
@@ -41,18 +41,17 @@ stdenv.mkDerivation {
   dontUseCmakeConfigure = true;
 
   cmakeFlags = [
-    "-DBLAS_LIBRARIES=${blas}"
     "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
   ];
 
   buildPhase = ''
-    runHook preConfigure
+    runHook preBuild
 
     for f in SuiteSparse_config Mongoose; do
       (cd $f && cmakeConfigurePhase && make -j$NIX_BUILD_CORES)
     done
 
-    runHook postConfigure
+    runHook postBuild
   '';
 
   installPhase = ''

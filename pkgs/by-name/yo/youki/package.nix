@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "youki";
-  version = "0.5.4";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "youki";
     rev = "v${version}";
-    hash = "sha256-tWe5EPodO+slp+K7mn9UTVApNdiDRPMsOa9RfiT9qQw=";
+    hash = "sha256-b2R9/ADoZfRSu1Qh7hImR1Y+ZX15Uhk7JFwD8ipec6o=";
   };
 
   nativeBuildInputs = [
@@ -53,8 +53,7 @@ rustPlatform.buildRustPackage rec {
     "youki"
   ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-YM4D2DDXc9o4ak2DT36IeXpYykA/9R7PPqmIXkZ9aDs=";
+  cargoHash = "sha256-R/1wE7twjMwlSns7ZV5nr8PZ/OzghcslvU+0Ic/oamQ=";
 
   meta = {
     description = "Container runtime written in Rust";

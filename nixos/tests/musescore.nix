@@ -5,9 +5,15 @@ let
   customMuseScoreConfig = hostPkgs.writeText "MuseScore4.ini" ''
     [application]
     hasCompletedFirstLaunchSetup=true
+    welcomeDialogLastShownIndex=0
+    welcomeDialogLastShownVersion=${hostPkgs.musescore.version}
+    welcomeDialogShowOnStartup=false
 
     [project]
     preferredScoreCreationMode=1
+
+    [tours]
+    lastShownTours=",project_opened/input-by-duration"
   '';
 in
 {
@@ -66,7 +72,7 @@ in
 
       machine.sleep(2)
 
-      machine.send_key("tab")
+      machine.send_key("right")
       # Type the beginning of https://de.wikipedia.org/wiki/Alle_meine_Entchen
       machine.send_chars("cdef6gg5aaaa7g")
       machine.sleep(1)
@@ -79,14 +85,13 @@ in
       # Wait until the Print dialogue appears.
       machine.wait_for_window("Print")
 
-      machine.screenshot("MuseScore4")
+      machine.screenshot("MuseScore3")
       machine.send_key("alt-p")
-      machine.sleep(1)
-
-      machine.screenshot("MuseScore5")
 
       # Wait until PDF is exported
       machine.wait_for_file('"/root/Untitled score.pdf"')
+
+      machine.screenshot("MuseScore4")
 
       ## Check that it contains the title of the score
       machine.succeed('pdfgrep "Untitled score" "/root/Untitled score.pdf"')

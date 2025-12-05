@@ -133,7 +133,7 @@ in
 {
   name = "curl-impersonate";
 
-  meta = with lib.maintainers; {
+  meta = {
     maintainers = [ ];
   };
 

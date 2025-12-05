@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "zabbix-cli";
-  version = "3.5.2";
+  version = "3.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unioslo";
     repo = "zabbix-cli";
     tag = version;
-    hash = "sha256-Sgt3kVbyzNJCSVUYErHNOrgc7Jd3tIwYhwOESRPeAyw=";
+    hash = "sha256-Fk3o0+cNCX/ixqNd9oldY6JJ+wQWlMjBAEwuAWCLURQ=";
   };
 
   build-system = with python3Packages; [
@@ -55,6 +55,11 @@ python3Packages.buildPythonApplication rec {
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
+
+  disabledTests = [
+    # Disable failing test with Click >= v8.2.0
+    "test_patch_get_click_type"
+  ];
 
   pythonImportsCheck = [ "zabbix_cli" ];
 

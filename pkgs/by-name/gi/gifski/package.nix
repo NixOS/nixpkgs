@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-8EAC8YH3AIbvYdTL7HtqTL7WqztzCwvDwIVkhiqvtrQ=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ZppSO3TyZBbNhG+YW71+C9kMu7ok2+kbnnCRbAKsbfs=";
 
   nativeBuildInputs = [
@@ -46,7 +45,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://gif.ski/";
     changelog = "https://github.com/ImageOptim/gifski/releases/tag/${src.rev}";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "gifski";
   };
 }

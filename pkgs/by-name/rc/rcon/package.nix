@@ -33,6 +33,13 @@ stdenv.mkDerivation rec {
     pcre
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace tests/CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/n0la/rcon";
     description = "Source RCON client for command line";

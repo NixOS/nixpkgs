@@ -8,20 +8,21 @@
   autoAddDriverRunpath,
   apple-sdk_15,
   versionCheckHook,
+  nix-update-script,
   rocmPackages,
   cudaSupport ? config.cudaSupport,
   rocmSupport ? config.rocmSupport,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "btop";
-  version = "1.4.4";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "aristocratos";
     repo = "btop";
-    rev = "v${version}";
-    hash = "sha256-4H9UjewJ7UFQtTQYwvHZL3ecPiChpfT6LEZwbdBCIa0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZLT+Hc1rvBFyhey+imbgGzSH/QaVxIh/jvDKVSmDrA0=";
   };
 
   nativeBuildInputs = [
@@ -55,10 +56,12 @@ stdenv.mkDerivation rec {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Monitor of resources";
     homepage = "https://github.com/aristocratos/btop";
-    changelog = "https://github.com/aristocratos/btop/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/aristocratos/btop/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
@@ -68,4 +71,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "btop";
   };
-}
+})

@@ -3,29 +3,41 @@
   lib,
   fetchurl,
   autoPatchelfHook,
+  erlang,
 }:
 let
+  # erlang-language-platform supports multiple OTP versions.
+  # here we search the release names from hashes.json to check support for our OTP.
+  # ELP releases only list the major and minor version so we do a prefix check.
   arch = if stdenv.hostPlatform.isAarch64 then "aarch64" else "x86_64";
-  release =
+  platform =
     if stdenv.hostPlatform.isDarwin then
-      "macos-${arch}-apple-darwin"
+      "elp-macos-${arch}-apple-darwin"
     else
-      "linux-${arch}-unknown-linux-gnu";
+      "elp-linux-${arch}-unknown-linux-gnu";
+  otp_version = "otp-${lib.versions.major erlang.version}";
+  release_major = "${platform}-${otp_version}";
 
-  hashes = {
-    linux-aarch64-unknown-linux-gnu = "sha256-i6XsOK8csrJ/9TDzltA7mGjdutLZONFiYGV5tqSCy8o=";
-    linux-x86_64-unknown-linux-gnu = "sha256-XK3DPWIdPDoIL10EATa8p1bnlpZaOzOdU0LnuKbj++E=";
-    macos-aarch64-apple-darwin = "sha256-8e5duQYDVFyZejMjuZPuWhg1on3CBku9eBuilG5p1BY=";
-    macos-x86_64-apple-darwin = "sha256-dnouUBUUAkMr1h+IJWYamxmk8IC7JdeIUS9/YI0GzOU=";
-  };
+  hashes = builtins.fromJSON (builtins.readFile ./hashes.json);
+
+  release_name =
+    let
+      hash_names = builtins.attrNames hashes;
+      found_name = lib.lists.findFirst (name: lib.strings.hasPrefix release_major name) false hash_names;
+    in
+    if found_name != false then
+      found_name
+    else
+      throw "erlang-language-platform does not support OTP major/minor version ${otp_version}";
+
 in
 stdenv.mkDerivation rec {
   pname = "erlang-language-platform";
-  version = "2025-04-02";
+  version = "2025-07-21";
 
   src = fetchurl {
-    url = "https://github.com/WhatsApp/erlang-language-platform/releases/download/${version}/elp-${release}-otp-26.2.tar.gz";
-    hash = hashes.${release};
+    url = "https://github.com/WhatsApp/erlang-language-platform/releases/download/${version}/${release_name}.tar.gz";
+    hash = hashes.${release_name};
   };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isElf [ autoPatchelfHook ];
@@ -39,6 +51,8 @@ stdenv.mkDerivation rec {
     install -m755 -D elp $out/bin/elp
     runHook postInstall
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "IDE-first library for the semantic analysis of Erlang code, including LSP server, linting and refactoring tools";

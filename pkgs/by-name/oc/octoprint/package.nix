@@ -15,7 +15,7 @@ let
 
   py = python3.override {
     self = py;
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) [
       (
 
         self: super: {
@@ -92,14 +92,14 @@ let
       (self: super: {
         octoprint = self.buildPythonPackage rec {
           pname = "OctoPrint";
-          version = "1.11.2";
+          version = "1.11.4";
           format = "setuptools";
 
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint";
             rev = version;
-            hash = "sha256-D6lIEa7ee44DWavMLaXIo7RsKwaMneYqOBQk626pI20=";
+            hash = "sha256-2C/f8SQbr1HS4XSm8iQ43xtax441/RrkEeq3youo8Q8=";
           };
 
           propagatedBuildInputs =
@@ -231,7 +231,6 @@ let
             mainProgram = "octoprint";
             license = licenses.agpl3Only;
             maintainers = with maintainers; [
-              abbradar
               WhittlesJr
               gador
             ];
@@ -240,7 +239,7 @@ let
       })
       (callPackage ./plugins.nix { })
       packageOverrides
-    ]);
+    ];
   };
 in
 with py.pkgs;

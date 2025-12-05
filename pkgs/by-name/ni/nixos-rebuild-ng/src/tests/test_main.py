@@ -10,7 +10,6 @@ from unittest.mock import ANY, Mock, call, patch
 import pytest
 
 import nixos_rebuild as nr
-from nixos_rebuild.constants import WITH_NIX_2_18
 
 from .helpers import get_qualified_name
 
@@ -66,8 +65,7 @@ def test_parse_args() -> None:
     assert r1.install_grub is True
     assert r1.profile_name == "system"
     assert r1.action == "switch"
-    # round-trip test (ensure that we have the same flags as parsed)
-    assert nr.utils.dict_to_flags(vars(g1["common_flags"])) == [
+    assert nr.utils.dict_to_flags(g1.common_flags) == [
         "--option",
         "foo1",
         "bar1",
@@ -75,7 +73,13 @@ def test_parse_args() -> None:
         "foo2",
         "bar2",
     ]
-    assert nr.utils.dict_to_flags(vars(g1["flake_common_flags"])) == [
+    assert nr.utils.dict_to_flags(g1.flake_common_flags) == [
+        "--option",
+        "foo1",
+        "bar1",
+        "--option",
+        "foo2",
+        "bar2",
         "--update-input",
         "input1",
         "--update-input",
@@ -113,13 +117,15 @@ def test_parse_args() -> None:
     assert r2.action == "dry-build"
     assert r2.file == "foo"
     assert r2.attr == "bar"
-    # round-trip test (ensure that we have the same flags as parsed)
-    assert nr.utils.dict_to_flags(vars(g2["common_flags"])) == [
+    assert nr.utils.dict_to_flags(g2.common_flags) == [
         "-vvv",
         "--quiet",
         "--quiet",
     ]
-    assert nr.utils.dict_to_flags(vars(g2["common_build_flags"])) == [
+    assert nr.utils.dict_to_flags(g2.build_flags) == [
+        "-vvv",
+        "--quiet",
+        "--quiet",
         "--include",
         "include1",
         "--include",
@@ -179,8 +185,8 @@ def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
                     "<nixpkgs/nixos>",
                     "--attr",
                     "config.system.build.toplevel",
-                    "-vvv",
                     "--no-out-link",
+                    "-vvv",
                 ],
                 check=True,
                 stdout=PIPE,
@@ -218,6 +224,49 @@ def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
                         }
                     }
                 ),
+            ),
+        ]
+    )
+
+
+# https://github.com/NixOS/nixpkgs/issues/437872
+@patch.dict(os.environ, {}, clear=True)
+@patch("subprocess.run", autospec=True)
+def test_execute_nix_build(mock_run: Mock, tmp_path: Path) -> None:
+    config_path = tmp_path / "test"
+    config_path.touch()
+
+    def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
+        return CompletedProcess([], 0, str(config_path))
+
+    mock_run.side_effect = run_side_effect
+
+    nr.execute(
+        [
+            "nixos-rebuild",
+            "build",
+            "--flake",
+            "/path/to/config#hostname",
+            "--no-build-output",
+        ]
+    )
+
+    assert mock_run.call_count == 1
+    mock_run.assert_has_calls(
+        [
+            call(
+                [
+                    "nix",
+                    "--extra-experimental-features",
+                    "nix-command flakes",
+                    "build",
+                    "--print-out-paths",
+                    '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel',
+                    "--no-link",
+                ],
+                check=True,
+                stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
             ),
         ]
     )
@@ -393,11 +442,11 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
                     "build",
                     "--print-out-paths",
                     '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel',
+                    "--no-link",
                     "-v",
                     "--option",
                     "narinfo-cache-negative-ttl",
                     "1200",
-                    "--no-link",
                 ],
                 check=True,
                 stdout=PIPE,
@@ -450,10 +499,6 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
 @patch("subprocess.run", autospec=True)
 @patch("uuid.uuid4", autospec=True)
 @patch(get_qualified_name(nr.services.cleanup_ssh), autospec=True)
-@pytest.mark.skipif(
-    not WITH_NIX_2_18,
-    reason="Tests internal logic based on the assumption that Nix >= 2.18",
-)
 def test_execute_nix_switch_build_target_host(
     mock_cleanup_ssh: Mock,
     mock_uuid4: Mock,
@@ -986,6 +1031,74 @@ def test_execute_build(mock_run: Mock, tmp_path: Path) -> None:
                 stdout=PIPE,
                 **DEFAULT_RUN_KWARGS,
             )
+        ]
+    )
+
+
+@patch("subprocess.run", autospec=True)
+def test_execute_build_dry_run_build_and_target_remote(
+    mock_run: Mock, tmp_path: Path
+) -> None:
+    config_path = tmp_path / "test"
+    config_path.touch()
+    mock_run.side_effect = [
+        CompletedProcess([], 0, str(config_path)),
+        CompletedProcess([], 0),
+        CompletedProcess([], 0, str(config_path)),
+    ]
+
+    nr.execute(
+        [
+            "nixos-rebuild",
+            "dry-build",
+            "--flake",
+            "/path/to/config#hostname",
+            "--build-host",
+            "user@build-host",
+            "--target-host",
+            "user@target-host",
+        ]
+    )
+
+    assert mock_run.call_count == 3
+    mock_run.assert_has_calls(
+        [
+            call(
+                [
+                    "nix",
+                    "--extra-experimental-features",
+                    "nix-command flakes",
+                    "eval",
+                    "--raw",
+                    '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel.drvPath',
+                ],
+                check=True,
+                stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                ["nix-copy-closure", "--to", "user@build-host", config_path],
+                check=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "ssh",
+                    *nr.process.SSH_DEFAULT_OPTS,
+                    "user@build-host",
+                    "--",
+                    "nix",
+                    "--extra-experimental-features",
+                    "'nix-command flakes'",
+                    "build",
+                    f"'{config_path}^*'",
+                    "--print-out-paths",
+                    "--dry-run",
+                ],
+                check=True,
+                stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
+            ),
         ]
     )
 

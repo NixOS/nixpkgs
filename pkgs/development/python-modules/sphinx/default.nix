@@ -118,6 +118,7 @@ buildPythonPackage rec {
     "test_class_alias_having_doccomment"
     "test_class_alias_for_imported_object_having_doccomment"
     "test_decorators"
+    "test_xml_warnings"
     # racy with too many threads
     # https://github.com/NixOS/nixpkgs/issues/353176
     "test_document_toc_only"
@@ -132,6 +133,10 @@ buildPythonPackage rec {
     # Racy tex file creation
     "test_literalinclude_namedlink_latex"
     "test_literalinclude_caption_latex"
+    # Racy local networking
+    "test_load_mappings_cache"
+    "test_load_mappings_cache_update"
+    "test_load_mappings_cache_revert_update"
   ]
   ++ lib.optionals (pythonAtLeast "3.12") [
     # https://github.com/sphinx-doc/sphinx/issues/12430

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opencl-icd-loader";
-  version = "2024.10.24";
+  version = "2025.07.22";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenCL-ICD-Loader";
     rev = "v${version}";
-    hash = "sha256-A+Rd/3LyBoUW2MrRDMOcwsTqTADuNxSQdF1HHgfq3mY=";
+    hash = "sha256-jwviNwX7C7b9lqIS4oZ4YLEFBfBdmQfXHxW3FPPYxYs=";
   };
 
   nativeBuildInputs = [ cmake ];

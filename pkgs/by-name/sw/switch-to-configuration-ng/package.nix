@@ -13,10 +13,7 @@ rustPlatform.buildRustPackage {
 
   src = ./src;
 
-  cargoLock = {
-    lockFile = ./src/Cargo.lock;
-    outputHashes."rust-ini-0.21.1" = "sha256-0nSBhme/g+mVsYdiq0Ash0ek9WEdvbf/b9FRxA7sauk=";
-  };
+  cargoLock.lockFile = ./src/Cargo.lock;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus ];

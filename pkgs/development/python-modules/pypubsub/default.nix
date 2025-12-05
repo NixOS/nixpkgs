@@ -40,6 +40,5 @@ buildPythonPackage {
       applications.
     '';
     license = licenses.bsd2;
-    maintainers = with maintainers; [ tfmoraes ];
   };
 }

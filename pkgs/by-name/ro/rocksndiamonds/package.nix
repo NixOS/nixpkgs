@@ -76,6 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.artsoft.org/rocksndiamonds/";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
   };
 })

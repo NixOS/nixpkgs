@@ -135,6 +135,7 @@ in
           "@system-service"
           "~@privileged"
           "~@resources"
+          "@chown"
         ];
         UMask = "0077";
       };

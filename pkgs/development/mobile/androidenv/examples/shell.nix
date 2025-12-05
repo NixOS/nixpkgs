@@ -2,7 +2,7 @@
   # If you copy this example out of nixpkgs, use these lines instead of the next.
   # This example pins nixpkgs: https://nix.dev/tutorials/first-steps/towards-reproducibility-pinning-nixpkgs.html
   /*
-    nixpkgsSource ? (builtins.fetchTarball {
+    nixpkgsSource ? (fetchTarball {
       name = "nixpkgs-20.09";
       url = "https://github.com/NixOS/nixpkgs/archive/20.09.tar.gz";
       sha256 = "1wg61h4gndm3vcprdcg7rc4s1v3jkm5xd7lw8r2f67w502y94gcy";

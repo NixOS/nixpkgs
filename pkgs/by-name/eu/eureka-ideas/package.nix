@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
@@ -18,7 +19,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-NJ1O8+NBG0y39bMOZeah2jSZlvnPrtpCtXrgAYmVrAc=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-nTYMKJ5OCApqooIF1dsDLriPfYjkZkTdtzpkJya/5ag=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -35,7 +35,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/simeg/eureka";
     changelog = "https://github.com/simeg/eureka/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "eureka";
+    # The last successful Darwin Hydra build was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

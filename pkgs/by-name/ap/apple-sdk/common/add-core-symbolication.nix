@@ -42,7 +42,6 @@ in
 self: super: {
   buildPhase = super.buildPhase or "" + ''
     mkdir -p System/Library/PrivateFrameworks/CoreSymbolication.framework/Versions/A/Headers
-    ln -s A System/Library/PrivateFrameworks/CoreSymbolication.framework/Versions/Current
     ln -s Versions/Current/Headers System/Library/PrivateFrameworks/CoreSymbolication.framework/Headers
     cp '${CoreSymbolication}/include/'*.h System/Library/PrivateFrameworks/CoreSymbolication.framework/Versions/A/Headers
   '';

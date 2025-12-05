@@ -10,7 +10,7 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "katawa-shoujo-re-engineered";
-  version = "2.0.2-1";
+  version = "2.0.3";
 
   src = fetchFromGitea {
     # GitHub mirror at fleetingheart/ksre
@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "fhs";
     repo = "katawa-shoujo-re-engineered";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-skCcNFUmAQMZWRCXsABJR6elDlbVZFRParq7nOzZL4M=";
+    hash = "sha256-M2TWc5dl7lkwM/oisM6xtJwb3Dw9i6qUadBHGdEO2bs=";
   };
 
   desktopItems = [

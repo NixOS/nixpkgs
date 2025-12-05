@@ -36,7 +36,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "scspell" ];
 
   meta = {
-    description = "A spell checker for source code";
+    description = "Spell checker for source code";
     homepage = "https://github.com/myint/scspell";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ guelakais ];

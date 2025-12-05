@@ -3,29 +3,29 @@
   stdenv,
   fetchFromGitHub,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   npmHooks,
   versionCheckHook,
   nix-update-script,
 }:
 let
-  pnpm = pnpm_9;
+  pnpm = pnpm_10;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bumpp";
-  version = "10.1.0";
+  version = "10.3.2";
 
   src = fetchFromGitHub {
     owner = "antfu-collective";
     repo = "bumpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m4m4mZFge9S0zP0E6XWfeFitx0t+QOl+nXM0oFtlIgU=";
+    hash = "sha256-1hGVLPogdeyWh/B2Yxfo/9YbJpFYl8ATh+QCa2VVyyk=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-duxpym1DlJM4q5j0wmrubYiAHQ3cDEFfeD9Gyic6mbI=";
+    fetcherVersion = 2;
+    hash = "sha256-y7uHDtoOjsLnNF47r4aWHYXW0ui8shhn1M0cD2FpaCg=";
   };
 
   nativeBuildInputs = [

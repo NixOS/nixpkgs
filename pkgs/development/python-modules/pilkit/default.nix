@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Collection of utilities and processors for the Python Imaging Library";
     homepage = "https://github.com/matthewwithanm/pilkit/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

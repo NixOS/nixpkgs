@@ -15,6 +15,7 @@ let
     mkEnableOption
     mkIf
     mkPackageOption
+    mkRemovedOptionModule
     types
     ;
 
@@ -28,8 +29,17 @@ let
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [
+      "services"
+      "wymoing"
+      "openwakeword"
+      "preLoadModels"
+    ] "Passing a list of models to preload was removed in wyoming-openwakeword 2.0")
+  ];
+
   options.services.wyoming.openwakeword = with types; {
-    enable = mkEnableOption "Wyoming openWakeWord server";
+    enable = mkEnableOption "Wyoming protocol server for openWakeWord wake word detection system";
 
     package = mkPackageOption pkgs "wyoming-openwakeword" { };
 
@@ -47,24 +57,6 @@ in
       default = [ ];
       description = ''
         Paths to directories with custom wake word models (*.tflite model files).
-      '';
-    };
-
-    preloadModels = mkOption {
-      type = listOf str;
-      default = [
-        "ok_nabu"
-      ];
-      example = [
-        # wyoming_openwakeword/models/*.tflite
-        "alexa"
-        "hey_jarvis"
-        "hey_mycroft"
-        "hey_rhasspy"
-        "ok_nabu"
-      ];
-      description = ''
-        List of wake word models to preload after startup.
       '';
     };
 
@@ -87,6 +79,16 @@ in
         Number of activations before a detection is registered.
 
         A higher trigger level means fewer detections.
+      '';
+      apply = toString;
+    };
+
+    refractorySeconds = mkOption {
+      type = either int float;
+      default = 2;
+      example = 1.5;
+      description = ''
+        Duration in seconds before a wake word can be detected again.
       '';
       apply = toString;
     };
@@ -125,11 +127,9 @@ in
             cfg.threshold
             "--trigger-level"
             cfg.triggerLevel
+            "--refractory-seconds"
+            cfg.refractorySeconds
           ]
-          ++ (concatMap (model: [
-            "--preload-model"
-            model
-          ]) cfg.preloadModels)
           ++ (concatMap (dir: [
             "--custom-model-dir"
             (toString dir)

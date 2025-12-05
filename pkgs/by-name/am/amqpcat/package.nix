@@ -35,6 +35,6 @@ crystal.buildCrystalPackage rec {
     mainProgram = "amqpcat";
     homepage = "https://github.com/cloudamqp/amqpcat";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

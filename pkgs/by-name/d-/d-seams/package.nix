@@ -35,6 +35,10 @@ clangStdenv.mkDerivation rec {
       hash = "sha256-PLbT1lqdw+69lIHH96MPcGRjfIeZyb88vc875QLYyqw=";
     })
   ];
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
   nativeBuildInputs = [
     cmake
     lua
@@ -53,7 +57,7 @@ clangStdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "d-SEAMS: Deferred Structural Elucidation Analysis for Molecular Simulations";
+    description = "Deferred Structural Elucidation Analysis for Molecular Simulations";
     mainProgram = "yodaStruct";
     longDescription = ''
       d-SEAMS, is a free and open-source postprocessing engine for the analysis

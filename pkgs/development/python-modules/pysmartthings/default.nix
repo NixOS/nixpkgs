@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pysmartthings";
-  version = "3.2.8";
+  version = "3.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "andrewsayre";
     repo = "pysmartthings";
     tag = "v${version}";
-    hash = "sha256-bTE4N2TwrAyi0NZcj/GghLZ7Vq4eoc9mQH2OBeCfHn8=";
+    hash = "sha256-+7d/KuuBQSe+U8oIWng8f5D0UObIYfFjikXVdxQ7fX8=";
   };
 
   build-system = [ poetry-core ];

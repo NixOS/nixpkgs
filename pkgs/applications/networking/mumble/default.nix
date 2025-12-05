@@ -6,6 +6,7 @@
   pkg-config,
   qt5,
   cmake,
+  ninja,
   avahi,
   boost,
   libopus,
@@ -51,6 +52,7 @@ let
 
         nativeBuildInputs = [
           cmake
+          ninja
           pkg-config
           python3
           qt5.wrapQtAppsHook
@@ -72,6 +74,7 @@ let
           "-D g15=OFF"
           "-D CMAKE_CXX_STANDARD=17" # protobuf >22 requires C++ 17
           "-D BUILD_NUMBER=${lib.versions.patch source.version}"
+          "-D CMAKE_UNITY_BUILD=ON" # Upstream uses this in their build pipeline to speed up builds
           "-D bundled-gsl=OFF"
           "-D bundled-json=OFF"
         ]
@@ -152,12 +155,6 @@ let
       patches = [
         ./disable-overlay-build.patch
         ./fix-plugin-copy.patch
-        # Can be removed before the next update of Mumble, as that fix was upstreamed
-        # fix version display in MacOS Finder
-        (fetchpatch {
-          url = "https://github.com/mumble-voip/mumble/commit/fbd21bd422367bed19f801bf278562f567cbb8b7.patch";
-          sha256 = "sha256-qFhC2j/cOWzAhs+KTccDIdcgFqfr4y4VLjHiK458Ucs=";
-        })
       ];
 
       postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -221,14 +218,14 @@ let
     } source;
 
   source = rec {
-    version = "1.5.735";
+    version = "1.5.857";
 
     # Needs submodules
     src = fetchFromGitHub {
       owner = "mumble-voip";
       repo = "mumble";
-      rev = "v${version}";
-      hash = "sha256-JRnGgxkf5ct6P71bYgLbCEUmotDLS2Evy6t8R7ac7D4=";
+      tag = "v${version}";
+      hash = "sha256-4ySak2nzT8p48waMgBc9kLrvFB8716e7p0G4trzuh1k=";
       fetchSubmodules = true;
     };
   };

@@ -19,13 +19,15 @@ stdenv.mkDerivation {
     sha256 = "sha256-FB43DAjHBFgxdysoLzBXLxii52a2CCh1skZP/RTzfdc=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
   buildInputs = [
     clang
     libffi
     llvm
     openssl
-    pkg-config
     readline
   ];
   sourceRoot = ''pil21'';

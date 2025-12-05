@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "scrypt";
-  version = "0.8.27";
+  version = "0.9.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "holgern";
     repo = "py-scrypt";
     tag = "v${version}";
-    hash = "sha256-r5tXRq4VFieqw3Plx6W5imDIeGIldW1BREdm6/Kav3M=";
+    hash = "sha256-4jVXaPD57RMe4ef1PVgZwPGAhEHL3RGlu2DSC6lGuR4=";
   };
 
   build-system = [ setuptools ];

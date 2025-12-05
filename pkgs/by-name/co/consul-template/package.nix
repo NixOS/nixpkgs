@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "consul-template";
-  version = "0.41.1";
+  version = "0.41.3";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "consul-template";
     rev = "v${version}";
-    hash = "sha256-lQTI3eTKggzNnN0KCu+ZcdqtDT06OfyIWPQg2qfaxro=";
+    hash = "sha256-v598V/pWZupZ6LKTYrJ0ES3Bs6TR5oAX5q2mnLbff+8=";
   };
 
   vendorHash = "sha256-Tz80n37NBqKX+h3OE6RBufPQ7OteWpZaa5br2WFIvOs=";
@@ -33,7 +33,6 @@ buildGoModule rec {
     license = licenses.mpl20;
     maintainers = with maintainers; [
       cpcloud
-      pradeepchhetri
     ];
     mainProgram = "consul-template";
   };

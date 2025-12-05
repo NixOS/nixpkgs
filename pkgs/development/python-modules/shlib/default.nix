@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "shlib";
-  version = "1.7";
+  version = "1.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "shlib";
     tag = "v${version}";
-    hash = "sha256-clhiTuU5vvZSzdGPA3CISiBTnAahvv1SOKAfMpb6lYU=";
+    hash = "sha256-0BWTaHKGVKYIPQ9ifVWp2VZkSH3Gg/NgP3gPhkmw5S4=";
   };
 
   postPatch = ''
@@ -36,10 +36,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "shlib" ];
 
   meta = with lib; {
-    description = "shell library";
+    description = "Shell library";
     homepage = "https://github.com/KenKundert/shlib";
     changelog = "https://github.com/KenKundert/shlib/releases/tag/${src.tag}";
-    license = licenses.gpl3Plus;
+    license = licenses.mit;
     maintainers = with maintainers; [ jpetrucciani ];
   };
 }

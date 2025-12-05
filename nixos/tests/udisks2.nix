@@ -12,7 +12,7 @@ in
 
 {
   name = "udisks2";
-  meta = with pkgs.lib.maintainers; {
+  meta = {
     maintainers = [ ];
   };
 

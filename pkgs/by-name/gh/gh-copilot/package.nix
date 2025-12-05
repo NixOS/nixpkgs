@@ -10,26 +10,26 @@ let
   systemToPlatform = {
     "x86_64-linux" = {
       name = "linux-amd64";
-      hash = "sha256-bDAhFU18dliKlKY5WQVsVSMVyF4YeTaKO9pwheMcdcg=";
+      hash = "sha256-WVb32g9eqoeQgvPUGOQ7r3oD+PerKYQWEh/PoZwVqkI=";
     };
     "aarch64-linux" = {
       name = "linux-arm64";
-      hash = "sha256-uddWn2RxQyB9s7kx6FI/oH9L/7l/fMD/7HQXWDqvuyQ=";
+      hash = "sha256-nZg7u0BUIHOdu3dg28fydgm6ctr4jOOIZOA5ms3/E64=";
     };
     "x86_64-darwin" = {
       name = "darwin-amd64";
-      hash = "sha256-L+lCmI1ciYInCt5aTcSVRDW0IwecGZ2BZNKrpeEE4jo=";
+      hash = "sha256-A+FQ7AgjqS1/7LExhyKwXlCAwCveSgeyhbCNAjqQ770=";
     };
     "aarch64-darwin" = {
       name = "darwin-arm64";
-      hash = "sha256-9ldVRUhHM2OD+BaOCqVmaE+HFP5jj+hrfyB6wobjS+E=";
+      hash = "sha256-+Q1H9h1j1kusEu1HW3zHWQ8ReR50kwjj4kGC3g6Jzqc=";
     };
   };
   platform = systemToPlatform.${system} or throwSystem;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gh-copilot";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchurl {
     name = "gh-copilot";

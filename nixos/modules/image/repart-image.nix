@@ -30,13 +30,14 @@
   # arguments
   name,
   version,
-  imageFileBasename,
+  baseName,
   compression,
   fileSystems,
   finalPartitions,
   split,
   seed,
   definitionsDirectory,
+  imageSize ? "auto",
   sectorSize,
   mkfsEnv ? { },
   createEmpty ? true,
@@ -170,7 +171,7 @@ stdenvNoCC.mkDerivation (
     systemdRepartFlags = [
       "--architecture=${systemdArch}"
       "--dry-run=no"
-      "--size=auto"
+      "--size=${imageSize}"
       "--definitions=${finalAttrs.finalRepartDefinitions}"
       "--split=${lib.boolToString split}"
       "--json=pretty"
@@ -205,7 +206,7 @@ stdenvNoCC.mkDerivation (
       echo "Building image with systemd-repart..."
       unshare --map-root-user fakeroot systemd-repart \
         ''${systemdRepartFlags[@]} \
-        ${imageFileBasename}.raw \
+        ${baseName}.raw \
         | tee repart-output.json
 
       runHook postBuild
@@ -220,14 +221,14 @@ stdenvNoCC.mkDerivation (
     # separate derivation to allow users to save disk space. Disk images are
     # already very space intensive so we want to allow users to mitigate this.
     + lib.optionalString compression.enable ''
-      for f in ${imageFileBasename}*; do
+      for f in ${baseName}*; do
         echo "Compressing $f with ${compression.algorithm}..."
         # Keep the original file when compressing and only delete it afterwards
         ${compressionCommand} $f && rm $f
       done
     ''
     + ''
-      mv -v repart-output.json ${imageFileBasename}* $out
+      mv -v repart-output.json ${baseName}* $out
 
       runHook postInstall
     '';

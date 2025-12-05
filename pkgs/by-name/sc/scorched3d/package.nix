@@ -72,6 +72,6 @@ stdenv.mkDerivation rec {
     description = "3D Clone of the classic Scorched Earth";
     license = licenses.gpl2Plus;
     platforms = platforms.linux; # maybe more
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

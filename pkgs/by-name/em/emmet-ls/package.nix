@@ -32,7 +32,7 @@ buildNpmPackage rec {
     homepage = "https://github.com/aca/emmet-ls";
     changelog = "https://github.com/aca/emmet-ls/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "emmet-ls";
   };
 }

@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cassette";
-  version = "0.2.1";
+  version = "0.2.1.g49";
 
   src = fetchFromGitHub {
     owner = "Rirusha";
     repo = "Cassette";
     rev = "v${version}";
-    hash = "sha256-DXCOrCntOgUPYMVRqC4jDNTFgUjShCBoYQgLtSnuz6U=";
+    hash = "sha256-1wIYEDaVlqNDS50MiYGqCtf5xGWou/g/YfZChTdQIns=";
   };
 
   nativeBuildInputs = [

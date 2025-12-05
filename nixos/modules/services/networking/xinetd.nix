@@ -31,7 +31,7 @@ let
       ${optionalString (srv.flags != "") "flags = ${srv.flags}"}
       socket_type = ${if srv.protocol == "udp" then "dgram" else "stream"}
       ${optionalString (srv.port != 0) "port        = ${toString srv.port}"}
-      wait        = ${if srv.protocol == "udp" then "yes" else "no"}
+      wait        = ${lib.boolToYesNo (srv.protocol == "udp")}
       user        = ${srv.user}
       server      = ${srv.server}
       ${optionalString (srv.serverArgs != "") "server_args = ${srv.serverArgs}"}
@@ -65,7 +65,7 @@ in
 
       type =
         with types;
-        listOf (submodule ({
+        listOf (submodule {
 
           options = {
 
@@ -130,7 +130,7 @@ in
 
           };
 
-        }));
+        });
 
     };
 

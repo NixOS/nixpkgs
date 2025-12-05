@@ -15,19 +15,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "faircamp";
-  version = "1.4.2";
+  version = "1.7.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "simonrepp";
     repo = "faircamp";
     rev = version;
-    hash = "sha256-68wo95SjiCBS8cikMGZpnpYx7AqyIQ/szXMorirwVPk=";
+    hash = "sha256-r5r7vfTbMPjAqMg5f7L/YfSzlxZgrSFjO6WHO64wfIo=";
   };
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-YyzzkWgjEKl46CfAkbFdum+AWCO0YGTXDh86mtHtCQs=";
+  cargoHash = "sha256-11EcYZw6Dq0Ls1fhBYLlvvHeZtiaweg6JAGBmkX+acw=";
 
   buildFeatures = [ "libvips" ];
 

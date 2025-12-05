@@ -26,10 +26,10 @@ in
     (mkRemovedOptionModule [
       "fetchType"
     ] "This option was removed, use the `unbound.host` option instead.")
-    ({
+    {
       options.warnings = options.warnings;
       options.assertions = options.assertions;
-    })
+    }
   ];
 
   port = 9167;

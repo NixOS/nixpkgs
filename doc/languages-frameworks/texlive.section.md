@@ -48,7 +48,7 @@ Release 23.11 ships with a new interface that will eventually replace `texlive.c
   ```
   This can be applied before or after calling `withPackages`.
 
-  The function currently support the parameters `withDocs`, `withSources`, and `requireTeXPackages`.
+  The function currently supports the parameters `withDocs`, `withSources`, and `requireTeXPackages`.
 
 ## User's guide {#sec-language-texlive-user-guide}
 
@@ -89,7 +89,7 @@ Release 23.11 ships with a new interface that will eventually replace `texlive.c
   nix-repl> texlive.collection-[TAB]
   ```
 
-- Note that the wrapper assumes that the result has a chance to be useful. For example, the core executables should be present, as well as some core data files. The supported way of ensuring this is by including some scheme, for example `scheme-basic`, into the combination.
+- Note that the wrapper assumes that the result has a chance to be useful. For example, the core executables should be present, as well as some core data files. The supported way of ensuring this is by including some scheme, for example, `scheme-basic`, into the combination.
 
 - TeX Live packages are also available under `texlive.pkgs` as derivations with outputs `out`, `tex`, `texdoc`, `texsource`, `tlpkg`, `man`, `info`. They cannot be installed outside of `texlive.combine` but are available for other uses. To repackage a font, for instance, use
 
@@ -235,7 +235,7 @@ runCommand "test.pdf" { nativeBuildInputs = [ latex_with_foiltex ]; } ''
 The font cache for LuaLaTeX is written to `$HOME`.
 Therefore, it is necessary to set `$HOME` to a writable path, e.g. [before using LuaLaTeX in nix derivations](https://github.com/NixOS/nixpkgs/issues/180639):
 ```nix
-runCommandNoCC "lualatex-hello-world" { buildInputs = [ texliveFull ]; } ''
+runCommand "lualatex-hello-world" { buildInputs = [ texliveFull ]; } ''
   mkdir $out
   echo '\documentclass{article} \begin{document} Hello world \end{document}' > main.tex
   env HOME=$(mktemp -d) lualatex  -interaction=nonstopmode -output-format=pdf -output-directory=$out ./main.tex

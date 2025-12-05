@@ -106,10 +106,6 @@ let
         description = "Number of ElGamal/AES tags to send.";
         default = 40;
       };
-      destination = mkOption {
-        type = types.str;
-        description = "Remote endpoint, I2P hostname or b32.i2p address.";
-      };
       keys = mkOption {
         type = types.str;
         default = name + "-keys.dat";
@@ -184,6 +180,10 @@ let
         (boolOpt "enabled" cfg.ntcp2.enable)
         (boolOpt "published" cfg.ntcp2.published)
         (intOpt "port" cfg.ntcp2.port)
+        (sec "ssu2")
+        (boolOpt "enabled" cfg.ssu2.enable)
+        (boolOpt "published" cfg.ssu2.published)
+        (intOpt "port" cfg.ssu2.port)
         (sec "addressbook")
         (strOpt "defaulturl" cfg.addressbook.defaulturl)
       ]
@@ -224,7 +224,7 @@ let
         let
           outTunOpts = [
             (sec tun.name)
-            "type = client"
+            (intOpt "type" tun.type)
             (intOpt "port" tun.port)
             (strOpt "destination" tun.destination)
           ]
@@ -246,14 +246,20 @@ let
         let
           inTunOpts = [
             (sec tun.name)
-            "type = server"
+            (intOpt "type" tun.type)
             (intOpt "port" tun.port)
             (strOpt "host" tun.address)
           ]
-          ++ (optionals (tun ? destination) (optionalNullString "destination" tun.destination))
           ++ (optionals (tun ? keys) (optionalNullString "keys" tun.keys))
           ++ (optionals (tun ? inPort) (optionalNullInt "inport" tun.inPort))
-          ++ (optionals (tun ? accessList) (optionalEmptyList "accesslist" tun.accessList));
+          ++ (optionals (tun ? accessList) (optionalEmptyList "accesslist" tun.accessList))
+          ++ (optionals (tun ? inbound.length) (optionalNullInt "inbound.length" tun.inbound.length))
+          ++ (optionals (tun ? inbound.quantity) (optionalNullInt "inbound.quantity" tun.inbound.quantity))
+          ++ (optionals (tun ? outbound.length) (optionalNullInt "outbound.length" tun.outbound.length))
+          ++ (optionals (tun ? outbound.quantity) (optionalNullInt "outbound.quantity" tun.outbound.quantity))
+          ++ (optionals (tun ? crypto.tagsToSend) (
+            optionalNullInt "crypto.tagstosend" tun.crypto.tagsToSend
+          ));
         in
         lib.concatStringsSep "\n" inTunOpts;
 
@@ -391,7 +397,8 @@ in
 
       floodfill = mkEnableOption "floodfill" // {
         description = ''
-          If the router is declared to be unreachable and needs introduction nodes.
+          Makes your router a floodfill, that means what other routers will
+          publish and get LeaseSets and RouterInfos on your router.
         '';
       };
 
@@ -413,7 +420,7 @@ in
       };
 
       port = mkOption {
-        type = with types; nullOr int;
+        type = with types; nullOr port;
         default = null;
         description = ''
           I2P listen port. If no one is given the router will pick between 9111 and 30777.
@@ -540,6 +547,18 @@ in
         '';
       };
 
+      ssu2 = {
+        enable = mkEnableTrueOption "SSU2";
+        published = mkEnableOption "SSU2 publication";
+        port = mkOption {
+          type = types.port;
+          default = 0;
+          description = ''
+            Port to listen for incoming SSU2 connections (0=auto).
+          '';
+        };
+      };
+
       limits.transittunnels = mkOption {
         type = types.int;
         default = 2500;
@@ -651,7 +670,7 @@ in
           description = "Upstream outproxy bind address.";
         };
         outproxyPort = mkOption {
-          type = types.int;
+          type = types.port;
           default = 4444;
           description = "Upstream outproxy bind port.";
         };
@@ -669,8 +688,20 @@ in
             { name, ... }:
             {
               options = {
+                type = mkOption {
+                  type = types.enum [
+                    "client"
+                    "udpclient"
+                  ];
+                  default = "client";
+                  description = "Tunnel type.";
+                };
+                destination = mkOption {
+                  type = types.str;
+                  description = "Remote endpoint, I2P hostname or b32.i2p address.";
+                };
                 destinationPort = mkOption {
-                  type = with types; nullOr int;
+                  type = with types; nullOr port;
                   default = null;
                   description = "Connect to particular port at destination.";
                 };
@@ -694,8 +725,18 @@ in
             { name, ... }:
             {
               options = {
+                type = mkOption {
+                  type = types.enum [
+                    "server"
+                    "http"
+                    "irc"
+                    "udpserver"
+                  ];
+                  default = "server";
+                  description = "Tunnel type.";
+                };
                 inPort = mkOption {
-                  type = types.int;
+                  type = types.port;
                   default = 0;
                   description = "Service port. Default to the tunnel's listen port.";
                 };

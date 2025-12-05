@@ -1,5 +1,6 @@
 {
   extraLibs ? [ ],
+  firefoxRuntime ? firefox-unwrapped,
 
   lib,
   fetchFromGitHub,
@@ -28,20 +29,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "firefoxpwa";
-  version = "2.14.1";
+  version = "2.17.0";
 
   src = fetchFromGitHub {
     owner = "filips123";
     repo = "PWAsForFirefox";
     rev = "v${version}";
-    hash = "sha256-yYvQxz+lAxKXpAWeLiBnepGuwYfNLyIhu4vQ8NdH3pc=";
+    hash = "sha256-GKK5PYWSO+rWtuZuHgDQx3V7f8bEX8JHvvFK8sQRli4=";
   };
 
   sourceRoot = "${src.name}/native";
   buildFeatures = [ "immutable-runtime" ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-elVthXdjlI9DSQgaIRzu3M72dgGNXGgMiUXEICaBJCQ=";
+  cargoHash = "sha256-aV6Wvv+GzPLsWtdsS3ki82ju1Fh4IgFnIOF4OTEV7uQ=";
 
   preConfigure = ''
     sed -i 's;version = "0.0.0";version = "${version}";' Cargo.toml
@@ -63,30 +63,33 @@ rustPlatform.buildRustPackage rec {
   gtk_modules = map (x: x + x.gtkModule) [ libcanberra-gtk3 ];
   libs =
     let
-      libs =
-        lib.optionals stdenv.hostPlatform.isLinux [
-          cups
-          ffmpeg
-          libglvnd
-          libnotify
-          libpulseaudio
-          libva
-          libgbm
-          pciutils
-          pipewire
-          udev
-          xorg.libXScrnSaver
-        ]
-        ++ gtk_modules
-        ++ extraLibs;
+      libs = [
+        cups
+        ffmpeg
+        libglvnd
+        libnotify
+        libpulseaudio
+        libva
+        libgbm
+        pciutils
+        pipewire
+        udev
+        xorg.libXScrnSaver
+      ]
+      ++ gtk_modules
+      ++ extraLibs;
     in
     lib.makeLibraryPath libs + ":" + lib.makeSearchPathOutput "lib" "lib64" libs;
 
   postInstall = ''
     # Runtime
     mkdir -p $out/share/firefoxpwa
-    cp -Lr ${firefox-unwrapped}/lib/firefox $out/share/firefoxpwa/runtime
+    cp -Lr ${firefoxRuntime}/lib/${firefoxRuntime.binaryName} $out/share/firefoxpwa/runtime
     chmod -R +w $out/share/firefoxpwa
+
+    if [ "${firefoxRuntime.binaryName}" != "firefox" ]; then
+      ln $out/share/firefoxpwa/runtime/${firefoxRuntime.binaryName} $out/share/firefoxpwa/runtime/firefox
+    fi
 
     # UserChrome
     cp -r userchrome $out/share/firefoxpwa

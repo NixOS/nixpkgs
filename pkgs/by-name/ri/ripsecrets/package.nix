@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-JCImUgicoXII64rK/Hch/0gJQE81Fw3h512w/vHUwAI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-2HsUNN3lyGb/eOUEN/vTOQbAy59DQSzIaOqdk9+KhfU=";
 
   meta = with lib; {
@@ -23,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/sirwart/ripsecrets";
     changelog = "https://github.com/sirwart/ripsecrets/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "ripsecrets";
   };
 }

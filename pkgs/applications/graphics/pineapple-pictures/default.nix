@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pineapple-pictures";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "BLumia";
     repo = "pineapple-pictures";
     rev = finalAttrs.version;
-    hash = "sha256-jdybJx/70m9c4/HC1Iz2xm3sf51Fl0jA0lhLvo+KwWw=";
+    hash = "sha256-wWu1nGAJ+8s7CIyFR0lJkxZ1C72Qvkfdvsw4Dvb4aKI=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     mainProgram = "ppic";
-    maintainers = with lib.maintainers; [ rewine ];
+    maintainers = with lib.maintainers; [ wineee ];
   };
 })

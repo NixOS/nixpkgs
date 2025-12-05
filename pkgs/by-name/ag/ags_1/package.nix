@@ -59,6 +59,11 @@ buildNpmPackage (finalAttrs: {
     upower
   ];
 
+  patches = [
+    # Workaround for TypeScript 5.9: https://github.com/Aylur/ags/issues/725#issuecomment-3070009695
+    ./ts59.patch
+  ];
+
   postPatch = ''
     chmod u+x ./post_install.sh && patchShebangs ./post_install.sh
   '';

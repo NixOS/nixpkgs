@@ -12,7 +12,7 @@
   libGL,
   glew,
   opencsg,
-  cgal,
+  cgal_5,
   mpfr,
   gmp,
   glib,
@@ -74,6 +74,25 @@ stdenv.mkDerivation rec {
       url = "https://github.com/openscad/openscad/commit/cc49ad8dac24309f5452d5dea9abd406615a52d9.patch";
       hash = "sha256-B3i+o6lR5osRcVXTimDZUFQmm12JhmbFgG9UwOPebF4=";
     })
+    (fetchpatch {
+      name = "fix-application-icon-not-shown-on-wayland.patch";
+      url = "https://github.com/openscad/openscad/commit/5ea83e5117f5f3ac2197c63db69f523721b8fa85.patch";
+      hash = "sha256-nfeUv0R+J95fyqnVC0HNeBVZnxVoisY1pcdII82qUSU=";
+
+      # upstream's formatting conventions changed between 2021 and this patch
+      postFetch = ''
+        sed -i 's/& / \&/g;s/\*\*/\0 /g;s/^\(.\)  /\1\t/' "$out"
+      '';
+    })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # ref. https://github.com/openscad/openscad/pull/4013 merged upstream
+    (fetchpatch {
+      name = "mem_fun-to-mem_fn.patch";
+      url = "https://github.com/openscad/openscad/commit/c9a1abbedfbf6dda9a23d3ad5844d11e5278a928.patch";
+      hash = "sha256-Man9ledRREb7U+2UOQ0VkpiwbYQjyVOY21YaRFObZc8=";
+    })
+
   ];
 
   postPatch = ''
@@ -82,6 +101,11 @@ stdenv.mkDerivation rec {
 
     substituteInPlace src/openscad.cc \
       --replace-fail 'boost::join' 'boost::algorithm::join'
+  ''
+  # ref. https://github.com/openscad/openscad/pull/4253 merged upstream but does not apply
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/FreetypeRenderer.h \
+      --replace-fail ": public std::unary_function<const GlyphData *, void>" ""
   '';
 
   nativeBuildInputs = [
@@ -99,7 +123,7 @@ stdenv.mkDerivation rec {
     boost
     glew
     opencsg
-    cgal
+    cgal_5
     mpfr
     gmp
     glib

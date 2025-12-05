@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1q17i8zg7dwd8al42wfnkn891dy5hdhw4325plnihkarr50avbr0";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-JTHgOEBpGXPO3C7YUbBF0LFeSUQK+R2w1LugwMV5xyU=";
 
   # requires network access
@@ -27,6 +26,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/windsoilder/hors";
     changelog = "https://github.com/WindSoilder/hors/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

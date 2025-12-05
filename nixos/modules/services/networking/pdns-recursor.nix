@@ -21,7 +21,6 @@ let
     ];
   configType = with types; attrsOf (nullOr (oneOrMore valueType));
 
-  toBool = val: if val then "yes" else "no";
   serialize =
     val:
     with types;
@@ -32,7 +31,7 @@ let
     else if path.check val then
       toString val
     else if bool.check val then
-      toBool val
+      boolToYesNo val
     else if builtins.isList val then
       (concatMapStringsSep "," serialize val)
     else
@@ -181,7 +180,7 @@ in
       default = "validate";
       description = ''
         Controls the level of DNSSEC processing done by the PowerDNS Recursor.
-        See https://doc.powerdns.com/md/recursor/dnssec/ for a detailed explanation.
+        See <https://doc.powerdns.com/md/recursor/dnssec/> for a detailed explanation.
       '';
     };
 

@@ -2,48 +2,38 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
+  pkg-config,
   boost,
   eigen,
   libxml2,
   mpi,
-  python3,
+  python3Packages,
   petsc,
-  pkg-config,
+  ctestCheckHook,
+  mpiCheckPhaseHook,
 }:
 
-stdenv.mkDerivation rec {
+assert petsc.mpiSupport;
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "precice";
-  version = "3.1.2";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "precice";
     repo = "precice";
-    rev = "v${version}";
-    hash = "sha256-KpmcQj8cv5V5OXCMhe2KLTsqUzKWtTeQyP+zg+Y+yd0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1FbTNo2F+jH1EVV6gXc9o0T31UHY/wBK3vQeCV7wW5E=";
   };
 
-  patches = lib.optionals (!lib.versionOlder "3.1.2" version) [
-    (fetchpatch {
-      name = "boost-187-fixes.patch";
-      url = "https://github.com/precice/precice/commit/23788e9eeac49a2069e129a0cb1ac846e8cbeb9f.patch";
-      hash = "sha256-Z8qOGOkXoCui8Wy0H/OeE+NaTDvyRuPm2A+VJKtjH4s=";
-    })
-  ];
-
   cmakeFlags = [
-    (lib.cmakeBool "PRECICE_PETScMapping" false)
-    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
-    (lib.cmakeFeature "PYTHON_LIBRARIES" python3.libPrefix)
-    (lib.cmakeFeature "PYTHON_INCLUDE_DIR" "${python3}/include/${python3.libPrefix}")
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    python3
-    python3.pkgs.numpy
   ];
 
   buildInputs = [
@@ -52,14 +42,30 @@ stdenv.mkDerivation rec {
     libxml2
     mpi
     petsc
+    python3Packages.python
+    python3Packages.numpy
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  doCheck = true;
+
+  nativeCheckInputs = [
+    ctestCheckHook
+    mpiCheckPhaseHook
+  ];
+
+  disabledTests = [
+    # Because preciceDt becomes very small. Test is likely to fail on other platform.
+    "precice.Integration/Serial/Time/Explicit/ParallelCoupling/ReadWriteScalarDataWithSubcycling6400Steps"
   ];
 
   meta = {
-    description = "preCICE stands for Precise Code Interaction Coupling Environment";
+    description = "PreCICE stands for Precise Code Interaction Coupling Environment";
     homepage = "https://precice.org/";
-    license = with lib.licenses; [ gpl3 ];
+    license = with lib.licenses; [ lgpl3Only ];
     maintainers = with lib.maintainers; [ Scriptkiddi ];
-    mainProgram = "binprecice";
+    mainProgram = "precice-tools";
     platforms = lib.platforms.unix;
   };
-}
+})

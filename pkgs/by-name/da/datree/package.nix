@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -30,7 +31,7 @@ buildGoModule rec {
 
   tags = [ "main" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion \
       --cmd datree \
       --bash <($out/bin/datree completion bash) \

@@ -49,6 +49,13 @@ in
         '';
       };
 
+      showBanner = mkOption {
+        description = "Whether to add the Cockpit banner to the issue and motd files.";
+        type = types.bool;
+        default = true;
+        example = false;
+      };
+
       port = mkOption {
         description = "Port where cockpit will listen.";
         type = types.port;
@@ -62,16 +69,28 @@ in
       };
     };
   };
-  config = mkIf cfg.enable {
 
+  config = mkIf cfg.enable {
     # expose cockpit-bridge system-wide
     environment.systemPackages = [ cfg.package ];
 
     # allow cockpit to find its plugins
     environment.pathsToLink = [ "/share/cockpit" ];
 
-    # generate cockpit settings
-    environment.etc."cockpit/cockpit.conf".source = settingsFormat.generate "cockpit.conf" cfg.settings;
+    environment.etc = {
+      # generate cockpit settings
+      "cockpit/cockpit.conf".source = settingsFormat.generate "cockpit.conf" cfg.settings;
+
+      # Add "Web console: ..." line to issue and MOTD
+      "issue.d/cockpit.issue" = {
+        enable = cfg.showBanner;
+        source = "/run/cockpit/issue";
+      };
+      "motd.d/cockpit" = {
+        enable = cfg.showBanner;
+        source = "/run/cockpit/issue";
+      };
+    };
 
     security.pam.services.cockpit = {
       startSession = true;
@@ -80,11 +99,26 @@ in
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
     systemd.packages = [ cfg.package ];
-    systemd.sockets.cockpit.wantedBy = [ "multi-user.target" ];
-    systemd.sockets.cockpit.listenStreams = [
-      "" # workaround so it doesn't listen on both ports caused by the runtime merging
-      (toString cfg.port)
-    ];
+
+    systemd.sockets.cockpit = {
+      wantedBy = [ "multi-user.target" ];
+      listenStreams = [
+        "" # workaround so it doesn't listen on both ports caused by the runtime merging
+        (toString cfg.port)
+      ];
+    };
+
+    # Enable connecting to remote hosts from the login page
+    systemd.services = mkIf (cfg.settings ? LoginTo -> cfg.settings.LoginTo) {
+      "cockpit-wsinstance-http".path = [
+        config.programs.ssh.package
+        cfg.package
+      ];
+      "cockpit-wsinstance-https@".path = [
+        config.programs.ssh.package
+        cfg.package
+      ];
+    };
 
     systemd.tmpfiles.rules = [
       # From $out/lib/tmpfiles.d/cockpit-tmpfiles.conf

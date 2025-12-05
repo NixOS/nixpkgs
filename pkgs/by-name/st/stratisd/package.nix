@@ -30,18 +30,18 @@
 
 stdenv.mkDerivation rec {
   pname = "stratisd";
-  version = "3.8.1";
+  version = "3.8.6";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = "stratisd";
     tag = "stratisd-v${version}";
-    hash = "sha256-vYqvYC3r1TQ62YtMJYOx8bRxFJOam5ntbOS+FJZL/gQ=";
+    hash = "sha256-Kky/6sgvA8NDDGLQLS3sjPJWTCxkoTP/ow+netnK6tY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-B3n9Ot4CFcVL/R2wHPuDIPBca/5pb2VgcuP1pxnnUrA=";
+    hash = "sha256-zA+GEKmg5iV1PaGh0yjNb4h52PH7PwpN53xLV8P9Gac=";
   };
 
   postPatch = ''
@@ -115,9 +115,9 @@ stdenv.mkDerivation rec {
   # remove files for supporting dracut
   postInstall = ''
     mkdir -p "$initrd/bin"
-    cp "$out/lib/dracut/modules.d/90stratis/stratis-rootfs-setup" "$initrd/bin"
+    cp "$out/lib/dracut/modules.d/50stratis/stratis-rootfs-setup" "$initrd/bin"
     mkdir -p "$initrd/lib/systemd/system"
-    substitute "$out/lib/dracut/modules.d/90stratis/stratisd-min.service" \
+    substitute "$out/lib/dracut/modules.d/50stratis/stratisd-min.service" \
       "$initrd/lib/systemd/system/stratisd-min.service" \
       --replace-fail mkdir "${coreutils}/bin/mkdir"
     mkdir -p "$initrd/lib/udev/rules.d"

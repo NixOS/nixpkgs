@@ -6,19 +6,16 @@
   libxcrypt-legacy,
   xz,
   zstd,
-  makeBinaryWrapper,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gcc-arm-embedded";
-  version = "14.2.rel1";
+  version = "14.3.rel1";
 
   platform =
     {
       aarch64-darwin = "darwin-arm64";
       aarch64-linux = "aarch64";
-      x86_64-darwin = "darwin-x86_64";
       x86_64-linux = "x86_64";
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -28,24 +25,12 @@ stdenv.mkDerivation rec {
     # hashes obtained from location ${url}.sha256asc
     sha256 =
       {
-        aarch64-darwin = "c7c78ffab9bebfce91d99d3c24da6bf4b81c01e16cf551eb2ff9f25b9e0a3818";
-        aarch64-linux = "87330bab085dd8749d4ed0ad633674b9dc48b237b61069e3b481abd364d0a684";
-        x86_64-darwin = "2d9e717dd4f7751d18936ae1365d25916534105ebcb7583039eff1092b824505";
-        x86_64-linux = "62a63b981fe391a9cbad7ef51b17e49aeaa3e7b0d029b36ca1e9c3b2a9b78823";
+        aarch64-darwin = "30f4d08b219190a37cded6aa796f4549504902c53cfc3c7e044a8490b6eba1f7";
+        aarch64-linux = "2d465847eb1d05f876270494f51034de9ace9abe87a4222d079f3360240184d3";
+        x86_64-linux = "8f6903f8ceb084d9227b9ef991490413014d991874a1e34074443c2a72b14dbd";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
-
-  nativeBuildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    makeBinaryWrapper
-    darwin.sigtool
-  ];
-
-  patches = [
-    # fix double entry in share/info/porting.info
-    # https://github.com/NixOS/nixpkgs/issues/363902
-    ./info-fix.patch
-  ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -59,34 +44,22 @@ stdenv.mkDerivation rec {
     rm $out/bin/{arm-none-eabi-gdb-py,arm-none-eabi-gdb-add-index-py} || :
   '';
 
-  preFixup =
-    lib.optionalString stdenv.hostPlatform.isLinux ''
-      find $out -type f | while read f; do
-        patchelf "$f" > /dev/null 2>&1 || continue
-        patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f" || true
-        patchelf --set-rpath ${
-          lib.makeLibraryPath [
-            "$out"
-            stdenv.cc.cc
-            ncurses6
-            libxcrypt-legacy
-            xz
-            zstd
-          ]
-        } "$f" || true
-      done
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-      find "$out" -executable -type f | while read executable; do
-        ( \
-          install_name_tool \
-            -change "/usr/local/opt/zstd/lib/libzstd.1.dylib" "${lib.getLib zstd}/lib/libzstd.1.dylib" \
-            -change "/usr/local/opt/xz/lib/liblzma.5.dylib" "${lib.getLib xz}/lib/liblzma.5.dylib" \
-            "$executable" \
-          && codesign -f -s - "$executable" \
-        ) || true
-      done
-    '';
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    find $out -type f | while read f; do
+      patchelf "$f" > /dev/null 2>&1 || continue
+      patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f" || true
+      patchelf --set-rpath ${
+        lib.makeLibraryPath [
+          "$out"
+          stdenv.cc.cc
+          ncurses6
+          libxcrypt-legacy
+          xz
+          zstd
+        ]
+      } "$f" || true
+    done
+  '';
 
   meta = with lib; {
     description = "Pre-built GNU toolchain from ARM Cortex-M & Cortex-R processors";
@@ -106,7 +79,6 @@ stdenv.mkDerivation rec {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

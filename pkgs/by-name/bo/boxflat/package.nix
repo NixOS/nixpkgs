@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "boxflat";
-  version = "1.33.0";
+  version = "1.35.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lawstorant";
     repo = "boxflat";
     tag = "v${version}";
-    hash = "sha256-efEEp2FDXrMrNFalwqNiOhSgQq3uFHNJEA+o34yiS5E=";
+    hash = "sha256-7JIIFti8LHBIDBr+GywImlP2l3Ct/hq4pb5+2/q+F0k=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -45,11 +45,13 @@ python3Packages.buildPythonPackage rec {
     udevCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-        --replace-fail "psutil==6.1.0" "psutil" \
-        --replace-fail "evdev==1.7.1" "evdev"
-  '';
+  pythonRelaxDeps = [
+    "psutil"
+    "evdev"
+    "pycairo"
+    "pygobject"
+    "PyYAML"
+  ];
 
   preBuild = ''
     cat > setup.py << EOF

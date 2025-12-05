@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "commoncode";
-  version = "32.2.1";
+  version = "32.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "nexB";
     repo = "commoncode";
     tag = "v${version}";
-    hash = "sha256-dCiERdNVup95UnvmJEzkpQsRvpk2eKqvwD6jkEBrXfE=";
+    hash = "sha256-FL9t8r53AJLR5D2XSEOq7qVHgvvHIbtPW5iVpSQCVsQ=";
   };
 
   dontConfigure = true;

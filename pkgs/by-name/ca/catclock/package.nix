@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "catclock";
-  version = "unstable-2021-11-15";
+  version = "0-unstable-2021-11-15";
 
   src = fetchFromGitHub {
     owner = "BarkyTheDog";

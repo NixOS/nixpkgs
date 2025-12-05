@@ -34,6 +34,9 @@ buildPythonPackage rec {
     homepage = "https://3-manifolds.github.io/PLink";
     changelog = "https://github.com/3-manifolds/PLink/releases/tag/${src.tag}";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ noiioiu ];
+    maintainers = with lib.maintainers; [
+      noiioiu
+      alejo7797
+    ];
   };
 }

@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Tlx14q/2k/0jZZ1nECX7zF/xNTeMCZg/fN+fhRM4uhc=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ZwxVhoqAzkaIgcH9GMR+IGkJ6IOQVtmt0qcDjdix6cU=";
 
   nativeBuildInputs = [
@@ -36,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/bytecodealliance/cargo-component";
     changelog = "https://github.com/bytecodealliance/cargo-component/releases/tag/${src.rev}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "cargo-component";
   };
 }

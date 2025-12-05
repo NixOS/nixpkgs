@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/lemnos/theme.sh";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "theme.sh";
   };
 }

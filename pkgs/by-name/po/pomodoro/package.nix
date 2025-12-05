@@ -7,7 +7,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "pomodoro";
-  version = "unstable-2021-06-18";
+  version = "0-unstable-2021-06-18";
 
   src = fetchFromGitHub {
     owner = "SanderJSA";
@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-ZA1q1YVJcdSUF9NTikyT3vrRnqbsu5plzRI2gMu+qnQ=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-oXOf9G0BMSbFFAsmRaAZzaquFva1i1gJ4ISqJkqSx4k=";
 
   meta = with lib; {

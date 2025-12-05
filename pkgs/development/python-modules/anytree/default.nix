@@ -55,6 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/c0fec0de/anytree";
     changelog = "https://github.com/c0fec0de/anytree/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maitnainers; [ ];
+    maintainers = [ ];
   };
 }

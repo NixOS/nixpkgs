@@ -116,7 +116,7 @@ in
         listen = [ ":8153" ];
         upstream = [ "udp:127.0.0.1:53" ];
       };
-      description = "Configuration of doh-server in toml. See example in https://github.com/m13253/dns-over-https/blob/master/doh-server/doh-server.conf";
+      description = "Configuration of doh-server in toml. See example in <https://github.com/m13253/dns-over-https/blob/master/doh-server/doh-server.conf>";
     };
 
     useACMEHost = lib.mkOption {
@@ -156,7 +156,7 @@ in
         "network.target"
       ]
       ++ lib.optional (cfg.useACMEHost != null) "acme-${cfg.useACMEHost}.service";
-      wants = lib.optional (cfg.useACMEHost != null) "acme-finished-${cfg.useACMEHost}.target";
+      wants = lib.optional (cfg.useACMEHost != null) "acme-${cfg.useACMEHost}.service";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";

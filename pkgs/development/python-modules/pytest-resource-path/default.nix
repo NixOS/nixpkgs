@@ -6,19 +6,19 @@
   colorama,
   pytest,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-resource-path";
-  version = "1.3.0";
-  format = "setuptools";
-  disabled = pythonOlder "3.5";
+  version = "1.4.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yukihiko-shinoda";
     repo = "pytest-resource-path";
-    rev = "v${version}";
-    sha256 = "1siv3pk4fsabz254fdzr7c0pxy124habnbw4ym66pfk883fr96g2";
+    tag = "v${version}";
+    hash = "sha256-9OBO9b02RrXilXUucerQQMTaQIRXtbcKCHqwwp9tBto=";
   };
 
   postPatch = ''
@@ -26,9 +26,11 @@ buildPythonPackage rec {
       --replace "pytest-runner" ""
   '';
 
+  build-system = [ setuptools ];
+
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [ colorama ];
+  dependencies = [ colorama ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

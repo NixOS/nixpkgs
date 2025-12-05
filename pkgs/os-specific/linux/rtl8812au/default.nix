@@ -60,5 +60,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ moni ];
+    broken = kernel.kernelOlder "5.10" || kernel.kernelAtLeast "6.15";
   };
 }

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   gettext,
+  gobject-introspection,
   pkg-config,
   wrapGAppsHook3,
   sqlite,
@@ -22,18 +23,19 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-libpinyin";
-  version = "1.16.4";
+  version = "1.16.5";
 
   src = fetchFromGitHub {
     owner = "libpinyin";
     repo = "ibus-libpinyin";
     tag = version;
-    hash = "sha256-ZIZ485Jk6LkFZ8TKEqlUeTZIIOZqo61uLQtPAfAX/Io=";
+    hash = "sha256-3QZHovjzGifWLFVudCnJOwMn/M3Nzfn8CZ1HpQwzUVw=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     gettext
+    gobject-introspection.setupHook
     pkg-config
     wrapGAppsHook3
   ];

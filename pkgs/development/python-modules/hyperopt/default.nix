@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "http://hyperopt.github.io/hyperopt/";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = [ ];
   };
 }

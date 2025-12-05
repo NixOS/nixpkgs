@@ -11,18 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "feroxbuster";
-  version = "2.11.0";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "epi052";
     repo = "feroxbuster";
     tag = "v${version}";
-    hash = "sha256-/NgGlXYMxGxpX93SJ6gWgZW21cSSZsgo/WMvRuLw+Bw=";
+    hash = "sha256-4YjZhBG+4Oo8mfEslNCNl0KFiqWsoreo9cPGYUoDJlk=";
   };
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-L5s+P9eerv+O2vBUczGmn0rUMbHQtnF8hVa22wOrTGo=";
+  cargoHash = "sha256-D5wiNzB83AWAy2N2ykzu6PNJPZ2PT/qtLPeiQzT2OxE=";
 
   OPENSSL_NO_VENDOR = true;
 
@@ -45,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Recursive content discovery tool";
     homepage = "https://github.com/epi052/feroxbuster";
-    changelog = "https://github.com/epi052/feroxbuster/releases/tag/v${src.tag}";
+    changelog = "https://github.com/epi052/feroxbuster/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     platforms = platforms.unix;

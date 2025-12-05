@@ -4,6 +4,8 @@
   akku,
   curl,
   git,
+
+  lrzsz,
 }:
 let
   joinOverrides =
@@ -84,9 +86,22 @@ in
     skipTests
   ];
 
+  xyz-modem = joinOverrides [
+    (pkg: old: {
+      postPatch = ''
+        substituteInPlace tests/test-xmodem.sps \
+          --replace-fail "which" "command -v"
+      '';
+    })
+    (pkg: old: {
+      nativeCheckInputs = [ lrzsz ];
+    })
+  ];
+
   # broken tests
   xitomatl = skipTests;
   ufo-threaded-function = skipTests;
+  ufo-timer = skipTests;
   ufo-try = skipTests;
 
   # unsupported schemes, it seems.
@@ -98,6 +113,8 @@ in
 
   # scheme-langserver doesn't work because of this
   ufo-thread-pool = brokenOnDarwin;
+
+  wak-htmlprag = brokenOnAarch64;
 
   # broken everywhere:
   chibi-math-linalg = broken;

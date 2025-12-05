@@ -62,12 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     passthru.isReleaseTarball = true;
   };
 
-  hardeningDisable = optionals stdenv.cc.isClang [
-    # remove once https://github.com/NixOS/nixpkgs/issues/318674 is
-    # addressed properly
-    "zerocallusedregs"
-  ];
-
   __darwinAllowLocalNetworking = true;
 
   # rustc complains about modified source files otherwise
@@ -82,13 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
   # See: https://github.com/NixOS/nixpkgs/pull/56540#issuecomment-471624656
   stripDebugList = [ "bin" ];
 
-  # The Rust pkg-config crate does not support prefixed pkg-config executables[1],
-  # but it does support checking these idiosyncratic PKG_CONFIG_${TRIPLE}
-  # environment variables.
-  # [1]: https://github.com/rust-lang/pkg-config-rs/issues/53
-  "PKG_CONFIG_${builtins.replaceStrings [ "-" ] [ "_" ] stdenv.buildPlatform.rust.rustcTarget}" =
-    "${pkgsBuildHost.stdenv.cc.targetPrefix}pkg-config";
-
   NIX_LDFLAGS = toString (
     # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
     # This doesn't apply to cross-building for FreeBSD because the host
@@ -101,12 +88,20 @@ stdenv.mkDerivation (finalAttrs: {
         (stdenv.hostPlatform.isLinux && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD && useLLVM)
         "--push-state --as-needed -L${llvmPackages.libcxx}/lib -lc++ -lc++abi -lLLVM-${lib.versions.major llvmPackages.llvm.version} --pop-state"
     ++ optional (stdenv.hostPlatform.isDarwin && !withBundledLLVM) "-lc++ -lc++abi"
-    ++ optional stdenv.hostPlatform.isFreeBSD "-rpath ${llvmPackages.libunwind}/lib"
     ++ optional stdenv.hostPlatform.isDarwin "-rpath ${llvmSharedForHost.lib}/lib"
   );
 
-  # Increase codegen units to introduce parallelism within the compiler.
-  RUSTFLAGS = "-Ccodegen-units=10";
+  RUSTFLAGS = lib.concatStringsSep " " (
+    [
+      # Increase codegen units to introduce parallelism within the compiler.
+      "-Ccodegen-units=10"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.rust.rustcTargetSpec == "x86_64-unknown-linux-gnu") [
+      # Upstream defaults to lld on x86_64-unknown-linux-gnu, we want to use our linker
+      "-Clinker-features=-lld"
+      "-Clink-self-contained=-linker"
+    ]
+  );
   RUSTDOCFLAGS = "-A rustdoc::broken-intra-doc-links";
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
@@ -118,9 +113,9 @@ stdenv.mkDerivation (finalAttrs: {
         stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang" else "cc"}";
       cxxPrefixForStdenv =
         stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang++" else "c++"}";
-      setBuild = "--set=target.${stdenv.buildPlatform.rust.rustcTarget}";
-      setHost = "--set=target.${stdenv.hostPlatform.rust.rustcTarget}";
-      setTarget = "--set=target.${stdenv.targetPlatform.rust.rustcTarget}";
+      setBuild = "--set=target.\"${stdenv.buildPlatform.rust.rustcTargetSpec}\"";
+      setHost = "--set=target.\"${stdenv.hostPlatform.rust.rustcTargetSpec}\"";
+      setTarget = "--set=target.\"${stdenv.targetPlatform.rust.rustcTargetSpec}\"";
       ccForBuild = ccPrefixForStdenv pkgsBuildBuild.targetPackages.stdenv;
       cxxForBuild = cxxPrefixForStdenv pkgsBuildBuild.targetPackages.stdenv;
       ccForHost = ccPrefixForStdenv pkgsBuildHost.targetPackages.stdenv;
@@ -237,6 +232,11 @@ stdenv.mkDerivation (finalAttrs: {
       # doesn't work) to build a linker.
       "--disable-llvm-bitcode-linker"
     ]
+    ++ optionals (!fastCross && stdenv.targetPlatform.config != "wasm32-unknown-none") [
+      # See https://github.com/rust-lang/rust/issues/132802
+      "--set=target.wasm32-unknown-unknown.optimized-compiler-builtins=false"
+      "--set=target.wasm32v1-none.optimized-compiler-builtins=false"
+    ]
     ++ optionals (stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.useLLVM or false)) [
       "--enable-profiler" # build libprofiler_builtins
     ]
@@ -280,12 +280,13 @@ stdenv.mkDerivation (finalAttrs: {
       ''
         runHook preBuild
 
-        mkdir -p build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-{std,rustc}/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/
+        mkdir -p build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage{0,1}-{std,rustc}/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/
         ln -s ${rustc.unwrapped}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/libstd-*.so build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/libstd.so
         ln -s ${rustc.unwrapped}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/librustc_driver-*.so build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/librustc.so
         ln -s ${rustc.unwrapped}/bin/rustc build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/rustc-main
+        ln -s ${rustc.unwrapped}/bin/rustc build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage1-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/rustc-main
         touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.libstd-stamp
-        touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.librustc-stamp
+        touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage{0,1}-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.librustc-stamp
         python ./x.py --keep-stage=0 --stage=1 build library
 
         runHook postBuild
@@ -299,10 +300,11 @@ stdenv.mkDerivation (finalAttrs: {
         runHook preInstall
 
         python ./x.py --keep-stage=0 --stage=1 install library/std
-        mkdir -v $out/bin $doc $man
-        ln -s ${rustc.unwrapped}/bin/{rustc,rustdoc} $out/bin
+        mkdir -v $doc $man
+        ln -s ${rustc.unwrapped}/{bin,libexec} $out
         rm -rf -v $out/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec}
         ln -s ${rustc.unwrapped}/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec} $out/lib/rustlib/
+        ln -s ${rustc.unwrapped}/lib/rustlib/etc $out/lib/rustlib/
         echo rust-std-${stdenv.hostPlatform.rust.rustcTargetSpec} >> $out/lib/rustlib/components
         lndir ${rustc.doc} $doc
         lndir ${rustc.man} $man
@@ -391,15 +393,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ]
   ++ optional (!withBundledLLVM) llvmShared.lib
-  ++ optional (useLLVM && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD) [
-    llvmPackages.libunwind
-    # Hack which is used upstream https://github.com/gentoo/gentoo/blob/master/dev-lang/rust/rust-1.78.0.ebuild#L284
-    (runCommandLocal "libunwind-libgcc" { } ''
-      mkdir -p $out/lib
-      ln -s ${llvmPackages.libunwind}/lib/libunwind.so $out/lib/libgcc_s.so
-      ln -s ${llvmPackages.libunwind}/lib/libunwind.so $out/lib/libgcc_s.so.1
-    '')
-  ];
+  ++ optional (useLLVM && !withBundledLLVM) llvmPackages.libunwind;
 
   outputs = [
     "out"
@@ -441,7 +435,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     llvm = llvmShared;
     inherit llvmPackages;
-    inherit (rustc) tier1TargetPlatforms targetPlatforms badTargetPlatforms;
+    inherit (rustc) targetPlatforms targetPlatformsWithHostTools badTargetPlatforms;
     tests = {
       inherit fd ripgrep wezterm;
     }
@@ -451,20 +445,14 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://www.rust-lang.org/";
     description = "Safe, concurrent, practical language";
-    maintainers = with maintainers; [ havvy ];
     teams = [ teams.rust ];
     license = [
       licenses.mit
       licenses.asl20
     ];
-    platforms = rustc.tier1TargetPlatforms;
+    platforms = rustc.targetPlatformsWithHostTools;
     # If rustc can't target a platform, we also can't build rustc for
     # that platform.
     badPlatforms = rustc.badTargetPlatforms;
-    # Builds, but can't actually compile anything
-    # https://github.com/NixOS/nixpkgs/issues/311930
-    # https://github.com/rust-lang/rust/issues/55120
-    # https://github.com/rust-lang/rust/issues/82521
-    broken = stdenv.hostPlatform.useLLVM;
   };
 })

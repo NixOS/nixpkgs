@@ -11,18 +11,19 @@
   glib,
   gspell,
   gtk3,
+  xapp-symbolic-icons,
   gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sticky";
-  version = "1.24";
+  version = "1.28";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "sticky";
     rev = version;
-    hash = "sha256-Mj14S4M7NMQE17SN8uED4UIJN6nwTo3E+D3j0tGKXc4=";
+    hash = "sha256-6CRkeJ2xuUs3viyYxnrgGFUIakK7ANyVpPZuwU486NM=";
   };
 
   postPatch = ''
@@ -51,14 +52,13 @@ stdenv.mkDerivation rec {
     python-xapp
   ];
 
-  dontWrapGApps = true;
-
   preFixup = ''
     buildPythonPath "$out $pythonPath"
 
-    wrapProgram $out/bin/sticky \
-      --prefix PYTHONPATH : "$program_PYTHONPATH" \
-      ''${gappsWrapperArgs[@]}
+    gappsWrapperArgs+=(
+      --prefix PYTHONPATH : "$program_PYTHONPATH"
+      --prefix XDG_DATA_DIRS : "${lib.makeSearchPath "share" [ xapp-symbolic-icons ]}"
+    )
   '';
 
   passthru = {
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Sticky notes app for the linux desktop";
+    description = "Sticky notes app for the Linux desktop";
     mainProgram = "sticky";
     homepage = "https://github.com/linuxmint/sticky";
     license = licenses.gpl2Only;

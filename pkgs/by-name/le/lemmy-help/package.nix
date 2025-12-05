@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [ "cli" ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ZuLbdsZadEkY5M4LoHBn6gnKYklVbXpRa60EocYUH+A=";
 
   meta = {
@@ -28,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/numToStr/lemmy-help";
     changelog = "https://github.com/numToStr/lemmy-help/releases/tag/v${version}";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "lemmy-help";
   };
 }

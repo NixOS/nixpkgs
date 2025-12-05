@@ -40,6 +40,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/Textualize/frogmouth";
     changelog = "https://github.com/Textualize/frogmouth/blob/${src.rev}/ChangeLog.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

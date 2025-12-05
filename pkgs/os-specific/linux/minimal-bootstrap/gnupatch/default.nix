@@ -66,7 +66,7 @@ let
     "error.c"
   ];
 
-  objects = map (x: lib.replaceStrings [ ".c" ] [ ".o" ] (builtins.baseNameOf x)) sources;
+  objects = map (x: lib.replaceStrings [ ".c" ] [ ".o" ] (baseNameOf x)) sources;
 in
 kaem.runCommand "${pname}-${version}"
   {

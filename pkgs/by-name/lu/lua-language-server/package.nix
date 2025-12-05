@@ -133,7 +133,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/LuaLS/lua-language-server/blob/${finalAttrs.version}/changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
       gepbird
       sei40kr
     ];

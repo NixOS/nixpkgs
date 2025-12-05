@@ -4,12 +4,11 @@
   buildPythonPackage,
   docstring-parser,
   fetchFromGitHub,
-  poetry-core,
-  poetry-dynamic-versioning,
+  hatchling,
+  hatch-vcs,
   pydantic,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   rich-rst,
   rich,
@@ -18,21 +17,19 @@
 
 buildPythonPackage rec {
   pname = "cyclopts";
-  version = "3.22.2";
+  version = "4.2.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "BrianPugh";
     repo = "cyclopts";
     tag = "v${version}";
-    hash = "sha256-PFrXCrcCbomgsBcQ9xOwPCmf96WjqXL8az4eZyjJQ/M=";
+    hash = "sha256-5OGQLAHDh3wkGxiYPXt6Txc4naSmuyDWojZA9ZgZwMo=";
   };
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
@@ -51,15 +48,19 @@ buildPythonPackage rec {
     pydantic
     pytest-mock
     pytestCheckHook
-    pyyaml
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "cyclopts" ];
 
   disabledTests = [
-    # Assertion error
-    "test_pydantic_error_msg"
+    # Test requires bash
+    "test_positional_not_treated_as_command"
+  ];
+
+  disabledTestPaths = [
+    # Tests requires sphinx
+    "tests/test_sphinx_ext.py"
   ];
 
   meta = with lib; {

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "matrix-synapse-shared-secret-auth";
-  version = "2.0.2";
+  version = "2.0.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "devture";
     repo = "matrix-synapse-shared-secret-auth";
     rev = version;
-    sha256 = "sha256-qzXKwTEOMtdvsxoU3Xh3vQyhK+Q18LfkeSts7EyDIXE=";
+    sha256 = "sha256-ZMEUBC2Y4J1+4tHfsMxqzTO/P1ef3aB81OAhEs+Tdc4=";
   };
 
   doCheck = false;

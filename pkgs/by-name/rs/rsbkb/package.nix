@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage {
   cargoPatches = [
     ./time.patch
   ];
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-fg8LQXqmw5GXiQe7ZVciORWI/yhKAhywolpapNpHXZY=";
 
   # Setup symlinks for all the utilities,

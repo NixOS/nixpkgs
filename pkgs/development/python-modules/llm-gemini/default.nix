@@ -15,14 +15,14 @@
 }:
 buildPythonPackage rec {
   pname = "llm-gemini";
-  version = "0.23";
+  version = "0.27";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-gemini";
     tag = version;
-    hash = "sha256-e+l7YjMJi+ZtkaBQUXT9364F7ncQO476isSm8uMCCB0=";
+    hash = "sha256-BkMLldozPv1yj5+02U6SW16x2mg0EdJJCVlXvj0gQpo=";
   };
 
   build-system = [ setuptools ];
@@ -50,6 +50,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/simonw/llm-gemini";
     changelog = "https://github.com/simonw/llm-gemini/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ josh ];
+    maintainers = with lib.maintainers; [
+      josh
+      philiptaron
+    ];
   };
 }

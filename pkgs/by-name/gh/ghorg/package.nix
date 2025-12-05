@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,13 +8,13 @@
 
 buildGoModule rec {
   pname = "ghorg";
-  version = "1.11.3";
+  version = "1.11.6";
 
   src = fetchFromGitHub {
     owner = "gabrie30";
     repo = "ghorg";
     rev = "v${version}";
-    sha256 = "sha256-SddkIZCnV6qPFFuFvV8I9P00C6oSKV32Xs6beAYvgs8=";
+    sha256 = "sha256-M1Kd0cpV/GRbxGdGs6nMn9DEnUdrSh9J5U52j7Hm6S8=";
   };
 
   doCheck = false;
@@ -28,7 +29,7 @@ buildGoModule rec {
   ];
 
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ghorg \
       --bash <($out/bin/ghorg completion bash) \
       --fish <($out/bin/ghorg completion fish) \
@@ -48,7 +49,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/gabrie30/ghorg";
     license = licenses.asl20;
-    maintainers = with maintainers; [ vidbina ];
     mainProgram = "ghorg";
   };
 }

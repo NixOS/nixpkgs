@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -9,16 +10,16 @@
 
 buildGoModule rec {
   pname = "kubeone";
-  version = "1.11.0";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "kubermatic";
     repo = "kubeone";
     rev = "v${version}";
-    hash = "sha256-K33KKvGw4iF7aq/eumSFzYk3ij8pE8mUh4wN9TA9Q/4=";
+    hash = "sha256-al/byEO5wNhoVnfHHJFQMnx7EtoF3+P7MtS/x82Z8w0=";
   };
 
-  vendorHash = "sha256-Wnnwp1GRlE1q8MSc23pOmSn9fKu5uHVzkivfuF2lnEk=";
+  vendorHash = "sha256-4thcMvdS2oxBai+3aOUPXd5T6f2DcW0Mm1d3y/DMGFc=";
 
   ldflags = [
     "-s"
@@ -31,7 +32,7 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kubeone \
       --bash <($out/bin/kubeone completion bash) \
       --zsh <($out/bin/kubeone completion zsh)

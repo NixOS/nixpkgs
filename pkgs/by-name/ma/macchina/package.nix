@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-GZO9xGc3KGdq2WdA10m/XV8cNAlQjUZFUVu1CzidJ5c=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-B3dylFOMQ1a1DfemfQFFlLVKCmB+ipUMV45iDh8fSqY=";
 
   nativeBuildInputs = [
@@ -34,7 +33,6 @@ rustPlatform.buildRustPackage rec {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [
       _414owen
-      figsoda
     ];
     mainProgram = "macchina";
   };

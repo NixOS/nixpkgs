@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   passthru.tests = {
-    inherit (obs-studio-plugins) obs-ndi;
+    inherit (obs-studio-plugins) distroav;
   };
   passthru.updateScript = ./update.py;
 

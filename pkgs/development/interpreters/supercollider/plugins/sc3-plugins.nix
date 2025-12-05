@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  fetchpatch2,
   fetchurl,
   cmake,
   supercollider,
@@ -16,6 +17,13 @@ stdenv.mkDerivation rec {
     url = "https://github.com/supercollider/sc3-plugins/releases/download/Version-${version}/sc3-plugins-${version}-Source.tar.bz2";
     sha256 = "sha256-+N7rhh1ALipy21HUC0jEQ2kCYbWlOveJg9TPe6dnF6I=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/supercollider/sc3-plugins/commit/3dc56bf7fcc1f2261afc13f96da762b78bcbfa51.patch";
+      hash = "sha256-lvXvGunfmjt6i+XPog14IKdnH1Qk8vefxplSDkXXXHU=";
+    })
+  ];
 
   strictDeps = true;
 

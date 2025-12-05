@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_unsign" ];
 
-  pytestFlagsArray = [ "tests/flask_unsign.py" ];
+  enabledTestPaths = [ "tests/flask_unsign.py" ];
 
   meta = {
     description = "Command line tool to fetch, decode, brute-force and craft session cookies of Flask applications";

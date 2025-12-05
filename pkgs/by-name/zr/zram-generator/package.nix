@@ -52,6 +52,9 @@ rustPlatform.buildRustPackage rec {
     export SYSTEMD_UTIL_DIR=$($PKG_CONFIG --variable=systemdutildir systemd)
   '';
 
+  # error[E0432]: unresolved import `self::consts`
+  doCheck = !stdenv.hostPlatform.isLoongArch64;
+
   dontCargoInstall = true;
 
   installFlags = [

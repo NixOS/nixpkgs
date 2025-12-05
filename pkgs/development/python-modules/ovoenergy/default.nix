@@ -5,29 +5,22 @@
   click,
   fetchFromGitHub,
   incremental,
-  pythonOlder,
   setuptools,
+  pyjwt,
   typer,
 }:
 
 buildPythonPackage rec {
   pname = "ovoenergy";
-  version = "2.0.1";
+  version = "3.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = "ovoenergy";
     tag = version;
-    hash = "sha256-7SXnOyvBsBPQ+4tC6pcEXGtcLdqKjzlB2xDZmw/uWcM=";
+    hash = "sha256-oWJxpiC83C/ghs/Ik8+DrPWtP/j5jWEZ3+9Nqg4ARKU=";
   };
-
-  postPatch = ''
-    substituteInPlace requirements_setup.txt \
-      --replace-fail "==" ">="
-  '';
 
   build-system = [
     incremental
@@ -39,6 +32,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     click
+    pyjwt
     typer
   ];
 

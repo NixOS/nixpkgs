@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "google";
     repo = "cronutils";
-    rev = "version/${finalAttrs.version}";
+    tag = "version/${finalAttrs.version}";
     hash = "sha256-XJksfX4jqE32l4HipvO26iv9W4c0Iss6DenlEatdL1k=";
   };
 
@@ -48,7 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-Wno-format-nonliteral"
   ]);
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "version/(.*)"
+    ];
+  };
 
   meta = {
     changelog = "https://github.com/google/cronutils/releases/tag/version%2F${finalAttrs.version}";

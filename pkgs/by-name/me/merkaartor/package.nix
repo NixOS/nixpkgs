@@ -7,7 +7,7 @@
   gdal,
   proj,
   protobuf,
-  qt5,
+  qt6,
   withGeoimage ? true,
   exiv2,
   withGpsdlib ? (!stdenv.hostPlatform.isDarwin),
@@ -25,24 +25,25 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "merkaartor";
-    rev = version;
+    tag = version;
     hash = "sha256-oxLGhIE1qJ9+GOztD1HvrLGRGVO3gyy7Rc6CyzKTFec=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    qt5.qttools
-    qt5.wrapQtAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     gdal
     proj
     protobuf
-    qt5.qtnetworkauth
-    qt5.qtsvg
-    qt5.qtwebengine
+    qt6.qt5compat
+    qt6.qtnetworkauth
+    qt6.qtsvg
+    qt6.qtwebengine
   ]
   ++ lib.optional withGeoimage exiv2
   ++ lib.optional withGpsdlib gpsd

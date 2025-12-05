@@ -195,7 +195,6 @@ in
             "${config.boot.initrd.systemd.package}/lib/systemd/systemd-vconsole-setup"
             "${config.boot.initrd.systemd.package.kbd}/bin/setfont"
             "${config.boot.initrd.systemd.package.kbd}/bin/loadkeys"
-            "${config.boot.initrd.systemd.package.kbd.gzip}/bin/gzip" # Fonts and keyboard layouts are compressed
           ]
           ++ lib.optionals (cfg.font != null && lib.hasPrefix builtins.storeDir cfg.font) [
             "${cfg.font}"

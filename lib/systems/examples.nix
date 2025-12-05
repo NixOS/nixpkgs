@@ -23,7 +23,6 @@ rec {
 
   ppc64-elfv1 = {
     config = "powerpc64-unknown-linux-gnuabielfv1";
-    rust.rustcTarget = "powerpc64-unknown-linux-gnu";
   };
   ppc64-elfv2 = {
     config = "powerpc64-unknown-linux-gnuabielfv2";
@@ -34,6 +33,11 @@ rec {
     gcc = {
       abi = "elfv2";
     };
+  };
+
+  ppc32 = {
+    config = "powerpc-unknown-linux-gnu";
+    rust.rustcTarget = "powerpc-unknown-linux-gnu";
   };
 
   sheevaplug = {
@@ -72,8 +76,8 @@ rec {
   armv7a-android-prebuilt = {
     config = "armv7a-unknown-linux-androideabi";
     rust.rustcTarget = "armv7-linux-androideabi";
-    androidSdkVersion = "33";
-    androidNdkVersion = "26";
+    androidSdkVersion = "35";
+    androidNdkVersion = "27";
     useAndroidPrebuilt = true;
   }
   // platforms.armv7a-android;
@@ -81,15 +85,15 @@ rec {
   aarch64-android-prebuilt = {
     config = "aarch64-unknown-linux-android";
     rust.rustcTarget = "aarch64-linux-android";
-    androidSdkVersion = "33";
-    androidNdkVersion = "26";
+    androidSdkVersion = "35";
+    androidNdkVersion = "27";
     useAndroidPrebuilt = true;
   };
 
   aarch64-android = {
     config = "aarch64-unknown-linux-android";
-    androidSdkVersion = "33";
-    androidNdkVersion = "26";
+    androidSdkVersion = "35";
+    androidNdkVersion = "27";
     libc = "bionic";
     useAndroidPrebuilt = false;
     useLLVM = true;
@@ -299,15 +303,6 @@ rec {
   };
 
   #
-  # Redox
-  #
-
-  x86_64-unknown-redox = {
-    config = "x86_64-unknown-redox";
-    libc = "relibc";
-  };
-
-  #
   # Darwin
   #
 
@@ -370,6 +365,21 @@ rec {
     libc = "ucrt";
     rust.rustcTarget = "aarch64-pc-windows-gnullvm";
     useLLVM = true;
+  };
+
+  # Target the MSVC ABI
+  x86_64-windows = {
+    config = "x86_64-pc-windows-msvc";
+    useLLVM = true;
+  };
+
+  aarch64-windows = {
+    config = "aarch64-pc-windows-msvc";
+    useLLVM = true;
+  };
+
+  x86_64-cygwin = {
+    config = "x86_64-pc-cygwin";
   };
 
   # BSDs

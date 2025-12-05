@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "python-ctags3";
-  version = "1.5.0";
+  version = "1.6.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "universal-ctags";
     repo = "python-ctags3";
     rev = version;
-    hash = "sha256-XVsZckNVJ1H5q8FzqoVd1UWRw0zOygvRtb7arX9dwGE=";
+    hash = "sha256-x+kyCB05VtOPlenkK5vOTjxXR24d436JpGvSd07PIbA=";
   };
 
   nativeBuildInputs = [ cython ];

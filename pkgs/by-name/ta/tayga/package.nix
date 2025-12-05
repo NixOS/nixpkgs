@@ -1,23 +1,38 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.9.2";
+  version = "0.9.5";
   pname = "tayga";
 
-  src = fetchurl {
-    url = "http://www.litech.org/tayga/tayga-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-Kx95J6nS3P+Qla/zwnGSSwUsz9L6ypWIsndDGkTwAJw=";
+  src = fetchFromGitHub {
+    owner = "apalrd";
+    repo = "tayga";
+    tag = finalAttrs.version;
+    hash = "sha256-xOm4fetFq2UGuhOojrT8WOcX78c6MLTMVbDv+O62x2E=";
   };
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-address-of-packed-member"
-    "-Wno-implicit-function-declaration"
-  ];
+  makeFlags = [ "CC=${lib.getExe stdenv.cc}" ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.is32bit {
+    NIX_CFLAGS_COMPILE = "-D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64";
+  };
+
+  preBuild = ''
+    echo "#define TAYGA_VERSION \"${finalAttrs.version}\"" > version.h
+  '';
+
+  installPhase = ''
+    install -Dm755 tayga $out/bin/tayga
+    install -D tayga.conf.5 $out/share/man/man5/tayga.conf.5
+    install -D tayga.8 $out/share/man/man8/tayga.8
+    cp -R docs $out/share/
+    cp tayga.conf.example $out/share/docs/
+  '';
 
   passthru.tests.tayga = nixosTests.tayga;
 
@@ -30,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       It is intended to provide production-quality NAT64 service
       for networks where dedicated NAT64 hardware would be overkill.
     '';
-    homepage = "http://www.litech.org/tayga";
+    homepage = "https://github.com/apalrd/tayga";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ _0x4A6F ];
     platforms = platforms.linux;

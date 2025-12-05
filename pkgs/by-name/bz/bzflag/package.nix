@@ -1,7 +1,8 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchFromGitHub,
+  autoreconfHook,
   pkg-config,
   curl,
   SDL2,
@@ -16,12 +17,17 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "bzflag";
   version = "2.4.30";
 
-  src = fetchurl {
-    url = "https://download.bzflag.org/bzflag/source/${finalAttrs.version}/bzflag-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-u3i3UOe856p8Eb01kGuwikmsx8UL8pYprzgO7NFTiU0=";
+  src = fetchFromGitHub {
+    owner = "BZFlag-Dev";
+    repo = "bzflag";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6lW3w1n1ZFs+Iw2wd0aJJpSSnymzkNmVLAgreW4l/6k=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   buildInputs = [
     curl

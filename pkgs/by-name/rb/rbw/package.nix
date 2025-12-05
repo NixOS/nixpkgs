@@ -11,28 +11,24 @@
   withFzf ? false,
   fzf,
   perl,
-
   # rbw-rofi
   withRofi ? false,
   rofi,
   xclip,
-
   # pass-import
   withPass ? false,
   pass,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "rbw";
-  version = "1.13.2";
+  version = "1.14.1";
 
   src = fetchzip {
     url = "https://git.tozt.net/rbw/snapshot/rbw-${version}.tar.gz";
-    hash = "sha256-ebLbdIF+BybK7ssNtZacGWmAEwdNZh8b94QYgvcwzmM=";
+    hash = "sha256-4wNDDMaz9zjNYahOZXARDbNdGKl0kS0pF3qQuM7fK4s=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-xDb4shDHCbd0yuTSAt80i1aqyuhpkfd/fYF98CfXdcM=";
+  cargoHash = "sha256-H1DSP3Kyklv8ncn7zDP0njDlwB8Qh+h7mqWRAJcpWrE=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -53,6 +49,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --cmd rbw \
       --bash <($out/bin/rbw gen-completions bash) \
       --fish <($out/bin/rbw gen-completions fish) \
+      --nushell <($out/bin/rbw gen-completions nushell) \
       --zsh <($out/bin/rbw gen-completions zsh)
   ''
   + lib.optionalString withFzf ''
@@ -78,7 +75,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://crates.io/crates/rbw";
     changelog = "https://git.tozt.net/rbw/plain/CHANGELOG.md?id=${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ albakham ];
+    maintainers = with lib.maintainers; [
+      albakham
+      jasonxue1
+    ];
     mainProgram = "rbw";
   };
 }

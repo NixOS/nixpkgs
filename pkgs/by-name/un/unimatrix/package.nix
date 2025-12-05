@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "unimatrix";
-  version = "unstable-2023-04-25";
+  version = "0-unstable-2023-04-25";
   pyproject = false;
 
   src = fetchFromGitHub {

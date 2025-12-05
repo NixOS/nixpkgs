@@ -9,6 +9,7 @@
   libgcrypt,
   libplist,
   libtasn1,
+  libtatsu,
   libusbmuxd,
   libimobiledevice-glue,
   unstableGitUpdater,
@@ -16,24 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libimobiledevice";
-  version = "1.3.0-unstable-2024-05-20";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = "libimobiledevice";
-    rev = "9ccc52222c287b35e41625cc282fb882544676c6";
-    hash = "sha256-pNvtDGUlifp10V59Kah4q87TvLrcptrCJURHo+Y+hs4=";
+    tag = version;
+    hash = "sha256-SWWsa7asCXpcz80VNhxoePWr74QY8SP0byGSCp+nGG0=";
   };
-
-  patches = [
-    # Fix gcc-14 and clang-16 build:
-    #   https://github.com/libimobiledevice/libimobiledevice/pull/1569
-    (fetchpatch {
-      name = "fime.h.patch";
-      url = "https://github.com/libimobiledevice/libimobiledevice/commit/92256c2ae2422dac45d8648a63517598bdd89883.patch";
-      hash = "sha256-sB+wEFuXFoQnuf7ntWfvYuCgWfYbmlPL7EjW0L0F74o=";
-    })
-  ];
 
   preAutoreconf = ''
     export RELEASE_VERSION=${version}
@@ -51,6 +42,7 @@ stdenv.mkDerivation rec {
     libgcrypt
     libplist
     libtasn1
+    libtatsu
     libusbmuxd
     libimobiledevice-glue
   ];

@@ -1,7 +1,6 @@
 {
   callPackage,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
   lib,
   makeWrapper,
@@ -14,26 +13,19 @@
 
 let
   # The version of ocaml fstar uses.
-  ocamlPackages = ocaml-ng.ocamlPackages_4_14;
+  ocamlPackages = ocaml-ng.ocamlPackages_5_3;
 
   fstarZ3 = callPackage ./z3 { };
 in
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "fstar";
-  version = "2025.03.25";
+  version = "2025.10.06";
 
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
-    rev = "v${version}";
-    hash = "sha256-PhjfThXF6fJlFHtNEURG4igCnM6VegWODypmRvnZPdA=";
-  };
-
-  # Compatibility with sedlex ≥ 3.5
-  patches = fetchpatch {
-    url = "https://github.com/FStarLang/FStar/commit/11aff952b955d2c9582515ee2d64ca6993ce1b73.patch";
-    hash = "sha256-HlppygegUAYYPDVSzFJvMHXdDSoug636bFa19v3TGkc=";
-    excludes = [ "fstar.opam" ];
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-PH3ylEiUS+mfFtYV+KI7xrCewkEutM1c14A+ARsyOQY=";
   };
 
   nativeBuildInputs = [
@@ -51,8 +43,11 @@ ocamlPackages.buildDunePackage rec {
   '';
 
   buildInputs = with ocamlPackages; [
+    memtrace
+  ];
+
+  propagatedBuildInputs = with ocamlPackages; [
     batteries
-    menhir
     menhirLib
     pprint
     ppx_deriving
@@ -63,7 +58,6 @@ ocamlPackages.buildDunePackage rec {
     stdint
     yojson
     zarith
-    memtrace
     mtime
   ];
 
@@ -84,6 +78,10 @@ ocamlPackages.buildDunePackage rec {
     runHook preInstall
 
     make install
+
+    # Ensure ocamlfind can locate fstar OCaml libraries
+    mkdir -p $OCAMLFIND_DESTDIR
+    ln -s -t $OCAMLFIND_DESTDIR/ $out/lib/fstar
 
     remove-references-to -t '${ocamlPackages.ocaml}' $out/bin/fstar.exe
 
@@ -116,7 +114,7 @@ ocamlPackages.buildDunePackage rec {
   meta = {
     description = "ML-like functional programming language aimed at program verification";
     homepage = "https://www.fstar-lang.org";
-    changelog = "https://github.com/FStarLang/FStar/raw/v${version}/CHANGES.md";
+    changelog = "https://github.com/FStarLang/FStar/raw/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       numinit
@@ -124,4 +122,4 @@ ocamlPackages.buildDunePackage rec {
     mainProgram = "fstar.exe";
     platforms = with lib.platforms; darwin ++ linux;
   };
-}
+})

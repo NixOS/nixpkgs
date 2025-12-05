@@ -9,12 +9,12 @@
 
 stdenv.mkDerivation {
   pname = "uci";
-  version = "unstable-2023-08-10";
+  version = "unstable-2025-10-12";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/uci.git";
-    rev = "5781664d5087ccc4b5ab58505883231212dbedbc";
-    hash = "sha256-8MyFaZdAMh5oMPO/5QyNT+Or57eBL3mamJLblGGoF9g=";
+    rev = "57c1e8cd2c051d755ca861a9ab38a8049d2e3f95";
+    hash = "sha256-/Ian7WoBvm9nmniHdVTEIyRW1BPTmOe3O0v59aDaXc0=";
   };
 
   hardeningDisable = [ "all" ];

@@ -10,17 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fh";
-  version = "0.1.24";
+  version = "0.1.26";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "fh";
     rev = "v${version}";
-    hash = "sha256-t7IZlG7rKNbkt2DIU5H0/B0+b4e9YEVJx14ijpOycCw=";
+    hash = "sha256-cHXpTe5tAXrAwVu5+ZTb3pzHIqAk353GnNFPvComIfQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-IXzqcIVk7F/MgWofzlwEkXfu7s8e7GdjYhdFbXUTeeo=";
+  cargoHash = "sha256-HwFehxL01pwT93jjVvCU9BXhaHhCDbox50ecXpod3Mo=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -51,7 +50,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/DeterminateSystems/fh";
     changelog = "https://github.com/DeterminateSystems/fh/releases/tag/${src.rev}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "fh";
   };
 }

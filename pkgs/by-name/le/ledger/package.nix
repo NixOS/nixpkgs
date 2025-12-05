@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
   boost,
   gmp,
@@ -13,43 +12,29 @@
   installShellFiles,
   texinfo,
   gnused,
+  versionCheckHook,
+  nix-update-script,
   usePython ? false,
   gpgmeSupport ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ledger";
-  version = "3.3.2";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "ledger";
     repo = "ledger";
-    rev = "v${version}";
-    hash = "sha256-Uym4s8EyzXHlISZqThcb6P1H5bdgD9vmdIOLkk5ikG0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yk6/4ImUzgZY8O7MmQMwFkuJ/pMXo6W5TAA0GGIxYgg=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      name = "ledger-boost-1.85-compat.patch";
-      url = "https://github.com/ledger/ledger/commit/46207852174feb5c76c7ab894bc13b4f388bf501.patch";
-      hash = "sha256-X0NSN60sEFLvcfMmtVoxC7fidcr5tJUlFVQ/E8qfLss=";
-    })
-    (fetchpatch2 {
-      name = "ledger-boost-1.86-compat-1.patch";
-      url = "https://github.com/ledger/ledger/commit/f6750ed89b46926d1f0859f3b25d18ed62ac219e.patch";
-      hash = "sha256-pktwotuMbZcR2DpZccMqV13524avKvazDX/+Ki6h69g=";
-    })
-    (fetchpatch2 {
-      name = "ledger-boost-1.86-compat-2.patch";
-      url = "https://github.com/ledger/ledger/commit/62f626fa73bd6832028f43c204c43cf15bd5f409.patch";
-      hash = "sha256-cazhSxadNpiA6ofZxS8JALOPy88cNPM/jKHaUYk8pBw=";
-    })
-    (fetchpatch2 {
-      name = "ledger-boost-1.86-compat-3.patch";
-      url = "https://github.com/ledger/ledger/commit/124398c35be573324cf2384c08b99b4476f29e2b.patch";
-      hash = "sha256-N3dUrqNsOiVgedoYmyfYllK+4lvKdMxc8iq0+DgEbxc=";
-    })
-  ];
+  # by default, it will query the python interpreter for it's sitepackages location
+  # however, that would write to a different nixstore path, pass our own sitePackages location
+  prePatch = lib.optionalString usePython ''
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail 'DESTINATION ''${Python_SITEARCH}' 'DESTINATION "${placeholder "py"}/${python3.sitePackages}"'
+  '';
 
   outputs = [
     "out"
@@ -86,18 +71,11 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DBUILD_DOCS:BOOL=ON"
-    "-DUSE_PYTHON:BOOL=${if usePython then "ON" else "OFF"}"
-    "-DUSE_GPGME:BOOL=${if gpgmeSupport then "ON" else "OFF"}"
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeBool "BUILD_DOCS" true)
+    (lib.cmakeBool "USE_PYTHON" usePython)
+    (lib.cmakeBool "USE_GPGME" gpgmeSupport)
   ];
-
-  # by default, it will query the python interpreter for it's sitepackages location
-  # however, that would write to a different nixstore path, pass our own sitePackages location
-  prePatch = lib.optionalString usePython ''
-    substituteInPlace src/CMakeLists.txt \
-      --replace 'DESTINATION ''${Python_SITEARCH}' 'DESTINATION "${placeholder "py"}/${python3.sitePackages}"'
-  '';
 
   installTargets = [
     "doc"
@@ -108,11 +86,19 @@ stdenv.mkDerivation rec {
     installShellCompletion --cmd ledger --bash $src/contrib/ledger-completion.bash
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Double-entry accounting system with a command-line reporting interface";
     mainProgram = "ledger";
     homepage = "https://www.ledger-cli.org/";
-    changelog = "https://github.com/ledger/ledger/raw/v${version}/NEWS.md";
+    changelog = "https://github.com/ledger/ledger/raw/v${finalAttrs.version}/NEWS.md";
     license = lib.licenses.bsd3;
     longDescription = ''
       Ledger is a powerful, double-entry accounting system that is accessed
@@ -121,6 +107,9 @@ stdenv.mkDerivation rec {
       their data, there really is no alternative.
     '';
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ jwiegley ];
+    maintainers = with lib.maintainers; [
+      jwiegley
+      afh
+    ];
   };
-}
+})

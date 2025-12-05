@@ -63,11 +63,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uclibc-ng";
-  version = "1.0.52";
+  version = "1.0.55";
 
   src = fetchurl {
     url = "https://downloads.uclibc-ng.org/releases/${finalAttrs.version}/uClibc-ng-${finalAttrs.version}.tar.xz";
-    hash = "sha256-iB2kc3hPlcyCkLsHgMCvyBDKKNV14z1a/V5xU7KaoTY=";
+    hash = "sha256-X386r92yygj7KVvkVWHAGIQHED10Rs/SZLm4Iv7T7S0=";
   };
 
   # 'ftw' needed to build acl, a coreutils dependency
@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     "TARGET_ARCH=${stdenv.hostPlatform.linuxArch}"
     "VERBOSE=1"
   ]
-  ++ lib.optionals (isCross) [
+  ++ lib.optionals isCross [
     "CROSS=${stdenv.cc.targetPrefix}"
   ];
 
@@ -144,9 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
       experimental and need more testing.
     '';
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [
-      rasendubi
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     badPlatforms = lib.platforms.aarch64;
   };

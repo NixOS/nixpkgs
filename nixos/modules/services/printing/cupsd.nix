@@ -54,6 +54,7 @@ let
       cups-filters
       pkgs.ghostscript
     ]
+    ++ lib.optional cfg.browsed.enable cfg.browsed.package
     ++ cfg.drivers;
     pathsToLink = [
       "/lib"
@@ -540,6 +541,6 @@ in
 
   };
 
-  meta.maintainers = with lib.maintainers; [ matthewbauer ];
+  meta.maintainers = [ ];
 
 }

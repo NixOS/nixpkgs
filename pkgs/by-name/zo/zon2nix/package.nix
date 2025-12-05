@@ -36,7 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/nix-community/zon2nix/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
-      figsoda
       RossComputerGuy
     ];
     inherit (zig_0_14.meta) platforms;

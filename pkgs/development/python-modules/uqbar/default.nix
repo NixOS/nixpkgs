@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
+  pytest-asyncio,
   pythonAtLeast,
   pythonOlder,
   defusedxml,
@@ -14,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "uqbar";
-  version = "0.7.4";
+  version = "0.9.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-q4p+ki5wA/gYGWnt2tzCiEakk4fBl9P96ONz2ZxlCCg=";
+    hash = "sha256-BaycnI00SgZzpvHPueXAAzV/yWDJEeaViWRSZkJofaY=";
   };
 
   postPatch = ''
@@ -37,7 +38,10 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   checkInputs = [
     defusedxml

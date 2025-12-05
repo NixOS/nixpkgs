@@ -7,7 +7,6 @@
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
-  fs,
   lxml,
   brotli,
   brotlicffi,
@@ -22,28 +21,20 @@
   xattr,
   skia-pathops,
   uharfbuzz,
-  pytest7CheckHook,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.56.0";
+  version = "4.60.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fonttools";
     repo = "fonttools";
     tag = version;
-    hash = "sha256-ZkC1+I2d9wY9J7IoCGHGWG2gOVN7wW274UpN1lQxmJY=";
+    hash = "sha256-h/JRItD5IHlhNSamxRxk/dvyAKUFayzxHvlW7v4N1s8=";
   };
-
-  patches = [
-    # https://github.com/fonttools/fonttools/pull/3855
-    # FIXME: remove when merged
-    ./python-3.13.4.patch
-  ];
 
   build-system = [
     setuptools
@@ -53,7 +44,7 @@ buildPythonPackage rec {
   optional-dependencies =
     let
       extras = {
-        ufo = [ fs ];
+        ufo = [ ];
         lxml = [ lxml ];
         woff = [
           (if isPyPy then brotlicffi else brotli)
@@ -68,16 +59,14 @@ buildPythonPackage rec {
         plot = [ matplotlib ];
         symfont = [ sympy ];
         type1 = lib.optional stdenv.hostPlatform.isDarwin xattr;
-        pathops = [ skia-pathops ];
+        pathops = lib.optional (lib.meta.availableOn stdenv.hostPlatform skia-pathops) skia-pathops;
         repacker = [ uharfbuzz ];
       };
     in
     extras // { all = lib.concatLists (lib.attrValues extras); };
 
   nativeCheckInputs = [
-    # test suite fails with pytest>=8.0.1
-    # https://github.com/fonttools/fonttools/issues/3458
-    pytest7CheckHook
+    pytestCheckHook
   ]
   ++ lib.concatLists (
     lib.attrVals (
@@ -106,19 +95,6 @@ buildPythonPackage rec {
     "test_recalc_timestamp_ttf"
     "test_recalc_timestamp_otf"
     "test_ttcompile_timestamp_calcs"
-  ];
-
-  disabledTestPaths = [
-    # avoid test which depend on fs and matplotlib
-    # fs and matplotlib were removed to prevent strong cyclic dependencies
-    "Tests/misc/plistlib_test.py"
-    "Tests/pens"
-    "Tests/ufoLib"
-
-    # test suite fails with pytest>=8.0.1
-    # https://github.com/fonttools/fonttools/issues/3458
-    "Tests/ttLib/woff2_test.py"
-    "Tests/ttx/ttx_test.py"
   ];
 
   meta = with lib; {

@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tweeny";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "mobius3";
     repo = "tweeny";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-VmvOMK+FjYZXKH9kPUT2L7pmJMPSr5eXptCcoGWK+qo=";
+    sha256 = "sha256-9nFEI4gignIJaBFW9GDuSJJqeWli6YcKs/uYEL89VsE=";
   };
 
   nativeBuildInputs = [

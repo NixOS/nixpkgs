@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   soapysdr,
   avahi,
@@ -26,6 +27,13 @@ stdenv.mkDerivation {
   buildInputs = [
     soapysdr
     avahi
+  ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/pothosware/SoapyRemote/commit/40c3ef9053b63885b7444ce7e9ef00d2c7964c9d.patch";
+      hash = "sha256-kEx4gge+AQW/LSUyo+aWXlqDzXjoxCfn3pi2mk5xsNI=";
+    })
   ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];

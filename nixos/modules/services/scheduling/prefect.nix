@@ -123,7 +123,7 @@ in
     baseUrl = lib.mkOption {
       type = nullOr str;
       default = null;
-      description = "external url when served by a reverse proxy, e.g. https://example.com/prefect";
+      description = "external url when served by a reverse proxy, e.g. `https://example.com/prefect`";
     };
   };
 
@@ -173,7 +173,6 @@ in
           ProtectKernelLogs = true;
           ProtectControlGroups = true;
           MemoryAccounting = true;
-          CPUAccounting = true;
 
           ExecStart = "${pkgs.prefect}/bin/prefect server start --host ${cfg.host} --port ${toString cfg.port}";
           Restart = "always";
@@ -216,7 +215,6 @@ in
           ProtectKernelLogs = true;
           ProtectControlGroups = true;
           MemoryAccounting = true;
-          CPUAccounting = true;
           ExecStart = ''
             ${pkgs.prefect}/bin/prefect worker start \
               --pool ${poolName} \

@@ -27,7 +27,7 @@ rec {
   phraseDirective =
     solution: env: name: val:
     if builtins.isInt val then
-      builtins.toString val
+      toString val
     else if builtins.isString val then
       name
     else if true == val then

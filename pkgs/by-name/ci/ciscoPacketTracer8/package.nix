@@ -3,11 +3,11 @@
   stdenvNoCC,
   requireFile,
   autoPatchelfHook,
+  dpkg,
   makeWrapper,
   alsa-lib,
   dbus,
   expat,
-  fetchurl,
   fontconfig,
   glib,
   libdrm,
@@ -15,16 +15,16 @@
   libpulseaudio,
   libudev0-shim,
   libxkbcommon,
-  libxml2,
+  libxml2_13,
   libxslt,
   nspr,
-  wayland,
   nss,
+  wayland,
   xorg,
-  dpkg,
   buildFHSEnv,
   copyDesktopItems,
   makeDesktopItem,
+  libsForQt5,
   version ? "8.2.2",
   packetTracerSource ? null,
 }:
@@ -41,19 +41,6 @@ let
     "8.2.2" = "CiscoPacketTracer822_amd64_signed.deb";
   };
 
-  libxml2' = libxml2.overrideAttrs (oldAttrs: rec {
-    version = "2.13.8";
-    src = fetchurl {
-      url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
-      hash = "sha256-J3KUyzMRmrcbK8gfL0Rem8lDW4k60VuyzSsOhZoO6Eo=";
-    };
-    meta = oldAttrs.meta // {
-      knownVulnerabilities = oldAttrs.meta.knownVulnerabilities or [ ] ++ [
-        "CVE-2025-6021"
-      ];
-    };
-  });
-
   unwrapped = stdenvNoCC.mkDerivation {
     name = "ciscoPacketTracer8-unwrapped";
     inherit version;
@@ -68,9 +55,13 @@ let
           url = "https://www.netacad.com";
         };
 
-    buildInputs = [
+    nativeBuildInputs = [
       autoPatchelfHook
+      dpkg
       makeWrapper
+    ];
+
+    buildInputs = [
       alsa-lib
       dbus
       expat
@@ -81,7 +72,7 @@ let
       libpulseaudio
       libudev0-shim
       libxkbcommon
-      libxml2'
+      libxml2_13
       libxslt
       nspr
       nss
@@ -111,7 +102,7 @@ let
     unpackPhase = ''
       runHook preUnpack
 
-      ${lib.getExe' dpkg "dpkg-deb"} -x $src $out
+      dpkg-deb -x $src $out
       chmod 755 "$out"
 
       runHook postUnpack
@@ -121,6 +112,7 @@ let
       runHook preInstall
 
       makeWrapper "$out/opt/pt/bin/PacketTracer" "$out/bin/packettracer8" \
+        --set QT_QPA_PLATFORM xcb \
         --prefix LD_LIBRARY_PATH : "$out/opt/pt/bin"
 
       runHook postInstall
@@ -130,7 +122,7 @@ let
   fhs-env = buildFHSEnv {
     name = "ciscoPacketTracer8-fhs-env";
     runScript = lib.getExe' unwrapped "packettracer8";
-    targetPkgs = pkgs: [ libudev0-shim ];
+    targetPkgs = _: [ libudev0-shim ];
   };
 in
 
@@ -151,7 +143,7 @@ stdenvNoCC.mkDerivation {
     ln -s ${fhs-env}/bin/${fhs-env.name} $out/bin/packettracer8
 
     mkdir -p $out/share/icons/hicolor/48x48/apps
-    ln -s ${unwrapped}/opt/pt/art/app.png $out/share/icons/hicolor/48x48/apps/cisco-packet-tracer.png
+    ln -s ${unwrapped}/opt/pt/art/app.png $out/share/icons/hicolor/48x48/apps/cisco-packet-tracer-8.png
     ln -s ${unwrapped}/usr/share/icons/gnome/48x48/mimetypes $out/share/icons/hicolor/48x48/mimetypes
     ln -s ${unwrapped}/usr/share/mime $out/share/mime
 
@@ -162,7 +154,7 @@ stdenvNoCC.mkDerivation {
     (makeDesktopItem {
       name = "cisco-pt8.desktop";
       desktopName = "Cisco Packet Tracer 8";
-      icon = "cisco-packet-tracer";
+      icon = "cisco-packet-tracer-8";
       exec = "packettracer8 %f";
       mimeTypes = [
         "application/x-pkt"
@@ -184,5 +176,12 @@ stdenvNoCC.mkDerivation {
     ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    knownVulnerabilities = [
+      ''
+        Cisco Packet Tracer 8 ships with qt5 qtwebengine.
+
+        ${lib.head libsForQt5.qtwebengine.meta.knownVulnerabilities}
+      ''
+    ];
   };
 }

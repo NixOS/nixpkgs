@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "typing-inspection";
-  version = "0.4.1";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "typing-inspection";
     tag = "v${version}";
-    hash = "sha256-MzOXl1i+rmr08TSH3Nxc0fFkcjATY6i9dFRLsYp+5m0=";
+    hash = "sha256-aGScO+FLEJ5IyI6hBqdsiKJRN7vEG36V5131nhVZEbc=";
   };
 
   build-system = [ hatchling ];

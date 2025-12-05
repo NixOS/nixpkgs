@@ -6,16 +6,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "mongosh";
-  version = "2.5.6";
+  version = "2.5.10";
 
   src = fetchFromGitHub {
     owner = "mongodb-js";
     repo = "mongosh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QK2woc6tlnTwYCZ7QEWCn2bRknye2qY8AYAHMVR9i24=";
+    hash = "sha256-N1uAIgEX44RSFJTivOpASKiab+Jr0N0Mo+olt000uK4=";
   };
 
-  npmDepsHash = "sha256-TfakEOiCtoRz2Fhwz5teOWq0OLb7uZaYiKHLSq/c1OU=";
+  npmDepsHash = "sha256-/8qw9dVPHAuyQZWdDq+jhP7NMBwTbvMqv/PtwXJEQuo=";
 
   patches = [
     ./disable-telemetry.patch

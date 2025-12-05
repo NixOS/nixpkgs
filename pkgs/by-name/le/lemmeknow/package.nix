@@ -13,7 +13,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Q82tP4xNWAooFjHeJCFmuULnWlFbgca/9Y2lm8rVXKs=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-65PPIYfwVO8O4K8yr499vRQScpAREiBZ8O0rrDMCXB8=";
 
   meta = {
@@ -22,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/swanandx/lemmeknow/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
       Br1ght0ne
     ];
     mainProgram = "lemmeknow";

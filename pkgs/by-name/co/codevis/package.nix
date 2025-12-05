@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-LZ6NsoyEPUvgcVdbG7U2Vzuz/TLLraScvW97PocUNpU=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-BIUzuV7q/5GSAmjRfdL71dWC7TjBVaSL8UyWpTF2AxM=";
 
   nativeBuildInputs = [
@@ -37,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/sloganking/codevis";
     changelog = "https://github.com/sloganking/codevis/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "codevis";
   };
 }

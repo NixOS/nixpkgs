@@ -2,13 +2,18 @@ Nix may already sandbox the build, in which case sandbox_apply will fail.
 
 --- a/Sources/Basics/Sandbox.swift
 +++ b/Sources/Basics/Sandbox.swift
-@@ -33,12 +33,14 @@ public enum Sandbox {
-         readOnlyDirectories: [AbsolutePath] = []
+@@ -57,6 +57,8 @@
+         allowNetworkConnections: [SandboxNetworkPermission] = []
      ) throws -> [String] {
          #if os(macOS)
 +        let env = ProcessInfo.processInfo.environment
 +        if env["NIX_BUILD_TOP"] == nil || env["IN_NIX_SHELL"] != nil {
-         let profile = try macOSSandboxProfile(strictness: strictness, writableDirectories: writableDirectories, readOnlyDirectories: readOnlyDirectories)
+         let profile = try macOSSandboxProfile(
+             fileSystem: fileSystem,
+             strictness: strictness,
+@@ -65,10 +67,10 @@
+             allowNetworkConnections: allowNetworkConnections
+         )
          return ["/usr/bin/sandbox-exec", "-p", profile] + command
 -        #else
 +        }
@@ -19,3 +24,4 @@ Nix may already sandbox the build, in which case sandbox_apply will fail.
      }
  
      /// Basic strictness level of a sandbox applied to a command line.
+

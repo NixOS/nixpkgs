@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "amaranth";
-  version = "0.5.7";
+  version = "0.5.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "amaranth-lang";
     repo = "amaranth";
     tag = "v${version}";
-    hash = "sha256-E/PJrvBmlS39KgzDz9sArq4BXwk/JmIMtdxL7MdrWlc=";
+    hash = "sha256-hqMgyQJRz1/5C9KB3nAI2RKPZXZUl3zhfZbk9M1hTxs=";
   };
 
   postPatch = ''

@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "opensmtpd";
-  version = "7.7.0p0";
+  version = "7.8.0p0";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.opensmtpd.org/archives/${pname}-${version}.tar.gz";
-    hash = "sha256-sJU9oc4sv+S+E5zbGaqTX7+rQs8KmT1CWzejl9xIOWg=";
+    hash = "sha256-QDTeLpLGH6g+7a2x2Ni9/mXlfrUM6WeeAUCVDjTKSrc=";
   };
 
   patches = [

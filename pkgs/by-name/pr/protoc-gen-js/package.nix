@@ -2,23 +2,23 @@
   stdenv,
   lib,
   buildBazelPackage,
-  bazel_6,
+  bazel_7,
   fetchFromGitHub,
   cctools,
 }:
 
 buildBazelPackage rec {
   pname = "protoc-gen-js";
-  version = "3.21.2";
+  version = "3.21.4";
 
   src = fetchFromGitHub {
     owner = "protocolbuffers";
     repo = "protobuf-javascript";
     rev = "v${version}";
-    hash = "sha256-TmP6xftUVTD7yML7UEM/DB8bcsL5RFlKPyCpcboD86U=";
+    hash = "sha256-eIOtVRnHv2oz4xuVc4aL6JmhpvlODQjXHt1eJHsjnLg=";
   };
 
-  bazel = bazel_6;
+  bazel = bazel_7;
   bazelTargets = [ "generator:protoc-gen-js" ];
   bazelBuildFlags = lib.optionals stdenv.cc.isClang [
     "--cxxopt=-x"
@@ -31,7 +31,13 @@ buildBazelPackage rec {
 
   LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
 
-  fetchAttrs.hash = "sha256-WOBlZ0XNrl5UxIaSDxZeOfzS2a8ZkrKdTLKHBDC9UNQ=";
+  fetchAttrs = {
+    preInstall = ''
+      rm -rv "$bazelOut/external/host_platform"
+    '';
+
+    hash = "sha256-CekpXINZSr6Hysa4qrVkdchBla9pgBwRtqBiuUGPNq0=";
+  };
 
   buildAttrs.installPhase = ''
     mkdir -p $out/bin

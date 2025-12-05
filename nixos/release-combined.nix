@@ -64,7 +64,7 @@ rec {
       name = "nixos-${nixos.channel.version}";
       meta = {
         description = "Release-critical builds for the NixOS channel";
-        maintainers = with pkgs.lib.maintainers; [ ];
+        maintainers = [ ];
       };
       constituents = pkgs.lib.concatLists [
         [ "nixos.channel" ]
@@ -100,7 +100,6 @@ rec {
         (onFullSupported "nixos.tests.fontconfig-default-fonts")
         (onFullSupported "nixos.tests.gitlab")
         (onFullSupported "nixos.tests.gnome")
-        (onFullSupported "nixos.tests.gnome-xorg")
         (onSystems [ "x86_64-linux" ] "nixos.tests.hibernate")
         (onFullSupported "nixos.tests.i3wm")
         (onSystems [ "aarch64-linux" ] "nixos.tests.installer.simpleUefiSystemdBoot")
@@ -171,7 +170,7 @@ rec {
         (onFullSupported "nixos.tests.php.fpm")
         (onFullSupported "nixos.tests.php.httpd")
         (onFullSupported "nixos.tests.php.pcre")
-        (onFullSupported "nixos.tests.plasma5")
+        (onFullSupported "nixos.tests.plasma6")
         (onSystems [ "x86_64-linux" ] "nixos.tests.podman")
         (onFullSupported "nixos.tests.predictable-interface-names.predictableNetworkd")
         (onFullSupported "nixos.tests.predictable-interface-names.predictable")

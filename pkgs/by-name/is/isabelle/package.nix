@@ -8,7 +8,7 @@
   java,
   scala_3,
   polyml,
-  veriT,
+  verit,
   vampire,
   eprover-ho,
   rlwrap,
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     polyml
-    veriT
+    verit
     vampire'
     eprover-ho
     net-tools
@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs lib/Tools/ bin/
 
     cat >contrib/verit-*/etc/settings <<EOF
-      ISABELLE_VERIT=${veriT}/bin/veriT
+      ISABELLE_VERIT=${verit}/bin/veriT
     EOF
 
     cat >contrib/e-*/etc/settings <<EOF
@@ -258,7 +258,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     symlinkJoin {
       name = "isabelle-with-components-${isabelle.version}";
-      paths = [ isabelle ] ++ (builtins.map (c: c.override { inherit isabelle; }) components);
+      paths = [ isabelle ] ++ (map (c: c.override { inherit isabelle; }) components);
 
       postBuild = ''
         rm $out/bin/*

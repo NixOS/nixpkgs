@@ -9,12 +9,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.6.15";
+  version = "1.6.16";
   pname = "freeipmi";
 
   src = fetchurl {
     url = "mirror://gnu/freeipmi/${pname}-${version}.tar.gz";
-    sha256 = "sha256-1pKcNUY59c51tbGJfos2brY2JcI+XEWQp66gNP4rjK8=";
+    sha256 = "sha256-W872u562gOSbSjYjV5kwrOeJn1OSWyBF/p+RrWkEER0=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -25,7 +25,11 @@ stdenv.mkDerivation rec {
     libgpg-error
   ];
 
-  configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  configureFlags = [
+    # Device permissions are set by udev/kernel, so don't restrict them unnecessarily
+    "--with-dont-check-for-root"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "ac_cv_file__dev_urandom=true"
     "ac_cv_file__dev_random=true"
   ];

@@ -15,13 +15,13 @@ assert enableCairo -> cairo != null && pango != null;
 
 stdenv.mkDerivation rec {
   pname = "duc";
-  version = "1.4.5";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "zevv";
     repo = "duc";
     rev = version;
-    sha256 = "sha256-ZLNsyp82UnsveEfDKzH8WfRh/Y/PQlXq8Ma+jIZl9Gk=";
+    sha256 = "sha256-hZ8bhPXS/trt6ZePjfuwx8PEfv0xCBqSJxRonLB7Ui0=";
   };
 
   nativeBuildInputs = [

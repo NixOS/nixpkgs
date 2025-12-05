@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "GATB";
     repo = "minia";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0bmfrywixaaql898l0ixsfkhxjf2hb08ssnqzlzacfizxdp46siq";
     fetchSubmodules = true;
   };
@@ -31,6 +31,13 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     rm -rf thirdparty/gatb-core/gatb-core/thirdparty/{hdf5,boost}
+  '';
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace thirdparty/gatb-core/gatb-core/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 3.1.0)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   meta = with lib; {

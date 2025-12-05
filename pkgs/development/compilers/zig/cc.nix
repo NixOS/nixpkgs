@@ -4,7 +4,6 @@
   zig,
   stdenv,
   makeWrapper,
-  coreutils,
 }:
 let
   targetPrefix = lib.optionalString (
@@ -14,7 +13,7 @@ in
 runCommand "zig-cc-${zig.version}"
   {
     pname = "zig-cc";
-    inherit (zig) version meta;
+    inherit (zig) version;
 
     nativeBuildInputs = [ makeWrapper ];
 
@@ -24,14 +23,17 @@ runCommand "zig-cc-${zig.version}"
     };
 
     inherit zig;
+
+    meta = zig.meta // {
+      mainProgram = "${targetPrefix}clang";
+    };
   }
   ''
     mkdir -p $out/bin
     for tool in cc c++ ld.lld; do
       makeWrapper "$zig/bin/zig" "$out/bin/$tool" \
         --add-flags "$tool" \
-        --suffix PATH : "${lib.makeBinPath [ coreutils ]}" \
-        --run "export ZIG_GLOBAL_CACHE_DIR=\$(mktemp -d)"
+        --run "export ZIG_GLOBAL_CACHE_DIR=\$TMPDIR/zig-cache"
     done
 
     ln -s $out/bin/c++ $out/bin/clang++

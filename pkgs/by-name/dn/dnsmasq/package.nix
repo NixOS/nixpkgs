@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     "PKG_CONFIG=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
   ];
 
-  hardeningEnable = [ "pie" ];
+  enableParallelBuilding = true;
 
   postBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
     make -C contrib/lease-tools
@@ -103,9 +103,10 @@ stdenv.mkDerivation rec {
     prometheus-exporter = nixosTests.prometheus-exporters.dnsmasq;
 
     # these tests use dnsmasq incidentally
-    inherit (nixosTests) dnscrypt-proxy2;
+    inherit (nixosTests) dnscrypt-proxy;
     kubernetes-dns-single = nixosTests.kubernetes.dns-single-node;
     kubernetes-dns-multi = nixosTests.kubernetes.dns-multi-node;
+    pihole-ftl-dnsmasq = nixosTests.pihole-ftl.dnsmasq;
   };
 
   meta = with lib; {

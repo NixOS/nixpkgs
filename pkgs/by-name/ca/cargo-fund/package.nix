@@ -16,11 +16,10 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "acfoltzer";
     repo = "cargo-fund";
-    rev = version;
+    tag = version;
     hash = "sha256-8mnCwWwReNH9s/gbxIhe7XdJRIA6BSUKm5jzykU5qMU=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-9NozPJzQIuF2KHaT6t4qBU0qKtBbM05mHxzmHlU3Dr4=";
 
   # The tests need a GitHub API token.

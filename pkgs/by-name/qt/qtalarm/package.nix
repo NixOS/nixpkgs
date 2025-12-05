@@ -2,8 +2,8 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  libsForQt5,
-  qt5,
+  kdePackages,
+  qt6,
   makeDesktopItem,
   nix-update-script,
   copyDesktopItems,
@@ -11,18 +11,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtalarm";
-  version = "2.5.1";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "CountMurphy";
     repo = "QTalarm";
     tag = finalAttrs.version;
-    hash = "sha256-87w5YFQ9olLnCfPF04jOnIMn1NtE2M2n5WZX4e69UGU=";
+    hash = "sha256-IN/XdR8J5uMIAjb1G2kzuLDtO972RLKSy3Ceh9CcHWw=";
   };
 
   buildInputs = [
-    libsForQt5.qtbase
-    libsForQt5.qtmultimedia
+    kdePackages.qtbase
+    kdePackages.qtmultimedia
   ];
 
   installPhase = ''
@@ -47,8 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    qt5.wrapQtAppsHook
-    qt5.qmake
+    qt6.wrapQtAppsHook
+    qt6.qmake
     copyDesktopItems
   ];
 

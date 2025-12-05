@@ -58,6 +58,35 @@ let
       '';
     });
 
+  drupalSettings =
+    hostName: cfg:
+    pkgs.writeTextFile {
+      name = "settings.nixos-${hostName}.php";
+      text = ''
+        <?php
+
+          // NixOS automatically generated settings
+          $settings['file_private_path'] = '${cfg.privateFilesDir}';
+          $settings['config_sync_directory'] = '${cfg.configSyncDir}';
+
+          // Extra config
+          ${cfg.extraConfig}
+      '';
+      checkPhase = "${pkgs.php}/bin/php --syntax-check $target";
+    };
+
+  appendSettings =
+    hostName:
+    pkgs.writeTextFile {
+      name = "append-drupal-settings-${hostName}";
+      text = ''
+
+        // NixOS settings file import.
+        require dirname(__FILE__) . '/settings.nixos-${hostName}.php';
+
+      '';
+    };
+
   siteOpts =
     {
       options,
@@ -85,6 +114,26 @@ let
           default = "/var/lib/drupal/${name}/private";
           defaultText = "/var/lib/drupal/<name>/private";
           description = "The location of the Drupal private files directory.";
+        };
+
+        configSyncDir = mkOption {
+          type = types.path;
+          default = "/var/lib/drupal/${name}/config/sync";
+          defaultText = "/var/lib/drupal/<name>/config/sync";
+          description = "The location of the Drupal config sync directory.";
+        };
+
+        extraConfig = mkOption {
+          type = types.lines;
+          default = "";
+          description = ''
+            Extra configuration values that you want to insert into settings.php.
+            All configuration must be written as PHP script.
+          '';
+          example = ''
+            $config['user.settings']['anonymous'] = 'Visitor';
+            $settings['entity_update_backup'] = TRUE;
+          '';
         };
 
         stateDir = mkOption {
@@ -308,6 +357,7 @@ in
           "d '${cfg.themesDir}' 0750 ${user} ${webserver.group} - -"
           "Z '${cfg.themesDir}' 0750 ${user} ${webserver.group} - -"
           "d '${cfg.privateFilesDir}' 0750 ${user} ${webserver.group} - -"
+          "d '${cfg.configSyncDir}' 0750 ${user} ${webserver.group} - -"
         ]) eachSite
       );
 
@@ -330,6 +380,8 @@ in
             serviceConfig = {
               Type = "oneshot";
               User = "root";
+              RemainAfterExit = true;
+
               ExecStart = writeShellScript "drupal-state-init-${hostName}" ''
                 set -e
 
@@ -345,22 +397,29 @@ in
                 fi
 
                 settings_file="${cfg.stateDir}/sites/default/settings.php"
-                defaultSettings="${cfg.package}/share/php/drupal/sites/default/default.settings.php"
+                default_settings="${cfg.package}/share/php/drupal/sites/default/default.settings.php"
 
-                if [ ! -f "$settings" ]; then
+                if [ ! -f "$settings_file" ]; then
                   echo "Preparing settings.php for ${hostName}..."
-                  cp "$defaultSettings" "$settings_file"
+                  cp "$default_settings" "$settings_file"
+                  cat < ${appendSettings hostName} >> "$settings_file"
                   chmod 644 "$settings_file"
-
-                  # Append settings to settings file
-                  printf "\n\n// NixOS Automatically Generated Settings\n" >> $settings_file
-                  printf "\$settings['file_private_path'] = '${cfg.privateFilesDir}';" >> $settings_file
                 fi
+
+                # Link the NixOS-managed settings file to the state directory.
+                ln -sf ${drupalSettings hostName cfg} ${cfg.stateDir}/sites/default/settings.nixos-${hostName}.php
 
                 # Set or reset file permissions so that the web user and webserver owns them.
                 chown -R ${user}:${webserver.group} ${cfg.stateDir}
               '';
             };
+
+            # Rerun this service if certain settings were updated
+            reloadTriggers = [
+              cfg.extraConfig
+              cfg.privateFilesDir
+              cfg.configSyncDir
+            ];
           })
         ) eachSite)
 

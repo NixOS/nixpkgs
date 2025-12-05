@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Plutoberth";
     repo = "SonyHeadphonesClient";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-vhI97KheKzr87exCh4xNN7NDefcagdMu1tWSt67vLiU=";
     fetchSubmodules = true;
   };
@@ -56,6 +56,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace Constants.h \
       --replace "UNKNOWN = -1" "// UNKNOWN removed since it doesn't fit in char"
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   installPhase = ''

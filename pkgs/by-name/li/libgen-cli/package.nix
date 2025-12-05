@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -29,7 +30,7 @@ buildGoModule rec {
     "-w"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd libgen-cli \
       --bash <($out/bin/libgen-cli completion bash) \
       --fish <($out/bin/libgen-cli completion fish) \

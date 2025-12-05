@@ -4,24 +4,31 @@
   click,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   python-dateutil,
   pytestCheckHook,
   setuptools,
   tatsu-lts,
 }:
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "beanquery";
-  version = "0.1.0-unstable-2025-01-10";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "beancount";
     repo = "beanquery";
-    # Pinned at commit where tatsu dependency replaced with tatsu-lts
-    # Later snapsot versions break fava build due to API changes at beanquery/shell.py
-    rev = "e77a67996a54eef2e9d77b6352c74a40164e281d";
-    hash = "sha256-XYfKAscm55lY4YjIGTQ6RMFnCPWemfszpheGQ9qjMiM=";
+    tag = "v${version}";
+    hash = "sha256-O7+WCF7s50G14oNTvJAOTvgSoNR9fWcn/m1jv7RHmK8=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "beancount-workaround.patch";
+      url = "https://github.com/beancount/beanquery/commit/aa0776285a25baeedf151e9f582bef0314f76004.patch?full_index=1";
+      hash = "sha256-hWL1CDsBSbMqufEQrtEncmyUr5L5VJI+i4xQtnAvQd8=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

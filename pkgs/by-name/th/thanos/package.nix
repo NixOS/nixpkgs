@@ -7,22 +7,29 @@
   nixosTests,
   testers,
   thanos,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
   pname = "thanos";
-  version = "0.38.0";
+  version = "0.40.1";
 
   src = fetchFromGitHub {
     owner = "thanos-io";
     repo = "thanos";
     tag = "v${version}";
-    hash = "sha256-3rNtiVTrA+MoCVuTSLIzh65U0kjA86EF+bQCyfVa6rA=";
+    hash = "sha256-g0xvtBwPoX906xHdyOEUfudio/9MZhkzdBp5FcATRsM=";
   };
 
-  vendorHash = "sha256-Z/S4mVg+VbP8hNVB1xz1uGWR6N/1aTA0DqTHbntGMLg=";
+  vendorHash = "sha256-ukKoiA7UhqDdMvAWYL5BGf6+FSPSkcRR/Scj5o/MMKc=";
 
   subPackages = "cmd/thanos";
+
+  # Verify in sync with https://github.com/thanos-io/thanos/blob/main/.promu.yml
+  tags = [
+    "netgo"
+    "slicelabels"
+  ];
 
   ldflags =
     let
@@ -38,6 +45,12 @@ buildGoModule rec {
     ];
 
   doCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };

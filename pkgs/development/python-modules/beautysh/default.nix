@@ -2,58 +2,48 @@
   lib,
   buildPythonPackage,
   colorama,
+  editorconfig,
   fetchFromGitHub,
-  fetchpatch,
-  poetry-core,
-  pytest7CheckHook,
-  setuptools,
+  hatchling,
+  hypothesis,
+  pytestCheckHook,
+  pyyaml,
   types-colorama,
-  types-setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "beautysh";
-  version = "6.2.1";
-  format = "pyproject";
+  version = "6.4.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lovesegfault";
     repo = "beautysh";
-    rev = "v${version}";
-    hash = "sha256-rPeGRcyNK45Y7OvtzaIH93IIzexBf/jM1SzYP0phQ1o=";
+    tag = "v${version}";
+    hash = "sha256-wLqysNhkagZ+sphqMC78cLoKvsMJpJCJr16lgvU37JI=";
   };
 
-  patches = [
-    # https://github.com/lovesegfault/beautysh/pull/247
-    (fetchpatch {
-      name = "poetry-to-poetry-core.patch";
-      url = "https://github.com/lovesegfault/beautysh/commit/5f4fcac083fa68568a50f3c2bcee3ead0f3ca7c5.patch";
-      hash = "sha256-H/kIJKww5ouWu8rmRkaMOXcsq2daZWDdwxBqbc99x0s=";
-    })
-  ];
+  build-system = [ hatchling ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'types-setuptools = "^57.4.0"' 'types-setuptools = "*"'
-  '';
-
-  nativeBuildInputs = [ poetry-core ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     colorama
-    setuptools
+    editorconfig
     types-colorama
-    types-setuptools
   ];
 
-  nativeCheckInputs = [ pytest7CheckHook ];
+  nativeCheckInputs = [
+    hypothesis
+    pytestCheckHook
+    pyyaml
+  ];
 
   pythonImportsCheck = [ "beautysh" ];
 
   meta = with lib; {
     description = "Tool for beautifying Bash scripts";
     homepage = "https://github.com/lovesegfault/beautysh";
-    license = with licenses; [ asl20 ];
+    changelog = "https://github.com/lovesegfault/beautysh/releases/tag/${src.tag}";
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     mainProgram = "beautysh";
   };

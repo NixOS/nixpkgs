@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   version = "0.2.6";
 
   src = fetchFromGitHub {
-    owner = "stiglers-eponym";
+    owner = "beamerpresenter";
     repo = "BeamerPresenter";
     rev = "v${version}";
     hash = "sha256-sPeWlPkWOPfLAoAC/+T7nyhPqvoaZg6aMOIVLjMqd2k=";
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Modular multi screen pdf presentation viewer";
-    homepage = "https://github.com/stiglers-eponym/BeamerPresenter";
+    homepage = "https://github.com/beamerpresenter/BeamerPresenter";
     license = with licenses; [
       agpl3Only
       gpl3Plus

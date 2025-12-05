@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-Ekjxna3u+71s1q7jjXp7PxYUQIfbp2E+jAqKGuszU6g=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-kWUAI25ag9ghIhn36NF+SunRtmbS0HzsZsxGJujmuG4=";
 
   nativeBuildInputs = [
@@ -41,7 +40,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://bupstash.io";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ andrewchambers ];
+    maintainers = [ ];
     mainProgram = "bupstash";
   };
 }

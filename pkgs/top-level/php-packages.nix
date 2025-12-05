@@ -1,5 +1,6 @@
 {
   stdenv,
+  fetchpatch,
   config,
   callPackages,
   lib,
@@ -115,7 +116,7 @@ lib.makeScope pkgs.newScope (
         ...
       }@args:
       stdenv.mkDerivation (
-        (builtins.removeAttrs args [ "name" ])
+        (removeAttrs args [ "name" ])
         // {
           pname = "php-${name}";
           extensionName = extName;
@@ -230,8 +231,6 @@ lib.makeScope pkgs.newScope (
 
       cyclonedx-php-composer = callPackage ../development/php-packages/cyclonedx-php-composer { };
 
-      deployer = callPackage ../development/php-packages/deployer { };
-
       grumphp = callPackage ../development/php-packages/grumphp { };
 
       phan = callPackage ../development/php-packages/phan { };
@@ -255,12 +254,12 @@ lib.makeScope pkgs.newScope (
       phpstan = callPackage ../development/php-packages/phpstan { };
 
       psalm = callPackage ../development/php-packages/psalm { };
-
-      psysh = callPackage ../development/php-packages/psysh { };
     }
     // lib.optionalAttrs config.allowAliases {
-      phpcbf = throw "`phpcbf` is now deprecated, use `php-codesniffer` instead which contains both `phpcs` and `phpcbf`.";
-      phpcs = throw "`phpcs` is now deprecated, use `php-codesniffer` instead which contains both `phpcs` and `phpcbf`.";
+      deployer = throw "`php8${lib.versions.minor php.version}Packages.deployer` has been removed, use `deployer`";
+      phpcbf = throw "`php8${lib.versions.minor php.version}Packages.phpcbf` has been removed, use `php-codesniffer` instead which contains both `phpcs` and `phpcbf`.";
+      phpcs = throw "`php8${lib.versions.minor php.version}Packages.phpcs` has been removed, use `php-codesniffer` instead which contains both `phpcs` and `phpcbf`.";
+      psysh = throw "`php8${lib.versions.minor php.version}Packages.psysh` has been removed, use `psysh`";
     };
 
     # This is a set of PHP extensions meant to be used in php.buildEnv
@@ -409,6 +408,7 @@ lib.makeScope pkgs.newScope (
       }
       // lib.optionalAttrs config.allowAliases {
         php-spx = throw "php-spx is deprecated, use spx instead";
+        openssl-legacy = throw "openssl-legacy has been removed";
       }
       // (
         # Core extensions
@@ -446,6 +446,16 @@ lib.makeScope pkgs.newScope (
               buildInputs = [ libxml2 ];
               configureFlags = [
                 "--enable-dom"
+              ];
+              patches = lib.optionals (lib.versionOlder php.version "8.3") [
+                # Fix gh10234 test with libxml 2.15.0
+                (fetchpatch {
+                  url = "https://github.com/php/php-src/commit/d6e70e705323a50b616ffee9402245ab97de3e4e.patch";
+                  hash = "sha256-Axu09l3uQ83qe30aDsR+Bt29cJiF4mLknwDyQf94vic=";
+                  includes = [
+                    "ext/dom/tests/gh10234.phpt"
+                  ];
+                })
               ];
             }
             {
@@ -598,16 +608,6 @@ lib.makeScope pkgs.newScope (
             {
               name = "openssl";
               buildInputs = [ openssl ];
-              configureFlags = [ "--with-openssl" ];
-              doCheck = false;
-            }
-            # This provides a legacy OpenSSL PHP extension
-            # For situations where OpenSSL 3 do not support a set of features
-            # without a specific openssl.cnf file
-            {
-              name = "openssl-legacy";
-              extName = "openssl";
-              buildInputs = [ openssl_1_1 ];
               configureFlags = [ "--with-openssl" ];
               doCheck = false;
             }
@@ -847,7 +847,7 @@ lib.makeScope pkgs.newScope (
           # [ { name = <name>; value = <extension drv>; } ... ]
           #
           # which we later use listToAttrs to make all attrs available by name.
-          namedExtensions = builtins.map (drv: {
+          namedExtensions = map (drv: {
             name = drv.name;
             value = mkExtension drv;
           }) extensionData;

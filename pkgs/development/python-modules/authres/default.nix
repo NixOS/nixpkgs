@@ -29,6 +29,5 @@ buildPythonPackage rec {
     '';
     homepage = "https://launchpad.net/authentication-results-python";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ leenaars ];
   };
 }

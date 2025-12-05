@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   meson,
   ninja,
   pkg-config,
@@ -68,6 +69,15 @@ stdenv.mkDerivation rec {
     qt6Packages.qtbase
   ];
 
+  patches = [
+    # See https://github.com/flatpak/libportal/pull/200
+    (fetchpatch2 {
+      name = "libportal-fix-qt6.9-private-api-usage.patch";
+      url = "https://github.com/flatpak/libportal/commit/796053d2eebe4532aad6bd3fd80cdf3b197806ec.patch?full_index=1";
+      hash = "sha256-TPIKKnZCcp/bmmsaNlDxAsKLTBe6BKPCTOutLjXPCHQ=";
+    })
+  ];
+
   mesonFlags = [
     (lib.mesonEnable "backend-gtk3" (variant == "gtk3"))
     (lib.mesonEnable "backend-gtk4" (variant == "gtk4"))
@@ -92,5 +102,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ jtojnar ];
     platforms = lib.platforms.unix;
+    # needs memfd_create which is available on some unixes but not darwin
+    badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];
   };
 }

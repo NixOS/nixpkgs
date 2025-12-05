@@ -183,9 +183,9 @@ in
     };
 
     environment.etc = lib.mkMerge [
-      ({
+      {
         "sysusers.d".source = sysusersConfig;
-      })
+      }
 
       # Statically create the symlinks to immutablePasswordFilesLocation when
       # using an immutable /etc because we will not be able to do it at

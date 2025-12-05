@@ -23,6 +23,13 @@ let
             "test_check_link_response_only" # fails on hydra https://hydra.nixos.org/build/242624087/nixlog/1
           ];
         });
+        prompt-toolkit = prev.prompt-toolkit.overridePythonAttrs (prev: rec {
+          version = "3.0.51";
+          src = prev.src.override {
+            tag = version;
+            hash = "sha256-pNYmjAgnP9nK40VS/qvPR3g+809Yra2ISASWJDdQKrU=";
+          };
+        });
         python-dateutil = prev.python-dateutil.overridePythonAttrs (prev: rec {
           version = "2.8.2";
           format = "setuptools";
@@ -53,6 +60,7 @@ let
           build-system = with final; [
             setuptools
           ];
+          postPatch = null;
           src = prev.src.override {
             inherit version;
             hash = "sha256-+OzBu6VmdBNFfFKauVW/jGe0XbeZ0VkGYmFxnjKFgKA=";
@@ -65,14 +73,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.27.50"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.31.39"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     tag = version;
-    hash = "sha256-ITiZ144YFhwuRcfhulLF0jxpp1OgznEE8frx4Yn4V+A=";
+    hash = "sha256-IuOamzLmnU3wIhgQIsWbU6GSRM2XLv0eH0gezp9IHNA=";
   };
 
   postPatch = ''
@@ -81,7 +89,7 @@ py.pkgs.buildPythonApplication rec {
       --replace-fail 'awscrt==' 'awscrt>=' \
       --replace-fail 'distro>=1.5.0,<1.9.0' 'distro>=1.5.0' \
       --replace-fail 'docutils>=0.10,<0.20' 'docutils>=0.10' \
-      --replace-fail 'prompt-toolkit>=3.0.24,<3.0.39' 'prompt-toolkit>=3.0.24' \
+      --replace-fail 'prompt-toolkit>=3.0.24,<3.0.52' 'prompt-toolkit>=3.0.24' \
       --replace-fail 'ruamel.yaml.clib>=0.2.0,<=0.2.12' 'ruamel.yaml.clib>=0.2.0' \
 
     substituteInPlace requirements-base.txt \
@@ -116,6 +124,14 @@ py.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = [
     groff
     less
+  ];
+
+  # Prevent breakage when running in a Python environment: https://github.com/NixOS/nixpkgs/issues/47900
+  makeWrapperArgs = [
+    "--unset"
+    "NIX_PYTHONPATH"
+    "--unset"
+    "PYTHONPATH"
   ];
 
   nativeCheckInputs = with py.pkgs; [
@@ -160,6 +176,12 @@ py.pkgs.buildPythonApplication rec {
     "tests/functional"
   ];
 
+  disabledTests = [
+    # Requires networking (socket binding not possible in sandbox)
+    "test_is_socket"
+    "test_is_special_file_warning"
+  ];
+
   pythonImportsCheck = [
     "awscli"
   ];
@@ -188,7 +210,6 @@ py.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       bhipple
       davegallant
-      bryanasdev000
       devusb
       anthonyroussel
     ];

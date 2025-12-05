@@ -80,9 +80,6 @@ stdenv.mkDerivation rec {
     "FPC=${startFPC}/bin/fpc"
   ];
 
-  # disabled by default in fpcsrc/compiler/llvm/agllvm.pas
-  hardeningDisable = [ "pie" ];
-
   installFlags = [ "INSTALL_PREFIX=\${out}" ];
 
   postInstall = ''
@@ -111,5 +108,9 @@ stdenv.mkDerivation rec {
       lgpl2
     ];
     platforms = platforms.unix;
+    # See:
+    # * <https://gitlab.com/freepascal.org/fpc/source/-/issues/41045>
+    # * <https://gitlab.com/freepascal.org/fpc/source/-/merge_requests/887>
+    broken = stdenv.cc.isClang && stdenv.hostPlatform.isx86_64;
   };
 }

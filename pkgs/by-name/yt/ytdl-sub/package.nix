@@ -1,21 +1,21 @@
 {
   python3Packages,
   fetchFromGitHub,
-  ffmpeg,
+  ffmpeg_7,
   lib,
   versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "ytdl-sub";
-  version = "2025.07.04";
+  version = "2025.11.28.post1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jmbannon";
     repo = "ytdl-sub";
     tag = version;
-    hash = "sha256-aVI/OY1Dh5LvbDyg+GuWBz2e6oUgTzErqfnow22v8CI=";
+    hash = "sha256-DKlo8Cs7MVfkY8qrVT6NDPTQm6DhGtOHQ1pm3587Hj8=";
   };
 
   postPatch = ''
@@ -38,8 +38,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--set YTDL_SUB_FFMPEG_PATH ${lib.getExe' ffmpeg "ffmpeg"}"
-    "--set YTDL_SUB_FFPROBE_PATH ${lib.getExe' ffmpeg "ffprobe"}"
+    "--set YTDL_SUB_FFMPEG_PATH ${lib.getExe' ffmpeg_7 "ffmpeg"}"
+    "--set YTDL_SUB_FFPROBE_PATH ${lib.getExe' ffmpeg_7 "ffprobe"}"
   ];
 
   nativeCheckInputs = [
@@ -49,8 +49,8 @@ python3Packages.buildPythonApplication rec {
   versionCheckProgramArg = "--version";
 
   env = {
-    YTDL_SUB_FFMPEG_PATH = "${lib.getExe' ffmpeg "ffmpeg"}";
-    YTDL_SUB_FFPROBE_PATH = "${lib.getExe' ffmpeg "ffprobe"}";
+    YTDL_SUB_FFMPEG_PATH = "${lib.getExe' ffmpeg_7 "ffmpeg"}";
+    YTDL_SUB_FFPROBE_PATH = "${lib.getExe' ffmpeg_7 "ffprobe"}";
   };
 
   disabledTests = [
@@ -59,10 +59,10 @@ python3Packages.buildPythonApplication rec {
     "test_thumbnail"
   ];
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # According to documentation, e2e tests can be flaky:
     # "This checksum can be inaccurate for end-to-end tests"
-    "--ignore=tests/e2e"
+    "tests/e2e"
   ];
 
   passthru.updateScript = ./update.sh;

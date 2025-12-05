@@ -1,44 +1,60 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchpatch,
-  makeWrapper,
-  python3Packages,
+
+  fetchFromGitHub,
+
+  autoreconfHook,
+  texinfo,
+  perl,
+
+  python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bashdb";
-  version = "5.0-1.1.2";
+  version = "5.2-1.1.2-unstable-2025-06-07";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/bashdb/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-MBdtKtKMWwCy4tIcXqGu+PuvQKj52fcjxnxgUx87czA=";
+  src = fetchFromGitHub {
+    owner = "Trepan-Debuggers";
+    repo = "bashdb";
+    rev = "7d0f9751e04fa54f48f0ab4be32ecb8030a4315d";
+    sha256 = "sha256-fwxmlFC66Lv+zD632s9a44I9IEQ/82caKnQ44pdVes4=";
   };
 
   patches = [
-    # Enable building with bash 5.1/5.2
-    # Remove with any upstream 5.1-x.y.z release
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/569fbb806d9ee813afa8b27d2098a44f93433922/devel/bashdb/files/patch-configure";
-      sha256 = "19zfzcnxavndyn6kfxp775kjcd0gigsm4y3bnh6fz5ilhnnbbbgr";
-    })
+    ./bash-5-or-greater.patch
   ];
-  patchFlags = [ "-p0" ];
 
   nativeBuildInputs = [
-    makeWrapper
+    autoreconfHook
+    texinfo # maninfo
+    perl # pod2man
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/bashdb --prefix PYTHONPATH ":" "$(toPythonPath ${python3Packages.pygments})"
-  '';
+  buildInputs = [
+    # used at runtime by term-highlight.py
+    (python3.withPackages (ps: [ ps.pygments ]))
+  ];
+
+  configureFlags = [
+    # wants to point where bash expects dbg-main
+    # for now point to self
+    "--with-dbg-main=${placeholder "out"}/share/bashdb/bashdb-main.inc"
+  ];
 
   meta = {
-    description = "Bash script debugger";
-    mainProgram = "bashdb";
     homepage = "https://bashdb.sourceforge.net/";
-    license = lib.licenses.gpl2;
+    description = "A gdb-like debugger for bash";
+    longDescription = ''
+      The Bash Debugger Project is a source-code debugger for bash that follows
+      the gdb command syntax.
+    '';
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "bashdb";
+    maintainers = with lib.maintainers; [
+      jk
+    ];
     platforms = lib.platforms.linux;
   };
 }

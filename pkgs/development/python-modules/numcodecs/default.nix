@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "numcodecs";
-  version = "0.15.1";
+  version = "0.16.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7u135NZjZkGizGBfvGB4x6jyzEDz36Kz9h5S5gkbBP8=";
+    hash = "sha256-xH8g1lZFRWjGtGl84CCB5ru1EvGYc4xqVvr+gCnJf7E=";
   };
 
   build-system = [
@@ -62,7 +62,7 @@ buildPythonPackage rec {
     pytestCheckHook
     importlib-metadata
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # https://github.com/NixOS/nixpkgs/issues/255262
   preCheck = "pushd $out";

@@ -5,9 +5,9 @@
     },
     "osquery": {
         "fetchSubmodules": true,
-        "hash": "sha256-oNH+mDTtg4m6wnE5XBWRQHWhBasy9ssSrxA/TPCd2pI=",
+        "hash": "sha256-VWe4dh5Y+9Umzt+MXL/eIqSGhGq7X6UWqDUBsBLSudE=",
         "owner": "osquery",
         "repo": "osquery",
-        "rev": "5.18.1"
+        "rev": "5.20.0"
     }
 }

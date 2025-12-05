@@ -106,6 +106,8 @@ stdenv.mkDerivation rec {
     "--with-systemdshutdowndir=$(out)/lib/systemd/system-shutdown"
     "--with-systemdtmpfilesdir=$(out)/lib/tmpfiles.d"
     "--with-udev-dir=$(out)/etc/udev"
+    "--with-user=nutmon"
+    "--with-group=nutmon"
   ]
   ++ (lib.lists.optionals withApcModbus [
     "--with-modbus+usb"

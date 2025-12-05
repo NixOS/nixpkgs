@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromSavannah,
+  fetchgit,
   flex,
   bison,
   python3,
@@ -28,6 +28,7 @@
   efiSupport ? false,
   zfsSupport ? false,
   xenSupport ? false,
+  xenPvhSupport ? false,
   kbdcompSupport ? false,
   ckbcomp,
 }:
@@ -60,24 +61,23 @@ let
     riscv64-linux.target = "riscv64";
   };
 
-  canEfi = lib.any (system: stdenv.hostPlatform.system == system) (
-    lib.mapAttrsToList (name: _: name) efiSystemsBuild
-  );
-  inPCSystems = lib.any (system: stdenv.hostPlatform.system == system) (
-    lib.mapAttrsToList (name: _: name) pcSystems
-  );
+  xenSystemsBuild = {
+    i686-linux.target = "i386";
+    x86_64-linux.target = "x86_64";
+  };
 
-  gnulib = fetchFromSavannah {
-    repo = "gnulib";
+  xenPvhSystemsBuild = {
+    i686-linux.target = "i386";
+    x86_64-linux.target = "i386"; # Xen PVH is only i386 on x86.
+  };
+
+  inPCSystems = lib.any (system: stdenv.hostPlatform.system == system) (lib.attrNames pcSystems);
+
+  gnulib = fetchgit {
+    url = "https://git.savannah.gnu.org/git/gnulib.git";
     # NOTE: keep in sync with bootstrap.conf!
     rev = "9f48fb992a3d7e96610c4ce8be969cff2d61a01b";
     hash = "sha256-mzbF66SNqcSlI+xmjpKpNMwzi13yEWoc1Fl7p4snTto=";
-  };
-
-  src = fetchFromSavannah {
-    repo = "grub";
-    rev = "grub-2.12";
-    hash = "sha256-lathsBb2f7urh8R86ihpTdwo3h1hAHnRiHd5gCLVpBc=";
   };
 
   # The locales are fetched from translationproject.org at build time,
@@ -88,10 +88,20 @@ let
     hash = "sha256-IoRiJHNQ58y0UhCAD0CrpFiI8Mz1upzAtyh5K4Njh/w=";
   };
 in
+
+assert zfsSupport -> zfs != null;
+assert !(efiSupport && (xenSupport || xenPvhSupport));
+assert !(xenSupport && xenPvhSupport);
+
 stdenv.mkDerivation rec {
   pname = "grub";
   version = "2.12";
-  inherit src;
+
+  src = fetchgit {
+    url = "https://git.savannah.gnu.org/git/grub.git";
+    tag = "grub-${version}";
+    hash = "sha256-lathsBb2f7urh8R86ihpTdwo3h1hAHnRiHd5gCLVpBc=";
+  };
 
   patches = [
     ./fix-bash-completion.patch
@@ -209,7 +219,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "23_prerequisite_1_key_protector_add_key_protectors_framework.patch";
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=5d260302da672258444b01239803c8f4d753e3f3";
-      hash = "sha256-9WnFN6xMiv+1XMhNHgVEegkhwzp9KpRZI6MIZY/Ih3Q=";
+      hash = "sha256-5aFHzc5qXBNLEc6yzI17AH6J7EYogcXdLxk//1QgumY=";
     })
     (fetchpatch {
       name = "23_prerequisite_2_disk_cryptodisk_allow_user_to_retry_failed_passphrase.patch";
@@ -239,7 +249,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "23_CVE-2024-49504.patch";
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=13febd78db3cd85dcba67d8ad03ad4d42815f11e";
-      hash = "sha256-U7lNUb4iVAyQ1yEg5ECHCQGE51tKvY13T9Ji09Q1W9Y=";
+      hash = "sha256-GejDL9IKbmbSUmp8F1NuvBcFAp2/W04jxmOatI5dKn8=";
     })
     (fetchpatch {
       name = "24_disk_loopback_reference_tracking_for_the_loopback.patch";
@@ -495,6 +505,11 @@ stdenv.mkDerivation rec {
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=348cd416a3574348f4255bf2b04ec95938990997";
       hash = "sha256-WBLYQxv8si2tvdPAvbm0/4NNqYWBMJpFV4GC0HhN/kE=";
     })
+    (fetchpatch {
+      name = "CVE-2025-4382.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=c448f511e74cb7c776b314fcb7943f98d3f22b6d";
+      hash = "sha256-64gMhCEW0aYHt46crX/qN/3Hj8MgvWLazgQlVXqe8LE=";
+    })
   ];
 
   postPatch =
@@ -605,7 +620,11 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals xenSupport [
     "--with-platform=xen"
-    "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}"
+    "--target=${xenSystemsBuild.${stdenv.hostPlatform.system}.target}"
+  ]
+  ++ lib.optionals xenPvhSupport [
+    "--with-platform=xen_pvh"
+    "--target=${xenPvhSystemsBuild.${stdenv.hostPlatform.system}.target}"
   ];
 
   # save target that grub is compiled for
@@ -653,16 +672,15 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
 
     platforms =
-      if xenSupport then
-        [
-          "x86_64-linux"
-          "i686-linux"
-        ]
+      if efiSupport then
+        lib.attrNames efiSystemsBuild
+      else if xenSupport then
+        lib.attrNames xenSystemsBuild
+      else if xenPvhSupport then
+        lib.attrNames xenPvhSystemsBuild
       else
         platforms.gnu ++ platforms.linux;
 
     maintainers = [ ];
-
-    broken = !(efiSupport -> canEfi) || !(zfsSupport -> zfs != null) || (efiSupport && xenSupport);
   };
 }

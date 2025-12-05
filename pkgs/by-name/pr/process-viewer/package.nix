@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-mEmtLCtHlrCurjKKJ3vEtEkLBik4LwuUED5UeQ1QLws=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-vmNqay/tYGASSez+VqyCQVMW+JGqfBvjwSKx0AG/LeY=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -32,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     description = "Process viewer GUI in rust";
     homepage = "https://github.com/guillaumegomez/process-viewer";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "process_viewer";
   };
 }

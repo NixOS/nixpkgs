@@ -34,6 +34,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = {
     description = "Simple batch tool to customize pak files in chrome or chromium-based browser";
     homepage = "https://github.com/myfreeer/chrome-pak-customizer";

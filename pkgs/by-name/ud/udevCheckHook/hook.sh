@@ -12,7 +12,7 @@ udevCheckHook() {
     for output in $(getAllOutputNames); do
         for path in etc lib ; do
             if [ -d "${!output}/$path/udev/rules.d" ]; then
-                @udevadm@ verify --resolve-names=never --no-style "${!output}/$path/udev/rules.d"
+                @udevadm@ verify --resolve-names=late --no-style "${!output}/$path/udev/rules.d"
             fi
         done
     done

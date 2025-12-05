@@ -35,6 +35,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/antangelo/xdvdfs";
     changelog = "https://github.com/antangelo/xdvdfs/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ federicoschonborn ];
+    maintainers = [ ];
   };
 })

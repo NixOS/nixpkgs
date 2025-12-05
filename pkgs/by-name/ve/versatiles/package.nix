@@ -6,17 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "versatiles";
-  version = "0.15.6"; # When updating: Replace with current version
+  version = "2.0.1"; # When updating: Replace with current version
 
   src = fetchFromGitHub {
     owner = "versatiles-org";
     repo = "versatiles-rs";
     tag = "v${version}"; # When updating: Replace with long commit hash of new version
-    hash = "sha256-JWMoXsMRdllYrTpUdKYEi7i5AI5957qwrr8agvyKeT8="; # When updating: Use `lib.fakeHash` for recomputing the hash once. Run: 'nix-build -A versatiles'. Swap with new hash and proceed.
+    hash = "sha256-qFVqikq1T6LQnOWgM66uKzFhWQbVjEuUK3N5vNvaDq4="; # When updating: Use `lib.fakeHash` for recomputing the hash once. Run: 'nix-build -A versatiles'. Swap with new hash and proceed.
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-8DtkeWo+lxv/9JzknpWnGYCA9v2HA4jFN4ZvseFpOGU="; # When updating: Same as above
+  cargoHash = "sha256-kkYdQEBydxPwxxSjTiwk4huCDK3xJ9FoyrcHL88ytfk="; # When updating: Same as above
 
   __darwinAllowLocalNetworking = true;
 

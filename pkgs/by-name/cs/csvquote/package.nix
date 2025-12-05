@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     description = "Enables common unix utilities like cut, awk, wc, head to work correctly with csv data containing delimiters and newlines";
     homepage = "https://github.com/dbro/csvquote";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

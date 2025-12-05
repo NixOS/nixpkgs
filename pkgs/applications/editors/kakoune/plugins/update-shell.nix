@@ -4,7 +4,7 @@
 
 with pkgs;
 let
-  pyEnv = python3.withPackages (ps: [ ps.gitpython ]);
+  pyEnv = python3.withPackages (ps: [ ps.nixpkgs-plugin-update ]);
 in
 
 mkShell {

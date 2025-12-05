@@ -21,7 +21,7 @@ stdenv.mkDerivation (
     inherit version;
 
     src = fetchurl {
-      url = "https://download.oracle.com/berkeley-db/${pname}-${version}.tar.gz";
+      url = "https://download.oracle.com/berkeley-db/db-${version}.tar.gz";
       sha256 = sha256;
     };
 

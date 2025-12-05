@@ -45,6 +45,11 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ mpi ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = with lib; {
     description = "Suite of MPI-based tools to manage large datasets";
     homepage = "https://hpc.github.io/mpifileutils";

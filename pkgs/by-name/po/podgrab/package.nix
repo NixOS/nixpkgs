@@ -7,7 +7,7 @@
 
 buildGoModule {
   pname = "podgrab";
-  version = "unstable-2021-04-14";
+  version = "0-unstable-2021-04-14";
 
   src = fetchFromGitHub {
     owner = "akhilrex";

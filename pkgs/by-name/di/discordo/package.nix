@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
@@ -10,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "discordo";
-  version = "0-unstable-2025-06-26";
+  version = "0-unstable-2025-11-30";
 
   src = fetchFromGitHub {
     owner = "ayn2op";
     repo = "discordo";
-    rev = "d701e7d15ba07457aa41ab1d1d02ce2c565c7736";
-    hash = "sha256-E8Et8w8ebDjNKPnPIFHC+Ut2IfOCnNJKRwVFUVNf7+8=";
+    rev = "845485595fbe5df8ff800ce068ea5e051f896dd5";
+    hash = "sha256-8GUVPt8GalNe5CzAmgJaf0eOM7+WqNt7qchrQGZ/zCo=";
   };
 
-  vendorHash = "sha256-X1/NjLI16U9+UyXMDmogRfIvuYNmWgIJ40uYo7VeTP0=";
+  vendorHash = "sha256-b5ilZPU6+KwiTj8aC0gqZvgGI+V69gF8LNxCpxwUy7c=";
 
   env.CGO_ENABLED = 0;
 
@@ -28,9 +29,11 @@ buildGoModule (finalAttrs: {
   ];
 
   # Clipboard support on X11 and Wayland
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    makeWrapper
+  ];
 
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/discordo \
       --prefix PATH : ${
         lib.makeBinPath [
@@ -47,7 +50,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Lightweight, secure, and feature-rich Discord terminal client";
     homepage = "https://github.com/ayn2op/discordo";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ arian-d ];
     mainProgram = "discordo";
   };

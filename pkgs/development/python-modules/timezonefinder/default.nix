@@ -1,33 +1,31 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
   cffi,
+  fetchFromGitHub,
   flatbuffers,
   h3,
   numba,
   numpy,
-  poetry-core,
+  pydantic,
   pytestCheckHook,
+  pytz,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "timezonefinder";
-  version = "6.6.2";
+  version = "8.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jannikmi";
     repo = "timezonefinder";
     tag = version;
-    hash = "sha256-5BScSnMYKPwVn4lO4qFeqPik1TAFu9AhOnmUADBW+3U=";
+    hash = "sha256-jIsS8RcbMNhj5Z/AYbNyVsbQOozbk75tXSLRqhez9Ug=";
   };
 
-  build-system = [
-    poetry-core
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [ cffi ];
 
@@ -38,10 +36,16 @@ buildPythonPackage rec {
     numpy
   ];
 
+  optional-dependencies = {
+    numba = [ numba ];
+    pytz = [ pytz ];
+  };
+
   nativeCheckInputs = [
-    numba
+    pydantic
     pytestCheckHook
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "timezonefinder" ];
 

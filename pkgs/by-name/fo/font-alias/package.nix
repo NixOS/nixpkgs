@@ -1,30 +1,36 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  writeScript,
+  fetchFromGitLab,
+  gitUpdater,
+  autoreconfHook,
+  font-util,
+  util-macros,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "font-alias";
   version = "1.0.5";
 
-  src = fetchurl {
-    url = "mirror://xorg/individual/font/font-alias-${finalAttrs.version}.tar.xz";
-    hash = "sha256-n4niF7tz4ONjagpJP7+LfJlRVuDFPZoEdtIBtnwta24=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    group = "xorg";
+    owner = "font";
+    repo = "alias";
+    tag = "font-alias-${finalAttrs.version}";
+    hash = "sha256-qglRNSt/PgFprpsvOVCeLMA+YagJw8DZMAfFdZ0m0/s=";
   };
 
+  nativeBuildInputs = [
+    autoreconfHook
+    font-util
+    util-macros
+  ];
+
   passthru = {
-    updateScript = writeScript "update-${finalAttrs.pname}" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p common-updater-scripts
-
-      version="$(list-directory-versions --pname ${finalAttrs.pname} \
-        --url https://xorg.freedesktop.org/releases/individual/font/ \
-        | sort -V | tail -n1)"
-
-      update-source-version ${finalAttrs.pname} "$version"
-    '';
+    updateScript = gitUpdater {
+      rev-prefix = "font-alias-";
+    };
   };
 
   meta = {

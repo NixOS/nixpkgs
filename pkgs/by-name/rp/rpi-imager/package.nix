@@ -8,8 +8,9 @@
   nix-update-script,
   pkg-config,
   qt6,
+  wrapGAppsHook4,
   testers,
-  util-linux,
+  writeShellScriptBin,
   xz,
   gnutls,
   zstd,
@@ -19,34 +20,43 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpi-imager";
-  version = "1.9.4";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-imager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ih7FeAKTKSvuwsrMgKQ0VEUYHHT6L99shxfAIjAzErk=";
+    hash = "sha256-33txlTRRzA1XxuKgWgz1lNIfzIMrPny6wGFHaecy7FY=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/src";
-
-  # By default, the builder checks for JSON support in lsblk by running "lsblk --json",
-  # but that throws an error, as /sys/dev doesn't exist in the sandbox.
-  # This patch removes the check.
-  # remove-vendoring.patch from
-  # https://gitlab.archlinux.org/archlinux/packaging/packages/rpi-imager/-/raw/main/remove-vendoring.patch
-  patches = [ ./remove-vendoring-and-lsblk-check.patch ];
+  patches = [ ./remove-vendoring.patch ];
 
   postPatch = ''
-    substituteInPlace ../debian/org.raspberrypi.rpi-imager.desktop \
+    substituteInPlace debian/com.raspberrypi.rpi-imager.desktop \
       --replace-fail "/usr/bin/" ""
+
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail 'qt_add_lupdate(TS_FILES ''${TRANSLATIONS} SOURCE_TARGETS ''${PROJECT_NAME} OPTIONS -no-obsolete -locations none)' ""
+  '';
+
+  preConfigure = ''
+    cd src
   '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
     qt6.wrapQtAppsHook
-    util-linux
+    wrapGAppsHook4
+    # Fool upstream's cmake lsblk check a bit
+    (writeShellScriptBin "lsblk" ''
+      echo "our lsblk has --json support but it doesn't work in our sandbox"
+    '')
+    # Upstream uses `git describe` to define a `IMAGER_VERSION` CMake variable,
+    # and we fool it to take a version from a fake `git` executable.
+    (writeShellScriptBin "git" ''
+      echo "v${finalAttrs.version}"
+    '')
   ];
 
   buildInputs = [
@@ -65,21 +75,20 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtwayland
   ];
 
-  cmakeFlags =
-    # Disable vendoring
-    [
-      (lib.cmakeBool "ENABLE_VENDORING" false)
-    ]
-    # Disable telemetry and update check.
-    ++ lib.optionals (!enableTelemetry) [
-      (lib.cmakeBool "ENABLE_CHECK_VERSION" false)
-      (lib.cmakeBool "ENABLE_TELEMETRY" false)
-    ];
+  cmakeFlags = [
+    # Isn't relevant for Nix
+    (lib.cmakeBool "ENABLE_CHECK_VERSION" false)
+    (lib.cmakeBool "ENABLE_TELEMETRY" enableTelemetry)
+  ];
 
   qtWrapperArgs = [
     "--unset QT_QPA_PLATFORMTHEME"
     "--unset QT_STYLE_OVERRIDE"
   ];
+  dontWrapGApps = true;
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   passthru = {
     tests.version = testers.testVersion {
@@ -99,8 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
       ymarkus
       anthonyroussel
     ];
-    platforms = lib.platforms.all;
-    # does not build on darwin
-    broken = stdenv.hostPlatform.isDarwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    # could not find xz
+    badPlatforms = lib.platforms.darwin;
   };
 })

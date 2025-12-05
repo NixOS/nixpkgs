@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-skk";
-  version = "5.1.6";
+  version = "5.1.8";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-1gfR0wXBXM6Gttwldg2vm8DUUW4OciqKMQkpFQHqLoE=";
+    hash = "sha256-1omxT31hKe7gQ5BARJ+0tIp4RT5eM+Tjufd6s/PxBoY=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_QT" enableQt)
-    (lib.cmakeBool "USE_QT6" (lib.versions.major qtbase.version == "6"))
     "-DSKK_DEFAULT_PATH=${skkDictionaries.l}/share/skk/SKK-JISYO.L"
   ];
 

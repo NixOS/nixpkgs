@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rusty-bash";
-  version = "0.8.5";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "shellgei";
     repo = "rusty_bash";
-    tag = "v${version}";
-    hash = "sha256-hUMkgsWlGSqOnYdFhDGBWbc13oAssklbuJAg8NkY398=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WBV0wF7SKhOKAo+F1IImpPIgLvo9GYkqWrb2GluUtdA=";
   };
 
   postPatch = ''
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "sush";
     maintainers = with lib.maintainers; [ aleksana ];
   };
-}
+})

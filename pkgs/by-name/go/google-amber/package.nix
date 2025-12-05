@@ -53,7 +53,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amber";
-  version = "unstable-2025-02-03";
+  version = "0-unstable-2025-02-03";
 
   src = fetchFromGitHub {
     owner = "google";

@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation {
   pname = "buzztrax";
-  version = "unstable-2022-01-26";
+  version = "0.11.0-unstable-2024-03-02";
 
   src = fetchFromGitHub {
     owner = "Buzztrax";
     repo = "buzztrax";
-    rev = "833287c6a06bddc922cd346d6f0fcec7a882aee5";
-    hash = "sha256-iI6m+zBWDDBjmeuU9Nm4aIbEKfaPe36APPktdjznQpU=";
+    rev = "4bb66d9d9870e1e56ce1f0e97bb58a0c627356d3";
+    hash = "sha256-AV/tYru9WhGbi6IlQEf42EN8b0pNAYblLUZ+fXpOFRI=";
   };
 
   postPatch = ''
@@ -64,12 +64,12 @@ stdenv.mkDerivation {
 
   # 'g_memdup' is deprecated: Use 'g_memdup2' instead
   env.NIX_CFLAGS_COMPILE =
-    "-Wno-error=deprecated-declarations"
+    "-Wno-error=deprecated-declarations -Wno-error=incompatible-pointer-types"
     # Suppress incompatible function pointer error in clang due to libxml2 2.12 const changes
     + lib.optionalString stdenv.cc.isClang " -Wno-error=incompatible-function-pointer-types";
 
   meta = with lib; {
-    description = "Buzztrax is a modular music composer for Linux";
+    description = "Modular music composer for Linux";
     homepage = "https://www.buzztrax.org/";
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.bendlas ];

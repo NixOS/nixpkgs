@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flashmq";
-  version = "1.22.0";
+  version = "1.23.2";
 
   src = fetchFromGitHub {
     owner = "halfgaar";
     repo = "FlashMQ";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yFoyErmBvitBRQ2bNOPY62FaV6YJNAXx8dqkIw2ACm4=";
+    hash = "sha256-v/gc9YVIBTQP8/wnYKucBQci/8oz+Xo9BTorAV6Jxqs=";
   };
 
   nativeBuildInputs = [

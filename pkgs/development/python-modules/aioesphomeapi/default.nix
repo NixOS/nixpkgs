@@ -1,8 +1,8 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   cython,
@@ -11,11 +11,11 @@
   # dependencies
   aiohappyeyeballs,
   async-interrupt,
-  async-timeout,
   chacha20poly1305-reuseable,
   cryptography,
   noiseprotocol,
   protobuf,
+  tzlocal,
   zeroconf,
 
   # tests
@@ -26,16 +26,14 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "33.1.1";
+  version = "42.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "aioesphomeapi";
     tag = "v${version}";
-    hash = "sha256-vXBTumh1oB1vTVlX4VJvIUTnkYLG9j/8cNuHFQ2PklY=";
+    hash = "sha256-My61UXXOe7YNuq7eBltXqXmX6OqnDWUk7HJofAgR2I8=";
   };
 
   build-system = [
@@ -52,15 +50,19 @@ buildPythonPackage rec {
     cryptography
     noiseprotocol
     protobuf
+    tzlocal
     zeroconf
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ];
 
   nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook
   ];
+
+  # Lack of network sandboxing leads to conflicting listeners when testing
+  # this package e.g. in nixpkgs-review on the two suppoted python package sets.
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTestPaths = [
     # benchmarking requires pytest-codespeed

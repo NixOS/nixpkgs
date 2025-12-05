@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdfried";
-  version = "0.12.2";
+  version = "0.14.6";
 
   src = fetchFromGitHub {
     owner = "benjajaja";
     repo = "mdfried";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k40Ir/GQeJ08h11b8u/VEx89lPFQ0sLNGG1Bmx+tKPI=";
+    hash = "sha256-Ys/CoyaIKVVRtQfmjc4XOABdrktZ1lIPNqw0V8jlY5I=";
   };
 
-  cargoHash = "sha256-IUmPQozLjaaFlcmEjZQ9IyvSRUlIZUxQDPWrpvaDArk=";
+  cargoHash = "sha256-ipNhqxcc+Kfr6XtF3QtFh896YK5v1u4kXapiMUjC9n8=";
 
   doCheck = true;
 

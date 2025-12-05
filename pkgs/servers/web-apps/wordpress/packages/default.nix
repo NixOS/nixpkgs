@@ -43,7 +43,7 @@ let
           license,
           ...
         }@args:
-        assert lib.any (x: x == type) [
+        assert lib.elem type [
           "plugin"
           "theme"
           "language"

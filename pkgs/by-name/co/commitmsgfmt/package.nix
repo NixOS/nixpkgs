@@ -4,24 +4,26 @@
   fetchFromGitLab,
   testers,
   commitmsgfmt,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "commitmsgfmt";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitLab {
     owner = "mkjeldsen";
     repo = "commitmsgfmt";
     rev = "v${version}";
-    hash = "sha256-HEkPnTO1HeJg8gpHFSUTkEVBPWJ0OdfUhNn9iGfaDD4=";
+    hash = "sha256-6mMjDMWkpaKXqmyE2taV4pDa92Tdt4VEHHLdOpRHung=";
   };
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-cej+Jpp12QEaru1mecuXtIFDEnSBvTwpx0Vgp8s7jj8=";
+
+  cargoHash = "sha256-Ewn7NCFtl8phC5cFyLWZcGZy4w+huummzeuXFRn64lQ=";
 
   passthru.tests.version = testers.testVersion {
     package = commitmsgfmt;
     command = "commitmsgfmt -V";
   };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://gitlab.com/mkjeldsen/commitmsgfmt";

@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "Kamal-Sadek";
     repo = "Liberal-Crime-Squad";
-    rev = "2ace84e";
+    rev = "2ace84ebe4b65b9d4ef67430d5419d57d340f055";
     sha256 = "0mcldn8ivlfyjfx22ygzcbbw3bzl0j6vi3g6jyj8jmcrni61mgmb";
   };
 

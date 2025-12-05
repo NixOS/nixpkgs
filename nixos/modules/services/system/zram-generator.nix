@@ -25,7 +25,7 @@ in
       default = { };
       description = ''
         Configuration for zram-generator,
-        see https://github.com/systemd/zram-generator for documentation.
+        see <https://github.com/systemd/zram-generator> for documentation.
       '';
     };
   };

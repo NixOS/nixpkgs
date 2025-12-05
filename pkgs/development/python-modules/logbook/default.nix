@@ -55,7 +55,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-rerunfailures
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;

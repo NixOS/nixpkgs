@@ -53,6 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sloria/aiohttp-utils";
     changelog = "https://github.com/sloria/aiohttp-utils/blob/${src.rev}/CHANGELOG.rst";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

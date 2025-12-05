@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "glibmm";
       versionPolicy = "odd-unstable";
       freeze = true;
     };

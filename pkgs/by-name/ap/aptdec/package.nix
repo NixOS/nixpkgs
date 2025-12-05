@@ -24,17 +24,23 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
+
   buildInputs = [
     libpng
     libsndfile
   ];
+
+  cmakeFlags = [ (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10") ];
 
   meta = with lib; {
     description = "NOAA APT satellite imagery decoding library";
     mainProgram = "aptdec";
     homepage = "https://github.com/Xerbo/aptdec";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ alexwinter ];
+    maintainers = with maintainers; [
+      aciceri
+      alexwinter
+    ];
     platforms = platforms.unix;
   };
 }

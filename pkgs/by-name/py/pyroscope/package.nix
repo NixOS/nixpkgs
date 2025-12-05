@@ -6,7 +6,6 @@
   versionCheckHook,
   installShellFiles,
   nix-update-script,
-  ...
 }:
 
 buildGoModule (finalAttrs: {
@@ -57,7 +56,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/grafana/pyroscope";
     changelog = "https://github.com/grafana/pyroscope/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    maintainers = [ lib.teams.mercury ];
+    teams = [ lib.teams.mercury ];
     mainProgram = "pyroscope";
   };
 })

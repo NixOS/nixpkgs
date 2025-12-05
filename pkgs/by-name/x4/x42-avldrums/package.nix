@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "x42";
     repo = "avldrums.lv2";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-AZKHjzgw0TtLHh4TF+yOUSa+GlNVwyHCpJWAZikXTy4=";
     fetchSubmodules = true;
   };
@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
     homepage = "https://x42-plugins.com/x42/x42-avldrums";
     maintainers = with maintainers; [
       magnetophon
-      orivej
     ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "amber-lang";
     repo = "amber";
-    rev = version;
+    tag = version;
     hash = "sha256-N9G/2G8+vrpr1/K7XLwgW+X2oAyAaz4qvN+EbLOCU1Q=";
   };
 
@@ -29,7 +29,6 @@ rustPlatform.buildRustPackage rec {
     ./fix_gnused_detection.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-e5+L7Qgd6hyqT1Pb9X7bVtRr+xm428Z5J4hhsYNnGtU=";
 
   preConfigure = ''

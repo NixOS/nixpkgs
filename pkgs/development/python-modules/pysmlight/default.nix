@@ -5,26 +5,30 @@
   awesomeversion,
   buildPythonPackage,
   fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
   lib,
   mashumaro,
-  poetry-core,
   pytest-asyncio,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pysmlight";
-  version = "0.2.7";
+  version = "0.2.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "smlight-tech";
     repo = "pysmlight";
     tag = "v${version}";
-    hash = "sha256-w5t8ApshET7DkxxDsEpRBdo3+sg05ch9ec85TI4dAms=";
+    hash = "sha256-+ApqlqrNGQJ52VJPaaWCddsQGMu7W2fLJLKxV69zJKI=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
   dependencies = [
     aiohttp

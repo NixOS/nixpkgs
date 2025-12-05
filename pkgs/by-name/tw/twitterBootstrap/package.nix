@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bootstrap";
-  version = "5.3.7";
+  version = "5.3.8";
 
   src = fetchurl {
     url = "https://github.com/twbs/bootstrap/releases/download/v${finalAttrs.version}/bootstrap-${finalAttrs.version}-dist.zip";
-    hash = "sha256-nuEoO1JVD4UE0VZZTxddacpVp79o771fpi3ZHLJ/qGs=";
+    hash = "sha256-MljIc8vLHi2B9DdK/qLqZDfZ7ukHcEEHP9gd1XnFums=";
   };
 
   nativeBuildInputs = [ unzip ];

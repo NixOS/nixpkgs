@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-eeQjezB6pRdnPADLgDLo8b+bUSP12gfBhFNt/uYCwHU=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-3YKFKngyLg2ah4GY+LlbPbnVks7/xFawnMf3D1gjmwI=";
 
   # Disable the GUI file picker so that GTK/XDG dependencies aren't used

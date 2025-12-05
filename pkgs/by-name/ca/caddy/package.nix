@@ -1,42 +1,41 @@
 {
   lib,
-  buildGoModule,
+  buildGo125Module,
   callPackage,
   fetchFromGitHub,
   nixosTests,
   caddy,
-  testers,
   installShellFiles,
   stdenv,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
 }:
 let
-  version = "2.10.0";
+  version = "2.10.2";
   dist = fetchFromGitHub {
     owner = "caddyserver";
     repo = "dist";
     tag = "v${version}";
-    hash = "sha256-us1TnszA/10OMVSDsNvzRb6mcM4eMR3pQ5EF4ggA958=";
+    hash = "sha256-D1qI7TDJpSvtgpo1FsPZk6mpqRvRharFZ8soI7Mn3RE=";
   };
 in
-buildGoModule {
+buildGo125Module (finalAttrs: {
   pname = "caddy";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "caddyserver";
     repo = "caddy";
-    tag = "v${version}";
-    hash = "sha256-hzDd2BNTZzjwqhc/STbSAHnNlP7g1cFuMehqU1LumQE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KvikafRYPFZ0xCXqDdji1rxlkThEDEOHycK8GP5e8vk=";
   };
 
-  vendorHash = "sha256-9Iu4qmBVkGeSAywLgQuDR7y+TwCBqwhVxhfaXhCDnUc=";
-
-  subPackages = [ "cmd/caddy" ];
+  vendorHash = "sha256-wjcmWKVmLBAybILUi8tKEDnFbhtybf042ODH7jEq6r8=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/caddyserver/caddy/v2.CustomVersion=${version}"
+    "-X github.com/caddyserver/caddy/v2.CustomVersion=${finalAttrs.version}"
   ];
 
   # matches upstream since v2.8.0
@@ -47,6 +46,10 @@ buildGoModule {
   ];
 
   nativeBuildInputs = [ installShellFiles ];
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     install -Dm644 ${dist}/init/caddy.service ${dist}/init/caddy-api.service -t $out/lib/systemd/system
@@ -72,18 +75,22 @@ buildGoModule {
   passthru = {
     tests = {
       inherit (nixosTests) caddy;
-      version = testers.testVersion {
-        command = "${caddy}/bin/caddy version";
-        package = caddy;
-      };
       acme-integration = nixosTests.acme.caddy;
     };
     withPlugins = callPackage ./plugins.nix { inherit caddy; };
   };
 
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  doInstallCheck = true;
+
   meta = {
     homepage = "https://caddyserver.com";
     description = "Fast and extensible multi-platform HTTP/1-2-3 web server with automatic HTTPS";
+    changelog = "https://github.com/caddyserver/caddy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "caddy";
     maintainers = with lib.maintainers; [
@@ -93,4 +100,4 @@ buildGoModule {
       ryan4yin
     ];
   };
-}
+})

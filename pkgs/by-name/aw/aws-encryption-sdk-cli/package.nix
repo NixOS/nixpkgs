@@ -12,9 +12,11 @@ let
     self = localPython;
     packageOverrides = final: prev: {
       urllib3 = prev.urllib3.overridePythonAttrs (prev: rec {
-        pyproject = true;
         version = "1.26.18";
-        nativeBuildInputs = with final; [ setuptools ];
+        build-system = with final; [
+          setuptools
+        ];
+        postPatch = null;
         src = prev.src.override {
           inherit version;
           hash = "sha256-+OzBu6VmdBNFfFKauVW/jGe0XbeZ0VkGYmFxnjKFgKA=";
@@ -33,6 +35,8 @@ localPython.pkgs.buildPythonApplication rec {
     inherit pname version;
     hash = "sha256-gORrscY+Bgmz2FrKdSBd56jP0yuEklytMeA3wr8tTZU=";
   };
+
+  pythonRelaxDeps = [ "aws-encryption-sdk" ];
 
   build-system = with localPython.pkgs; [
     setuptools

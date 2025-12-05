@@ -3,6 +3,7 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 
   # build deps
   cargo-deny,
@@ -21,10 +22,8 @@
   uv,
   which,
   yasm,
-  zlib,
 
   # runtime deps
-  apple-sdk_14,
   fontconfig,
   freetype,
   gst_all_1,
@@ -36,6 +35,7 @@
   vulkan-loader,
   wayland,
   xorg,
+  zlib,
 
   # tests
   nixosTests,
@@ -63,15 +63,15 @@ let
   );
 in
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "servo";
-  version = "0-unstable-2025-07-21";
+  version = "0.0.2";
 
   src = fetchFromGitHub {
     owner = "servo";
     repo = "servo";
-    rev = "50603e5074064211cee253b0782cb29ae413d3ee";
-    hash = "sha256-qlIjyvrtCwnUVO12LYm52drsQJqgfOEj7rV4LgubG5E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mhZaAyLznchFUd9f2HqD7th3RDO2inH6U3L5PcZLPFA=";
     # Breaks reproducibility depending on whether the picked commit
     # has other ref-names or not, which may change over time, i.e. with
     # "ref-names: HEAD -> main" as long this commit is the branch HEAD
@@ -81,8 +81,7 @@ rustPlatform.buildRustPackage {
     '';
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-kKuauc5yK6IOKDL9o+vmNLg4wyZ+24YNT5Yhn+z51jE=";
+  cargoHash = "sha256-jrspfHjJgNAzuCtFqOE7dwgMN02NwVkCOisYAOE8CrU=";
 
   # set `HOME` to a temp dir for write access
   # Fix invalid option errors during linking (https://github.com/mozilla/nixpkgs-mozilla/commit/c72ff151a3e25f14182569679ed4cd22ef352328)
@@ -109,7 +108,6 @@ rustPlatform.buildRustPackage {
     uv
     which
     yasm
-    zlib
   ];
 
   env.UV_PYTHON = customPython.interpreter;
@@ -125,6 +123,7 @@ rustPlatform.buildRustPackage {
     harfbuzz
     libunwind
     libGL
+    zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland
@@ -132,9 +131,6 @@ rustPlatform.buildRustPackage {
     xorg.libxcb
     udev
     vulkan-loader
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_14
   ];
 
   # Builds with additional features for aarch64, see https://github.com/servo/servo/issues/36819
@@ -142,7 +138,16 @@ rustPlatform.buildRustPackage {
     "servo_allocator/use-system-allocator"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
+  env.NIX_CFLAGS_COMPILE = toString (
+    [
+      # mozjs-sys fails with:
+      #  cc1plus: error: '-Wformat-security' ignored without '-Wformat'
+      "-Wno-error=format-security"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
+    ]
+  );
 
   # copy resources into `$out` to be used during runtime
   # link runtime libraries
@@ -155,11 +160,13 @@ rustPlatform.buildRustPackage {
   '';
 
   passthru = {
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
     tests = { inherit (nixosTests) servo; };
   };
 
   meta = {
+    # undefined libmozjs_sys symbols during linking
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Embeddable, independent, memory-safe, modular, parallel web rendering engine";
     homepage = "https://servo.org";
     license = lib.licenses.mpl20;
@@ -167,7 +174,8 @@ rustPlatform.buildRustPackage {
       hexa
       supinie
     ];
+    teams = with lib.teams; [ ngi ];
     mainProgram = "servo";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

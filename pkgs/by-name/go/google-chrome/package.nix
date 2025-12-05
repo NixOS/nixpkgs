@@ -170,11 +170,11 @@ let
 
   linux = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "138.0.7204.168";
+    version = "143.0.7499.40";
 
     src = fetchurl {
       url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_amd64.deb";
-      hash = "sha256-vfMEQOh9VZsLElld8qfeLY9B53z1AqyRTQ/7p2cxHYg=";
+      hash = "sha256-rx5yfN8fD4bs2SRASJ65YFijfq9xknUDwZiXdgAagIU=";
     };
 
     # With strictDeps on, some shebangs were not being patched correctly
@@ -230,9 +230,6 @@ let
         --replace-fail /usr/bin/google-chrome-$dist $exe
       substituteInPlace $out/share/gnome-control-center/default-apps/google-$appname.xml \
         --replace-fail /opt/google/$appname/google-$appname $exe
-      substituteInPlace $out/share/menu/google-$appname.menu \
-        --replace-fail /opt $out/share \
-        --replace-fail $out/share/google/$appname/google-$appname $exe
 
       for icon_file in $out/share/google/chrome*/product_logo_[0-9]*.png; do
         num_and_suffix="''${icon_file##*logo_}"
@@ -275,11 +272,11 @@ let
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "138.0.7204.169";
+    version = "143.0.7499.41";
 
     src = fetchurl {
-      url = "http://dl.google.com/release2/chrome/acwjggvog6ot2icovazewas35mgq_138.0.7204.169/GoogleChrome-138.0.7204.169.dmg";
-      hash = "sha256-58/hSldBZ3gtzjY0GCt6GkxUX97GORwTh5uEfEjxM3A=";
+      url = "http://dl.google.com/release2/chrome/mn7icxthshss2p6fseuwaupjs4_143.0.7499.41/GoogleChrome-143.0.7499.41.dmg";
+      hash = "sha256-L8Zl/hGDqWPQQ+dnaZw7QVifo+N81BCYNzawW+kcyDg=";
     };
 
     dontPatch = true;
@@ -318,7 +315,6 @@ let
     homepage = "https://www.google.com/chrome/browser/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
-      jnsgruk
       johnrtitor
     ];
     platforms = lib.platforms.darwin ++ [ "x86_64-linux" ];

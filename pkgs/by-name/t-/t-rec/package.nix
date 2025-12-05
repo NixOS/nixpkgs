@@ -12,16 +12,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "t-rec";
-  version = "0.7.9";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "sassman";
     repo = "t-rec-rs";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-aQX+JJ2MwzzxJkA1vsE8JqvYpWtqyycvycPc2pyFU7g=";
+    sha256 = "sha256-pM/p+fstEHDP+EBKjgbW1Tw1HxdNM9rpvFiMkbCDT3g=";
   };
 
-  cargoHash = "sha256-AgSYM2a9XGH2X4dcp5CSMnt0Bq/5XT8C3g1R2UX4mLY=";
+  cargoHash = "sha256-sUzvKeG1fmY40udLlxvvmJPJOCNlfliFKuEZYRtGQOM=";
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [

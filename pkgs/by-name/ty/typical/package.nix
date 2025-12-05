@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-y7PWTzD9+rkC4wZYhecmDTa3AoWl4Tgh7QXbSK4Qq5Q=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-+SnwxmNQDj6acr2nEKJkNmR5PqnTIvyMApyZOmCld2U=";
 
   nativeBuildInputs = [
@@ -47,6 +46,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/stepchowfun/typical";
     changelog = "https://github.com/stepchowfun/typical/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

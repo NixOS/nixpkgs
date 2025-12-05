@@ -28,7 +28,7 @@ rec {
 
   export-gambopt = params: "export GAMBOPT=${params.buildRuntimeOptions} ;";
 
-  gambit-bootstrap = import ./bootstrap.nix (pkgs);
+  gambit-bootstrap = import ./bootstrap.nix pkgs;
 
   meta = with lib; {
     description = "Optimizing Scheme to C compiler";

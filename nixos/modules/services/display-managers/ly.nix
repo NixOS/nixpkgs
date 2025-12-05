@@ -36,7 +36,6 @@ let
   defaultConfig = {
     shutdown_cmd = "/run/current-system/systemd/bin/systemctl poweroff";
     restart_cmd = "/run/current-system/systemd/bin/systemctl reboot";
-    tty = 2;
     service_name = "ly";
     path = "/run/current-system/sw/bin";
     term_reset_cmd = "${pkgs.ncurses}/bin/tput reset";
@@ -66,13 +65,7 @@ in
       package = mkPackageOption pkgs [ "ly" ] { };
 
       settings = mkOption {
-        type =
-          with lib.types;
-          attrsOf (oneOf [
-            str
-            int
-            bool
-          ]);
+        type = with lib.types; attrsOf iniFmt.lib.types.atom;
         default = { };
         example = {
           load = false;
@@ -115,11 +108,14 @@ in
       displayManager = {
         enable = true;
         execCmd = "exec /run/current-system/sw/bin/ly";
+
+        # Set this here instead of 'defaultConfig' so users get eval
+        # errors when they change it.
+        ly.settings.tty = 1;
       };
 
       xserver = {
-        # To enable user switching, allow ly to allocate TTYs/displays dynamically.
-        tty = null;
+        # To enable user switching, allow ly to allocate displays dynamically.
         display = null;
       };
     };
@@ -131,10 +127,7 @@ in
         after = [
           "systemd-user-sessions.service"
           "plymouth-quit-wait.service"
-          "getty@tty${toString finalConfig.tty}.service"
         ];
-
-        conflicts = [ "getty@tty7.service" ];
 
         serviceConfig = {
           Type = "idle";

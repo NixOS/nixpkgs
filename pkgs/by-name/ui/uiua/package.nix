@@ -33,7 +33,6 @@ in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uiua";
   inherit (versionInfo) version cargoHash;
-  useFetchCargoVendor = true;
 
   src = fetchFromGitHub {
     owner = "uiua-lang";
@@ -81,8 +80,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.tests.run =
     runCommand "uiua-test-run" { nativeBuildInputs = [ finalAttrs.finalPackage ]; }
       ''
-        uiua init
-        diff -U3 --color=auto <(uiua run main.ua) <(echo '"Hello, World!"')
+        echo '&p "Hello, World!"' > test.ua
+        diff -U3 --color=auto <(uiua run test.ua) <(echo 'Hello, World!')
         touch $out
       '';
 

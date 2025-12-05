@@ -8,6 +8,7 @@
   # build-system
   setuptools,
   pkg-config,
+  pybind11,
 
   # native dependencies
   freetype,
@@ -43,17 +44,20 @@
 
 buildPythonPackage rec {
   pname = "pillow";
-  version = "11.3.0";
+  version = "12.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-pillow";
     repo = "pillow";
     tag = version;
-    hash = "sha256-VOOIxzTyERI85CvA2oIutybiivU14kIko8ysXpmwUN8=";
+    hash = "sha256-58mjwHErEZPkkGBVZznkkMQN5Zo4ZBBiXnhqVp1F81g=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    pybind11
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -74,7 +78,7 @@ buildPythonPackage rec {
 
   pypaBuildFlags = [
     # Disable platform guessing, which tries various FHS paths
-    "--config=setting=--disable-platform-guessing"
+    "--config-setting=--disable-platform-guessing"
   ];
 
   preConfigure =
@@ -105,12 +109,7 @@ buildPythonPackage rec {
     pytestCheckHook
     numpy
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  pytestFlagsArray = [
-    # Checks for very precise color values on what's basically white
-    "--deselect=Tests/test_file_avif.py::TestFileAvif::test_background_from_gif"
-  ];
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Code quality mismathch 9 vs 10
@@ -126,6 +125,9 @@ buildPythonPackage rec {
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # Crashes the interpreter
     "Tests/test_imagetk.py"
+
+    # Checks for very precise color values on what's basically white
+    "Tests/test_file_avif.py::TestFileAvif::test_background_from_gif"
   ];
 
   passthru.tests = {

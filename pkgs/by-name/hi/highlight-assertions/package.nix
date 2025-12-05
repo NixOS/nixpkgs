@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-7r8tBJ6JFGUGUsTivzlO23hHiXISajjn2WF12mmbmMg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-egrxcnDVKKgk1sL5WNMIR2FPwQbjjMy20VWizcTBEtM=";
 
   # requires nightly features
@@ -26,6 +25,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "highlight-assertions";
     homepage = "https://github.com/thehamsta/highlight-assertions";
     license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

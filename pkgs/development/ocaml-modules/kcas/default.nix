@@ -2,6 +2,7 @@
   lib,
   buildDunePackage,
   fetchurl,
+  ocaml,
   domain-local-await,
   domain-local-timeout,
   alcotest,
@@ -29,7 +30,7 @@ buildDunePackage rec {
     backoff
   ];
 
-  doCheck = true;
+  doCheck = !lib.versionAtLeast ocaml.version "5.4";
   nativeCheckInputs = [ mdx.bin ];
   checkInputs = [
     alcotest

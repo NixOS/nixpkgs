@@ -6,6 +6,7 @@
   pkg-config,
   autoreconfHook,
   autoconf-archive,
+  gettext,
   ncurses,
   db,
   popt,
@@ -79,6 +80,7 @@ stdenv.mkDerivation {
     })
 
     ./use-ax-check-compile-flag.patch
+    ./fix_gettext_0_25.patch
   ]
   ++ lib.optional pulseSupport ./pulseaudio.patch;
 
@@ -90,6 +92,7 @@ stdenv.mkDerivation {
     pkg-config
     autoreconfHook
     autoconf-archive
+    gettext
   ];
 
   buildInputs = [
@@ -147,7 +150,7 @@ stdenv.mkDerivation {
     # Misc
     (lib.withFeature curlSupport "curl")
     (lib.withFeature samplerateSupport "samplerate")
-    ("--enable-debug=" + (if withDebug then "yes" else "no"))
+    "--enable-debug=${lib.boolToYesNo withDebug}"
     "--disable-cache"
     "--without-rcc"
   ];

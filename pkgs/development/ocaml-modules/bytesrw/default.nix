@@ -11,13 +11,13 @@
 
 buildTopkgPackage rec {
   pname = "bytesrw";
-  version = "0.1.0";
+  version = "0.2.0";
 
   minimalOCamlVersion = "4.14.0";
 
   src = fetchzip {
     url = "https://erratique.ch/software/bytesrw/releases/bytesrw-${version}.tbz";
-    hash = "sha256-leH3uo5Q8ba22A/Mbl9pio0tW/IxCTGp77Cra7l4D80=";
+    hash = "sha256-DMQXclJV5uz/2a6XVHVnBkYgXpGRI83uzmzeed3fDxQ=";
   };
 
   # docs say these are optional, but buildTopkgPackage doesn’t handle missing
@@ -32,7 +32,7 @@ buildTopkgPackage rec {
   ];
 
   meta = {
-    description = "composable, memory efficient, byte stream readers and writers compatible with effect-based concurrency";
+    description = "Composable, memory efficient, byte stream readers and writers compatible with effect-based concurrency";
     longDescription = ''
       Bytesrw extends the OCaml Bytes module with composable, memory efficient,
       byte stream readers and writers compatible with effect-based concurrency.

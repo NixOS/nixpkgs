@@ -8,19 +8,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typos";
-  version = "1.34.0";
+  version = "1.40.0";
 
   src = fetchFromGitHub {
     owner = "crate-ci";
     repo = "typos";
     tag = "v${version}";
-    hash = "sha256-fQFCjeqk7IGObusFpT19fxaZvbt9KNLtecgNPirwhhU=";
+    hash = "sha256-fWDV4SmFsmIGrM22hT5ELqMwYBE6GOCIIPsLtLnc9cc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-6MKlpKBmA/y2cSs2bRqwZs4K/duPurlUDLw9uBdWpUs=";
+  cargoHash = "sha256-jku4918M0Ymgzk+Y1OP8cr8oG501Wp0EolS4N2CbQSs=";
 
   passthru.updateScript = nix-update-script { };
+
+  preCheck = ''
+    export LC_ALL=C.UTF-8
+  '';
+
+  postCheck = ''
+    unset LC_ALL
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -36,7 +43,6 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [
-      figsoda
       mgttlinger
     ];
   };

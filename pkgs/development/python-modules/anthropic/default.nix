@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  stdenv,
 
   # build-system
   hatch-fancy-pypi-readme,
@@ -10,6 +11,7 @@
   # dependencies
   anyio,
   distro,
+  docstring-parser,
   httpx,
   jiter,
   pydantic,
@@ -22,6 +24,7 @@
 
   # test
   dirty-equals,
+  inline-snapshot,
   nest-asyncio,
   pytest-asyncio,
   pytest-xdist,
@@ -31,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.55.0";
+  version = "0.75.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     tag = "v${version}";
-    hash = "sha256-2IdsWNQdp4Cr6xP1MDnj5EN/jyGcxuc5bTKg349DpI8=";
+    hash = "sha256-wwaH9/o7qr8eXKvmKpj+/ubOdDydcXId/qiA6dXpd2I=";
   };
 
   postPatch = ''
@@ -54,6 +57,7 @@ buildPythonPackage rec {
   dependencies = [
     anyio
     distro
+    docstring-parser
     httpx
     jiter
     pydantic
@@ -68,6 +72,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dirty-equals
+    inline-snapshot
     nest-asyncio
     pytest-asyncio
     pytest-xdist
@@ -80,6 +85,11 @@ buildPythonPackage rec {
   disabledTests = [
     # Test require network access
     "test_copy_build_request"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Hangs
+    # https://github.com/anthropics/anthropic-sdk-python/issues/1008
+    "test_get_platform"
   ];
 
   disabledTestPaths = [

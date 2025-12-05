@@ -3,6 +3,7 @@
   stdenv,
   python312Packages,
   fetchFromGitHub,
+  fetchpatch,
   replaceVars,
   gitMinimal,
   portaudio,
@@ -19,7 +20,7 @@ let
     d.stopwords
   ]);
 
-  version = "0.85.2";
+  version = "0.86.1";
   aider-chat = python3Packages.buildPythonApplication {
     pname = "aider-chat";
     inherit version;
@@ -29,7 +30,7 @@ let
       owner = "Aider-AI";
       repo = "aider";
       tag = "v${version}";
-      hash = "sha256-J2xCx1edbu8mEGzNq2PKMxPCMlMZkArEwz6338Sm1tw=";
+      hash = "sha256-UmLcE5gin1iILIY5okl5ac2vtiF30txUFjtC0mouBhs=";
     };
 
     pythonRelaxDeps = true;
@@ -150,6 +151,13 @@ let
 
       (replaceVars ./fix-flake8-invoke.patch {
         flake8 = lib.getExe python3Packages.flake8;
+      })
+
+      # https://github.com/Aider-AI/aider/pull/4671
+      (fetchpatch {
+        name = "add-new-exceptions-to-LiteLLMExceptions.patch";
+        url = "https://github.com/Aider-AI/aider/commit/7201abc56539ae8ee2bf4ea0926f584c9ec5558c.patch";
+        hash = "sha256-bjL9nbEQGGNkFczm1hDOMP3b48eRJk17zcivXjOdVnw=";
       })
     ];
 

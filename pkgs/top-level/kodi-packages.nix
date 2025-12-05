@@ -129,6 +129,8 @@ let
 
     netflix = callPackage ../applications/video/kodi/addons/netflix { };
 
+    plex-for-kodi = callPackage ../applications/video/kodi/addons/plex-for-kodi { };
+
     orftvthek = callPackage ../applications/video/kodi/addons/orftvthek { };
 
     radioparadise = callPackage ../applications/video/kodi/addons/radioparadise { };
@@ -140,8 +142,6 @@ let
     screensaver-asteroids = callPackage ../applications/video/kodi/addons/screensaver-asteroids { };
 
     skyvideoitalia = callPackage ../applications/video/kodi/addons/skyvideoitalia { };
-
-    svtplay = callPackage ../applications/video/kodi/addons/svtplay { };
 
     steam-controller = callPackage ../applications/video/kodi/addons/steam-controller { };
 
@@ -270,4 +270,6 @@ self
     throw
       "kodi.packages.controllers has been replaced with kodi.packages.controller-topology-project - a package which contains a large number of controller profiles."
       { };
+
+  svtplay = throw "kodiPackages.svtplay has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-12
 }

@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
     # remove devDependencies that are only required to build
     #  and package the typescript code
-    pnpm prune --prod
+    CI=true pnpm prune --prod
 
     # Clean up broken symlinks left behind by `pnpm prune`
     # https://github.com/pnpm/pnpm/issues/3645

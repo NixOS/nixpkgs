@@ -11,38 +11,34 @@
 
 stdenv.mkDerivation {
   pname = "inormalize";
-  version = "unstable-2014-10-21";
+  version = "1.2.00-unstable-2023-01-19";
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";
     repo = "inormalize";
-    rev = "79cea9cdfe7b99abfd40afda89ab2253b596ad2f";
-    sha256 = "1ahqv5q0ljvji99a5q8azjkdf6bgp6nr8lwivkqwqs3jm0k5clq7";
+    rev = "4928e573165d76551c3d273ccf0c46f4fbab11fc";
+    hash = "sha256-ZxTsPBsaL/5BWC7ew57um8LPb96hytI30JE8saBBNw8=";
   };
 
-  patches = [
-    ./lgmask-interp.patch
-    ./nu_correct_norm-interp.patch
-  ];
-
   postPatch = ''
-    substituteInPlace inormalize.cc \
-      --replace "clamp" "::clamp"
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 3.1)" "CMAKE_MINIMUM_REQUIRED(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [
     cmake
     makeWrapper
   ];
+
   buildInputs = [
     libminc
     ebtks
-  ];
-  propagatedBuildInputs = with perlPackages; [
+  ]
+  ++ (with perlPackages; [
     perl
     GetoptTabular
     MNI-Perllib
-  ];
+  ]);
 
   cmakeFlags = [
     "-DLIBMINC_DIR=${libminc}/lib/cmake"
@@ -55,11 +51,11 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/BIC-MNI/inormalize";
     description = "Program to normalize intensity of MINC files";
-    maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.unix;
-    license = licenses.free;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.free;
   };
 }

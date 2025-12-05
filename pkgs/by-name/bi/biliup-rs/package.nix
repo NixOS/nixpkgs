@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage rec {
     sqlite
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-bSnc8xFFcWONFX35G3S75ppqA2WF/M0EB/68BR1AgWM=";
 
   passthru.updateScript = nix-update-script { };
@@ -34,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     description = "CLI tool for uploading videos to Bilibili";
     homepage = "https://biliup.github.io/biliup-rs";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ oosquare ];
+    maintainers = [ ];
     mainProgram = "biliup";
     platforms = lib.platforms.all;
   };

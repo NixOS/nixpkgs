@@ -109,7 +109,6 @@ qtModule {
 
   meta = {
     maintainers = with lib.maintainers; [
-      abbradar
       periklis
     ];
     knownVulnerabilities = [

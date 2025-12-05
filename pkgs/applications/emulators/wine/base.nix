@@ -13,6 +13,7 @@
   bison,
   flex,
   fontforge,
+  gettext,
   makeWrapper,
   pkg-config,
   nixosTests,
@@ -38,12 +39,6 @@ let
       mingwGccsSuffixSalts = map (gcc: gcc.suffixSalt) mingwGccs;
     };
   } ./setup-hook-darwin.sh;
-
-  # Using the 14.4 SDK allows Wine to use `os_sync_wait_on_address` for its futex implementation on Darwin.
-  # It does an availability check, so older systems will still work.
-  darwinFrameworks = lib.optionals stdenv.hostPlatform.isDarwin (
-    toBuildInputs pkgArches (pkgs: [ pkgs.apple-sdk_14 ])
-  );
 
   # Building Wine with these flags isn’t supported on Darwin. Using any of them will result in an evaluation failures
   # because they will put Darwin in `meta.badPlatforms`.
@@ -92,16 +87,19 @@ stdenv.mkDerivation (
     # Fixes "Compiler cannot create executables" building wineWow with mingwSupport
     strictDeps = true;
 
-    nativeBuildInputs = [
-      bison
-      flex
-      fontforge
-      makeWrapper
-      pkg-config
-    ]
-    ++ lib.optionals supportFlags.mingwSupport (
-      mingwGccs ++ lib.optional stdenv.hostPlatform.isDarwin setupHookDarwin
-    );
+    nativeBuildInputs =
+      with supportFlags;
+      [
+        bison
+        flex
+        fontforge
+        makeWrapper
+        pkg-config
+      ]
+      ++ lib.optional gettextSupport gettext
+      ++ lib.optionals mingwSupport (
+        mingwGccs ++ lib.optional stdenv.hostPlatform.isDarwin setupHookDarwin
+      );
 
     buildInputs = toBuildInputs pkgArches (
       with supportFlags;
@@ -115,7 +113,6 @@ stdenv.mkDerivation (
         ++ lib.optional stdenv.hostPlatform.isLinux pkgs.libcap
         ++ lib.optional stdenv.hostPlatform.isDarwin pkgs.libinotify-kqueue
         ++ lib.optional cupsSupport pkgs.cups
-        ++ lib.optional gettextSupport pkgs.gettext
         ++ lib.optional dbusSupport pkgs.dbus
         ++ lib.optional cairoSupport pkgs.cairo
         ++ lib.optional odbcSupport pkgs.unixODBC
@@ -165,8 +162,7 @@ stdenv.mkDerivation (
           pkgs.libGL
           pkgs.libdrm
         ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin darwinFrameworks
-        ++ lib.optionals (x11Support) (
+        ++ lib.optionals x11Support (
           with pkgs.xorg;
           [
             libX11
@@ -192,6 +188,9 @@ stdenv.mkDerivation (
             libgbm
           ]
         )
+        ++ lib.optionals ffmpegSupport [
+          pkgs.ffmpeg-headless
+        ]
       )
     );
 
@@ -210,11 +209,7 @@ stdenv.mkDerivation (
     # LD_LIBRARY_PATH.
     NIX_LDFLAGS = toString (
       map (path: "-rpath " + path) (
-        map (x: "${lib.getLib x}/lib") (
-          [ stdenv.cc.cc ]
-          # Avoid adding rpath references to non-existent framework `lib` paths.
-          ++ lib.subtractLists darwinFrameworks finalAttrs.buildInputs
-        )
+        map (x: "${lib.getLib x}/lib") ([ stdenv.cc.cc ] ++ finalAttrs.buildInputs)
         # libpulsecommon.so is linked but not found otherwise
         ++ lib.optionals supportFlags.pulseaudioSupport (
           map (x: "${lib.getLib x}/lib/pulseaudio") (toBuildInputs pkgArches (pkgs: [ pkgs.libpulseaudio ]))

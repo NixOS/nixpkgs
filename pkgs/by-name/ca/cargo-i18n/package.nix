@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-azwQlXsoCgNB/TjSBBE+taUR1POBJXaPnS5Sr+HVR90=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-7rqfJ3l4qdVcmfMZgZpL8qomnytiOSqWtFFZFeB047I=";
 
   # Devendor gettext in the gettext-sys crate. The paths to the bin/lib/include folders have to be specified because

@@ -29,7 +29,6 @@ buildDunePackage rec {
     description = "OCaml bindings to the SQLite 3 database access library";
     license = licenses.mit;
     maintainers = with maintainers; [
-      maggesi
       vbgl
     ];
   };

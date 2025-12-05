@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iir1";
-  version = "1.9.5";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "berndporr";
     repo = "iir1";
     rev = finalAttrs.version;
-    hash = "sha256-8u+V3+p/nVfl1Izht27OE6D1kkA6all6aUEL9APwXmk=";
+    hash = "sha256-WrefRcC6pOpcWVVOtJbJiyllgCPMm9cdlK6eXB2gxFw=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/berndporr/iir1";
     changelog = "https://github.com/berndporr/iir1/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

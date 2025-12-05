@@ -13,14 +13,12 @@
 
 buildPythonPackage rec {
   pname = "hacking";
-  version = "7.0.0";
+  version = "8.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ubbC5SgPfVT6gsWP4JmD9oxbb2NKw/ozn4uhalcVyrc=";
+    hash = "sha256-N89wYj7PMkdMTNYWSCeuff9HU62n+e/HBeiIOhAPi7I=";
   };
 
   postPatch = ''

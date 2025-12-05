@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "rtfunicode";
-  version = "1.4";
+  version = "2.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mjpieters";
     repo = "rtfunicode";
     tag = version;
-    hash = "sha256-5lmiazxiEENpdqzVgoKQoG2OW/w5nGmC8odulo2XaLo=";
+    hash = "sha256-mo3kuuK1epcH0Iyi9GYpZOYsUI4etWheyEPdw/S3tJE=";
   };
 
   nativeBuildInputs = [ unittestCheckHook ];

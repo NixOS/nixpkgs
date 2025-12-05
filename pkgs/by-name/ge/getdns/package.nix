@@ -64,9 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       their applications.
     '';
     homepage = "https://getdnsapi.net";
-    maintainers = with lib.maintainers; [
-      leenaars
-      ehmry
+    maintainers = [
     ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;

@@ -1,45 +1,47 @@
 {
   lib,
   stdenv,
-  fetchurl,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  cmake,
-  sundials,
-  lapack,
-  attrs,
-  lark,
-  lxml,
-  rpclib,
-  msgpack,
-  numpy,
-  scipy,
-  pytz,
-  dask,
-  requests,
-  matplotlib,
-  pyqtgraph,
-  notebook,
-  plotly,
-  hatchling,
-  pyside6,
-  jinja2,
-  flask,
-  dash,
-  dash-bootstrap-components,
+
+  # patches
   qt6,
   fmpy,
-  runCommand,
-  enableRemoting ? true,
-  versionCheckHook,
-  fmi-reference-fmus,
   replaceVars,
+
+  # nativeBuildInputs
+  cmake,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  attrs,
+  jinja2,
+  lark,
+  lxml,
+  msgpack,
+  nbformat,
+  numpy,
+  pyside6,
+
+  # preBuild
+  rpclib,
+
+  # tests
+  versionCheckHook,
+
+  # passthru
+  sundials,
+  lapack,
+  runCommand,
+  fmi-reference-fmus,
+
+  enableRemoting ? true,
 }:
 buildPythonPackage rec {
   pname = "fmpy";
-  version = "0.3.23";
-  disabled = pythonOlder "3.10";
+  version = "0.3.26";
   pyproject = true;
 
   # Bumping version? Make sure to look through the commit history for
@@ -47,46 +49,10 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CATIA-Systems";
     repo = "FMPy";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-4jBYOymurGCbjT0WQjIRNsztwOXBYVTGLdc4kNSTOZw=";
+    hash = "sha256-NAaROHrZ8OPmj/3lWFk9hNrrlqsDbscGdDn6G7xfFeQ=";
   };
-
-  nativeBuildInputs = [
-    cmake
-  ];
-
-  build-system = [
-    hatchling
-  ];
-
-  dependencies = [
-    pyqtgraph
-    pyside6
-    attrs
-    lark
-    lxml
-    msgpack
-    numpy
-    scipy
-    pytz
-    dask
-    requests
-    matplotlib
-    pyqtgraph
-    notebook
-    plotly
-    rpclib
-    fmpy.passthru.cvode
-    pyside6
-    jinja2
-    flask
-    dash
-    dash-bootstrap-components
-  ];
-
-  dontUseCmakeConfigure = true;
-  dontUseCmakeBuildDir = true;
 
   patches = [
     (replaceVars ./0001-gui-override-Qt6-libexec-path.patch {
@@ -106,8 +72,32 @@ buildPythonPackage rec {
   # Make forced includes of other systems' artifacts optional in order
   # to pass build (otherwise vendored upstream from CI)
   postPatch = ''
-    sed --in-place 's/force-include/source/g' pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace-fail "force-include" "source"
   '';
+
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  build-system = [
+    hatchling
+  ];
+
+  dependencies = [
+    attrs
+    cmake
+    jinja2
+    lark
+    lxml
+    msgpack
+    nbformat
+    numpy
+    pyside6
+  ];
+
+  dontUseCmakeConfigure = true;
+  dontUseCmakeBuildDir = true;
 
   # Don't run upstream build scripts as they are too specialized.
   # cvode is already built, so we only need to build native binaries.
@@ -118,9 +108,10 @@ buildPythonPackage rec {
     cmakeConfigurePhase
     cmake --build native/src/build --config Release
   ''
+  # reimplementation of native/build_remoting.py
+  # 2025-10-25: fix cmake 4 compatibility
   + lib.optionalString (enableRemoting && stdenv.hostPlatform.isLinux) ''
-    # reimplementation of native/build_remoting.py
-    cmakeFlags="-S native/remoting -B remoting/linux64 -D RPCLIB=${rpclib}"
+    cmakeFlags="-S native/remoting -B remoting/linux64 -D RPCLIB=${rpclib} -D CMAKE_POLICY_VERSION_MINIMUM=3.10"
     cmakeConfigurePhase
     cmake --build remoting/linux64 --config Release
   ''
@@ -147,21 +138,32 @@ buildPythonPackage rec {
     "fmpy.sundials"
   ];
 
-  nativeInstallCheckInputs = [
+  nativeCheckInputs = [
     versionCheckHook
   ];
+  versionCheckProgramArg = "--version";
 
   passthru = {
     # From sundials, build only the CVODE solver. C.f.
     # src/native/build_cvode.py
     cvode =
-      (sundials.overrideAttrs (prev: {
+      (sundials.overrideAttrs (prev: rec {
         # hash copied from native/build_cvode.py
         version = "5.3.0";
-        src = fetchurl {
-          url = "https://github.com/LLNL/sundials/releases/download/v5.3.0/sundials-5.3.0.tar.gz";
-          sha256 = "88dff7e11a366853d8afd5de05bf197a8129a804d9d4461fb64297f1ef89bca7";
+        src = fetchFromGitHub {
+          owner = "LLNL";
+          repo = "sundials";
+          tag = "v${version}";
+          hash = "sha256-8TvIGhrB9Rq9GgWqeyPTcYFrgn6Q79VkhkLuucNKlg0=";
         };
+
+        # Fix CMake 4 compatibility
+        postPatch = ''
+          substituteInPlace config/SundialsPOSIXTimers.cmake \
+            --replace-fail \
+              "CMAKE_MINIMUM_REQUIRED(VERSION 3.0.2)" \
+              "CMAKE_MINIMUM_REQUIRED(VERSION 3.10)"
+        '';
 
         cmakeFlags =
           prev.cmakeFlags
@@ -174,6 +176,8 @@ buildPythonPackage rec {
             BUILD_IDA = false;
             BUILD_IDAS = false;
             BUILD_KINSOL = false;
+
+            BUILD_SHARED_LIBS = true;
           };
 
         # FMPy searches for sundials without the "lib"-prefix; strip it
@@ -205,7 +209,7 @@ buildPythonPackage rec {
       for fmu in $(find ${fmi-reference-fmus}/*.fmu ! -name "Clocks.fmu"); do
         name=$(basename $fmu)
         echo "--- START $name ---"
-        ${fmpy}/bin/fmpy simulate $fmu \
+        ${lib.getExe fmpy} simulate $fmu \
           --fmi-logging \
           --output-file $out/$name.csv \
           | tee $out/$name.out
@@ -227,5 +231,6 @@ buildPythonPackage rec {
     # builds. C.f.
     # <https://github.com/CATIA-Systems/FMPy/blob/v0.3.23/pyproject.toml?plain=1#L71-L112>
     platforms = lib.platforms.x86_64 ++ [ "i686-windows" ];
+    mainProgram = "fmpy";
   };
 }

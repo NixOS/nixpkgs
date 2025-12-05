@@ -12,13 +12,13 @@
 }:
 mkLibretroCore {
   core = "mupen64plus-next";
-  version = "0-unstable-2025-07-01";
+  version = "0-unstable-2025-11-14";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "mupen64plus-libretro-nx";
-    rev = "1b693cdac7c42979f6ef53ffe260a76454f0cf45";
-    hash = "sha256-hano/fv7LcinEOYfwwzhn+gXTsB8hDav0KQw5XkmXmY=";
+    rev = "680e033fc8ed1a49df7b156d97164e0050ee13bc";
+    hash = "sha256-oBsOC1YtHx+mTgi9rwucU7rVeFt6RbxKrxHyPDx0eXg=";
   };
 
   # Fix for GCC 14

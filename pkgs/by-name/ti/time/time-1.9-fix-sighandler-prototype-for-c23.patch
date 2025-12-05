@@ -1,0 +1,30 @@
+In C23 functions with empty argument list in the prototype are treated
+as taking no arguments. This means that the `int` argument of the
+sighandler must be specified explicitly or the code will fail to
+compile due to mismatched function type.
+
+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
+---
+This fixes the same issue as
+<https://lists.gnu.org/archive/html/bug-time/2025-01/msg00000.html> and
+<https://lists.gnu.org/archive/html/bug-time/2025-03/msg00000.html> but does not
+rely on `sighandler_t` which is a GNU extension.
+
+ src/time.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/time.c b/src/time.c
+index 7b401bc..88287dd 100644
+--- a/src/time.c
++++ b/src/time.c
+@@ -77,7 +77,7 @@ enum
+
+
+ /* A Pointer to a signal handler.  */
+-typedef RETSIGTYPE (*sighandler) ();
++typedef RETSIGTYPE (*sighandler) (int);
+
+ /* msec = milliseconds = 1/1,000 (1*10e-3) second.
+    usec = microseconds = 1/1,000,000 (1*10e-6) second.  */
+--
+2.51.0

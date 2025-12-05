@@ -29,14 +29,14 @@ let
       ModulePath "${xorg.xorgserver.out}/lib/xorg/modules"
       ModulePath "${xorg.xf86videodummy}/lib/xorg/modules"
       XkbDir "${xkeyboard_config}/share/X11/xkb"
-      FontPath "${xorg.fontadobe75dpi}/lib/X11/fonts/75dpi"
-      FontPath "${xorg.fontadobe100dpi}/lib/X11/fonts/100dpi"
-      FontPath "${xorg.fontmiscmisc}/lib/X11/fonts/misc"
-      FontPath "${xorg.fontcursormisc}/lib/X11/fonts/misc"
+      FontPath "${xorg.fontadobe75dpi}/share/fonts/X11/75dpi"
+      FontPath "${xorg.fontadobe100dpi}/share/fonts/X11/100dpi"
+      FontPath "${xorg.fontmiscmisc}/share/fonts/X11/misc"
+      FontPath "${xorg.fontcursormisc}/share/fonts/X11/misc"
     ${lib.optionalString unfreeFonts ''
-      FontPath "${xorg.fontbhlucidatypewriter75dpi}/lib/X11/fonts/75dpi"
-      FontPath "${xorg.fontbhlucidatypewriter100dpi}/lib/X11/fonts/100dpi"
-      FontPath "${xorg.fontbh100dpi}/lib/X11/fonts/100dpi"
+      FontPath "${xorg.fontbhlucidatypewriter75dpi}/share/fonts/X11/75dpi"
+      FontPath "${xorg.fontbhlucidatypewriter100dpi}/share/fonts/X11/100dpi"
+      FontPath "${xorg.fontbh100dpi}/share/fonts/X11/100dpi"
     ''}
     EndSection
 

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "bx-python";
-  version = "0.13.0";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bxlab";
     repo = "bx-python";
     tag = "v${version}";
-    hash = "sha256-I5yc8i9xoievaZbgwHSQQSVvs1VnNa66Q883T4dCYYw=";
+    hash = "sha256-WZjCPggAlC+L/SagC4TXJXNrFG85BmjO7FaV2GxrYYA=";
   };
 
   postPatch = ''
@@ -64,7 +64,7 @@ buildPythonPackage rec {
   meta = {
     description = "Tools for manipulating biological data, particularly multiple sequence alignments";
     homepage = "https://github.com/bxlab/bx-python";
-    changelog = "https://github.com/bxlab/bx-python/releases/tag/v${version}";
+    changelog = "https://github.com/bxlab/bx-python/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jbedo ];
     platforms = [ "x86_64-linux" ];

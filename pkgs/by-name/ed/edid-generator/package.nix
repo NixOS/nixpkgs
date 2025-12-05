@@ -48,6 +48,8 @@ stdenv.mkDerivation {
   modelines = "";
 
   configurePhase = ''
+    runHook preConfigure
+
     test "$clean" != 1 || rm *x*.S
     ./modeline2edid - <"$modelinesPath"
 
@@ -56,6 +58,8 @@ stdenv.mkDerivation {
       cat "$file"
     done
     make clean
+
+    runHook postConfigure
   '';
 
   buildPhase = ''

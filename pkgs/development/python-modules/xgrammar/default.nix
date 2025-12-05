@@ -11,21 +11,23 @@
   scikit-build-core,
 
   # dependencies
+  mlx-lm,
+  numpy,
   pydantic,
-  sentencepiece,
-  tiktoken,
   torch,
   transformers,
   triton,
 
   # tests
   pytestCheckHook,
+  sentencepiece,
+  tiktoken,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "xgrammar";
-  version = "0.1.19";
+  version = "0.1.24";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -33,7 +35,7 @@ buildPythonPackage rec {
     repo = "xgrammar";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-0b2tJx1D/2X/uosbthHfevUpTCBtuSKNlxOKyidTotA=";
+    hash = "sha256-K+GCHuWKF449JaGWr7FQrDeJS3pxmVKnGf68L53LrK0=";
   };
 
   patches = [
@@ -49,25 +51,29 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   dependencies = [
+    numpy
     pydantic
-    sentencepiece
-    tiktoken
     torch
     transformers
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
     triton
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    mlx-lm
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    sentencepiece
+    tiktoken
     writableTmpDirAsHomeHook
   ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isLinux (toString [
     # xgrammar hardcodes -flto=auto while using static linking, which can cause linker errors without this additional flag.
     "-ffat-lto-objects"
-  ];
+  ]);
 
   disabledTests = [
     # You are trying to access a gated repo.
@@ -78,6 +84,7 @@ buildPythonPackage rec {
     "test_grammar_matcher_json_schema"
     "test_grammar_matcher_tag_dispatch"
     "test_regex_converter"
+    "test_serialize_compiled_grammar_with_hf_tokenizer"
     "test_tokenizer_info"
 
     # Torch not compiled with CUDA enabled
@@ -92,7 +99,11 @@ buildPythonPackage rec {
   meta = {
     description = "Efficient, Flexible and Portable Structured Generation";
     homepage = "https://xgrammar.mlc.ai";
-    changelog = "https://github.com/mlc-ai/xgrammar/releases/tag/v${version}";
+    changelog = "https://github.com/mlc-ai/xgrammar/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
+    badPlatforms = [
+      # error: ‘operator delete’ called on unallocated object ‘result’ [-Werror=free-nonheap-object]
+      "aarch64-linux"
+    ];
   };
 }

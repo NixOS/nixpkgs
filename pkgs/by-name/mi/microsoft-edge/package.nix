@@ -6,8 +6,7 @@
   patchelf,
   bintools,
   dpkg,
-
-  # Linked dynamic libraries.
+  # Linked dynamic libraries
   alsa-lib,
   at-spi2-atk,
   at-spi2-core,
@@ -47,21 +46,16 @@
   pipewire,
   vulkan-loader,
   wayland, # ozone/wayland
-
   # Command line programs
   coreutils,
-
   # command line arguments which are always set e.g "--disable-gpu"
   commandLineArgs ? "",
-
   # Will crash without.
   systemd,
-
   # Loaded at runtime.
   libexif,
   pciutils,
-
-  # Additional dependencies according to other distros.
+  # Additional dependencies according to other distros
   ## Ubuntu
   curl,
   liberation_ttf,
@@ -79,34 +73,25 @@
   ## Gentoo
   bzip2,
   libcap,
-
   # Necessary for USB audio devices.
   libpulseaudio,
   pulseSupport ? true,
-
   adwaita-icon-theme,
   gsettings-desktop-schemas,
-
   # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder)
   libva,
   libvaSupport ? true,
-
   # For Vulkan support (--enable-features=Vulkan)
   addDriverRunpath,
-
   # For QT support
   qt6,
-
   # Edge AAD sync
   cacert,
   libsecret,
-
   # Edge Specific
   libuuid,
 }:
-
 let
-
   opusWithCustomModes = libopus.override { withCustomModes = true; };
 
   deps = [
@@ -175,14 +160,13 @@ let
   ++ lib.optionals pulseSupport [ libpulseaudio ]
   ++ lib.optionals libvaSupport [ libva ];
 in
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "microsoft-edge";
-  version = "138.0.3351.95";
+  version = "142.0.3595.94";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_${finalAttrs.version}-1_amd64.deb";
-    hash = "sha256-Q5TdmqLlRITWDRZwUTMiOOjXQm09Cq+bK6N5XNew6R8=";
+    hash = "sha256-P+mPXg0gVWqlJqBS2F/Tuf42BikntPO0R693wPASKQc=";
   };
 
   # With strictDeps on, some shebangs were not being patched correctly
@@ -232,9 +216,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --replace-fail /usr/bin/microsoft-edge-$dist $exe
     substituteInPlace $out/share/gnome-control-center/default-apps/microsoft-edge.xml \
       --replace-fail /opt/microsoft/msedge $exe
-    substituteInPlace $out/share/menu/microsoft-edge.menu \
-      --replace-fail /opt $out/share \
-      --replace-fail $out/share/microsoft/$appname/microsoft-edge $exe
 
     for icon_file in $out/share/microsoft/msedge/product_logo_[0-9]*.png; do
       num_and_suffix="''${icon_file##*logo_}"

@@ -46,6 +46,6 @@ buildPythonPackage rec {
     mainProgram = "tskit";
     homepage = "https://github.com/tskit-dev/tskit";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ alxsimon ];
+    maintainers = [ ];
   };
 }

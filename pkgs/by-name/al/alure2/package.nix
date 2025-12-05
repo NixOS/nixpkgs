@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "alure2";
-  version = "unstable-2020-02-06";
+  version = "0-unstable-2020-02-06";
 
   src = fetchFromGitHub {
     owner = "kcat";
@@ -27,6 +27,11 @@ stdenv.mkDerivation {
     opusfile
     libsndfile
   ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   meta = with lib; {
     description = "Utility library for OpenAL, providing a C++ API and managing common tasks that include file loading, caching, and streaming";

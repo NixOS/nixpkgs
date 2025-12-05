@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "djangocms-alias";
-  version = "2.0.4";
+  version = "3.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "django-cms";
     repo = "djangocms-alias";
     tag = version;
-    hash = "sha256-0lIhPgI+HbAKX9wEpZ/v40OHvN6WWK9ehFxIcpzdcq8=";
+    hash = "sha256-70Gs+Ys26ypq5RXkPTxxMDFz/OCBvvAVnSIUQ3P1OV8=";
   };
 
   build-system = [ setuptools ];

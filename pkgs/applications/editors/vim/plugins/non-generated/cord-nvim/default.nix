@@ -24,7 +24,6 @@ let
         --replace-fail "2.2.6" "${version}"
     '';
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-14u3rhpDYNKZ4YLoGp6OPeeXDo3EzGYO3yhE9BkDSC0=";
 
     # cord depends on nightly features

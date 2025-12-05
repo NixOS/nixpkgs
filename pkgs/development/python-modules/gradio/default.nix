@@ -75,25 +75,27 @@
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "5.38.0";
+  version = "5.49.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
     tag = "gradio@${version}";
-    hash = "sha256-NbVRbwqHUSwyG+v+cDKCrVtzjj6ThxGRfO+xjqXOy5I=";
+    hash = "sha256-tfjyu2yl+2ndPZWrsSrVf8qv2eqpU5ZJHVqM9saJVt4=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
     fetcherVersion = 1;
-    hash = "sha256-E6dBajJoKzaJF67KRrSB/LNAyLDmT78mCmTar5G6P6g=";
+    hash = "sha256-XnCx34nbX+essVfXJlxvYB9/lnolAkF81Jp6dAOqr8E=";
   };
 
   pythonRelaxDeps = [
     "aiofiles"
+    "gradio-client"
     "markupsafe"
+    "pillow"
   ];
 
   pythonRemoveDeps = [
@@ -182,11 +184,6 @@ buildPythonPackage rec {
   preBuild = ''
     pnpm build
     pnpm package
-  '';
-
-  postBuild = ''
-    # SyntaxError: 'await' outside function
-    zip -d dist/gradio-*.whl gradio/_frontend_code/lite/examples/transformers_basic/run.py
   '';
 
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
@@ -329,10 +326,13 @@ buildPythonPackage rec {
     "test/test_docker/test_reverse_proxy_root_path/test_reverse_proxy_root_path.py"
   ];
 
-  pytestFlagsArray = [
+  disabledTestMarks = [
+    "flaky"
+  ];
+
+  pytestFlags = [
     "-x" # abort on first failure
-    "-m 'not flaky'"
-    #"-W" "ignore" # uncomment for debugging help
+    #"-Wignore" # uncomment for debugging help
   ];
 
   # check the binary works outside the build env

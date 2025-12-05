@@ -9,7 +9,6 @@
   coreutils,
   cfitsio,
   fetchFromGitHub,
-  fetchpatch,
   gtest,
   libusb1,
   libusb-compat-0_1,
@@ -42,12 +41,13 @@
 }:
 
 let
+  thirdparty_version = "2.1.6.2";
   fxload = libusb1.override { withExamples = true; };
   src-3rdparty = fetchFromGitHub {
     owner = "indilib";
     repo = "indi-3rdparty";
-    rev = "v${indilib.version}";
-    hash = "sha256-zd88QHYhqxAQlzozXZMKXCFWKYqvGsPHhNxmkdexOOE=";
+    rev = "v${thirdparty_version}";
+    hash = "sha256-FMvdm7dkOkRlmbPNeQjh0jd+2bOinzW13QPP2NnOr/M=";
   };
 
   buildIndi3rdParty =
@@ -58,7 +58,7 @@ let
       cmakeFlags ? [ ],
       postInstall ? "",
       doCheck ? true,
-      version ? indilib.version,
+      version ? thirdparty_version,
       src ? src-3rdparty,
       meta ? { },
       ...
@@ -116,7 +116,6 @@ let
             changelog = "https://github.com/indilib/indi-3rdparty/releases/tag/v${version}";
             license = licenses.lgpl2Plus;
             maintainers = with maintainers; [
-              hjones2199
               sheepforce
               returntoreality
             ];
@@ -688,6 +687,7 @@ in
   indi-fli = buildIndi3rdParty {
     pname = "indi-fli";
     buildInputs = [
+      libusb1
       cfitsio
       indilib
       zlib
@@ -972,14 +972,6 @@ in
   indi-shelyak = buildIndi3rdParty {
     pname = "indi-shelyak";
     buildInputs = [ indilib ];
-
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/indilib/indi-3rdparty/commit/db8106a9a03e0cfb700e02841d46f8b97b5513e0.patch";
-        hash = "sha256-JJatmu/dxFEni6CdR6QUn7+EiPe18EwE7OmrCT8Nk2c=";
-        stripLen = 1;
-      })
-    ];
   };
 
   indi-starbook = buildIndi3rdParty {

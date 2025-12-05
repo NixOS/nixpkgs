@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "knx-frontend";
-  version = "2025.6.13.181749";
+  version = "2025.10.31.195356";
   pyproject = true;
 
   # TODO: source build, uses yarn.lock
   src = fetchPypi {
     pname = "knx_frontend";
     inherit version;
-    hash = "sha256-ERSVE88D9Hw1Ixh3f2cfP4fq54clam1KKvG2Hj/Hizk=";
+    hash = "sha256-m490gincBGm5qN1ndVfw8HZYnIh9RNLHQkW6w4duTTE=";
   };
 
   build-system = [ setuptools ];

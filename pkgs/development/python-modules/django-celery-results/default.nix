@@ -36,7 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Celery result back end with django";
     homepage = "https://github.com/celery/django-celery-results";
-    changelog = "https://github.com/celery/django-celery-results/blob/v{version}/Changelog";
+    changelog = "https://github.com/celery/django-celery-results/blob/v${version}/Changelog";
     license = licenses.bsd3;
     maintainers = [ ];
   };

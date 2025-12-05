@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl3Plus
     ];
     mainProgram = "nx";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

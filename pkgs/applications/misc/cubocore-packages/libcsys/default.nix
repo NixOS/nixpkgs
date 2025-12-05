@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  udisks2,
+  udisks,
   qt6,
   cmake,
   ninja,
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     qt6.qtbase
-    udisks2
+    udisks
   ];
 
   dontWrapQtApps = true;
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library for managing drive and getting system resource information in real time";
     homepage = "https://gitlab.com/cubocore/libcsys";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ dan4ik605743 ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

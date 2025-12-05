@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -9,16 +10,16 @@
 
 buildGoModule rec {
   pname = "roxctl";
-  version = "4.7.4";
+  version = "4.9.1";
 
   src = fetchFromGitHub {
     owner = "stackrox";
     repo = "stackrox";
     rev = version;
-    sha256 = "sha256-X5yNo0Q0mB8ews9axhLie2BiEEoYKjLxVe5h8urhoH0=";
+    sha256 = "sha256-zlmXIqFXp2vnsTsY12zWwMjhPwt7ZM746EjQWVwgKe0=";
   };
 
-  vendorHash = "sha256-eTxcJnAZUKk6VDQhbjxnsiQWEpM2jA228SAhrCqjbF4=";
+  vendorHash = "sha256-IyeJS5RHcBkw2bvZklIojrQZBPRhJ+JAnggGm113Lns=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -30,7 +31,7 @@ buildGoModule rec {
     "-X github.com/stackrox/rox/pkg/version/internal.MainVersion=${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd roxctl \
       --bash <($out/bin/roxctl completion bash) \
       --fish <($out/bin/roxctl completion fish) \

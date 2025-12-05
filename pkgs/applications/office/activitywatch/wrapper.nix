@@ -21,7 +21,7 @@ symlinkJoin {
   ++ (lib.forEach extraWatchers (p: p.out));
 
   meta = with lib; {
-    description = "The best free and open-source automated time tracker";
+    description = "Best free and open-source automated time tracker";
     homepage = "https://activitywatch.net/";
     downloadPage = "https://github.com/ActivityWatch/activitywatch/releases";
     changelog = "https://github.com/ActivityWatch/activitywatch/releases/tag/v${aw-server-rust.version}";

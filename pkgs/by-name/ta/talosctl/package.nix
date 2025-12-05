@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -8,16 +9,16 @@
 
 buildGoModule rec {
   pname = "talosctl";
-  version = "1.10.5";
+  version = "1.11.5";
 
   src = fetchFromGitHub {
     owner = "siderolabs";
     repo = "talos";
     tag = "v${version}";
-    hash = "sha256-s+vRJ0qFhsgLiRpQfUnf/p6bcjQq40ISTB042iE7eBQ=";
+    hash = "sha256-53WZ1w7+FUhFY9YzfKcVle5Kjng+hlHuNn4klev+pqQ=";
   };
 
-  vendorHash = "sha256-lYfyW3BEqlzf2wesZwNqQPdjSKRRldEbOeyRri4GwvQ=";
+  vendorHash = "sha256-ocU7vpSdUdVzOFcqa+QWRdcP9SnC6WtV/ruheSGUfg4=";
 
   ldflags = [
     "-s"
@@ -30,7 +31,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd talosctl \
       --bash <($out/bin/talosctl completion bash) \
       --fish <($out/bin/talosctl completion fish) \

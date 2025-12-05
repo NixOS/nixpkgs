@@ -29,9 +29,9 @@ stdenv.mkDerivation {
 
   buildCommand = ''
     mkdir -pv $out/repos
-    ${lib.concatMapStrings (
-      r: "cp -r ${fetchgit r} $out/repos/${hashname r}\n"
-    ) (import ./src-libs.nix)}
+    ${lib.concatMapStrings (r: "cp -r ${fetchgit r} $out/repos/${hashname r}\n") (
+      import ./src-libs.nix
+    )}
 
     ${mkscript "$out/bin/checkout-git.sh" ''
       if test "$#" -ne 4; then

@@ -15,3 +15,9 @@ if [[ "$latest_version" == "$current_version" ]]; then
 fi
 
 update-source-version teamviewer "$latest_version"
+
+systems=$(nix eval --json -f . teamviewer.meta.platforms | jq --raw-output '.[]')
+for system in $systems; do
+  hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix eval --raw -f . teamviewer.src.url --system "$system")))
+  update-source-version teamviewer $latest_version $hash --system=$system --ignore-same-version --ignore-same-hash
+done

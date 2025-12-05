@@ -18,22 +18,22 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "3.13.0";
+  version = "3.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     tag = "v${version}";
-    hash = "sha256-vwAqlTq4HIbmCL1HsHcgfVWETImxdqTsnenmX2RGXw8=";
+    hash = "sha256-p+Z2c+PBNdjfaRjZErWwWgihzuddV14PgTHE3NVNHs8=";
   };
 
   patches = [
-    # https://github.com/rapidfuzz/RapidFuzz/pull/446
+    # https://github.com/rapidfuzz/RapidFuzz/pull/463
     (fetchpatch {
-      name = "support-taskflow-3.10.0.patch";
-      url = "https://github.com/rapidfuzz/RapidFuzz/commit/bba3281cc61ecc4ab4affe5d2d50389a4f6d7556.patch";
-      hash = "sha256-kAS6xsPY7eUTfKO+EAOW8bktY4cApvLEpRMciJEsPgk=";
+      name = "support-taskflow-3.11.0.patch";
+      url = "https://github.com/rapidfuzz/RapidFuzz/commit/0ef2a4980c41b852283e6db7a747a1632307c75e.patch";
+      hash = "sha256-xb+J3PXwD51lZqIJcTzPJWrT/oqrIXxh1cLp91DhIPg=";
     })
   ];
 
@@ -69,11 +69,6 @@ buildPythonPackage rec {
     hypothesis
     pandas
     pytestCheckHook
-  ];
-
-  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    # segfaults
-    "test_cdist"
   ];
 
   pythonImportsCheck = [

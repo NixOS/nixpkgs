@@ -1,0 +1,31 @@
+commit 4277cc75bc147d0af6ffddc7db96f48492977968
+Author: bakersdozen123 <taunts_bakers_3r@icloud.com>
+Date:   Sat Oct 11 09:56:48 2025 -0700
+
+    ssh: fix custom ssh heap buffer overflow
+    
+    The `ssh_custom_free()` function calls `strlen()` on the `publickey`
+    field, which stores binary data, not a null-terminated string. This
+    causes a heap buffer overflow when the public key data is not
+    null-terminated or contains embedded null bytes.
+    
+    The `publickey` field stores binary data, as required by the underlying
+    `libssh2_userauth_publickey()` function, which accepts a public key
+    parameter of the type `const unsigned char*`.
+    
+    Use the stored `publickey_len` instead of `strlen()` to determine the
+    correct buffer size.
+
+diff --git a/src/libgit2/transports/credential.c b/src/libgit2/transports/credential.c
+index b47bd63a1..7d0eacecf 100644
+--- a/src/libgit2/transports/credential.c
++++ b/src/libgit2/transports/credential.c
+@@ -161,7 +161,7 @@ static void ssh_custom_free(struct git_credential *cred)
+ 
+ 	if (c->publickey) {
+ 		/* Zero the memory which previously held the publickey */
+-		size_t key_len = strlen(c->publickey);
++		size_t key_len = c->publickey_len;
+ 		git__memzero(c->publickey, key_len);
+ 		git__free(c->publickey);
+ 	}

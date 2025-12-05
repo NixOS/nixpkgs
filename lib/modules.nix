@@ -245,25 +245,26 @@ let
         };
       };
 
-      merged =
-        let
-          collected =
-            collectModules class (specialArgs.modulesPath or "") (regularModules ++ [ internalModule ])
-              (
-                {
-                  inherit
-                    lib
-                    options
-                    config
-                    specialArgs
-                    ;
-                  _class = class;
-                  _prefix = prefix;
-                }
-                // specialArgs
-              );
-        in
-        mergeModules prefix (reverseList collected);
+      # This function takes an empty attrset as an argument.
+      # It could theoretically be replaced with its body,
+      # but such a binding is avoided to allow for earlier grabage collection.
+      doCollect =
+        { }:
+        collectModules class (specialArgs.modulesPath or "") (regularModules ++ [ internalModule ]) (
+          {
+            inherit
+              lib
+              options
+              specialArgs
+              ;
+            _class = class;
+            _prefix = prefix;
+            config = addErrorContext "if you get an infinite recursion here, you probably reference `config` in `imports`. If you are trying to achieve a conditional import behavior dependent on `config`, consider importing unconditionally, and using `mkEnableOption` and `mkIf` to control its effect." config;
+          }
+          // specialArgs
+        );
+
+      merged = mergeModules prefix (reverseList (doCollect { }).modules);
 
       options = merged.matchedOptions;
 
@@ -359,12 +360,13 @@ let
         options = checked options;
         config = checked (removeAttrs config [ "_module" ]);
         _module = checked (config._module);
+        inherit (doCollect { }) graph;
         inherit extendModules type class;
       };
     in
     result;
 
-  # collectModules :: (class: String) -> (modulesPath: String) -> (modules: [ Module ]) -> (args: Attrs) -> [ Module ]
+  # collectModules :: (class: String) -> (modulesPath: String) -> (modules: [ Module ]) -> (args: Attrs) -> ModulesTree
   #
   # Collects all modules recursively through `import` statements, filtering out
   # all modules in disabledModules.
@@ -424,8 +426,37 @@ let
         else
           m: m;
 
+      # isDisabled :: String -> [ { disabled, file } ] -> StructuredModule -> bool
+      #
+      # Figures out whether a `StructuredModule` is disabled.
+      isDisabled =
+        modulesPath: disabledList:
+        let
+          moduleKey =
+            file: m:
+            if isString m then
+              if substring 0 1 m == "/" then m else toString modulesPath + "/" + m
+
+            else if isConvertibleWithToString m then
+              if m ? key && m.key != toString m then
+                throw "Module `${file}` contains a disabledModules item that is an attribute set that can be converted to a string (${toString m}) but also has a `.key` attribute (${m.key}) with a different value. This makes it ambiguous which module should be disabled."
+              else
+                toString m
+
+            else if m ? key then
+              m.key
+
+            else if isAttrs m then
+              throw "Module `${file}` contains a disabledModules item that is an attribute set, presumably a module, that does not have a `key` attribute. This means that the module system doesn't have any means to identify the module that should be disabled. Make sure that you've put the correct value in disabledModules: a string path relative to modulesPath, a path value, or an attribute set with a `key` attribute."
+            else
+              throw "Each disabledModules item must be a path, string, or a attribute set with a key attribute, or a value supported by toString. However, one of the disabledModules items in `${toString file}` is none of that, but is of type ${typeOf m}.";
+
+          disabledKeys = concatMap ({ file, disabled }: map (moduleKey file) disabled) disabledList;
+        in
+        structuredModule: elem structuredModule.key disabledKeys;
+
       /**
-        Collects all modules recursively into the form
+        Collects all modules recursively into a `[ StructuredModule ]` and a list of disabled modules:
 
           {
             disabled = [ <list of disabled modules> ];
@@ -493,36 +524,32 @@ let
         modulesPath:
         { disabled, modules }:
         let
-          moduleKey =
-            file: m:
-            if isString m then
-              if substring 0 1 m == "/" then m else toString modulesPath + "/" + m
-
-            else if isConvertibleWithToString m then
-              if m ? key && m.key != toString m then
-                throw "Module `${file}` contains a disabledModules item that is an attribute set that can be converted to a string (${toString m}) but also has a `.key` attribute (${m.key}) with a different value. This makes it ambiguous which module should be disabled."
-              else
-                toString m
-
-            else if m ? key then
-              m.key
-
-            else if isAttrs m then
-              throw "Module `${file}` contains a disabledModules item that is an attribute set, presumably a module, that does not have a `key` attribute. This means that the module system doesn't have any means to identify the module that should be disabled. Make sure that you've put the correct value in disabledModules: a string path relative to modulesPath, a path value, or an attribute set with a `key` attribute."
-            else
-              throw "Each disabledModules item must be a path, string, or a attribute set with a key attribute, or a value supported by toString. However, one of the disabledModules items in `${toString file}` is none of that, but is of type ${typeOf m}.";
-
-          disabledKeys = concatMap ({ file, disabled }: map (moduleKey file) disabled) disabled;
-          keyFilter = filter (attrs: !elem attrs.key disabledKeys);
+          keyFilter = filter (attrs: !isDisabled modulesPath disabled attrs);
         in
         map (attrs: attrs.module) (genericClosure {
           startSet = keyFilter modules;
           operator = attrs: keyFilter attrs.modules;
         });
 
+      toGraph =
+        modulesPath:
+        { disabled, modules }:
+        let
+          isDisabledModule = isDisabled modulesPath disabled;
+
+          toModuleGraph = structuredModule: {
+            disabled = isDisabledModule structuredModule;
+            inherit (structuredModule) key;
+            file = structuredModule.module._file;
+            imports = map toModuleGraph structuredModule.modules;
+          };
+        in
+        map toModuleGraph (filter (x: x.key != "lib/modules.nix") modules);
     in
-    modulesPath: initialModules: args:
-    filterModules modulesPath (collectStructuredModules unknownModule "" initialModules args);
+    modulesPath: initialModules: args: {
+      modules = filterModules modulesPath (collectStructuredModules unknownModule "" initialModules args);
+      graph = toGraph modulesPath (collectStructuredModules unknownModule "" initialModules args);
+    };
 
   /**
     Wrap a module with a default location for reporting errors.
@@ -651,7 +678,13 @@ let
       # evaluation of the option.
       context = name: ''while evaluating the module argument `${name}' in "${key}":'';
       extraArgs = mapAttrs (
-        name: _: addErrorContext (context name) (args.${name} or config._module.args.${name})
+        name: _:
+        addErrorContext (context name) (
+          args.${name} or (addErrorContext
+            "noting that argument `${name}` is not externally provided, so querying `_module.args` instead, requiring `config`"
+            config._module.args.${name}
+          )
+        )
       ) (functionArgs f);
 
       # Note: we append in the opposite order such that we can add an error
@@ -1088,16 +1121,43 @@ let
       files = map (def: def.file) res.defsFinal;
       definitionsWithLocations = res.defsFinal;
       inherit (res) isDefined;
+      inherit (res.checkedAndMerged) valueMeta;
       # This allows options to be correctly displayed using `${options.path.to.it}`
       __toString = _: showOption loc;
     };
+
+  # Check that a type with v2 merge has a coherent check attribute.
+  # Throws an error if the type uses an ad-hoc `type // { check }` override.
+  # Returns the last argument like `seq`, allowing usage: checkV2MergeCoherence loc type expr
+  checkV2MergeCoherence =
+    loc: type: result:
+    if type.check.isV2MergeCoherent or false then
+      result
+    else
+      throw ''
+        The option `${showOption loc}' has a type `${type.description}' that uses
+        an ad-hoc `type // { check = ...; }' override, which is incompatible with
+        the v2 merge mechanism.
+
+        Please use `lib.types.addCheck` instead of `type // { check }' to add
+        custom validation. For example:
+
+          lib.types.addCheck baseType (value: /* your check */)
+
+        instead of:
+
+          baseType // { check = value: /* your check */; }
+
+        Alternatively, this message may also occur as false positive when mixing Nixpkgs
+        versions, if one Nixpkgs is between 83fed2e6..58696117 (Aug 28 - Oct 28 2025)
+      '';
 
   # Merge definitions of a value of a given type.
   mergeDefinitions = loc: type: defs: rec {
     defsFinal' =
       let
         # Process mkMerge and mkIf properties.
-        defs' = concatMap (
+        defsNormalized = concatMap (
           m:
           map (
             value:
@@ -1112,26 +1172,33 @@ let
         ) defs;
 
         # Process mkOverride properties.
-        defs'' = filterOverrides' defs';
+        defsFiltered = filterOverrides' defsNormalized;
 
         # Sort mkOrder properties.
-        defs''' =
+        defsSorted =
           # Avoid sorting if we don't have to.
-          if any (def: def.value._type or "" == "order") defs''.values then
-            sortProperties defs''.values
+          if any (def: def.value._type or "" == "order") defsFiltered.values then
+            sortProperties defsFiltered.values
           else
-            defs''.values;
+            defsFiltered.values;
       in
       {
-        values = defs''';
-        inherit (defs'') highestPrio;
+        values = defsSorted;
+        inherit (defsFiltered) highestPrio;
       };
     defsFinal = defsFinal'.values;
 
     # Type-check the remaining definitions, and merge them. Or throw if no definitions.
     mergedValue =
       if isDefined then
-        if all (def: type.check def.value) defsFinal then
+        if type.merge ? v2 then
+          # check and merge share the same closure
+          # .headError is either not-present, null, or a string describing the error
+          if checkedAndMerged.headError or null != null then
+            throw "A definition for option `${showOption loc}' is not of type `${type.description}'. TypeError: ${checkedAndMerged.headError.message}"
+          else
+            checkedAndMerged.value
+        else if all (def: type.check def.value) defsFinal then
           type.merge loc defsFinal
         else
           let
@@ -1143,6 +1210,46 @@ let
         # handling.  If changed here, please change it there too.)
         throw
           "The option `${showOption loc}' was accessed but has no value defined. Try setting the option.";
+
+    checkedAndMerged =
+      (
+        # This function (which is immediately applied) checks that type.merge
+        # returns the proper attrset.
+        # Once use of the merge.v2 feature has propagated, consider removing this
+        # for an estimated one thousandth performance improvement (NixOS by nr.thunks).
+        {
+          headError,
+          value,
+          valueMeta,
+        }@args:
+        args
+      )
+        (
+          if type.merge ? v2 then
+            let
+              # Check for v2 merge coherence
+              r = checkV2MergeCoherence loc type (
+                type.merge.v2 {
+                  inherit loc;
+                  defs = defsFinal;
+                }
+              );
+            in
+            r
+            // {
+              valueMeta = r.valueMeta // {
+                _internal = {
+                  inherit type;
+                };
+              };
+            }
+          else
+            {
+              headError = null;
+              value = mergedValue;
+              valueMeta = { };
+            }
+        );
 
     isDefined = defsFinal != [ ];
 
@@ -1374,7 +1481,7 @@ let
   };
 
   /**
-    Return a definition with file location information.
+    Returns a definition with file location information.
   */
   mkDefinition = args@{ file, value, ... }: args // { _type = "definition"; };
 
@@ -1389,11 +1496,6 @@ let
   mkImageMediaOverride = mkOverride 60; # image media profiles can be derived by inclusion into host config, hence needing to override host config, but do allow user to mkForce
   mkForce = mkOverride 50;
   mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
-
-  defaultPriority =
-    warnIf (oldestSupportedReleaseIsAtLeast 2305)
-      "lib.modules.defaultPriority is deprecated, please use lib.modules.defaultOverridePriority instead."
-      defaultOverridePriority;
 
   mkFixStrictness = warn "lib.mkFixStrictness has no effect and will be removed. It returns its argument unmodified, so you can just remove any calls." id;
 
@@ -1463,7 +1565,7 @@ let
     };
 
   /**
-    Return a module that causes a warning to be shown if the
+    Returns a module that causes a warning to be shown if the
     specified option is defined. For example,
 
       mkRemovedOptionModule [ "boot" "loader" "grub" "bootDevice" ] "<replacement instructions>"
@@ -1511,7 +1613,7 @@ let
     };
 
   /**
-    Return a module that causes a warning to be shown if the
+    Returns a module that causes a warning to be shown if the
     specified "from" option is defined; the defined value is however
     forwarded to the "to" option. This can be used to rename options
     while providing backward compatibility. For example,
@@ -1553,13 +1655,11 @@ let
         New option path as list of strings.
       */
       to,
-
       /**
         Release number of the first release that contains the rename, ignoring backports.
         Set it to the upcoming release, matching the nixpkgs/.version file.
       */
       sinceRelease,
-
     }:
     doRename {
       inherit from to;
@@ -1569,7 +1669,7 @@ let
     };
 
   /**
-    Return a module that causes a warning to be shown if any of the "from"
+    Returns a module that causes a warning to be shown if any of the "from"
     option is defined; the defined values can be used in the "mergeFn" to set
     the "to" value.
     This function can be used to merge multiple options into one that has a
@@ -1648,7 +1748,7 @@ let
 
   /**
     Single "from" version of mkMergedOptionModule.
-    Return a module that causes a warning to be shown if the "from" option is
+    Returns a module that causes a warning to be shown if the "from" option is
     defined; the defined value can be used in the "mergeFn" to set the "to"
     value.
     This function can be used to change an option into another that has a
@@ -1711,11 +1811,10 @@ let
     };
 
   /**
-    Transitional version of mkAliasOptionModule that uses MD docs.
-
-    This function is no longer necessary and merely an alias of `mkAliasOptionModule`.
+    Deprecated alias of mkAliasOptionModule that uses MD docs.
+    This function is no longer necessary will be removed in 26.05`.
   */
-  mkAliasOptionModuleMD = mkAliasOptionModule;
+  mkAliasOptionModuleMD = lib.warn "mkAliasOptionModuleMD is deprecated and will be removed in 26.05; please use mkAliasOptionModule." mkAliasOptionModule;
 
   /**
     mkDerivedConfig : Option a -> (a -> Definition b) -> Definition b
@@ -1746,7 +1845,7 @@ let
   mkDerivedConfig = opt: f: mkOverride (opt.highestPrio or defaultOverridePriority) (f opt.value);
 
   /**
-    Return a module that help declares an option that has been renamed.
+    Returns a module that help declares an option that has been renamed.
     When a value is defined for the old option, it is forwarded to the `to` option.
   */
   doRename =
@@ -2087,7 +2186,6 @@ private
   inherit
     defaultOrderPriority
     defaultOverridePriority
-    defaultPriority
     doRename
     evalModules
     evalOptionValue # for use by lib.types

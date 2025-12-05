@@ -7,6 +7,7 @@
   gettext,
   gtk4,
   libadwaita,
+  libdex,
   meson,
   ninja,
   pkg-config,
@@ -16,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "d-spy";
-  version = "48.0";
+  version = "49.2";
 
   outputs = [
     "out"
@@ -25,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/d-spy/${lib.versions.major finalAttrs.version}/d-spy-${finalAttrs.version}.tar.xz";
-    hash = "sha256-D3oJAZBGGU2X/Dw0KzhOocOA4Qqc/IAlv83lfVlcODA=";
+    hash = "sha256-uBT/J9goqrzacvLGLxtB1iA190PQb9mn48XJhsSHmmk=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk4
     libadwaita
+    libdex
   ];
 
   passthru = {

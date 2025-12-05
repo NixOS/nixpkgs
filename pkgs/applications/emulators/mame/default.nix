@@ -7,7 +7,6 @@
   SDL2_ttf,
   copyDesktopItems,
   expat,
-  fetchpatch,
   fetchurl,
   flac,
   fontconfig,
@@ -38,14 +37,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mame";
-  version = "0.278";
+  version = "0.283";
   srcVersion = builtins.replaceStrings [ "." ] [ "" ] version;
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${srcVersion}";
-    hash = "sha256-YJt+in9QV7a0tQZnfqFP3Iu6XQD0sryjud4FcgokYFg=";
+    hash = "sha256-ePOmBX21XsS+FTABIswjRp8hlcbkMtkW5mJLwt4LhTA=";
   };
 
   outputs = [
@@ -117,16 +116,6 @@ stdenv.mkDerivation rec {
     # that you run MAME changing to install directory, so we add absolute paths
     # here
     ./001-use-absolute-paths.diff
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # coreaudio_sound.cpp compares __MAC_OS_X_VERSION_MIN_REQUIRED to 1200
-    # instead of 120000, causing it to try to use a constant that isn't
-    # actually defined yet when targeting macOS 11 like Nixpkgs does.
-    # Backport mamedev/mame#13890 until the next time we update MAME.
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/mamedev/mame/pull/13890.patch";
-      hash = "sha256-Fqpw4fHEMns4tSSIjc1p36ss+J9Tc/O0cnN3HI/ratM=";
-    })
   ];
 
   # Since the bug described in https://github.com/NixOS/nixpkgs/issues/135438,
@@ -180,7 +169,7 @@ stdenv.mkDerivation rec {
   installPhase =
     let
       icon = fetchurl {
-        url = "https://raw.githubusercontent.com/PapirusDevelopmentTeam/papirus-icon-theme/refs/heads/master/Papirus/32x32/apps/mame.svg";
+        url = "https://raw.githubusercontent.com/PapirusDevelopmentTeam/papirus-icon-theme/4256be4cf56870aa1fbd85c48cafeafa187160e0/Papirus/32x32/apps/mame.svg";
         hash = "sha256-s44Xl9UGizmddd/ugwABovM8w35P0lW9ByB69MIpG+E=";
       };
     in

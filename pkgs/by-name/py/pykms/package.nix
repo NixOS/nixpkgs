@@ -48,7 +48,7 @@ pypkgs.buildPythonApplication rec {
   sourceRoot = "${src.name}/py-kms";
 
   propagatedBuildInputs = with pypkgs; [
-    systemd
+    systemd-python
     pytz
     tzlocal
     dnspython

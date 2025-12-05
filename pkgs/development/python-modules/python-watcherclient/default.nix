@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "python-watcherclient";
-  version = "4.8.0";
+  version = "4.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "openstack";
     repo = "python-watcherclient";
     tag = version;
-    hash = "sha256-ZwMsLXqfRw/qJ71B/WcLkK9TGX77GLiy/nLE7kRD1Xg=";
+    hash = "sha256-ik//J9R9F4SCljexijcfXuSbDgDUNnMTqfpxIPd2Jm8=";
   };
 
   env.PBR_VERSION = version;

@@ -21,7 +21,7 @@ let
       ...
     }@attrs:
     let
-      attrs' = builtins.removeAttrs attrs [
+      attrs' = removeAttrs attrs [
         "version"
         "hash"
         "vendorHash"
@@ -194,9 +194,9 @@ rec {
   mkTerraform = attrs: pluggable (generic attrs);
 
   terraform_1 = mkTerraform {
-    version = "1.12.2";
-    hash = "sha256-ilQ1rscGD66OT6lHsBgWELayC24B2D7l6iH6vtvqzFI=";
-    vendorHash = "sha256-zWNLIurNP5e/AWr84kQCb2+gZIn6EAsuvr0ZnfSq7Zw=";
+    version = "1.14.1";
+    hash = "sha256-qqIoVAzVpsdGNbA04jpsiN1HR94xhcfDJvz8UyEweyw=";
+    vendorHash = "sha256-+mWMU3FWF/VTyPMnOj9AGy1kfvv2W4UB9EDZI7bqSh0=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = {
       inherit plugins;
@@ -213,7 +213,7 @@ rec {
       mainTf = writeText "main.tf" ''
         resource "random_id" "test" {}
       '';
-      terraform = terraform_1.withPlugins (p: [ p.random ]);
+      terraform = terraform_1.withPlugins (p: [ p.hashicorp_random ]);
       test = runCommand "terraform-plugin-test" { buildInputs = [ terraform ]; } ''
         set -e
         # make it fail outside of sandbox

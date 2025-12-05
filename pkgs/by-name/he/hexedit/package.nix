@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pixel";
     repo = "hexedit";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-fIgPbr7qmxyEga2YaAD0+NBM8LeDm/tVAq99ub7aiAI=";
   };
 

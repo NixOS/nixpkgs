@@ -83,19 +83,17 @@ let
       '';
 
       copyExtraFiles = pkgs.writeShellScript "copy-extra-files" ''
-        empty_file=$(${pkgs.coreutils}/bin/mktemp)
-
         ${concatStrings (
           mapAttrsToList (n: v: ''
             ${pkgs.coreutils}/bin/install -Dp "${v}" "${bootMountPoint}/"${escapeShellArg n}
-            ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/${nixosDir}/.extra-files/"${escapeShellArg n}
+            ${pkgs.coreutils}/bin/install -D /dev/null "${bootMountPoint}/${nixosDir}/.extra-files/"${escapeShellArg n}
           '') cfg.extraFiles
         )}
 
         ${concatStrings (
           mapAttrsToList (n: v: ''
             ${pkgs.coreutils}/bin/install -Dp "${pkgs.writeText n v}" "${bootMountPoint}/loader/entries/"${escapeShellArg n}
-            ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/${nixosDir}/.extra-files/loader/entries/"${escapeShellArg n}
+            ${pkgs.coreutils}/bin/install -D /dev/null "${bootMountPoint}/${nixosDir}/.extra-files/loader/entries/"${escapeShellArg n}
           '') cfg.extraEntries
         )}
       '';
@@ -172,7 +170,7 @@ in
       description = ''
         Whether to enable the systemd-boot (formerly gummiboot) EFI boot manager.
         For more information about systemd-boot:
-        https://www.freedesktop.org/wiki/Software/systemd/systemd-boot/
+        <https://www.freedesktop.org/wiki/Software/systemd/systemd-boot/>
       '';
     };
 
@@ -182,7 +180,7 @@ in
       description = ''
         The sort key used for the NixOS bootloader entries.
         This key determines sorting relative to non-NixOS entries.
-        See also https://uapi-group.org/specifications/specs/boot_loader_specification/#sorting
+        See also <https://uapi-group.org/specifications/specs/boot_loader_specification/#sorting>
 
         This option can also be used to control the sorting of NixOS specialisations.
 
@@ -384,7 +382,7 @@ in
 
         To control the ordering of the entry in the boot menu, use the sort-key
         field, see
-        https://uapi-group.org/specifications/specs/boot_loader_specification/#sorting
+        <https://uapi-group.org/specifications/specs/boot_loader_specification/#sorting>
         and {option}`boot.loader.systemd-boot.sortKey`.
       '';
     };
@@ -393,7 +391,7 @@ in
       type = types.attrsOf types.path;
       default = { };
       example = literalExpression ''
-        { "efi/memtest86/memtest.efi" = "''${pkgs.memtest86plus}/memtest.efi"; }
+        { "efi/memtest86/memtest.efi" = pkgs.memtest86plus.efi; }
       '';
       description = ''
         A set of files to be copied to {file}`$BOOT`.
@@ -580,7 +578,7 @@ in
 
     boot.loader.systemd-boot.extraFiles = mkMerge [
       (mkIf cfg.memtest86.enable {
-        "efi/memtest86/memtest.efi" = "${pkgs.memtest86plus.efi}";
+        "efi/memtest86/memtest.efi" = pkgs.memtest86plus.efi;
       })
       (mkIf cfg.netbootxyz.enable {
         "efi/netbootxyz/netboot.xyz.efi" = "${pkgs.netbootxyz-efi}";

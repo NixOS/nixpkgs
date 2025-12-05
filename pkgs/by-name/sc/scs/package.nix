@@ -7,26 +7,27 @@
   gfortran,
   fixDarwinDylibNames,
   nix-update-script,
+  python3Packages,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scs";
-  version = "3.2.7";
+  version = "3.2.9";
 
   src = fetchFromGitHub {
     owner = "cvxgrp";
     repo = "scs";
-    tag = version;
-    hash = "sha256-Y28LrYUuDaXPO8sce1pJIfG3A03rw7BumVgxCIKRn+U=";
+    tag = finalAttrs.version;
+    hash = "sha256-/PJKZvYYPHGuByIf70oa2U53fY2W46/lp+OXXBM1vTU=";
   };
 
   # Actually link and add libgfortran to the rpath
   postPatch = ''
     substituteInPlace scs.mk \
-      --replace "#-lgfortran" "-lgfortran" \
-      --replace "gcc" "cc"
+      --replace-fail "# -lgfortran" "-lgfortran" \
+      --replace-fail "gcc" "cc"
   '';
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
@@ -54,6 +55,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests.scs-python = python3Packages.scs;
   };
 
   meta = {
@@ -62,9 +64,9 @@ stdenv.mkDerivation rec {
       Numerical optimization package for solving large-scale convex cone problems
     '';
     homepage = "https://github.com/cvxgrp/scs";
-    changelog = "https://github.com/cvxgrp/scs/releases/tag/${version}";
+    changelog = "https://github.com/cvxgrp/scs/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ bhipple ];
   };
-}
+})

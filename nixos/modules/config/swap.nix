@@ -268,6 +268,7 @@ in
           sw:
           let
             realDevice' = utils.escapeSystemdPath sw.realDevice;
+            btrfsInSystem = config.boot.supportedFilesystems.btrfs or false;
           in
           lib.nameValuePair "mkswap-${sw.deviceName}" {
             description = "Initialisation of swap device ${sw.device}";
@@ -287,6 +288,7 @@ in
               pkgs.util-linux
               pkgs.e2fsprogs
             ]
+            ++ lib.optional btrfsInSystem pkgs.btrfs-progs
             ++ lib.optional sw.randomEncryption.enable pkgs.cryptsetup;
 
             environment.DEVICE = sw.device;
@@ -295,13 +297,19 @@ in
               ${lib.optionalString (sw.size != null) ''
                 currentSize=$(( $(stat -c "%s" "$DEVICE" 2>/dev/null || echo 0) / 1024 / 1024 ))
                 if [[ ! -b "$DEVICE" && "${toString sw.size}" != "$currentSize" ]]; then
-                  # Disable CoW for CoW based filesystems like BTRFS.
-                  truncate --size 0 "$DEVICE"
-                  chattr +C "$DEVICE" 2>/dev/null || true
+                  if [[ $(stat -f -c %T $(dirname "$DEVICE")) == "btrfs" ]]; then
+                    # Use btrfs mkswapfile to speed up the creation of swapfile.
+                    rm -f "$DEVICE"
+                    btrfs filesystem mkswapfile --size "${toString sw.size}M" --uuid clear "$DEVICE"
+                  else
+                    # Disable CoW for CoW based filesystems.
+                    truncate --size 0 "$DEVICE"
+                    chattr +C "$DEVICE" 2>/dev/null || true
 
-                  echo "Creating swap file using dd and mkswap."
-                  dd if=/dev/zero of="$DEVICE" bs=1M count=${toString sw.size} status=progress
-                  ${lib.optionalString (!sw.randomEncryption.enable) "mkswap ${sw.realDevice}"}
+                    echo "Creating swap file using dd and mkswap."
+                    dd if=/dev/zero of="$DEVICE" bs=1M count=${toString sw.size} status=progress
+                    ${lib.optionalString (!sw.randomEncryption.enable) "mkswap ${sw.realDevice}"}
+                  fi
                 fi
               ''}
               ${lib.optionalString sw.randomEncryption.enable ''

@@ -1,6 +1,6 @@
 {
   lib,
-  flutter332,
+  flutter335,
   python3,
   fetchFromGitHub,
   pcre2,
@@ -17,15 +17,15 @@
   gitUpdater,
 }:
 
-flutter332.buildFlutterApplication rec {
+flutter335.buildFlutterApplication rec {
   pname = "yubioath-flutter";
-  version = "7.2.3";
+  version = "7.3.0";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubioath-flutter";
     tag = version;
-    hash = "sha256-n7BfstsuOTv8d16Y5oE/LDqlj0nVs/6196SnLaLN7h4=";
+    hash = "sha256-1Hr8ZDHXiLiYfQg4PEpmIuIJR/USbsGCgI4YZSex2Eg=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

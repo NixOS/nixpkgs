@@ -23,7 +23,7 @@ buildGoModule rec {
     description = "Live coding demos without Context Switching";
     homepage = "https://github.com/dgageot/demoit";
     license = licenses.asl20;
-    maintainers = [ maintainers.freezeboy ];
+    maintainers = [ ];
     mainProgram = "demoit";
   };
 }

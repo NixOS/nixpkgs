@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ueE1NKbCMBUBrrdsHkwZ5Yv6LD3tQL3ZAk2O4xoYOcw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-jSUqpryUgOL0qo0gbbH4s24krrPsLOSNc6FQUEUeeUQ=";
 
   nativeBuildInputs = [
@@ -51,12 +50,16 @@ rustPlatform.buildRustPackage rec {
     "--skip=watcher::tests::the_gauntlet"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd inlyne \
-      --bash completions/inlyne.bash \
-      --fish completions/inlyne.fish \
-      --zsh completions/_inlyne
-  '';
+  postInstall =
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd inlyne \
+        --bash completions/inlyne.bash \
+        --fish completions/inlyne.fish \
+        --zsh completions/_inlyne
+    ''
+    + ''
+      install -Dm444 assets/inlyne.desktop -t $out/share/applications
+    '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/inlyne \
@@ -73,7 +76,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Inlyne-Project/inlyne";
     changelog = "https://github.com/Inlyne-Project/inlyne/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "inlyne";
   };
 }

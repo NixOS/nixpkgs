@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pssh";
-  version = "2.3.5";
+  version = "2.3.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lilydjwg";
     repo = "pssh";
     tag = "v${version}";
-    hash = "sha256-JZOO5xmW34lvWzGL4tC9fquZOOYhub0/aa/iQ63rjHE=";
+    hash = "sha256-KG/7sHJn++eQ/tRT5pMeWDYxkf/Rk5q1x73fQoBdyx4=";
   };
 
   build-system = with python3Packages; [ setuptools ];

@@ -6,7 +6,6 @@
   attr,
   autoreconfHook,
   bzip2,
-  fetchpatch,
   glibcLocalesUtf8,
   lzo,
   openssl,
@@ -32,23 +31,14 @@
 assert xarSupport -> libxml2 != null;
 stdenv.mkDerivation (finalAttrs: {
   pname = "libarchive";
-  version = "3.8.1";
+  version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KN5SvQ+/g/OOa+hntMX3D8p5IEWO0smke5WK+DwrOH0=";
+    hash = "sha256-s7duwuNFyYq8obTS3qc6JewJ9f8LJhItlEx8wxnMgwk=";
   };
-
-  patches = [
-    # https://github.com/libarchive/libarchive/pull/2689
-    # Remove after next release.
-    (fetchpatch {
-      url = "https://github.com/libarchive/libarchive/commit/489d0b8e2f1fafd3b7ebf98f389ca67462c34651.patch?full_index=1";
-      hash = "sha256-r+tSJ+WA0VKCjg+8MfS5/RqcB+aAMZ2dK0YUh+U1q78=";
-    })
-  ];
 
   outputs = [
     "out"
@@ -69,9 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
         "libarchive/test/test_read_disk_directory_traversals.c"
         "cpio/test/test_option_a.c"
         "cpio/test/test_option_t.c"
-      ]
-      ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
-        # only on some aarch64-linux systems?
+        # fails tests on filesystems with 64-bit inode values:
+        # FAIL: bsdcpio_test
+        #   bsdcpio: linkfile: large inode number truncated: Numerical result out of range
         "cpio/test/test_basic.c"
         "cpio/test/test_format_newc.c"
       ];

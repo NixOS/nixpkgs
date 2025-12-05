@@ -8,7 +8,6 @@
   platformio,
   esptool,
   git,
-  inetutils,
   versionCheckHook,
   nixosTests,
 }:
@@ -34,15 +33,23 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2025.7.3";
+  version = "2025.11.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = version;
-    hash = "sha256-njhcH/C55i1Xkclt2bp+z9OXhR7gsewWUgW3bn/1yig=";
+    hash = "sha256-uV5lSlAFHTxIJqkvwRiDWcB2Hw+z+4+phBm2JHld4jA=";
   };
+
+  patches = [
+    # Use the esptool executable directly in the ESP32 post build script, that
+    # gets executed by platformio. This is required, because platformio uses its
+    # own python environment through `python -m esptool` and then fails to find
+    # the esptool library.
+    ./esp32-post-build-esptool-reference.patch
+  ];
 
   build-system = with python.pkgs; [
     setuptools
@@ -61,19 +68,17 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==80.9.0" "setuptools"
+      --replace-fail "setuptools==80.9.0" "setuptools" \
+      --replace-fail "wheel>=0.43,<0.46" "wheel"
   '';
 
   # Remove esptool and platformio from requirements
   env.ESPHOME_USE_SUBPROCESS = "";
 
-  # esphome has optional dependencies it does not declare, they are
-  # loaded when certain config blocks are used.
-  # They have validation functions like:
-  # - validate_cryptography_installed for the wifi component
   dependencies = with python.pkgs; [
     aioesphomeapi
     argcomplete
+    bleak
     cairosvg
     click
     colorama
@@ -83,35 +88,30 @@ python.pkgs.buildPythonApplication rec {
     freetype-py
     icmplib
     jinja2
-    kconfiglib
-    packaging
     paho-mqtt
     pillow
     platformio
-    protobuf
     puremagic
     pyparsing
     pyserial
     pyyaml
-    requests
     ruamel-yaml
     tornado
     tzdata
     tzlocal
     voluptuous
+    zeroconf
   ];
 
   makeWrapperArgs = [
     # platformio is used in esphome/platformio_api.py
     # esptool is used in esphome/__main__.py
-    # git is used in esphome/writer.py
-    # inetutils is used in esphome/dashboard/status/ping.py
+    # git is used in esphome/git.py
     "--prefix PATH : ${
       lib.makeBinPath [
         platformio
         esptool
         git
-        inetutils
       ]
     }"
     "--prefix PYTHONPATH : ${python.pkgs.makePythonPath dependencies}" # will show better error messages
@@ -125,7 +125,7 @@ python.pkgs.buildPythonApplication rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs =
-    with python3Packages;
+    with python.pkgs;
     [
       hypothesis
       mock
@@ -134,7 +134,10 @@ python.pkgs.buildPythonApplication rec {
       pytest-mock
       pytestCheckHook
     ]
-    ++ [ versionCheckHook ];
+    ++ [
+      git
+      versionCheckHook
+    ];
 
   disabledTestPaths = [
     # platformio builds; requires networking for dependency resolution
@@ -147,7 +150,7 @@ python.pkgs.buildPythonApplication rec {
 
   postInstall =
     let
-      argcomplete = lib.getExe' python3Packages.argcomplete "register-python-argcomplete";
+      argcomplete = lib.getExe' python.pkgs.argcomplete "register-python-argcomplete";
     in
     ''
       installShellCompletion --cmd esphome \
@@ -157,6 +160,22 @@ python.pkgs.buildPythonApplication rec {
     '';
 
   doInstallCheck = true;
+
+  disabledTests = [
+    # tries to import platformio, which is wrapped in an fhsenv
+    "test_clean_build"
+    "test_clean_build_empty_cache_dir"
+    "test_clean_all"
+    "test_clean_all_partial_exists"
+    # tries to use esptool, which is wrapped in an fhsenv
+    "test_upload_using_esptool_path_conversion"
+    "test_upload_using_esptool_with_file_path"
+    # AssertionError: Expected 'run_external_command' to have been called once. Called 0 times.
+    "test_run_platformio_cli_sets_environment_variables"
+    # Expects a full git clone
+    "test_clang_tidy_mode_full_scan"
+    "test_clang_tidy_mode_targeted_scan"
+  ];
 
   versionCheckProgramArg = "--version";
 
@@ -176,6 +195,7 @@ python.pkgs.buildPythonApplication rec {
     ];
     maintainers = with lib.maintainers; [
       hexa
+      thanegill
     ];
     mainProgram = "esphome";
   };

@@ -27,7 +27,7 @@ buildDunePackage {
   ];
 
   meta = dolmen.meta // {
-    description = "A LSP server for automated deduction languages";
+    description = "LSP server for automated deduction languages";
     mainProgram = "dolmenls";
     maintainers = [ lib.maintainers.stepbrobd ];
   };

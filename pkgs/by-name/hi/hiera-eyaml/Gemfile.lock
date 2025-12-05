@@ -1,11 +1,15 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    hiera-eyaml (3.0.0)
-      highline (~> 1.6.19)
-      optimist
-    highline (1.6.21)
-    optimist (3.0.0)
+    hiera-eyaml (4.3.0)
+      highline (>= 2.1, < 4)
+      optimist (~> 3.1)
+    highline (3.1.2)
+      reline
+    io-console (0.8.1)
+    optimist (3.2.1)
+    reline (0.6.2)
+      io-console (~> 0.5)
 
 PLATFORMS
   ruby
@@ -14,4 +18,4 @@ DEPENDENCIES
   hiera-eyaml
 
 BUNDLED WITH
-   2.1.4
+   2.6.9

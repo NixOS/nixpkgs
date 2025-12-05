@@ -7,8 +7,6 @@
 let
   cfg = config.services.avahi;
 
-  yesNo = yes: if yes then "yes" else "no";
-
   avahiDaemonConf =
     with cfg;
     pkgs.writeText "avahi-daemon.conf" ''
@@ -21,8 +19,8 @@ let
         lib.optionalString (hostName != "") "host-name=${hostName}"
       }
       browse-domains=${lib.concatStringsSep ", " browseDomains}
-      use-ipv4=${yesNo ipv4}
-      use-ipv6=${yesNo ipv6}
+      use-ipv4=${lib.boolToYesNo ipv4}
+      use-ipv6=${lib.boolToYesNo ipv6}
       ${lib.optionalString (
         allowInterfaces != null
       ) "allow-interfaces=${lib.concatStringsSep "," allowInterfaces}"}
@@ -30,22 +28,22 @@ let
         denyInterfaces != null
       ) "deny-interfaces=${lib.concatStringsSep "," denyInterfaces}"}
       ${lib.optionalString (domainName != null) "domain-name=${domainName}"}
-      allow-point-to-point=${yesNo allowPointToPoint}
+      allow-point-to-point=${lib.boolToYesNo allowPointToPoint}
       ${lib.optionalString (cacheEntriesMax != null) "cache-entries-max=${toString cacheEntriesMax}"}
 
       [wide-area]
-      enable-wide-area=${yesNo wideArea}
+      enable-wide-area=${lib.boolToYesNo wideArea}
 
       [publish]
-      disable-publishing=${yesNo (!publish.enable)}
-      disable-user-service-publishing=${yesNo (!publish.userServices)}
-      publish-addresses=${yesNo (publish.userServices || publish.addresses)}
-      publish-hinfo=${yesNo publish.hinfo}
-      publish-workstation=${yesNo publish.workstation}
-      publish-domain=${yesNo publish.domain}
+      disable-publishing=${lib.boolToYesNo (!publish.enable)}
+      disable-user-service-publishing=${lib.boolToYesNo (!publish.userServices)}
+      publish-addresses=${lib.boolToYesNo (publish.userServices || publish.addresses)}
+      publish-hinfo=${lib.boolToYesNo publish.hinfo}
+      publish-workstation=${lib.boolToYesNo publish.workstation}
+      publish-domain=${lib.boolToYesNo publish.domain}
 
       [reflector]
-      enable-reflector=${yesNo reflector}
+      enable-reflector=${lib.boolToYesNo reflector}
       ${extraConfig}
     '';
 in
@@ -276,6 +274,8 @@ in
         Extra config to append to avahi-daemon.conf.
       '';
     };
+
+    debug = lib.mkEnableOption "debug logging";
   };
 
   config = lib.mkIf cfg.enable {
@@ -356,7 +356,7 @@ in
         NotifyAccess = "main";
         BusName = "org.freedesktop.Avahi";
         Type = "dbus";
-        ExecStart = "${cfg.package}/sbin/avahi-daemon --syslog -f ${avahiDaemonConf}";
+        ExecStart = "${cfg.package}/sbin/avahi-daemon --syslog -f ${avahiDaemonConf} ${lib.optionalString cfg.debug "--debug"}";
         ConfigurationDirectory = "avahi/services";
 
         # Hardening

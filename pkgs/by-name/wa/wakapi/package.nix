@@ -1,14 +1,14 @@
 {
   lib,
-  buildGoModule,
+  buildGoLatestModule,
   fetchFromGitHub,
   nixosTests,
   nix-update-script,
 }:
 let
-  version = "2.14.1";
+  version = "2.16.1";
 in
-buildGoModule {
+buildGoLatestModule {
   pname = "wakapi";
   inherit version;
 
@@ -16,10 +16,10 @@ buildGoModule {
     owner = "muety";
     repo = "wakapi";
     tag = version;
-    hash = "sha256-ujHrb9yXUbUYB0JGftrdTfEeFakgwGJ7EH6e1KnyrnI=";
+    hash = "sha256-CmbQWOTurz2NlZq89zbjGHUnMo55sJD7N/u/etginmM=";
   };
 
-  vendorHash = "sha256-eaaU8vqTpgtSSfaaFDg4Bo06lTjvqLkVuidkq25tjb4=";
+  vendorHash = "sha256-Rki0KPJgAFLXlVsufl4wQPWKz6Km7cbD/jF4/Zp2tdk=";
 
   # Not a go module required by the project, contains development utilities
   excludedPackages = [ "scripts" ];
@@ -31,6 +31,9 @@ buildGoModule {
     "-s"
     "-w"
   ];
+
+  # Skip tests that require network access
+  checkFlags = [ "-skip=TestLoginHandlerTestSuite" ];
 
   passthru = {
     nixos = nixosTests.wakapi;

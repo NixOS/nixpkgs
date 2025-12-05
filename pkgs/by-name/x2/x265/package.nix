@@ -5,6 +5,7 @@
   fetchurl,
   cmake,
   nasm,
+  fetchpatch,
   fetchpatch2,
 
   # NUMA support enabled by default on NUMA platforms:
@@ -55,6 +56,29 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./darwin-__rdtsc.patch
+    # fix compilation with gcc15
+    # https://bitbucket.org/multicoreware/x265_git/pull-requests/36
+    ./gcc15-fixes.patch
+
+    # Fix the build with CMake 4.
+    (fetchpatch {
+      name = "x265-fix-cmake-4-1.patch";
+      url = "https://bitbucket.org/multicoreware/x265_git/commits/b354c009a60bcd6d7fc04014e200a1ee9c45c167/raw";
+      stripLen = 1;
+      hash = "sha256-kS+hYZb5dnIlNoZ8ABmNkLkPx+NqCPy+DonXktBzJAE=";
+    })
+    (fetchpatch {
+      name = "x265-fix-cmake-4-2.patch";
+      url = "https://bitbucket.org/multicoreware/x265_git/commits/51ae8e922bcc4586ad4710812072289af91492a8/raw";
+      stripLen = 1;
+      hash = "sha256-ZrpyfSnijUgdyVscW73K48iEXa9k85ftNaQdr0HWSYg=";
+    })
+    (fetchpatch {
+      name = "x265-fix-cmake-4-3.patch";
+      url = "https://bitbucket.org/multicoreware/x265_git/commits/78e5ac35c13c5cbccc5933083edceb0d3eaeaa21/raw";
+      stripLen = 1;
+      hash = "sha256-qEihgUKGEdthbKz67s+/hS/qdpzl+3tEB3gx2tarax4=";
+    })
   ]
   # TODO: remove after update to version 4.2
   ++ lib.optionals (stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.isLinux) [
@@ -83,7 +107,7 @@ stdenv.mkDerivation rec {
     cmake
     nasm
   ]
-  ++ lib.optionals (numaSupport) [ numactl ];
+  ++ lib.optionals numaSupport [ numactl ];
 
   cmakeFlags = [
     "-DENABLE_ALPHA=ON"
@@ -95,6 +119,13 @@ stdenv.mkDerivation rec {
     (mkFlag ppaSupport "ENABLE_PPA")
     (mkFlag vtuneSupport "ENABLE_VTUNE")
     (mkFlag werrorSupport "WARNINGS_AS_ERRORS")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isPower [
+    # baseline for everything but ppc64le doesn't have AltiVec
+    # ppc64le: https://bitbucket.org/multicoreware/x265_git/issues/320/fail-to-build-on-power8-le
+    (lib.cmakeBool "ENABLE_ALTIVEC" false)
+    # baseline for everything but ppc64le is pre-POWER8
+    (lib.cmakeBool "CPU_POWER8" (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian))
   ]
   # Clang does not support the endfunc directive so use GCC.
   ++ lib.optional (
@@ -112,9 +143,6 @@ stdenv.mkDerivation rec {
     "-DENABLE_CLI=OFF"
     "-DENABLE_SHARED=OFF"
     "-DEXPORT_C_API=OFF"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isPower [
-    "-DENABLE_ALTIVEC=OFF" # https://bitbucket.org/multicoreware/x265_git/issues/320/fail-to-build-on-power8-le
   ]
   ++ lib.optionals isCross [
     (mkFlag stdenv.hostPlatform.isAarch32 "CROSS_COMPILE_ARM")

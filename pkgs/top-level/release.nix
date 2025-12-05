@@ -22,7 +22,7 @@
   supportedSystems ? builtins.fromJSON (builtins.readFile ../../ci/supportedSystems.json),
   # The platform triples for which we build bootstrap tools.
   bootstrapConfigs ? [
-    "aarch64-apple-darwin"
+    "arm64-apple-darwin"
     "aarch64-unknown-linux-gnu"
     "aarch64-unknown-linux-musl"
     "i686-unknown-linux-gnu"
@@ -44,8 +44,8 @@
       # so users choosing to allow don't have to rebuild them every time.
       permittedInsecurePackages = [
         "olm-3.2.16" # see PR #347899
-        "kanidm_1_5-1.5.0"
-        "kanidmWithSecretProvisioning_1_5-1.5.0"
+        "kanidm_1_6-1.6.4"
+        "kanidmWithSecretProvisioning_1_6-1.6.4"
       ];
     };
 
@@ -57,12 +57,10 @@
   # resulting tree of attributes to *not* have a ".${system}"
   # suffixed upon every job name like Hydra expects.
   #
-  # This flag exists mainly for use by
-  # pkgs/top-level/release-attrnames-superset.nix; see that file for
-  # full details.  The exact behavior of this flag may change; it
-  # should be considered an internal implementation detail of
-  # pkgs/top-level/.
-  #
+  # This flag exists mainly for use by ci/eval/attrpaths.nix; see
+  # that file for full details.  The exact behavior of this flag
+  # may change; it should be considered an internal implementation
+  # detail of ci/eval.
   attrNamesOnly ? false,
 }:
 
@@ -113,20 +111,7 @@ let
 
     manual = pkgs.nixpkgs-manual.override { inherit nixpkgs; };
     metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
-    lib-tests = import ../../lib/tests/release.nix {
-      pkgs = import nixpkgs (
-        recursiveUpdate
-          (recursiveUpdate {
-            inherit system;
-            config.allowUnsupportedSystem = true;
-          } nixpkgsArgs)
-          {
-            config.permittedInsecurePackages = nixpkgsArgs.config.permittedInsecurePackages or [ ] ++ [
-              "nix-2.3.18"
-            ];
-          }
-      );
-    };
+    lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
     pkgs-lib-tests = import ../pkgs-lib/tests { inherit pkgs; };
 
     darwin-tested =
@@ -166,10 +151,9 @@ let
             # jobs.firefox-unwrapped.x86_64-darwin
             jobs.qt5.qtmultimedia.x86_64-darwin
             jobs.inkscape.x86_64-darwin
-            jobs.gimp.x86_64-darwin
+            jobs.gimp2.x86_64-darwin # FIXME replace with gimp once https://github.com/NixOS/nixpkgs/issues/411189 is resoved
             jobs.emacs.x86_64-darwin
             jobs.wireshark.x86_64-darwin
-            jobs.transmission_3-gtk.x86_64-darwin
             jobs.transmission_4-gtk.x86_64-darwin
 
             # Tests
@@ -210,10 +194,9 @@ let
             # jobs.firefox-unwrapped.aarch64-darwin
             jobs.qt5.qtmultimedia.aarch64-darwin
             jobs.inkscape.aarch64-darwin
-            jobs.gimp.aarch64-darwin
+            jobs.gimp2.aarch64-darwin # FIXME replace with gimp once https://github.com/NixOS/nixpkgs/issues/411189 is resoved
             jobs.emacs.aarch64-darwin
             jobs.wireshark.aarch64-darwin
-            jobs.transmission_3-gtk.aarch64-darwin
             jobs.transmission_4-gtk.aarch64-darwin
 
             # Tests
@@ -372,29 +355,23 @@ let
         if attrNamesOnly then id else release-lib.getPlatforms
       );
       packageJobs = packagePlatforms pkgs // {
-        haskell.compiler = packagePlatforms pkgs.haskell.compiler;
-        haskellPackages = packagePlatforms pkgs.haskellPackages;
         # Build selected packages (HLS) for multiple Haskell compilers to rebuild
         # the cache after a staging merge
-        haskell.packages =
-          genAttrs
-            [
-              # TODO: share this list between release.nix and release-haskell.nix
-              "ghc90"
-              "ghc92"
-              "ghc94"
-              "ghc96"
-              "ghc98"
-              "ghc910"
-              "ghc912"
-            ]
-            (compilerName: {
-              inherit (packagePlatforms pkgs.haskell.packages.${compilerName})
-                haskell-language-server
-                ;
-            });
-        idrisPackages = packagePlatforms pkgs.idrisPackages;
-        agdaPackages = packagePlatforms pkgs.agdaPackages;
+        haskell = packagePlatforms pkgs.haskell // {
+          packages =
+            genAttrs
+              [
+                "ghc96"
+                "ghc98"
+                "ghc910"
+                "ghc912"
+              ]
+              (compilerName: {
+                inherit (packagePlatforms pkgs.haskell.packages.${compilerName})
+                  haskell-language-server
+                  ;
+              });
+        };
 
         pkgsLLVM.stdenv = [
           "x86_64-linux"
@@ -417,18 +394,7 @@ let
           "aarch64-linux"
         ];
 
-        tests = packagePlatforms pkgs.tests;
-
-        # Language packages disabled in https://github.com/NixOS/nixpkgs/commit/ccd1029f58a3bb9eca32d81bf3f33cb4be25cc66
-
-        #emacsPackages = packagePlatforms pkgs.emacsPackages;
-        #rPackages = packagePlatforms pkgs.rPackages;
-        ocamlPackages = { };
-        perlPackages = { };
-
-        darwin = packagePlatforms pkgs.darwin // {
-          xcode = { };
-        };
+        pkgsRocm = pkgs.rocmPackages.meta.release-packagePlatforms;
       };
       mapTestOn-packages = if attrNamesOnly then packageJobs else mapTestOn packageJobs;
     in

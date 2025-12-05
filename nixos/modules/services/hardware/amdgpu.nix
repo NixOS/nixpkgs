@@ -40,7 +40,6 @@ in
     };
 
     opencl.enable = lib.mkEnableOption ''OpenCL support using ROCM runtime library'';
-    # cfg.amdvlk option is defined in ./amdvlk.nix module
   };
 
   config = {

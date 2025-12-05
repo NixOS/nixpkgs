@@ -8,13 +8,14 @@
   shapely,
   sqlalchemy,
   alembic,
+  pytest-benchmark,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "geoalchemy2";
-  version = "0.17.1";
+  version = "0.18.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "geoalchemy";
     repo = "geoalchemy2";
     tag = version;
-    hash = "sha256-ze0AWwlmBsMUhbmaCNUeEwhFcLxRDeal0IDO421++ck=";
+    hash = "sha256-F/+POYOb7PoUwLnQpM00zAPpbSXNeWJF2TZ4y260Pzw=";
   };
 
   build-system = [
@@ -38,9 +39,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     alembic
+    pytest-benchmark
     pytestCheckHook
   ]
   ++ optional-dependencies.shapely;
+
+  pytestFlags = [ "--benchmark-disable" ];
 
   disabledTestPaths = [
     # tests require live databases

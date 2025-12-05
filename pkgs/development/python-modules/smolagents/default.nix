@@ -33,7 +33,7 @@
   # openai
   openai,
   # toolkit
-  duckduckgo-search,
+  ddgs,
   markdownify,
   # torch
   numpy,
@@ -52,19 +52,17 @@
 
 buildPythonPackage rec {
   pname = "smolagents";
-  version = "1.18.0";
+  version = "1.21.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "smolagents";
     tag = "v${version}";
-    hash = "sha256-pRpogmVes8ZX19GZff+HmGdykvMnBJ7hGsoYsUGVOSY=";
+    hash = "sha256-X9tJfNxF2icULyma0dWIQEllY9oKaCB+MQ4JJTdzhz4=";
   };
 
   build-system = [ setuptools ];
-
-  pythonRelaxDeps = [ "pillow" ];
 
   dependencies = [
     huggingface-hub
@@ -101,7 +99,7 @@ buildPythonPackage rec {
     #   opentelemetry-sdk
     # ];
     toolkit = [
-      duckduckgo-search
+      ddgs
       markdownify
     ];
     torch = [
@@ -130,12 +128,18 @@ buildPythonPackage rec {
     pytestCheckHook
     wikipedia-api
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "smolagents" ];
 
+  disabledTestPaths = [
+    # ImportError: cannot import name 'require_soundfile' from 'transformers.testing_utils'
+    "tests/test_types.py"
+  ];
+
   disabledTests = [
     # Missing dependencies
+    "test_cleanup"
     "test_ddgs_with_kwargs"
     "test_e2b_executor_instantiation"
     "test_flatten_messages_as_text_for_all_models"

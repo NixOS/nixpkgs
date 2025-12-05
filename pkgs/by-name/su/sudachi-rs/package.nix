@@ -29,7 +29,6 @@ rustPlatform.buildRustPackage rec {
     ./update-outdated-lockfile.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-lUP/9s4W0JehxeCjMmq6G22KMGdDNnq1YlobeLQn2AE=";
 
   # prepare the resources before the build so that the binary can find sudachidict

@@ -15,7 +15,7 @@
 assert par2Support -> par2cmdline != null;
 
 let
-  version = "0.33.7";
+  version = "0.33.9";
 
   pythonDeps =
     with python3.pkgs;
@@ -37,8 +37,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     repo = "bup";
     owner = "bup";
-    rev = version;
-    hash = "sha256-tuOUml4gF4i7bE2xtjJJol1gRAfYv73RghUYwIDsGyM=";
+    tag = version;
+    hash = "sha256-MW4kScu81XW89W7WpvOj40+S8bG5QozN30Hfj4TsnX4=";
   };
 
   buildInputs = [

@@ -13,16 +13,16 @@
 let
   ocamlPackages = ocaml-ng.ocamlPackages_5_2;
 in
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage {
   pname = "owi";
-  version = "0.2-unstable-2025-07-11";
+  version = "0.2-unstable-2025-12-01";
 
   src = fetchFromGitHub {
     owner = "ocamlpro";
     repo = "owi";
-    rev = "be3d93320dcbf7d4e991f9b240ff490b5a1b0acc";
+    rev = "92403520c3ad8ea1a57d734772e2c4c22589eca3";
     fetchSubmodules = true;
-    hash = "sha256-yc/f/N+smGk3NwtZnP/k4ISN3mvp1GL9VTcjgosbQJw=";
+    hash = "sha256-cVkHaXBeTgfHKLCIB3sTEIqu2kvYmo3gi42tRn2DcaA=";
   };
 
   nativeBuildInputs = with ocamlPackages; [
@@ -49,12 +49,14 @@ ocamlPackages.buildDunePackage rec {
     integers
     menhirLib
     ocaml_intrinsics
+    ocamlgraph
     patricia-tree
     prelude
     processor
     scfg
     sedlex
     smtml
+    synchronizer
     uutf
     xmlm
     yojson

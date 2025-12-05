@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "sievelib";
-  version = "1.4.2";
+  version = "1.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YOoANqVRTiYQ5b9WFYbzJOdf/ZGnIJ9fueBrj+KLBrs=";
+    hash = "sha256-bFemWvAc6WbJCxPlLxT7+acDd2egcbg4FHTMWrIxBPQ=";
   };
 
   build-system = [ setuptools-scm ];
@@ -48,6 +48,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/tonioo/sievelib";
     changelog = "https://github.com/tonioo/sievelib/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ leenaars ];
   };
 }

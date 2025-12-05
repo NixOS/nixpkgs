@@ -12,14 +12,17 @@ let
     mkdir $out
 
     ${
-      if config.boot.initrd.systemd.enable then
+      if config.boot.initrd.enable && config.boot.initrd.systemd.enable then
         ''
-          cp ${config.system.build.bootStage2} $out/prepare-root
-          substituteInPlace $out/prepare-root --subst-var-by systemConfig $out
           # This must not be a symlink or the abs_path of the grub builder for the tests
           # will resolve the symlink and we end up with a path that doesn't point to a
           # system closure.
           cp "$systemd/lib/systemd/systemd" $out/init
+
+          ${lib.optionalString (!config.system.nixos-init.enable) ''
+            cp ${config.system.build.bootStage2} $out/prepare-root
+            substituteInPlace $out/prepare-root --subst-var-by systemConfig $out
+          ''}
         ''
       else
         ''
@@ -50,8 +53,6 @@ let
       ${config.boot.bootspec.writer}
       ${optionalString config.boot.bootspec.enableValidation ''${config.boot.bootspec.validator} "$out/${config.boot.bootspec.filename}"''}
     ''}
-
-    ${config.system.extraSystemBuilderCmds}
   '';
 
   # Putting it all together.  This builds a store path containing
@@ -126,6 +127,7 @@ in
       [ "system" "replaceRuntimeDependencies" ]
       [ "system" "replaceDependencies" "replacements" ]
     )
+    (mkRenamedOptionModule [ "system" "extraSystemBuilderCmds" ] [ "system" "systemBuilderCommands" ])
   ];
 
   options = {
@@ -210,15 +212,6 @@ in
       '';
     };
 
-    system.extraSystemBuilderCmds = mkOption {
-      type = types.lines;
-      internal = true;
-      default = "";
-      description = ''
-        This code will be added to the builder creating the system store path.
-      '';
-    };
-
     system.extraDependencies = mkOption {
       type = types.listOf types.pathInStore;
       default = [ ];
@@ -283,8 +276,8 @@ in
       };
 
       cutoffPackages = mkOption {
-        default = [ config.system.build.initialRamdisk ];
-        defaultText = literalExpression "[ config.system.build.initialRamdisk ]";
+        default = lib.optionals config.boot.initrd.enable [ config.system.build.initialRamdisk ];
+        defaultText = literalExpression "lib.optionals config.boot.initrd.enable [ config.system.build.initialRamdisk ]";
         type = types.listOf types.package;
         description = ''
           Packages to which no replacements should be applied.
@@ -340,7 +333,7 @@ in
       }
     ];
 
-    system.extraSystemBuilderCmds =
+    system.systemBuilderCommands =
       optionalString config.system.copySystemConfiguration ''
         ln -s '${import ../../../lib/from-env.nix "NIXOS_CONFIG" <nixos-config>}' \
           "$out/configuration.nix"
@@ -373,7 +366,9 @@ in
       );
       # End if legacy environment variables
 
-      preSwitchCheck = config.system.preSwitchChecksScript;
+      preSwitchCheck = lib.mkIf (
+        config.system.preSwitchChecks != { }
+      ) config.system.preSwitchChecksScript;
 
       # Not actually used in the builder. `passedChecks` is just here to create
       # the build dependencies. Checks are similar to build dependencies in the

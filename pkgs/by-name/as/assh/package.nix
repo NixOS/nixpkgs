@@ -15,8 +15,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     repo = "advanced-ssh-config";
     owner = "moul";
-    rev = "v${version}";
-    sha256 = "sha256-rvJJZqVSBdaJ154NV6RaxbymsSsHbKnlJDeR6KHQE7M=";
+    tag = "v${version}";
+    hash = "sha256-rvJJZqVSBdaJ154NV6RaxbymsSsHbKnlJDeR6KHQE7M=";
   };
 
   vendorHash = "sha256-L2Uo/jsMtxQClF1UDa7NIUbOm7BflvncNsjqGnCsPKo=";
@@ -46,7 +46,7 @@ buildGoModule rec {
     homepage = "https://github.com/moul/assh";
     changelog = "https://github.com/moul/assh/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin;
   };
 }

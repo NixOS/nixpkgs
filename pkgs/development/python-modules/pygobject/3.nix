@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pygobject";
-  version = "3.50.0";
+  version = "3.54.5";
 
   outputs = [
     "out"
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-jYNudbWogdRX7hYiyuSjK826KKC6ViGTrbO7tHJHIhI=";
+    url = "mirror://gnome/sources/pygobject/${lib.versions.majorMinor version}/pygobject-${version}.tar.gz";
+    hash = "sha256-tmVvY0j1JFYGzxXqSMOEx/BRVsderSBsGyRsgKIvtYU=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -63,8 +63,8 @@ buildPythonPackage rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "python3.pkgs.${pname}3";
+      packageName = "pygobject";
+      attrPath = "python3.pkgs.pygobject3";
       versionPolicy = "odd-unstable";
     };
   };
@@ -73,7 +73,7 @@ buildPythonPackage rec {
     homepage = "https://pygobject.readthedocs.io/";
     description = "Python bindings for Glib";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    teams = [ teams.gnome ];
     platforms = platforms.unix;
   };
 }

@@ -32,13 +32,13 @@ assert !(enableJpeg7 && enableJpeg8); # pick only one or none, not both
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libjpeg-turbo";
-  version = "3.1.1";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "libjpeg-turbo";
     repo = "libjpeg-turbo";
     tag = finalAttrs.version;
-    hash = "sha256-yGCMtAa0IjyeSBv3HxCQfYDSbNSbscj3choU6D2dlp8=";
+    hash = "sha256-tmeWLJxieV42f9ljSpKJoLER4QOYQLsLFC7jW54YZAk=";
   };
 
   patches =
@@ -111,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://libjpeg-turbo.org/";
     description = "Faster (using SIMD) libjpeg implementation";
     license = lib.licenses.ijg; # and some parts under other BSD-style licenses
+    changelog = "https://github.com/libjpeg-turbo/libjpeg-turbo/releases/tag/${finalAttrs.version}";
     pkgConfigModules = [
       "libjpeg"
       "libturbojpeg"

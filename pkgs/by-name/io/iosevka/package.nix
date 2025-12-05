@@ -47,25 +47,27 @@
   #   sequence = "+>"
   # '';
   extraParameters ? null,
-  # Custom font set name. Required if any custom settings above.
-  set ? null,
+  # Custom font set name. Required if `extraParameters` is used and/or
+  # if `privateBuildPlan` is a TOML string.
+  set ? privateBuildPlan.family or null,
 }:
 
+assert (builtins.isAttrs privateBuildPlan) -> builtins.hasAttr "family" privateBuildPlan;
 assert (privateBuildPlan != null) -> set != null;
 assert (extraParameters != null) -> set != null;
 
 buildNpmPackage rec {
   pname = "Iosevka${toString set}";
-  version = "33.2.7";
+  version = "33.3.5";
 
   src = fetchFromGitHub {
     owner = "be5invis";
     repo = "iosevka";
     rev = "v${version}";
-    hash = "sha256-LS4c79/QmBSgsgSY/Tddmf2M6U0LcISMapnWK7Eu1Ak=";
+    hash = "sha256-DLLUM2ogC5kFFyOcwd1kkUgJEJEFO5VgSdfrRTKQKM4=";
   };
 
-  npmDepsHash = "sha256-DyExvgNJBRlz8iVezlrJfTyobK0L6CMQN+gIMGoYYrw=";
+  npmDepsHash = "sha256-avjEEJFr9918FzgE1Yxx9S6KRY0A940nlaKVcjkmepI=";
 
   nativeBuildInputs = [
     remarshal
@@ -133,6 +135,7 @@ buildNpmPackage rec {
   '';
 
   enableParallelBuilding = true;
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
     homepage = "https://typeof.net/Iosevka/";
@@ -147,7 +150,6 @@ buildNpmPackage rec {
     platforms = platforms.all;
     maintainers = with maintainers; [
       ttuegel
-      rileyinman
       lunik1
     ];
   };

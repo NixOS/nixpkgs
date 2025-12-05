@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
     homepage = "https://suso.suso.org/xulu/Num-utils";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.catern ];
   };
 }

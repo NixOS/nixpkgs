@@ -4,7 +4,7 @@
   python312Packages,
 }:
 let
-  version = "0.1.3+";
+  version = "0.1.3";
 in
 python312Packages.buildPythonApplication rec {
   pname = "sl1-to-photon";
@@ -14,7 +14,7 @@ python312Packages.buildPythonApplication rec {
     owner = "cab404";
     repo = "SL1toPhoton";
     rev = "7edc6ea99818622f5d49ac7af80ddd4916b8c19f";
-    sha256 = "ssFfjlBMi3FHosDBUA2gs71VUIBkEdPVcV3STNxmOIM=";
+    sha256 = "sha256-ssFfjlBMi3FHosDBUA2gs71VUIBkEdPVcV3STNxmOIM=";
   };
 
   pythonPath = with python312Packages; [

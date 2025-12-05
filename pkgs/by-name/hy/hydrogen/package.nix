@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydrogen";
-  version = "1.2.4";
+  version = "1.2.6";
 
   src = fetchFromGitHub {
     owner = "hydrogen-music";
     repo = "hydrogen";
     tag = finalAttrs.version;
-    hash = "sha256-OMd8t043JVfMEfRjLdcE/R/4ymGp2yennkCjyX75r8Q=";
+    hash = "sha256-JK4AAGMby2S2fh9bmgb2mSHBgKfUQ481GDjAvOdSnjs=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.hydrogen-music.org";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
   };
 })

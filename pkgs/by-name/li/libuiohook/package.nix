@@ -6,6 +6,7 @@
   cmake,
   pkg-config,
   libX11,
+  libxcb,
   libxkbcommon,
   xinput,
   xorg,
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) (
     [
       libX11
+      libxcb
       libxkbcommon
       xinput
     ]

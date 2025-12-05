@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/host";
 
+  patches = [
+    # https://github.com/greatscottgadgets/ubertooth/pull/546
+    ./fix-cmake4-build.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config

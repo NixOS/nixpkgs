@@ -16,34 +16,45 @@
   shellingham,
 
   # tests
-  coverage,
   pytest-xdist,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
   procps,
+
+  # typer or typer-slim
+  package ? "typer",
 }:
 
 buildPythonPackage rec {
-  pname = "typer";
-  version = "0.15.4";
+  pname = package;
+  version = "0.19.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fastapi";
     repo = "typer";
     tag = version;
-    hash = "sha256-lZJKE8bxYxmDxAmnL7L/fL89gMe44voyHT20DUazd9E=";
+    hash = "sha256-mMsOEI4FpLkLkpjxjnUdmKdWD65Zx3Z1+L+XsS79k44=";
   };
+
+  postPatch = ''
+    for f in $(find tests -type f -print); do
+      # replace `sys.executable -m coverage run` with `sys.executable`
+      sed -z -i 's/"-m",\n\?\s*"coverage",\n\?\s*"run",//g' "$f"
+    done
+  '';
+
+  env.TIANGOLO_BUILD_PACKAGE = package;
 
   build-system = [ pdm-backend ];
 
   dependencies = [
     click
     typing-extensions
-    # Build includes the standard optional by default
-    # https://github.com/tiangolo/typer/blob/0.12.3/pyproject.toml#L71-L72
   ]
-  ++ optional-dependencies.standard;
+  # typer includes the standard optional by default
+  # https://github.com/tiangolo/typer/blob/0.12.3/pyproject.toml#L71-L72
+  ++ lib.optionals (package == "typer") optional-dependencies.standard;
 
   optional-dependencies = {
     standard = [
@@ -52,8 +63,9 @@ buildPythonPackage rec {
     ];
   };
 
+  doCheck = package == "typer"; # tests expect standard dependencies
+
   nativeCheckInputs = [
-    coverage # execs coverage in tests
     pytest-xdist
     pytestCheckHook
     writableTmpDirAsHomeHook

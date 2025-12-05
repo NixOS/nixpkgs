@@ -91,7 +91,7 @@ let
 
           PYFLAKES_BUILTINS="$(
             echo -n ${lib.escapeShellArg (lib.concatStringsSep "," pythonizedNames)},
-            < ${lib.escapeShellArg "driver-symbols"}
+            cat ${lib.escapeShellArg "driver-symbols"}
           )" ${hostPkgs.python3Packages.pyflakes}/bin/pyflakes $out/test-script
         ''}
 
@@ -202,7 +202,7 @@ in
     _module.args = {
       hostPkgs =
         # Comment is in nixos/modules/misc/nixpkgs.nix
-        lib.mkOverride lib.modules.defaultOverridePriority config.hostPkgs.__splicedPackages;
+        lib.mkOverride lib.modules.defaultOverridePriority config.hostPkgs;
     };
 
     driver = withChecks driver;

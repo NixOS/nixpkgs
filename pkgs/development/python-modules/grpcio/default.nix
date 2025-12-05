@@ -8,6 +8,7 @@
   openssl,
   pkg-config,
   protobuf,
+  typing-extensions,
   pythonOlder,
   setuptools,
   zlib,
@@ -18,14 +19,14 @@
 # nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio";
-  version = "1.73.1";
+  version = "1.76.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-f84s0cDBEWzzhQVk6/wyZPunXTx0p0FDc/EjjqNl74c=";
+    hash = "sha256-e+eDiNbaGiXA1exQZSPbWLGL4i2cN9jToywIvkmHvXM=";
   };
 
   outputs = [
@@ -46,7 +47,10 @@ buildPythonPackage rec {
     zlib
   ];
 
-  dependencies = [ protobuf ];
+  dependencies = [
+    protobuf
+    typing-extensions
+  ];
 
   preBuild = ''
     export GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS="$NIX_BUILD_CORES"

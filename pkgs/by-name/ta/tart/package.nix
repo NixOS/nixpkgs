@@ -9,14 +9,16 @@
   # See https://github.com/cirruslabs/softnet#installing
   enableSoftnet ? false,
   softnet,
+  nix-update-script,
+  versionCheckHook,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tart";
-  version = "2.27.2";
+  version = "2.30.0";
 
   src = fetchurl {
     url = "https://github.com/cirruslabs/tart/releases/download/${finalAttrs.version}/tart.tar.gz";
-    hash = "sha256-KUmNMQGhPk/mWOVYJYQe1jkOTI1H/4yYd/IXle2tO8o=";
+    hash = "sha256-NUjF5hX+M12WcT+T/QXqHBFz2UOVm0NFtYzKGQmS6kg=";
   };
   sourceRoot = ".";
 
@@ -37,8 +39,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
-    description = "macOS VMs on Apple Silicon to use in CI and other automations";
+    description = "macOS and Linux VMs on Apple Silicon to use in CI and other automations";
     homepage = "https://tart.run";
     license = licenses.fairsource09;
     maintainers = with maintainers; [
@@ -46,10 +54,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       aduh95
     ];
     mainProgram = "tart";
-    platforms = [
-      "aarch64-darwin"
-      "x86_64-darwin"
-    ];
+    platforms = platforms.darwin;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

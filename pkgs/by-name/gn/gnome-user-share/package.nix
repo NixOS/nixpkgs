@@ -26,11 +26,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-user-share";
-  version = "48.1";
+  version = "48.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-user-share/${lib.versions.major finalAttrs.version}/gnome-user-share-${finalAttrs.version}.tar.xz";
-    hash = "sha256-grz9TvPqf9eyr3+6mkW0dOF03NgowcS/5/+KLvhYunc=";
+    hash = "sha256-Ayho1Ar4UIC6Thi6XatGwOZj7H5DiUnwgsgFeV9ivwY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -77,6 +77,14 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
   ];
+
+  postPatch = ''
+    substituteInPlace src/meson.build \
+      --replace-fail "'cp', 'src' / rust_target / meson.project_name(), '@OUTPUT@'," "'cp', 'src' / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name(), '@OUTPUT@',"
+  '';
+
+  # For https://gitlab.gnome.org/GNOME/gnome-user-share/-/blob/7ffb23dd5af0fda75c66f03756798dc10e253c36/src/meson.build#L47
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
   doCheck = true;
   strictDeps = true;

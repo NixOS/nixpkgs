@@ -1,31 +1,25 @@
 {
   lib,
-  better-exceptions,
   buildPythonPackage,
   fetchFromGitHub,
-  freezegun,
-  greenlet,
   hatch-fancy-pypi-readme,
   hatch-vcs,
   hatchling,
-  pretend,
   pytest-asyncio,
   pytestCheckHook,
-  rich,
-  simplejson,
-  twisted,
+  time-machine,
 }:
 
 buildPythonPackage rec {
   pname = "structlog";
-  version = "25.4.0";
+  version = "25.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "structlog";
     tag = version;
-    hash = "sha256-iNnUogcICQJvHBZO2J8uk4NleQY/ra3ZzxQgnSRKr30=";
+    hash = "sha256-dY18eZ7IEzP/eKR7d2CjpTRr2KfXy+YmeZMueHkLSQY=";
   };
 
   build-system = [
@@ -35,15 +29,9 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    better-exceptions
-    freezegun
-    greenlet
-    pretend
     pytest-asyncio
     pytestCheckHook
-    rich
-    simplejson
-    twisted
+    time-machine
   ];
 
   pythonImportsCheck = [ "structlog" ];

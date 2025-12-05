@@ -3,31 +3,23 @@
 
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
-  cairo,
-  imagemagick,
-  nototools,
-  pkg-config,
-  pngquant,
-  python3,
-  which,
-  zopfli,
   noto-fonts-color-emoji,
 }:
 
 let
-  version = "15.0.2";
+  version = "17.0.2";
 
   twemojiSrc = fetchFromGitHub {
-    name = "twemoji";
+    name = "twemoji-src";
     owner = "jdecked";
     repo = "twemoji";
     rev = "v${version}";
-    hash = "sha256-FLOqXDpSFyClBlG5u3IRL0EKeu1mckCfRizJh++IWxo=";
+    hash = "sha256-LeAIXrPzp6rmmrz4ixehaD4/U1i15NDR0wvYyFOjw0U=";
   };
 in
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "twitter-color-emoji";
   inherit version;
 
@@ -43,16 +35,7 @@ stdenv.mkDerivation rec {
     mv ${twemojiSrc.name} ${noto-fonts-color-emoji.src.name}
   '';
 
-  nativeBuildInputs = [
-    cairo
-    python3.pkgs.fonttools
-    imagemagick
-    nototools
-    pkg-config
-    pngquant
-    which
-    zopfli
-  ];
+  inherit (noto-fonts-color-emoji) strictDeps depsBuildBuild nativeBuildInputs;
 
   postPatch =
     let

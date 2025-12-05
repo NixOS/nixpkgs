@@ -94,6 +94,7 @@ buildPythonPackage rec {
       --replace 'py.full_path()' "'python'"
 
     substituteInPlace pyproject.toml \
+      --replace-fail "Cython>=0.29.34,<3.1" Cython \
       --replace-fail "meson-python>=0.15.0,<0.16.0" "meson-python"
   '';
 
@@ -141,9 +142,8 @@ buildPythonPackage rec {
   '';
 
   # https://github.com/numpy/numpy/blob/a277f6210739c11028f281b8495faf7da298dbef/numpy/_pytesttester.py#L180
-  pytestFlagsArray = [
-    "-m"
-    "not\\ slow" # fast test suite
+  disabledTestMarks = [
+    "slow" # fast test suite
   ];
 
   # https://github.com/numpy/numpy/issues/24548

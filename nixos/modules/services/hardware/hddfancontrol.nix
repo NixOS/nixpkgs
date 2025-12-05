@@ -42,6 +42,7 @@ in
 
   options = {
     services.hddfancontrol.enable = lib.mkEnableOption "hddfancontrol daemon";
+    services.hddfancontrol.package = lib.mkPackageOption pkgs "hddfancontrol" { };
 
     services.hddfancontrol.settings = lib.mkOption {
       type = lib.types.attrsWith {
@@ -52,21 +53,30 @@ in
             {
               options = {
                 disks = lib.mkOption {
-                  type = lib.types.listOf lib.types.path;
+                  type = lib.types.listOf lib.types.str;
                   default = [ ];
                   description = ''
                     Drive(s) to get temperature from
+
+                    Can also use command substitution to automatically grab all matching drives; such as all scsi (sas) drives
                   '';
-                  example = [ "/dev/sda" ];
+                  example = [
+                    "/dev/sda"
+                    "`find /dev/disk/by-id -name \"scsi*\" -and -not -name \"*-part*\" -printf \"%p \"`"
+                  ];
                 };
 
                 pwmPaths = lib.mkOption {
-                  type = lib.types.listOf lib.types.path;
+                  type = lib.types.listOf lib.types.str;
                   default = [ ];
                   description = ''
                     PWM filepath(s) to control fan speed (under /sys), followed by initial and fan-stop PWM values
+                    Can also use command substitution to ensure the correct hwmonX is selected on every boot
                   '';
-                  example = [ "/sys/class/hwmon/hwmon2/pwm1:30:10" ];
+                  example = [
+                    "/sys/class/hwmon/hwmon2/pwm1:30:10"
+                    "`echo /sys/devices/platform/nct6775.656/hwmon/hwmon[[:print:]]`/pwm4:80:20"
+                  ];
                 };
 
                 logVerbosity = lib.mkOption {
@@ -151,9 +161,12 @@ in
         documentation = [ "man:hddfancontrol(1)" ];
         after = [ "hddtemp.service" ];
         wants = [ "hddtemp.service" ];
+        script =
+          let
+            argString = lib.strings.concatStringsSep " " (args cnf);
+          in
+          "${lib.getExe cfg.package} -v ${cnf.logVerbosity} daemon ${argString}";
         serviceConfig = {
-          ExecStart = "${lib.getExe pkgs.hddfancontrol} -v ${cnf.logVerbosity} daemon ${lib.escapeShellArgs (args cnf)}";
-
           CPUSchedulingPolicy = "rr";
           CPUSchedulingPriority = 49;
 
@@ -177,7 +190,7 @@ in
       ];
     in
     {
-      systemd.packages = [ pkgs.hddfancontrol ];
+      systemd.packages = [ cfg.package ];
 
       hardware.sensor.hddtemp = {
         enable = true;

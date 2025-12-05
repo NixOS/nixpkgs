@@ -32,8 +32,6 @@
   socat,
   libslirp,
   libcbor,
-  apple-sdk_13,
-  darwinMinVersionHook,
   guestAgentSupport ?
     (with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows) && !minimal,
   numaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32 && !minimal,
@@ -90,10 +88,12 @@
   tpmSupport ? !minimal,
   uringSupport ? stdenv.hostPlatform.isLinux && !userOnly,
   liburing,
-  canokeySupport ? !minimal,
+  canokeySupport ? false,
   canokey-qemu,
   capstoneSupport ? !minimal,
   capstone,
+  valgrindSupport ? false,
+  valgrind-light,
   pluginsSupport ? !stdenv.hostPlatform.isStatic,
   enableDocs ? !minimal || toolsOnly,
   enableTools ? !minimal || toolsOnly,
@@ -126,14 +126,6 @@ assert lib.assertMsg (
 
 let
   hexagonSupport = hostCpuTargets == null || lib.elem "hexagon" hostCpuTargets;
-
-  # needed in buildInputs and depsBuildBuild
-  # check log for warnings eg: `warning: 'hv_vm_config_get_max_ipa_size' is only available on macOS 13.0`
-  # to indicate if min version needs to get bumped.
-  darwinSDK = [
-    apple-sdk_13
-    (darwinMinVersionHook "13")
-  ];
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -144,17 +136,16 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils"
     + lib.optionalString userOnly "-user";
-  version = "10.0.2";
+  version = "10.1.2";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-73hvI5jLUYRgD2mu9NXWke/URXajz/QSbTjUxv7Id1k=";
+    hash = "sha256-nXXzMcGly5tuuP2fZPVj7C6rNGyCLLl/izXNgtPxFHk=";
   };
 
   depsBuildBuild = [
     buildPackages.stdenv.cc
   ]
-  ++ lib.optionals stdenv.buildPlatform.isDarwin darwinSDK
   ++ lib.optionals hexagonSupport [ pkg-config ];
 
   nativeBuildInputs = [
@@ -167,7 +158,11 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     perl
 
-    # Don't change this to python3 and python3.pkgs.*, breaks cross-compilation
+    # For python changes other than simple package additions, ping @dramforever for review.
+    # Don't change `python3Packages` to `python3.pkgs.*`, breaks cross-compilation.
+    python3Packages.distlib
+    # Hooks from the python package are needed to add `$pythonPath` so
+    # `python/scripts/mkvenv.py` can detect `meson` otherwise the vendored meson without patches will be used.
     python3Packages.python
   ]
   ++ lib.optionals gtkSupport [ wrapGAppsHook3 ]
@@ -199,7 +194,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!userOnly) [ curl ]
   ++ lib.optionals ncursesSupport [ ncurses ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin darwinSDK
   ++ lib.optionals seccompSupport [ libseccomp ]
   ++ lib.optionals numaSupport [ numactl ]
   ++ lib.optionals alsaSupport [ alsa-lib ]
@@ -248,7 +242,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals smbdSupport [ samba ]
   ++ lib.optionals uringSupport [ liburing ]
   ++ lib.optionals canokeySupport [ canokey-qemu ]
-  ++ lib.optionals capstoneSupport [ capstone ];
+  ++ lib.optionals capstoneSupport [ capstone ]
+  ++ lib.optionals valgrindSupport [ valgrind-light ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
   dontAddStaticConfigureFlags = true;
@@ -290,9 +285,11 @@ stdenv.mkDerivation (finalAttrs: {
     # avoid conflicts with libc++ include for <version>
     mv VERSION QEMU_VERSION
     substituteInPlace configure \
-      --replace '$source_path/VERSION' '$source_path/QEMU_VERSION'
+      --replace-fail '$source_path/VERSION' '$source_path/QEMU_VERSION'
     substituteInPlace meson.build \
-      --replace "'VERSION'" "'QEMU_VERSION'"
+      --replace-fail "'VERSION'" "'QEMU_VERSION'"
+    substituteInPlace docs/conf.py \
+      --replace-fail "'../VERSION'" "'../QEMU_VERSION'"
     substituteInPlace python/qemu/machine/machine.py \
       --replace-fail /var/tmp "$TMPDIR"
   '';

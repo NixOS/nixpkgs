@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "reverse-geocode";
-  version = "1.6.5";
+  version = "1.6.6";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "reverse_geocode";
     inherit version;
-    hash = "sha256-AyqkLnbHa8ZylVfrJHpsxLeBfLTl6u9IQ3EV8grXrkE=";
+    hash = "sha256-FBZYFYFsxjnddOtmCnTkZK7rzR0IFN50qJfWIHHJnyo=";
   };
 
   build-system = [ setuptools ];

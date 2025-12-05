@@ -4,6 +4,7 @@
   fetchurl,
   fetchzip,
   unzip,
+  config,
 }:
 
 rec {
@@ -145,13 +146,13 @@ rec {
     version = "1.3.5.201612301822";
 
     srcFeature = fetchurl {
-      url = "https://mihnita.github.io/ansi-econsole/install/features/net.mihai-nita.ansicon_${version}.jar";
-      sha256 = "086ylxpsrlpbvwv5mw7v6b44j63cwzgi8apg2mq058ydr5ak6hxs";
+      url = "https://raw.githubusercontent.com/mihnita/ansi-econsole/8dcf0a2531cbf091310c0e01db1a1310557fc383/AnsiConSitePublished/features/net.mihai-nita.ansicon_${version}.jar";
+      hash = "sha256-o9hnMuZeohU+AKS+ueU8dWS9HomrnqaKpWYMG5vMeJs=";
     };
 
     srcPlugin = fetchurl {
-      url = "https://mihnita.github.io/ansi-econsole/install/plugins/net.mihai-nita.ansicon.plugin_${version}.jar";
-      sha256 = "1j42l0xxzs89shqkyn91lb0gia10mifzy0i73c3n7gj7sv2ddbjq";
+      url = "https://raw.githubusercontent.com/mihnita/ansi-econsole/8dcf0a2531cbf091310c0e01db1a1310557fc383/AnsiConSitePublished/plugins/net.mihai-nita.ansicon.plugin_${version}.jar";
+      hash = "sha256-WK7WxNZHvmMHGycC/12sIKj4wKIhWT8x1Anp3zuggsg=";
     };
 
     meta = with lib; {
@@ -211,16 +212,16 @@ rec {
 
   anyedittools = buildEclipsePlugin rec {
     name = "anyedit-${version}";
-    version = "2.7.2.202006062100";
+    version = "2.7.3.202502241151";
 
     srcFeature = fetchurl {
-      url = "https://github.com/iloveeclipse/plugins/blob/latest/features/AnyEditTools_${version}.jar";
-      sha256 = "0dwwwvz8by10f5gnws1ahmg02g6v4xbaqcwc0cydvv1h52cyb40g";
+      url = "https://raw.githubusercontent.com/iloveeclipse/plugins/f0560d1c628e0dba776831b1dea98d929515ebe5/features/AnyEditTools_${version}.jar";
+      hash = "sha256-liEw+H8yTCrYQMe3gVQhJuxPXlSpEs4QwB2yv8n/CiE=";
     };
 
     srcPlugin = fetchurl {
-      url = "https://github.com/iloveeclipse/plugins/blob/latest/plugins/de.loskutov.anyedit.AnyEditTools_${version}.jar";
-      sha256 = "1ip8dk92ka7bczw1bkbs3zkclmwr28ds5q1wrzh525wb70x8v6fi";
+      url = "https://raw.githubusercontent.com/iloveeclipse/plugins/f0560d1c628e0dba776831b1dea98d929515ebe5/plugins/de.loskutov.anyedit.AnyEditTools_${version}.jar";
+      hash = "sha256-LrWCWJWZxsnMiBnTwXdWaXUoyXMYpLqXMUkHEOna2kk=";
     };
 
     meta = with lib; {
@@ -251,29 +252,6 @@ rec {
       description = "Show file encoding and line ending for the active editor in the eclipse status bar";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.epl10;
-      platforms = platforms.all;
-    };
-  };
-
-  bytecode-outline = buildEclipsePlugin rec {
-    name = "bytecode-outline-${version}";
-    version = "1.0.1.202006062100";
-
-    srcFeature = fetchurl {
-      url = "https://github.com/iloveeclipse/plugins/blob/latest/features/org.eclipse.jdt.bcoview.feature_${version}.jar";
-      sha256 = "0zbcph72lgv8cb5n4phcl3qsybc5q5yviwbv8yjv4v12m4l15wpk";
-    };
-
-    srcPlugin = fetchurl {
-      url = "https://github.com/iloveeclipse/plugins/blob/latest/plugins/org.eclipse.jdt.bcoview_${version}.jar";
-      sha256 = "1bx860k4haqcnhy8825kn4df0pyzd680qbnvjmxfrlxrqhr66fbb";
-    };
-
-    meta = with lib; {
-      homepage = "https://github.com/iloveeclipse/plugins";
-      description = "Shows disassembled bytecode of current java editor or class file";
-      sourceProvenance = with sourceTypes; [ binaryBytecode ];
-      license = licenses.bsd2;
       platforms = platforms.all;
     };
   };
@@ -588,24 +566,6 @@ rec {
     };
   };
 
-  scala = buildEclipseUpdateSite rec {
-    name = "scala-${version}";
-    version = "4.4.1.201605041056";
-
-    src = fetchzip {
-      url = "http://download.scala-ide.org/sdk/lithium/e44/scala211/stable/base-20160504-1321.zip";
-      sha256 = "13xgx2rwlll0l4bs0g6gyvrx5gcc0125vzn501fdj0wv2fqxn5lw";
-    };
-
-    meta = with lib; {
-      homepage = "http://scala-ide.org/";
-      description = "Scala IDE for Eclipse";
-      sourceProvenance = with sourceTypes; [ binaryBytecode ];
-      license = licenses.bsd3;
-      platforms = platforms.all;
-    };
-  };
-
   spotbugs = buildEclipseUpdateSite rec {
     name = "spotbugs-${version}";
     version = "3.1.11";
@@ -630,13 +590,13 @@ rec {
     version = "6.9.13.201609291640";
 
     srcFeature = fetchurl {
-      url = "http://beust.com/eclipse-old/eclipse_${version}/features/org.testng.eclipse_${version}.jar";
-      sha256 = "02wzcysl7ga3wnvnwp6asl8d77wgc547c5qqawixw94lw6fn1a15";
+      url = "https://raw.githubusercontent.com/testng-team/testng-eclipse-update-site/0eb404d0c65dc0ef25b19145bb44a56326a53da6/updatesites/${version}/features/org.testng.eclipse_${version}.jar";
+      hash = "sha256-JahgneGUJN4jVxgXdkhhj5/TENXKXG635UO9Q7Vnnws=";
     };
 
     srcPlugin = fetchurl {
-      url = "http://beust.com/eclipse-old/eclipse_${version}/plugins/org.testng.eclipse_${version}.jar";
-      sha256 = "1j4zw6392q3q6z3pcy803k3g0p220gk1x19fs99p0rmmdz83lc8d";
+      url = "https://raw.githubusercontent.com/testng-team/testng-eclipse-update-site/0eb404d0c65dc0ef25b19145bb44a56326a53da6/updatesites/${version}/plugins/org.testng.eclipse_${version}.jar";
+      hash = "sha256-DTE60G+1ZnBT0i6FHuYDQlzwxhwAeXbHN3hgkYbhn8g=";
     };
 
     meta = with lib; {
@@ -711,104 +671,13 @@ rec {
       maintainers = [ maintainers.romildo ];
     };
   };
-
-  ivyde = buildEclipsePlugin rec {
-    name = "ivyde-${version}";
-    version = "2.2.0.final-201311091524-RELEASE";
-
-    srcFeature = fetchurl {
-      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivyde-${version}/features/org.apache.ivyde.feature_${version}.jar";
-      hash = "sha256-iKe7oOPjy6th0HmKt6NXexOHN60EDpQe1r+n6K+uoyw=";
-    };
-
-    srcPlugin = fetchurl {
-      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivyde-${version}/plugins/org.apache.ivyde.eclipse_${version}.jar";
-      hash = "sha256-lhwFwdMDwCIUrQjdWfe5ZSutCIsKtZSBT6FWthUipdk=";
-    };
-
-    meta = with lib; {
-      homepage = "https://ant.apache.org/ivy/ivyde/index.html";
-      description = "Plugin which integrates Apache Ivy's dependency management";
-      sourceProvenance = with sourceTypes; [ binaryBytecode ];
-      license = licenses.asl20;
-      platforms = platforms.all;
-      maintainers = [ maintainers.r3dl3g ];
-    };
-  };
-
-  ivyderv = buildEclipsePlugin rec {
-    name = "ivyderv-${version}";
-    version = "2.2.0.final-201311091524-RELEASE";
-
-    srcFeature = fetchurl {
-      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivyde-${version}/features/org.apache.ivyde.eclipse.resolvevisualizer.feature_${version}.jar";
-      hash = "sha256-PSH5NtE7hN2hHoHUhVK1CLkHN7YSDdTTqBP7711X4rU=";
-    };
-
-    srcPlugin = fetchurl {
-      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivyde-${version}/plugins/org.apache.ivyde.eclipse.resolvevisualizer_${version}.jar";
-      hash = "sha256-qjTvn1j7viSfzLkWnYjyS9Pj2ExqsiFGLzot3+oB0Tw=";
-    };
-
-    meta = with lib; {
-      homepage = "https://ant.apache.org/ivy/ivyde/index.html";
-      description = "Graph viewer of the resolved dependencies";
-      longDescription = ''
-        Apache IvyDE Resolve Visualizer is an optional dependency of Apache IvyDE since
-        it requires additional plugins to be installed (Zest).
-      '';
-      sourceProvenance = with sourceTypes; [ binaryBytecode ];
-      license = licenses.asl20;
-      platforms = platforms.all;
-      maintainers = [ maintainers.r3dl3g ];
-    };
-  };
-
-  ivy = buildEclipsePlugin rec {
-    name = "ivy-${version}";
-    version = "2.5.0.final_20191020104435";
-
-    srcFeature = fetchurl {
-      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivy-${version}/features/org.apache.ivy.eclipse.ant.feature_${version}.jar";
-      sha256 = "de6134171a0edf569bb9b4c3a91639d469f196e86804d218adfdd60a5d7fa133";
-    };
-
-    srcPlugin = fetchurl {
-      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivy-${version}/plugins/org.apache.ivy.eclipse.ant_${version}.jar";
-      sha256 = "9e8ea20480cf73d0f0f3fb032d263c7536b24fd2eef71beb7d62af4e065f9ab5";
-    };
-
-    meta = with lib; {
-      homepage = "https://ant.apache.org/ivy/index.html";
-      description = "Popular dependency manager focusing on flexibility and simplicity";
-      sourceProvenance = with sourceTypes; [ binaryBytecode ];
-      license = licenses.asl20;
-      platforms = platforms.all;
-      maintainers = [ maintainers.r3dl3g ];
-    };
-  };
-
-  ivyant = buildEclipsePlugin rec {
-    name = "ivyant-${version}";
-    version = "2.5.0.final_20191020104435";
-
-    srcFeature = fetchurl {
-      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivy-${version}/features/org.apache.ivy.eclipse.ant.feature_${version}.jar";
-      sha256 = "de6134171a0edf569bb9b4c3a91639d469f196e86804d218adfdd60a5d7fa133";
-    };
-
-    srcPlugin = fetchurl {
-      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivy-${version}/plugins/org.apache.ivy.eclipse.ant_${version}.jar";
-      sha256 = "9e8ea20480cf73d0f0f3fb032d263c7536b24fd2eef71beb7d62af4e065f9ab5";
-    };
-
-    meta = with lib; {
-      homepage = "https://ant.apache.org/ivy/ivyde/index.html";
-      description = "Ant Tasks integrated into Eclipse's Ant runtime";
-      sourceProvenance = with sourceTypes; [ binaryBytecode ];
-      license = licenses.asl20;
-      platforms = platforms.all;
-      maintainers = [ maintainers.r3dl3g ];
-    };
-  };
+}
+// lib.optionalAttrs config.allowAliases {
+  # Added 2025-11-16
+  bytecode-outline = throw "eclipses.plugins.bytecode-outline has been removed due to being removed upstream.";
+  ivyde = throw "eclipses.plugins.ivyde has been removed due to being archived upstream.";
+  ivyderv = throw "eclipses.plugins.inyderv has been removed due to being archived upstream.";
+  ivy = throw "eclipses.plugins.ivy has been removed due to being archived upstream.";
+  ivyant = throw "eclipses.plugins.ivyant has been removed due to being archived upstream.";
+  scala = throw "eclipses.plugins.scala has been removed due to being deprecated upstream.";
 }

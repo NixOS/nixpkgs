@@ -36,7 +36,7 @@ in
     };
 
     configFile = lib.mkOption {
-      type = lib.types.path;
+      type = lib.types.nullOr lib.types.path;
       example = lib.literalExpression ''
         pkgs.writeText "oxidized-config.yml" '''
           ---
@@ -122,6 +122,8 @@ in
         };
       };
 
+    }
+    // lib.optionalAttrs (cfg.configFile != null) {
       "${cfg.dataDir}/.config/oxidized/config" = {
         "L+" = {
           argument = "${cfg.configFile}";

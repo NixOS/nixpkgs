@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-QslV0MVbIuiFDmd8A69+7nTPAUhDrn/dndZsIiNkeZ8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-1JjvfXyjGUHIwJJAlI2pB829kHcPrVmKOp+msDk5Qp4=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -55,7 +54,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kyoheiu/felix";
     changelog = "https://github.com/kyoheiu/felix/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ _7karni ];
     mainProgram = "fx";
   };
 }

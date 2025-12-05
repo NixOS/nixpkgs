@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   libsForQt5,
@@ -17,6 +18,15 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "1b769lp6gfwds4jb2g7ymhdm9c06zg57zpyz3zpdb40w07zfsjzv";
   };
+
+  patches = [
+    # https://github.com/stolowski/QComicBook/pull/45
+    (fetchpatch {
+      name = "cmake-4-compatibility.patch";
+      url = "https://github.com/stolowski/QComicBook/commit/424a188f63171842ce8fad86fa85c4e03e405618.patch?full_index=1";
+      hash = "sha256-q0X2i21JgtBfRfyMGpuUyB9GtIiWiFo6IWME6EBMSwk=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

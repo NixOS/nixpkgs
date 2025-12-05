@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pytools";
-  version = "2025.1.6";
+  version = "2025.2.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k44d+Zl7pax3EDSkmw5jgBvZOiuS5qOPQyQVGaH7Mis=";
+    hash = "sha256-nLgr50dW0ZIcArrTx2fr3kZ50tFDqFpMNY0y9lRuVG8=";
   };
 
   build-system = [ hatchling ];
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/inducer/pytools/";
     changelog = "https://github.com/inducer/pytools/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ artuuge ];
+    maintainers = [ ];
   };
 }

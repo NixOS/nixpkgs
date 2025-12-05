@@ -3,7 +3,6 @@
   stdenv,
   bash,
   fetchFromGitHub,
-  fetchpatch,
   SDL2,
   alsa-lib,
   catch2_3,
@@ -15,7 +14,6 @@
   gtkmm3,
   iniparser,
   jsoncpp,
-  libcava,
   libdbusmenu-gtk3,
   libevdev,
   libinotify-kqueue,
@@ -73,29 +71,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
     tag = finalAttrs.version;
-    hash = "sha256-KfWjYDqJf2jNmYAnmV7EQHweMObEBreUc2G7/LpvvC0=";
+    hash = "sha256-mGiBZjfvtZZkSHrha4UF2l1Ogbij8J//r2h4gcZAJ6w=";
+  };
+
+  libcavaSrc = fetchFromGitHub {
+    owner = "LukashonakV";
+    repo = "cava";
+    tag = "0.10.4";
+    hash = "sha256-9eTDqM+O1tA/3bEfd1apm8LbEcR9CVgELTIspSVPMKM=";
   };
 
   postUnpack = lib.optional cavaSupport ''
     pushd "$sourceRoot"
-    cp -R --no-preserve=mode,ownership ${libcava.src} subprojects/cava-0.10.4
+    cp -R --no-preserve=mode,ownership ${finalAttrs.libcavaSrc} subprojects/cava-0.10.4
     patchShebangs .
     popd
   '';
-
-  patches = [
-    (fetchpatch {
-      name = "waybar-default-icon.patch";
-      url = "https://github.com/Alexays/Waybar/commit/c336bc5466c858ac41dc9afd84f04a5ffec9e292.patch";
-      hash = "sha256-RRGy/aeFX95fW0pT6mXhww2RdEtoOnaT3+dc7iB3bAY=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson

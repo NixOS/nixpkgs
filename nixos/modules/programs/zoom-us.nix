@@ -17,15 +17,15 @@
       # configuration elsewhere.
       config.programs.zoom-us.package.override (prev: {
         # Support pulseaudio if it's enabled on the system.
-        pulseaudioSupport = prev.pulseaudioSupport or config.services.pulseaudio.enable;
+        pulseaudioSupport =
+          prev.pulseaudioSupport or (
+            config.services.pulseaudio.enable
+            || (config.services.pipewire.enable && config.services.pipewire.pulse.enable)
+          );
 
         # Support Plasma 6 desktop environment if it's enabled on the system.
         plasma6XdgDesktopPortalSupport =
           prev.plasma6XdgDesktopPortalSupport or config.services.desktopManager.plasma6.enable;
-
-        # Support Plasma 5 desktop environment if it's enabled on the system.
-        plasma5XdgDesktopPortalSupport =
-          prev.plasma5XdgDesktopPortalSupport or config.services.xserver.desktopManager.plasma5.enable;
 
         # Support LXQT desktop environment if it's enabled on the system.
         # There's also `config.services.xserver.desktopManager.lxqt.enable`

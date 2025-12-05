@@ -1,65 +1,101 @@
 {
   lib,
+  stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchNpmDeps,
-  writeShellApplication,
-  cacert,
-  curl,
-  gnused,
   jq,
-  nix-prefetch-github,
-  prefetch-npm-deps,
-  gitUpdater,
+  pkg-config,
+  clang_20,
+  libsecret,
+  ripgrep,
+  nix-update-script,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "gemini-cli";
-  version = "0.1.7";
+  version = "0.19.3";
 
   src = fetchFromGitHub {
     owner = "google-gemini";
     repo = "gemini-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DAenod/w9BydYdYsOnuLj7kCQRcTnZ81tf4MhLUug6c=";
+    hash = "sha256-kAb5CSD7PB3b63QnVSbgWxIMPO2Hh5LfmtZ3wE2TUFk=";
   };
 
-  npmDeps = fetchNpmDeps {
-    inherit (finalAttrs) src;
-    hash = "sha256-otogkSsKJ5j1BY00y4SRhL9pm7CK9nmzVisvGCDIMlU=";
-  };
+  npmDepsHash = "sha256-tCu98oLr/xh4MJR6q+AbySHOmFeZFH7z59rL0K5A9Es=";
+
+  nativeBuildInputs = [
+    jq
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.isDarwin [ clang_20 ]; # clang_21 breaks @vscode/vsce's optionalDependencies keytar
+
+  buildInputs = [
+    ripgrep
+    libsecret
+  ];
 
   preConfigure = ''
     mkdir -p packages/generated
     echo "export const GIT_COMMIT_INFO = { commitHash: '${finalAttrs.src.rev}' };" > packages/generated/git-commit.ts
   '';
 
+  postPatch = ''
+    # Remove node-pty dependency from package.json
+    ${jq}/bin/jq 'del(.optionalDependencies."node-pty")' package.json > package.json.tmp && mv package.json.tmp package.json
+
+    # Remove node-pty dependency from packages/core/package.json
+    ${jq}/bin/jq 'del(.optionalDependencies."node-pty")' packages/core/package.json > packages/core/package.json.tmp && mv packages/core/package.json.tmp packages/core/package.json
+
+    # Ideal method to disable auto-update
+    sed -i '/disableAutoUpdate: {/,/}/ s/default: false/default: true/' packages/cli/src/config/settingsSchema.ts
+
+    # Disable auto-update for real because the default value in settingsSchema isn't cleanly applied
+    # https://github.com/google-gemini/gemini-cli/issues/13569
+    substituteInPlace packages/cli/src/utils/handleAutoUpdate.ts \
+      --replace-fail "settings.merged.general?.disableAutoUpdate ?? false" "settings.merged.general?.disableAutoUpdate ?? true" \
+      --replace-fail "settings.merged.general?.disableAutoUpdate" "(settings.merged.general?.disableAutoUpdate ?? true)"
+    substituteInPlace packages/cli/src/ui/utils/updateCheck.ts \
+      --replace-fail "settings.merged.general?.disableUpdateNag" "(settings.merged.general?.disableUpdateNag ?? true)"
+  '';
+
+  # Prevent npmDeps from getting into the closure
+  disallowedReferences = [ finalAttrs.npmDeps ];
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/{bin,share/gemini-cli}
 
+    npm prune --omit=dev
     cp -r node_modules $out/share/gemini-cli/
 
     rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli
     rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-core
+    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-a2a-server
+    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-test-utils
+    rm -f $out/share/gemini-cli/node_modules/gemini-cli-vscode-ide-companion
     cp -r packages/cli $out/share/gemini-cli/node_modules/@google/gemini-cli
     cp -r packages/core $out/share/gemini-cli/node_modules/@google/gemini-cli-core
+    cp -r packages/a2a-server $out/share/gemini-cli/node_modules/@google/gemini-cli-a2a-server
 
     ln -s $out/share/gemini-cli/node_modules/@google/gemini-cli/dist/index.js $out/bin/gemini
+    chmod +x "$out/bin/gemini"
+
     runHook postInstall
   '';
 
-  postInstall = ''
-    chmod +x "$out/bin/gemini"
-  '';
-
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "AI agent that brings the power of Gemini directly into your terminal";
     homepage = "https://github.com/google-gemini/gemini-cli";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ donteatoreo ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    maintainers = with lib.maintainers; [
+      xiaoxiangmoe
+      FlameFlag
+      taranarmo
+    ];
     platforms = lib.platforms.all;
     mainProgram = "gemini";
   };

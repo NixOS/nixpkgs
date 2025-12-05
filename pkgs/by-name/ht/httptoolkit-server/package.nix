@@ -16,13 +16,13 @@ let
   nodejs = nodejs_20;
   buildNpmPackage' = buildNpmPackage.override { inherit nodejs; };
 
-  version = "1.20.1";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "httptoolkit";
     repo = "httptoolkit-server";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-iEAYZX7WNk6TvZ44GAOgTqXOcW5oFn4gX+kzixZZbWA=";
+    tag = "v${version}";
+    hash = "sha256-rcjgV71nu1Id4CQAfB9r0583qXAFk3eqDbdPWgqhtuw=";
   };
 
   overridesNodeModules = buildNpmPackage' {
@@ -30,7 +30,7 @@ let
     inherit version src;
     sourceRoot = "${src.name}/overrides/js";
 
-    npmDepsHash = "sha256-Uw7XbfwLMX+zbSrzFgvB8lw3hxUyw1eRKazCITrT/28=";
+    npmDepsHash = "sha256-MtUJY9IxzkGPuoIXHAr9nNNF+NpEf2b/oAYauJPwdaw=";
 
     dontBuild = true;
 
@@ -47,7 +47,7 @@ let
     src = fetchFromGitHub {
       owner = "murat-dogan";
       repo = "node-datachannel";
-      rev = "refs/tags/v${nodeDatachannel.version}";
+      tag = "v${nodeDatachannel.version}";
       hash = "sha256-xjYja+e2Z7X5cU4sEuSsJzG0gtmTPl3VrUf+ypd3zdw=";
     };
 
@@ -102,7 +102,7 @@ buildNpmPackage' {
 
   patches = [ ./only-build-for-one-platform.patch ];
 
-  npmDepsHash = "sha256-gHXop4CTsQTSMrZ5mBHkMcmpOr2MIjVLrzjLLCfZ3As=";
+  npmDepsHash = "sha256-9Vy7i2L0yc8BdmoJvGr2g+OCwpdQUC/zVCUU7FcyCtk=";
 
   npmFlags = [ "--ignore-scripts" ];
 

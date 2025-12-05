@@ -11,7 +11,7 @@
   makeWrapper,
   moreutils,
   nodejs,
-  pnpm_9,
+  pnpm_10,
 
   _7zz,
   electron,
@@ -19,21 +19,22 @@
 }:
 
 let
-  pnpm = pnpm_9;
+  pnpm = pnpm_10;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "voicevox";
-  version = "0.24.2";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "voicevox";
     tag = finalAttrs.version;
-    hash = "sha256-ploFrzxIseyUD7LINnFmshrg3QJV8KUkdbvDoJ/VkRk=";
+    hash = "sha256-s8+uHwqxK9my/850C52VT5kshlGrHOOHtopUlsowNeI=";
   };
 
   patches = [
     (replaceVars ./hardcode-paths.patch {
+      electron_path = lib.getExe electron;
       sevenzip_path = lib.getExe _7zz;
       voicevox_engine_path = lib.getExe voicevox-engine;
     })
@@ -41,11 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     # unlock the overly specific pnpm package version pin
-    jq 'del(.packageManager)' package.json | sponge package.json
-
-    substituteInPlace package.json \
-      --replace-fail "999.999.999" "$version" \
-      --replace-fail ' && electron-builder --config electron-builder.config.cjs --publish never' ""
+    # and also set version to a proper value
+    jq "del(.packageManager) | .version = \"$version\"" package.json | sponge package.json
   '';
 
   pnpmDeps = pnpm.fetchDeps {
@@ -65,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
     fetcherVersion = 1;
-    hash = "sha256-RKgqFmHQnjHS7yeUIbH9awpNozDOCCHplc/bmfxmMyg=";
+    hash = "sha256-no0oFhy7flet9QH4FEkPJdlwNq5YkjIx8Uat3M2ruKI=";
   };
 
   nativeBuildInputs = [
@@ -96,11 +94,11 @@ stdenv.mkDerivation (finalAttrs: {
     chmod -R u+w electron-dist
 
     # note: we patched out the call to electron-builder in postPatch
-    pnpm run electron:build
+    pnpm run electron:build:compile
 
     pnpm exec electron-builder \
       --dir \
-      --config electron-builder.config.cjs \
+      --config ./build/electronBuilderConfigLoader.cjs \
       -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version}
 

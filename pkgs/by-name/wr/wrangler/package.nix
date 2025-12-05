@@ -12,18 +12,18 @@
   xorg,
   jq,
   moreutils,
-  gitUpdater,
+  nix-update-script,
   versionCheckHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
-  version = "4.22.0";
+  version = "4.51.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "wrangler@${finalAttrs.version}";
-    hash = "sha256-4uE1Jv70aDqAUk7GWmFr65SNXLnDDIZiFN87DQxluKg=";
+    hash = "sha256-NYYw4/Yx4wVn7snXQsGxtppLNvqzAjg6fqQIFeKc9L4=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
@@ -33,15 +33,19 @@ stdenv.mkDerivation (finalAttrs: {
       src
       postPatch
       ;
-    fetcherVersion = 1;
-    hash = "sha256-r3QswmqP6CNufnsFM0KeKojm/HjHogrfYO/TdL3SrmA=";
+    fetcherVersion = 2;
+    hash = "sha256-utRo6lI8YgVJItqa/433HWNTp2AAHgiA3xWdJn2IELg=";
   };
   # pnpm packageManager version in workers-sdk root package.json may not match nixpkgs
   postPatch = ''
     jq 'del(.packageManager)' package.json | sponge package.json
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "wrangler@"; };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex=wrangler@(.*)"
+    ];
+  };
 
   buildInputs = [
     llvmPackages.libcxx
@@ -67,6 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
   # so I simply removed it
   postBuild = ''
     mv packages/vitest-pool-workers packages/~vitest-pool-workers
+
+    NODE_ENV="production" pnpm --filter unenv-preset run build
+    NODE_ENV="production" pnpm --filter workers-utils run build
     NODE_ENV="production" pnpm --filter workers-shared run build
     NODE_ENV="production" pnpm --filter miniflare run build
     NODE_ENV="production" pnpm --filter wrangler run build
@@ -81,11 +88,9 @@ stdenv.mkDerivation (finalAttrs: {
   # - Update: Now we're copying everything over due to broken symlink errors
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin $out/lib $out/lib/packages/wrangler
+    mkdir -p $out/{bin,lib}
     mv packages/~vitest-pool-workers packages/vitest-pool-workers
-    cp -r fixtures $out/lib
-    cp -r packages $out/lib
-    cp -r node_modules $out/lib
+    cp -r {fixtures,packages,node_modules} $out/lib
     cp -r tools $out/lib/tools
     rm -rf node_modules/typescript node_modules/eslint node_modules/prettier node_modules/bin node_modules/.bin node_modules/**/bin node_modules/**/.bin
     rm -rf $out/lib/**/bin $out/lib/**/.bin
@@ -101,6 +106,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+
+  preFixup = ''
+    # fixupPhase spends a lot of time trying to strip text files, which is especially slow on Darwin
+    stripExclude+=("*.js" "*.ts" "*.map" "*.json" "*.md")
+  '';
+
   meta = {
     description = "Command-line interface for all things Cloudflare Workers";
     homepage = "https://github.com/cloudflare/workers-sdk#readme";

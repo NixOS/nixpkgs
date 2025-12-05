@@ -1,13 +1,11 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   cython,
   fetchFromGitHub,
-  libiconv,
+  narwhals,
   pandas,
   python,
-  pythonOlder,
   readstat,
   setuptools,
   zlib,
@@ -15,16 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pyreadstat";
-  version = "1.3.0";
+  version = "1.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Roche";
     repo = "pyreadstat";
     tag = "v${version}";
-    hash = "sha256-ZcdCUX8mNBipOV5k+y7WdgxCZLfsZZlClyeuL8sQ6BI=";
+    hash = "sha256-JDs5SxiqSZHVOJTPezq5oIT+Xgp6tz2BytoQ6jb/ZwU=";
   };
 
   build-system = [
@@ -32,9 +28,10 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = [ zlib ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+  buildInputs = [ zlib ];
 
   dependencies = [
+    narwhals
     readstat
     pandas
   ];

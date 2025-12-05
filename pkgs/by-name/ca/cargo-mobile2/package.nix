@@ -10,7 +10,7 @@
 
 let
   pname = "cargo-mobile2";
-  version = "0.20.2";
+  version = "0.22.1";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -18,15 +18,14 @@ rustPlatform.buildRustPackage {
     owner = "tauri-apps";
     repo = "cargo-mobile2";
     rev = "cargo-mobile2-v${version}";
-    hash = "sha256-mXedzfAN40IG8ivcSa/tf/Ys/rKcwkCmxU7/ja9ec2U=";
+    hash = "sha256-+U/uTbTGa3NPK5WpyvR5C5L1ozl+fa15pNNWYZJXgnk=";
   };
 
   # Manually specify the sourceRoot since this crate depends on other crates in the workspace. Relevant info at
   # https://discourse.nixos.org/t/difficulty-using-buildrustpackage-with-a-src-containing-multiple-cargo-workspaces/10202
   # sourceRoot = "${src.name}/tooling/cli";
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Y1ykz7QU48AJVKBcYdrWEuNcahontkaJyFmrrh4eQs0=";
+  cargoHash = "sha256-fMtFvPrWMLHE4N9WJv6J4pqHbHPnNKhQWz5qEvB8jKQ=";
 
   preBuild = ''
     mkdir -p $out/share/

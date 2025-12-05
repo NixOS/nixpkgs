@@ -9,17 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-edit";
-  version = "0.13.6";
+  version = "0.13.8";
 
   src = fetchFromGitHub {
     owner = "killercup";
     repo = "cargo-edit";
     rev = "v${version}";
-    hash = "sha256-z+LTgCeTUr3D0LEbw0yHlk1di2W95XewbYlgusD2TLg=";
+    hash = "sha256-+CWCWhdb7S4QSNAfzL2+YMTF7oKQvk18NSxSSTQtQBc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-/+DDA64kemZKzKdaKnXK+R4e8FV59qT5HCGcwyOz7R8=";
+  cargoHash = "sha256-D2klo0arp1Gv6y1a1lCM3Ht4nAirkao/Afu7FE3CTbg=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -40,7 +39,6 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [
       Br1ght0ne
-      figsoda
       gerschtli
       jb55
       killercup

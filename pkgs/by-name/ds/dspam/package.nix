@@ -149,6 +149,6 @@ stdenv.mkDerivation rec {
     description = "Community Driven Antispam Filter";
     license = licenses.agpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

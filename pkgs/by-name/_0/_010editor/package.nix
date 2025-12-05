@@ -7,25 +7,16 @@
   makeWrapper,
   makeDesktopItem,
   cups,
-  qt5,
+  qt6,
   undmg,
+  xorg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "010editor";
-  version = "15.0.2";
+  version = "16.0.2";
 
-  src =
-    if stdenv.hostPlatform.isLinux then
-      fetchzip {
-        url = "https://download.sweetscape.com/010EditorLinux64Installer${finalAttrs.version}.tar.gz";
-        hash = "sha256-oXwC4criDox8rac7mnJroqxMNKU7k+y7JQqc88XoRFc=";
-      }
-    else
-      fetchurl {
-        url = "https://download.sweetscape.com/010EditorMac64Installer${finalAttrs.version}.dmg";
-        hash = "sha256-RZtFV3AbE5KfzW18usW0FS/AnX8Uets/RkVayBAODQ4=";
-      };
+  src = finalAttrs.passthru.srcs.${stdenv.hostPlatform.system};
 
   sourceRoot = ".";
 
@@ -37,14 +28,15 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionals stdenv.hostPlatform.isLinux [
       autoPatchelfHook
       makeWrapper
-      qt5.wrapQtAppsHook
+      qt6.wrapQtAppsHook
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ undmg ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     cups
-    qt5.qtbase
-    qt5.qtwayland
+    qt6.qtbase
+    qt6.qtwayland
+    xorg.xkeyboardconfig
   ];
 
   installPhase =
@@ -53,15 +45,16 @@ stdenv.mkDerivation (finalAttrs: {
         mkdir -p $out/Applications
         cp -R *.app $out/Applications
       '';
+
       linuxInstall = ''
         mkdir -p $out/opt && cp -ar source/* $out/opt
 
-        # Unset wrapped QT plugins since they're already included in the package,
-        # else the program crashes because of the conflict
+        # Wrap binary: clean env, fix XKB lookup
         makeWrapper $out/opt/010editor $out/bin/010editor \
-          --unset QT_PLUGIN_PATH
+          --unset QT_PLUGIN_PATH \
+          --set XKB_CONFIG_ROOT ${xorg.xkeyboardconfig}/share/X11/xkb
 
-        # Copy the icon and generated desktop file
+        # Install icon + desktop entry
         install -D $out/opt/010_icon_128x128.png $out/share/icons/hicolor/128x128/apps/010.png
         install -D $desktopItem/share/applications/* -t $out/share/applications/
       '';
@@ -84,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     exec = "010editor %f";
     icon = "010";
     desktopName = "010 Editor";
-    genericName = "Text and hex edtior";
+    genericName = "Text and hex editor";
     categories = [ "Development" ];
     mimeTypes = [
       "text/html"
@@ -93,6 +86,23 @@ stdenv.mkDerivation (finalAttrs: {
       "text/x-c++src"
       "text/xml"
     ];
+  };
+
+  passthru.srcs = {
+    x86_64-linux = fetchzip {
+      url = "https://download.sweetscape.com/010EditorLinux64Installer${finalAttrs.version}.tar.gz";
+      hash = "sha256-sFTP/z+aann3KdEVW+RSWhi/uyLZB4q3kBXaBkwHkKE=";
+    };
+
+    x86_64-darwin = fetchurl {
+      url = "https://download.sweetscape.com/010EditorMac64Installer${finalAttrs.version}.dmg";
+      hash = "sha256-Ky7IvLeFogx6R2YAirASNNIClEL9/M0eEyCxbGAt0sU=";
+    };
+
+    aarch64-darwin = fetchurl {
+      url = "https://download.sweetscape.com/010EditorMacARM64Installer${finalAttrs.version}.dmg";
+      hash = "sha256-gtfTq/e/BHSxkCv/Qg/o8Naoao+I8fzKOmGB1PXPSwI=";
+    };
   };
 
   meta = {

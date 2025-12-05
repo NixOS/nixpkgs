@@ -3,37 +3,25 @@
   rustPlatform,
   fetchFromGitHub,
   stdenv,
-  rust-jemalloc-sys,
   nix-update-script,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sqruff";
-  version = "0.25.28";
+  version = "0.29.3";
 
   src = fetchFromGitHub {
     owner = "quarylabs";
     repo = "sqruff";
     tag = "v${version}";
-    hash = "sha256-Xea6jXQos5gyF1FeGF7B5YaQszqfsKhGw1k8j0m7J6c=";
+    hash = "sha256-bJmkHOACjdSXHE56okrIFERs1wK00XeyipdIFbRjIFI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-agB//UDTsEje9pgig07dUy8/Fr+zx7/MC3AdLjqoKJY=";
-
-  buildInputs = [
-    rust-jemalloc-sys
-  ];
+  cargoHash = "sha256-TxADMtapo6Pc4Z0MUkzkzUIrLnGa1DdZFzfTq4buF4g=";
 
   # Disable the `python` feature which doesn't work on Nix yet
   buildNoDefaultFeatures = true;
-  # The jinja and dbt template engines require the `python` feature which we disabled, so we disable these tests
-  patches = [
-    ./disable-templaters-test.diff
-    ./disable-ui_with_dbt-test.diff
-    ./disable-ui_with_jinja-test.diff
-    ./disable-ui_with_python-test.diff
-  ];
+  buildAndTestSubdir = "crates/cli";
 
   # Patch the tests to find the sqruff binary
   postPatch = ''

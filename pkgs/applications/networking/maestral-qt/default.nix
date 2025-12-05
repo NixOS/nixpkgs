@@ -11,7 +11,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maestral-qt";
-  version = "1.9.4";
+  version = "1.9.5";
   pyproject = true;
 
   disabled = python3.pythonOlder "3.7";
@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "SamSchott";
     repo = "maestral-qt";
     tag = "v${version}";
-    hash = "sha256-VkJOKKYnoXux3WjD1JwINGWwv1SMIXfidyV2ITE7dJc=";
+    hash = "sha256-FCn9ELbodk+zCJNmlOVoxE/KSSqbxy5HTB1vpiu7AJA=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -51,6 +51,10 @@ python3.pkgs.buildPythonApplication rec {
     "--prefix PYTHONPATH : ${makePythonPath (requiredPythonModules maestral.propagatedBuildInputs)}"
     "--prefix PYTHONPATH : ${makePythonPath [ maestral ]}"
   ];
+
+  postInstall = ''
+    install -Dm444 -t $out/share/icons/hicolor/512x512/apps src/maestral_qt/resources/maestral.png
+  '';
 
   # no tests
   doCheck = false;

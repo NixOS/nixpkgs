@@ -41,7 +41,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nzp-fteqw";
-  version = "0-unstable-2024-09-11-20-07-31";
+  version = "0-unstable-2024-09-11";
 
   src = fetchFromGitHub {
     owner = "nzp-team";
@@ -61,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libGL
+    xorg.libxcb
     xorg.libX11
     xorg.libXrandr
     xorg.libXcursor

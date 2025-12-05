@@ -10,20 +10,22 @@
   hyprutils,
   libjpeg,
   libjxl,
+  librsvg,
   libspng,
   libwebp,
+  pango,
   pixman,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprgraphics";
-  version = "0.1.5";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprgraphics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gbh1HL98Fdqu0jJIWN4OJQN7Kkth7+rbkFpSZLm/62A=";
+    hash = "sha256-JnET78yl5RvpGuDQy3rCycOCkiKoLr5DN1fPhRNNMco=";
   };
 
   nativeBuildInputs = [
@@ -37,8 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
     hyprutils
     libjpeg
     libjxl
+    librsvg
     libspng
     libwebp
+    pango
     pixman
   ];
 

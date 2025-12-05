@@ -39,7 +39,6 @@ rustPlatform.buildRustPackage rec {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = "src-tauri";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Nu1N96OrLG/D2/1vbU229jLVNZuKIiCSwDJA25hlqFM=";
 
   # FIXME: This is a workaround, because we have a git dependency node_modules/lrc-kit contains install scripts

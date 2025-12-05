@@ -123,7 +123,14 @@ impl From<&Action> for &'static str {
 // Allow for this switch-to-configuration to remain consistent with the perl implementation.
 // Perl's "die" uses errno to set the exit code: https://perldoc.perl.org/perlvar#%24%21
 fn die() -> ! {
-    std::process::exit(std::io::Error::last_os_error().raw_os_error().unwrap_or(1));
+    let code = match std::io::Error::last_os_error().raw_os_error().unwrap_or(1) {
+        // Ensure that even if errno did not point to a helpful error code, we still have a
+        // non-zero exit code
+        0 => 1,
+        other => other,
+    };
+
+    std::process::exit(code);
 }
 
 fn parse_os_release() -> Result<HashMap<String, String>> {
@@ -142,7 +149,7 @@ fn parse_os_release() -> Result<HashMap<String, String>> {
 fn do_pre_switch_check(command: &str, toplevel: &Path, action: &Action) -> Result<()> {
     let mut cmd_split = command.split_whitespace();
     let Some(argv0) = cmd_split.next() else {
-        bail!("missing first argument in install bootloader commands");
+        bail!("missing first argument in pre-switch check");
     };
 
     match std::process::Command::new(argv0)
@@ -190,17 +197,17 @@ fn required_env(var: &str) -> anyhow::Result<String> {
     std::env::var(var).with_context(|| format!("missing required environment variable ${var}"))
 }
 
-#[derive(Debug)]
-struct UnitState {
+struct UnitState<'a, 'b> {
     state: String,
     substate: String,
+    proxy: Proxy<'a, &'b LocalConnection>,
 }
 
 // Asks the currently running systemd instance via dbus which units are active. Returns a hash
 // where the key is the name of each unit and the value a hash of load, state, substate.
-fn get_active_units(
-    systemd_manager: &Proxy<'_, &LocalConnection>,
-) -> Result<HashMap<String, UnitState>> {
+fn get_active_units<'a, 'b>(
+    systemd_manager: &Proxy<'a, &'b LocalConnection>,
+) -> Result<HashMap<String, UnitState<'a, 'b>>> {
     let units = systemd_manager
         .list_units_by_patterns(Vec::new(), Vec::new())
         .context("Failed to list systemd units")?;
@@ -212,29 +219,36 @@ fn get_active_units(
                 id,
                 _description,
                 _load_state,
-                active_state,
-                sub_state,
+                state,
+                substate,
                 following,
-                _unit_path,
+                unit_path,
                 _job_id,
                 _job_type,
                 _job_path,
             )| {
-                if following.is_empty() && active_state != "inactive" {
-                    Some((id, active_state, sub_state))
+                let proxy = systemd_manager.connection.with_proxy(
+                    "org.freedesktop.systemd1",
+                    unit_path,
+                    Duration::from_millis(5000),
+                );
+
+                if following.is_empty() && state != "inactive" {
+                    Some((
+                        id,
+                        UnitState {
+                            state,
+                            substate,
+                            proxy,
+                        },
+                    ))
                 } else {
                     None
                 }
             },
         )
-        .fold(HashMap::new(), |mut acc, (id, active_state, sub_state)| {
-            acc.insert(
-                id,
-                UnitState {
-                    state: active_state,
-                    substate: sub_state,
-                },
-            );
+        .fold(HashMap::new(), |mut acc, (id, unit_state)| {
+            acc.insert(id, unit_state);
 
             acc
         }))
@@ -259,6 +273,8 @@ fn parse_systemd_ini(data: &mut UnitInfo, mut unit_file: impl Read) -> Result<()
         &unit_file_content,
         ParseOption {
             enabled_quote: true,
+            enabled_indented_mutiline_value: false,
+            enabled_preserve_key_leading_whitespace: false,
             // Allow for escaped characters that won't get interpreted by the INI parser. These
             // often show up in systemd unit files device/mount/swap unit names (e.g. dev-disk-by\x2dlabel-root.device).
             enabled_escape: false,
@@ -802,9 +818,12 @@ fn parse_fstab(fstab: impl BufRead) -> (HashMap<String, Filesystem>, HashMap<Str
 
 // Converts a path to the name of a systemd mount unit that would be responsible for mounting this
 // path.
-fn path_to_unit_name(bin_path: &Path, path: &str) -> String {
+fn path_to_unit_name(bin_path: &Path, path: &str, is_automount: bool) -> String {
     let Ok(output) = std::process::Command::new(bin_path.join("systemd-escape"))
-        .arg("--suffix=mount")
+        .arg(format!(
+            "--suffix={}",
+            if is_automount { "automount" } else { "mount" }
+        ))
         .arg("-p")
         .arg(path)
         .output()
@@ -814,7 +833,7 @@ fn path_to_unit_name(bin_path: &Path, path: &str) -> String {
     };
 
     let Ok(unit) = String::from_utf8(output.stdout) else {
-        eprintln!("Unable to convert systemd-espape output to valid UTF-8");
+        eprintln!("Unable to convert systemd-escape output to valid UTF-8");
         die();
     };
 
@@ -885,20 +904,19 @@ impl std::fmt::Display for Job {
     }
 }
 
-fn new_dbus_proxies(
-    conn: &LocalConnection,
-) -> (Proxy<'_, &LocalConnection>, Proxy<'_, &LocalConnection>) {
-    (
-        conn.with_proxy(
-            "org.freedesktop.systemd1",
-            "/org/freedesktop/systemd1",
-            Duration::from_millis(10000),
-        ),
-        conn.with_proxy(
-            "org.freedesktop.login1",
-            "/org/freedesktop/login1",
-            Duration::from_millis(10000),
-        ),
+fn systemd1_proxy(conn: &LocalConnection) -> Proxy<'_, &LocalConnection> {
+    conn.with_proxy(
+        "org.freedesktop.systemd1",
+        "/org/freedesktop/systemd1",
+        Duration::from_millis(10000),
+    )
+}
+
+fn login1_proxy(conn: &LocalConnection) -> Proxy<'_, &LocalConnection> {
+    conn.with_proxy(
+        "org.freedesktop.login1",
+        "/org/freedesktop/login1",
+        Duration::from_millis(10000),
     )
 }
 
@@ -907,6 +925,10 @@ fn block_on_jobs(
     submitted_jobs: &Rc<RefCell<HashMap<dbus::Path<'static>, Job>>>,
 ) {
     while !submitted_jobs.borrow().is_empty() {
+        log::debug!(
+            "waiting for submitted jobs to finish, still have {} job(s)",
+            submitted_jobs.borrow().len()
+        );
         _ = conn.process(Duration::from_millis(500));
     }
 }
@@ -933,7 +955,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
     }
 
     let dbus_conn = LocalConnection::new_session().context("Failed to open dbus connection")?;
-    let (systemd, _) = new_dbus_proxies(&dbus_conn);
+    let systemd = systemd1_proxy(&dbus_conn);
 
     let nixos_activation_done = Rc::new(RefCell::new(false));
     let _nixos_activation_done = nixos_activation_done.clone();
@@ -959,6 +981,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
         .restart_unit("nixos-activation.service", "replace")
         .context("Failed to restart nixos-activation.service")?;
 
+    log::debug!("waiting for nixos activation to finish");
     while !*nixos_activation_done.borrow() {
         _ = dbus_conn
             .process(Duration::from_secs(500))
@@ -987,6 +1010,8 @@ dry-activate: show what would be done if this configuration were activated
 
 /// Performs switch-to-configuration functionality for the entire system
 fn do_system_switch(action: Action) -> anyhow::Result<()> {
+    log::debug!("Performing system switch");
+
     let out = PathBuf::from(required_env("OUT")?);
     let toplevel = PathBuf::from(required_env("TOPLEVEL")?);
     let distro_id = required_env("DISTRO_ID")?;
@@ -994,8 +1019,14 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
     let install_bootloader = required_env("INSTALL_BOOTLOADER")?;
     let locale_archive = required_env("LOCALE_ARCHIVE")?;
     let new_systemd = PathBuf::from(required_env("SYSTEMD")?);
+    let log_level = if std::env::var("STC_DEBUG").is_ok() {
+        LevelFilter::Debug
+    } else {
+        LevelFilter::Info
+    };
 
     let action = ACTION.get_or_init(|| action);
+    log::debug!("Using action {:?}", action);
 
     // The action that is to be performed (like switch, boot, test, dry-activate) Also exposed via
     // environment variable from now on
@@ -1027,6 +1058,7 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
     std::fs::set_permissions("/run/nixos", perms)
         .context("Failed to set permissions on /run/nixos directory")?;
 
+    log::debug!("Creating lock file /run/nixos/switch-to-configuration.lock");
     let Ok(lock) = std::fs::OpenOptions::new()
         .append(true)
         .create(true)
@@ -1036,12 +1068,13 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
         die();
     };
 
+    log::debug!("Acquiring lock on file /run/nixos/switch-to-configuration.lock");
     let Ok(_lock) = Flock::lock(lock, FlockArg::LockExclusiveNonblock) else {
         eprintln!("Could not acquire lock");
         die();
     };
 
-    if syslog::init(Facility::LOG_USER, LevelFilter::Debug, Some("nixos")).is_err() {
+    if syslog::init(Facility::LOG_USER, log_level, Some("nixos")).is_err() {
         bail!("Failed to initialize logger");
     }
 
@@ -1051,6 +1084,7 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
         != "1"
     {
         do_pre_switch_check(&pre_switch_check, &toplevel, action)?;
+        log::debug!("Done performing pre-switch checks");
     }
 
     if *action == Action::Check {
@@ -1060,6 +1094,7 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
     // Install or update the bootloader.
     if matches!(action, Action::Switch | Action::Boot) {
         do_install_bootloader(&install_bootloader, &toplevel)?;
+        log::debug!("Done performing bootloader installation");
     }
 
     // Just in case the new configuration hangs the system, do a sync now.
@@ -1114,7 +1149,8 @@ won't take effect until you reboot the system.
     let mut units_to_reload = map_from_list_file(RELOAD_LIST_FILE);
 
     let dbus_conn = LocalConnection::new_system().context("Failed to open dbus connection")?;
-    let (systemd, logind) = new_dbus_proxies(&dbus_conn);
+    let systemd = systemd1_proxy(&dbus_conn);
+    let logind = login1_proxy(&dbus_conn);
 
     let submitted_jobs = Rc::new(RefCell::new(HashMap::new()));
     let finished_jobs = Rc::new(RefCell::new(HashMap::new()));
@@ -1163,6 +1199,17 @@ won't take effect until you reboot the system.
         .context("Invalid regex for matching systemd unit names")?;
 
     for (unit, unit_state) in &current_active_units {
+        // Don't touch units not explicitly written by NixOS (e.g. units created by generators in
+        // /run/systemd/generator*)
+        if !unit_state
+            .proxy
+            .get("org.freedesktop.systemd1.Unit", "FragmentPath")
+            .map(|fragment_path: String| fragment_path.starts_with("/etc/systemd/system"))
+            .unwrap_or_default()
+        {
+            continue;
+        }
+
         let current_unit_file = Path::new("/etc/systemd/system").join(unit);
         let new_unit_file = toplevel.join("etc/systemd/system").join(unit);
 
@@ -1293,8 +1340,10 @@ won't take effect until you reboot the system.
         .unwrap_or_default();
 
     for (mountpoint, current_filesystem) in current_filesystems {
+        let is_automount = current_filesystem.options.contains("x-systemd.automount");
+
         // Use current version of systemctl binary before daemon is reexeced.
-        let unit = path_to_unit_name(&current_system_bin, &mountpoint);
+        let unit = path_to_unit_name(&current_system_bin, &mountpoint, is_automount);
         if let Some(new_filesystem) = new_filesystems.get(&mountpoint) {
             if current_filesystem.fs_type != new_filesystem.fs_type
                 || current_filesystem.device != new_filesystem.device
@@ -1640,6 +1689,7 @@ won't take effect until you reboot the system.
         eprintln!("restarting systemd...");
         _ = systemd.reexecute(); // we don't get a dbus reply here
 
+        log::debug!("waiting for systemd restart to finish");
         while !*systemd_reload_status.borrow() {
             _ = dbus_conn
                 .process(Duration::from_millis(500))
@@ -1654,6 +1704,7 @@ won't take effect until you reboot the system.
 
     // Make systemd reload its units.
     _ = systemd.reload(); // we don't get a dbus reply here
+    log::debug!("waiting for systemd reload to finish");
     while !*systemd_reload_status.borrow() {
         _ = dbus_conn
             .process(Duration::from_millis(500))
@@ -1690,6 +1741,7 @@ won't take effect until you reboot the system.
                     .canonicalize()
                     .context("Failed to get full path to /proc/self/exe")?;
 
+                log::debug!("Performing user switch for {name}");
                 std::process::Command::new(&myself)
                     .uid(uid)
                     .gid(gid)
@@ -1865,10 +1917,17 @@ won't take effect until you reboot the system.
     //
     // Wait for events from systemd to settle. process() will return true if we have received any
     // messages on the bus.
-    while dbus_conn
-        .process(Duration::from_millis(250))
-        .unwrap_or_default()
-    {}
+    let mut waited = Duration::from_millis(0);
+    let wait_interval = Duration::from_millis(250);
+    let max_wait = Duration::from_secs(90);
+    log::debug!("waiting for systemd events to settle");
+    while dbus_conn.process(wait_interval).unwrap_or_default() {
+        waited += wait_interval;
+        if waited >= max_wait {
+            log::debug!("timed out waiting systemd events to settle");
+            break;
+        }
+    }
 
     let new_active_units = get_active_units(&systemd)?;
 

@@ -20,6 +20,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     mkdir -p $out/include
     cp -r include/igl $out/include
+    rm -rf $out/include/igl/opengl
   '';
 
   meta = with lib; {

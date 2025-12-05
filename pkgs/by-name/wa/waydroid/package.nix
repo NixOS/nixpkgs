@@ -12,11 +12,13 @@
   lxc,
   iproute2,
   iptables,
+  nftables,
   util-linux,
   wrapGAppsHook3,
   wl-clipboard,
   runtimeShell,
   nix-update-script,
+  withNftables ? false,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -65,6 +67,10 @@ python3Packages.buildPythonApplication rec {
     "USE_SYSTEMD=0"
     "SYSCONFDIR=$(out)/etc"
   ];
+  postInstall = lib.optionalString withNftables ''
+    substituteInPlace $out/lib/waydroid/data/scripts/waydroid-net.sh \
+      --replace-fail 'LXC_USE_NFT="false"' 'LXC_USE_NFT="true"'
+  '';
 
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
@@ -76,7 +82,7 @@ python3Packages.buildPythonApplication rec {
           dnsmasq
           getent
           iproute2
-          iptables
+          (if withNftables then nftables else iptables)
         ]
       }
 

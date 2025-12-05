@@ -69,7 +69,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Screencast tool to display your keys inspired by Screenflick";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.rasendubi ];
+    maintainers = [ ];
     mainProgram = "screenkey";
   };
 }

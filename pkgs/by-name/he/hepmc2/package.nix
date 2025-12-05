@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-Dmomentum:STRING=GEV"
     "-Dlength:STRING=MM"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
   meta = with lib; {

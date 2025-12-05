@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   git,
@@ -9,18 +10,18 @@
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "3.0.25";
+  version = "3.0.45";
 
   src = fetchFromGitHub {
     owner = "kubescape";
     repo = "kubescape";
     tag = "v${version}";
-    hash = "sha256-1KwFa0FixlzgRd2hSUj/ODf0SJKxZ496/xg374uV4fI=";
+    hash = "sha256-ydTCphcqHY0RM2RYlqp5tFlNqL9QP3LCSSca7b+MM7E=";
     fetchSubmodules = true;
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-GL5V3f2hiTzNDhBKyvyT8BlbRCaPSJXLy/+xiYjhsvw=";
+  vendorHash = "sha256-4c4AyvSJqIYLou0e9Hr7u/0FWdwKOyFzkY/R8BheWL0=";
 
   subPackages = [ "." ];
 
@@ -57,7 +58,7 @@ buildGoModule rec {
       --replace-fail "TestSetContextMetadata" "SkipSetContextMetadata"
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kubescape \
       --bash <($out/bin/kubescape completion bash) \
       --fish <($out/bin/kubescape completion fish) \

@@ -23,20 +23,13 @@ let
   };
 
   pname = "nextpnr";
-  version = "0.8";
-
-  prjxray_src = fetchFromGitHub {
-    owner = "f4pga";
-    repo = "prjxray";
-    rev = "faf9c774a340e39cf6802d009996ed6016e63521";
-    hash = "sha256-BEv7vJoOHWHZoc9EXbesfwFFClkuiSpVwHUrj4ahUcA=";
-  };
+  version = "0.9";
 
   prjbeyond_src = fetchFromGitHub {
     owner = "YosysHQ-GmbH";
     repo = "prjbeyond-db";
-    rev = "06d3b424dd0e52d678087c891c022544238fb9e3";
-    hash = "sha256-nmyFFUO+/J2lb+lPATEjdYq0d21P1fN3N94JXR8brZ0=";
+    rev = "f49f66be674d9857c657930353b867ba94bcbdd7";
+    hash = "sha256-B/VmKgMu6f2Y8umE+NgGD5W0FYBIfDcMVwgHocFzreA=";
   };
 in
 
@@ -47,7 +40,7 @@ stdenv.mkDerivation rec {
     owner = "YosysHQ";
     repo = "nextpnr";
     tag = "${pname}-${version}";
-    hash = "sha256-lconcmLACxWxC41fTIkUaGbfp79G98YdHA4mRJ9Qo1w=";
+    hash = "sha256-rpg99k7rSNU4p5D0iXipLgNNOA2j0PdDsz8JTxyYNPM=";
     fetchSubmodules = true;
   };
 
@@ -80,10 +73,16 @@ stdenv.mkDerivation rec {
       "-DTRELLIS_LIBDIR=${trellis}/lib/trellis"
       "-DGOWIN_BBA_EXECUTABLE=${python3Packages.apycula}/bin/gowin_bba"
       "-DUSE_OPENMP=ON"
-      "-DHIMBAECHEL_UARCH=all"
+
+      # gatemate excluded due to non-reproducible build https://github.com/YosysHQ/prjpeppercorn/issues/9
+      # xilinx excluded due to needing vivado https://github.com/f4pga/prjxray?tab=readme-ov-file#step-1
+      "-DHIMBAECHEL_UARCH=example;gowin;ng-ultra"
+
       "-DHIMBAECHEL_GOWIN_DEVICES=all"
-      "-DHIMBAECHEL_PRJXRAY_DB=${prjxray_src}"
       "-DHIMBAECHEL_PRJBEYOND_DB=${prjbeyond_src}"
+      # https://github.com/YosysHQ/nextpnr/issues/1578
+      # `Compatibility with CMake < 3.5 has been removed from CMake.`
+      "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
     ]
     ++ (lib.optional enableGui "-DBUILD_GUI=ON");
 

@@ -1,12 +1,12 @@
 diff --git a/Makefile b/Makefile
-index bffcbd4..fd1d8a3 100644
+index 9e598ea..0776132 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -1,6 +1,7 @@
- VERSION         := 0.08
+ VERSION         := 0.12
  DKMS_ROOT_PATH  := /usr/src/msi_ec-$(VERSION)
- TARGET ?= $(shell uname -r)
-+KERNELDIR ?= /lib/modules/$(TARGET)/build/
+ KERNELRELEASE ?= $(shell uname -r)
++KERNELDIR ?= /lib/modules/$(KERNELRELEASE)/build/
  
  ccflags-y := -std=gnu11 -Wno-declaration-after-statement
  
@@ -14,11 +14,11 @@ index bffcbd4..fd1d8a3 100644
  all: modules
  
  modules:
--	@$(MAKE) -C /lib/modules/$(TARGET)/build M=$(CURDIR) modules
+-	@$(MAKE) -C /lib/modules/$(KERNELRELEASE)/build M=$(CURDIR) modules
 +	@$(MAKE) -C $(KERNELDIR) M=$(CURDIR) modules
  
  clean:
- 	@$(MAKE) -C /lib/modules/$(TARGET)/build M=$(CURDIR) clean
+ 	@$(MAKE) -C /lib/modules/$(KERNELRELEASE)/build M=$(CURDIR) clean
  
 +modules_install:
 +	@$(MAKE) -C $(KERNELDIR) M=$(CURDIR) modules_install

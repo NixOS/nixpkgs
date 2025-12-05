@@ -13,19 +13,16 @@
   pytestCheckHook,
   replaceVars,
   rustPlatform,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "slixmpp";
-  version = "1.10.0";
+  version = "1.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RrxdAVB8tChcglXOXHF8C19o5U38HxcSiDmY1tciV4o=";
+    hash = "sha256-dGn23K9XQv1i4OZu5EfFM4p0UgwZgqcHhOe3kN7y/dU=";
   };
 
   patches = [
@@ -41,7 +38,7 @@ buildPythonPackage rec {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname src;
-    hash = "sha256-CeuClBYEG2YCm5lnxFs5RhjIgYEOe76rzHpauLZeQR0=";
+    hash = "sha256-eKXQeZ2RLHsTZmYszws4fCHgeiSO9wsrRbPkVV1gqZY=";
   };
 
   dependencies = [
@@ -57,7 +54,7 @@ buildPythonPackage rec {
     safer-xml-parserig = [ defusedxml ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     # don't test against pure python version in the source tree

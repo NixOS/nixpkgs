@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "iaqualink";
-  version = "0.5.3";
+  version = "0.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "flz";
     repo = "iaqualink-py";
     tag = "v${version}";
-    hash = "sha256-2DqZJlsbDWo9fxIDg5P0CvZs8AuAh8XrhNiwIvuRm80=";
+    hash = "sha256-s/ZhcbTaCvn7ei1O4+P4fKPojitl+4gsatc9PZx+W2g=";
   };
 
   build-system = [

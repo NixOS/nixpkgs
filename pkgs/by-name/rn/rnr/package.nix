@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-uuM8zh0wFSsySedXmdm8WGGR4HmUc5TCZ6socdztrZI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-lXo3BECHpiNMRMgd4XZy+b8QHbE0TZ5/P4cz+SgwqsY=";
 
   meta = {
@@ -24,6 +23,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ismaelgv/rnr";
     changelog = "https://github.com/ismaelgv/rnr/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

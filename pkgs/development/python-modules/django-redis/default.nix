@@ -63,14 +63,13 @@ buildPythonPackage rec {
     pytestCheckHook
     redisTestHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # https://github.com/jazzband/django-redis/issues/777
   dontUsePytestXdist = true;
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = [

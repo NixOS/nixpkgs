@@ -24,12 +24,17 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    environment.systemPackages = [
+      pkgs.cosmic-comp
+      cfg.package
+    ];
+
     services.greetd = {
       enable = true;
       settings = {
         default_session = {
           user = "cosmic-greeter";
-          command = ''${lib.getExe' pkgs.coreutils "env"} XCURSOR_THEME="''${XCURSOR_THEME:-Pop}" systemd-cat -t cosmic-greeter ${lib.getExe pkgs.cosmic-comp} ${lib.getExe cfg.package}'';
+          command = ''${lib.getExe' pkgs.coreutils "env"} XCURSOR_THEME="''${XCURSOR_THEME:-Pop}" ${lib.getExe' cfg.package "cosmic-greeter-start"}'';
         };
         initial_session = lib.mkIf (cfgAutoLogin.enable && (cfgAutoLogin.user != null)) {
           user = cfgAutoLogin.user;
@@ -50,14 +55,22 @@ in
       };
     };
 
+    systemd.tmpfiles.settings.cosmic-greeter."/run/cosmic-greeter".d = {
+      group = "cosmic-greeter";
+      mode = "0755";
+      user = "cosmic-greeter";
+    };
+
     # The greeter user is hardcoded in `cosmic-greeter`
     users.groups.cosmic-greeter = { };
     users.users.cosmic-greeter = {
       description = "COSMIC login greeter user";
       isSystemUser = true;
       home = "/var/lib/cosmic-greeter";
+      homeMode = "0750";
       createHome = true;
       group = "cosmic-greeter";
+      extraGroups = [ "video" ];
     };
     # Required for authentication
     security.pam.services.cosmic-greeter = { };

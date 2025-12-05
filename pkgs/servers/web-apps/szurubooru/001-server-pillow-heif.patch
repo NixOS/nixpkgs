@@ -1,0 +1,66 @@
+commit f89ce378d3b405d69635da28dfd57adced23aa17
+Author: kuflierl <41301536+kuflierl@users.noreply.github.com>
+Date:   Mon Sep 15 20:14:08 2025 +0200
+
+    server: replace pillow-avif-plugin, pyheif, heif-image-plugin with pillow-heif
+
+diff --git a/requirements.txt b/requirements.txt
+index ffe18f0c..16a72750 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,12 +1,10 @@
+ alembic>=0.8.5
+ certifi>=2017.11.5
+ coloredlogs==5.0
+-heif-image-plugin==0.3.2
+ numpy>=1.8.2
+-pillow-avif-plugin~=1.1.0
+-pillow>=4.3.0
++pillow>=11.2.1
++pillow-heif>=1.0.0
+ psycopg2-binary>=2.6.1
+-pyheif==0.6.1
+ pynacl>=1.2.1
+ pyRFC3339>=1.0
+ pytz>=2018.3
+diff --git a/szurubooru/func/image_hash.py b/szurubooru/func/image_hash.py
+index 76d5a846..b89541eb 100644
+--- a/szurubooru/func/image_hash.py
++++ b/szurubooru/func/image_hash.py
+@@ -4,13 +4,13 @@ from datetime import datetime
+ from io import BytesIO
+ from typing import Any, Callable, List, Optional, Set, Tuple
+ 
+-import HeifImagePlugin
++from pillow_heif import register_heif_opener
+ import numpy as np
+-import pillow_avif
+ from PIL import Image
+ 
+ from szurubooru import config, errors
+ 
++register_heif_opener()
+ logger = logging.getLogger(__name__)
+ 
+ # Math based on paper from H. Chi Wong, Marshall Bern and David Goldberg
+diff --git a/szurubooru/func/images.py b/szurubooru/func/images.py
+index e135d182..f4b5aa5b 100644
+--- a/szurubooru/func/images.py
++++ b/szurubooru/func/images.py
+@@ -7,14 +7,14 @@ import subprocess
+ from io import BytesIO
+ from typing import List
+ 
+-import HeifImagePlugin
+-import pillow_avif
++from pillow_heif import register_heif_opener
+ from PIL import Image as PILImage
+ 
+ from szurubooru import errors
+ from szurubooru.func import mime, util
+ 
+ logger = logging.getLogger(__name__)
++register_heif_opener()
+ 
+ 
+ def convert_heif_to_png(content: bytes) -> bytes:

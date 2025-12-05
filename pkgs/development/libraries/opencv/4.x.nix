@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   unzip,
@@ -13,7 +14,7 @@
   glib,
   glog,
   gflags,
-  protobuf_21,
+  protobuf,
   config,
   ocl-icd,
   qimgv,
@@ -69,7 +70,7 @@
   tesseract,
   leptonica,
   enableTbb ? false,
-  tbb,
+  onetbb,
   enableOvis ? false,
   ogre,
   enableGPhoto2 ? false,
@@ -103,7 +104,7 @@ let
     ;
   inherit (lib.trivial) flip;
 
-  version = "4.11.0";
+  version = "4.12.0";
 
   # It's necessary to consistently use backendStdenv when building with CUDA
   # support, otherwise we get libstdc++ errors downstream
@@ -114,21 +115,21 @@ let
     owner = "opencv";
     repo = "opencv";
     tag = version;
-    hash = "sha256-oiU4CwoMfuUbpDtujJVTShMCzc5GsnIaprC4DzkSzEM=";
+    hash = "sha256-TZdEeZyBY3vCI53g4VDMzl3AASMuXAZKrSH/+XlxR7c=";
   };
 
   contribSrc = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv_contrib";
     tag = version;
-    hash = "sha256-YNd96qFJ8SHBgDEEsoNps888myGZdELbbuYCae9pW3M=";
+    hash = "sha256-3tbscRFryjCynIqh0OWec8CUjXTeIDxOGJkHTK2aIao=";
   };
 
   testDataSrc = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv_extra";
     tag = version;
-    hash = "sha256-EqlGlemztYlk03MX1LAviArWT+OA3/qL3jfgHYC+SP8=";
+    hash = "sha256-f8PZyFLdfixt1ApjMc9Cvj9nfEaDRUszSeEfCsWziis=";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -298,6 +299,17 @@ effectiveStdenv.mkDerivation {
   # Ensures that we use the system OpenEXR rather than the vendored copy of the source included with OpenCV.
   patches = [
     ./cmake-don-t-use-OpenCVFindOpenEXR.patch
+    ./0001-cmake-OpenCVUtils.cmake-invalidate-Nix-store-paths-b.patch
+    (fetchpatch {
+      name = "ffmpeg-8-support.patch";
+      url = "https://github.com/opencv/opencv/commit/90c444abd387ffa70b2e72a34922903a2f0f4f5a.patch";
+      hash = "sha256-iRRparDJoNhrvELH6cAagWcVzpiE2lfivHVxvZyi3ik=";
+    })
+    (fetchpatch {
+      name = "fix-ffmpeg-8-support.patch";
+      url = "https://github.com/opencv/opencv/commit/dbb622b7f59c3f0e5bd3487252ef37cf72dcdcdb.patch";
+      hash = "sha256-MS9WizZQu0Gxw/daDDFmETxcDJYRTyhSq/xK0X5lAZM=";
+    })
   ]
   ++ optionals enableCuda [
     ./cuda_opt_flow.patch
@@ -321,18 +333,13 @@ effectiveStdenv.mkDerivation {
       ${installExtraFiles wechat_qrcode}
     '');
 
-  postConfigure = ''
-    [ -e modules/core/version_string.inc ]
-    echo '"(build info elided)"' > modules/core/version_string.inc
-  '';
-
   buildInputs = [
     boost
     gflags
     glib
     glog
     pcre2
-    protobuf_21
+    protobuf
     zlib
   ]
   ++ optionals enablePython [
@@ -406,7 +413,7 @@ effectiveStdenv.mkDerivation {
     leptonica
   ]
   ++ optionals enableTbb [
-    tbb
+    onetbb
   ]
   ++ optionals effectiveStdenv.hostPlatform.isDarwin [
     bzip2
@@ -463,6 +470,7 @@ effectiveStdenv.mkDerivation {
     (cmakeBool "OPENCV_GENERATE_PKGCONFIG" true)
     (cmakeBool "WITH_OPENMP" true)
     (cmakeBool "BUILD_PROTOBUF" false)
+    (cmakeFeature "CMAKE_CXX_STANDARD" "17") # required to enable protobuf
     (cmakeBool "WITH_PROTOBUF" true)
     (cmakeBool "PROTOBUF_UPDATE_FILES" true)
     (cmakeBool "OPENCV_ENABLE_NONFREE" enableUnfree)
@@ -631,7 +639,7 @@ effectiveStdenv.mkDerivation {
         inherit opencv4;
       };
     }
-    // optionalAttrs (enableCuda) {
+    // optionalAttrs enableCuda {
       no-libstdcxx-errors = callPackage ./libstdcxx-test.nix { attrName = "opencv4"; };
     };
   }

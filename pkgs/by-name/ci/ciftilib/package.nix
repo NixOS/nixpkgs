@@ -38,11 +38,19 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)" \
+      --replace-fail "CMAKE_POLICY(VERSION 2.8.7)" "CMAKE_POLICY(VERSION 3.10)" \
+      --replace-fail "CMAKE_POLICY(SET CMP0045 OLD)" ""
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/Washington-University/CiftiLib";
     description = "Library for reading and writing CIFTI files";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
     license = licenses.bsd2;
   };
 }

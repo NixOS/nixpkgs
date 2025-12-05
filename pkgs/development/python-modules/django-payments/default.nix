@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "django-payments";
-  version = "3.0.1";
+  version = "3.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "jazzband";
     repo = "django-payments";
     tag = "v${version}";
-    hash = "sha256-/XsqtExnNtUGqI40XvvcO/nGq56gbC/mPdtHv1QQyGo=";
+    hash = "sha256-b8CXMzuTfeF3Q9Ed/Ke2mGGBXYajJYcFkfzkb1lVAIE=";
   };
 
   build-system = [

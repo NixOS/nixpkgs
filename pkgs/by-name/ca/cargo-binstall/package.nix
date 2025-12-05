@@ -6,21 +6,21 @@
   bzip2,
   xz,
   zstd,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-binstall";
-  version = "1.14.1";
+  version = "1.16.2";
 
   src = fetchFromGitHub {
     owner = "cargo-bins";
     repo = "cargo-binstall";
-    rev = "v${version}";
-    hash = "sha256-E+Vyup0HNDbHVQ43Dq5U77TxXqDRSPAs0Kw0RsvEggs=";
+    tag = "v${version}";
+    hash = "sha256-jaBIVR8N1UXihRDjQVdJtx5ErlrOHXBVs68SzD0bbPc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-VsgiD/k6Kd02t3HnXax9GdvPsymTOBjvdJivpoGxrXc=";
+  cargoHash = "sha256-Qn/eRQ1GDFPepwgrnZObz7Bgxm9UzFNAZsdwP36A+dM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -58,12 +58,16 @@ rustPlatform.buildRustPackage rec {
     "--skip=gh_api_client::test::test_gh_api_client_cargo_binstall_v0_20_1"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "-V";
+
   meta = {
     description = "Tool for installing rust binaries as an alternative to building from source";
     mainProgram = "cargo-binstall";
     homepage = "https://github.com/cargo-bins/cargo-binstall";
     changelog = "https://github.com/cargo-bins/cargo-binstall/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
 }

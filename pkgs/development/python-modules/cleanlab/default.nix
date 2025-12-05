@@ -114,5 +114,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/cleanlab/cleanlab/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ happysalada ];
+    # cleanlab is incompatible with datasets>=4.0.0
+    # cleanlab/datalab/internal/data.py:313: AssertionError
+    # https://github.com/cleanlab/cleanlab/issues/1244
+    broken = lib.versionAtLeast datasets.version "4.0.0";
   };
 }

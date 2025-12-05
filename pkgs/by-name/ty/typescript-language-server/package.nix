@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "typescript-language-server";
-  version = "4.3.4";
+  version = "5.1.3";
 
   src = fetchFromGitHub {
     owner = "typescript-language-server";
     repo = "typescript-language-server";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-H+SEwvoLsKfwZgKqp0Bymkk0m4hk0PsGlMceL0GsEFY=";
+    hash = "sha256-qKw/AQ6SbodCDJsBJhlHc/w5qFtyhQQv7jFsJiuJtGE=";
   };
 
   patches = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-nSMhPfbWD93sGIKehBBE/bh4RzHXFtGAjeyG20m/LWQ=";
+    hash = "sha256-CSjxiuUN+hHmoWwkVe6c5lLFeX3ROB3QlBQ15rVmPhk=";
   };
 
   nativeBuildInputs = [

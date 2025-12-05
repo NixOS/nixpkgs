@@ -8,26 +8,23 @@
   mdit-py-plugins,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mdformat-beautysh";
-  version = "0.1.1";
+  version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hukkin";
     repo = "mdformat-beautysh";
     tag = version;
-    hash = "sha256-mH9PN6QsPmnIzh/0vxa+5mYLzANUHRruXC0ql4h8myw=";
+    hash = "sha256-Wzwy2FSknohmgrZ/ACliBDD2lOaQKKHyacAL57Ci3SU=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautysh
     mdformat
     mdformat-gfm
@@ -41,6 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Mdformat plugin to beautify Bash scripts";
     homepage = "https://github.com/hukkin/mdformat-beautysh";
+    changelog = "https://github.com/hukkin/mdformat-beautysh/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ aldoborrero ];
   };

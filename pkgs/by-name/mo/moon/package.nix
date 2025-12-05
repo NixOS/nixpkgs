@@ -9,20 +9,21 @@
   nix-update-script,
   installShellFiles,
   buildPackages,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moon";
-  version = "1.38.5";
+  version = "1.41.5";
 
   src = fetchFromGitHub {
     owner = "moonrepo";
     repo = "moon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jWLyg7K+ucCsrHwFNrpmWAXznSD+3TaYGfbZ2hWlnP0=";
+    hash = "sha256-BcDKjw2k102TQmLeq6+59Z6b4IpnGDRbQ4/nAXXIPBo=";
   };
 
-  cargoHash = "sha256-2E59P0d3SDZUgbN5V52Rr9liONiKcFUFv3dSrtFJ8NE=";
+  cargoHash = "sha256-mc3A573QaovLwhcZshe9Z60ebHmcCyW/izbxlb2FNpk=";
 
   env = {
     RUSTFLAGS = "-C strip=symbols";
@@ -33,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     installShellFiles
+    writableTmpDirAsHomeHook
   ];
 
   postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (

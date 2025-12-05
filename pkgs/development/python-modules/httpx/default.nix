@@ -79,7 +79,7 @@ buildPythonPackage rec {
     trustme
     uvicorn
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # testsuite wants to find installed packages for testing entrypoint
   preCheck = ''

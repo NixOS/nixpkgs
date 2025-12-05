@@ -6,7 +6,7 @@
 }:
 
 let
-  unionOfDisjoints = lib.fold lib.attrsets.unionOfDisjoint { };
+  unionOfDisjoints = lib.foldr lib.attrsets.unionOfDisjoint { };
 
   addTests =
     attrPath: drv:

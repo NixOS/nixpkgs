@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "maccy";
-  version = "2.3.0";
+  version = "2.5.1";
 
   src = fetchurl {
     url = "https://github.com/p0deje/Maccy/releases/download/${finalAttrs.version}/Maccy.app.zip";
-    hash = "sha256-Prr0t3OvPWUnUQ3cTE3D+jj1ASKKmDvGZInKlT1WsJ0=";
+    hash = "sha256-pwMiCAS+1uEtEQv2e1UflxYuuh/qqYJbMcp2ZVvZBTA=";
   };
 
   dontUnpack = true;

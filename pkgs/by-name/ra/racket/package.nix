@@ -26,13 +26,6 @@
 let
   minimal = racket-minimal.override { inherit disableDocs; };
 
-  makeLibPaths = lib.concatMapStringsSep " " (
-    lib.flip lib.pipe [
-      lib.getLib
-      (x: ''"${x}/lib"'')
-    ]
-  );
-
   manifest = lib.importJSON ./manifest.json;
   inherit (stdenv.hostPlatform) isDarwin;
 in
@@ -71,7 +64,6 @@ minimal.overrideAttrs (
 
     preBuild =
       let
-        libPaths = makeLibPaths finalAttrs.buildInputs;
         libPathsVar = if isDarwin then "DYLD_FALLBACK_LIBRARY_PATH" else "LD_LIBRARY_PATH";
       in
       /*
@@ -79,7 +71,13 @@ minimal.overrideAttrs (
         dependencies, which is integrated into the build process of Racket
       */
       ''
-        for lib_path in ${libPaths}; do
+        for lib_path in $( \
+            echo "$NIX_LDFLAGS" \
+              | tr ' ' '\n' \
+              | grep '^-L' \
+              | sed 's/^-L//' \
+              | awk '!seen[$0]++' \
+        ); do
             addToSearchPath ${libPathsVar} $lib_path
         done
       ''
@@ -89,8 +87,19 @@ minimal.overrideAttrs (
         export XDG_CACHE_HOME=$(mktemp -d)
       '';
 
+    dontWrapGApps = true;
+
     preFixup = lib.optionalString (!isDarwin) ''
       gappsWrapperArgs+=("--set" "LOCALE_ARCHIVE" "${glibcLocales}/lib/locale/locale-archive")
+
+      find $out/bin -type f -executable -print0 |
+          while IFS= read -r -d ''' f; do
+              if test "$(file --brief --mime-type "$f")" = application/x-executable; then
+                  wrapGApp "$f"
+              fi
+          done
+
+      wrapGApp $out/lib/racket/gracket
     '';
 
     passthru =

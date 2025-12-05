@@ -90,7 +90,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/microsoft/azure-dcap-client";
     maintainers = with lib.maintainers; [
       phlip9
-      trundle
       veehaitch
     ];
     platforms = [ "x86_64-linux" ];

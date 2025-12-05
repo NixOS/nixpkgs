@@ -4,21 +4,18 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "autoslot";
-  version = "2024.12.1";
+  version = "2025.11.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cjrh";
     repo = "autoslot";
     tag = "v${version}";
-    hash = "sha256-wYjsBrjvSZFHDt0HLrnS9Xwk8EHVQupfPSkQnUFmMAk=";
+    hash = "sha256-mPGfBUSKkskiiokqo/TJWdDzuvcg/LDULx+Gx8LexV8=";
   };
 
   build-system = [ flit-core ];

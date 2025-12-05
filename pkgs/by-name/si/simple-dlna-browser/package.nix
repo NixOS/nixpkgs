@@ -15,7 +15,7 @@
 }:
 stdenv.mkDerivation {
   pname = "simple-dlna-browser";
-  version = "unstable-2023-01-09";
+  version = "0-unstable-2023-01-09";
 
   src = fetchFromGitHub {
     owner = "javier-lopez";
@@ -64,6 +64,6 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/javier-lopez/learn/blob/master/sh/tools/simple-dlna-browser";
     license = lib.licenses.fair;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -5,6 +5,7 @@
   enet,
   extra-cmake-modules,
   fetchFromGitHub,
+  faad2,
   libGL,
   libarchive,
   libpcap,
@@ -28,13 +29,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "melonDS";
-  version = "1.0-unstable-2025-07-13";
+  version = "1.0-unstable-2025-11-06";
 
   src = fetchFromGitHub {
     owner = "melonDS-emu";
     repo = "melonDS";
-    rev = "13a9825c9a84fdbf42d0d4b922f9c2e0920ed19e";
-    hash = "sha256-16QcMsYARA5tXeEtCyV2jsWSRwrcBJBYSxG5YtYMPa4=";
+    rev = "220b238ec06692ee144bb1f50867a2edb8795de1";
+    hash = "sha256-Vnrg+6fSnzQKy+3ZU6LKSkkgc04H9KPsE/M2Iu9Wudw=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     enet
+    faad2
     libarchive
     libslirp
     libGL

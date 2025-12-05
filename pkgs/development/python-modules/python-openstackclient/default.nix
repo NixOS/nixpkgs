@@ -18,6 +18,7 @@
   python-manilaclient,
   python-mistralclient,
   python-neutronclient,
+  python-octaviaclient,
   python-openstackclient,
   python-watcherclient,
   python-zaqarclient,
@@ -33,13 +34,13 @@
 
 buildPythonPackage rec {
   pname = "python-openstackclient";
-  version = "8.1.0";
+  version = "8.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_openstackclient";
     inherit version;
-    hash = "sha256-m5xCs/a8S0tICmJU/FYKywGXh4MeCUOW2/msmuVxrks=";
+    hash = "sha256-1hKvGN/GbMjzHmzpZpC2wnOt6KJA7EC39INaiJb7vgE=";
   };
 
   build-system = [
@@ -70,7 +71,7 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
     stestr run -E \
-      "openstackclient.tests.unit.network.v2.test_security_group_network.(TestCreateSecurityGroupNetwork.(test_create_with_tags|test_create_with_no_tag|test_create_min_options|test_create_all_options)|TestShowSecurityGroupNetwork.test_show_all_options)"
+      "openstackclient.tests.unit.volume.v3.test_volume.(TestVolumeCreate|TestVolumeShow)"
     runHook postCheck
   '';
 
@@ -89,6 +90,7 @@ buildPythonPackage rec {
       python-manilaclient
       python-mistralclient
       python-neutronclient
+      python-octaviaclient
       python-watcherclient
       python-zaqarclient
       python-zunclient

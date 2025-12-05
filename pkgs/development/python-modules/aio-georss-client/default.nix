@@ -51,6 +51,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aio_georss_client" ];
 
   meta = with lib; {
+    # https://github.com/exxamalte/python-aio-georss-client/issues/63
+    broken = lib.versionAtLeast xmltodict.version "1";
     description = "Python library for accessing GeoRSS feeds";
     homepage = "https://github.com/exxamalte/python-aio-georss-client";
     changelog = "https://github.com/exxamalte/python-aio-georss-client/blob/v${version}/CHANGELOG.md";

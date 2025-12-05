@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-hLRl8mKRaufneJNBQqPsH+48ZQGxFBNgulXcaK4/6s4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ALp6BQNWpylHPBeLs/4hugN1ulCdctOmgu55Lmt8wjI=";
 
   nativeBuildInputs = [
@@ -54,7 +53,7 @@ rustPlatform.buildRustPackage rec {
       asl20
       unlicense
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "rgr";
   };
 }

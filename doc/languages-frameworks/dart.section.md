@@ -25,9 +25,9 @@ cause the generated `pubspec.lock` derivation to rebuild!
 
 If the package has Git package dependencies, the hashes must be provided in the `gitHashes` set. If a hash is missing, an error message prompting you to add it will be shown.
 
-The `dart` commands run can be overridden through `pubGetScript` and `dartCompileCommand`, you can also add flags using `dartCompileFlags` or `dartJitFlags`.
+The `dart` commands run can be overridden through `pubGetScript` and `dartCompileCommand`; you can also add flags using `dartCompileFlags` or `dartJitFlags`.
 
-Dart supports multiple [outputs types](https://dart.dev/tools/dart-compile#types-of-output), you can choose between them using `dartOutputType` (defaults to `exe`). If you want to override the binaries path or the source path they come from, you can use `dartEntryPoints`. Outputs that require a runtime will automatically be wrapped with the relevant runtime (`dartaotruntime` for `aot-snapshot`, `dart run` for `jit-snapshot` and `kernel`, `node` for `js`), this can be overridden through `dartRuntimeCommand`.
+Dart supports multiple [outputs types](https://dart.dev/tools/dart-compile#types-of-output); you can choose between them using `dartOutputType` (defaults to `exe`). If you want to override the binaries path or the source path they come from, you can use `dartEntryPoints`. Outputs that require a runtime will automatically be wrapped with the relevant runtime (`dartaotruntime` for `aot-snapshot`, `dart run` for `jit-snapshot` and `kernel`, `node` for `js`); this can be overridden through `dartRuntimeCommand`.
 
 ```nix
 {
@@ -133,7 +133,7 @@ Flutter-specific `nix-shell` usage notes are included here. See the [Dart docume
 #### Entering the shell {#ssec-dart-flutter-nix-shell-enter}
 
 By default, dependencies for only the `targetFlutterPlatform` are available in the
-build environment. This is useful for keeping closures small, but be problematic
+build environment. This is useful for keeping closures small but can be problematic
 during development. It's common, for example, to build Web apps for Linux during
 development to take advantage of native features such as stateful hot reload.
 

@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,6 +20,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./fix-linux-6-12-build.patch
     ./fix-linux-6-15-build.patch
+    ./fix-linux-6-16-build.patch
   ];
 
   sourceRoot = "${src.name}/driver";
@@ -29,7 +31,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "KERNELDIR :=" "KERNELDIR ?="
   '';
 
-  makeFlags = [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 

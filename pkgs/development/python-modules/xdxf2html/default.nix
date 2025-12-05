@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "xdxf2html";
-  version = "0.1.0";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-u2UaEALzD583+hbgwTItQOdGQ6GIhdVy79C2gfJwzlI=";
+    hash = "sha256-ux622mch+sc6LzaYxbt35JGRL5mrnn/Tk7nrO5Z03xU=";
   };
 
   build-system = [ setuptools ];

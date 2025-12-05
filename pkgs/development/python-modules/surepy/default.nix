@@ -61,7 +61,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to interact with the Sure Petcare API";
     homepage = "https://github.com/benleb/surepy";
-    changelog = "https://github.com/benleb/surepy/releases/tag/v${src.tag}";
+    changelog = "https://github.com/benleb/surepy/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "surepy";

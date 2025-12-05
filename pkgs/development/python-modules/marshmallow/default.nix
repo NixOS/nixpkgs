@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
@@ -27,6 +28,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     simplejson
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isx86_32 [
+    # Raises a slightly different error than upstream expects: 'Timestamp is too large' instead of 'out of range'
+    "test_from_timestamp_with_overflow_value"
   ];
 
   pythonImportsCheck = [ "marshmallow" ];

@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "teensy-cmake-macros";
-  version = "unstable-2023-04-15";
+  version = "0-unstable-2023-04-15";
 
   src = fetchFromGitHub {
     owner = "newdigate";
@@ -28,6 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
       teensy-cmake-macros = finalAttrs.finalPackage;
     };
   };
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   meta = with lib; {
     description = "CMake macros for building teensy projects";

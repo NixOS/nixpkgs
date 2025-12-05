@@ -48,7 +48,7 @@ stdenv.mkDerivation {
     license = licenses.bsd3;
     platforms = platforms.unix;
     homepage = "https://linux-nfs.org/";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     longDescription = ''
       Universal addresses to RPC program number mapper.
     '';

@@ -11,14 +11,14 @@
 }:
 buildGoModule rec {
   pname = "ctags-lsp";
-  version = "0.7.0";
+  version = "0.9.0";
   vendorHash = null;
 
   src = fetchFromGitHub {
     owner = "netmute";
     repo = "ctags-lsp";
     tag = "v${version}";
-    hash = "sha256-yueT8Q/mJTvQ3fqE4237E93W4ToEi0IzSus/xoto6vA=";
+    hash = "sha256-CcaYwfmWtBoyAkgF1xwBjNG3MtSa94x2/prW6VQpbQ0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

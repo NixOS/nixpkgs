@@ -38,10 +38,16 @@ stdenv.mkDerivation {
     "-DBUILD_EXAMPLES=OFF"
   ];
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     description = "Platform-agnostic camera and sensor capture API for the ZED 2, ZED 2i, and ZED Mini stereo cameras";
     homepage = "https://github.com/stereolabs/zed-open-capture";
-    license = licenses.mit;
-    maintainers = with maintainers; [ marius851000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ marius851000 ];
+    platforms = lib.platforms.linux;
   };
 }

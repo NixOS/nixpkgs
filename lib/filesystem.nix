@@ -28,7 +28,8 @@ in
 
   /**
     The type of a path. The path needs to exist and be accessible.
-    The result is either "directory" for a directory, "regular" for a regular file, "symlink" for a symlink, or "unknown" for anything else.
+    The result is either `"directory"` for a directory, `"regular"` for a
+    regular file, `"symlink"` for a symlink, or `"unknown"` for anything else.
 
     # Inputs
 
@@ -56,25 +57,7 @@ in
 
     :::
   */
-  pathType =
-    builtins.readFileType or
-    # Nix <2.14 compatibility shim
-    (
-      path:
-      if
-        !pathExists path
-      # Fail irrecoverably to mimic the historic behavior of this function and
-      # the new builtins.readFileType
-      then
-        abort "lib.filesystem.pathType: Path ${toString path} does not exist."
-      # The filesystem root is the only path where `dirOf / == /` and
-      # `baseNameOf /` is not valid. We can detect this and directly return
-      # "directory", since we know the filesystem root can't be anything else.
-      else if dirOf path == path then
-        "directory"
-      else
-        (readDir (dirOf path)).${baseNameOf path}
-    );
+  pathType = builtins.readFileType;
 
   /**
     Whether a path exists and is a directory.
@@ -178,9 +161,9 @@ in
     in
     builtins.listToAttrs cabal-subdirs;
   /**
-    Find the first directory containing a file matching 'pattern'
-    upward from a given 'file'.
-    Returns 'null' if no directories contain a file matching 'pattern'.
+    Find the first directory containing a file matching `pattern`
+    upward from a given `file`.
+    Returns `null` if no directories contain a file matching `pattern`.
 
     # Inputs
 
@@ -239,16 +222,15 @@ in
     ```
   */
   listFilesRecursive =
-    dir:
-    lib.flatten (
-      lib.mapAttrsToList (
-        name: type:
-        if type == "directory" then
-          lib.filesystem.listFilesRecursive (dir + "/${name}")
-        else
-          dir + "/${name}"
-      ) (builtins.readDir dir)
-    );
+    let
+      # We only flatten at the very end, as flatten is recursive.
+      internalFunc =
+        dir:
+        (lib.mapAttrsToList (
+          name: type: if type == "directory" then internalFunc (dir + "/${name}") else dir + "/${name}"
+        ) (builtins.readDir dir));
+    in
+    dir: lib.flatten (internalFunc dir);
 
   /**
     Transform a directory tree containing package files suitable for

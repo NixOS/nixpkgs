@@ -12,13 +12,13 @@
 stdenv.mkDerivation rec {
   pname = "aws-c-io";
   # nixpkgs-update: no auto update
-  version = "0.15.3";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-io";
     rev = "v${version}";
-    hash = "sha256-/pG/+MHAu/TYTtY/RQrr1U1ev2FZ1p/O8kIRUDDOcvQ=";
+    hash = "sha256-NOEjXk4s/FV4CdmyXOr4Oh2y+pFNrUMP/Sy+X+fVQc4=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/awslabs/aws-c-io";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
   };
 }

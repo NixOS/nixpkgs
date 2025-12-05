@@ -48,8 +48,7 @@ stdenv.mkDerivation rec {
   dontAddDisableDepTrack = stdenv.hostPlatform.isWindows;
 
   configureFlags =
-    lib.optional (!enableUdev) "--disable-udev"
-    ++ lib.optional (withExamples) "--enable-examples-build";
+    lib.optional (!enableUdev) "--disable-udev" ++ lib.optional withExamples "--enable-examples-build";
 
   postBuild = lib.optionalString withDocs ''
     make -C doc
@@ -69,7 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://libusb.info/";
-    description = "cross-platform user-mode USB device library";
+    description = "Cross-platform user-mode USB device library";
     longDescription = ''
       libusb is a cross-platform user-mode library that provides access to USB devices.
     '';
@@ -77,7 +76,7 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [
       prusnak
-      realsnick
+      logger
     ];
   };
 }

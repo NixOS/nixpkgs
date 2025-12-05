@@ -571,7 +571,7 @@ class DFLock < Struct.new(:game, :therapist, keyword_init: true)
 
   # Returns an array containing all versions.
   def all_versions
-    self.game.versions.keys.map {"DF #{_1}"}.to_a + ["DT #{self.therapist.version}"]
+    [self.game.versions.keys.lazy.map {"DF #{_1}"}.first] + ["DT #{self.therapist.version}"]
   end
 
   # Loads this DFLock.

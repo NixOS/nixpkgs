@@ -1,7 +1,6 @@
 {
   lib,
   elixir,
-  fetchpatch,
   fetchFromGitHub,
   makeWrapper,
   stdenv,
@@ -10,23 +9,16 @@
 
 stdenv.mkDerivation rec {
   pname = "elixir-ls";
-  version = "0.28.1";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "elixir-lsp";
     repo = "elixir-ls";
     rev = "v${version}";
-    hash = "sha256-r4P+3MPniDNdF3SG2jfBbzHsoxn826eYd2tsv6bJBoI=";
+    hash = "sha256-GtkFuof60cOTlHuhcwCnIVtGx6KlHrcazTa/UjAIGAQ=";
   };
 
   patches = [
-    # fix elixir deterministic support https://github.com/elixir-lsp/elixir-ls/pull/1216
-    # remove > 0.28.1
-    (fetchpatch {
-      url = "https://github.com/elixir-lsp/elixir-ls/pull/1216.patch";
-      hash = "sha256-J1Q7XQXWYuCMq48e09deQU71DOElZ2zMTzrceZMky+0=";
-    })
-
     # patch wrapper script to remove elixir detection and inject necessary paths
     ./launch.sh.patch
   ];
@@ -60,6 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/elixir-lsp/elixir-ls";
+    changelog = "https://github.com/elixir-lsp/elixir-ls/releases/tag/v${version}";
     description = ''
       A frontend-independent IDE "smartness" server for Elixir.
       Implements the "Language Server Protocol" standard and provides debugger support via the "Debug Adapter Protocol"

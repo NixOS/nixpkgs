@@ -10,6 +10,8 @@
   libnotify,
   libavif,
   kdePackages,
+  autoPatchelfHook,
+  libpulseaudio,
 }:
 
 stdenv.mkDerivation {
@@ -17,7 +19,8 @@ stdenv.mkDerivation {
     cmake
     pkg-config
     kdePackages.wrapQtAppsHook
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs =
     (with kdePackages; [
@@ -37,6 +40,14 @@ stdenv.mkDerivation {
       libnotify
     ]
     ++ lib.optional enableAvifSupport libavif;
+
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [ libpulseaudio ];
+
+  preConfigure = ''
+    if [[ -f "$src/GIT_HASH" ]]; then
+      export GIT_HASH="$(cat $src/GIT_HASH)"
+    fi
+  '';
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_WITH_QT6" true)

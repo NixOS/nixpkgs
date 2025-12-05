@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "python-docs-theme";
-  version = "2025.5";
+  version = "2025.10";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "python";
     repo = "python-docs-theme";
     tag = version;
-    hash = "sha256-dcxlZGPB36q2MO2WHtshkgNE5ryKtI/RfuVG7hcLcas=";
+    hash = "sha256-vuQsGHj39znL3RvSvnc9ET1g30/FcSnDnFby2bm84hY=";
   };
 
   build-system = [ flit-core ];

@@ -9,14 +9,14 @@
   click-plugins,
   click-repl,
   click,
-  fetchPypi,
+  cryptography,
+  fetchFromGitHub,
   gevent,
   google-cloud-firestore,
   google-cloud-storage,
   kombu,
   moto,
   msgpack,
-  nixosTests,
   pymongo,
   redis,
   pydantic,
@@ -27,10 +27,12 @@
   pytest-xdist,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   setuptools,
   vine,
+  # The AMQP REPL depends on click-repl, which is incompatible with our version
+  # of click.
+  withAmqpRepl ? false,
 }:
 
 buildPythonPackage rec {
@@ -38,12 +40,16 @@ buildPythonPackage rec {
   version = "5.5.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-bJcq55aMK1KBIn8Bw6P5hAN9IcUSnQe/NVDMKvxrEKU=";
+  src = fetchFromGitHub {
+    owner = "celery";
+    repo = "celery";
+    tag = "v${version}";
+    hash = "sha256-+sickqRfSkBxhcO0W9na6Uov4kZ7S5oqpXXKX0iRQ0w=";
   };
+
+  patches = lib.optionals (!withAmqpRepl) [
+    ./remove-amqp-repl.patch
+  ];
 
   build-system = [ setuptools ];
 
@@ -52,13 +58,16 @@ buildPythonPackage rec {
     click
     click-didyoumean
     click-plugins
-    click-repl
     kombu
     python-dateutil
     vine
+  ]
+  ++ lib.optionals withAmqpRepl [
+    click-repl
   ];
 
   optional-dependencies = {
+    auth = [ cryptography ];
     azureblockblob = [
       azure-identity
       azure-storage-blob
@@ -84,7 +93,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     # test_eventlet touches network
@@ -108,6 +117,9 @@ buildPythonPackage rec {
     "test_itercapture_limit"
     "test_stamping_headers_in_options"
     "test_stamping_with_replace"
+
+    # Flaky: Unclosed temporary file handle under heavy load (as in nixpkgs-review)
+    "test_check_privileges_without_c_force_root_and_no_group_entry"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Too many open files on hydra
@@ -118,12 +130,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "celery" ];
 
-  meta = with lib; {
+  meta = {
     description = "Distributed task queue";
     homepage = "https://github.com/celery/celery/";
     changelog = "https://github.com/celery/celery/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "celery";
   };
 }

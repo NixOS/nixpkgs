@@ -14,7 +14,7 @@ bundlerEnv {
 
   meta = with lib; {
     description = "Per-value asymmetric encryption of sensitive data for Hiera";
-    homepage = "https://github.com/TomPoulton/hiera-eyaml";
+    homepage = "https://github.com/voxpupuli/hiera-eyaml";
     license = licenses.mit;
     maintainers = with maintainers; [
       benley

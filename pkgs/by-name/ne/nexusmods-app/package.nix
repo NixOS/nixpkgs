@@ -1,14 +1,13 @@
 {
   _7zz,
-  avalonia,
   buildDotnetModule,
+  callPackage,
   desktop-file-utils,
   dotnetCorePackages,
-  fetchgit,
+  fetchFromGitHub,
   imagemagick,
   lib,
   xdg-utils,
-  nix-update-script,
   pname ? "nexusmods-app",
 }:
 let
@@ -23,14 +22,17 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.13.4";
+  version = "0.21.1";
 
-  src = fetchgit {
-    url = "https://github.com/Nexus-Mods/NexusMods.App.git";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-Ub6HjZChOhRUDYQ2TAnrwOtrW6ahP+k74vCAmLkYABA=";
+  src = fetchFromGitHub {
+    owner = "Nexus-Mods";
+    repo = "NexusMods.App";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RTQ3EwfA7hRfnCJoRubWtaqFVHhRdbWfLTBORVc+kss=";
     fetchSubmodules = true;
   };
+
+  gameHashes = callPackage ./game-hashes { };
 
   enableParallelBuilding = false;
 
@@ -41,11 +43,6 @@ buildDotnetModule (finalAttrs: {
   # TODO: do something about this in buildDotnetModule
   projectFile = "src/NexusMods.App/NexusMods.App.csproj";
   testProjectFile = "NexusMods.App.sln";
-
-  buildInputs = [
-    # TODO: bump avalonia to 11.1.3
-    # avalonia
-  ];
 
   nativeCheckInputs = [ _7zz ];
 
@@ -60,12 +57,23 @@ buildDotnetModule (finalAttrs: {
   dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   postPatch = ''
-    # for some reason these tests fail (intermittently?) with a zero timestamp
-    touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
+    # Specify a fixed date to improve build reproducibility
+    echo "1970-01-01T00:00:00Z" >buildDate.txt
+    substituteInPlace src/NexusMods.Sdk/NexusMods.Sdk.csproj \
+      --replace-fail '$(BaseIntermediateOutputPath)buildDate.txt' "$(realpath buildDate.txt)"
 
-    # Assertion assumes version is set to 0.0.1
-    substituteInPlace tests/NexusMods.Telemetry.Tests/TrackingDataSenderTests.cs \
-      --replace-fail 'cra_ct=v0.0.1' 'cra_ct=v${finalAttrs.version}'
+    # Use a pinned version of the game hashes db
+    substituteInPlace src/NexusMods.Games.FileHashes/NexusMods.Games.FileHashes.csproj \
+      --replace-fail '$(BaseIntermediateOutputPath)games_hashes_db.zip' "$gameHashes"
+
+    # Use a vendored version of the nexus API's games.json data
+    substituteInPlace src/NexusMods.Networking.NexusWebApi/NexusMods.Networking.NexusWebApi.csproj \
+      --replace-fail '$(BaseIntermediateOutputPath)games.json' ${./vendored/games.json}
+
+    ${lib.optionalString finalAttrs.doCheck ''
+      # For some reason these tests fail (intermittently?) with a zero timestamp
+      touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
+    ''}
   '';
 
   makeWrapperArgs = [
@@ -95,8 +103,8 @@ buildDotnetModule (finalAttrs: {
 
     # Bitmap icons
     for i in 16 24 48 64 96 128 256 512; do
-      size=''${i}x''${i}
-      dir=$out/share/icons/hicolor/$size/apps
+      size="$i"x"$i"
+      dir="$out/share/icons/hicolor/$size/apps"
       mkdir -p $dir
       magick -background none $icon -resize $size $dir/com.nexusmods.app.png
     done
@@ -127,7 +135,11 @@ buildDotnetModule (finalAttrs: {
 
   dotnetTestFlags = [
     "--environment=USER=nobody"
+    "--property:Version=${finalAttrs.version}"
     "--property:DefineConstants=${lib.strings.concatStringsSep "%3B" constants}"
+
+    # Disable native apphosts for tests; they fail in checkPhase as the wrapper env (DOTNET_ROOT, libs) isn't applied
+    "--property:UseAppHost=false"
   ];
 
   testFilters = [
@@ -137,13 +149,6 @@ buildDotnetModule (finalAttrs: {
   ];
 
   disabledTests = [
-    # Fails attempting to download game hashes DB from github:
-    # HttpRequestException : Resource temporarily unavailable (github.com:443)
-    "NexusMods.DataModel.SchemaVersions.Tests.LegacyDatabaseSupportTests.TestDatabase"
-    "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0001_ConvertTimestamps.OldTimestampsAreInRange"
-    "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0003_FixDuplicates.No_Duplicates"
-    "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0004_RemoveGameFiles.Test"
-
     # Fails attempting to fetch SMAPI version data from github:
     # https://github.com/erri120/smapi-versions/raw/main/data/game-smapi-versions.json
     "NexusMods.Games.StardewValley.Tests.SMAPIGameVersionDiagnosticEmitterTests.Test_TryGetLastSupportedSMAPIVersion"
@@ -186,12 +191,12 @@ buildDotnetModule (finalAttrs: {
     };
   };
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     mainProgram = "NexusMods.App";
     homepage = "https://github.com/Nexus-Mods/NexusMods.App";
-    changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/${finalAttrs.src.tag}";
     license = [ lib.licenses.gpl3Plus ];
     maintainers = with lib.maintainers; [
       l0b0

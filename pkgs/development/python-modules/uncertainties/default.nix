@@ -38,6 +38,11 @@ buildPythonPackage rec {
   ]
   ++ optional-dependencies.arrays;
 
+  disabledTests = [
+    # Flaky tests, see: https://github.com/lmfit/uncertainties/issues/343
+    "test_repeated_summation_complexity"
+  ];
+
   pythonImportsCheck = [ "uncertainties" ];
 
   meta = {

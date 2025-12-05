@@ -3,11 +3,13 @@
   buildGoModule,
   fetchFromGitLab,
   installShellFiles,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "obfs4";
-  version = "0.4.0";
+  version = "0.7.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -16,15 +18,16 @@ buildGoModule rec {
     # We don't use pname = lyrebird and we use the old obfs4 name as the first
     # will collide with lyrebird Gtk3 program.
     repo = "lyrebird";
-    rev = "lyrebird-${version}";
-    hash = "sha256-aPALWvngC/BVQO73yUAykHvEb6T0DZcGMowXINDqhpQ=";
+    tag = "lyrebird-${finalAttrs.version}";
+    hash = "sha256-JBYYMi80n9FlW1WNh1fa3G+stL4hX9XeJ2idLvtgylI=";
   };
 
-  vendorHash = "sha256-iR3+ZMEF0SB3EoLTf2gtqTe3CQcjtDRhfwwbwGj3pXo=";
+  vendorHash = "sha256-isquplrmgtR8Mn5M+XNRdeGJHrAm7V7h1etVmVmN60I=";
 
   ldflags = [
     "-s"
     "-w"
+    "-X main.lyrebirdVersion=${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/lyrebird" ];
@@ -36,7 +39,15 @@ buildGoModule rec {
     ln -s $out/share/man/man1/{lyrebird,obfs4proxy}.1
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^lyrebird-(\\d+\\.\\d+\\.\\d+)$" ];
+  };
+
+  meta = {
     description = "Circumvents censorship by transforming Tor traffic between clients and bridges";
     longDescription = ''
       Obfs4proxy is a tool that attempts to circumvent censorship by
@@ -50,13 +61,16 @@ buildGoModule rec {
       multiple pluggable transports.
     '';
     homepage = "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird";
-    maintainers = with maintainers; [ thoughtpolice ];
-    mainProgram = "lyrebird";
-    changelog = "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/-/raw/${src.rev}/ChangeLog";
+    changelog = "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/-/blob/lyrebird-${finalAttrs.version}/ChangeLog";
     license = with lib.licenses; [
       bsd2
       bsd3
       gpl3
     ];
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      defelo
+    ];
+    mainProgram = "lyrebird";
   };
-}
+})

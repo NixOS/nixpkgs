@@ -25,9 +25,9 @@
   withDocs ? withIntrospection,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dconf";
-  version = "0.40.0";
+  version = "0.49.0";
 
   outputs = [
     "out"
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
   ++ lib.optional withDocs "devdoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0cs5nayg080y8pb9b7qccm1ni8wkicdmqp1jsgc22110r6j24zyg";
+    url = "mirror://gnome/sources/dconf/${lib.versions.majorMinor finalAttrs.version}/dconf-${finalAttrs.version}.tar.xz";
+    sha256 = "FqR+SaWBVtu5ZXjhcIMlKZ5MGe6pvhKNW9Ev0JY9bDY=";
   };
 
   nativeBuildInputs = [
@@ -79,15 +79,13 @@ stdenv.mkDerivation rec {
     !stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isDarwin;
 
   postPatch = ''
-    chmod +x meson_post_install.py tests/test-dconf.py
-    patchShebangs meson_post_install.py
-    patchShebangs tests/test-dconf.py
+    chmod +x tests/test-dconf.py tests/shellcheck.sh
+    patchShebangs tests/test-dconf.py tests/shellcheck.sh
   '';
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      versionPolicy = "odd-unstable";
+      packageName = "dconf";
     };
     tests = { inherit (nixosTests) dconf; };
   };
@@ -103,4 +101,4 @@ stdenv.mkDerivation rec {
     teams = [ teams.gnome ];
     mainProgram = "dconf";
   };
-}
+})

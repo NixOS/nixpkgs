@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-VjvHCiWjsx5Y7xxqck/O9gSNrL8mxCTosLwLqC85ywY=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-3MvUn6CJ3skVctTIYhib8G+UVOB/VXokwlTnseGJAGU=";
   cargoPatches = [ ./0001-make-near-test-contracts-optional.patch ];
 
@@ -55,6 +54,8 @@ rustPlatform.buildRustPackage rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
+    # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
+    broken = true;
     description = "Reference client for NEAR Protocol";
     homepage = "https://github.com/near/nearcore";
     license = licenses.gpl3;

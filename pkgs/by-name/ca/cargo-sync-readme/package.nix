@@ -11,11 +11,10 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "phaazon";
     repo = "cargo-sync-readme";
-    rev = version;
+    tag = version;
     sha256 = "sha256-n9oIWblTTuXFFQFN6mpQiCH5N7yg5fAp8v9vpB5/DAo=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-A1LZKENNOcgUz6eacUo9WCKIZWA7dJa0zuZrgzRr/Js=";
 
   meta = {

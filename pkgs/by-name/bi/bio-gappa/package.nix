@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "lczech";
     repo = "gappa";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WV8PO0v+e14tyjEm+xQGveQ0Pslgeh+osEMCqF8mue0=";
     fetchSubmodules = true;
   };
@@ -33,6 +33,17 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     xz
   ];
+
+  # CMake 2.8.7 is deprecated and is no longer supported by CMake > 4
+  # https://github.com/NixOS/nixpkgs/issues/445447
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required (VERSION 2.8.7 FATAL_ERROR)" \
+      "cmake_minimum_required (VERSION 3.10  FATAL_ERROR)"
+    substituteInPlace libs/genesis/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required (VERSION 2.8.12 FATAL_ERROR)" \
+      "cmake_minimum_required (VERSION 3.10   FATAL_ERROR)"
+  '';
 
   installPhase = ''
     runHook preInstall

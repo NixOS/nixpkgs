@@ -250,7 +250,7 @@ lib.makeOverridable
         "codegenUnits"
         "links"
       ];
-      extraDerivationAttrs = builtins.removeAttrs crate processedAttrs;
+      extraDerivationAttrs = removeAttrs crate processedAttrs;
       nativeBuildInputs_ = nativeBuildInputs;
       buildInputs_ = buildInputs;
       extraRustcOpts_ = extraRustcOpts;

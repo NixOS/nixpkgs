@@ -71,6 +71,23 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion =
+          !(
+            (lib.hasAttrByPath [ "settings" "queue" ] cfg)
+            && (builtins.any (lib.hasAttrByPath [
+              "value"
+              "next-hop"
+            ]) (lib.attrsToList cfg.settings.queue))
+          );
+        message = ''
+          Stalwart deprecated `next-hop` in favor of "virtual queues" `queue.strategy.route` \
+          with v0.13.0 see [Outbound Strategy](https://stalw.art/docs/mta/outbound/strategy/#configuration) \
+          and [release announcement](https://github.com/stalwartlabs/stalwart/blob/main/UPGRADING.md#upgrading-from-v012x-and-v011x-to-v013x).
+        '';
+      }
+    ];
 
     # Default config: all local
     services.stalwart-mail.settings = {
@@ -116,7 +133,7 @@ in
         in
         {
           path = "/var/cache/stalwart-mail";
-          resource = lib.mkIf (hasHttpListener) (lib.mkDefault "file://${cfg.package.webadmin}/webadmin.zip");
+          resource = lib.mkIf hasHttpListener (lib.mkDefault "file://${cfg.package.webadmin}/webadmin.zip");
         };
     };
 
@@ -137,8 +154,8 @@ in
     ];
 
     systemd = {
-      packages = [ cfg.package ];
       services.stalwart-mail = {
+        description = "Stalwart Mail Server";
         wantedBy = [ "multi-user.target" ];
         after = [
           "local-fs.target"
@@ -156,14 +173,20 @@ in
             '';
 
         serviceConfig = {
+          # Upstream service config
+          Type = "simple";
+          LimitNOFILE = 65536;
+          KillMode = "process";
+          KillSignal = "SIGINT";
+          Restart = "on-failure";
+          RestartSec = 5;
+          SyslogIdentifier = "stalwart-mail";
+
           ExecStart = [
             ""
             "${lib.getExe cfg.package} --config=${configFile}"
           ];
           LoadCredential = lib.mapAttrsToList (key: value: "${key}:${value}") cfg.credentials;
-
-          StandardOutput = "journal";
-          StandardError = "journal";
 
           ReadWritePaths = [
             cfg.dataDir
@@ -211,7 +234,6 @@ in
           UMask = "0077";
         };
         unitConfig.ConditionPathExists = [
-          ""
           "${configFile}"
         ];
       };

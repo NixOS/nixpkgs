@@ -15,12 +15,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-WnB2kxfWdWZCRqlSUL0cV4l9dIUr+cm7QCXF6F1ktt0=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-EIj2BUVS1tbY+kxUnpu1C+0+n68gTFZbp45f5UNidtY=";
 
   # tests fail with `--release`
   # https://github.com/yarrow/zet/pull/7
   checkType = "debug";
+
+  env.RUSTFLAGS = "-Amismatched_lifetime_syntaxes";
 
   meta = {
     description = "CLI utility to find the union, intersection, set difference, etc of files considered as sets of lines";
@@ -31,6 +32,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 })

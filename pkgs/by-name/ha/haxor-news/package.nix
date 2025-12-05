@@ -5,7 +5,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "haxor-news";
   version = "unstable-2022-04-22";
   format = "setuptools";

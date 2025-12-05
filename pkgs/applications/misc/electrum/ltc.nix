@@ -70,17 +70,17 @@ python3.pkgs.buildPythonApplication {
       aiorpcx
       attrs
       bitstring
+      certifi
       cryptography
       dnspython
       jsonrpclib-pelix
       matplotlib
       pbkdf2
       protobuf
-      py-scrypt
       pysocks
       qrcode
       requests
-      certifi
+      scrypt
       # plugins
       btchip-python
       ckcc-protocol

@@ -7,6 +7,7 @@
   which,
   procps,
   kbd,
+  nixosTests,
 }:
 
 stdenv.mkDerivation {
@@ -37,6 +38,8 @@ stdenv.mkDerivation {
   '';
 
   preConfigure = "./autogen.sh";
+
+  passthru.tests.nixos = nixosTests.logkeys;
 
   meta = with lib; {
     description = "GNU/Linux keylogger that works";

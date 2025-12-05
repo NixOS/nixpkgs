@@ -12,18 +12,13 @@ set -x
 
 show_usage() {
   cat <<DOC
-Usage: ./update-provider [--force] [--no-build] [<owner>/]<provider>
+Usage: ./update-provider [--force] [--no-build] <owner>_<provider>
 
-Update a single provider in the providers.json inventory file.
+Add or update a single provider in the providers.json inventory file.
 
-For example to update 'terraform-providers.aws' run:
+For example to update 'terraform-providers.hashicorp_aws' run:
 
-    ./update-provider aws
-
-If the provider is not in the list already, use the form '<owner>/<provider>'
-to add the provider to the list:
-
-    ./update-provider hetznercloud/hcloud
+    ./update-provider hashicorp_aws
 
 Options:
 
@@ -104,9 +99,11 @@ is_stable_version() {
 
 pushd "$(dirname "$0")" >/dev/null
 
-if [[ ${provider} =~ ^[^/]+/[^/]+$ ]]; then
-  homepage="https://registry.terraform.io/providers/${provider}"
-  provider=$(basename "${provider}")
+provider="$(echo "$provider" | tr '[:upper:]' '[:lower:]')"
+homepage="$(read_attr homepage)"
+
+if [[ $homepage == "null" ]]; then
+  homepage="https://registry.terraform.io/providers/${provider//_//}"
   echo_provider "init"
   update_attr homepage "${homepage}"
   # create empty stings so nix-prefetch works
@@ -115,18 +112,16 @@ if [[ ${provider} =~ ^[^/]+/[^/]+$ ]]; then
   update_attr spdx ""
 fi
 
-homepage="$(read_attr homepage)"
-
 old_rev="$(read_attr rev)"
 registry_response_unstable=$(curl -s "${homepage//providers/v1/providers}")
 
 if is_stable_version "${old_rev}"; then
-  version_stable=$(jq -r '.versions | map(select(test("^[0-9]+\\.[0-9]+\\.[0-9]+$"))) | last' <<<${registry_response_unstable})
+  version_stable=$(jq -r '.versions | map(select(test("^[0-9]+\\.[0-9]+\\.[0-9]+$"))) | last' <<<"${registry_response_unstable}")
   registry_response_stable=$(curl -s "${homepage//providers/v1/providers}/${version_stable}")
-  rev="$(jq -r '.tag' <<<${registry_response_stable})"
+  rev="$(jq -r '.tag' <<<"${registry_response_stable}")"
   registry_response=$registry_response_stable
 else
-  rev="$(jq -r '.tag' <<<${registry_response_unstable})"
+  rev="$(jq -r '.tag' <<<"${registry_response_unstable}")"
   registry_response=$registry_response_unstable
 fi
 

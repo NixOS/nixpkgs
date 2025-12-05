@@ -182,7 +182,7 @@ stdenv.mkDerivation rec {
     description = "Daemon for managing Optimus videocards (power-on/off, spawns xservers)";
     homepage = "https://github.com/Bumblebee-Project/Bumblebee";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

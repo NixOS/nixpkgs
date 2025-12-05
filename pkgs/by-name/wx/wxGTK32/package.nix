@@ -101,6 +101,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional unicode "--enable-unicode"
   ++ lib.optional withMesa "--with-opengl"
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--with-macosx-version-min=${stdenv.hostPlatform.darwinMinVersion}"
     "--with-osx_cocoa"
     "--with-libiconv"
     "--with-urlsession" # for wxWebRequest
@@ -147,9 +148,11 @@ stdenv.mkDerivation rec {
       multithreading, image loading and saving in a variety of popular formats,
       database support, HTML viewing and printing, and much more.
     '';
-    license = licenses.wxWindows;
+    license = with licenses; [
+      lgpl2Plus
+      wxWindowsException31
+    ];
     maintainers = with maintainers; [
-      tfmoraes
       fliegendewurst
     ];
     platforms = platforms.unix;

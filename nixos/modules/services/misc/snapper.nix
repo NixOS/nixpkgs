@@ -265,11 +265,11 @@ in
         }
         // (lib.mapAttrs' (
           name: subvolume:
-          lib.nameValuePair "snapper/configs/${name}" ({
+          lib.nameValuePair "snapper/configs/${name}" {
             text = lib.generators.toKeyValue { inherit mkKeyValue; } (
               lib.filterAttrs (k: v: v != defaultOf k) subvolume
             );
-          })
+          }
         ) cfg.configs)
         // (lib.optionalAttrs (cfg.filters != null) { "snapper/filters/default.txt".text = cfg.filters; });
       };

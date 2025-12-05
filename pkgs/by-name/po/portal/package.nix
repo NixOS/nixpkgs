@@ -23,7 +23,7 @@ buildGoModule rec {
   meta = {
     description = "Quick and easy command-line file transfer utility from any computer to another";
     homepage = "https://github.com/SpatiumPortae/portal";
-    changelog = "https://github.com/SpatiumPortae/portal/tag/v${version}";
+    changelog = "https://github.com/SpatiumPortae/portal/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tennox ];
     mainProgram = "portal";

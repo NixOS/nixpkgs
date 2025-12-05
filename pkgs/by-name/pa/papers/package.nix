@@ -6,6 +6,7 @@
   ninja,
   pkg-config,
   appstream,
+  blueprint-compiler,
   desktop-file-utils,
   gtk4,
   glib,
@@ -33,11 +34,14 @@
   exempi,
   cargo,
   rustPlatform,
+  _experimental-update-script-combinators,
+  common-updater-scripts,
+  gnome,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "papers";
-  version = "48.4";
+  version = "49.2";
 
   outputs = [
     "out"
@@ -47,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/papers/${lib.versions.major finalAttrs.version}/papers-${finalAttrs.version}.tar.xz";
-    hash = "sha256-8RqhxUSsIRJZ4jC0DIBK5kB3M5pXve+j2761f5Fm4/0=";
+    hash = "sha256-SanKL2LFWY+ObKTmfIf09ZxewN5wTTspnVFkyR0fakE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -56,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
       pname
       version
       ;
-    hash = "sha256-1HFecOTn84m9lT166HlmYjqP+KN/ZOTWW4ztigrpqNQ=";
+    hash = "sha256-aOVPknBqBV7AWO9LxvWRjiL2H2UQHAcpGpKY5YeoQrc=";
   };
 
   nativeBuildInputs = [
@@ -71,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
     yelp-tools
     cargo
+    blueprint-compiler
     rustPlatform.cargoSetupHook
   ];
 
@@ -105,6 +110,15 @@ stdenv.mkDerivation (finalAttrs: {
       "-Dnautilus=false"
     ];
 
+  # For https://gitlab.gnome.org/GNOME/papers/-/blob/5efed8638dd4a2d5c36f59eb9a22158d69632e0b/shell/src/meson.build#L36
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
+
+  postPatch = ''
+    substituteInPlace shell/src/meson.build thumbnailer/meson.build --replace-fail \
+      "meson.current_build_dir() / rust_target / meson.project_name()" \
+      "meson.current_build_dir() / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()"
+  '';
+
   postInstall = ''
     substituteInPlace $out/share/thumbnailers/papers.thumbnailer \
       --replace-fail '=papers-thumbnailer' "=$out/bin/papers-thumbnailer"
@@ -124,9 +138,39 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput "share/doc" "$devdoc"
   '';
 
+  passthru = {
+    updateScript =
+      let
+        updateSource = gnome.updateScript {
+          packageName = "papers";
+        };
+
+        updateLockfile = {
+          command = [
+            "sh"
+            "-c"
+            ''
+              PATH=${
+                lib.makeBinPath [
+                  common-updater-scripts
+                ]
+              }
+              update-source-version papers --ignore-same-version --source-key=cargoDeps.vendorStaging > /dev/null
+            ''
+          ];
+          # Experimental feature: do not copy!
+          supportedFeatures = [ "silent" ];
+        };
+      in
+      _experimental-update-script-combinators.sequence [
+        updateSource
+        updateLockfile
+      ];
+  };
+
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/papers";
-    changelog = "https://gitlab.gnome.org/GNOME/Incubator/papers/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
+    homepage = "https://gitlab.gnome.org/GNOME/papers";
+    changelog = "https://gitlab.gnome.org/GNOME/papers/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "GNOME's document viewer";
 
     longDescription = ''

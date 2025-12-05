@@ -14,7 +14,7 @@
   pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
+  python-jsonpath,
   respx,
   syrupy,
   tenacity,
@@ -22,16 +22,14 @@
 
 buildPythonPackage rec {
   pname = "pyenphase";
-  version = "2.2.2";
+  version = "2.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "pyenphase";
     repo = "pyenphase";
     tag = "v${version}";
-    hash = "sha256-1RF1U4hMsGRa2OJJY2Plvuow3P+R7wbwd4ouo7QQ4n0=";
+    hash = "sha256-WpfiRACZ08M9EQbjfM5dNz2cFFGd7OlG/SB6F128Rcs=";
   };
 
   pythonRelaxDeps = [ "tenacity" ];
@@ -54,6 +52,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-timeout
     pytestCheckHook
+    python-jsonpath
     respx
     syrupy
   ];

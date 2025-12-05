@@ -2,53 +2,56 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  oath-toolkit,
-  openldap,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "glauth";
-  version = "2.3.2";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "glauth";
     repo = "glauth";
-    rev = "v${version}";
-    hash = "sha256-FOhtL8nIm5kuKRxFtkrDyUU2z1K22ZdHaes3GY0KmfQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UUTL+ZnHRSYuD/TUYpsuo+Nu90kpA8ZL4XaGz6in3ME=";
   };
 
-  vendorHash = "sha256-MfauZRufl3kxr1fqatxTmiIvLJ+5JhbpSnbTHiujME8=";
+  vendorHash = "sha256-Lijy0LFy0PgWogdzYRNPFOkLym6Gf9qG4R+Bm91eYJg=";
 
-  nativeCheckInputs = [
-    oath-toolkit
-    openldap
-  ];
+  postPatch = ''
+    substituteInPlace v2/internal/version/const.go \
+      --replace-fail '"v2.3.1"' '"v${finalAttrs.version}"'
+  '';
 
-  modRoot = "v2";
+  # Builds without go workspace fail with mysterious errors
+  overrideModAttrs = _: {
+    buildPhase = ''
+      go work vendor -e -v
+    '';
+  };
 
-  # Disable go workspaces to fix build.
-  env.GOWORK = "off";
-
-  # Based on ldflags in <glauth>/Makefile.
   ldflags = [
     "-s"
     "-w"
-    "-X main.GitClean=1"
-    "-X main.LastGitTag=v${version}"
-    "-X main.GitTagIsCommit=1"
   ];
 
   # Tests fail in the sandbox.
   doCheck = false;
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+
   meta = with lib; {
     description = "Lightweight LDAP server for development, home use, or CI";
     homepage = "https://github.com/glauth/glauth";
+    changelog = "https://github.com/glauth/glauth/releases/tag/v${finalAttrs.version}";
     license = licenses.mit;
     maintainers = with maintainers; [
       bjornfor
       christoph-heiss
+      xddxdd
     ];
     mainProgram = "glauth";
   };
-}
+})

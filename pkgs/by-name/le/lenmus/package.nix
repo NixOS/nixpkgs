@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -22,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lenmus";
-  version = "6.0.1";
+  version = "6.0.1-unstable-2025-09-15";
 
   src = fetchFromGitHub {
     owner = "lenmus";
     repo = "lenmus";
-    rev = "Release_${finalAttrs.version}";
-    hash = "sha256-qegOAc6vs2+6VViDHVjv0q+qjLZyTT7yPF3hFpTt5zE=";
+    rev = "113787fe4d755e7e406b5ea4bd2cfb9eae0e56a3";
+    hash = "sha256-tDvSgdeFx5xEjExnDhoXgvuvk7+oEPgbt4DJajckvLc=";
   };
 
   env = {
@@ -83,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "LenMus Phonascus is a program for learning music";
+    description = "Program for learning music";
     longDescription = ''
       LenMus Phonascus is a free open source program (GPL v3) for learning music.
       It allows you to focus on specific skills and exercises, on both theory and aural training.

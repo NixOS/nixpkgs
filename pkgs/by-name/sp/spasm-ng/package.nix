@@ -12,7 +12,7 @@
 stdenv.mkDerivation {
   pname = "spasm-ng";
 
-  version = "unstable-2022-07-05";
+  version = "0.5-beta.3-unstable-2022-07-05";
 
   src = fetchFromGitHub {
     owner = "alberthdev";

@@ -43,9 +43,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mattes/epeg";
     description = "Insanely fast JPEG/ JPG thumbnail scaling";
     platforms = platforms.linux ++ platforms.darwin;
-    license = {
-      url = "https://github.com/mattes/epeg#license";
-    };
+    license = lib.licenses.mit-enna;
     maintainers = with maintainers; [ nh2 ];
     mainProgram = "epeg";
   };

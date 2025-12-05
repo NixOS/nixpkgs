@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "gotests";
-  version = "1.6.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "cweill";
     repo = "gotests";
     rev = "v${version}";
-    sha256 = "sha256-6IzUpAsFUgF2FwiC17OfDn1M+8WYFQPpRyXbkpHIztw=";
+    sha256 = "sha256-lx8gbVm4s4kmm252khoSukrlj5USQS+StGuJ+419QZw=";
   };
 
-  vendorHash = "sha256-WMeHZN3s+8pIYEVaSLjI3Bz+rPTWHr1AkZ8lydjBwCw=";
+  vendorHash = "sha256-/dP8uA1yWBrtmFNHUvcicPhA2qr5R2v1uSwYi+ciypg=";
 
   # tests are broken in nix environment
   doCheck = false;

@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/BambooEngine/ibus-bamboo";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ astronaut0212 ];
+    maintainers = [ ];
   };
 }

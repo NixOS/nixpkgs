@@ -14,12 +14,12 @@
 
 let
   pname = "ex_doc";
-  version = "0.38.2";
+  version = "0.39.2";
   src = fetchFromGitHub {
     owner = "elixir-lang";
     repo = "${pname}";
     rev = "v${version}";
-    hash = "sha256-Qv1vDfDGquWoem42IqA8lDiFWEtznT7ONIXSOCvn39g=";
+    hash = "sha256-khQIYS7iHOODlLMwFYPJTVE0MNia/gwYcin9ITpwttY=";
   };
 in
 mixRelease {

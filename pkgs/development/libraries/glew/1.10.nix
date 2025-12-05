@@ -67,5 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     #["BSD" "GLX" "SGI-B" "GPL2"]
     pkgConfigModules = [ "glew" ];
     inherit (mesa.meta) platforms;
+    # The last successful Darwin Hydra build was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

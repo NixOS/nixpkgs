@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "junrrein";
     repo = "pdfslicer";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     sha256 = "0sja0ddd9c8wjjpzk2ag8q1lxpj09adgmhd7wnsylincqnj2jyls";
   };
@@ -29,6 +29,16 @@ stdenv.mkDerivation rec {
     # Don't build tests, vendored catch doesn't build with latest glibc.
     substituteInPlace CMakeLists.txt \
       --replace "add_subdirectory (tests)" ""
+
+    # Replace deprecated and now unsupported old cmake version
+    # https://github.com/NixOS/nixpkgs/issues/445447
+
+    substituteInPlace third-party/fmtlib/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1.0)" \
+        "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace third-party/GSL/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1.3)" \
+        "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [

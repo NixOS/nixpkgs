@@ -7,6 +7,7 @@
 
   # optional-dependencies
   numpy,
+  packaging,
   torch,
   tensorflow,
   flax,
@@ -19,6 +20,7 @@
   pytest,
   pytest-benchmark,
   hypothesis,
+  fsspec,
 
   # tests
   pytestCheckHook,
@@ -26,25 +28,27 @@
 
 buildPythonPackage rec {
   pname = "safetensors";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "safetensors";
     tag = "v${version}";
-    hash = "sha256-wAr/jvr0w+vOHjjqE7cPcAM/IMz+58YhfoJ2XC4987M=";
+    hash = "sha256-qLRPMJJGs3C/PNqHSszNWRoX/DdvXt68TWW0b7aI664=";
   };
 
   sourceRoot = "${src.name}/bindings/python";
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      sourceRoot
+      ;
+    hash = "sha256-zNmL1Uoq/BLh6UBzMgUs/EEbzIvy7z2ylOR//Q959l4=";
   };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
@@ -54,6 +58,7 @@ buildPythonPackage rec {
   optional-dependencies = lib.fix (self: {
     numpy = [ numpy ];
     torch = self.numpy ++ [
+      packaging
       torch
     ];
     tensorflow = self.numpy ++ [
@@ -79,6 +84,7 @@ buildPythonPackage rec {
       pytest
       pytest-benchmark
       hypothesis
+      fsspec
     ];
     all = self.torch ++ self.numpy ++ self.pinned-tf ++ self.jax ++ self.paddlepaddle ++ self.testing;
     dev = self.all;
@@ -89,6 +95,7 @@ buildPythonPackage rec {
     numpy
     pytestCheckHook
     torch
+    fsspec
   ];
 
   enabledTestPaths = [ "tests" ];

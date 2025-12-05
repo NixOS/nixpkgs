@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "infisicalsdk";
-  version = "1.0.9";
+  version = "1.0.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Infisical";
     repo = "python-sdk-official";
     tag = "v${version}";
-    hash = "sha256-k4yJ1o3OOt01vXCfWDZ1zUtr/yoMSg43QzKUG9V/NGA=";
+    hash = "sha256-fuUun4vm8MBdl8MmR9cV+OWSRGsSaRoh7IF1vHRGm1k=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -32,7 +32,7 @@ python3Packages.buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/Infisical/python-sdk-official";
     description = "Infisical Python SDK";
-    license = lib.licenses.unfree;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ artur-sannikov ];
   };
 }

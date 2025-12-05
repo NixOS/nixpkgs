@@ -19,8 +19,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-T/9eHI2P8eCZAqMTeZz1yEi5nljQWfHrdNiU3h3h74U=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-deczbMPeJsnmXbVB60stKhJJZRIIwjY5vExS3x3b6aU=";
+
+  # Test suite is broken since rustc 1.90, see:
+  # https://github.com/CycloneDX/cyclonedx-rust-cargo/issues/807
+  doCheck = false;
 
   nativeBuildInputs = [
     pkg-config

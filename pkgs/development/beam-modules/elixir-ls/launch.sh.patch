@@ -1,8 +1,8 @@
 diff --git c/scripts/launch.sh w/scripts/launch.sh
-index 21afbb1e..8bc5c382 100755
+index 524f2294..bbea062d 100755
 --- c/scripts/launch.sh
 +++ w/scripts/launch.sh
-@@ -1,125 +1,4 @@
+@@ -1,114 +1,4 @@
 -#!/bin/sh
 -# Actual launcher. This does the hard work of figuring out the best way
 -# to launch the language server or the debug adapter.
@@ -102,25 +102,14 @@ index 21afbb1e..8bc5c382 100755
 -            export_stdlib_path "mise which elixir"
 -        else
 -            >&2 echo "mise not found"
--            >&2 echo "Looking for rtx executable"
+-            >&2 echo "Looking for vfox executable"
 -
--            # Look for rtx executable
--            if command -v rtx >/dev/null 2>&1; then
--                >&2 echo "rtx executable found at $(command -v rtx), activating"
--                eval "$($(command -v rtx) env -s "$preferred_shell")"
--                export_stdlib_path "rtx which elixir"
+-            if command -v vfox >/dev/null 2>&1; then
+-                >&2 echo "vfox executable found at $(command -v vfox), activating"
+-                eval "$( $(command -v vfox) activate "$preferred_shell" )"
 -            else
--                >&2 echo "rtx not found"
--                >&2 echo "Looking for vfox executable"
--
--                # Look for vfox executable
--                if command -v vfox >/dev/null 2>&1; then
--                    >&2 echo "vfox executable found at $(command -v vfox), activating"
--                    eval "$($(command -v vfox) activate "$preferred_shell")"
--                else
--                    >&2 echo "vfox not found"
--                    export_stdlib_path "which elixir"
--                fi
+-                >&2 echo "vfox not found"
+-                export_stdlib_path "which elixir"
 -            fi
 -        fi
 -    fi
@@ -129,7 +118,7 @@ index 21afbb1e..8bc5c382 100755
  
  # In case that people want to tweak the path, which Elixir to use, or
  # whatever prior to launching the language server or the debug adapter, we
-@@ -138,29 +17,22 @@ fi
+@@ -127,12 +17,8 @@ fi
  # script so we can correctly configure the Erlang library path to
  # include the local .ez files, and then do what we were asked to do.
  
@@ -142,6 +131,9 @@ index 21afbb1e..8bc5c382 100755
 +SCRIPT=$(readlink -f "$0")
 +SCRIPTPATH=$(dirname "$SCRIPT")/../scripts
  
+ # Unset MIX_OS_DEPS_COMPILE_PARTITION_COUNT as it pollutes stdout
+ # breaking LSP protocol. See https://github.com/elixir-lsp/elixir-ls/issues/1195
+@@ -141,19 +27,16 @@ unset MIX_OS_DEPS_COMPILE_PARTITION_COUNT
  export MIX_ENV=prod
  # Mix.install prints to stdout and reads from stdin
  # we need to make sure it doesn't interfere with LSP/DAP
@@ -151,9 +143,9 @@ index 21afbb1e..8bc5c382 100755
  default_erl_opts="-kernel standard_io_encoding latin1 +sbwt none +sbwtdcpu none +sbwtdio none"
  
 -if [ "$preferred_shell" = "bash" ]; then
--  source "$dirname/exec.bash"
+-  . "$dirname/exec.bash"
 -elif [ "$preferred_shell" = "zsh" ]; then
--  source "$dirname/exec.zsh"
+-  . "$dirname/exec.zsh"
 -else
 -  if [ -z "$ELS_ELIXIR_OPTS" ]
 -  then

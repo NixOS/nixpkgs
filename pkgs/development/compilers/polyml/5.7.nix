@@ -61,8 +61,8 @@ stdenv.mkDerivation rec {
     homepage = "https://www.polyml.org/";
     license = licenses.lgpl21;
     platforms = with platforms; (linux ++ darwin);
-    maintainers = with maintainers; [ maggesi ];
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
+    # The last successful Darwin Hydra build was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

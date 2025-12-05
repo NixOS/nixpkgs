@@ -15,7 +15,7 @@ php.buildComposerProject2 (finalAttrs: {
     hash = "sha256-dv9v1KCLNheFmrRQ7cID5WFvoiH0OWVPWSrN023dEqA=";
   };
 
-  vendorHash = "sha256-H1QJ+ML0tbZzEBKknP0GHhUhw+ujiIH/QNmEgA2zSmM=";
+  vendorHash = "sha256-U6BHAd4tWQKm6uCJ5sM51PltXhF3J4ieTnbC060+8Jg=";
 
   meta = {
     changelog = "https://github.com/phar-io/phive/releases/tag/${finalAttrs.version}";

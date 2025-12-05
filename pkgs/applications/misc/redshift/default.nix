@@ -70,12 +70,12 @@ let
       ++ lib.optionals (pname == "gammastep") [ wayland-scanner ];
 
       configureFlags = [
-        "--enable-randr=${if withRandr then "yes" else "no"}"
-        "--enable-geoclue2=${if withGeoclue then "yes" else "no"}"
-        "--enable-drm=${if withDrm then "yes" else "no"}"
-        "--enable-vidmode=${if withVidmode then "yes" else "no"}"
-        "--enable-quartz=${if withQuartz then "yes" else "no"}"
-        "--enable-corelocation=${if withCoreLocation then "yes" else "no"}"
+        "--enable-randr=${lib.boolToYesNo withRandr}"
+        "--enable-geoclue2=${lib.boolToYesNo withGeoclue}"
+        "--enable-drm=${lib.boolToYesNo withDrm}"
+        "--enable-vidmode=${lib.boolToYesNo withVidmode}"
+        "--enable-quartz=${lib.boolToYesNo withQuartz}"
+        "--enable-corelocation=${lib.boolToYesNo withCoreLocation}"
       ]
       ++ lib.optionals (pname == "gammastep") [
         "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user/"
@@ -168,7 +168,7 @@ rec {
 
     src = fetchFromGitLab {
       owner = "chinstrap";
-      repo = pname;
+      repo = "gammastep";
       rev = "v${version}";
       hash = "sha256-c8JpQLHHLYuzSC9bdymzRTF6dNqOLwYqgwUOpKcgAEU=";
     };
@@ -178,7 +178,7 @@ rec {
       longDescription = "Gammastep" + lib.removePrefix "Redshift" redshift.meta.longDescription;
       homepage = "https://gitlab.com/chinstrap/gammastep";
       mainProgram = "gammastep";
-      maintainers = (with lib.maintainers; [ ]) ++ redshift.meta.maintainers;
+      maintainers = [ ] ++ redshift.meta.maintainers;
     };
   };
 }

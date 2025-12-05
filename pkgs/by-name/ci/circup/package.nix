@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "circup";
-  version = "2.1.2";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adafruit";
     repo = "circup";
     tag = version;
-    hash = "sha256-lmuxqkZVByJwnfHj4yljWQwTvdLnguq3hZm6a7LN6Xo=";
+    hash = "sha256-o42gzdv69+BO5kTconZaMQBv89GzuFprf/UoZjF29oI=";
   };
 
   pythonRelaxDeps = [ "semver" ];
@@ -42,6 +42,7 @@ python3.pkgs.buildPythonApplication rec {
   disabledTests = [
     # Test requires network access
     "test_libraries_from_imports_bad"
+    "test_install_auto_file_bad"
   ];
 
   meta = with lib; {

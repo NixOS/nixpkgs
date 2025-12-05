@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   # There are currently no checks which do not require network access, which breaks the check hook somehow?
   # nativeCheckInputs = [ pytestCheckHook ];
-  # pytestFlagsArray = [ "-m 'not network'" ];
+  # disabledTestMarks = [ "network" ];
 
   nativeBuildInputs = [ versionCheckHook ];
 

@@ -5,17 +5,17 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "gitea-mcp-server";
-  version = "0.2.0";
+  version = "0.5.0";
 
   src = fetchFromGitea {
     domain = "gitea.com";
     owner = "gitea";
     repo = "gitea-mcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZUnpE25XIYzSwdEilzXnhqGR676iBQcR2yiT3jhJApc=";
+    hash = "sha256-Wrqy8RpDoK8GYldjGiTs8zwB3qzApKYJyK5Vhh0fMRg=";
   };
 
-  vendorHash = "sha256-u9jIjrbDUhnaaeBET+pKQTKhaQLUeQvKOXSBfS0vMJM=";
+  vendorHash = "sha256-N1Ct479Q5RH4TCxcSbIBoGDP/atBlWkxwBLJLk82juM=";
 
   subPackages = [ "." ];
 

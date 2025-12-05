@@ -9,6 +9,7 @@
   vala,
   pkg-config,
   libgee,
+  libshumate,
   gtk4,
   glib,
   gettext,
@@ -19,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "granite";
-  version = "7.6.0";
+  version = "7.7.0";
 
   outputs = [
     "out"
@@ -28,9 +29,9 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "granite";
     rev = version;
-    sha256 = "sha256-bv2rOq16xg9lCWfcLzAFN4LjBTJBxPhXvEJzutkdYzs=";
+    sha256 = "sha256-ypSkzz9BaVweR1C0OkkfwDl8tehMK1S5iExL14LuKmI=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,10 @@ stdenv.mkDerivation rec {
     sassc
     vala
     wrapGAppsHook4
+  ];
+
+  buildInputs = [
+    libshumate # demo
   ];
 
   propagatedBuildInputs = [

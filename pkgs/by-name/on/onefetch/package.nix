@@ -25,7 +25,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ZaaSuHWkhJx0q1CBAiRhwoLeeyyoAj6/vP3AJwybjAo=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-56Net4nNRndePhdsQPbmqiPHpOUGMmnQt6BuplQpvSU=";
 
   cargoPatches = [
@@ -72,7 +71,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       Br1ght0ne
-      figsoda
       kloenk
     ];
     mainProgram = "onefetch";

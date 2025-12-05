@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  fetchpatch,
   kernel,
   rr,
 }:
@@ -15,6 +16,14 @@ stdenv.mkDerivation {
 
   inherit (rr) src version;
   sourceRoot = "${rr.src.name}/third-party/zen-pmu-workaround";
+  patches = [
+    (fetchpatch {
+      name = "kernel-6.16.patch";
+      url = "https://github.com/rr-debugger/rr/commit/86aa1ebe03c6a7f60eb65249233f866fd3da8316.diff";
+      stripLen = 2;
+      hash = "sha256-zj5MNwlZmWnagu0tE5Jl5a48wEF0lqNTh4KcbhmOkOo=";
+    })
+  ];
 
   hardeningDisable = [ "pic" ];
   nativeBuildInputs = kernel.moduleBuildDependencies;

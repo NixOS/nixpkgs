@@ -1,23 +1,23 @@
 {
+
   lib,
   stdenv,
   fetchFromGitHub,
   pkg-config,
   libxml2,
-  systemd,
   libusb1,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qdl";
-  version = "0-unstable-2025-07-07";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "linux-msm";
     repo = "qdl";
-    rev = "cd3272350328185b1d4f7de08fdecf38f8fd31be";
-    hash = "sha256-Q4XcnBfr4wk2Kt0iLwF8niYoofg1YuXUehkg3G/gNOo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aC5c22gSrQ6EKEZ0vNdfBQF+ZKRN3jrgTB1KUXGLEPA=";
   };
 
   postPatch = ''
@@ -35,6 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
     "prefix=${placeholder "out"}"
   ];
 
+  enableParallelBuilding = true;
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://github.com/linux-msm/qdl";
     description = "Tool for flashing images to Qualcomm devices";
@@ -42,10 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       muscaln
       anas
+      numinit
     ];
     platforms = lib.platforms.linux;
     mainProgram = "qdl";
   };
-
-  passthru.updateScript = unstableGitUpdater { };
 })

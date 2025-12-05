@@ -24,10 +24,8 @@
   unzip,
   wayland,
   libXNVCtrl,
-  nlohmann_json,
   spdlog,
   libxkbcommon,
-  glew,
   glfw,
   libXrandr,
   x11Support ? true,
@@ -95,14 +93,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangohud";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "flightlessmango";
     repo = "MangoHud";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-FvPhnOvcYE8vVB5R+ZRmuZxrC9U4GA338V7VAuUlHCE=";
+    hash = "sha256-BZ3R7D2zOlg69rx4y2FzzjpXuPOv913TOz9kSvRN+Wg=";
   };
 
   outputs = [
@@ -190,7 +188,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     dbus
-    nlohmann_json
     spdlog
   ]
   ++ lib.optional waylandSupport wayland
@@ -198,7 +195,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional nvidiaSupport libXNVCtrl
   ++ lib.optional (x11Support || waylandSupport) libxkbcommon
   ++ lib.optionals mangoappSupport [
-    glew
     glfw
     libXrandr
   ];

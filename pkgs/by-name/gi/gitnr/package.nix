@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-9vx+bGfYuJuafZUY2ZT4SAgrNcSXuMe1kHH/lrpItvM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-DlYV92ZbkeUieVmyaxVuCslkwAgWrULu4HerLFXZZtE=";
 
   nativeBuildInputs = [
@@ -44,7 +43,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/reemus-dev/gitnr/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [
-      figsoda
       matthiasbeyer
     ];
     mainProgram = "gitnr";

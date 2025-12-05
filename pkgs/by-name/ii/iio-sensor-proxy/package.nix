@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch2,
+  fetchpatch,
   glib,
   cmake,
   libxml2,
@@ -13,39 +13,21 @@
   systemd,
   polkit,
   udevCheckHook,
+  libssc,
+  libqmi,
 }:
 
 stdenv.mkDerivation rec {
   pname = "iio-sensor-proxy";
-  version = "3.7";
+  version = "3.8";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "hadess";
     repo = "iio-sensor-proxy";
     rev = version;
-    hash = "sha256-MAfh6bgh39J5J3rlyPjyCkk5KcfWHMZLytZcBRPHaJE=";
+    hash = "sha256-ZVaV4Aj4alr5eP3uz6SunpeRsMOo8YcZMqCcB0DUYGY=";
   };
-
-  # Fix devices with cros-ec-accel, like Chromebooks and Framework Laptop 12
-  # https://gitlab.freedesktop.org/hadess/iio-sensor-proxy/-/merge_requests/400
-  patches = [
-    (fetchpatch2 {
-      name = "mr400_1.patch";
-      url = "https://gitlab.freedesktop.org/hadess/iio-sensor-proxy/-/commit/f35d293e65841a3b9c0de778300c7fa58b181fd0.patch";
-      hash = "sha256-Gk8Wpy+KFhHAsR3XklcsL3Eo4fHjQuFT6PCN5hz9KHk=";
-    })
-    (fetchpatch2 {
-      name = "mr400_2.patch";
-      url = "https://gitlab.freedesktop.org/hadess/iio-sensor-proxy/-/commit/7416edf4da98d8e3b75f9eddb7e5c488ac4a4c54.patch";
-      hash = "sha256-5UnYam6P+paBHAI0qKXDAvrFM8JYhRVTUFePRTHCp+U=";
-    })
-    (fetchpatch2 {
-      name = "mr400_3.patch";
-      url = "https://gitlab.freedesktop.org/hadess/iio-sensor-proxy/-/commit/d00109194422a4fe3e9a7bc1235ffc492459c61a.patch";
-      hash = "sha256-58KrXbdpR1eWbPmsr8b0ke67hX5J0o0gtqzrz3dc+ck=";
-    })
-  ];
 
   postPatch = ''
     # upstream meson.build currently doesn't have an option to change the default polkit dir
@@ -53,10 +35,19 @@ stdenv.mkDerivation rec {
       --replace 'polkit_policy_directory' "'$out/share/polkit-1/actions'"
   '';
 
+  patches = [
+    # https://gitlab.freedesktop.org/hadess/iio-sensor-proxy/-/merge_requests/381
+    (fetchpatch {
+      url = "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/af17d8f3a7572ed2be40d5a28c6ce08c74bd36c7/temp/iio-sensor-proxy/0001-iio-sensor-proxy-depend-on-libssc.patch";
+      hash = "sha256-faOpfR6qit68R2b+sk9/k4XeA6Ao5UuerrfFzMaD3MM=";
+    })
+  ];
+
   buildInputs = [
     libgudev
     systemd
     polkit
+    libssc
   ];
 
   nativeBuildInputs = [
@@ -72,6 +63,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     (lib.mesonOption "udevrulesdir" "${placeholder "out"}/lib/udev/rules.d")
     (lib.mesonOption "systemdsystemunitdir" "${placeholder "out"}/lib/systemd/system")
+    (lib.mesonBool "ssc-support" true)
   ];
 
   doInstallCheck = true;

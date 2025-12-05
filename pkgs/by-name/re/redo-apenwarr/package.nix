@@ -31,20 +31,23 @@ stdenv.mkDerivation rec {
     unset CC CXX
 
     substituteInPlace minimal/do.test \
-      --replace "/bin/pwd" "${coreutils}/bin/pwd"
+      --replace-fail "/bin/pwd" "${coreutils}/bin/pwd"
 
     substituteInPlace t/105-sympath/all.do \
-      --replace "/bin/pwd" "${coreutils}/bin/pwd"
+      --replace-fail "/bin/pwd" "${coreutils}/bin/pwd"
 
     substituteInPlace t/all.do \
-      --replace "/bin/ls" "ls"
+      --replace-fail "/bin/ls" "ls"
 
     substituteInPlace t/110-compile/hello.o.do \
-      --replace "/usr/include" "${lib.getDev stdenv.cc.libc}/include"
+      --replace-fail "/usr/include" "${lib.getDev stdenv.cc.libc}/include"
 
     substituteInPlace t/200-shell/nonshelltest.do \
-      --replace "/usr/bin/env perl" "${perl}/bin/perl"
+      --replace-fail "/usr/bin/env perl" "${perl}/bin/perl"
 
+    # See https://github.com/apenwarr/redo/pull/47
+    substituteInPlace minimal/do \
+      --replace-fail 'cd "$dodir"' 'cd "''${dodir:-.}"'
   '';
 
   inherit doCheck;
@@ -80,7 +83,6 @@ stdenv.mkDerivation rec {
     description = "Smaller, easier, more powerful, and more reliable than make. An implementation of djb's redo";
     homepage = "https://github.com/apenwarr/redo";
     maintainers = with maintainers; [
-      andrewchambers
       ck3d
     ];
     license = licenses.asl20;

@@ -14,9 +14,9 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "keeferrourke";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0id2dddx6rl71472l47vafx968wnklmq6b980br68w82kcvqczzs";
+    repo = "la-capitaine-icon-theme";
+    tag = "v${version}";
+    hash = "sha256-+n+GN5sCcWTyAigtgyudliOTulP7ECoOCYdm01trokU=";
   };
 
   propagatedBuildInputs = [
@@ -40,6 +40,7 @@ stdenvNoCC.mkDerivation rec {
     mkdir -p $out/share/icons/$pname
     cp -a * $out/share/icons/$pname
     rm $out/share/icons/$pname/{configure,COPYING,LICENSE,*.md}
+    cp "$out/share/icons/$pname/places/scalable/"distributor-logo-{archlinux,debian,kubuntu}.svg "$out/share/icons/$pname/apps/scalable/"
     runHook postInstall
   '';
 

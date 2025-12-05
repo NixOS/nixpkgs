@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     ./update-mdbook-for-rust-1.64.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-+x4pOtszvdzI/zR55ezcxlS52GrWQTuBn7vbnqDTVac=";
 
   meta = with lib; {
@@ -30,7 +29,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/mdzk-rs/mdzk/blob/main/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [
-      bryanasdev000
       ratsclub
     ];
     mainProgram = "mdzk";

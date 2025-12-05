@@ -1,21 +1,28 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoreconfHook,
   libax25,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ax25-tools";
   version = "0.0.10-rc5";
 
+  strictDeps = true;
+
+  nativeBuildInputs = [ autoreconfHook ];
+
   buildInputs = [ libax25 ];
 
-  # Due to recent unsolvable administrative domain problems with linux-ax25.org,
-  # the new domain is linux-ax25.in-berlin.de
-  src = fetchurl {
-    url = "https://linux-ax25.in-berlin.de/pub/ax25-tools/ax25-tools-${version}.tar.gz";
-    sha256 = "sha256-kqnLi1iobcufVWMPxUyaRsWKIPyTvtUkuMERGQs2qgY=";
+  # src from linux-ax25.in-berlin.de remote has been
+  # unreliable, pointing to github mirror from the radiocatalog
+  src = fetchFromGitHub {
+    owner = "radiocatalog";
+    repo = "ax25-tools";
+    tag = "ax25-tools-${finalAttrs.version}";
+    hash = "sha256-yoFflC3KU3cKQEENj4MF793TvUdf38C2Q9B7nMuLgMg=";
   };
 
   configureFlags = [
@@ -30,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ sarcasticadmin ];
     platforms = platforms.linux;
   };
-}
+})

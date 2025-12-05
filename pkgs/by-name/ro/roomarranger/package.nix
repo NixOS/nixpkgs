@@ -10,12 +10,14 @@
 }:
 
 let
+  version = "10.3.1";
+
   desktopItem = makeDesktopItem {
     type = "Application";
     exec = "roomarranger";
     name = "roomarranger";
     desktopName = "Room Arranger";
-    genericName = "Design your room, office, apartment, house.";
+    genericName = "Design your room, office, apartment or house, plan gardens and more...";
     icon = "roomarranger-icon";
     terminal = false;
     categories = [ "Graphics" ];
@@ -28,11 +30,11 @@ in
 
 stdenv.mkDerivation {
   pname = "roomarranger";
-  version = "10.0.1";
+  inherit version;
 
   src = fetchurl {
-    url = "https://f000.backblazeb2.com/file/rooarr/rooarr1001-linux64.tar.gz";
-    hash = "sha256-OwJSOfyTQinVKzrJftpFa5NN1kGweBezedpL2aE4LbE=";
+    url = "https://f000.backblazeb2.com/file/rooarr/rooarr${lib.versions.major version}${lib.versions.minor version}${lib.versions.patch version}-linux64.tar.gz";
+    hash = "sha256-J4/IsOH12CutjorGtZzKbL4uFYWd9SXmjNx32Vi5dr0=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +46,6 @@ stdenv.mkDerivation {
   buildInputs = [
     gtk3
     qt6.qt3d
-    qt6.qtwayland
   ];
 
   installPhase = ''
@@ -53,8 +54,9 @@ stdenv.mkDerivation {
     mkdir -p $out/lib $out/bin
     cp -r rooarr-bin/* $out/lib/
 
-    # Delete bundled dynamic libraries that reference major Qt version 6
-    rm -f $out/lib/*.6
+    # Remove Wayland plugins that require unavailable libraries
+    rm -rf $out/lib/wayland-graphics-integration-client
+    rm -f $out/lib/platforms/libqwayland-*.so
 
     ln -s $out/lib/RoomArranger $out/bin/roomarranger
 
@@ -78,8 +80,11 @@ stdenv.mkDerivation {
     longDescription = ''
       Room Arranger is a 3D room / apartment / floor planner with a simple user interface.
       Free for 30 days. Updates are free.
+
+      Note: This package uses XCB (X11) for rendering. On Wayland compositors, it will run via XWayland.
     '';
     homepage = "https://www.roomarranger.com/";
+    changelog = "https://www.roomarranger.com/whatsnew.txt";
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ bellackn ];

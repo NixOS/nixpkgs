@@ -137,7 +137,7 @@ python3.pkgs.buildPythonApplication {
       of the blockchain.
     '';
     homepage = "https://groestlcoin.org/";
-    downloadPage = "https://github.com/Groestlcoin/electrum-grs/releases/tag/v{version}";
+    downloadPage = "https://github.com/Groestlcoin/electrum-grs/releases/tag/v${version}";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ gruve-p ];

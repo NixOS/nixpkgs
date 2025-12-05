@@ -55,6 +55,18 @@ buildPythonPackage rec {
     hash = "sha256-yxxZcg61aTicC6dNFPUjUbVzr0ifIwAyocnzFPi6t/4=";
   };
 
+  # Patch dll search path to fix proper discovery of lib_lightgbm.so
+  #   Exception: Cannot find lightgbm library file in following paths:
+  # /nix/store/...-python3.13-lightgbm-4.6.0/lib/python3.13/site-packages/lib_lightgbm.so
+  # /nix/store/...-python3.13-lightgbm-4.6.0/lib/python3.13/site-packages/lightgbm/bin/lib_lightgbm.so
+  # /nix/store/...-python3.13-lightgbm-4.6.0/lib/python3.13/site-packages/lightgbm/lib/lib_lightgbm.so
+  postPatch = ''
+    substituteInPlace lightgbm/libpath.py \
+      --replace-fail \
+        'curr_path.parents[0] / "lib",' \
+        'curr_path.parents[1] / "lib",'
+  '';
+
   build-system = [
     scikit-build-core
   ];
@@ -87,9 +99,10 @@ buildPythonPackage rec {
     scipy
   ];
 
-  pypaBuildFlags =
-    lib.optionals gpuSupport [ "--config-setting=cmake.define.USE_GPU=ON" ]
-    ++ lib.optionals cudaSupport [ "--config-setting=cmake.define.USE_CUDA=ON" ];
+  cmakeFlags = [
+    (lib.cmakeBool "USE_GPU" gpuSupport)
+    (lib.cmakeBool "USE_CUDA" cudaSupport)
+  ];
 
   optional-dependencies = {
     arrow = [

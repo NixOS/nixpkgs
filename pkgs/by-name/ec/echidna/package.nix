@@ -3,6 +3,7 @@
   stdenv,
   makeWrapper,
   haskellPackages,
+  fetchpatch,
   fetchFromGitHub,
   # dependencies
   slither-analyzer,
@@ -10,16 +11,25 @@
 
 haskellPackages.mkDerivation rec {
   pname = "echidna";
-  version = "2.2.6";
+  version = "2.2.7";
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "echidna";
     tag = "v${version}";
-    sha256 = "sha256-5nzis7MXOqs0bhx2jrEexjZYZI2qY6D0D7AWO+SPs+A=";
+    sha256 = "sha256-rDtxyUpWfdMvS5BY1y8nydkQk/eCdmtjCqGJ+I4vy0I=";
   };
 
   isExecutable = true;
+
+  patches = [
+    # Fix build with GHC 9.10
+    # https://github.com/crytic/echidna/pull/1446
+    (fetchpatch {
+      url = "https://github.com/crytic/echidna/commit/1b498bdb8c86d8297aa34de8f48b6dce2f4dd84d.patch";
+      hash = "sha256-JeKPv2Q2gIt1XpI81XPFu80/x8QcOI4k1QN/mTf+bqk=";
+    })
+  ];
 
   buildTools = with haskellPackages; [
     hpack
@@ -86,7 +96,7 @@ haskellPackages.mkDerivation rec {
     makeWrapper
   ];
 
-  preConfigure = ''
+  prePatch = ''
     hpack
   '';
 
@@ -117,4 +127,6 @@ haskellPackages.mkDerivation rec {
   ];
   platforms = lib.platforms.unix;
   mainProgram = "echidna";
+  # Fails to build since https://hydra.nixos.org/build/313316669/nixlog/2
+  broken = true;
 }

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "array-api-strict";
-  version = "2.4";
+  version = "2.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "data-apis";
     repo = "array-api-strict";
     tag = version;
-    hash = "sha256-NofL9F3pQSKN9RpOlHPigLadIu5ELokwUuUMCZyhr3s=";
+    hash = "sha256-m0uWaeUwHsWyAOxS7nxY8c+HWUhz+mOKNE4M0DsiClI=";
   };
 
   postPatch = ''
@@ -47,8 +47,8 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://data-apis.org/array-api-strict";
-    changelog = "https://github.com/data-apis/array-api-strict/releases/tag/${version}";
-    description = "A strict, minimal implementation of the Python array API";
+    changelog = "https://github.com/data-apis/array-api-strict/releases/tag/${src.tag}";
+    description = "Strict, minimal implementation of the Python array API";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ berquist ];
   };

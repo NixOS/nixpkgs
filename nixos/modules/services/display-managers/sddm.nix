@@ -12,9 +12,11 @@ let
   xEnv = config.systemd.services.display-manager.environment;
 
   sddm = cfg.package.override (old: {
-    withWayland = cfg.wayland.enable;
-    withLayerShellQt = cfg.wayland.compositor == "kwin";
-    extraPackages = old.extraPackages or [ ] ++ cfg.extraPackages;
+    extraPackages =
+      old.extraPackages or [ ]
+      ++ lib.optionals cfg.wayland.enable [ pkgs.qt6.qtwayland ]
+      ++ lib.optionals (cfg.wayland.compositor == "kwin") [ pkgs.kdePackages.layer-shell-qt ]
+      ++ cfg.extraPackages;
   });
 
   iniFmt = pkgs.formats.ini { };
@@ -93,7 +95,6 @@ let
   }
   // optionalAttrs xcfg.enable {
     X11 = {
-      MinimumVT = if xcfg.tty != null then xcfg.tty else 7;
       ServerPath = toString xserverWrapper;
       XephyrPath = "${pkgs.xorg.xorgserver.out}/bin/Xephyr";
       SessionCommand = toString dmcfg.sessionData.wrapper;
@@ -229,7 +230,7 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs [ "plasma5Packages" "sddm" ] { };
+      package = mkPackageOption pkgs [ "kdePackages" "sddm" ] { };
 
       enableHidpi = mkOption {
         type = types.bool;
@@ -256,6 +257,7 @@ in
       theme = mkOption {
         type = types.str;
         default = "";
+        example = lib.literalExpression "\"\${pkgs.where-is-my-sddm-theme.override { variants = [ \"qt5\" ]; }}/share/sddm/themes/where_is_my_sddm_theme_qt5\"";
         description = ''
           Greeter theme to use.
         '';
@@ -419,8 +421,7 @@ in
     services = {
       dbus.packages = [ sddm ];
       xserver = {
-        # To enable user switching, allow sddm to allocate TTYs/displays dynamically.
-        tty = null;
+        # To enable user switching, allow sddm to allocate displays dynamically.
         display = null;
       };
     };
@@ -432,12 +433,8 @@ in
       services.display-manager = {
         after = [
           "systemd-user-sessions.service"
-          "getty@tty7.service"
           "plymouth-quit.service"
           "systemd-logind.service"
-        ];
-        conflicts = [
-          "getty@tty7.service"
         ];
       };
     };

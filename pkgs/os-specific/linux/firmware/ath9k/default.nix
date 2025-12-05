@@ -39,6 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs target_firmware/firmware-crc.pl
+    substituteInPlace target_firmware/CMakeLists.txt \
+    --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.6)" \
+                   "CMAKE_MINIMUM_REQUIRED(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [
@@ -164,7 +167,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [
       # see NOTICE.txt for details
       bsd3 # almost everything; "the ClearBSD licence"
-      gpl2ClasspathPlus # **/*cmnos_printf.c, only three files
+      gpl2Plus # **/*cmnos_printf.c, only three files
+      classpathException20 # **/*cmnos_printf.c, only three files
       mit # **/xtos, **/xtensa
     ];
 
@@ -185,5 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://lists.infradead.org/mailman/listinfo/ath9k_htc_fw";
     downloadPage = "https://github.com/qca/open-ath9k-htc-firmware";
     changelog = "https://github.com/qca/open-ath9k-htc-firmware/tags";
+    # The last successful Darwin Hydra build was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

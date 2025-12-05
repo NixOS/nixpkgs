@@ -32,6 +32,5 @@ stdenv.mkDerivation {
     mainProgram = "bcc";
     homepage = "https://github.com/wormt/bcc";
     license = licenses.mit;
-    maintainers = with maintainers; [ ertes ];
   };
 }

@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ThHkEvu+lWojHmEgcrwdZDPROfxznB7vv78msyZf90A=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-JghCYYDf2keV9UFU5m+qDIIb7+V0aPwVzR41J01pXcI=";
 
   nativeBuildInputs = [
@@ -40,6 +39,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://riff.sh";
     changelog = "https://github.com/DeterminateSystems/riff/releases/tag/v${version}";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Sales integration with the Multi-Drop-Bus of Snack machines, NFC readers and QR code display";
     license = lib.licenses.agpl3Plus;
     teams = with lib.teams; [ ngi ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "taler-mdb";
   };
 })

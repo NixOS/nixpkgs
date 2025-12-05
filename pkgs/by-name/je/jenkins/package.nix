@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   common-updater-scripts,
   coreutils,
@@ -16,13 +16,13 @@
   curl,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "jenkins";
-  version = "2.504.3";
+  version = "2.528.2";
 
   src = fetchurl {
     url = "https://get.jenkins.io/war-stable/${finalAttrs.version}/jenkins.war";
-    hash = "sha256-6oiDQxuLXva2j+DlgXyT3AoR3vOABU594xNkhnlu/rA=";
+    hash = "sha256-YiWtzsAQ6gdcLWmP69vXLfduIV3WtsocV5u07Osq1cc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = { inherit (nixosTests) jenkins jenkins-cli; };
 
     updateScript = writeScript "update.sh" ''
-      #!${stdenv.shell}
+      #!${stdenvNoCC.shell}
       set -o errexit
       PATH=${
         lib.makeBinPath [

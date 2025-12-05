@@ -4,26 +4,21 @@
   fetchzip,
   openssl,
   pkg-config,
-  systemd,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pr-tracker";
-  version = "1.8.0";
+  version = "1.10.0";
 
   src = fetchzip {
     url = "https://git.qyliss.net/pr-tracker/snapshot/pr-tracker-${version}.tar.xz";
-    hash = "sha256-Trn+ogRNR23j2S+82ZqeWIZriUZ/Lv7khGBo0aiYutU=";
+    hash = "sha256-lAraMuhAvTV/PX0R/SSga3bebuK0lizcyEK7Qo3iUmc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-63Y/BXmFRbrTUBtUNP1iEk+cvSxDJG/bp8mBWQbQsh0=";
+  cargoHash = "sha256-gD2J3yp2ICNU9bQSXp2ks5GV+vL76t278WwiWCsAT8k=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    openssl
-    systemd
-  ];
+  buildInputs = [ openssl ];
 
   meta = {
     changelog = "https://git.qyliss.net/pr-tracker/plain/NEWS?h=${version}";
@@ -32,7 +27,7 @@ rustPlatform.buildRustPackage rec {
       A web server that displays the path a Nixpkgs pull request will take
       through the various release channels.
     '';
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     homepage = "https://git.qyliss.net/pr-tracker";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [

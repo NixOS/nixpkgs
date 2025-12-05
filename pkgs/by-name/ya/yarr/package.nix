@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "yarr";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "nkanaev";
     repo = "yarr";
     rev = "v${version}";
-    hash = "sha256-yII0KV4AKIS1Tfhvj588O631JDArnr0/30rNynTSwzk=";
+    hash = "sha256-D/049qH6CFNL7MY5e54guA9i84pbAwGf2UPHnVQWCkU=";
   };
 
   vendorHash = null;

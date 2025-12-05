@@ -8,7 +8,7 @@
   versionCheckHook,
 }:
 let
-  version = "1.34.3";
+  version = "1.36.2";
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "envoy-bin is not available for ${system}.";
 
@@ -21,8 +21,8 @@ let
 
   hash =
     {
-      aarch64-linux = "sha256-LsNkrFJ59MUiKIF0Dcuq2Lhn3LnAW0Mwlx4kIx78KfQ=";
-      x86_64-linux = "sha256-04vGgR8U0qiNBvmiim0aKa6Ug2acR31F5H4biSWkrag=";
+      aarch64-linux = "sha256-r3NrtmU8zpxSsvOwkqNgKsIaYKxnVpjQYNxNgoN8Bco=";
+      x86_64-linux = "sha256-r9Z7z+pUhSXudqk1CgpM/rKsJMe1MnlM4zLYQK2M2uc=";
     }
     .${system} or throwSystem;
 in
@@ -65,9 +65,7 @@ stdenv.mkDerivation {
     description = "Cloud-native edge and service proxy";
     license = lib.licenses.asl20;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = with lib.maintainers; [
-      adamcstephens
-    ];
+    maintainers = with lib.maintainers; [ katexochen ];
     mainProgram = "envoy";
     platforms = [
       "x86_64-linux"

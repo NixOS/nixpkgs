@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     sed -i 's|depmod|#depmod|' Makefile
   '';
 
-  makeFlags = [
+  makeFlags = kernelModuleMakeFlags ++ [
     "TARGET=${kernel.modDirVersion}"
     "KERNEL_MODULES=${kernel.dev}/lib/modules/${kernel.modDirVersion}"
     "MODDESTDIR=$(out)/lib/modules/${kernel.modDirVersion}/kernel/drivers/hwmon"

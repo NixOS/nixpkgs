@@ -10,12 +10,18 @@ let
     mkKeyValue = lib.generators.mkKeyValueDefault { } " ";
     listsAsDuplicateKeys = true;
   };
+  assertKey = key: {
+    assertion = cfg.settings ? ${key};
+    message = "Please set services.gonic.settings.${key}. See https://github.com/sentriz/gonic#configuration-options for supported values.";
+  };
 in
 {
   options = {
     services.gonic = {
 
       enable = lib.mkEnableOption "Gonic music server";
+
+      package = lib.mkPackageOption pkgs "gonic" { };
 
       settings = lib.mkOption rec {
         type = settingsFormat.type;
@@ -29,6 +35,7 @@ in
         example = {
           music-path = [ "/mnt/music" ];
           podcast-path = "/mnt/podcasts";
+          playlists-path = "/mnt/playlists";
         };
         description = ''
           Configuration for Gonic, see <https://github.com/sentriz/gonic#configuration-options> for supported values.
@@ -39,6 +46,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      (assertKey "music-path")
+      (assertKey "podcast-path")
+      (assertKey "playlists-path")
+    ];
+
     systemd.services.gonic = {
       description = "Gonic Media Server";
       after = [ "network.target" ];
@@ -51,8 +64,7 @@ in
               n: v: !((n == "tls-cert" || n == "tls-key") && v == null)
             ) cfg.settings;
           in
-          "${pkgs.gonic}/bin/gonic -config-path ${settingsFormat.generate "gonic" filteredSettings}";
-        DynamicUser = true;
+          "${lib.getExe cfg.package} -config-path ${settingsFormat.generate "gonic" filteredSettings}";
         StateDirectory = "gonic";
         CacheDirectory = "gonic";
         WorkingDirectory = "/var/lib/gonic";
@@ -62,6 +74,7 @@ in
         BindPaths = [
           cfg.settings.playlists-path
           cfg.settings.podcast-path
+          cfg.settings.cache-path
         ];
         BindReadOnlyPaths = [
           # gonic can access scrobbling services
@@ -94,7 +107,6 @@ in
         ];
         RestrictRealtime = true;
         LockPersonality = true;
-        MemoryDenyWriteExecute = true;
         UMask = "0066";
         ProtectHostname = true;
       };

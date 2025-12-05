@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://git.taler.net/twister.git";
     description = "Fault injector for HTTP traffic";
     teams = with lib.teams; [ ngi ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     license = lib.licenses.agpl3Plus;
     mainProgram = "twister";
     platforms = lib.platforms.linux;

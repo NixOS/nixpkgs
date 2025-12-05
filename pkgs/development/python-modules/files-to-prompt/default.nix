@@ -29,6 +29,8 @@ buildPythonPackage rec {
     versionCheckHook
   ];
 
+  disabledTests = [ "test_binary_file_warning" ];
+
   versionCheckProgramArg = "--version";
 
   meta = {

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "iqtree";
     repo = "iqtree2";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-8d5zqZIevv3bnq7z7Iyo/x8i445y1RAFtRMeK8s/ieQ=";
     fetchSubmodules = true;
   };

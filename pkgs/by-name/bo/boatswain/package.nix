@@ -5,6 +5,7 @@
   desktop-file-utils,
   fetchFromGitLab,
   glib,
+  gobject-introspection,
   graphene,
   gtk4,
   gusb,
@@ -40,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     appstream
     desktop-file-utils
     glib
+    gobject-introspection
     gtk4
     json-glib
     libpeas2

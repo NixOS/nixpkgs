@@ -59,7 +59,7 @@ buildPythonPackage rec {
     zope-exceptions
     zope-testing
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # Import process is too complex and some tests fail
   preCheck = ''
@@ -77,6 +77,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/zopefoundation/zope.security";
     changelog = "https://github.com/zopefoundation/zope.security/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.zpl21;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

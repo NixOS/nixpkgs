@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-vNeOJOyQsjDUzScA1a/W+SI1Z67HTLiHjwWZZpr1Paw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-mMoYJ3dLpb1Y3Ocdyxg1brE7xYeZBbtUg0J/2HTK0hE=";
 
   nativeBuildInputs = [
@@ -72,7 +71,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/ouch-org/ouch/blob/${version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ] ++ lib.optionals enableUnfree [ unfreeRedistributable ];
     maintainers = with lib.maintainers; [
-      figsoda
       psibi
       krovuxdev
     ];

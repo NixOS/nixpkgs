@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   openssl,
   zlib,
@@ -12,14 +13,27 @@
 
 stdenv.mkDerivation rec {
   pname = "libwebsockets";
-  version = "4.3.5";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "warmcat";
     repo = "libwebsockets";
     rev = "v${version}";
-    hash = "sha256-KOAhIVn4G5u0A1TE75Xv7iYO3/i8foqWYecH0kJHdBM=";
+    hash = "sha256-Xvcnfvm9UCNXm3G3tVe7jExE3fwpzYuz8wllvINymeI=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2025-11677.patch";
+      url = "https://libwebsockets.org/git/libwebsockets/patch?id=2f082ec31261f556969160143ba94875d783971a";
+      hash = "sha256-FeiZAbr1kpt+YNjhi2gfG2A6nXKiSssMFRmlALaneu4=";
+    })
+    (fetchpatch {
+      name = "CVE-2025-11678.patch";
+      url = "https://libwebsockets.org/git/libwebsockets/patch?id=2bb9598562b37c942ba5b04bcde3f7fdf66a9d3a";
+      hash = "sha256-1uQUkoMbK+3E/QYMIBLlBZypwHBIrWBtm+KIW07WRj8=";
+    })
+  ];
 
   outputs = [
     "out"
@@ -40,6 +54,8 @@ stdenv.mkDerivation rec {
     "-DLWS_WITH_SOCKS5=ON"
     "-DDISABLE_WERROR=ON"
     "-DLWS_BUILD_HASH=no_hash"
+    # TODO(Mindavi): figure out why linking has broken for test apps between 4.3.5 and 4.4.1.
+    "-DLWS_WITHOUT_TESTAPPS=ON"
   ]
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DLWS_WITHOUT_TESTAPPS=ON"
   ++ lib.optional withExternalPoll "-DLWS_WITH_EXTERNAL_POLL=ON"

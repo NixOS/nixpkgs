@@ -33,6 +33,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/snpeff --add-flags "-jar $out/libexec/snpeff/snpEff.jar"
     makeWrapper ${jre}/bin/java $out/bin/snpsift --add-flags "-jar $out/libexec/snpeff/SnpSift.jar"
+    # camelCase is the default
+    ln -s $out/bin/snpeff $out/bin/snpEff
+    ln -s $out/bin/snpsift $out/bin/snpSift
   '';
 
   meta = with lib; {

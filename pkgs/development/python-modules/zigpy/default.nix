@@ -13,8 +13,8 @@
   freezegun,
   frozendict,
   jsonschema,
-  pyserial-asyncio,
-  pytest-asyncio,
+  pyserial-asyncio-fast,
+  pytest-asyncio_0,
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.80.1";
+  version = "0.87.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
     tag = version;
-    hash = "sha256-OHwX2bwM6XYPGs2n7X5OQ3lW1lsD0RaaPNSFXOX+C/Q=";
+    hash = "sha256-gaKTU3cAx8TecafVasoLeefjWS/R1AJVCZn9F1oqyPY=";
   };
 
   postPatch = ''
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     cryptography
     frozendict
     jsonschema
-    pyserial-asyncio
+    pyserial-asyncio-fast
     typing-extensions
     voluptuous
   ]
@@ -60,7 +60,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     freezegun
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-timeout
     pytestCheckHook
   ];

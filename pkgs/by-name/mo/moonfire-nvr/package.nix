@@ -49,8 +49,6 @@ rustPlatform.buildRustPackage {
 
   sourceRoot = "${src.name}/server";
 
-  useFetchCargoVendor = true;
-
   cargoHash = "sha256-+L4XofUFvhJDPGv4fAGYXFNpuNd01k/P63LH2tXXHE0=";
 
   env.VERSION = "v${version}";
@@ -65,7 +63,7 @@ rustPlatform.buildRustPackage {
   ];
 
   postInstall = ''
-    mkdir -p $out/lib/ui
+    mkdir -p $out/lib
     ln -s ${ui} $out/lib/ui
   '';
 
@@ -74,9 +72,9 @@ rustPlatform.buildRustPackage {
   passthru = {
     inherit ui;
     tests.version = testers.testVersion {
-      inherit version;
       package = moonfire-nvr;
       command = "moonfire-nvr --version";
+      version = "Version: v${version}";
     };
   };
 

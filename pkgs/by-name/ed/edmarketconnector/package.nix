@@ -24,19 +24,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "edmarketconnector";
-  version = "5.13.1";
+  version = "5.13.2";
 
   src = fetchFromGitHub {
     owner = "EDCD";
     repo = "EDMarketConnector";
     tag = "Release/${finalAttrs.version}";
-    hash = "sha256-50OPbAXrDKodN0o6UibGUmMqQ/accF2/gNHnms+8rOI=";
+    hash = "sha256-BqzrW5pV9ty1MBaILQir+iOda2xQoJeTq8eZG0x6+90=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    runHook preInstallPhase
+    runHook preInstall
 
     mkdir -p $out/share/icons/hicolor/512x512/apps/
     ln -s ${finalAttrs.src}/io.edcd.EDMarketConnector.png $out/share/icons/hicolor/512x512/apps/io.edcd.EDMarketConnector.png
@@ -45,9 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s "${finalAttrs.src}/io.edcd.EDMarketConnector.desktop" "$out/share/applications/"
 
     makeWrapper ${pythonEnv}/bin/python $out/bin/edmarketconnector \
-      --add-flags "${finalAttrs.src}/EDMarketConnector.py $@"
+      --add-flags "${finalAttrs.src}/EDMarketConnector.py"
 
-    runHook postInstallPhase
+    runHook postInstall
   '';
 
   meta = {
@@ -58,6 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.x86_64;
     mainProgram = "edmarketconnector";
-    maintainers = with lib.maintainers; [ jiriks74 ];
+    maintainers = with lib.maintainers; [
+      jiriks74
+      toasteruwu
+    ];
   };
 })

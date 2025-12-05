@@ -6,7 +6,6 @@
   fetchFromGitLab,
   imagemagick,
   libarchive,
-  libdevil,
   libraw,
   mpv,
   pkg-config,
@@ -38,7 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     exiv2
     imagemagick
     libarchive
-    libdevil
     libraw
     mpv
     resvg
@@ -56,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   cmakeFlags = [
+    (lib.cmakeBool "WITH_DEVIL" false)
     (lib.cmakeBool "WITH_FREEIMAGE" false)
   ];
 

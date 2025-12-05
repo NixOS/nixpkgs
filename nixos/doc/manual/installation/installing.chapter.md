@@ -254,7 +254,7 @@ update /etc/fstab.
     # parted /dev/sda -- mklabel msdos
     ```
 
-2.  Add the *root* partition. This will fill the the disk except for the
+2.  Add the *root* partition. This will fill the disk except for the
     end part, where the swap will live.
 
     ```ShellSession

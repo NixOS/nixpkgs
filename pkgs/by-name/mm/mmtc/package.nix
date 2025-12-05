@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-gs6uytX4rm2JrJ4UbtHJDg+b+Z1ZjcsuUR0b13jQIy4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-TpAl7lMaQGSH9oMNqYIxnajsfh1HAdyU2suSFRfWYPs=";
 
   nativeBuildInputs = [ installShellFiles ];
@@ -33,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/figsoda/mmtc";
     changelog = "https://github.com/figsoda/mmtc/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "mmtc";
   };
 }

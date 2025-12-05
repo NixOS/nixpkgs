@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "micromdm";
-  version = "1.13.0";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "micromdm";
     repo = "micromdm";
     rev = "v${version}";
-    hash = "sha256-o/HK1bjaUwsSQG7QbYe0gFnD/OKV00cHXLXpftNa3iY=";
+    hash = "sha256-b0ST2krDY4avvcdcpUInTH1On0cGKTsdwPpL9HbSPig=";
   };
 
-  vendorHash = "sha256-aKm8a/PS+1ozImh1aL2EliALyUqjPMMBh4NTbL0H/ng=";
+  vendorHash = "sha256-NxjxHKEB1+d2BsVImL405anuMcKF+DlpnRPvKkGNMAQ=";
 
   meta = {
     description = "Mobile Device Management server for Apple Devices, focused on giving you all the power through an API";

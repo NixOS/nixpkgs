@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://github.com/impallari/Encode-Sans";
     license = licenses.ofl;
-    maintainers = with maintainers; [ cmfwyp ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

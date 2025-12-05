@@ -3,22 +3,24 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   tkinter,
   supercollider,
 }:
 
 buildPythonPackage rec {
   pname = "foxdot";
-  version = "0.8.12";
-  format = "setuptools";
+  version = "0.9.0";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "FoxDot";
-    inherit version;
-    sha256 = "528999da55ad630e540a39c0eaeacd19c58c36f49d65d24ea9704d0781e18c90";
+    inherit pname version;
+    hash = "sha256-9dIaqrGcYpZeWlRlymRvG9YnTRav0zktfmUpFBlN/7E=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     tkinter
   ]
   # we currently build SuperCollider only on Linux

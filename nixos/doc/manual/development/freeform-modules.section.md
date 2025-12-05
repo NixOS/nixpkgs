@@ -50,7 +50,7 @@ And the following shows what such a module then allows
   # Not a declared option, but the freeform type allows this
   settings.logLevel = "debug";
 
-  # Not allowed because the the freeform type only allows strings
+  # Not allowed because the freeform type only allows strings
   # settings.enable = true;
 
   # Allowed because there is a port option declared

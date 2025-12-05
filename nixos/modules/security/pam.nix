@@ -549,8 +549,8 @@ let
             '';
           };
 
-          package = lib.mkPackageOption pkgs.plasma5Packages "kwallet-pam" {
-            pkgsText = "pkgs.plasma5Packages";
+          package = lib.mkPackageOption pkgs.kdePackages "kwallet-pam" {
+            pkgsText = "pkgs.kdePackages";
           };
 
           forceRun = lib.mkEnableOption null // {
@@ -1011,6 +1011,7 @@ let
                       modulePath = "${config.boot.zfs.package}/lib/security/pam_zfs_key.so";
                       settings = {
                         inherit (config.security.pam.zfs) homes;
+                        mount_recursively = config.security.pam.zfs.mountRecursively;
                       };
                     }
                     {
@@ -1202,6 +1203,7 @@ let
                 modulePath = "${config.boot.zfs.package}/lib/security/pam_zfs_key.so";
                 settings = {
                   inherit (config.security.pam.zfs) homes;
+                  mount_recursively = config.security.pam.zfs.mountRecursively;
                 };
               }
               {
@@ -1311,7 +1313,7 @@ let
                 name = "lastlog";
                 enable = cfg.updateWtmp;
                 control = "required";
-                modulePath = "${package}/lib/security/pam_lastlog.so";
+                modulePath = "${pkgs.util-linux.lastlog}/lib/security/pam_lastlog2.so";
                 settings = {
                   silent = true;
                 };
@@ -1362,6 +1364,7 @@ let
                 settings = {
                   inherit (config.security.pam.zfs) homes;
                   nounmount = config.security.pam.zfs.noUnmount;
+                  mount_recursively = config.security.pam.zfs.mountRecursively;
                 };
               }
               {
@@ -1663,7 +1666,7 @@ in
         must be that described in {manpage}`limits.conf(5)`.
 
         Note that these limits do not apply to systemd services,
-        whose limits can be changed via {option}`systemd.extraConfig`
+        whose limits can be changed via {option}`systemd.settings.Manager`
         instead.
       '';
     };
@@ -2195,6 +2198,14 @@ in
           Do not unmount home dataset on logout.
         '';
       };
+
+      mountRecursively = lib.mkOption {
+        default = false;
+        type = lib.types.bool;
+        description = ''
+          Mount child datasets of home dataset.
+        '';
+      };
     };
 
     security.pam.enableEcryptfs = lib.mkEnableOption "eCryptfs PAM module (mounting ecryptfs home directory on login)";
@@ -2298,7 +2309,7 @@ in
       ++ lib.optionals config.security.pam.enableFscrypt [ pkgs.fscrypt-experimental ]
       ++ lib.optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ];
 
-    boot.supportedFilesystems = lib.optionals config.security.pam.enableEcryptfs [ "ecryptfs" ];
+    boot.supportedFilesystems = lib.mkIf config.security.pam.enableEcryptfs [ "ecryptfs" ];
 
     security.wrappers = {
       unix_chkpwd = {
@@ -2310,6 +2321,28 @@ in
     };
 
     environment.etc = lib.mapAttrs' makePAMService enabledServices;
+
+    systemd =
+      lib.mkIf (lib.any (service: service.updateWtmp) (lib.attrValues config.security.pam.services))
+        {
+          tmpfiles.packages = [ pkgs.util-linux.lastlog ]; # /lib/tmpfiles.d/lastlog2-tmpfiles.conf
+          services.lastlog2-import = {
+            enable = true;
+            wantedBy = [ "default.target" ];
+            after = [
+              "local-fs.target"
+              "systemd-tmpfiles-setup.service"
+            ];
+            # TODO: ${pkgs.util-linux.lastlog}/lib/systemd/system/lastlog2-import.service
+            # uses unpatched /usr/bin/mv, needs to be fixed on staging
+            # in the meantime, use a service drop-in here
+            serviceConfig.ExecStartPost = [
+              ""
+              "${lib.getExe' pkgs.coreutils "mv"} /var/log/lastlog /var/log/lastlog.migrated"
+            ];
+          };
+          packages = [ pkgs.util-linux.lastlog ]; # lib/systemd/system/lastlog2-import.service
+        };
 
     security.pam.services = {
       other.text = ''

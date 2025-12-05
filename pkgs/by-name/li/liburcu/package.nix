@@ -3,15 +3,16 @@
   stdenv,
   fetchurl,
   perl,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.15.3";
+  version = "0.15.5";
   pname = "liburcu";
 
   src = fetchurl {
     url = "https://lttng.org/files/urcu/userspace-rcu-${version}.tar.bz2";
-    hash = "sha256-Jmh+yE4+EUdZRUyISgir6ved7AmwQYld30xF7BUKy20=";
+    hash = "sha256-sveHqKg1EsMlmecc2rzFExRklHuCAUiWvRFBOy14LeE=";
   };
 
   outputs = [
@@ -26,6 +27,11 @@ stdenv.mkDerivation rec {
 
   preCheck = "patchShebangs tests/unit";
   doCheck = true;
+
+  passthru.updateScript = gitUpdater {
+    url = "https://git.lttng.org/userspace-rcu.git";
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "Userspace RCU (read-copy-update) library";

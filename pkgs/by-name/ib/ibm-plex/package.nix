@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation {
   pname = "ibm-plex";
   inherit version;
 
-  srcs = builtins.map (
+  srcs = map (
     family:
     fetchzip {
       url = "https://github.com/IBM/plex/releases/download/%40ibm%2Fplex-${family}%40${version}/ibm-plex-${family}.zip";

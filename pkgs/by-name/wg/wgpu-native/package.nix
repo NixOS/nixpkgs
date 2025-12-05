@@ -9,15 +9,15 @@
   callPackage,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wgpu-native";
-  version = "25.0.2.1";
+  version = "27.0.2.0";
 
   src = fetchFromGitHub {
     owner = "gfx-rs";
     repo = "wgpu-native";
-    tag = "v${version}";
-    hash = "sha256-w0qzJxdJioiQAmsh56vLaR34TjaUK/qqHhWcvO93IQ8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sJEDCt8DTP6FjtbROVCZVD0we0OA07wjkiLnXoQfTuc=";
     fetchSubmodules = true;
   };
 
@@ -26,8 +26,7 @@ rustPlatform.buildRustPackage rec {
     "dev"
   ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-iOnz//eHQ6WRPWOGcKOXyuwZS9WcbJWslRAz8yDamn8=";
+  cargoHash = "sha256-ZQiX7IZsbjlDzRNlYgpRnLfCKGAYnSwvACRMNkZPjbE=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -38,6 +37,8 @@ rustPlatform.buildRustPackage rec {
     vulkan-loader
   ];
 
+  env.WGPU_NATIVE_VERSION = finalAttrs.version;
+
   postInstall = ''
     rm $out/lib/libwgpu_native.a
     install -Dm644 ./ffi/wgpu.h -t $dev/include/webgpu
@@ -47,7 +48,7 @@ rustPlatform.buildRustPackage rec {
   passthru = {
     updateScript = nix-update-script { };
     examples = callPackage ./examples.nix {
-      inherit version src;
+      inherit (finalAttrs) version src;
     };
   };
 
@@ -60,4 +61,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [ niklaskorz ];
   };
-}
+})

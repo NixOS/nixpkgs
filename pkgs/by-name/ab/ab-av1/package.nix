@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ab-av1";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "alexheretic";
     repo = "ab-av1";
     tag = "v${version}";
-    hash = "sha256-uW5BXUNzk94bqSWQSaCiuSO8Angwt0eo4ZmvGRr/4S8=";
+    hash = "sha256-bVsEsQMQhXyDES5mlBHRK1Uf7UwbX6iKhTF17peokAk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-oLmE+xkatgIDIu6mUJ49O9s6ULp0bvpWdBP8rEGb5yc=";
+  cargoHash = "sha256-TDpNT62jkkP+g2w1HXmPJiblHXFOuAuzYRY5cpzRW/M=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -34,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/alexheretic/ab-av1";
     changelog = "https://github.com/alexheretic/ab-av1/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "ab-av1";
   };
 }

@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "kyverno-chainsaw";
-  version = "0.2.12";
+  version = "0.2.13";
 
   src = fetchFromGitHub {
     owner = "kyverno";
     repo = "chainsaw";
     rev = "v${version}";
-    hash = "sha256-BxSJu71/KhVtWEOw2V+nteZnvyyoGvrbWQmHGqDtLa0=";
+    hash = "sha256-DbwqcHBmKAzq3xzUVGOdXjF8uaUWkEKRlz9m7tfyIdY=";
   };
 
-  vendorHash = "sha256-zB2HkY8ryPWln0HcKZPMCSKUnbCh/2UivteN6danNJU=";
+  vendorHash = "sha256-e4hSfmnROnfLRNvmfN0VFoIR0zVaqBhd0/c4lIyScvY=";
 
   subPackages = [ "." ];
 
@@ -60,6 +60,6 @@ buildGoModule rec {
       * Asserting operators react (or not) the way they should
     '';
     mainProgram = "chainsaw";
-    maintainers = with lib.maintainers; [ Sanskarzz ];
+    maintainers = [ ];
   };
 }

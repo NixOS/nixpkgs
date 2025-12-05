@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "smallwm";
-  version = "unstable-2020-02-28";
+  version = "0-unstable-2020-02-28";
 
   src = fetchFromGitHub {
     owner = "adamnew123456";
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/adamnew123456/SmallWM";
     license = lib.licenses.bsd2;
     mainProgram = "smallwm";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (libX11.meta) platforms;
   };
 })

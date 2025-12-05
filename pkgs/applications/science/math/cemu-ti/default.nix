@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     # This is resolved upstream, but I can't apply the patch because the
     # sourceRoot isn't set to the base of the Git repo.
     ./resolve-ambiguous-constexpr.patch
+    # Disable the deploy_script generation. It's broken with Qt 6.10 and not used by this package.
+    ./cmake-no-deploy.patch
   ];
 
   nativeBuildInputs = [
@@ -45,12 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "CEmu";
     homepage = "https://ce-programming.github.io/CEmu";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
-    platforms = [
-      "x86_64-linux"
-      "x86_64-darwin"
-      "aarch64-linux"
-    ];
-    broken = stdenv.hostPlatform.isDarwin || (stdenv.system == "x86_64-linux");
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 })

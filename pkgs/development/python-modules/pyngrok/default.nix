@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   setuptools,
   pyyaml,
@@ -9,14 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pyngrok";
-  version = "7.2.12";
+  version = "7.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HM5NeFYZuAZLyn5vbIo0VNaaql/P8PNb0FqoElTOEv8=";
+    hash = "sha256-L+kcuiwlMez7EktQcfN3gIthpooUyjyZ/Lfz/a4FJ48=";
   };
 
   build-system = [

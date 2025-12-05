@@ -1,14 +1,13 @@
-diff --git a/third_party/nvidia/backend/compiler.py b/third_party/nvidia/backend/compiler.py
-index 960334744..269e22e6e 100644
---- a/third_party/nvidia/backend/compiler.py
-+++ b/third_party/nvidia/backend/compiler.py
-@@ -38,6 +38,9 @@ def _path_to_binary(binary: str):
-         os.path.join(os.path.dirname(__file__), "bin", binary),
-     ]
+diff --git a/python/triton/knobs.py b/python/triton/knobs.py
+index 161f739bd..047b19d69 100644
+--- a/python/triton/knobs.py
++++ b/python/triton/knobs.py
+@@ -208,6 +208,8 @@ class env_nvidia_tool(env_base[str, NvidiaTool]):
+         else:
+             paths = [self.default_path]
  
-+    import shlex
-+    paths.extend(shlex.split("@nixpkgsExtraBinaryPaths@"))
-+
-     for path in paths:
-         if os.path.exists(path) and os.path.isfile(path):
-             result = subprocess.check_output([path, "--version"], stderr=subprocess.STDOUT)
++        import shlex
++        paths.extend(shlex.split("@nixpkgsExtraBinaryPaths@"))
+         for path in paths:
+             if tool := NvidiaTool.from_path(path):
+                 return tool

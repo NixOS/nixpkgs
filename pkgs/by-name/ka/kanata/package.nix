@@ -1,37 +1,35 @@
 {
   stdenv,
   lib,
-  apple-sdk_13,
-  darwinMinVersionHook,
+  gnused,
   rustPlatform,
+  karabiner-dk,
   fetchFromGitHub,
   versionCheckHook,
-  nix-update-script,
+  nix-update,
+  yq,
+  curl,
+  jq,
+  writeShellApplication,
   writeShellScriptBin,
   withCmd ? false,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kanata";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "jtroo";
     repo = "kanata";
-    rev = "v${version}";
-    sha256 = "sha256-xxAIwiwCQugDXpWga9bQ9ZGfem46rwDlmf64dX/tw7g=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-IicVuJZBHzBv9SNGQuWIIaLq2qpWfn/jMFh9KPvAThs=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-LfjuQHR3vVUr2e0efVymnfCnyYkFRx7ZiNdSIjBZc5s=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_13
-    (darwinMinVersionHook "13.0")
-  ];
+  cargoHash = "sha256-2DTL1u17jUFiRoVe7973L5/352GtKte/vakk01SSRwY=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     (writeShellScriptBin "sw_vers" ''
-      echo 'ProductVersion: 13.0'
+      echo 'ProductVersion: ${stdenv.hostPlatform.darwinMinVersion}'
     '')
   ];
 
@@ -47,7 +45,26 @@ rustPlatform.buildRustPackage rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    darwinDriverVersion = "6.2.0"; # needs to be updated if karabiner-driverkit changes
+    updateScript = lib.getExe (writeShellApplication {
+      name = "update-script-kanata";
+      runtimeInputs = [
+        curl
+        gnused
+        yq
+        jq
+        nix-update
+      ];
+      text = builtins.readFile ./update.sh;
+    });
+
+    darwinDriver =
+      if stdenv.hostPlatform.isDarwin then
+        (karabiner-dk.override {
+          driver-version = finalAttrs.passthru.darwinDriverVersion;
+        })
+      else
+        null;
   };
 
   meta = with lib; {
@@ -55,10 +72,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/jtroo/kanata";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [
-      bmanuel
       linj
+      auscyber
     ];
     platforms = platforms.unix;
     mainProgram = "kanata";
   };
-}
+})

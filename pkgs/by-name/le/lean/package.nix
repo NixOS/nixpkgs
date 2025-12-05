@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
 
   cmakeDir = "../src";
 
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
+  ];
+
   # Running the tests is required to build the *.olean files for the core
   # library.
   doCheck = true;

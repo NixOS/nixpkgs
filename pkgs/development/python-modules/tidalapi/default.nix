@@ -9,17 +9,18 @@
   ratelimit,
   typing-extensions,
   mpegdash,
+  pyaes,
 }:
 buildPythonPackage rec {
   pname = "tidalapi";
-  version = "0.8.4";
+  version = "0.8.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EbbLabs";
     repo = "python-tidal";
     tag = "v${version}";
-    hash = "sha256-PSM4aLjvG8b2HG86SCLgPjPo8PECVD5XrNZSbiAxcSk=";
+    hash = "sha256-+O+U8QZhaOdUgPONv1tb5ctiK8NmD2NJK0hokmNtUZM=";
   };
 
   build-system = [
@@ -33,6 +34,7 @@ buildPythonPackage rec {
     isodate
     ratelimit
     typing-extensions
+    pyaes
   ];
 
   doCheck = false; # tests require internet access
@@ -47,6 +49,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/tamland/python-tidal";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
+      drafolin
       drawbu
       ryand56
     ];

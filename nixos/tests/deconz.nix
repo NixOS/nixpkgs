@@ -12,7 +12,6 @@ in
   node.pkgsReadOnly = false;
 
   nodes.machine = {
-    nixpkgs.config.allowUnfree = true;
     services.deconz = {
       enable = true;
       inherit httpPort;

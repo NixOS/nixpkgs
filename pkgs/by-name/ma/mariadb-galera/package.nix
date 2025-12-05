@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  asio,
+  asio_1_32_0,
   boost,
   check,
   openssl,
@@ -12,20 +12,21 @@
 
 stdenv.mkDerivation rec {
   pname = "mariadb-galera";
-  version = "26.4.23";
+  version = "26.4.24";
 
   src = fetchFromGitHub {
     owner = "codership";
     repo = "galera";
-    rev = "release_${version}";
-    hash = "sha256-v7zwhXfW9K1wvV951Utt/rUbSIMiRZB1rWfeK1VJzN4=";
+    tag = "release_${version}";
+    hash = "sha256-mpf+YY0m+UwvemdZt6SfRP9IJlq5IZtlOJMucADc1oM=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    asio
+    # depends on io_service
+    asio_1_32_0
     boost.dev
     check
     openssl

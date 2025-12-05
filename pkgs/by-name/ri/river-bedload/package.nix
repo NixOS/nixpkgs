@@ -6,22 +6,25 @@
   lib,
   pkg-config,
   stdenv,
-  river,
+  river-classic,
   wayland,
   wayland-protocols,
   wayland-scanner,
-  zig,
+  zig_0_15,
 }:
 
+let
+  zig = zig_0_15;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "river-bedload";
-  version = "0.1.1-unstable-2025-03-19";
+  version = "0.2.0";
 
   src = fetchFromSourcehut {
     owner = "~novakane";
     repo = "river-bedload";
-    rev = "4a2855ca2669372c346975dd6e1f612ca563b131";
-    hash = "sha256-CQH2LQi2ga4YDD2ZYb998ExDJHK4TGHq5h3z94703Dc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MOZju7mU/AtaSm9CJgb/UqYpCg697tefJC1yvQPK3S8=";
   };
 
   deps = callPackage ./build.zig.zon.nix { };
@@ -53,6 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ adamcstephens ];
     mainProgram = "river-bedload";
-    inherit (river.meta) platforms;
+    inherit (river-classic.meta) platforms;
   };
 })

@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     owner = "tome2";
     repo = "tome2";
     rev = "3892fbcb1c2446afcb0c34f59e2a24f78ae672c4";
-    hash = "sha256-E6T5ZnsAzZ4cy2S8WvB0k3W4XGFsiA3TKTCSBqje+tw=";
+    hash = "sha256-OL59zktCJGBHPE8Y89S+OdcnJ/Hj+dGif1DNhePEQXo=";
   };
 
   buildInputs = [

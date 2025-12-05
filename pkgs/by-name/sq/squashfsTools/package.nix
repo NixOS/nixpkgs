@@ -14,20 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "squashfs";
-  version = "4.6.1";
+  version = "4.7.4";
 
   src = fetchFromGitHub {
     owner = "plougher";
     repo = "squashfs-tools";
     rev = version;
-    hash = "sha256-C/awQpp1Q/0adx3YVNTq6ruEAzcjL5G7SkOCgpvAA50=";
+    hash = "sha256-xvTSGVwtzJjoAIF6GClASUIB5eIk+uquQNNzHIuwkuY=";
   };
-
-  patches = [
-    # This patch adds an option to pad filesystems (increasing size) in
-    # exchange for better chunking / binary diff calculation.
-    ./4k-align.patch
-  ];
 
   strictDeps = true;
   nativeBuildInputs = [

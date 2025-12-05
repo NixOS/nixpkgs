@@ -17,14 +17,14 @@
 let
   latestVersionForNc = {
     "31" = {
-      version = "9.0.3";
-      appHash = "sha256-G7SDE72tszifozfT3vNxHW6WmMqQKhrSayQVANQaMbs=";
-      modelHash = "sha256-dB4ot/65xisR700kUXg3+Y+SkrpQO4mWrFfp+En0QEE=";
+      version = "9.0.7";
+      appHash = "sha256-7EK4QIM9/Qbku2cTOmMcz6ywqKT9l2Ot1DYsdAXOo2E=";
+      modelHash = "sha256-h3tYtnQUcuFbWAuiKsN2wiFSbbRy/7eNO992MtGrzkc=";
     };
-    "30" = {
-      version = "8.2.1";
-      appHash = "sha256-xSJbfL5HI1bo5KYvk/ssEjSUsWF1hFQkl5MOm/kXYDE=";
-      modelHash = "sha256-O1gh3d0MGQOHUbrIyX3f+R7lGJ7+i8tTmrnfKlczrsk=";
+    "32" = {
+      version = "10.0.4";
+      appHash = "sha256-/RHnnvGJMcxe4EuceYc20xh3qkYy1ZzGsyvp0h03eLk=";
+      modelHash = "sha256-AJzVVdZrQs1US1JokW5VokL/uTsK7WiKmuZhw7WeRnU=";
     };
   };
   currentVersionInfo =
@@ -91,25 +91,34 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = lib.optionalString useLibTensorflow ''
+    runHook preBuild
+
     cd recognize
 
     # Install tfjs dependency
     export CPPFLAGS="-I${lib.getDev nodejs}/include/node -Ideps/include"
     cd node_modules/@tensorflow/tfjs-node
     node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs}
+    rm -r ./build-tmp-napi-v*/
     cd -
 
     # Test tfjs returns exit code 0
     node src/test_libtensorflow.js
     cd ..
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     approot="$(dirname $(dirname $(find -path '*/appinfo/info.xml' | head -n 1)))"
     if [ -d "$approot" ]; then
       mv "$approot/" $out
       chmod -R a-w $out
     fi
+
+    runHook postInstall
   '';
 
   meta = with lib; {

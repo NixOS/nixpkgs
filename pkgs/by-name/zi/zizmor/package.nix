@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  rust-jemalloc-sys,
   installShellFiles,
   nix-update-script,
   rustPlatform,
@@ -10,17 +11,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zizmor";
-  version = "1.11.0";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "zizmorcore";
     repo = "zizmor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zxEF76zpqwLroC5GjSkwIC3+XdXmErvabIEqhVe0zCA=";
+    hash = "sha256-d9DfDqtAI7UvADI8QnbjES0phBBfit6CQ0Osj9ckqlU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-vxDyao9pX/CfS08vFmq3vXtgDIg5NXlEwpzroGW48dA=";
+  cargoHash = "sha256-lF8Z+fe8x+PbXvcJABn58VMU+4pBJOGUeW+PhZXxCTU=";
+
+  buildInputs = [
+    rust-jemalloc-sys
+  ];
 
   nativeBuildInputs = lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     installShellFiles

@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vectorscan";
-  version = "5.4.11";
+  version = "5.4.12";
 
   src = fetchFromGitHub {
     owner = "VectorCamp";
     repo = "vectorscan";
     rev = "vectorscan/${version}";
-    hash = "sha256-wz2oIhau/vjnri3LOyPZSCFAWg694FTLVt7+SZYEsL4=";
+    hash = "sha256-P/3qmgVZ9OLfJGfxsKJ6CIuaKuuhs1nJt4Vjf1joQDc=";
   };
 
   postPatch = ''
@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     substituteInPlace libhs.pc.in \
       --replace-fail "libdir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@" "libdir=@CMAKE_INSTALL_LIBDIR@" \
       --replace-fail "includedir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@" "includedir=@CMAKE_INSTALL_INCLUDEDIR@"
+    substituteInPlace cmake/cflags-generic.cmake \
+      --replace-fail "-Werror" ""
     substituteInPlace cmake/build_wrapper.sh \
       --replace-fail 'nm' '${stdenv.cc.targetPrefix}nm' \
       --replace-fail 'objcopy' '${stdenv.cc.targetPrefix}objcopy'
@@ -58,6 +60,7 @@ stdenv.mkDerivation rec {
   # For generic builds (e.g. x86_64) this can mean using an implementation not optimized for the
   # potentially available more modern hardware extensions (e.g. x86_64 with AVX512).
   cmakeFlags = [
+    "-DBUILD_BENCHMARKS=OFF"
     (if enableShared then "-DBUILD_SHARED_LIBS=ON" else "BUILD_STATIC_LIBS=ON")
   ]
   ++ (

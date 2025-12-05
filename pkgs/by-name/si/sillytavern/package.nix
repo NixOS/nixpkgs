@@ -1,35 +1,26 @@
 {
-  makeBinaryWrapper,
   buildNpmPackage,
-  nodejs,
   fetchFromGitHub,
   lib,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "sillytavern";
-  version = "1.13.1";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "SillyTavern";
     repo = "SillyTavern";
     tag = finalAttrs.version;
-    hash = "sha256-rWDJBuGzgG34jpsBPdLqIegcOfV3bRyOdulRsMS2mhg=";
+    hash = "sha256-5bml7PwmlfJag8DzbR5qdNJ6ddKmZsEUD155VwkJhjI=";
   };
-  npmDepsHash = "sha256-DyqAaaeSCAdsKXWUo1t4FpUuqu1n4TfZBLg23URuNUM=";
-
-  nativeBuildInputs = [ makeBinaryWrapper ];
+  npmDepsHash = "sha256-cqS8UFyXNql/SE1nrWhZlIXhz0SO3JUSDThsfAOHP7E=";
 
   dontNpmBuild = true;
-  installPhase = ''
-    runHook preInstall
 
-    mkdir -p $out/{bin,opt}
-    cp -r . $out/opt/sillytavern
-    makeWrapper ${lib.getExe nodejs} $out/bin/sillytavern \
-      --add-flags $out/opt/sillytavern/server.js \
-      --set-default NODE_ENV production
-
-    runHook postInstall
+  # These dirs are not installed automatically.
+  # And if they were not in place, the app would try to create them at runtime, which is of course impossible to achieve.
+  postInstall = ''
+    mkdir $out/lib/node_modules/sillytavern/{backups,public/scripts/extensions/third-party}
   '';
 
   meta = {
@@ -37,6 +28,9 @@ buildNpmPackage (finalAttrs: {
     longDescription = ''
       SillyTavern is a user interface you can install on your computer (and Android phones) that allows you to interact with
       text generation AIs and chat/roleplay with characters you or the community create.
+
+      This package makes a global installation, instead of a standalone installation according to the official tutorial.
+      See [the official documentation](https://docs.sillytavern.app/installation/#global--standalone-mode) for the context.
     '';
     downloadPage = "https://github.com/SillyTavern/SillyTavern/releases";
     homepage = "https://docs.sillytavern.app/";

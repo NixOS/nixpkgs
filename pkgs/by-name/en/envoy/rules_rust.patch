@@ -5,61 +5,10 @@ Subject: [PATCH] rules_rust base
 
 Signed-off-by: Luke Granger-Brown <git@lukegb.com>
 ---
- cargo/private/cargo_bootstrap.bzl |  8 ++++----
- crate_universe/extensions.bzl     | 10 +++++-----
  crate_universe/src/lockfile.rs    |  4 ++--
  rust/private/rustc.bzl            |  4 ++--
  4 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git cargo/private/cargo_bootstrap.bzl cargo/private/cargo_bootstrap.bzl
-index a8021c49d62037ef32c7c64d5bb4a5efe3a8b4aa..f63d7c23ae0bddc9f3fece347a3a2b5b0afe6d8d 100644
---- cargo/private/cargo_bootstrap.bzl
-+++ cargo/private/cargo_bootstrap.bzl
-@@ -173,13 +173,13 @@ def _detect_changes(repository_ctx):
-     # 'consumed' which means changes to it will trigger rebuilds
- 
-     for src in repository_ctx.attr.srcs:
--        repository_ctx.watch(src)
-+        repository_ctx.path(src)
- 
--    repository_ctx.watch(repository_ctx.attr.cargo_lockfile)
--    repository_ctx.watch(repository_ctx.attr.cargo_toml)
-+    repository_ctx.path(repository_ctx.attr.cargo_lockfile)
-+    repository_ctx.path(repository_ctx.attr.cargo_toml)
- 
-     if repository_ctx.attr.cargo_config:
--        repository_ctx.watch(repository_ctx.attr.cargo_config)
-+        repository_ctx.path(repository_ctx.attr.cargo_config)
- 
- def _cargo_bootstrap_repository_impl(repository_ctx):
-     # Pretend to Bazel that this rule's input files have been used, so that it will re-run the rule if they change.
-diff --git crate_universe/extensions.bzl crate_universe/extensions.bzl
-index a749b10c8d469bd316d78034059c94b1fd98dbef..8f8c84dac1ec330d5e8e6abbd930387cb6c9f29e 100644
---- crate_universe/extensions.bzl
-+++ crate_universe/extensions.bzl
-@@ -957,17 +957,17 @@ def _crate_impl(module_ctx):
-                 fail("Spec specified for repo {}, but the module defined repositories {}".format(repo, local_repos))
- 
-         for cfg in mod.tags.from_cargo + mod.tags.from_specs:
--            # Preload all external repositories. Calling `module_ctx.watch` will cause restarts of the implementation
-+            # Preload all external repositories. Calling `module_ctx.path` will cause restarts of the implementation
-             # function of the module extension when the file has changed.
-             if cfg.cargo_lockfile:
--                module_ctx.watch(cfg.cargo_lockfile)
-+                module_ctx.path(cfg.cargo_lockfile)
-             if cfg.lockfile:
--                module_ctx.watch(cfg.lockfile)
-+                module_ctx.path(cfg.lockfile)
-             if cfg.cargo_config:
--                module_ctx.watch(cfg.cargo_config)
-+                module_ctx.path(cfg.cargo_config)
-             if hasattr(cfg, "manifests"):
-                 for m in cfg.manifests:
--                    module_ctx.watch(m)
-+                    module_ctx.path(m)
- 
-             cargo_path, rustc_path = _get_host_cargo_rustc(module_ctx, host_triple, cfg.host_tools_repo)
-             cargo_bazel_fn = new_cargo_bazel_fn(
 diff --git crate_universe/src/lockfile.rs crate_universe/src/lockfile.rs
 index 3e0ce6265fda6fbdd9e3e989e3e4e4443b615b8c..0fafcea8fbc7a590676d34d2c4ca8c413b953955 100644
 --- crate_universe/src/lockfile.rs

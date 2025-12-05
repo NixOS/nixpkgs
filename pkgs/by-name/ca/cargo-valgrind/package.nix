@@ -8,17 +8,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-valgrind";
-  version = "2.3.2";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "jfrimmel";
     repo = "cargo-valgrind";
     tag = version;
-    sha256 = "sha256-oLnvDie6PUW5MVEMIcqfmwNkkfz25l+NABSKih4eSpI=";
+    sha256 = "sha256-sVW3zNe0a9iQQ0vRWJofqG4gwUJ/w0U4ugVyMNtWX98=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-L927ViGgb5LchJRMd6cBks6K41xOYLNI1Q2kTKdYBgg=";
+  cargoHash = "sha256-sRJGnbQFCk+SJtG/hnde+8ggZuutrdk0279ziickmnA=";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -36,6 +35,7 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     "--skip tests_are_runnable"
     "--skip default_cargo_project_reports_no_violations"
+    "--skip empty_tests_not_leak_in_release_mode"
   ];
 
   meta = with lib; {

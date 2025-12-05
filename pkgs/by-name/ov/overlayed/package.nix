@@ -30,7 +30,6 @@ rustPlatform.buildRustPackage rec {
   cargoRoot = "apps/desktop/src-tauri";
   buildAndTestSubdir = "apps/desktop/src-tauri";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-6wN4nZQWrY0J5E+auj17B3iJ/84hzBXYA/bJsX/N5pk=";
 
   pnpmDeps = pnpm_9.fetchDeps {

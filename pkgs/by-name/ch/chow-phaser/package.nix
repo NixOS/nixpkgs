@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jatinchowdhury18";
     repo = "ChowPhaser";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-9wo7ZFMruG3QNvlpILSvrFh/Sx6J1qnlWc8+aQyS4tQ=";
   };

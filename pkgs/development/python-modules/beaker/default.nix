@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pycrypto
     cryptography
   ]
-  ++ lib.optionals (isPy27) [
+  ++ lib.optionals isPy27 [
     funcsigs
     pycryptopp
   ];
@@ -57,16 +57,16 @@ buildPythonPackage rec {
 
   # Can not run memcached tests because it immediately tries to connect.
   # Disable external tests because they need to connect to a live database.
-  pytestFlagsArray = [
-    "--ignore=tests/test_memcached.py"
-    "--ignore-glob='tests/test_managers/test_ext_*'"
+  disabledTestPaths = [
+    "tests/test_memcached.py"
+    "tests/test_managers/test_ext_*"
   ];
 
   meta = {
     description = "Session and Caching library with WSGI Middleware";
     homepage = "https://github.com/bbangert/beaker";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     knownVulnerabilities = [ "CVE-2013-7489" ];
   };
 }

@@ -81,6 +81,12 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i 's,^wget .*,cp $devPak "$PAK_NAME",' Resources/downloadpak.sh
     patchShebangs Resources
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)" \
+      --replace-fail "cmake_policy(SET CMP0054 OLD)" ""
+    substituteInPlace Sources/AngelScript/projects/{cmake,cmake_addons}/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   postInstall = ''
@@ -96,7 +102,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [
-      abbradar
       azahi
     ];
     # never built on aarch64-linux since first introduction in nixpkgs

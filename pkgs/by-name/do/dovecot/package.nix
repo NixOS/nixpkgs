@@ -127,6 +127,12 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/debian/dovecot/-/raw/debian/1%252.3.19.1+dfsg1-2/debian/patches/Support-openssl-3.0.patch";
       hash = "sha256-PbBB1jIY3jIC8Js1NY93zkV0gISGUq7Nc67Ul5tN7sw=";
     })
+    # Fix build with gcc15
+    (fetchpatch {
+      name = "dovecot-test-data-stack-drop-bogus-assertion.patch";
+      url = "https://github.com/dovecot/core/commit/9f642dd868db6e7401f24e4fb4031b5bdca8aae7.patch";
+      hash = "sha256-dAX80dRqOba9Fkzl11ChYJ6vqcgfkaw/o+TOQKCnnns=";
+    })
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fix timespec calls
@@ -149,9 +155,9 @@ stdenv.mkDerivation rec {
     "--with-textcat"
   ]
   ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "i_cv_epoll_works=${if stdenv.hostPlatform.isLinux then "yes" else "no"}"
-    "i_cv_posix_fallocate_works=${if stdenv.hostPlatform.isDarwin then "no" else "yes"}"
-    "i_cv_inotify_works=${if stdenv.hostPlatform.isLinux then "yes" else "no"}"
+    "i_cv_epoll_works=${lib.boolToYesNo stdenv.hostPlatform.isLinux}"
+    "i_cv_posix_fallocate_works=${lib.boolToYesNo stdenv.hostPlatform.isDarwin}"
+    "i_cv_inotify_works=${lib.boolToYesNo stdenv.hostPlatform.isLinux}"
     "i_cv_signed_size_t=no"
     "i_cv_signed_time_t=yes"
     "i_cv_c99_vsnprintf=yes"

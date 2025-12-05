@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-djprzmogT1OEf0/+twdxzx30YaMNzFjXkZd4IDsH8oo=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ZIRwp5AJugMDxg3DyFIH5VlD0m4Si2tJdspKE5QEB4M=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -33,7 +32,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://git.sr.ht/~ireas/rusty-man/tree/v${finalAttrs.version}/item/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
       defelo
     ];
   };

@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "safety";
-  version = "3.5.2";
+  version = "3.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyupio";
     repo = "safety";
     tag = version;
-    hash = "sha256-kYGoJpFkZo4kZmbmak/+nOS2gzDO/xAwfbcGPOFxyrY=";
+    hash = "sha256-BPLK/V7YQBCGopfRFAWdra8ve8Ww5KN1+oZKyoEPiFc=";
   };
 
   patches = [

@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cbmc";
-  version = "6.7.1";
+  version = "6.8.0";
 
   src = fetchFromGitHub {
     owner = "diffblue";
     repo = "cbmc";
     tag = "cbmc-${finalAttrs.version}";
-    hash = "sha256-GUY4Evya0GQksl0R4b01UDSvoxUEOOeq4oOIblmoF5o=";
+    hash = "sha256-PT6AYiwkplCeyMREZnGZA0BKl4ZESRC02/9ibKg7mYU=";
   };
 
   srcglucose = fetchFromGitHub {
@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "CBMC is a Bounded Model Checker for C and C++ programs";
+    description = "Bounded Model Checker for C and C++ programs";
     homepage = "http://www.cprover.org/cbmc/";
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ jiegec ];

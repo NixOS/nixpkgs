@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   installShellFiles,
   stdenv,
   testers,
@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "kopia";
-  version = "0.20.1";
+  version = "0.22.2";
 
   src = fetchFromGitHub {
     owner = "kopia";
     repo = "kopia";
     tag = "v${version}";
-    hash = "sha256-hKtrHv7MQjA/AQ/frjP2tPT6zqVPPGnBxYuhWtUgIl0=";
+    hash = "sha256-UtyOMXX6Q0fhlnSMmI5d+0BHGvoWkPZbcm9B6vWG05Y=";
   };
 
-  vendorHash = "sha256-npNSNlS8gvbxtB4KeaiSsCUzxwJ0kwvnzDda/CZRVmM=";
+  vendorHash = "sha256-zjUkVU9I+Dp21QcOZPT30Ki570vQJPyK4UYSy8PEiZI=";
 
   subPackages = [ "." ];
 
@@ -31,6 +31,12 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  postPatch = ''
+    substituteInPlace internal/mount/mount_posix_webdav_helper_linux.go \
+      --replace-fail "/usr/bin/mount" "mount" \
+      --replace-fail "/usr/bin/umount" "umount"
+  '';
+
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kopia \
       --bash <($out/bin/kopia --completion-script-bash) \
@@ -38,7 +44,7 @@ buildGoModule rec {
   '';
 
   passthru = {
-    updateScript = gitUpdater { rev-prefix = "v"; };
+    updateScript = nix-update-script { };
     tests = {
       kopia-version = testers.testVersion {
         package = kopia;
@@ -46,11 +52,16 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://kopia.io";
+    changelog = "https://github.com/kopia/kopia/releases/tag/v${version}";
     description = "Cross-platform backup tool with fast, incremental backups, client-side end-to-end encryption, compression and data deduplication";
     mainProgram = "kopia";
-    license = licenses.asl20;
-    maintainers = [ maintainers.bbigras ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      bbigras
+      blenderfreaky
+      nadir-ishiguro
+    ];
   };
 }

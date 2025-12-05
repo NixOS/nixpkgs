@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   langchain-core,
@@ -20,19 +20,19 @@
 
 buildPythonPackage rec {
   pname = "langchain-groq";
-  version = "0.3.2";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-groq==${version}";
-    hash = "sha256-KsKT7+jpTTiSVMZWcIwW7+1BCL7rpZHg/OX3PNLI6As=";
+    hash = "sha256-dmuDgKQW1yAz/8tjQx7LaUiuz5Sh4cAyd9nt33mCPbI=";
   };
 
   sourceRoot = "${src.name}/libs/partners/groq";
 
-  build-system = [ pdm-backend ];
+  build-system = [ hatchling ];
 
   pythonRelaxDeps = [
     # Each component release requests the exact latest core.
@@ -54,8 +54,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_groq" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-groq==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-groq==";
+    };
   };
 
   meta = {

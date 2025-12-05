@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "marst";
-  version = "2.7";
+  version = "2.8";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-Pue50cvjzZ+19iJxfae7VQbxpto7MPgS4jhLh7zk2lA=";
+    hash = "sha256-139HA7C0S1C+V5CPnVVu5sO+3ZfWOMQpSdauyE+AcLo=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
         from some other representations to MARST representation.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

@@ -1,10 +1,10 @@
 {
-  buildGo124Module,
+  buildGoModule,
   buildPackages,
   fetchFromGitHub,
   fetchNpmDeps,
   lib,
-  nodejs,
+  nodejs_24,
   npmHooks,
   pkg-config,
   stdenv,
@@ -14,32 +14,33 @@
   nixosTests,
   nix-update-script,
   ffmpegSupport ? true,
+  versionCheckHook,
 }:
 
-buildGo124Module rec {
+buildGoModule (finalAttrs: {
   pname = "navidrome";
-  version = "0.57.0";
+  version = "0.58.5";
 
   src = fetchFromGitHub {
     owner = "navidrome";
     repo = "navidrome";
-    rev = "v${version}";
-    hash = "sha256-KTgh+dA2YYPyNdGr2kYEUlYeRwNnEcSQlpQ7ZTbAjP0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-bb6Ak8coEhN4ny79WgZ4DqzjqLbCr1FW/a3w2gfls2M=";
   };
 
-  vendorHash = "sha256-/WeEimHCEQbTbCZ+4kXVJdHAa9PJEk1bG1d2j3V9JKM=";
+  vendorHash = "sha256-axtXNcduTCmi08kjmGCCgokvHR+uIdpZtnLCSFUIoM4=";
 
   npmRoot = "ui";
 
   npmDeps = fetchNpmDeps {
-    inherit src;
-    sourceRoot = "${src.name}/ui";
-    hash = "sha256-tl6unHz0E0v0ObrfTiE0vZwVSyVFmrLggNM5QsUGsvI=";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/ui";
+    hash = "sha256-X6H3laLaWsI0aqFKIE7IDdWqYuTScI7gcRbcB4wPsKA=";
   };
 
   nativeBuildInputs = [
     buildPackages.makeWrapper
-    nodejs
+    nodejs_24
     npmHooks.npmConfigHook
     pkg-config
   ];
@@ -55,8 +56,8 @@ buildGo124Module rec {
   ];
 
   ldflags = [
-    "-X github.com/navidrome/navidrome/consts.gitSha=${src.rev}"
-    "-X github.com/navidrome/navidrome/consts.gitTag=v${version}"
+    "-X github.com/navidrome/navidrome/consts.gitSha=${finalAttrs.src.rev}"
+    "-X github.com/navidrome/navidrome/consts.gitTag=v${finalAttrs.version}"
   ];
 
   CGO_CFLAGS = lib.optionals stdenv.cc.isGNU [ "-Wno-return-local-addr" ];
@@ -65,11 +66,6 @@ buildGo124Module rec {
     patchShebangs ui/bin/update-workbox.sh
   '';
 
-  patches = [
-    # Until https://github.com/navidrome/navidrome/pull/4302 is released
-    ./0001-test-fix-Use-bin-sh-as-mock_mpv.sh-interpreter-4301.patch
-  ];
-
   preBuild = ''
     make buildjs
   '';
@@ -77,6 +73,9 @@ buildGo124Module rec {
   tags = [
     "netgo"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   postFixup = lib.optionalString ffmpegSupport ''
     wrapProgram $out/bin/navidrome \
@@ -89,7 +88,7 @@ buildGo124Module rec {
   };
 
   meta = {
-    description = "Navidrome Music Server and Streamer compatible with Subsonic/Airsonic";
+    description = "Music Server and Streamer compatible with Subsonic/Airsonic";
     mainProgram = "navidrome";
     homepage = "https://www.navidrome.org/";
     license = lib.licenses.gpl3Only;
@@ -102,4 +101,4 @@ buildGo124Module rec {
     # Broken on Darwin: sandbox-exec: pattern serialization length exceeds maximum (NixOS/nix#4119)
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

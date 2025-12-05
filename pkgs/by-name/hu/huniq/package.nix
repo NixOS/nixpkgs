@@ -13,7 +13,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-5GvHM05qY/Jj1mPYwn88Zybn6Nn5nJIaw0XP8iCcrwE=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-pE2LmoUUrIiKECte97AO2i5Ef22/qZwby/EDxTUr0x4=";
 
   meta = with lib; {
@@ -21,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "huniq";
     homepage = "https://github.com/koraa/huniq";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

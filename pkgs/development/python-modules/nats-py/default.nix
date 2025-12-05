@@ -8,23 +8,20 @@
   nats-server,
   nkeys,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   uvloop,
 }:
 
 buildPythonPackage rec {
   pname = "nats-py";
-  version = "2.10.0";
+  version = "2.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = "nats.py";
     tag = "v${version}";
-    hash = "sha256-cgcoxDTfXeP2w1k8Miw8zY1Bln0XpTdtUY13SSvrHXw=";
+    hash = "sha256-HQtoFyw3Gi/lIQFVrFvRtWWzHTY+TchZYKqTiHfUWFk=";
   };
 
   build-system = [ setuptools ];
@@ -56,6 +53,9 @@ buildPythonPackage rec {
     "test_subscribe_iterate_next_msg"
     "test_ordered_consumer_larger_streams"
     "test_object_file_basics"
+    # Should be safe to remove on next version upgrade (from 2.11.0)
+    # https://github.com/nats-io/nats.py/pull/728
+    "test_object_list"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "test_subscribe_iterate_next_msg"
@@ -67,8 +67,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for NATS.io";
     homepage = "https://github.com/nats-io/nats.py";
-    changelog = "https://github.com/nats-io/nats.py/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
+    changelog = "https://github.com/nats-io/nats.py/releases/tag/${src.tag}";
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }

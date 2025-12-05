@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-pUoMMgZQ+oDs9Yhc1rQuy9cUWiR800DlIe8wxQjnIis=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-6SIwOkLQ6rayhRQEMSCm72mMhGJ6NlIBq4aKukXURdM=";
 
   cargoPatches = [
@@ -38,7 +37,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       dit7ya
-      figsoda
     ];
     mainProgram = "zine";
   };

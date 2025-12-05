@@ -151,6 +151,31 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace doc/meson.build \
       --replace-fail '$MESON_INSTALL_DESTDIR_PREFIX/@1@/@2@' '@1@/@2@'
+
+    substituteInPlace triggers/gtk-icon-cache.trigger \
+      --replace-fail '/usr/share/icons/hicolor/index.theme' '/run/current-system/sw/share/icons/hicolor/index.theme'
+  '';
+
+  # Fixup PATHs in trigger scripts
+  postInstall = ''
+    wrapProgram $out/share/flatpak/triggers/desktop-database.trigger --prefix PATH : ${
+      lib.makeBinPath [
+        desktop-file-utils
+      ]
+    }
+
+    wrapProgram $out/share/flatpak/triggers/gtk-icon-cache.trigger --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        gtk3
+      ]
+    }
+
+    wrapProgram $out/share/flatpak/triggers/mime-database.trigger --prefix PATH : ${
+      lib.makeBinPath [
+        shared-mime-info
+      ]
+    }
   '';
 
   strictDeps = true;
@@ -228,6 +253,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "system_dbus_proxy" (lib.getExe xdg-dbus-proxy))
     (lib.mesonOption "system_fusermount" "/run/wrappers/bin/fusermount3")
     (lib.mesonOption "system_install_dir" "/var/lib/flatpak")
+    (lib.mesonOption "sysconfdir" "/etc")
   ];
 
   nativeCheckInputs = [

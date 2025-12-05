@@ -18,16 +18,16 @@
 
 buildGoModule rec {
   pname = "supersonic" + lib.optionalString waylandSupport "-wayland";
-  version = "0.17.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "dweymouth";
     repo = "supersonic";
-    rev = "v${version}";
-    hash = "sha256-+MgDCI/wz5yfdpSy0Gh85ZWUAuL2wijixYskx/jH7Vw=";
+    tag = "v${version}";
+    hash = "sha256-GMmIUDgbFFrOqDJ13C0o1fHg1tiWSjbCm36VPD7/IGw=";
   };
 
-  vendorHash = "sha256-v6tPGjeJhRdSJpVPQAERRM7cpXO7Ut7kLF3EdNcDFgM=";
+  vendorHash = "sha256-FQmaxDIVWCxyFdgz03aNRXFyi8UeMeCqiVHNZOqq/8Q=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -38,7 +38,7 @@ buildGoModule rec {
   ];
 
   # go-glfw doesn't support both X11 and Wayland in single build
-  tags = lib.optionals waylandSupport [ "wayland" ];
+  tags = [ "migrated_fynedo" ] ++ lib.optionals waylandSupport [ "wayland" ];
 
   buildInputs = [
     libglvnd
@@ -88,13 +88,14 @@ buildGoModule rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     mainProgram = "supersonic" + lib.optionalString waylandSupport "-wayland";
     description = "Lightweight cross-platform desktop client for Subsonic music servers";
     homepage = "https://github.com/dweymouth/supersonic";
-    platforms = platforms.linux ++ lib.optionals (!waylandSupport) platforms.darwin;
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/dweymouth/supersonic/releases/tag/${src.tag}";
+    platforms = lib.platforms.linux ++ lib.optionals (!waylandSupport) lib.platforms.darwin;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       zane
       sochotnicky
     ];

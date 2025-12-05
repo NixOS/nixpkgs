@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "labwc";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc";
     tag = finalAttrs.version;
-    hash = "sha256-7PgRbOSxU7v49dcTuke7V/Xa42baw79iMvfnCOYx4qU=";
+    hash = "sha256-aKjebrUqksLoDhHa/maI871jq/2u6YbTaNd6+hJz8uE=";
   };
 
   outputs = [
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/labwc/labwc/blob/master/NEWS.md";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "labwc";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (wayland.meta) platforms;
   };
 })

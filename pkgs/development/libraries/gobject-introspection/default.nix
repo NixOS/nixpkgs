@@ -43,7 +43,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gobject-introspection";
-  version = "1.84.0";
+  version = "1.86.0";
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gobject-introspection/${lib.versions.majorMinor finalAttrs.version}/gobject-introspection-${finalAttrs.version}.tar.xz";
-    hash = "sha256-lFtX2n7CYuXCZrieCR0UvoAMxCQnfYKgKHK315SoR3k=";
+    hash = "sha256-kg0aP87ercMqz/lcLiA7MZA53UtKCN0aLf0oPRnAua4=";
   };
 
   patches = [
@@ -67,10 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./absolute_shlib_path.patch {
       inherit nixStoreDir;
     })
-
-    # Fix getter heuristics regression
-    # https://gitlab.gnome.org/GNOME/gobject-introspection/-/merge_requests/529
-    ./0001-scanner-Prefer-some-getters-over-others.patch
   ]
   ++ lib.optionals x11Support [
     # Hardcode the cairo shared library path in the Cairo gir shipped with this package.
@@ -160,11 +156,11 @@ stdenv.mkDerivation (finalAttrs: {
     # though, so we need to replace the absolute path with a local one during build.
     # We are using a symlink that we will delete before installation.
     mkdir -p $out/lib
-    ln -s $PWD/tests/scanner/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary} $out/lib/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary}
+    ln -s $PWD/tests/scanner/libregress-1.0${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libregress-1.0${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
 
   postCheck = ''
-    rm $out/lib/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary}
+    rm $out/lib/libregress-1.0${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
 
   setupHook = ./setup-hook.sh;

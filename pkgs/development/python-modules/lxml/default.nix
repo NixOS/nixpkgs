@@ -3,7 +3,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   cython,
@@ -18,15 +17,20 @@
 
 buildPythonPackage rec {
   pname = "lxml";
-  version = "5.4.0";
+  version = "6.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lxml";
     repo = "lxml";
     tag = "lxml-${version}";
-    hash = "sha256-yp0Sb/0Em3HX1XpDNFpmkvW/aXwffB4D1sDYEakwKeY=";
+    hash = "sha256-Ri5SzfQJFghRcMAKHS5QKD365OZlio895fSlumq83vs=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'Cython>=3.1.4' 'Cython'
+  '';
 
   build-system = [
     cython

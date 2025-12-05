@@ -12,12 +12,29 @@
         },
         "state": {
           "checkoutState": {
-            "revision": "e394bf350e38cb100b6bc4172834770ede1b7232",
-            "version": "1.0.3"
+            "revision": "fee6933f37fde9a5e12a1e4aeaa93fe60116ff2a",
+            "version": "1.2.2"
           },
           "name": "sourceControlCheckout"
         },
         "subpath": "swift-argument-parser"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-atomics",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-atomics.git",
+          "name": "swift-atomics"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "6c89474e62719ddcc1e9614989fff2f68208fe10",
+            "version": "1.1.0"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-atomics"
       },
       {
         "basedOn": null,
@@ -39,6 +56,23 @@
       {
         "basedOn": null,
         "packageRef": {
+          "identity": "swift-collections",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-collections.git",
+          "name": "swift-collections"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "937e904258d22af6e447a0b72c0bc67583ef64a2",
+            "version": "1.0.4"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-collections"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
           "identity": "swift-crypto",
           "kind": "remoteSourceControl",
           "location": "https://github.com/apple/swift-crypto.git",
@@ -46,8 +80,8 @@
         },
         "state": {
           "checkoutState": {
-            "revision": "ddb07e896a2a8af79512543b1c7eb9797f8898a5",
-            "version": "1.1.7"
+            "revision": "33a20e650c33f6d72d822d558333f2085effa3dc",
+            "version": "2.5.0"
           },
           "name": "sourceControlCheckout"
         },
@@ -63,8 +97,8 @@
         },
         "state": {
           "checkoutState": {
-            "revision": "3303b164430d9a7055ba484c8ead67a52f7b74f6",
-            "version": "1.0.0"
+            "revision": "9b1258905c21fc1b97bf03d1b4ca12c4ec4e5fda",
+            "version": "1.2.0"
           },
           "name": "sourceControlCheckout"
         },
@@ -80,8 +114,8 @@
         },
         "state": {
           "checkoutState": {
-            "branch": "main",
-            "revision": "b45d1f2ed151d057b54504d653e0da5552844e34"
+            "branch": "release/5.10",
+            "revision": "1d5aba8186fc648e17b30631b34043110ca8dd19"
           },
           "name": "sourceControlCheckout"
         },
@@ -97,7 +131,7 @@
         },
         "state": {
           "checkoutState": {
-            "branch": "main",
+            "branch": "release/5.10",
             "revision": "584941b1236b15bad74d8163785d389c028b1ad8"
           },
           "name": "sourceControlCheckout"
@@ -114,8 +148,8 @@
         },
         "state": {
           "checkoutState": {
-            "branch": "main",
-            "revision": "d491147940587dbadfb3472354f4d0c6e063e061"
+            "branch": "release/5.10",
+            "revision": "636291555b65bd59b2b3279abc7d03a622aa7c55"
           },
           "name": "sourceControlCheckout"
         },
@@ -131,8 +165,8 @@
         },
         "state": {
           "checkoutState": {
-            "revision": "1d425b0851ffa2695d488cce1d68df2539f42500",
-            "version": "2.31.2"
+            "revision": "2d8e6ca36fe3e8ed74b0883f593757a45463c34d",
+            "version": "2.53.0"
           },
           "name": "sourceControlCheckout"
         },

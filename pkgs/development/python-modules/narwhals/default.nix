@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   dask,
   duckdb,
@@ -21,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "narwhals";
-  version = "1.40.0";
+  version = "2.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
     tag = "v${version}";
-    hash = "sha256-cCgWKH4DzENTI1vwxOU+GRp/poUe55XqSPY8UHYy9PI=";
+    hash = "sha256-a/X6LVzFxtjyaFcgZapJZ5i9h5LSB39XjGu/HdhPf8k=";
   };
 
   build-system = [ hatchling ];
@@ -56,7 +57,7 @@ buildPythonPackage rec {
     pytest-env
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "narwhals" ];
 
@@ -68,6 +69,23 @@ buildPythonPackage rec {
     # Timezone issue
     "test_to_datetime"
     "test_unary_two_elements"
+    # Test requires pyspark binary
+    "test_datetime_w_tz_pyspark"
+    "test_convert_time_zone_to_connection_tz_pyspark"
+    "test_replace_time_zone_to_connection_tz_pyspark"
+    "test_lazy"
+    # Incompatible with ibis 11
+    "test_unique_3069"
+    # DuckDB 1.4.x compatibility - empty result schema handling with PyArrow
+    "test_skew_expr"
+    # ibis improvements cause strict XPASS failures (tests expected to fail now pass)
+    "test_empty_scalar_reduction_with_columns"
+    "test_collect_empty"
+  ];
+
+  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    # Segfault in included polars/lazyframe
+    "tests/tpch_q1_test.py"
   ];
 
   pytestFlags = [

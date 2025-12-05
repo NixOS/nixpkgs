@@ -11,7 +11,7 @@ version="$(curl https://josm.openstreetmap.de/apt/pool/universe/j/josm/ |
   sort -n |
   tail -n1)"
 
-pkgHash="$(nurl -H https://github.com/JOSM/josm "$version-tested")"
+pkgHash="$(nurl -f fetchsvn -H https://josm.openstreetmap.de/svn/trunk/native/linux/tested "$version")"
 
 update-source-version josm "$version" --source-key=srcs.jar
 update-source-version josm "$version" --ignore-same-version --source-key=srcs.macosx

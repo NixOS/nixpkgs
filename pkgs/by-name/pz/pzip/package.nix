@@ -32,7 +32,7 @@ buildGoModule rec {
     homepage = "https://github.com/ybirader/pzip";
     changelog = "https://github.com/ybirader/pzip/releases/tag/${src.rev}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "pzip";
   };
 }

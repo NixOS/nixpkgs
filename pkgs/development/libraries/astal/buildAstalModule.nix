@@ -15,7 +15,7 @@
   python3,
 }:
 let
-  cleanArgs = lib.flip builtins.removeAttrs [
+  cleanArgs = lib.flip removeAttrs [
     "name"
     "sourceRoot"
     "nativeBuildInputs"

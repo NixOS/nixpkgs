@@ -11,17 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "netavark";
-  version = "1.15.2";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "netavark";
     rev = "v${version}";
-    hash = "sha256-sZzbhlrjTuMwOm0+vBMSqHbpqLGhz6jExpBSokqj/VE=";
+    hash = "sha256-Co7Wt6eUwbDVd+MljXh+kJ1Op8ekGzYxWA4j8EWa0jk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ZIFD76GLe44Hx7+/YgBeixsZ+KuYDHBCzMC91R+uTNw=";
+  cargoHash = "sha256-FBvD7EY+NryetZmJSAMZdikDi5N5kLWHL8gzd0rGnj8=";
 
   nativeBuildInputs = [
     installShellFiles

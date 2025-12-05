@@ -868,6 +868,10 @@ in
             "amshan"
             "benqprojector"
           ];
+          componentsUsingInputDevices = [
+            # Components that require access to input devices (/dev/input/*)
+            "keyboard_remote"
+          ];
         in
         {
           ExecStart = escapeSystemdExecArgs (
@@ -898,13 +902,15 @@ in
           # Hardening
           AmbientCapabilities = capabilities;
           CapabilityBoundingSet = capabilities;
-          DeviceAllow = (
+          DeviceAllow =
             optionals (any useComponent componentsUsingSerialDevices) [
               "char-ttyACM rw"
               "char-ttyAMA rw"
               "char-ttyUSB rw"
             ]
-          );
+            ++ optionals (any useComponent componentsUsingInputDevices) [
+              "char-input rw"
+            ];
           DevicePolicy = "closed";
           LockPersonality = true;
           MemoryDenyWriteExecute = true;
@@ -946,9 +952,13 @@ in
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
-          SupplementaryGroups = optionals (any useComponent componentsUsingSerialDevices) [
-            "dialout"
-          ];
+          SupplementaryGroups =
+            optionals (any useComponent componentsUsingSerialDevices) [
+              "dialout"
+            ]
+            ++ optionals (any useComponent componentsUsingInputDevices) [
+              "input"
+            ];
           SystemCallArchitectures = "native";
           SystemCallFilter = [
             "@system-service"

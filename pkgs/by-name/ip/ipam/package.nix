@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitea,
   installShellFiles,
@@ -28,7 +29,7 @@ buildGoModule rec {
     "-w"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ipam \
       --bash <($out/bin/ipam completion bash) \
       --fish <($out/bin/ipam completion fish) \
@@ -40,7 +41,7 @@ buildGoModule rec {
     homepage = "https://ipam.lauka.net/";
     changelog = "https://codeberg.org/lauralani/ipam/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "ipam";
   };
 }

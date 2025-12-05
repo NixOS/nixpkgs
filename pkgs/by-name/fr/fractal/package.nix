@@ -22,27 +22,30 @@
   pipewire,
   libshumate,
   wrapGAppsHook4,
+  blueprint-compiler,
+  bubblewrap,
   sqlite,
   xdg-desktop-portal,
   libseccomp,
   glycin-loaders,
+  libwebp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fractal";
-  version = "11.2";
+  version = "13";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "fractal";
     tag = finalAttrs.version;
-    hash = "sha256-UE0TRC9DeP+fl85fzuQ8/3ioIPdeSqsJWnW1olB1gmo=";
+    hash = "sha256-zIB04OIhMSm6OWHalnLO9Ng87dsvsmYurrro3hKwoYU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-I+1pGZWxn9Q/CL8D6VxsaO3H4EdBek4wyykvNgCNRZI=";
+    hash = "sha256-5wI74sKytewbRs0T/IQZFEaRTgJcF6HyDEK0mpjy0LU=";
   };
 
   patches = [
@@ -51,12 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./disable-debug.patch
   ];
 
-  # Dirty approach to add patches after cargoSetupPostUnpackHook
-  # We should eventually use a cargo vendor patch hook instead
-  preConfigure = ''
-    pushd ../$(stripHash $cargoDeps)/glycin-2.*
-      patch -p3 < ${glycin-loaders.passthru.glycinPathsPatch}
-    popd
+  postPatch = ''
+    substituteInPlace src/meson.build --replace-fail \
+      "target_dir / rust_target / meson.project_name()" \
+      "target_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()"
   '';
 
   nativeBuildInputs = [
@@ -73,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils
     appstream-glib
     wrapGAppsHook4
+    blueprint-compiler
   ];
 
   buildInputs = [
@@ -87,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     xdg-desktop-portal
     libseccomp
+    libwebp
   ]
   ++ (with gst_all_1; [
     gstreamer
@@ -99,8 +102,11 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
+      --prefix PATH : "${lib.makeBinPath [ bubblewrap ]}"
     )
   '';
+
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
   passthru = {
     updateScript = nix-update-script { };

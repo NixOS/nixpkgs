@@ -5,14 +5,22 @@
   gfortran,
   meson,
   ninja,
+  cmake,
   pkg-config,
   mctc-lib,
   mstore,
   toml-f,
   blas,
+  buildType ? "meson",
 }:
 
 assert !blas.isILP64;
+assert (
+  builtins.elem buildType [
+    "meson"
+    "cmake"
+  ]
+);
 
 stdenv.mkDerivation rec {
   pname = "simple-dftd3";
@@ -20,17 +28,24 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "dftd3";
-    repo = pname;
+    repo = "simple-dftd3";
     tag = "v${version}";
     hash = "sha256-c4xctcMcPQ70ippqbwtinygmnZ5en6ZGF5/v0ZWtzys=";
   };
 
+  patches = [
+    ./cmake.patch
+  ];
+
   nativeBuildInputs = [
     gfortran
+    pkg-config
+  ]
+  ++ lib.optionals (buildType == "meson") [
     meson
     ninja
-    pkg-config
-  ];
+  ]
+  ++ lib.optional (buildType == "cmake") cmake;
 
   buildInputs = [
     mctc-lib
@@ -42,6 +57,10 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
+  ];
+
+  cmakeFlags = [
+    (lib.strings.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
 
   doCheck = true;

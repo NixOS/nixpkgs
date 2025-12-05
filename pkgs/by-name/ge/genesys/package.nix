@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "genesys";
-  version = "1.0.7";
+  version = "1.0.8";
 
   src = fetchurl {
     url = "https://github.com/mrlem/genesys/releases/download/v${finalAttrs.version}/genesys-${finalAttrs.version}.tar.gz";
-    hash = "sha256-I1lEVvwRiGf1f4zUtqKhSb+it/nC8WAmw5S6edquOj8=";
+    hash = "sha256-7qhvsZoL7jqjpWhxNZ4fkoa6IcQvp+8kCwQ0mZtMjek=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

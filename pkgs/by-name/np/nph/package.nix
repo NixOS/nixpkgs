@@ -22,7 +22,7 @@ buildNimPackage' (finalAttrs: {
   src = fetchFromGitHub {
     owner = "arnetheduck";
     repo = "nph";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RIuggg09l7jZDg91FPrjwdoE+gCxgb7c8fEvCiwQk5U=";
   };
 

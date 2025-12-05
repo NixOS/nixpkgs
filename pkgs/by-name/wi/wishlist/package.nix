@@ -30,10 +30,7 @@ buildGoModule rec {
     homepage = "https://github.com/charmbracelet/wishlist";
     changelog = "https://github.com/charmbracelet/wishlist/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      caarlos0
-      penguwin
-    ];
+    maintainers = with lib.maintainers; [ caarlos0 ];
     mainProgram = "wishlist";
   };
 }

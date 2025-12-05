@@ -32,7 +32,7 @@ buildLua {
   '';
 
   passthru.scriptName = "cutter.lua";
-  extraScripts = [ "c_concat.sh" ];
+  extraScriptsToCopy = [ "c_concat.sh" ];
 
   postInstall = ''
     wrapProgram $out/share/mpv/scripts/c_concat.sh \

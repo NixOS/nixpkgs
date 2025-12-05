@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.sr.ht/~leon_plickat/lavalauncher/refs/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "lavalauncher";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (wayland.meta) platforms;
     # meson.build:52:23: ERROR: C shared or static library 'rt' not found
     # https://logs.ofborg.org/?key=nixos/nixpkgs.340239&attempt_id=1f05cada-67d2-4cfe-b6a8-4bf4571b9375

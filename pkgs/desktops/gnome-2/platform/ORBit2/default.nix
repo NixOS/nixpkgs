@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+  patches = [ ./implicit-int.patch ];
+
   # Processing file orbit-interface.idl
   # sh: gcc: not found
   # output does not contain binaries for build

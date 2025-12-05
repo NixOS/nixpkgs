@@ -230,7 +230,7 @@ let
       nvimGrammars = lib.mapAttrsToList (
         name: value:
         value.origGrammar
-          or (builtins.throw "additions to `pkgs.vimPlugins.nvim-treesitter.grammarPlugins` set should be passed through `pkgs.neovimUtils.grammarToPlugin` first")
+          or (throw "additions to `pkgs.vimPlugins.nvim-treesitter.grammarPlugins` set should be passed through `pkgs.neovimUtils.grammarToPlugin` first")
       ) vimPlugins.nvim-treesitter.grammarPlugins;
       isNvimGrammar = x: builtins.elem x nvimGrammars;
 

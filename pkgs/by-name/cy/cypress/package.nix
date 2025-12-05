@@ -19,19 +19,19 @@ let
   availableBinaries = {
     x86_64-linux = {
       platform = "linux-x64";
-      hash = "sha256-LcpIiPQWH4ny31abrjL7fYZ4coWphRVCGJlJibt5iqQ=";
+      hash = "sha256-oCTpVD7W1NHWD0nJBrgtmWZZozbcJeAfr7mn/JjqdcM=";
     };
     aarch64-linux = {
       platform = "linux-arm64";
-      hash = "sha256-4eGIklTtF08WLdYanjQPvWX+vEUalhMV1WwiJpVayfc=";
+      hash = "sha256-MIUVhWkfKN5056jhHN31h4dBcTHJI0iX+I2RbkNI80I=";
     };
     aarch64-darwin = {
       platform = "darwin-arm64";
-      hash = "sha256-C8TknPDv0NwHzDJzIHHBfpMB0mSsXTnXkUxO3l5v5zY=";
+      hash = "sha256-8qvMsC+tRKK12jC2r1A54kS/PZ6q+sErvLvTkse6Kn4=";
     };
     x86_64-darwin = {
       platform = "darwin-x64";
-      hash = "sha256-fvZT7bBV331iVuzvwosIvh8C/XMHLvCvQpQyeM3bt2E=";
+      hash = "sha256-cCLJloLcuCDgTEiMMJKY6rYiPPhZfFfqXFP5NAMhw4Q=";
     };
   };
   inherit (stdenv.hostPlatform) system;
@@ -41,7 +41,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "14.5.2";
+  version = "14.5.4";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/${platform}/cypress.zip";

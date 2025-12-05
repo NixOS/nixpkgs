@@ -2,7 +2,7 @@
 {
   workspaceStateFile = ./workspace-state.json;
   hashes = {
-    "AEXML" = "sha256-bQcXq1aS76sOjW8yYCOlGVZ2tStDvzRQSyj9VrAj6nI=";
+    "AEXML" = "sha256-6KvO8zT667Td+4qOeYzHbd51hDzFJFrxcVyYr2h5igc=";
     "ArtifactBundleGen" = "sha256-mSXJiRGFIm2RtzBG8l6s4RJ2BzSbPZKUZIqWM4vDIhc=";
     "JSONUtilities" = "sha256-jl8XfgoB5IX0qwwDtzcWgK0u3SNG2HfrPoEb2a6/mlA=";
     "PathKit" = "sha256-ewxTC1kpu6PXhwamCxYfI50ooYO1SIU0+IXH2tc/uv4=";
@@ -10,7 +10,7 @@
     "Spectre" = "sha256-fipGRIgw+jV7Wrxa+xivRk7YMyxDhGFB6SHIHscrmV8=";
     "SwiftCLI" = "sha256-PmjzLss0D12iy6YKsudFa8i63NQAssyCBqqq8VjRiH4=";
     "Version" = "sha256-4IwQlexWtIH9M0sSai1a+ITTAKkD2zJtbYoV4Cg+Snw=";
-    "XcodeProj" = "sha256-ycHDzay37YtT/3QqUpG6XPjRh32P5iU/I5GpfjrXs/I=";
+    "XcodeProj" = "sha256-UMnSV/kdRlUxp23Rd70xCHzJeP6Vh1viyHNERo3haRE=";
     "Yams" = "sha256-5qxuCkmopm3uFcoYJKQA8ofW98f53H1gZaPiOh2DS4U=";
   };
 }

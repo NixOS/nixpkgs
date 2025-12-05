@@ -26,7 +26,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tomlq -ti 'del(.bench)' crates/proksi/Cargo.toml
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-MYyPYZFmbQZszYViaGZdbUZWM739MN14J1ckyR8hXZc=";
 
   nativeBuildInputs = [

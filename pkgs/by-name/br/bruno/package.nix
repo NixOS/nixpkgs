@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  clang_20,
   fetchFromGitHub,
   buildNpmPackage,
   nix-update-script,
@@ -19,25 +20,26 @@
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "2.7.0";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     tag = "v${version}";
-    hash = "sha256-qNZCLd4FixJ+I5xaIIQ9EIKfCXnPOZFGbXHkgagBbFE=";
+    hash = "sha256-rHum5wQFQ3MuPCelJYzPo5ce4vlHA34ARgSQ6uJTE60=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-osdjtn9jn6T1YizQM7I9cfiHvIkrZ8HRDNjsR+FS/DE=";
+  npmDepsHash = "sha256-CXXXyDaaoAoZhUo1YNP3PUEGzlmIaDnA+JhrCqBY1H4=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
     pkg-config
   ]
+  ++ lib.optional stdenv.isDarwin clang_20 # clang_21 breaks gyp builds
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     makeWrapper
     copyDesktopItems
@@ -100,6 +102,7 @@ buildNpmPackage rec {
     npm run build --workspace=packages/bruno-converters
     npm run build --workspace=packages/bruno-app
     npm run build --workspace=packages/bruno-query
+    npm run build --workspace=packages/bruno-filestore
     npm run build --workspace=packages/bruno-requests
 
     npm run sandbox:bundle-libraries --workspace=packages/bruno-js
@@ -188,6 +191,7 @@ buildNpmPackage rec {
       mattpolzin
       redyf
       water-sucks
+      starsep
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

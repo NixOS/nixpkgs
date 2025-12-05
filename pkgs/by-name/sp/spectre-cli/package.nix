@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
     "-DBUILD_SPECTRE_TESTS=ON"
   ];
 

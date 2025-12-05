@@ -53,7 +53,7 @@ let
     ${lib.getExe golangci-lint} "$@"
     result=$?
     echo "golangci-lint returned: $result" >&2
-    ${lib.optionalString (ignoreGoLintWarnings) ''
+    ${lib.optionalString ignoreGoLintWarnings ''
       if [ $result != 0 ]; then
         cat <<EOF >&2
       Ignoring return value since ignoreGoLintWarnings was true.

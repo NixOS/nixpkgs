@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "6.1.1";
 
   src = fetchurl {
-    url = "http://get.videolan.org/libdvdnav/${version}/${pname}-${version}.tar.bz2";
+    url = "http://get.videolan.org/libdvdnav/${version}/libdvdnav-${version}.tar.bz2";
     sha256 = "sha256-wZGnR1lH0yP/doDPksD7G+gjdwGIXzdlbGTQTpjRjUg=";
   };
 

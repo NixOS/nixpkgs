@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   flit-core,
 
   # extras: babel
@@ -13,7 +12,7 @@
   argon2-cffi,
   bcrypt,
   bleach,
-  flask-mailman,
+  flask-mail,
 
   # extras: fsqla
   flask-sqlalchemy,
@@ -52,16 +51,14 @@
 
 buildPythonPackage rec {
   pname = "flask-security";
-  version = "5.6.2";
+  version = "5.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pallets-eco";
     repo = "flask-security";
     tag = version;
-    hash = "sha256-mEl98Yp4USKu+z636yAb5p5qPBzcdQraZ/XaPbDoGWU=";
+    hash = "sha256-XxlSkD9mWNcaHi9WvNtOayvFCOZMOznnLzdXvjxfKP8=";
   };
 
   build-system = [ flit-core ];
@@ -73,8 +70,7 @@ buildPythonPackage rec {
     flask-principal
     flask-wtf
     markupsafe
-    (if pythonOlder "3.12" then passlib else libpass)
-    importlib-resources
+    libpass
     wtforms
   ];
 
@@ -87,12 +83,11 @@ buildPythonPackage rec {
       argon2-cffi
       bcrypt
       bleach
-      flask-mailman
+      flask-mail
     ];
     fsqla = [
       flask-sqlalchemy
       sqlalchemy
-      sqlalchemy-utils
     ];
     mfa = [
       cryptography

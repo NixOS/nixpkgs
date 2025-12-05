@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-yvcKRESX2W1oLmQvkl07iG8+I74qDKsaS3amM4pZU8s=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-5GFYp1ZEkmag2GfzHRz3QDYaURzbDKY9yTSznkxddnE=";
 
   meta = with lib; {
@@ -25,7 +24,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://git.sr.ht/~jplatte/cargo-depgraph/tree/${src.rev}/item/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
-      figsoda
       matthiasbeyer
     ];
   };

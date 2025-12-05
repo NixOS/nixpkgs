@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typstyle";
-  version = "0.13.16";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "typstyle-rs";
     repo = "typstyle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dfw1jyPNZ0LDEZ+pbJt9DWKa4aBlFCAZIgKrZK+AmJw=";
+    hash = "sha256-L6MmXipkpTfSvSzuUmE6/hUqDoLbe3+2/bHgFbTfLpo=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Eg8i+vsBp0BuxxBWXZisVKiGge25UKfxoK/3Knk+LsU=";
+  cargoHash = "sha256-xGGuZw87CjS/tA74SiIyMqM6PS0OJt00axiI3jyAAr0=";
 
   # Disabling tests requiring network access
   checkFlags = [
@@ -42,7 +41,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "typstyle";
     maintainers = with lib.maintainers; [
-      drupol
       prince213
     ];
   };

@@ -17,7 +17,7 @@
 
 let
   # This package should be updated together with pkgs/by-name/ca/carburetor/package.nix
-  version = "5.0.0";
+  version = "5.1.0";
 in
 python3Packages.buildPythonApplication {
   pname = "tractor";
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication {
     owner = "tractor";
     repo = "tractor";
     tag = version;
-    hash = "sha256-KyVL3dFofoi2TRtZo557X9P/RD16v94VuWdtdAskZk4=";
+    hash = "sha256-pyGDxHOpaZutUhXRwGAN77fGNn68EWIGgWu80avkuSI=";
   };
 
   patches = [ ./fix-gsettings-schema.patch ];

@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-MRLQvspv6kjirljhAkk1KT+hPA4hdjA1b7RL9eEyglQ=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-rlxNvIYtVdWth5ZEdbmxOf3GKXIBpHnGDcSO883Ldjg=";
 
   meta = with lib; {
@@ -25,7 +24,7 @@ rustPlatform.buildRustPackage rec {
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "proximity-sort";
   };
 }

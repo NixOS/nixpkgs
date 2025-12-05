@@ -2,8 +2,9 @@
   lib,
   stdenv,
   buildGoModule,
-  fetchFromGitHub,
+  callPackage,
   installShellFiles,
+  procps,
   qemu,
   darwin,
   makeWrapper,
@@ -22,16 +23,8 @@
 
 buildGoModule (finalAttrs: {
   pname = "lima";
-  version = "1.2.0";
 
-  src = fetchFromGitHub {
-    owner = "lima-vm";
-    repo = "lima";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-vrYsIYikoN4D3bxu/JTb9lMRcL5k9S6T473dl58SDW0=";
-  };
-
-  vendorHash = "sha256-8S5tAL7GY7dxNdyC+WOrOZ+GfTKTSX84sG8WcSec2Os=";
+  inherit (callPackage ./source.nix { }) version src vendorHash;
 
   nativeBuildInputs = [
     makeWrapper
@@ -48,6 +41,11 @@ buildGoModule (finalAttrs: {
     substituteInPlace Makefile \
       --replace-fail 'codesign -f -v --entitlements vz.entitlements -s -' 'codesign -f --entitlements vz.entitlements -s -' \
       --replace-fail 'rm -rf _output vendor' 'rm -rf _output'
+  ''
+  # fixed upstream, remove when version >=2.0.0
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    substituteInPlace pkg/networks/usernet/recoincile.go \
+      --replace-fail '/usr/bin/pkill' '${lib.getExe' procps "pkill"}'
   '';
 
   # It attaches entitlements with codesign and strip removes those,
@@ -159,7 +157,12 @@ buildGoModule (finalAttrs: {
         };
       };
 
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--override-filename"
+        ./source.nix
+      ];
+    };
   };
 
   meta = {

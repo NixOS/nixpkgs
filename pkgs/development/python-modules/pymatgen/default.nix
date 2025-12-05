@@ -46,6 +46,7 @@
 
   # tests
   addBinToPathHook,
+  moyopy,
   pytest-xdist,
   pytestCheckHook,
 }:
@@ -120,17 +121,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymatgen" ];
 
-  pytestFlagsArray = [
-    # We have not packaged moyopy yet.
-    "--deselect=tests/analysis/test_prototypes.py::test_get_protostructure_label_from_moyopy"
-  ];
-
   nativeCheckInputs = [
     addBinToPathHook
+    moyopy
     pytestCheckHook
     pytest-xdist
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck =
     # ensure tests can find these

@@ -30,7 +30,7 @@ in
   options = {
     services.synapse-auto-compressor = {
       enable = lib.mkEnableOption "synapse-auto-compressor";
-      package = lib.mkPackageOption pkgs "rust-synapse-state-compress" { };
+      package = lib.mkPackageOption pkgs "rust-synapse-compress-state" { };
       postgresUrl = lib.mkOption {
         default =
           let

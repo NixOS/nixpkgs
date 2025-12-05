@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   xorg,
   pkg-config,
   cmake,
@@ -27,6 +28,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "GN3zI5LQnVmRC0KWffzUTHKrxcqnstiL55hopwTTwpE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "bump-cmake-required-version.patch";
+      url = "https://github.com/qarkai/xautoclick/commit/a6cd4058fa7d8579bf4ada3f48441f333fca9dab.patch?full_index=1";
+      hash = "sha256-4ovcaVrXQqFZX85SnewtfjZpipcGTw52ZrTkT6iWZQM=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

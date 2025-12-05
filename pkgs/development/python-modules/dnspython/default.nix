@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "dnspython";
-  version = "2.7.0";
+  version = "2.8.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zpxDLtoNyRz2GKXO3xpOFCZRGWu80sgOie1akH5c+vE=";
+    hash = "sha256-GB08aZZFLLEYnEBGxhWZuEpahuCZVi/9530mmE/ybQ8=";
   };
 
   build-system = [ hatchling ];

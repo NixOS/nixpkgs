@@ -40,7 +40,7 @@ The chosen design is a trade-off between speed, repository size, and contributor
     - It would also require keeping an impure or otherwise continuously updated reference to those other revisions.
     - The static mapping acts like a semi-automatically updated cache that we drag along with version history.
     - Other setups, such as a dedicated service to cache a history of moved content, are more complicated and would still be impure.
-- Checking in large amounts of data that is touched often, bears a risk of more merge conflicts or related build failures.
+- Checking in large amounts of data that is touched often bears a risk of more merge conflicts or related build failures.
 
 The solution picked here is to have a static mapping of the historical locations checked into the Git tree, such that it can be read during the build process.
 This also ensures that an improper redirect mapping will cause `nixos-render-docs` to fail the build and thus enforce that redirects stay up-to-date with every commit.

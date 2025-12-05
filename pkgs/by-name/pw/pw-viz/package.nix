@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-fB7PnWWahCMKhGREg6neLmOZjh2OWLu61Vpmfsl03wA=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-jsaWrdJRKfu75Gw8qGHxx0FHK7rOEK8IEDiQ6ktZsM0=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -63,7 +62,7 @@ rustPlatform.buildRustPackage rec {
     description = "Simple and elegant pipewire graph editor";
     homepage = "https://github.com/ax9d/pw-viz";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

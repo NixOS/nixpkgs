@@ -6,9 +6,9 @@
   replaceVars,
 
   cmake,
+  jre,
   ninja,
   pkg-config,
-  jre,
   swig,
   wrapGAppsHook3,
 
@@ -17,25 +17,27 @@
   glibc,
   sudo,
 
+  python3Packages,
+
   cairo,
   mysql,
   libiodbc,
   proj,
 
   antlr4_13,
-  gtkmm3,
-  libxml2,
-  libmysqlconnectorcpp,
-  vsqlite,
-  gdal,
   boost,
+  gdal,
+  gtkmm3,
+  libmysqlconnectorcpp,
+  libsecret,
   libssh,
+  libuuid,
+  libxml2,
+  libzip,
   openssl,
   rapidjson,
-  libuuid,
-  libzip,
-  libsecret,
-  python3Packages,
+  vsqlite,
+  zstd,
 }:
 
 let
@@ -94,28 +96,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    jre
     ninja
     pkg-config
-    jre
     swig_4_2
     wrapGAppsHook3
   ];
 
   buildInputs = [
     antlr4_13.runtime.cpp
-    gtkmm3
-    (libxml2.override { enableHttp = true; })
-    libmysqlconnectorcpp
-    vsqlite
-    gdal
     boost
+    gdal
+    gtkmm3
+    libiodbc
+    libmysqlconnectorcpp
+    libsecret
     libssh
+    libuuid
+    (libxml2.override { enableHttp = true; })
+    libzip
     openssl
     rapidjson
-    libuuid
-    libzip
-    libsecret
-    libiodbc
+    vsqlite
+    zstd
 
     bash # for shebangs
 

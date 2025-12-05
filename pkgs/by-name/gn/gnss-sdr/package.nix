@@ -69,7 +69,7 @@ gnuradio.pkgs.mkDerivation rec {
   ++ lib.optionals (gnuradio.hasFeature "gr-uhd") [
     gnuradio.unwrapped.uhd
   ]
-  ++ lib.optionals (enableRawUdp) [
+  ++ lib.optionals enableRawUdp [
     libpcap
   ]
   ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
@@ -82,7 +82,7 @@ gnuradio.pkgs.mkDerivation rec {
   ++ lib.optionals (gnuradio.hasFeature "gr-pdu") [
     gnuradio.unwrapped.libad9361
   ]
-  ++ lib.optionals (enableOsmosdr) [
+  ++ lib.optionals enableOsmosdr [
     gnuradio.pkgs.osmosdr
   ];
 

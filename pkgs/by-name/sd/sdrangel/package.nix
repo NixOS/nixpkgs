@@ -3,7 +3,6 @@
   stdenv,
   airspy,
   airspyhf,
-  apple-sdk_12,
   aptdec,
   boost,
   cm256cc,
@@ -44,14 +43,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdrangel";
-  version = "7.22.6";
+  version = "7.22.9";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "sdrangel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ymDKHGJNoCOMa1zzFvjTzFa34wP1+iKSfJZZi7Sk/GM=";
+    hash = "sha256-VYSM9ldzx/8tWKQb++qGROSXdeEXIDhGqnnHUmkW4+k=";
   };
+
+  patches = [
+    # Fix build with Qt 6.10, remove when the commit reaches a release
+    (fetchpatch {
+      url = "https://github.com/f4exb/sdrangel/commit/fd6a8d51f8c39fd31b4e864f528bf1921ebd4260.patch";
+      hash = "sha256-S8LQbCTEgyEt1wByDsDMqqyQjK5HALtvUIODgQ1skSA=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -103,16 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6Packages.qtwayland ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
   ++ lib.optionals withSDRplay [ sdrplay ];
-
-  patches = [
-    # https://github.com/f4exb/sdrangel/pull/2439
-    (fetchpatch {
-      url = "https://github.com/f4exb/sdrangel/commit/60869b74f96b26e8a173f3f215c2badeaef9a136.patch";
-      hash = "sha256-Lq9pyissNmLYavLCISga0EWbRwisGnKiz6UYhzxJatc=";
-    })
-  ];
 
   cmakeFlags = [
     "-DAPT_DIR=${aptdec}"
@@ -131,6 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
       SDRangel is an Open Source Qt6 / OpenGL 3.0+ SDR and signal analyzer frontend to various hardware.
     '';
     maintainers = with lib.maintainers; [
+      aciceri
       alkeryn
       Tungsten842
     ];

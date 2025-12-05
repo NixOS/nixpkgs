@@ -1,21 +1,23 @@
 {
   autoAddDriverRunpath,
+  backendStdenv,
   catch2_3,
   cmake,
+  cuda_cccl,
+  cuda_cudart,
+  cuda_nvcc,
+  cuda_nvrtc,
+  cudaNamePrefix,
+  cudnn,
   fetchFromGitHub,
   gitUpdater,
   lib,
+  libcublas,
   ninja,
   nlohmann_json,
-  stdenv,
-  cuda_cccl ? null,
-  cuda_cudart ? null,
-  cuda_nvcc ? null,
-  cuda_nvrtc ? null,
-  cudnn ? null,
-  libcublas ? null,
 }:
 let
+  inherit (lib) licenses maintainers teams;
   inherit (lib.lists) optionals;
   inherit (lib.strings)
     cmakeBool
@@ -23,32 +25,29 @@ let
     optionalString
     ;
 in
-
 # TODO(@connorbaker): This should be a hybrid C++/Python package.
-stdenv.mkDerivation (finalAttrs: {
+backendStdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  # NOTE: Depends on the CUDA package set, so use cudaNamePrefix.
+  name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
+
   pname = "cudnn-frontend";
-  version = "1.9.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cudnn-frontend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Vc5jqB1XHcJEdKG0nxbWLewW2fDezRVwjUSzPDubSGE=";
+    hash = "sha256-+8aBl9dKd2Uz50XoOr91NRyJ4OGJtzfDNNNYGQJ9b94=";
   };
-
-  patches = [
-    # https://github.com/NVIDIA/cudnn-frontend/pull/125
-    ./0001-cmake-float-out-common-python-bindings-option.patch
-    ./0002-cmake-add-config-so-headers-can-be-discovered-when-i.patch
-    ./0003-cmake-install-samples-and-tests-when-built.patch
-    ./0004-samples-fix-instances-of-maybe-uninitialized.patch
-  ];
 
   # nlohmann_json should be the only vendored dependency.
   postPatch = ''
-    echo "patching source to use nlohmann_json from nixpkgs"
-    rm -rf include/cudnn_frontend/thirdparty/nlohmann
-    rmdir include/cudnn_frontend/thirdparty
+    nixLog "patching source to use nlohmann_json from nixpkgs"
+    rm -rfv include/cudnn_frontend/thirdparty/nlohmann
+    rmdir -v include/cudnn_frontend/thirdparty
     substituteInPlace include/cudnn_frontend_utils.h \
       --replace-fail \
         '#include "cudnn_frontend/thirdparty/nlohmann/json.hpp"' \
@@ -99,6 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
     nlohmann_json
   ];
 
+  # TODO(@connorbaker): I'm using this incorrectly to build the executables which would allow us to test functionality,
+  # rather than to indicate the checkPhase will actually run.
   doCheck = true;
 
   postInstall = optionalString finalAttrs.doCheck ''
@@ -120,13 +121,14 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "A c++ wrapper for the cudnn backend API";
     homepage = "https://github.com/NVIDIA/cudnn-frontend";
-    license = lib.licenses.mit;
-    badPlatforms = optionals (cudnn == null) finalAttrs.meta.platforms;
+    license = licenses.mit;
+    # Supports cuDNN 8.5.0 and newer:
+    # https://github.com/NVIDIA/cudnn-frontend/blob/11b51e9c5ad6cc71cd66cb873e34bc922d97d547/README.md?plain=1#L32
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
     ];
-    maintainers = with lib.maintainers; [ connorbaker ];
-    teams = [ lib.teams.cuda ];
+    maintainers = [ maintainers.connorbaker ];
+    teams = [ teams.cuda ];
   };
 })

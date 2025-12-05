@@ -37,7 +37,7 @@ in
                     description = ''
                       Configuration included in `${name}.toml`.
 
-                      See https://yazi-rs.github.io/docs/configuration/${name}/ for documentation.
+                      See <https://yazi-rs.github.io/docs/configuration/${name}/> for documentation.
                     '';
                   }
                 )
@@ -71,7 +71,7 @@ in
       description = ''
         Lua plugins.
 
-        See https://yazi-rs.github.io/docs/plugins/overview/ for documentation.
+        See <https://yazi-rs.github.io/docs/plugins/overview/> for documentation.
       '';
       example = lib.literalExpression ''
         {
@@ -92,7 +92,7 @@ in
       description = ''
         Pre-made themes.
 
-        See https://yazi-rs.github.io/docs/flavors/overview/ for documentation.
+        See <https://yazi-rs.github.io/docs/flavors/overview/> for documentation.
       '';
       example = lib.literalExpression ''
         {

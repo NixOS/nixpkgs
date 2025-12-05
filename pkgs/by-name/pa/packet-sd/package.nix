@@ -1,4 +1,5 @@
 {
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   fetchpatch2,
@@ -45,5 +46,7 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = [ ];
     mainProgram = "prometheus-packet-sd";
+    # The last successful Darwin Hydra build was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

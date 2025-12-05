@@ -5,7 +5,7 @@
   fetchPypi,
   numpy,
   astropy,
-  astropy-extension-helpers,
+  extension-helpers,
   setuptools,
   setuptools-scm,
   pytestCheckHook,
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    astropy-extension-helpers
+    extension-helpers
     numpy
     setuptools
     setuptools-scm

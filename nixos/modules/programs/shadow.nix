@@ -77,49 +77,49 @@ in
             SYS_UID_MIN = lib.mkOption {
               description = "Range of user IDs used for the creation of system users by useradd or newusers.";
               default = 400;
-              type = lib.types.int;
+              type = lib.types.ints.u32;
             };
 
             SYS_UID_MAX = lib.mkOption {
               description = "Range of user IDs used for the creation of system users by useradd or newusers.";
               default = 999;
-              type = lib.types.int;
+              type = lib.types.ints.u32;
             };
 
             UID_MIN = lib.mkOption {
               description = "Range of user IDs used for the creation of regular users by useradd or newusers.";
               default = 1000;
-              type = lib.types.int;
+              type = lib.types.ints.u32;
             };
 
             UID_MAX = lib.mkOption {
               description = "Range of user IDs used for the creation of regular users by useradd or newusers.";
               default = 29999;
-              type = lib.types.int;
+              type = lib.types.ints.u32;
             };
 
             SYS_GID_MIN = lib.mkOption {
               description = "Range of group IDs used for the creation of system groups by useradd, groupadd, or newusers";
               default = 400;
-              type = lib.types.int;
+              type = lib.types.ints.u32;
             };
 
             SYS_GID_MAX = lib.mkOption {
               description = "Range of group IDs used for the creation of system groups by useradd, groupadd, or newusers";
               default = 999;
-              type = lib.types.int;
+              type = lib.types.ints.u32;
             };
 
             GID_MIN = lib.mkOption {
               description = "Range of group IDs used for the creation of regular groups by useradd, groupadd, or newusers.";
               default = 1000;
-              type = lib.types.int;
+              type = lib.types.ints.u32;
             };
 
             GID_MAX = lib.mkOption {
               description = "Range of group IDs used for the creation of regular groups by useradd, groupadd, or newusers.";
               default = 29999;
-              type = lib.types.int;
+              type = lib.types.ints.u32;
             };
 
             TTYGROUP = lib.mkOption {
@@ -158,6 +158,8 @@ in
         This must not be a store path, since the path is
         used outside the store (in particular in /etc/passwd).
       '';
+      # /bin/sh is also the compiled in default of the shadow package.
+      default = "/bin/sh";
       example = lib.literalExpression "pkgs.zsh";
       type = lib.types.either lib.types.path lib.types.shellPackage;
     };

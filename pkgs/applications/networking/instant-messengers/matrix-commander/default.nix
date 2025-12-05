@@ -18,13 +18,13 @@
 
 buildPythonApplication rec {
   pname = "matrix-commander";
-  version = "8.0.4";
+  version = "8.0.5";
 
   src = fetchFromGitHub {
     owner = "8go";
     repo = "matrix-commander";
     rev = "v${version}";
-    hash = "sha256-JZcdAo6d7huwDQ9hJE8oT5FH0ZQjg0DhoglOkhOyk1o=";
+    hash = "sha256-eNgnjErPi5q9yA/2iEg3+CoN2xbopmFOpbgU/7GhoAQ=";
   };
 
   format = "pyproject";

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "zipstream-ng";
-  version = "1.8.0";
+  version = "1.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "pR0Ps";
     repo = "zipstream-ng";
     tag = "v${version}";
-    hash = "sha256-mmPxzml+gaVg2IQ/Gql+3ru0hHosbyX4WjLCMxD/MJw=";
+    hash = "sha256-dkSTZkj6Rx6OMdlX4oDOydetosf/iEJhlARmEc0W9gQ=";
   };
 
   build-system = [ setuptools ];

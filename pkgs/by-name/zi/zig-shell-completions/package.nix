@@ -1,20 +1,21 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitea,
   installShellFiles,
   unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zig-shell-completions";
-  version = "0-unstable-2025-06-29";
+  version = "0-unstable-2025-11-25";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "ziglang";
     repo = "shell-completions";
-    rev = "4f91bcbe28cec28ff707d5e032333cbdbfa01161";
-    hash = "sha256-4uzM5pFnYf5dTkw3igzWUCYYsBZVTrb/mFf5iHFiGT4=";
+    rev = "c2983a75dcbcaf3a1df74ab563a9bd3c8e7f448e";
+    hash = "sha256-+sV3BitKhALNQys3u+wsMSHTH3QxoRZ1i75fazIgOjQ=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -34,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
-    homepage = "https://github.com/ziglang/shell-completions";
+    homepage = "https://codeberg.org/ziglang/shell-completions";
     description = "Shell completions for the Zig compiler";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aaronjheng ];

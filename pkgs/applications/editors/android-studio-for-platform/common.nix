@@ -170,7 +170,7 @@ runCommand drvName
       unwrapped = androidStudioForPlatform;
     };
     meta = with lib; {
-      description = "The Official IDE for Android platform development";
+      description = "Official IDE for Android platform development";
       longDescription = ''
         Android Studio for Platform (ASfP) is the version of the Android Studio IDE
         for Android Open Source Project (AOSP) platform developers who build with the Soong build system.

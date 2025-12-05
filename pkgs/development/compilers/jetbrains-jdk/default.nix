@@ -19,6 +19,7 @@
   libXrender,
   libX11,
   libXext,
+  libxkbcommon,
   libxcb,
   nss,
   nspr,
@@ -27,6 +28,8 @@
   wayland,
   udev,
   fontconfig,
+  shaderc,
+  vulkan-headers,
 }:
 
 assert debugBuild -> withJcef;
@@ -42,27 +45,27 @@ let
 in
 jdk.overrideAttrs (oldAttrs: rec {
   pname = "jetbrains-jdk" + lib.optionalString withJcef "-jcef";
-  javaVersion = "21.0.6";
-  build = "895.109";
+  javaVersion = "21.0.8";
+  build = "1148.57";
   # To get the new tag:
   # git clone https://github.com/jetbrains/jetbrainsruntime
   # cd jetbrainsruntime
-  # git checkout jbr-release-${javaVersion}b${build}
-  # git log --simplify-by-decoration --decorate=short --pretty=short | grep "jbr-" --color=never | cut -d "(" -f2 | cut -d ")" -f1 | awk '{print $2}' | sort -t "-" -k 2 -g | tail -n 1 | tr -d ","
-  openjdkTag = "jbr-21.0.6+7";
+  # git tag --points-at [revision]
+  # Look for the line that starts with jbr-
+  openjdkTag = "jbr-release-21.0.8b1148.57";
   version = "${javaVersion}-b${build}";
 
   src = fetchFromGitHub {
     owner = "JetBrains";
     repo = "JetBrainsRuntime";
     rev = "jb${version}";
-    hash = "sha256-Neh0PGer4JnNaForBKRlGPLft5cae5GktreyPRNjFCk=";
+    hash = "sha256-RgXwWNHAeFxmrFmyB+DP5dOif06iql2UvimEaARnQvg=";
   };
 
   env = {
     BOOT_JDK = jdk.home;
     # run `git log -1 --pretty=%ct` in jdk repo for new value on update
-    SOURCE_DATE_EPOCH = 1726275531;
+    SOURCE_DATE_EPOCH = 1759539679;
   };
 
   patches = [ ];
@@ -140,6 +143,7 @@ jdk.overrideAttrs (oldAttrs: rec {
         libXrender
         libX11
         libXext
+        libxkbcommon
         libxcb
         nss
         nspr
@@ -170,8 +174,14 @@ jdk.overrideAttrs (oldAttrs: rec {
     autoconf
     unzip
     rsync
+    shaderc # glslc
   ]
   ++ oldAttrs.nativeBuildInputs;
+
+  buildInputs = [
+    vulkan-headers
+  ]
+  ++ oldAttrs.buildInputs or [ ];
 
   meta = with lib; {
     description = "OpenJDK fork to better support Jetbrains's products";

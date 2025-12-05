@@ -1,36 +1,49 @@
 {
   lib,
-  addDriverRunpath,
-  buildPythonPackage,
-  cmake,
+  stdenv,
   config,
-  cudaPackages,
+  buildPythonPackage,
   fetchFromGitHub,
-  filelock,
-  gtest,
-  libxml2,
+
+  # patches
+  replaceVars,
+  addDriverRunpath,
+  cudaPackages,
+
+  # build-system
+  setuptools,
+
+  # nativeBuildInputs
+  cmake,
+  ninja,
   lit,
   llvm,
+  writableTmpDirAsHomeHook,
+
+  # buildInputs
+  gtest,
+  libxml2,
   ncurses,
-  ninja,
   pybind11,
+  zlib,
+
+  # dependencies
+  filelock,
+
+  # passthru
   python,
   pytestCheckHook,
-  writableTmpDirAsHomeHook,
-  stdenv,
-  replaceVars,
-  setuptools,
   torchWithRocm,
-  zlib,
-  cudaSupport ? config.cudaSupport,
-  rocmSupport ? config.rocmSupport,
-  rocmPackages,
+  runCommand,
   triton,
+  rocmPackages,
+
+  cudaSupport ? config.cudaSupport,
 }:
 
 buildPythonPackage rec {
   pname = "triton";
-  version = "3.3.1";
+  version = "3.5.1";
   pyproject = true;
 
   # Remember to bump triton-llvm as well!
@@ -38,15 +51,14 @@ buildPythonPackage rec {
     owner = "triton-lang";
     repo = "triton";
     tag = "v${version}";
-    hash = "sha256-XLw7s5K0j4mfIvNMumlHkUpklSzVSTRyfGazZ4lLpn0=";
+    hash = "sha256-dyNRtS1qtU8C/iAf0Udt/1VgtKGSvng1+r2BtvT9RB4=";
   };
 
   patches = [
     (replaceVars ./0001-_build-allow-extra-cc-flags.patch {
       ccCmdExtraFlags = "-Wl,-rpath,${addDriverRunpath.driverLink}/lib";
     })
-    (replaceVars ./0002-nvidia-amd-driver-short-circuit-before-ldconfig.patch {
-      libhipDir = if rocmSupport then "${lib.getLib rocmPackages.clr}/lib" else null;
+    (replaceVars ./0002-nvidia-driver-short-circuit-before-ldconfig.patch {
       libcudaStubsDir =
         if cudaSupport then "${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs" else null;
     })
@@ -60,20 +72,34 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = ''
+  postPatch =
+    # Allow CMake 4
+    # Upstream issue: https://github.com/triton-lang/triton/issues/8245
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail "cmake>=3.20,<4.0" "cmake>=3.20"
+    ''
+    # Avoid downloading dependencies remove any downloads
+    + ''
+      substituteInPlace setup.py \
+        --replace-fail "[get_json_package_info()]" "[]" \
+        --replace-fail "[get_llvm_package_info()]" "[]" \
+        --replace-fail 'yield ("triton.profiler", "third_party/proton/proton")' 'pass' \
+        --replace-fail "curr_version.group(1) != version" "False"
+    ''
     # Use our `cmakeFlags` instead and avoid downloading dependencies
-    # remove any downloads
-    substituteInPlace python/setup.py \
-      --replace-fail "[get_json_package_info()]" "[]"\
-      --replace-fail "[get_llvm_package_info()]" "[]"\
-      --replace-fail 'packages += ["triton/profiler"]' "pass"\
-      --replace-fail "curr_version.group(1) != version" "False"
-
+    + ''
+      substituteInPlace setup.py \
+        --replace-fail \
+          "cmake_args.extend(thirdparty_cmake_args)" \
+          "cmake_args.extend(thirdparty_cmake_args + os.environ.get('cmakeFlags', \"\").split())"
+    ''
     # Don't fetch googletest
-    substituteInPlace cmake/AddTritonUnitTest.cmake \
-      --replace-fail "include(\''${PROJECT_SOURCE_DIR}/unittest/googletest.cmake)" ""\
-      --replace-fail "include(GoogleTest)" "find_package(GTest REQUIRED)"
-  '';
+    + ''
+      substituteInPlace cmake/AddTritonUnitTest.cmake \
+        --replace-fail "include(\''${PROJECT_SOURCE_DIR}/unittest/googletest.cmake)" ""\
+        --replace-fail "include(GoogleTest)" "find_package(GTest REQUIRED)"
+    '';
 
   build-system = [ setuptools ];
 
@@ -90,6 +116,15 @@ buildPythonPackage rec {
 
     # Upstream's setup.py tries to write cache somewhere in ~/
     writableTmpDirAsHomeHook
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeFeature "LLVM_SYSPATH" "${llvm}")
+
+    # `find_package` is called with `NO_DEFAULT_PATH`
+    # https://cmake.org/cmake/help/latest/command/find_package.html
+    # https://github.com/triton-lang/triton/blob/c3c476f357f1e9768ea4e45aa5c17528449ab9ef/third_party/amd/CMakeLists.txt#L6
+    (lib.cmakeFeature "LLD_DIR" "${lib.getLib llvm}")
   ];
 
   buildInputs = [
@@ -113,19 +148,11 @@ buildPythonPackage rec {
     "-Wno-stringop-overread"
   ];
 
-  # Avoid GLIBCXX mismatch with other cuda-enabled python packages
-  preConfigure = ''
+  preConfigure =
     # Ensure that the build process uses the requested number of cores
-    export MAX_JOBS="$NIX_BUILD_CORES"
-
-    # Upstream's github actions patch setup.cfg to write base-dir. May be redundant
-    echo "
-    [build_ext]
-    base-dir=$PWD" >> python/setup.cfg
-
-    # The rest (including buildPhase) is relative to ./python/
-    cd python
-  '';
+    ''
+      export MAX_JOBS="$NIX_BUILD_CORES"
+    '';
 
   env = {
     TRITON_BUILD_PROTON = "OFF";
@@ -167,94 +194,116 @@ buildPythonPackage rec {
     "triton.language"
   ];
 
-  passthru.gpuCheck = stdenv.mkDerivation {
-    pname = "triton-pytest";
-    inherit (triton) version src;
+  passthru = {
+    gpuCheck = stdenv.mkDerivation {
+      pname = "triton-pytest";
+      inherit (triton) version src;
 
-    requiredSystemFeatures = [ "cuda" ];
+      requiredSystemFeatures = [ "cuda" ];
 
-    nativeBuildInputs = [
-      (python.withPackages (ps: [
-        ps.scipy
-        ps.torchWithCuda
-        ps.triton-cuda
-      ]))
-    ];
+      nativeBuildInputs = [
+        (python.withPackages (ps: [
+          ps.scipy
+          ps.torchWithCuda
+          ps.triton-cuda
+        ]))
+      ];
 
-    dontBuild = true;
-    nativeCheckInputs = [
-      pytestCheckHook
-      writableTmpDirAsHomeHook
-    ];
+      dontBuild = true;
+      nativeCheckInputs = [
+        pytestCheckHook
+        writableTmpDirAsHomeHook
+      ];
 
-    doCheck = true;
+      doCheck = true;
 
-    preCheck = ''
-      cd python/test/unit
-    '';
-    checkPhase = "pytestCheckPhase";
+      preCheck = ''
+        cd python/test/unit
+      '';
+      checkPhase = "pytestCheckPhase";
 
-    installPhase = "touch $out";
-  };
+      installPhase = "touch $out";
+    };
 
-  passthru.tests = {
-    # Ultimately, torch is our test suite:
-    inherit torchWithRocm;
+    tests = {
+      # Ultimately, torch is our test suite:
+      inherit torchWithRocm;
 
-    # Test as `nix run -f "<nixpkgs>" python3Packages.triton.tests.axpy-cuda`
-    # or, using `programs.nix-required-mounts`, as `nix build -f "<nixpkgs>" python3Packages.triton.tests.axpy-cuda.gpuCheck`
-    axpy-cuda =
-      cudaPackages.writeGpuTestPython
-        {
-          libraries = ps: [
-            ps.triton
-            ps.torch-no-triton
-          ];
-        }
-        ''
-          # Adopted from Philippe Tillet https://triton-lang.org/main/getting-started/tutorials/01-vector-add.html
+      # Test that _get_path_to_hip_runtime_dylib works when ROCm is available at runtime
+      rocm-libamdhip64-path =
+        runCommand "triton-rocm-libamdhip64-path-test"
+          {
+            buildInputs = [
+              triton
+              python
+              rocmPackages.clr
+            ];
+          }
+          ''
+            python -c "
+            import os
+            import triton
+            path = triton.backends.amd.driver._get_path_to_hip_runtime_dylib()
+            print(f'libamdhip64 path: {path}')
+            assert os.path.exists(path)
+            " && touch $out
+          '';
 
-          import triton
-          import triton.language as tl
-          import torch
-          import os
+      # Test as `nix run -f "<nixpkgs>" python3Packages.triton.tests.axpy-cuda`
+      # or, using `programs.nix-required-mounts`, as `nix build -f "<nixpkgs>" python3Packages.triton.tests.axpy-cuda.gpuCheck`
+      axpy-cuda =
+        cudaPackages.writeGpuTestPython
+          {
+            libraries = ps: [
+              ps.triton
+              ps.torch-no-triton
+            ];
+          }
+          ''
+            # Adopted from Philippe Tillet https://triton-lang.org/main/getting-started/tutorials/01-vector-add.html
 
-          @triton.jit
-          def axpy_kernel(n, a: tl.constexpr, x_ptr, y_ptr, out, BLOCK_SIZE: tl.constexpr):
-            pid = tl.program_id(axis=0)
-            block_start = pid * BLOCK_SIZE
-            offsets = block_start + tl.arange(0, BLOCK_SIZE)
-            mask = offsets < n
-            x = tl.load(x_ptr + offsets, mask=mask)
-            y = tl.load(y_ptr + offsets, mask=mask)
-            output = a * x + y
-            tl.store(out + offsets, output, mask=mask)
+            import triton
+            import triton.language as tl
+            import torch
+            import os
 
-          def axpy(a, x, y):
-            output = torch.empty_like(x)
-            assert x.is_cuda and y.is_cuda and output.is_cuda
-            n_elements = output.numel()
+            @triton.jit
+            def axpy_kernel(n, a: tl.constexpr, x_ptr, y_ptr, out, BLOCK_SIZE: tl.constexpr):
+              pid = tl.program_id(axis=0)
+              block_start = pid * BLOCK_SIZE
+              offsets = block_start + tl.arange(0, BLOCK_SIZE)
+              mask = offsets < n
+              x = tl.load(x_ptr + offsets, mask=mask)
+              y = tl.load(y_ptr + offsets, mask=mask)
+              output = a * x + y
+              tl.store(out + offsets, output, mask=mask)
 
-            def grid(meta):
-              return (triton.cdiv(n_elements, meta['BLOCK_SIZE']), )
+            def axpy(a, x, y):
+              output = torch.empty_like(x)
+              assert x.is_cuda and y.is_cuda and output.is_cuda
+              n_elements = output.numel()
 
-            axpy_kernel[grid](n_elements, a, x, y, output, BLOCK_SIZE=1024)
-            return output
+              def grid(meta):
+                return (triton.cdiv(n_elements, meta['BLOCK_SIZE']), )
 
-          if __name__ == "__main__":
-            if os.environ.get("HOME", None) == "/homeless-shelter":
-              os.environ["HOME"] = os.environ.get("TMPDIR", "/tmp")
-            if "CC" not in os.environ:
-              os.environ["CC"] = "${lib.getExe' cudaPackages.backendStdenv.cc "cc"}"
-            torch.manual_seed(0)
-            size = 12345
-            x = torch.rand(size, device='cuda')
-            y = torch.rand(size, device='cuda')
-            output_torch = 3.14 * x + y
-            output_triton = axpy(3.14, x, y)
-            assert output_torch.sub(output_triton).abs().max().item() < 1e-6
-            print("Triton axpy: OK")
-        '';
+              axpy_kernel[grid](n_elements, a, x, y, output, BLOCK_SIZE=1024)
+              return output
+
+            if __name__ == "__main__":
+              if os.environ.get("HOME", None) == "/homeless-shelter":
+                os.environ["HOME"] = os.environ.get("TMPDIR", "/tmp")
+              if "CC" not in os.environ:
+                os.environ["CC"] = "${lib.getExe' cudaPackages.backendStdenv.cc "cc"}"
+              torch.manual_seed(0)
+              size = 12345
+              x = torch.rand(size, device='cuda')
+              y = torch.rand(size, device='cuda')
+              output_torch = 3.14 * x + y
+              output_triton = axpy(3.14, x, y)
+              assert output_torch.sub(output_triton).abs().max().item() < 1e-6
+              print("Triton axpy: OK")
+          '';
+    };
   };
 
   meta = {
@@ -264,7 +313,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       SomeoneSerge
-      Madouura
       derdennisop
     ];
   };

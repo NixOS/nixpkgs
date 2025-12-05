@@ -1,44 +1,35 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchpatch,
+  fetchFromGitLab,
   cmake,
-  unzip,
   gmp,
   scalp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pagsuite";
-  version = "1.80";
+  version = "1.80-unstable-2025-05-03";
 
-  src = fetchurl {
-    url = "https://gitlab.com/kumm/pagsuite/-/raw/master/releases/pagsuite_${
-      lib.replaceStrings [ "." ] [ "_" ] version
-    }.zip";
-    hash = "sha256-TYd+dleVPWEWU9Cb3XExd7ixJZyiUAp9QLtorYJSIbQ=";
+  src = fetchFromGitLab {
+    domain = "gitlab.com";
+    owner = "kumm";
+    repo = "pagsuite";
+    rev = "1cc657765658cb2eb622d4a9c656ab9854150e7d";
+    hash = "sha256-jyp3h5n6SkyTpLzqMezvu2nri6rDkX3ACcCO9r4/bBA=";
   };
-
-  patches = [
-    # Fix issue with latest ScaLP update
-    (fetchpatch {
-      url = "https://gitlab.com/kumm/pagsuite/-/commit/cae9f78bec93a7f197461358f2f796f6b5778781.patch";
-      hash = "sha256-12IisS6oGYLRicORTemHB7bw9EB9cuQjxG8f6X0WMrU=";
-    })
-  ];
-
-  sourceRoot = "pagsuite_${lib.replaceStrings [ "." ] [ "_" ] version}";
 
   nativeBuildInputs = [
     cmake
-    unzip
   ];
 
   buildInputs = [
     gmp
     scalp
   ];
+
+  # make[2]: ***  No rule to make target 'lib/libpag.dylib', needed by 'bin/osr'.  Stop.
+  enableParallelBuilding = false;
 
   meta = with lib; {
     description = "Optimization tools for the (P)MCM problem";

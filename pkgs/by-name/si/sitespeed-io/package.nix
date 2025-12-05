@@ -26,18 +26,14 @@ assert
   (!withFirefox && !withChromium) -> throw "Either `withFirefox` or `withChromium` must be enabled.";
 buildNpmPackage rec {
   pname = "sitespeed-io";
-  version = "37.8.0";
+  version = "38.4.1";
 
   src = fetchFromGitHub {
     owner = "sitespeedio";
     repo = "sitespeed.io";
     tag = "v${version}";
-    hash = "sha256-0bXkVqCen0kUHP8YeFkpdxTd+4Hx6YMZVTjwgWWg6nQ=";
+    hash = "sha256-7aqZ63q+17MmUjHwh5Z9yqvwRq/Av+UOswIlSA2V14E=";
   };
-
-  postPatch = ''
-    ln -s npm-shrinkwrap.json package-lock.json
-  '';
 
   # Don't try to download the browser drivers
   CHROMEDRIVER_SKIP_DOWNLOAD = true;
@@ -50,7 +46,7 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
   npmInstallFlags = [ "--omit=dev" ];
-  npmDepsHash = "sha256-ZWjlueRZkH5lsalUY/xoOO/22P9Ta5CnmK0UKjapyU8=";
+  npmDepsHash = "sha256-2v/3Ygy6pAyfoQKcbJphIExcU46xc9c6+yXP2JbX11Y=";
 
   postInstall = ''
     mv $out/bin/sitespeed{.,-}io

@@ -7,7 +7,6 @@
   sip,
   pyqt-builder,
   qt6Packages,
-  pythonOlder,
   pyqt6,
   python,
   mesa,
@@ -15,15 +14,13 @@
 
 buildPythonPackage rec {
   pname = "pyqt6-webengine";
-  version = "6.8.0";
+  version = "6.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
-    pname = "PyQt6_WebEngine";
+    pname = "pyqt6_webengine";
     inherit version;
-    hash = "sha256-ZARepiK2pBiCwrGPVa6XFLhmCs/walTpEOtygiwvP/I=";
+    hash = "sha256-auU347vaBrjgZTXkhSKX4Lw7AFQ8R5KVQfzJsRmBqiU=";
   };
 
   patches = [

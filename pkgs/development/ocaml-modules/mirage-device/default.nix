@@ -3,23 +3,21 @@
   buildDunePackage,
   fetchurl,
   fmt,
-  ocaml_lwt,
+  lwt,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mirage-device";
   version = "2.0.0";
 
-  useDune2 = true;
-
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-device/releases/download/v${version}/mirage-device-v${version}.tbz";
-    sha256 = "18alxyi6wlxqvb4lajjlbdfkgcajsmklxi9xqmpcz07j51knqa04";
+    url = "https://github.com/mirage/mirage-device/releases/download/v${finalAttrs.version}/mirage-device-v${finalAttrs.version}.tbz";
+    hash = "sha256-BChsZyjygM9uxT3FTmfVUrE3XVtUSkXJ2rhTbqLvVKE=";
   };
 
   propagatedBuildInputs = [
     fmt
-    ocaml_lwt
+    lwt
   ];
 
   meta = {
@@ -28,4 +26,4 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

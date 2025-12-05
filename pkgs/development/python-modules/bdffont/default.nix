@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/TakWolf/bdffont";
-    description = "A library for manipulating Glyph Bitmap Distribution Format (BDF) Fonts";
+    description = "Library for manipulating Glyph Bitmap Distribution Format (BDF) Fonts";
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

@@ -51,6 +51,5 @@ buildPythonPackage rec {
     description = "Python library that makes parsing and manipulating URLs easy";
     homepage = "https://github.com/gruns/furl";
     license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ vanzef ];
   };
 }

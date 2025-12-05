@@ -5,16 +5,18 @@
   nodes.machine =
     { pkgs, lib, ... }:
     {
-      boot.initrd.postDeviceCommands = ''
-        ${pkgs.btrfs-progs}/bin/mkfs.btrfs -f -L aux /dev/vdb
-      '';
-
-      virtualisation.emptyDiskImages = [ 4096 ];
+      virtualisation.emptyDiskImages = [
+        {
+          size = 4096;
+          driveConfig.deviceExtraOpts.serial = "aux";
+        }
+      ];
 
       virtualisation.fileSystems = {
         "/home" = {
-          device = "/dev/disk/by-label/aux";
+          device = "/dev/disk/by-id/virtio-aux";
           fsType = "btrfs";
+          autoFormat = true;
         };
       };
       services.snapper.configs.home.SUBVOLUME = "/home";

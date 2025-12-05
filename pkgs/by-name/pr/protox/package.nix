@@ -6,15 +6,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "protox";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-7vXh4wedBskF9qtAVZn0mevzUoy7rlBCnxqzKU6NXwQ=";
+    hash = "sha256-3Bh+VDSsol2Pz3UVDSxx8KNJbzKParU/OoNcSNgVTJM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-+F4R99YsWUjJukEtAEeH/N/J3YqnhJ/YcATfbPOFjuo=";
+  cargoHash = "sha256-Xcvl8c99M34sNd1R52M9eE2hh4lnbKL7vRHorlcJGss=";
 
   buildFeatures = [ "bin" ];
 
@@ -30,6 +29,6 @@ rustPlatform.buildRustPackage rec {
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

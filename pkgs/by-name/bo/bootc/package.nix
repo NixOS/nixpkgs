@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch2,
   libz,
   zstd,
   pkg-config,
@@ -13,17 +14,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bootc";
-  version = "1.5.0";
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-3/Ngq6ZHPoE9BMychv+Jg0LhtJrY8GPrFYu7lRvX1+k=";
+  version = "1.6.0";
+
+  cargoHash = "sha256-KGwXQ6+/w3uHuPqSADsqJSip+SMdC104dfW7tNxGwnc=";
   doInstallCheck = true;
 
   src = fetchFromGitHub {
     owner = "bootc-dev";
     repo = "bootc";
     rev = "v${version}";
-    hash = "sha256-1u4pBiySYzudFVf4bayQ7FbXf4EjA4v1+AOX9E+tjyA=";
+    hash = "sha256-TztsiC+DwD9yEAmjTuiuOi+Kf8WEYMsOVVnMKpSM3/g=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/bootc-dev/bootc/commit/ff8b1b411270275c49ee512d54b27ed7a2fca112.patch";
+      hash = "sha256-7UKquq6ZargQUDGZk22X9Co92v8e995bL+tuAjvh/7c=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -47,6 +55,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_tar_write"
     "--skip=test_tar_write_tar_layer"
   ];
+
+  cargoBuildFlags = [ "-p bootc" ];
 
   nativeInstallCheckInputs = [
     versionCheckHook

@@ -12,13 +12,13 @@
 
 buildDunePackage rec {
   pname = "terminal";
-  version = "0.4.0";
+  version = "0.5.0";
 
   minimalOCamlVersion = "4.03";
 
   src = fetchurl {
     url = "https://github.com/CraigFe/progress/releases/download/${version}/progress-${version}.tbz";
-    hash = "sha256-i+RJVTN5uy3F6LeYBcgER2kKA9yj6a7pWf7PRtgnj7c=";
+    hash = "sha256-f4fwWXNjkoxFuoWa5aFDD2qjwp4lH/GlPPeG7Q4EWWE=";
   };
 
   propagatedBuildInputs = [

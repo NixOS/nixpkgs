@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "ratarmountcore";
-  version = "1.0.0";
+  version = "1.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "mxmlnkn";
     repo = "ratarmount";
     tag = "v${version}";
-    hash = "sha256-nTKbwZoD7nf3cKFJOR5p6ZRFHsKVeJXboOAhPjvnQAM=";
+    hash = "sha256-8DjmYYTb0BR5KvtSeI2s7VtYdbRSI+QCjhZfDwqnk3M=";
     fetchSubmodules = true;
   };
 
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     fsspec
     writableTmpDirAsHomeHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "ratarmountcore" ];
 

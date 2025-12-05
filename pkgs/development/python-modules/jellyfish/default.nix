@@ -47,7 +47,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jellyfish" ];
 
   meta = {
-    description = "A python library for doing approximate and phonetic matching of strings";
+    description = "Python library for doing approximate and phonetic matching of strings";
     homepage = "https://github.com/jamesturk/jellyfish";
     changelog = "https://github.com/jamesturk/jellyfish/releases/tag/v${version}";
     license = lib.licenses.mit;

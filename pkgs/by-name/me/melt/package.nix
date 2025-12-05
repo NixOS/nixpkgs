@@ -29,6 +29,6 @@ buildGoModule rec {
     homepage = "https://github.com/charmbracelet/melt";
     changelog = "https://github.com/charmbracelet/melt/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ penguwin ];
+    maintainers = [ ];
   };
 }

@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "ov";
-  version = "0.42.1";
+  version = "0.45.1";
 
   src = fetchFromGitHub {
     owner = "noborus";
     repo = "ov";
     tag = "v${version}";
-    hash = "sha256-CGsqH8jaMm8eybRRcr//Wot2rXdDb+8ofIuuV9dWlgo=";
+    hash = "sha256-Ptzlz+9mBKSPmogT4PVnimHw/wsQMQpfPo8MX1AocdM=";
   };
 
-  vendorHash = "sha256-tYWLULiYnVsW+9Hwy1JnMGYDduAlfoW7fgy0H8Zh9FI=";
+  vendorHash = "sha256-iAwlD6G+80Ci9pGANqbcmVjoRto7FMBSSDKsI6lpv/k=";
 
   ldflags = [
     "-s"
@@ -75,7 +75,6 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       farcaller
-      figsoda
     ];
     mainProgram = "ov";
   };

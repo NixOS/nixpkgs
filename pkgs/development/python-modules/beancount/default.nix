@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   bison,
   buildPythonPackage,
   click,
@@ -14,7 +15,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.1.0";
+  version = "3.2.0";
   pname = "beancount";
   pyproject = true;
 
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "beancount";
     repo = "beancount";
     tag = version;
-    hash = "sha256-ogjBW/NGlMmhYlzcx3EWWoVi+OOEv2Wm49tzwMiNb8A=";
+    hash = "sha256-XWTgaBvB4/SONL44afvprZwJUVrkoda5XLGNxad0kec=";
   };
 
   build-system = [
@@ -50,6 +51,12 @@ buildPythonPackage rec {
     # avoid local paths, relative imports wont resolve correctly
     mv beancount tests
   '';
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Cannot run the gpg-agent. If needed, implement as passthru tests.
+    "test_read_encrypted_file"
+    "test_include_encrypted"
+  ];
 
   pythonImportsCheck = [ "beancount" ];
 

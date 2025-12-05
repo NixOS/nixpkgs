@@ -46,12 +46,16 @@ stdenv.mkDerivation rec {
   };
 
   configurePhase = ''
+    runHook preConfigure
+
     # Set up picosat, so we can build 'aigbmc'
     mkdir ../picosat
     ln -s ${picosat}/include/picosat/picosat.h ../picosat/picosat.h
     ln -s ${picosat}/lib/picosat.o             ../picosat/picosat.o
     ln -s ${picosat}/share/picosat.version     ../picosat/VERSION
     ./configure.sh
+
+    runHook postConfigure
   '';
 
   postBuild = ''

@@ -19,12 +19,12 @@
 stdenv.mkDerivation rec {
   pname = "poco";
 
-  version = "1.14.1";
+  version = "1.14.2";
 
   src = fetchFromGitHub {
     owner = "pocoproject";
     repo = "poco";
-    hash = "sha256-acq2eja61sH/QHwMPmiDNns2jvXRTk0se/tHj9XRSiU=";
+    hash = "sha256-koREkrfAHWfpqITN5afiXwZg37Wve2Ftx8sr8t2bSV4=";
     rev = "poco-${version}-release";
   };
 
@@ -112,7 +112,6 @@ stdenv.mkDerivation rec {
     description = "Cross-platform C++ libraries with a network/internet focus";
     license = licenses.boost;
     maintainers = with maintainers; [
-      orivej
       tomodachi94
     ];
     platforms = platforms.unix;

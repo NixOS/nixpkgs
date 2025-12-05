@@ -38,7 +38,7 @@
       description = "MCE error injection tool";
       license = licenses.gpl2Only;
       platforms = platforms.linux;
-      maintainers = [ maintainers.evils ];
+      maintainers = [ ];
     };
   };
 
@@ -71,7 +71,7 @@
       description = "PCIE AER error injection tool";
       license = licenses.gpl2Only;
       platforms = platforms.linux;
-      maintainers = [ maintainers.evils ];
+      maintainers = [ ];
     };
   };
 }

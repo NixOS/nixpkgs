@@ -15,8 +15,7 @@
   libtool,
   libusb1,
   makeDesktopItem,
-  qtbase,
-  wrapQtAppsHook,
+  qt5,
 
   withGui ? true,
   withNonFreePlugins ? false,
@@ -81,7 +80,7 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals withGui [
     imagemagick # to make icons
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ]
   ++ lib.optionals withNonFreePlugins [
     autoPatchelfHook
@@ -96,7 +95,7 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals withGui [
     copyDesktopItems
-    qtbase
+    qt5.qtbase
   ]
   ++ lib.optionals withNonFreePlugins [
     libtool.lib
@@ -106,6 +105,9 @@ stdenv.mkDerivation {
     # The non-free (Debian) packages uses this directory structure so do the same when compiling
     # from source so we can easily merge them.
     "-DCMAKE_INSTALL_LIBDIR=lib/${system}-gnu"
+    # There are many CMakeLists.txt files with various minimum versions. It's much easier to set this
+    # here, instead of substituting those everywhere
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
   ]
   ++ lib.optionals (!withGui) [
     "-DNO_GUI=ON"

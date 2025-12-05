@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "corepaint";
     homepage = "https://gitlab.com/cubocore/coreapps/corepaint";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ dan4ik605743 ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

@@ -33,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "4.9.0";
+  version = "4.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = "anyio";
     tag = version;
-    hash = "sha256-kISaBHDkMOYYU9sdiQAXiq3jp1ehWOYFpvFbuceBWB0=";
+    hash = "sha256-TOXg9J/Z2S5/X7OBgU+J0HZNB3BDluaWTqDiqp3O4ek=";
   };
 
   build-system = [ setuptools-scm ];
@@ -75,11 +75,12 @@ buildPythonPackage rec {
   ]
   ++ optional-dependencies.trio;
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::trio.TrioDeprecationWarning"
-    "-m"
-    "'not network'"
+  pytestFlags = [
+    "-Wignore::trio.TrioDeprecationWarning"
+  ];
+
+  disabledTestMarks = [
+    "network"
   ];
 
   preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -94,6 +95,8 @@ buildPythonPackage rec {
     "test_nonexistent_main_module"
     #  3 second timeout expired
     "test_keyboardinterrupt_during_test"
+    # racy with high thread count, see https://github.com/NixOS/nixpkgs/issues/448125
+    "test_multiple_threads"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # PermissionError: [Errno 1] Operation not permitted: '/dev/console'

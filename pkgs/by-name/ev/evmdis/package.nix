@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "evmdis";
-  version = "unstable-2022-05-09";
+  version = "0-unstable-2022-05-09";
 
   src = fetchFromGitHub {
     owner = "Arachnid";

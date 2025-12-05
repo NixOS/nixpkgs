@@ -12,14 +12,14 @@
 }:
 buildPythonPackage rec {
   pname = "tree-sitter-sql";
-  version = "0.3.8";
+  version = "0.3.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DerekStride";
     repo = "tree-sitter-sql";
     tag = "v${version}";
-    hash = "sha256-8gdbbz187sV8I+PJHubFyyQwGUqvo05Yw1DX7rOK4DI=";
+    hash = "sha256-efeDAUgCwV9UBXbLyZ1a4Rwcvr/+wke8IzkxRUQnddM=";
   };
 
   postUnpack = ''
@@ -51,8 +51,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tree_sitter_sql" ];
 
   meta = {
-    description = "sql grammar for tree-sitter";
+    description = "Sql grammar for tree-sitter";
     homepage = "https://github.com/DerekStride/tree-sitter-sql";
+    changelog = "https://github.com/DerekStride/tree-sitter-sql/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pcboy ];
   };

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromSourcehut,
+  fetchFromGitLab,
   meson,
   ninja,
   pkg-config,
@@ -12,21 +12,24 @@
   libscfg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kanshi";
-  version = "1.7.0";
+  version = "1.8.0";
 
-  src = fetchFromSourcehut {
-    owner = "~emersion";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "emersion";
     repo = "kanshi";
-    rev = "v${version}";
-    sha256 = "sha256-FDt+F5tWHLsMejlExb5yPh0SlWzuUlK9u54Uy+alrzw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-90FnVtiYR8AEAddIQe9sfgQDMO8OqlQ8fNy/nJsbhKs=";
   };
 
   strictDeps = true;
+
   depsBuildBuild = [
     pkg-config
   ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -34,18 +37,14 @@ stdenv.mkDerivation rec {
     scdoc
     wayland-scanner
   ];
+
   buildInputs = [
     wayland
     libvarlink
     libscfg
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-error=maybe-uninitialized"
-  ];
-
-  meta = with lib; {
-    homepage = "https://sr.ht/~emersion/kanshi";
+  meta = {
     description = "Dynamic display configuration tool";
     longDescription = ''
       kanshi allows you to define output profiles that are automatically enabled
@@ -55,12 +54,15 @@ stdenv.mkDerivation rec {
       kanshi can be used on Wayland compositors supporting the
       wlr-output-management protocol.
     '';
-    license = licenses.mit;
+    homepage = "https://gitlab.freedesktop.org/emersion/kanshi";
+    changelog = "https://gitlab.freedesktop.org/emersion/kanshi/-/tags/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
     mainProgram = "kanshi";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       balsoft
       danielbarter
+      aleksana
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ktls-utils";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "ktls-utils";
     rev = "ktls-utils-${version}";
-    hash = "sha256-cGvTuesaAMWVeJFQKdGKLGJJ4OMudOjqxCneViGl4IQ=";
+    hash = "sha256-xBh9iSmTf8YCfahWnJvDx/nvz91NFZ3AiJ2JYs+pMfY=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/oracle/ktls-utils/blob/${src.rev}/NEWS";
     license = licenses.gpl2Only;
     maintainers = [ ];
-    mainProgram = "ktls-utils";
+    mainProgram = "tlshd";
     platforms = platforms.linux;
   };
 }

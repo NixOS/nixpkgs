@@ -3,8 +3,6 @@
   stdenv,
   fetchFromGitLab,
   buildPythonPackage,
-  isPy27,
-  fetchPypi,
   pythonAtLeast,
 
   # build-system
@@ -29,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "ase";
-  version = "3.25.0-unstable-2025-06-24";
+  version = "3.26.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "ase";
     repo = "ase";
-    rev = "4e22dabfbe7ae2329e50260ca1b6f08a83527ac3";
-    hash = "sha256-ehMyVtPxfTxT8T418VyLGnUEyYip4LPTTaGL0va7qgM=";
+    tag = version;
+    hash = "sha256-1738NQPgOqSr2PZu1T2b9bL0V+ZzGk2jcWBhLF21VQs=";
   };
 
   build-system = [ setuptools ];
@@ -79,7 +77,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Atomic Simulation Environment";
-    homepage = "https://wiki.fysik.dtu.dk/ase/";
+    homepage = "https://ase-lib.org/";
+    changelog = "https://ase-lib.org/releasenotes.html";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };

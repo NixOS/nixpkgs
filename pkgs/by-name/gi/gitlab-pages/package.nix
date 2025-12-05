@@ -6,18 +6,23 @@
 
 buildGoModule rec {
   pname = "gitlab-pages";
-  version = "18.2.1";
+  version = "18.6.1";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-pages";
     rev = "v${version}";
-    hash = "sha256-z1Pl3xeaoqeF/9qOVcuCpuciu1r6NQ4UhlLe9gy9+nE=";
+    hash = "sha256-dZEwBTjfHG6tHf4eBOML06yJwLTYC9u1c/8i3KJINh4=";
   };
 
-  vendorHash = "sha256-OubXCpvGtGqegQmdb6R1zw/0DfQ4FdbJGt7qYYRnWnA=";
+  vendorHash = "sha256-AL6V2LPzCGo/7IuY8msip35OScfocp3zO2ZzM8cZfnU=";
   subPackages = [ "." ];
+
+  ldflags = [
+    "-X"
+    "main.VERSION=${version}"
+  ];
 
   meta = {
     description = "Daemon used to serve static websites for GitLab users";

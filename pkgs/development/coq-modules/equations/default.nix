@@ -17,6 +17,7 @@
       case = case: out: { inherit case out; };
     in
     lib.switch coq.coq-version [
+      (case "9.1" "1.3.1+9.1")
       (case "9.0" "1.3.1+9.0")
       (case "8.20" "1.3.1+8.20")
       (case "8.19" "1.3+8.19")
@@ -80,6 +81,8 @@
   release."1.3.1+8.20".sha256 = "sha256-u8LB1KiACM5zVaoL7dSdHYvZgX7pf30VuqtjLLGuTzc=";
   release."1.3.1+9.0".rev = "v1.3.1-9.0";
   release."1.3.1+9.0".sha256 = "sha256-186Z0/wCuGAjIvG1LoYBMPooaC6HmnKWowYXuR0y6bA=";
+  release."1.3.1+9.1".rev = "v1.3.1-9.1";
+  release."1.3.1+9.1".sha256 = "sha256-LtYbAR3jt+JbYcqP+m1n3AZhAWSMIeOZtmdSJwg7L1A=";
 
   mlPlugin = true;
 

@@ -22,5 +22,12 @@ self: super: {
   fetchrepoproject = args: super.fetchrepoproject ({ preferLocalBuild = false; } // args);
   fetchs3 = args: super.fetchs3 ({ preferLocalBuild = false; } // args);
   fetchsvn = args: super.fetchsvn ({ preferLocalBuild = false; } // args);
-  fetchurl = args: super.fetchurl ({ preferLocalBuild = false; } // args);
+  fetchurl =
+    fpArgs:
+    super.fetchurl (
+      super.lib.extends (finalAttrs: args: { preferLocalBuild = args.preferLocalBuild or false; }) (
+        super.lib.toFunction fpArgs
+      )
+    );
+  mkNugetSource = args: super.mkNugetSource ({ preferLocalBuild = false; } // args);
 }

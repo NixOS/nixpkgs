@@ -48,6 +48,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/anthonyharrison/sbom4python";
     license = lib.licenses.asl20;
     mainProgram = "sbom4python";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

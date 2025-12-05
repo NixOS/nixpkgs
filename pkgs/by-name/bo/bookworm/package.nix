@@ -24,7 +24,7 @@
   unar,
   unzip,
   vala,
-  webkitgtk_4_0,
+  # webkitgtk_4_0,
   wrapGAppsHook3,
 }:
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation {
     poppler
     python3
     sqlite
-    webkitgtk_4_0
+    # webkitgtk_4_0
   ];
 
   postPatch = ''
@@ -92,6 +92,8 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
+    # webkitgtk_4_0 was removed
+    broken = true;
     description = "Simple, focused eBook reader";
     mainProgram = "com.github.babluboy.bookworm";
     longDescription = ''

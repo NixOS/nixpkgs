@@ -51,6 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # Switch to girepository-2.0
+    # https://src.fedoraproject.org/rpms/libpeas1/pull-request/3
+    ./girepository-2.0.patch
+
     # Fix build with meson 0.61, can be removed on next update
     # https://gitlab.com/entangle/entangle/-/issues/67
     (fetchpatch {

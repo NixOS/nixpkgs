@@ -18,13 +18,13 @@
 }:
 let
   pname = "v2raya";
-  version = "2.2.6.7";
+  version = "2.2.7.4";
 
   src = fetchFromGitHub {
     owner = "v2rayA";
     repo = "v2rayA";
     tag = "v${version}";
-    hash = "sha256-UnA7+DJEzWekPhNhwNcnJ6Carx6IoExauZRjsfWBERM=";
+    hash = "sha256-Dr9RKVGt5zjUOVwUAXe2m8F29Z64BhyrmuLYGwZMd0A=";
     postFetch = "sed -i -e 's/npmmirror/yarnpkg/g' $out/gui/yarn.lock";
   };
 

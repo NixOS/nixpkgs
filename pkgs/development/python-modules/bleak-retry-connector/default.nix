@@ -9,24 +9,28 @@
   pytestCheckHook,
   pytest-asyncio,
   pytest-cov-stub,
+  pythonOlder,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "bleak-retry-connector";
-  version = "3.9.0";
+  version = "4.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bleak-retry-connector";
     tag = "v${version}";
-    hash = "sha256-weZ44YhbCoDRByzta/tkl1maEuxewS+53jxFRDHK6so=";
+    hash = "sha256-T7mJUj/AF+ZuTiGGFHUT7Ftnz+A0O5nGjj4a75obsuc=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
     bleak
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     bluetooth-adapters
     dbus-fast
   ];
@@ -42,7 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Connector for Bleak Clients that handles transient connection failures";
     homepage = "https://github.com/bluetooth-devices/bleak-retry-connector";
-    changelog = "https://github.com/bluetooth-devices/bleak-retry-connector/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Bluetooth-Devices/bleak-retry-connector/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

@@ -101,7 +101,7 @@ runCommand name { inherit dependencies; } ''
     mkdir -p $out/${dataDhall}
 
     XDG_DATA_HOME=$out/${data} ${dhall-docs}/bin/dhall-docs --output-link $out/docs ${
-      lib.cli.toGNUCommandLineShell { } {
+      lib.cli.toCommandLineShellGNU { } {
         base-import-url = baseImportUrl;
 
         input = documentationRoot;

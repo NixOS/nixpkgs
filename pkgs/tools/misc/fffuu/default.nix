@@ -16,15 +16,15 @@ mkDerivation {
     sha256 = "1qc7p44dqja6qrjbjdc2xn7n9v41j5v59sgjnxjj5k0mxp58y1ch";
   };
 
+  postUnpack = ''
+    sourceRoot="$sourceRoot/haskell_tool"
+  '';
+
   postPatch = ''
-    substituteInPlace haskell_tool/fffuu.cabal \
+    substituteInPlace fffuu.cabal \
       --replace "containers >=0.5 && <0.6" "containers >= 0.6" \
       --replace "optparse-generic >= 1.2.3 && < 1.3" "optparse-generic >= 1.2.3" \
       --replace "split >= 0.2.3 && <= 0.2.4" "split >= 0.2.3"
-  '';
-
-  preCompileBuildDriver = ''
-    cd haskell_tool
   '';
 
   isLibrary = false;

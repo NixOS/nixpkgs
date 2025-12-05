@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-motd";
-  version = "1.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "rust-motd";
     repo = "rust-motd";
     rev = "v${version}";
-    hash = "sha256-pgmAf9izrIun6+EayxSNy9glTUFd0x/uy5r/aijVi4U=";
+    hash = "sha256-8XuOleWJxNKXkFK330e2a4hGTCOx83kMgya2EPojqVQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-TO2YCUmD+K4X7ArAPGCDhTH2W2UG8Ezr+yZjaQJTL0A=";
+  cargoHash = "sha256-el+7lzX28lxclwfq0ulehtZ5+Gv4ISHxPt1DXqwDBzc=";
 
   nativeBuildInputs = [
     pkg-config
@@ -35,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rust-motd/rust-motd";
     changelog = "https://github.com/rust-motd/rust-motd/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ liberodark ];
     mainProgram = "rust-motd";
   };
 }

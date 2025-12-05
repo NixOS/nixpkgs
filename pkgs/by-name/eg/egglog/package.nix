@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-j+3qknmezKqHVxvfmG9oPFtWOzJsimGXYe5PWX694mI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-gWccsWZCOucNP6M6cJqCMF8emwzqLXkaRm/huK4ARTs=";
 
   useNextest = true;
@@ -26,7 +25,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/egraphs-good/egglog";
     license = licenses.mit;
     maintainers = with maintainers; [
-      figsoda
       XBagon
     ];
   };

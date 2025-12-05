@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprutils";
-  version = "0.8.1";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprutils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F2SV9WGqgtRsXIdUrl3sRe0wXlQD+kRRZcSfbepjPJY=";
+    hash = "sha256-XQLlR/QJWiRRWY+ohtOqfe0fDMMPl/UyQCcypfUtZiE=";
   };
 
   nativeBuildInputs = [
@@ -43,5 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     teams = [ lib.teams.hyprland ];
+    maintainers = with lib.maintainers; [ logger ];
   };
 })

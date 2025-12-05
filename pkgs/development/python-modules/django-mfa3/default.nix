@@ -5,21 +5,21 @@
   django,
   setuptools,
   pyotp,
-  fido2_2,
+  fido2,
   qrcode,
   python,
 }:
 
 buildPythonPackage rec {
   pname = "django-mfa3";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xi";
     repo = "django-mfa3";
     tag = version;
-    hash = "sha256-bgIzrSM8KP6uQHvn393NWYw9DODdHLMqKn6pgw3EG/w=";
+    hash = "sha256-J31NiqOysOS6FFDCaCiPAJUBvD0Xu99sIykLxfk0M3U=";
   };
 
   build-system = [ setuptools ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   dependencies = [
     django
     pyotp
-    fido2_2
+    fido2
     qrcode
   ];
 

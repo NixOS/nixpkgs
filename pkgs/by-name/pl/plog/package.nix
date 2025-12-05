@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "plog";
-  version = "1.1.10";
+  version = "1.1.11";
 
   outputs = [
     "out"
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "SergiusTheBest";
     repo = "plog";
     rev = version;
-    hash = "sha256-NZphrg9OB1FTY2ifu76AXeCyGwW2a2BkxMGjZPf4uM8=";
+    hash = "sha256-/H7qNL6aPjmFYk0X1sx4CCSZWrAMQgPo8I9X/P50ln0=";
   };
 
   strictDeps = true;

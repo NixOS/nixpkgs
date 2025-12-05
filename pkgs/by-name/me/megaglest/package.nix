@@ -73,7 +73,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "MegaGlest";
     repo = "megaglest-source";
-    rev = version;
+    tag = version;
     fetchSubmodules = true;
     sha256 = "0fb58a706nic14ss89zrigphvdiwy5s9dwvhscvvgrfvjpahpcws";
   };
@@ -143,6 +143,11 @@ stdenv.mkDerivation {
     "-DBUILD_MEGAGLEST_MODEL_IMPORT_EXPORT_TOOLS=On"
     "-DBUILD_MEGAGLEST_MODEL_VIEWER=On"
   ];
+
+  postPatch = ''
+    substituteInPlace {data/glest_game,.}/CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED( VERSION 2.8.2 )" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   postInstall = ''
     for i in $out/bin/*; do

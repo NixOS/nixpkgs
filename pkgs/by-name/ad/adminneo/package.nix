@@ -3,73 +3,54 @@
   stdenvNoCC,
   fetchFromGitHub,
   php,
-  writeText,
   nix-update-script,
-  theme ? null,
-  plugins ? [ ],
+  installPlugins ? true,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "adminneo";
-  version = "4.17.2";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "adminneo-org";
     repo = "adminneo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-erz/kkaywkuT4k3wg8a48p2pTEqzsr3pHDrtNDtrq2I=";
+    hash = "sha256-x92APmqRbH9XxMJjQASwHAgD0SWTK63MMYwkbiEq7U8=";
   };
 
   nativeBuildInputs = [
     php
   ];
 
-  buildPhase = ''
-    runHook preBuild
-
-    php compile.php
-
-    runHook postBuild
-  '';
+  makeFlags = [
+    "PHP=${php}/bin/php"
+  ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir $out
-    cp export/adminer-${finalAttrs.version}.php $out/adminer.php
-    cp ${./index.php} $out/index.php
-
-    ${lib.optionalString (theme != null) ''
-      cp designs/${theme}/adminer.css $out/adminer.css
-    ''}
-
-    # Copy base plugin
-    mkdir -p $out/plugins
-    cp plugins/plugin.php $out/plugins/plugin.php
-
-    ${lib.optionalString (plugins != [ ]) ''
-      cp plugins/*.php $out/plugins/
-      cp ${writeText "$out/plugins.json" ''
-        ${toString (builtins.toJSON plugins)}
-      ''} $out/plugins.json
-    ''}
-
+    cp compiled/adminneo-${finalAttrs.version}.php $out/adminneo.php
+    # for compatibility
+    ln -s adminneo.php $out/index.php
+  ''
+  + (lib.optionalString installPlugins ''
+    cp -r compiled/adminneo-plugins $out/
+  '')
+  + ''
     runHook postInstall
   '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-    indexPHP = ./index.php;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Database management in a single PHP file (fork of Adminer)";
-    homepage = "https://github.com/adminneo-org/adminneo";
+    homepage = "https://www.adminneo.org/";
     license = with lib.licenses; [
       asl20
       gpl2Only
     ];
     maintainers = with lib.maintainers; [
-      johnrtitor
+      Necoro
     ];
     platforms = lib.platforms.all;
   };

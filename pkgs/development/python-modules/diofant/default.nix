@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "diofant";
-  version = "0.14.0";
+  version = "0.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "diofant";
     repo = "diofant";
     tag = "v${version}";
-    hash = "sha256-+VM5JBj4NRhNwyAVhnsACg5cVyyxJ3IcOKNL1osr67E=";
+    hash = "sha256-uQvAYSURDhuAKcX0WVMk4y2ZXiiq0lPZct/7A5n5t34=";
   };
 
   patches = [
@@ -55,18 +55,20 @@ buildPythonPackage rec {
 
   doCheck = false; # some tests get stuck easily
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-    "-m 'not slow'"
-  ];
-
   nativeCheckInputs = [
     hypothesis
     pexpect
     pytest-cov-stub
     pytest-xdist
     pytestCheckHook
+  ];
+
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
+  ];
+
+  disabledTestMarks = [
+    "slow"
   ];
 
   disabledTests = [
@@ -79,7 +81,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "diofant" ];
 
   meta = with lib; {
-    changelog = "https://diofant.readthedocs.io/en/latest/release/notes-${version}.html";
+    changelog = "https://diofant.readthedocs.io/en/latest/release/notes-${src.tag}.html";
     description = "Python CAS library";
     homepage = "https://github.com/diofant/diofant";
     license = licenses.bsd3;

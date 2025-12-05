@@ -17,7 +17,6 @@
   protobuf,
   pyyaml,
   requests,
-  watchfiles,
 
   # optional-dependencies
   # cgraph
@@ -34,28 +33,39 @@
   aiohttp-cors,
   colorful,
   opencensus,
+  opentelemetry-exporter-prometheus,
+  opentelemetry-proto,
+  opentelemetry-sdk,
   prometheus-client,
   pydantic,
   py-spy,
   smart-open,
   virtualenv,
+  # llm
+  async-timeout,
+  hf-transfer,
+  jsonref,
+  meson,
+  ninja,
+  # nixl,
+  pybind11,
+  typer,
+  vllm,
   # observability
   memray,
-  opentelemetry-api,
-  opentelemetry-sdk,
-  opentelemetry-exporter-otlp,
   # rllib
   dm-tree,
   gymnasium,
   lz4,
-  # ormsgpack,
+  ormsgpack,
   scipy,
-  typer,
-  rich,
   # serve
   fastapi,
   starlette,
   uvicorn,
+  watchfiles,
+  # serve-async-inference
+  celery,
   # serve-grpc
   pyopenssl,
   # tune
@@ -64,7 +74,7 @@
 
 let
   pname = "ray";
-  version = "2.48.0";
+  version = "2.52.1";
 in
 buildPythonPackage rec {
   inherit pname version;
@@ -78,35 +88,28 @@ buildPythonPackage rec {
       platforms = {
         aarch64-darwin = "macosx_12_0_arm64";
         aarch64-linux = "manylinux2014_aarch64";
-        x86_64-darwin = "macosx_12_0_x86_64";
         x86_64-linux = "manylinux2014_x86_64";
       };
       # ./pkgs/development/python-modules/ray/prefetch.sh
       # Results are in ./ray-hashes.nix
       hashes = {
         x86_64-linux = {
-          cp310 = "sha256-ZJ7ZRC3C05E1xZO2zww46DVRcLkmcjZat6PLyVjEJjQ=";
-          cp311 = "sha256-RtS0KlhJLex5yq0tViNEaJpPmagoruqBGgzSzWU1U+8=";
-          cp312 = "sha256-pC7TtkD0tZmj/IBnyD7mBJfA8D0HDXp98Co4j6F6VGs=";
-          cp313 = "sha256-JeS3n8yPhJ1y2xrMTwPzcAjFwLdF32PYowzTVna2VF4=";
+          cp310 = "sha256-s/nmG3mfs8yP1wd6PS62dt3+99tkT2tqK2V8XDIUzxk=";
+          cp311 = "sha256-paPCaNRQYMUM0CmXnsxfHqrsBAsZ+ojdT+npJ9Gf8T4=";
+          cp312 = "sha256-hDwBCK1yu3/Gwjoi4p5gmVRqXqrTrWdceKFG2QgPbsY=";
+          cp313 = "sha256-u+SSx4CjmmS9PQdmytENVM8SIi34jSh+wtjy1S3jfHk=";
         };
         aarch64-linux = {
-          cp310 = "sha256-+CCVC8RNewAMIjNC9cgAycCOf9iVJCARJTiOohHKrRo=";
-          cp311 = "sha256-JKcPQW7AvhS5dfFgBEgFzLSMxrxQ3mMpg+uPCo4WaCs=";
-          cp312 = "sha256-8c8z0mAxb5L3dVgYXxw2/DVQbXbuf9/tn1tw+cS9un8=";
-          cp313 = "sha256-Yi5rzbeNmAQNh76pTmXQu2zMCuG0MpTGvWn1Qr8o4JI=";
-        };
-        x86_64-darwin = {
-          cp310 = "sha256-M72kdTrQrNK1JMkVgInUNIbNRMxZ/pcEZkNbwpaP3i0=";
-          cp311 = "sha256-uUUA/i0X5JH+LpvUo79i3yF+IajyhFAzw1PU0uokD3M=";
-          cp312 = "sha256-Wm9XEm6sndMoYongfpHoewVHkvlpi298yriLYkgWtUI=";
-          cp313 = "sha256-V0K3KlFK/l1g9BMwIAzVCDduFsZQ9pYuYjN6pILWoMY=";
+          cp310 = "sha256-Zb9GH9/k/6ZnxG+UVfh0CyrWwfpHG0YdX1z2t7rxd7U=";
+          cp311 = "sha256-K1fvJyoqCg265tGNcKpUHqtiC0/jtE1QRm06UzwW+dk=";
+          cp312 = "sha256-COuPX9VSkrpr7jY6MkkRNqXlSvVOAH+B4GA5hvvqQaQ=";
+          cp313 = "sha256-44Jq605Dmd4MaIW9i+fOL2KfoAEPABPxGD4HJrPSXkA=";
         };
         aarch64-darwin = {
-          cp310 = "sha256-bKK5zkWtNgy+KZaYL7Imkez+ZVPsj5eiVIKV8PlqrHg=";
-          cp311 = "sha256-S5uSrCljX1Ve80E0fZpj2/ArfZRjRyOa88CeNkvEXPg=";
-          cp312 = "sha256-jeeZ87CJb0jTBtXkoE/GA3oIxJXUX5x5k1NE5Wk+PPg=";
-          cp313 = "sha256-p6bYMNncWui7FW/N6aGtq39O2wBPA5GKck2IXs64Jk0=";
+          cp310 = "sha256-mTGUqL5wVA4PgZhiAxu/GaZEAfvmwxtCBl/TE7pGbTQ=";
+          cp311 = "sha256-9Z47LRoUZqwHePLG+snMtfMBB9d+Pd3R1gFnJI0mhHQ=";
+          cp312 = "sha256-aDFZL+3woSIBb12rS2fYX6PU2zsh9YjRiDS1wDE5bRw=";
+          cp313 = "sha256-tbwpVIq7Cgp66eb/OwzMooJO2vARpDNuFaMnk9V0+/0=";
         };
       };
     in
@@ -132,7 +135,6 @@ buildPythonPackage rec {
     protobuf
     pyyaml
     requests
-    watchfiles
   ];
 
   optional-dependencies = lib.fix (self: {
@@ -148,6 +150,8 @@ buildPythonPackage rec {
       ++ self.observability
       ++ self.rllib
       ++ self.serve
+      ++ self.serve-async-inference
+      ++ self.serve-grpc
       ++ self.train
       ++ self.tune
     );
@@ -167,6 +171,9 @@ buildPythonPackage rec {
       colorful
       grpcio
       opencensus
+      opentelemetry-exporter-prometheus
+      opentelemetry-proto
+      opentelemetry-sdk
       prometheus-client
       pydantic
       py-spy
@@ -174,22 +181,37 @@ buildPythonPackage rec {
       smart-open
       virtualenv
     ];
+    llm = lib.unique (
+      [
+        async-timeout
+        hf-transfer
+        jsonref
+        jsonschema
+        meson
+        ninja
+        # nixl
+        pybind11
+        typer
+        vllm
+      ]
+      ++ self.data
+      ++ self.serve
+      ++ vllm.optional-dependencies.audio
+    );
     observability = [
       memray
-      opentelemetry-api
-      opentelemetry-sdk
-      opentelemetry-exporter-otlp
     ];
-    rllib = [
-      dm-tree
-      gymnasium
-      lz4
-      # ormsgpack
-      pyyaml
-      scipy
-      typer
-      rich
-    ];
+    rllib = lib.unique (
+      [
+        dm-tree
+        gymnasium
+        lz4
+        ormsgpack
+        pyyaml
+        scipy
+      ]
+      ++ self.tune
+    );
     serve = lib.unique (
       [
         fastapi
@@ -200,6 +222,12 @@ buildPythonPackage rec {
       ]
       ++ self.default
     );
+    serve-async-inference = lib.unique (
+      [
+        celery
+      ]
+      ++ self.serve
+    );
     serve-grpc = lib.unique (
       [
         grpcio
@@ -207,13 +235,22 @@ buildPythonPackage rec {
       ]
       ++ self.serve
     );
-    train = self.tune;
+    train = lib.unique (
+      [
+        pydantic
+      ]
+      ++ self.tune
+    );
     tune = [
       fsspec
       pandas
       pyarrow
       requests
       tensorboardx
+
+      # `import ray.tune` fails without pydantic
+      # Reported upstream: https://github.com/ray-project/ray/issues/58280
+      pydantic
     ];
   });
 
@@ -233,7 +270,6 @@ buildPythonPackage rec {
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
-      "x86_64-darwin"
       "x86_64-linux"
     ];
   };

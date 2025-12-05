@@ -11,6 +11,7 @@
   git,
   pkg-config,
   openssl,
+  cmake,
   cacert,
   usage,
   mise,
@@ -21,17 +22,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mise";
-  version = "2025.7.17";
+  version = "2025.11.11";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     rev = "v${version}";
-    hash = "sha256-lyj5ksasgeQhjsYI+LD5UhXQQHjCviphcMdjEW/AQmM=";
+    hash = "sha256-Qvxh3mxT6Eb2T2x83TonlmdBdmor5AqbVadUUG9p1o8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-So6ZYIkwxxh8cYaLGyA1LMoRU00jXda/R/fdYN55oVg=";
+  cargoHash = "sha256-G2cLBPKXkK6LcK2wGIknz9TH2RGndmc4/3oq/QKkw2c=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -61,7 +61,14 @@ rustPlatform.buildRustPackage rec {
       --replace-fail 'cmd!("direnv"' 'cmd!("${lib.getExe direnv}"'
   '';
 
-  nativeCheckInputs = [ cacert ];
+  nativeCheckInputs = [
+    cacert
+    cmake
+    rustPlatform.bindgenHook
+  ];
+
+  # disable warnings as errors for aws-lc-sys in checkPhase
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   checkFlags = [
     # last_modified will always be different in nix
@@ -81,7 +88,7 @@ rustPlatform.buildRustPackage rec {
     installManPage ./man/man1/mise.1
 
     substituteInPlace ./completions/{mise.bash,mise.fish,_mise}  \
-      --replace-fail '-v usage' '-v ${lib.getExe usage}' \
+      --replace-fail '-p usage' '-p ${lib.getExe usage}' \
       --replace-fail 'usage complete-word' '${lib.getExe usage} complete-word'
 
     installShellCompletion \
@@ -112,10 +119,9 @@ rustPlatform.buildRustPackage rec {
           ''
             export HOME=$(mktemp -d)
 
-            spec="$(mise usage)"
             for shl in bash fish zsh; do
               echo "testing $shl"
-              usage complete-word --shell $shl --spec "$spec"
+              usage complete-word --shell $shl --file <(mise usage)
             done
 
             touch $out

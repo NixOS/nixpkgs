@@ -5,7 +5,7 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "duti";
   version = "1.5.5pre";
   src = fetchFromGitHub {
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
       a Microsoft Word document has a UTI of com.microsoft.word.doc. Using duti, the
       user can change which application acts as the default handler for a given UTI.
     '';
+    mainProgram = "duti";
     maintainers = with maintainers; [
-      matthewbauer
       n-hass
     ];
     platforms = platforms.darwin;

@@ -34,7 +34,10 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "SSLv3/TLS network protocol analyzer";
     homepage = "https://ssldump.sourceforge.net";
-    license = "BSD-style";
+    license = with lib.licenses; [
+      bsdOriginal
+      bsdOriginalShortened
+    ];
     maintainers = with maintainers; [ aycanirican ];
     platforms = platforms.unix;
     mainProgram = "ssldump";

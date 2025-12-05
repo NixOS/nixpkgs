@@ -11,13 +11,15 @@ in
       services.postfix = {
         enable = true;
         enableSubmission = true;
-        tlsTrustedAuthorities = "${certs.ca.cert}";
-        config.smtpd_tls_chain_files = [
-          "${certs.${domain}.key}"
-          "${certs.${domain}.cert}"
-        ];
-        inherit domain;
-        destination = [ domain ];
+        settings.main = {
+          mydomain = domain;
+          destination = domain;
+          smtp_tls_CAfile = "${certs.ca.cert}";
+          smtpd_tls_chain_files = [
+            "${certs.${domain}.key}"
+            "${certs.${domain}.cert}"
+          ];
+        };
         localRecipients = [
           "root"
           "alice"

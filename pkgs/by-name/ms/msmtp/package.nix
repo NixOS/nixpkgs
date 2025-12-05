@@ -31,13 +31,13 @@
 let
   inherit (lib) getBin getExe optionals;
 
-  version = "1.8.30";
+  version = "1.8.32";
 
   src = fetchFromGitHub {
     owner = "marlam";
     repo = "msmtp";
     rev = "msmtp-${version}";
-    hash = "sha256-aM2qId08zvT9LbncCQYHsklbvHVtcZJgr91JTjwpQ/0=";
+    hash = "sha256-ofyDtP7KgTKX/O1O4g3OcDwgihDveAiJ5s5GQtSqf28=";
   };
 
   meta = with lib; {

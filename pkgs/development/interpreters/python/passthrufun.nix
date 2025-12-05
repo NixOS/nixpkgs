@@ -23,6 +23,7 @@
   pythonOnHostForHost,
   pythonOnTargetForTarget,
   pythonAttr ? null,
+  pythonABITags ? [ "none" ],
   self, # is pythonOnHostForTarget
 }:
 let
@@ -141,6 +142,7 @@ rec {
   pythonOlder = lib.versionOlder pythonVersion;
   inherit hasDistutilsCxxPatch;
   inherit pythonOnBuildForHost;
+  inherit pythonABITags;
 
   tests = callPackage ./tests.nix {
     python = self;

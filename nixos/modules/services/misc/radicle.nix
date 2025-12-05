@@ -199,7 +199,7 @@ in
         };
       settings = lib.mkOption {
         description = ''
-          See https://app.radicle.xyz/nodes/seed.radicle.garden/rad:z3gqcJUoA1n9HaHKufZs5FCSGazv5/tree/radicle/src/node/config.rs#L275
+          See <https://app.radicle.xyz/nodes/seed.radicle.garden/rad:z3gqcJUoA1n9HaHKufZs5FCSGazv5/tree/radicle/src/node/config.rs#L275>
         '';
         default = { };
         example = lib.literalExpression ''
@@ -226,6 +226,16 @@ in
           type = lib.types.port;
           default = 8080;
           description = "The port on which `radicle-httpd` listens.";
+        };
+        aliases = lib.mkOption {
+          type = lib.types.attrsOf lib.types.str;
+          description = "Alias and RID pairs to shorten git clone commands for repositories.";
+          default = { };
+          example = lib.literalExpression ''
+            {
+              heartwood = "rad:z3gqcJUoA1n9HaHKufZs5FCSGazv5";
+            }
+          '';
         };
         nginx = lib.mkOption {
           # Type of a single virtual host, or null.
@@ -342,7 +352,20 @@ in
                 description = "Radicle HTTP gateway to radicle-node";
                 documentation = [ "man:radicle-httpd(1)" ];
                 serviceConfig = {
-                  ExecStart = "${lib.getExe' cfg.httpd.package "radicle-httpd"} --listen ${cfg.httpd.listenAddress}:${toString cfg.httpd.listenPort} ${lib.escapeShellArgs cfg.httpd.extraArgs}";
+                  ExecStart = lib.escapeShellArgs (
+                    [
+                      (lib.getExe' cfg.httpd.package "radicle-httpd")
+                      "--listen=${cfg.httpd.listenAddress}:${toString cfg.httpd.listenPort}"
+                    ]
+                    ++ lib.flatten (
+                      lib.mapAttrsToList (alias: rid: [
+                        "--alias"
+                        alias
+                        rid
+                      ]) cfg.httpd.aliases
+                    )
+                    ++ cfg.httpd.extraArgs
+                  );
                   Restart = lib.mkDefault "on-failure";
                   RestartSec = "10";
                   SocketBindAllow = [ "tcp:${toString cfg.httpd.listenPort}" ];
