@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "papilo";
-  version = "2.4.4";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "papilo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VHOwr3uIhurab1zI9FeecBXZIp1ee2pk8fhVak6H0+A=";
+    hash = "sha256-oxuXv/xWQiApxrrVdH3aEUOp40Em6kCz/DJXXpCxdzs=";
   };
 
   # skip SEGFAULT tests
