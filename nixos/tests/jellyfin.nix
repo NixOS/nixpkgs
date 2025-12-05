@@ -42,6 +42,23 @@
       environment.systemPackages = with pkgs; [ ffmpeg ];
       virtualisation.diskSize = 3 * 1024;
     };
+
+    machineWithForceConfig = {
+      services.jellyfin = {
+        enable = true;
+        forceEncodingConfig = true;
+        hardwareAcceleration = {
+          enable = true;
+          type = "vaapi";
+          devices = [ "/dev/dri/renderD128" ];
+        };
+        transcoding = {
+          threadCount = 2;
+        };
+      };
+      environment.systemPackages = with pkgs; [ ffmpeg ];
+      virtualisation.diskSize = 3 * 1024;
+    };
   };
 
   # Documentation of the Jellyfin API: https://api.jellyfin.org/
@@ -77,6 +94,29 @@
           # Check device access
           machineWithTranscoding.succeed("systemctl show jellyfin.service --property=DeviceAllow | grep '/dev/dri/renderD128 rw'")
 
+      # Test forceEncodingConfig backup functionality
+      with subtest("Force encoding config creates backup"):
+          machineWithForceConfig.wait_for_unit("jellyfin.service")
+          machineWithForceConfig.wait_for_open_port(8096)
+          machineWithForceConfig.wait_until_succeeds("journalctl --since -1m --unit jellyfin --grep 'Startup complete'")
+
+          # Verify encoding.xml exists
+          machineWithForceConfig.succeed("test -f /var/lib/jellyfin/config/encoding.xml")
+
+          # Create a marker in the current encoding.xml to verify backup works
+          machineWithForceConfig.succeed("echo '<!-- MARKER -->' >> /var/lib/jellyfin/config/encoding.xml")
+
+          # Restart the service to trigger the backup
+          machineWithForceConfig.succeed("systemctl restart jellyfin.service")
+          machineWithForceConfig.wait_for_unit("jellyfin.service")
+          machineWithForceConfig.wait_for_open_port(8096)
+
+          # Verify backup was created with the marker
+          machineWithForceConfig.succeed("grep -q 'MARKER' /var/lib/jellyfin/config/encoding.xml.backup")
+
+          # Verify the new encoding.xml does not have the marker (was overwritten)
+          machineWithForceConfig.fail("grep -q 'MARKER' /var/lib/jellyfin/config/encoding.xml")
+
       auth_header = 'MediaBrowser Client="NixOS Integration Tests", DeviceId="1337", Device="Apple II", Version="20.09"'
 
 
@@ -94,6 +134,7 @@
       with subtest("Dashboard configuration verification"):
           # Complete setup and get admin token
           machineWithTranscoding.wait_until_succeeds(api_get("/Startup/Configuration"))
+          machineWithTranscoding.succeed(api_get("/Startup/FirstUser"))
           machineWithTranscoding.succeed(api_post("/Startup/Complete"))
 
           auth_result = json.loads(machineWithTranscoding.succeed(

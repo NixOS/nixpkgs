@@ -122,6 +122,28 @@ in
         };
       };
 
+      forceEncodingConfig = mkOption {
+        type = bool;
+        default = false;
+        description = ''
+          Whether to overwrite Jellyfin's `encoding.xml` configuration file on each service start.
+
+          When enabled, the encoding configuration specified in {option}`services.jellyfin.transcoding`
+          and {option}`services.jellyfin.hardwareAcceleration` will be applied on every service restart.
+          A backup of the existing `encoding.xml` will be created at `encoding.xml.backup` before overwriting.
+
+          ::: {.warning}
+          Enabling this option means that any changes made to transcoding settings through
+          Jellyfin's web dashboard will be lost on the next service restart. The NixOS configuration
+          becomes the single source of truth for encoding settings.
+          :::
+
+          When disabled (the default), the encoding configuration is only written if no `encoding.xml`
+          exists yet. This allows settings to be changed through Jellyfin's web dashboard and persist
+          across restarts, but means the NixOS configuration options will be ignored after the initial setup.
+        '';
+      };
+
       transcoding = {
         maxConcurrentStreams = mkOption {
           type = nullOr (lib.types.ints.positive);
@@ -362,7 +384,29 @@ in
           WorkingDirectory = cfg.dataDir;
           ExecStart = "${getExe cfg.package} --datadir '${cfg.dataDir}' --configdir '${cfg.configDir}' --cachedir '${cfg.cacheDir}' --logdir '${cfg.logDir}'";
           ExecStartPre = lib.optionals cfg.hardwareAcceleration.enable [
-            "${pkgs.coreutils}/bin/cp /etc/jellyfin/encoding.xml ${cfg.configDir}/encoding.xml"
+            (
+              let
+                copyEncodingConfig =
+                  if cfg.forceEncodingConfig then
+                    # Create a backup of the existing encoding.xml (if it exists) before overwriting
+                    pkgs.writeShellScript "jellyfin-copy-encoding-config" ''
+                      if [ -f "${cfg.configDir}/encoding.xml" ]; then
+                        ${pkgs.coreutils}/bin/cp "${cfg.configDir}/encoding.xml" "${cfg.configDir}/encoding.xml.backup"
+                      fi
+                      ${pkgs.coreutils}/bin/cp /etc/jellyfin/encoding.xml "${cfg.configDir}/encoding.xml"
+                      ${pkgs.coreutils}/bin/chown ${cfg.user}:${cfg.group} "${cfg.configDir}/encoding.xml"
+                    ''
+                  else
+                    # Only copy if encoding.xml does not already exist
+                    pkgs.writeShellScript "jellyfin-copy-encoding-config" ''
+                      if [ ! -f "${cfg.configDir}/encoding.xml" ]; then
+                        ${pkgs.coreutils}/bin/cp /etc/jellyfin/encoding.xml "${cfg.configDir}/encoding.xml"
+                        ${pkgs.coreutils}/bin/chown ${cfg.user}:${cfg.group} "${cfg.configDir}/encoding.xml"
+                      fi
+                    '';
+              in
+              "+${copyEncodingConfig}"
+            )
           ];
           Restart = "on-failure";
           TimeoutSec = 15;
