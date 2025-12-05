@@ -17,7 +17,7 @@ let
     ;
 in
 {
-  meta.maintainers = with lib.maintainers; [ felbinger ];
+  meta.maintainers = with lib.teams; [ secshell ];
 
   options.services.part-db = {
     enable = mkEnableOption "PartDB";
