@@ -9,7 +9,7 @@
   openjdk17_headless,
 }:
 let
-  version = "2201.10.3";
+  version = "2201.13.1";
   codeName = "swan-lake";
   openjdk = openjdk17_headless;
 in
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   src = fetchzip {
     url = "https://dist.ballerina.io/downloads/${version}/ballerina-${version}-${codeName}.zip";
-    hash = "sha256-JVwxWRiOQaUZBkvxoLhKvktyQYnBtbCBZXZa6g6hoRQ=";
+    hash = "sha256-WSiWE5AZ8Bkh1qvKJIPC4jIpGWRUchBPA+/pRCMEzCI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
