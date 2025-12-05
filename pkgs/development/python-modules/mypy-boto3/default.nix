@@ -1033,8 +1033,8 @@ in
       "sha256-BojorzQHOokGEYaY38eUKmo4lggBGdcplQw9ZO26p9s=";
 
   mypy-boto3-pinpoint-email =
-    buildMypyBoto3Package "pinpoint-email" "1.41.0"
-      "sha256-3uG2a+3/fffBVSntP6o2HxohJgSnaxhyEJ5tNGcDeXc=";
+    buildMypyBoto3Package "pinpoint-email" "1.42.3"
+      "sha256-AcDdmMa0wduyJgWbOjfLcyq5v44Oj8WktWB7PL4Pjso=";
 
   mypy-boto3-pinpoint-sms-voice =
     buildMypyBoto3Package "pinpoint-sms-voice" "1.41.0"
