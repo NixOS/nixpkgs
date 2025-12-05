@@ -17475,6 +17475,11 @@
     github = "mohe2015";
     githubId = 13287984;
   };
+  moinakb001 = {
+    name = "Moinak Bhattacharyya";
+    github = "moinakb001";
+    githubId = 3363259;
+  };
   momeemt = {
     name = "Mutsuha Asada";
     email = "me@momee.mt";
