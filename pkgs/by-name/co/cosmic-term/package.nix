@@ -27,6 +27,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-gLPNX9CEortxDPM9+QYiHlCTPINnoYL1P90HWVPcezY=";
 
+  postPatch = ''
+    substituteInPlace $cargoDepsCopy/cosmic-files-*/src/operation/mod.rs \
+      --replace-fail 'return OperationError::from_msg("Restoring from trash is not supported on macos");' \
+                     'return Err(OperationError::from_msg("Restoring from trash is not supported on macos"));'
+  '';
+
   nativeBuildInputs = [
     just
     pkg-config
@@ -36,11 +42,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     fontconfig
     freetype
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libinput
   ];
 
   dontUseJustBuild = true;
   dontUseJustCheck = true;
+
+  # Default features include wayland, dbus and secret-service,
+  # which we don't want on darwin.
+  buildNoDefaultFeatures = stdenv.hostPlatform.isDarwin;
+  buildFeatures = lib.optionals stdenv.hostPlatform.isDarwin [
+    "wgpu"
+  ];
 
   justFlags = [
     "--set"
@@ -75,7 +90,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Terminal for the COSMIC Desktop Environment";
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.cosmic ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     mainProgram = "cosmic-term";
   };
 })
