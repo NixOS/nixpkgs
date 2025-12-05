@@ -194,8 +194,8 @@ in
       "sha256-ISo7In03FFfx4u7qzLR9u+9XuzmLW7VLYYs1WmMT5BI=";
 
   mypy-boto3-chime-sdk-media-pipelines =
-    buildMypyBoto3Package "chime-sdk-media-pipelines" "1.41.0"
-      "sha256-SLBcjUEwy1rD0UreeyXZHuLZFnWU7Zvs3ff7TmZyZBk=";
+    buildMypyBoto3Package "chime-sdk-media-pipelines" "1.42.3"
+      "sha256-7Azzr1VUhy9D+75EwPDUs0rAsGIGetAvWAyLRywc+6M=";
 
   mypy-boto3-chime-sdk-meetings =
     buildMypyBoto3Package "chime-sdk-meetings" "1.41.0"
