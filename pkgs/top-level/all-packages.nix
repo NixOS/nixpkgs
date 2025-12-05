@@ -10368,10 +10368,6 @@ with pkgs;
     gruppled-white-lite-cursors
     ;
 
-  gruvbox-dark-icons-gtk = callPackage ../data/icons/gruvbox-dark-icons-gtk {
-    inherit (plasma5Packages) breeze-icons;
-  };
-
   iosevka-comfy = recurseIntoAttrs (callPackages ../data/fonts/iosevka/comfy.nix { });
 
   /**
