@@ -1,0 +1,102 @@
+{
+  "cpptrace": {
+    "owner": "jeremy-rifkin",
+    "repo": "cpptrace",
+    "rev": "v1.0.3"
+  },
+  "fmt": {
+    "owner": "fmtlib",
+    "repo": "fmt",
+    "rev": "12.1.0"
+  },
+  "gtest": {
+    "owner": "google",
+    "repo": "googletest",
+    "rev": "v1.17.0"
+  },
+  "jemalloc": {
+    "owner": "facebook",
+    "repo": "jemalloc",
+    "rev": "5.3.0"
+  },
+  "jsoncons": {
+    "owner": "danielaparker",
+    "repo": "jsoncons",
+    "rev": "v1.4.3"
+  },
+  "libevent": {
+    "owner": "libevent",
+    "repo": "libevent",
+    "rev": "release-2.1.12-stable"
+  },
+  "lua": {
+    "owner": "RocksLabs",
+    "repo": "lua",
+    "rev": "f458c3d797db31155fa0c156d5301716df48cb8c"
+  },
+  "luajit": {
+    "owner": "RocksLabs",
+    "repo": "LuaJIT",
+    "rev": "c0a8e68325ec261a77bde1c8eabad398168ffe74"
+  },
+  "lz4": {
+    "owner": "lz4",
+    "repo": "lz4",
+    "rev": "v1.10.0"
+  },
+  "pegtl": {
+    "owner": "taocpp",
+    "repo": "PEGTL",
+    "rev": "3.2.8"
+  },
+  "rangev3": {
+    "owner": "ericniebler",
+    "repo": "range-v3",
+    "rev": "0.12.0"
+  },
+  "rocksdb": {
+    "owner": "facebook",
+    "repo": "rocksdb",
+    "rev": "v10.6.2"
+  },
+  "snappy": {
+    "owner": "RocksLabs",
+    "repo": "snappy",
+    "rev": "1.2.2-rtti"
+  },
+  "span": {
+    "owner": "martinmoene",
+    "repo": "span-lite",
+    "rev": "v0.11.0"
+  },
+  "spdlog": {
+    "owner": "gabime",
+    "repo": "spdlog",
+    "rev": "v1.16.0"
+  },
+  "tbb": {
+    "owner": "uxlfoundation",
+    "repo": "oneTBB",
+    "rev": "v2022.3.0"
+  },
+  "trie": {
+    "owner": "Tessil",
+    "repo": "hat-trie",
+    "rev": "906e6abd1e7063f1dacd3a6b270aa654b525eb0a"
+  },
+  "xxhash": {
+    "owner": "Cyan4973",
+    "repo": "xxHash",
+    "rev": "v0.8.3"
+  },
+  "zlib": {
+    "owner": "zlib-ng",
+    "repo": "zlib-ng",
+    "rev": "2.2.4"
+  },
+  "zstd": {
+    "owner": "facebook",
+    "repo": "zstd",
+    "rev": "v1.5.7"
+  }
+}
