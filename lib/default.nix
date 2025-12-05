@@ -392,6 +392,7 @@ let
         makeOverridable
         callPackageWith
         callPackagesWith
+        makeCallPackageWithArgSelectors
         extendDerivation
         hydraJob
         makeScope
