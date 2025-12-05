@@ -188,55 +188,60 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    "-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON"
-    "-DARROW_BUILD_SHARED=${if enableShared then "ON" else "OFF"}"
-    "-DARROW_BUILD_STATIC=${if enableShared then "OFF" else "ON"}"
-    "-DARROW_BUILD_TESTS=${if enableShared then "ON" else "OFF"}"
-    "-DARROW_BUILD_INTEGRATION=ON"
-    "-DARROW_BUILD_UTILITIES=ON"
-    "-DARROW_EXTRA_ERROR_CONTEXT=ON"
-    "-DARROW_VERBOSE_THIRDPARTY_BUILD=ON"
-    "-DARROW_DEPENDENCY_SOURCE=SYSTEM"
-    "-Dxsimd_SOURCE=AUTO"
-    "-DARROW_DEPENDENCY_USE_SHARED=${if enableShared then "ON" else "OFF"}"
-    "-DARROW_COMPUTE=ON"
-    "-DARROW_CSV=ON"
-    "-DARROW_DATASET=ON"
-    "-DARROW_FILESYSTEM=ON"
-    "-DARROW_FLIGHT_SQL=${if enableFlight then "ON" else "OFF"}"
-    "-DARROW_HDFS=ON"
-    "-DARROW_IPC=ON"
-    "-DARROW_JEMALLOC=${if enableJemalloc then "ON" else "OFF"}"
-    "-DARROW_JSON=ON"
-    "-DARROW_USE_GLOG=ON"
-    "-DARROW_WITH_BACKTRACE=ON"
-    "-DARROW_WITH_BROTLI=ON"
-    "-DARROW_WITH_BZ2=ON"
-    "-DARROW_WITH_LZ4=ON"
-    "-DARROW_WITH_NLOHMANN_JSON=ON"
-    "-DARROW_WITH_SNAPPY=ON"
-    "-DARROW_WITH_UTF8PROC=ON"
-    "-DARROW_WITH_ZLIB=ON"
-    "-DARROW_WITH_ZSTD=ON"
-    "-DARROW_MIMALLOC=ON"
-    "-DARROW_SUBSTRAIT=ON"
-    "-DARROW_FLIGHT=${if enableFlight then "ON" else "OFF"}"
-    "-DARROW_FLIGHT_TESTING=${if enableFlight then "ON" else "OFF"}"
-    "-DARROW_S3=${if enableS3 then "ON" else "OFF"}"
-    "-DARROW_GCS=${if enableGcs then "ON" else "OFF"}"
-    "-DARROW_ORC=ON"
+    (lib.cmakeBool "CMAKE_FIND_PACKAGE_PREFER_CONFIG" true)
+    (lib.cmakeBool "ARROW_BUILD_SHARED" enableShared)
+    (lib.cmakeBool "ARROW_BUILD_STATIC" (!enableShared))
+    (lib.cmakeBool "ARROW_BUILD_TESTS" enableShared)
+    (lib.cmakeBool "ARROW_BUILD_INTEGRATION" true)
+    (lib.cmakeBool "ARROW_BUILD_UTILITIES" true)
+    (lib.cmakeBool "ARROW_EXTRA_ERROR_CONTEXT" true)
+    (lib.cmakeBool "ARROW_VERBOSE_THIRDPARTY_BUILD" true)
+    (lib.cmakeFeature "ARROW_DEPENDENCY_SOURCE" "SYSTEM")
+    (lib.cmakeFeature "xsimd_SOURCE" "AUTO")
+    (lib.cmakeBool "ARROW_DEPENDENCY_USE_SHARED" enableShared)
+    (lib.cmakeBool "ARROW_COMPUTE" true)
+    (lib.cmakeBool "ARROW_CSV" true)
+    (lib.cmakeBool "ARROW_DATASET" true)
+    (lib.cmakeBool "ARROW_FILESYSTEM" true)
+    (lib.cmakeBool "ARROW_FLIGHT_SQL" enableFlight)
+    (lib.cmakeBool "ARROW_HDFS" true)
+    (lib.cmakeBool "ARROW_IPC" true)
+    (lib.cmakeBool "ARROW_JEMALLOC" enableJemalloc)
+    (lib.cmakeBool "ARROW_JSON" true)
+    (lib.cmakeBool "ARROW_USE_GLOG" true)
+    (lib.cmakeBool "ARROW_WITH_BACKTRACE" true)
+    (lib.cmakeBool "ARROW_WITH_BROTLI" true)
+    (lib.cmakeBool "ARROW_WITH_BZ2" true)
+    (lib.cmakeBool "ARROW_WITH_LZ4" true)
+    (lib.cmakeBool "ARROW_WITH_NLOHMANN_JSON" true)
+    (lib.cmakeBool "ARROW_WITH_SNAPPY" true)
+    (lib.cmakeBool "ARROW_WITH_UTF8PROC" true)
+    (lib.cmakeBool "ARROW_WITH_ZLIB" true)
+    (lib.cmakeBool "ARROW_WITH_ZSTD" true)
+    (lib.cmakeBool "ARROW_MIMALLOC" true)
+    (lib.cmakeBool "ARROW_SUBSTRAIT" true)
+    (lib.cmakeBool "ARROW_FLIGHT" enableFlight)
+    (lib.cmakeBool "ARROW_FLIGHT_TESTING" enableFlight)
+    (lib.cmakeBool "ARROW_S3" enableS3)
+    (lib.cmakeBool "ARROW_GCS" enableGcs)
+    (lib.cmakeBool "ARROW_ORC" true)
     # Parquet options:
-    "-DARROW_PARQUET=ON"
-    "-DPARQUET_BUILD_EXECUTABLES=ON"
-    "-DPARQUET_REQUIRE_ENCRYPTION=ON"
+    (lib.cmakeBool "ARROW_PARQUET" true)
+    (lib.cmakeBool "PARQUET_BUILD_EXECUTABLES" true)
+    (lib.cmakeBool "PARQUET_REQUIRE_ENCRYPTION" true)
   ]
-  ++ lib.optionals (!enableShared) [ "-DARROW_TEST_LINKAGE=static" ]
+  ++ lib.optionals (!enableShared) [
+    (lib.cmakeFeature "ARROW_TEST_LINKAGE" "static")
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DCMAKE_INSTALL_RPATH=@loader_path/../lib" # needed for tools executables
+    # needed for tools executables
+    (lib.cmakeFeature "CMAKE_INSTALL_RPATH" "@loader_path/../lib")
   ]
-  ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [ "-DARROW_USE_SIMD=OFF" ]
+  ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
+    (lib.cmakeBool "ARROW_USE_SIMD" false)
+  ]
   ++ lib.optionals enableS3 [
-    "-DAWSSDK_CORE_HEADER_FILE=${aws-sdk-cpp-arrow}/include/aws/core/Aws.h"
+    (lib.cmakeFeature "AWSSDK_CORE_HEADER_FILE" "${aws-sdk-cpp-arrow}/include/aws/core/Aws.h")
   ];
 
   doInstallCheck = true;
@@ -259,13 +264,6 @@ stdenv.mkDerivation (finalAttrs: {
           "TestMinioServer.Connect"
           "TestS3FS.*"
           "TestS3FSGeneric.*"
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          # TODO: revisit at 12.0.0 or when
-          # https://github.com/apache/arrow/commit/295c6644ca6b67c95a662410b2c7faea0920c989
-          # is available, see
-          # https://github.com/apache/arrow/pull/15288#discussion_r1071244661
-          "ExecPlanExecution.StressSourceSinkStopped"
         ];
     in
     lib.optionalString finalAttrs.doInstallCheck "-${lib.concatStringsSep ":" filteredTests}";
@@ -306,12 +304,13 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postInstallCheck
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-language development platform for in-memory data";
     homepage = "https://arrow.apache.org/docs/cpp/";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    changelog = "https://arrow.apache.org/release/${finalAttrs.version}.html";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       tobim
       veprbl
       cpcloud
