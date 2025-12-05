@@ -20,7 +20,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "morphosis";
-  version = "48.2";
+  version = "49.0";
   pyproject = false;
 
   src = fetchFromGitLab {
@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
     owner = "World";
     repo = "morphosis";
     tag = version;
-    hash = "sha256-wDEhXIt1iup7QxKsmWUjQZGTEZhOuNjpLqzpqs+TPHo=";
+    hash = "sha256-pc0fbkDeE5E+ceMyvhg9x+TrS0Phua6dBvjJYd+MHp8=";
   };
 
   strictDeps = true;
