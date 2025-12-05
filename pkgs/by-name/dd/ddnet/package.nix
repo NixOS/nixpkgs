@@ -130,7 +130,6 @@ stdenv.mkDerivation rec {
       cc-by-sa-30
     ];
     maintainers = with lib.maintainers; [
-      lom
       ncfavier
       Scrumplex
       sirseruju

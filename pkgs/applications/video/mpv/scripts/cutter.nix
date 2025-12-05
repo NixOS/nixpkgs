@@ -43,6 +43,6 @@ buildLua {
     description = "Cut videos and concat them automatically";
     homepage = "https://github.com/rushmj/mpv-video-cutter";
     license = licenses.mit;
-    maintainers = with maintainers; [ lom ];
+    maintainers = [ ];
   };
 }

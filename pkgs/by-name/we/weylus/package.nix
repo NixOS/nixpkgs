@@ -102,6 +102,6 @@ rustPlatform.buildRustPackage {
     mainProgram = "weylus";
     homepage = "https://github.com/H-M-H/Weylus";
     license = with licenses; [ agpl3Only ];
-    maintainers = with maintainers; [ lom ];
+    maintainers = [ ];
   };
 }
