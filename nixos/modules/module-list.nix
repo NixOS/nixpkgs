@@ -651,6 +651,7 @@
   ./services/hardware/buffyboard.nix
   ./services/hardware/ddccontrol.nix
   ./services/hardware/deepcool-digital-linux.nix
+  ./services/hardware/dell-bios-fan-control.nix
   ./services/hardware/display.nix
   ./services/hardware/fancontrol.nix
   ./services/hardware/freefall.nix
