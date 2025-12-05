@@ -58,6 +58,7 @@ extra-packages:
   - Cabal-syntax == 3.12.*
   - Cabal-syntax == 3.14.*
   - Cabal-syntax == 3.16.*              # version required for cabal-install and other packages
+  - crypton-x509-store < 1.6.12         # 2025-11-22: requires unix >= 2.8 which isn't available for GHC < 9.6
   - extensions == 0.1.0.1               # 2025-09-21: needed for Cabal 3.10 (fourmolo/ormolu with ghc 9.8)
   - fourmolu == 0.14.0.0                # 2023-11-13: for ghc-lib-parser 9.6 compat
   - fourmolu == 0.15.0.0                # 2025-09-21: for ghc-lib-parser 9.8 compat

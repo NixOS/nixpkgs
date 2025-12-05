@@ -74,7 +74,7 @@ sub findFiles;
 
 sub findFilesInDir($relName, $target, $ignoreCollisions, $checkCollisionContents, $priority, $ignoreSingleFileOutputs) {
     opendir DIR, "$target" or die "cannot open `$target': $!";
-    my @names = readdir DIR or die;
+    my @names = readdir DIR;
     closedir DIR;
 
     foreach my $name (@names) {
