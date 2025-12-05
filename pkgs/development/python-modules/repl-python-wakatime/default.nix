@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "repl-python-wakatime";
-  version = "0.1.1";
+  version = "0.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wakatime";
     repo = "repl-python-wakatime";
     tag = version;
-    hash = "sha256-1uzW3Q1PE4Gdpo354JewzkR8UREPrAFMXiwOKEMbW3M=";
+    hash = "sha256-U7p0TnGtjxssYAMk6QteeU1Vdq7mrjdDZvwYhyNOIoY=";
   };
 
   build-system = [
