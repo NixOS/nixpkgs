@@ -122,7 +122,7 @@ let
           type = attrs;
           default = { };
           description = "An attrset used to generate dconf keyfile.";
-          example = literalExpression ''
+          example = lib.literalExpression ''
             with lib.gvariant;
             {
               "com/raggesilver/BlackBox" = {
@@ -139,7 +139,7 @@ let
             A list of dconf keys to be lockdown. This doesn't take effect if `lockAll`
             is set.
           '';
-          example = literalExpression ''
+          example = lib.literalExpression ''
             [ "/org/gnome/desktop/background/picture-uri" ]
           '';
         };
