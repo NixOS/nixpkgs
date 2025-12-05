@@ -182,8 +182,8 @@ in
       "sha256-ycyUNWVH6be7P5uutkkjDBBfNKwMdRQxOO27fn6v/gU=";
 
   mypy-boto3-ce =
-    buildMypyBoto3Package "ce" "1.42.1"
-      "sha256-60Mw4tF0KLLr7Yw8NLMx5cj66cLl9Y9ov7GT1bAiWbo=";
+    buildMypyBoto3Package "ce" "1.42.3"
+      "sha256-7/ThXdlFlGzPsvdDnrilv9+wBHvmlJ0qwOJgpF86pLQ=";
 
   mypy-boto3-chime =
     buildMypyBoto3Package "chime" "1.41.0"
