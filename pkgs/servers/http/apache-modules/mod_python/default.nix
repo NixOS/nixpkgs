@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mod_python";
-  version = "3.5.0.4";
+  version = "3.5.0.5";
 
   src = fetchFromGitHub {
     owner = "grisha";
     repo = "mod_python";
     tag = finalAttrs.version;
-    hash = "sha256-bZ0w61+0If70KD3UW24JllY6vD0vQX2C7FssYG1YLPI=";
+    hash = "sha256-7nH0AwSaXoWvGMDgctx+HykC0Q87pU/nNSUammEj/wQ=";
   };
 
   patches = [ ./install.patch ];
