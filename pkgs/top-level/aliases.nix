@@ -511,9 +511,8 @@ mapAliases {
   dnscrypt-proxy2 = throw "'dnscrypt-proxy2' has been renamed to/replaced by 'dnscrypt-proxy'"; # Converted to throw 2025-10-27
   docker-distribution = throw "'docker-distribution' has been renamed to/replaced by 'distribution'"; # Converted to throw 2025-10-27
   docker-sync = throw "'docker-sync' has been removed because it was broken and unmaintained"; # Added 2025-08-26
-  docker_26 = throw "'docker_26' has been removed because it has been unmaintained since February 2025. Use docker_29 or newer instead."; # Added 2025-06-21
-  docker_27 = throw "'docker_27' has been removed because it has been unmaintained since May 2025. Use docker_29 or newer instead."; # Added 2025-06-15
-  docker_28 = throw "'docker_28' has been removed because it has been unmaintained since November 2025. Use docker_29 or newer instead."; # Added 2025-12-05
+  docker_26 = throw "'docker_26' has been removed because it has been unmaintained since February 2025. Use docker_28 or newer instead."; # Added 2025-06-21
+  docker_27 = throw "'docker_27' has been removed because it has been unmaintained since May 2025. Use docker_28 or newer instead."; # Added 2025-06-15
   dockerfile-language-server-nodejs = warnAlias "'dockerfile-language-server-nodejs' has been renamed to 'dockerfile-language-server'" dockerfile-language-server; # Added 2025-09-12
   dolphin-emu-beta = throw "'dolphin-emu-beta' has been renamed to/replaced by 'dolphin-emu'"; # Converted to throw 2025-10-27
   dontRecurseIntoAttrs = warnAlias "dontRecurseIntoAttrs has been removed from pkgs, use `lib.dontRecurseIntoAttrs` instead" lib.dontRecurseIntoAttrs; # Added 2025-10-30
