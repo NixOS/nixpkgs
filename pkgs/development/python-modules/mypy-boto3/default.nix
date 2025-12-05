@@ -997,8 +997,8 @@ in
       "sha256-4+T+yIICXzW6IX90M8y5eOL8jT9r0cJhxeI94SxX6vE=";
 
   mypy-boto3-panorama =
-    buildMypyBoto3Package "panorama" "1.41.0"
-      "sha256-CNN7vovIF4d7nExBmsrED3aOR3O7jtgUmszWHUx1xOI=";
+    buildMypyBoto3Package "panorama" "1.42.3"
+      "sha256-ynBHsnTvNz9G8sM9d88RI31ZMl0UzBgIz3ONEsJ+aHA=";
 
   mypy-boto3-payment-cryptography =
     buildMypyBoto3Package "payment-cryptography" "1.41.0"
