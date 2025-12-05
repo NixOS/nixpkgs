@@ -1197,8 +1197,8 @@ in
       "sha256-+SQRuoyCF3xgXvSbazaRk9dPQeOfGJZYu3vKSn4l44Y=";
 
   mypy-boto3-sagemaker-runtime =
-    buildMypyBoto3Package "sagemaker-runtime" "1.41.0"
-      "sha256-1TLdkhntzL/HGW4J59LmY31Fw2r4erY5mJdwSPQNnos=";
+    buildMypyBoto3Package "sagemaker-runtime" "1.42.3"
+      "sha256-595ADc+EWC7i37ubD46h6HR7VUhSnH8+UkPz6q4jUR0=";
 
   mypy-boto3-savingsplans =
     buildMypyBoto3Package "savingsplans" "1.42.1"
