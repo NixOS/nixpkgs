@@ -8,6 +8,8 @@
 
   anki-quizlet-importer-extended = callPackage ./anki-quizlet-importer-extended { };
 
+  fsrs4anki-helper = callPackage ./fsrs4anki-helper { };
+
   local-audio-yomichan = callPackage ./local-audio-yomichan { };
 
   passfail2 = callPackage ./passfail2 { };
