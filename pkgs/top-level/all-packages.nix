@@ -10377,11 +10377,6 @@ with pkgs;
     kdePackages.callPackage ../data/themes/kwin-decorations/kde-rounded-corners
       { };
 
-  la-capitaine-icon-theme = callPackage ../data/icons/la-capitaine-icon-theme {
-    inherit (plasma5Packages) breeze-icons;
-    inherit (pantheon) elementary-icon-theme;
-  };
-
   inherit (callPackages ../data/fonts/liberation-fonts { })
     liberation_ttf_v1
     liberation_ttf_v2
