@@ -96,7 +96,7 @@ in
           NODE_ENV = cfg.nodeEnv;
           NODE_PATH = "${pkgs.nodePackages.node-uptime}/lib/node_modules/node-uptime/node_modules";
         };
-        preStart = "mkdir -p /var/lib/uptime";
+        serviceConfig.StateDirectory = "uptime";
         serviceConfig.ExecStart = "${pkgs.nodejs}/bin/node ${pkgs.nodePackages.node-uptime}/lib/node_modules/node-uptime/app.js";
       };
 
@@ -113,8 +113,7 @@ in
           NODE_ENV = cfg.nodeEnv;
           NODE_PATH = "${pkgs.nodePackages.node-uptime}/lib/node_modules/node-uptime/node_modules";
         };
-        # Ugh, need to wait for web service to be up
-        preStart = if cfg.enableWebService then "sleep 1s" else "mkdir -p /var/lib/uptime";
+        serviceConfig.StateDirectory = "uptime";
         serviceConfig.ExecStart = "${pkgs.nodejs}/bin/node ${pkgs.nodePackages.node-uptime}/lib/node_modules/node-uptime/monitor.js";
       };
     })

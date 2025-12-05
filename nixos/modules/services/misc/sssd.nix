@@ -172,7 +172,18 @@ in
             "CAP_BLOCK_SUSPEND"
           ];
           Restart = "on-abnormal";
-          StateDirectory = baseNameOf dataDir;
+          StateDirectory = [
+            (baseNameOf dataDir)
+            "${baseNameOf dataDir}/conf.d"
+            "sss/db"
+            "sss/gpo_cache"
+            "sss/mc"
+            "sss/pipes"
+            "sss/pipes/private"
+            "sss/pubconf"
+            "sss/pubconf/krb5.include.d"
+            "sss/secrets"
+          ];
           # We cannot use LoadCredential here because it's not available in ExecStartPre
           EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         };
@@ -181,7 +192,6 @@ in
           StartLimitBurst = 5;
         };
         preStart = ''
-          mkdir -p "${dataDir}/conf.d"
           [ -f ${settingsFile} ] && rm -f ${settingsFile}
           old_umask=$(umask)
           umask 0177
@@ -189,7 +199,6 @@ in
             -o ${settingsFile} \
             -i ${settingsFileUnsubstituted}
           umask $old_umask
-          mkdir -p /var/lib/sss/{pubconf,db,mc,pipes,gpo_cache,secrets} /var/lib/sss/pipes/private /var/lib/sss/pubconf/krb5.include.d
         '';
       };
 
