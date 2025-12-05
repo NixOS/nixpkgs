@@ -5,6 +5,7 @@
   lndir,
   formats,
   runCommand,
+  jq,
 }:
 {
   buildAnkiAddon = lib.extendMkDerivation {
@@ -59,13 +60,24 @@
               # config.json file.
               # See https://addon-docs.ankiweb.net/addon-config.html#config-json
               config ? { },
+              # An alternative to `config` that accepts a path to a JSON add-on
+              # config file. The JSON should be structured like the `config`
+              # attribute above.
+              configFile ? null,
               # Path to a folder to be merged with the add-on "user_files" folder.
               # See https://addon-docs.ankiweb.net/addon-config.html#user-files.
               userFiles ? null,
             }:
             let
               metaConfigFormat = formats.json { };
-              addonMetaConfig = metaConfigFormat.generate "meta.json" { inherit config; };
+              addonMetaConfig =
+                if configFile == null then
+                  metaConfigFormat.generate "meta.json" { inherit config; }
+                else
+                  runCommand "meta.json" {
+                    nativeBuildInputs = [ jq ];
+                    inherit configFile;
+                  } ''jq '{ config: . }' "$configFile" >$out'';
             in
             symlinkJoin {
               pname = "${finalAttrs.pname}-with-config";
