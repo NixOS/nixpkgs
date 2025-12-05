@@ -1253,8 +1253,8 @@ in
       "sha256-gGSjHXCQf4jHTYaJQWRRQfdpr82gGklxWeWBrLx5/Is=";
 
   mypy-boto3-sesv2 =
-    buildMypyBoto3Package "sesv2" "1.41.2"
-      "sha256-Bv3w6fex931Mtv324CUDMvpIUxLzTD8+2MPg4SQUnjs=";
+    buildMypyBoto3Package "sesv2" "1.42.3"
+      "sha256-wthoJwRcmdsLT84jMNrgjJVB8Q6FgEqoBKRjfhkAedk=";
 
   mypy-boto3-shield =
     buildMypyBoto3Package "shield" "1.41.0"
