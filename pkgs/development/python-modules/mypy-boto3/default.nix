@@ -1117,8 +1117,8 @@ in
       "sha256-Jvb5qMnUZhiuDYtByiG2CjaQPsm30iyEEWGG1hKUg48=";
 
   mypy-boto3-resource-groups =
-    buildMypyBoto3Package "resource-groups" "1.41.0"
-      "sha256-iEHUj8swYyb+Ljpa+U4SHwLNWH+XqCbIVDZaDUTqFVg=";
+    buildMypyBoto3Package "resource-groups" "1.42.3"
+      "sha256-e2HQgjT94ETQuVS6ILTxBrVVbCmFb1pRo0FLiSCSJ4Y=";
 
   mypy-boto3-resourcegroupstaggingapi =
     buildMypyBoto3Package "resourcegroupstaggingapi" "1.41.0"
