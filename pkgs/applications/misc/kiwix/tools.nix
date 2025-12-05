@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kiwix-tools";
-  version = "3.7.0-unstable-2024-12-21";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "kiwix";
     repo = "kiwix-tools";
-    rev = "43b00419dd3f33eb644e1d83c2e802fc200b2de7";
-    hash = "sha256-Rctb6ZPTXjgSrLRB5VK4CEqYHuEPB7a+SQaNi47cxv0=";
+    rev = finalAttrs.version;
+    hash = "sha256-fhe3ny4d0RafHiuXKeD1xkIgDZHX8FDwDOLqR0sOZ/o=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://kiwix.org";
     changelog = "https://github.com/kiwix/kiwix-tools/releases/tag/${finalAttrs.version}";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = with maintainers; [ colinsane ];
   };
 })
