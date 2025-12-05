@@ -46,6 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://gitlab.com/virtio-fs/virtiofsd";
+    changelog = "https://gitlab.com/virtio-fs/virtiofsd/-/releases/v${finalAttrs.version}";
     description = "vhost-user virtio-fs device backend written in Rust";
     maintainers = with maintainers; [
       qyliss
