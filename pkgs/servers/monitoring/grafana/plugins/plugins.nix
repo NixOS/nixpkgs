@@ -29,6 +29,7 @@
   marcusolsson-csv-datasource = callPackage ./marcusolsson-csv-datasource { };
   marcusolsson-dynamictext-panel = callPackage ./marcusolsson-dynamictext-panel { };
   marcusolsson-json-datasource = callPackage ./marcusolsson-json-datasource { };
+  netsage-sankey-panel = callPackage ./netsage-sankey-panel { };
   redis-app = callPackage ./redis-app { };
   redis-datasource = callPackage ./redis-datasource { };
   redis-explorer-app = callPackage ./redis-explorer-app { };
