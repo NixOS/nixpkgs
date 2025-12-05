@@ -13,7 +13,7 @@
 
 buildPythonPackage {
   pname = "traittypes";
-  version = "0.2.1-unstable-2020-07-17";
+  version = "0.2.3";
   pyproject = true;
 
   disabled = isPy27;
