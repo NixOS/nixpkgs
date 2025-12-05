@@ -82,6 +82,8 @@ makeScopeWithSplicing' {
 
       maplibre-native-qt = callPackage ../development/libraries/maplibre-native-qt { };
 
+      osgqt = pkgs.osgqt.override { qt6Support = true; };
+
       qca = callPackage ../development/libraries/qca {
         inherit (qt6) qtbase qt5compat;
       };
