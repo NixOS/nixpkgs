@@ -62,28 +62,28 @@ in
       );
     };
 
-    # Not working, no ExecReloadPre
-    # PartOf ?
-    # ReloadPropagatedFrom ?
-    # stopForFirewall = mkOption {
-    #   type = bool;
-    #   default = false;
-    #   description = lib.mdDoc ''
-    #     Whether to stop reaction when reloading the firewall
+     # Not working, no ExecReloadPre
+     # PartOf ?
+     # ReloadPropagatedFrom ?
+     stopForFirewall = mkOption {
+       type = bool;
+       default = false;
+       description = lib.mdDoc ''
+         Whether to stop reaction when reloading the firewall
 
-    #     The presence of a reaction chain in the INPUT table may cause the firewall
-    #     reload to fail.
-    #     One can alternatively cherry-pick the right iptables commands to execute before and after the firewall
-    #     ```nix
-    #     {
-    #       systemd.services.firewall.serviceConfig = {
-    #         ExecStopPre = [ "${pkgs.iptables}/bin/iptables -w -D INPUT -p all -j reaction" ];
-    #         ExecStartPost = [ "${pkgs.iptables}/bin/iptables -w -I INPUT -p all -j reaction" ];
-    #       };
-    #     }
-    #     ```
-    #   '';
-    # };
+         The presence of a reaction chain in the INPUT table may cause the firewall
+         reload to fail.
+         One can alternatively cherry-pick the right iptables commands to execute before and after the firewall
+         ```nix
+         {
+           systemd.services.firewall.serviceConfig = {
+             ExecStopPre = [ "${pkgs.iptables}/bin/iptables -w -D INPUT -p all -j reaction" ];
+             ExecStartPost = [ "${pkgs.iptables}/bin/iptables -w -I INPUT -p all -j reaction" ];
+           };
+         }
+         ```
+       '';
+     };
 
     checkConfig = mkOption {
       type = types.bool;
