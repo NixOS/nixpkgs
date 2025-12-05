@@ -48,8 +48,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pathy" ];
 
   meta = with lib; {
+    # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
+    broken = true;
     # https://github.com/justindujardin/pathy/issues/113
-    broken = pathlib-abc.version != "0.1.1";
     description = "Path interface for local and cloud bucket storage";
     mainProgram = "pathy";
     homepage = "https://github.com/justindujardin/pathy";
