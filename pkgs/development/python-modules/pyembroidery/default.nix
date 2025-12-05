@@ -13,7 +13,7 @@ let
   # but the latest GitHub version stopped at 1.2.39. Further more Ink/Stitch requires the .exceptions
   # module which is absent from the PyPI release.
   # I guess this is *technically* the correct version name, but... yikes.
-  version = "1.5.1-unstable-2024-06-26";
+  version = "1.0.0";
 in
 buildPythonPackage {
   inherit pname version;
