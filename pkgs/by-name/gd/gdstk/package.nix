@@ -1,52 +1,45 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  zlib,
-  qhull,
-  python3Packages,
-  ...
-}:
+{ lib, stdenv, fetchurl, zlib, python3Packages }:
 
-# Since gdstk is primarily a Python package, we use the specific build function.
-with python3Packages;
-
-buildPythonPackage rec {
+python3Packages.buildPythonPackage rec {
   pname = "gdstk";
-  version = "0.9.61"; # Make sure this is the version you intend to package
+  version = "0.9.61";
+  
+  format = "wheel";
 
-  format = "other";
-
-  src = fetchFromGitHub {
-    owner = "heitzmann";
-    repo = "gdstk";
-    rev = "v${version}";
-    # !! IMPORTANT !!
-    # REPLACE THIS HASH. Nix will tell you the correct one if the build fails,
-    # or you can prefetch it.
-    hash = "sha256-soU+6EbyOkHGvVq230twiRzywOskhkkXFr5akBpvgBw=";
+  src = fetchurl {
+    url = "https://files.pythonhosted.org/packages/74/72/cc46f132741e541995ede7fccf9820f105fb2296ab70192bd27de56190f2/gdstk-0.9.61-cp313-cp313-manylinux_2_28_x86_64.whl";
+    sha256 = "+rZ8zdgCnvfrhz+MmPh13CZlpeRa9889KnoPQBgmodM=";
   };
-
-  # Dependencies for the C++ library (which the Python module links against)
+  
+  # 🔑 CRITICAL FIX: Include C runtime dependencies.
   buildInputs = [
-    zlib
-    qhull
+    zlib # For libz.so.1
+    stdenv.cc.cc.lib # <--- ADDED: For libstdc++.so.6
   ];
 
-  # Build tools needed for the C++ parts (CMake)
-  nativeBuildInputs = [ cmake ];
+  propagatedBuildInputs = [
+    python3Packages.numpy
+  ];
 
-  # Dependencies required by the Python module at runtime
-  propagatedBuildInputs = [ numpy ];
+  # 🔑 CRITICAL FIX: Custom phase to manually set LD_LIBRARY_PATH for all C/C++ dependencies.
+  pythonImportsCheckPhase = ''
+    echo "Running custom pythonImportsCheckPhase with explicit LD_LIBRARY_PATH"
+    
+    # Explicitly set the path for libz.so.1 AND libstdc++.so.6
+    export LD_LIBRARY_PATH="${zlib}/lib:${stdenv.cc.cc.lib}/lib:$LD_LIBRARY_PATH"
+    
+    # Execute the import check command manually
+    ${python3Packages.python.interpreter} -c '
+import sys; 
+import importlib; 
+list(map(lambda mod: importlib.import_module(mod), sys.argv[1:]))
+' gdstk
+  '';
 
-  # The meta attributes are crucial for Nixpkgs acceptance
   meta = with lib; {
-    # Short, capitalized sentence, no trailing period.
     description = "C++ library and Python module for creation and manipulation of GDSII and OASIS files";
     homepage = "https://github.com/heitzmann/gdstk";
-    license = licenses.bsl11; # Boost Software License 1.0 (BSL-1.0)
-    # Add your maintainer handle (e.g., maintainers.gonsolo)
+    license = licenses.bsl11;
     maintainers = [ maintainers.gonsolo ];
   };
 }
