@@ -20,7 +20,7 @@
 
 buildPythonPackage {
   pname = "kerbad";
-  version = "0.5.6-unstable-2025-10-07";
+  version = "0.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
