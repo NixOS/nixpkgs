@@ -566,8 +566,8 @@ in
       "sha256-4LBhjln6mCxMSooGEV7mo1Fe7U6Jssxq+6JYwqnFhRs=";
 
   mypy-boto3-glacier =
-    buildMypyBoto3Package "glacier" "1.41.0"
-      "sha256-3Fl97pRM53uuiVn8ueiFIqhok6oNHSwXkRabkIF7eAM=";
+    buildMypyBoto3Package "glacier" "1.42.3"
+      "sha256-06ckDtpv0ZvarXu9RIy8UxLRprY54/NBmrCyc7vQ5ek=";
 
   mypy-boto3-globalaccelerator =
     buildMypyBoto3Package "globalaccelerator" "1.41.0"
