@@ -168,7 +168,7 @@ let
       dontPatch = true;
       dontConfigure = true;
       dontBuild = true;
-      preferLocalBuild = true;
+
     }
   ) cfg.plugins;
 
@@ -201,7 +201,7 @@ let
         dontPatch = true;
         dontConfigure = true;
         dontBuild = true;
-        preferLocalBuild = true;
+
       };
 
   mattermostConfWithoutPlugins = recursiveUpdate {

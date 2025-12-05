@@ -181,7 +181,7 @@ else
       $out/bin/${ghcCommand}-pkg check
     ''
     + postBuild;
-    preferLocalBuild = true;
+
     passthru = {
       inherit (ghc) version meta targetPrefix;
 

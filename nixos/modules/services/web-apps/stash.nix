@@ -328,7 +328,7 @@ let
           {
             inherit srcs;
             nativeBuildInputs = [ pkgs.yq-go ];
-            preferLocalBuild = true;
+
           }
           ''
             mkdir -p $out

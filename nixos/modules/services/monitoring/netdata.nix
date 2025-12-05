@@ -7,7 +7,7 @@
 let
   cfg = config.services.netdata;
 
-  wrappedPlugins = pkgs.runCommand "wrapped-plugins" { preferLocalBuild = true; } ''
+  wrappedPlugins = pkgs.runCommand "wrapped-plugins" { } ''
     mkdir -p $out/libexec/netdata/plugins.d
     ln -s /run/wrappers/bin/apps.plugin $out/libexec/netdata/plugins.d/apps.plugin
     ln -s /run/wrappers/bin/cgroup-network $out/libexec/netdata/plugins.d/cgroup-network

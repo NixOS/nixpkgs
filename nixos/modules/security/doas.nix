@@ -287,7 +287,7 @@ in
               # "root" is allowed to do anything.
               permit nopass keepenv root
             '';
-            preferLocalBuild = true;
+
           }
           # Make sure that the doas.conf file is syntactically valid.
           "${pkgs.buildPackages.doas}/bin/doas -C $src && cp $src $out";

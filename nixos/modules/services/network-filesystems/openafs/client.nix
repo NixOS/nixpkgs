@@ -30,7 +30,7 @@ let
     mkCellServDB cfg.cellName cfg.cellServDB
   );
 
-  afsConfig = pkgs.runCommand "afsconfig" { preferLocalBuild = true; } ''
+  afsConfig = pkgs.runCommand "afsconfig" { } ''
     mkdir -p $out
     echo ${cfg.cellName} > $out/ThisCell
     cat ${cellServDB} ${clientServDB} > $out/CellServDB
@@ -223,7 +223,7 @@ in
 
     environment.etc = {
       clientCellServDB = {
-        source = pkgs.runCommand "CellServDB" { preferLocalBuild = true; } ''
+        source = pkgs.runCommand "CellServDB" { } ''
           cat ${cellServDB} ${clientServDB} > $out
         '';
         target = "openafs/CellServDB";

@@ -20,7 +20,7 @@ let
     stdenv.mkDerivation (finalAttrs: {
       name = "${targetPlatformConfig}-nim-wrapper-${nimUnwrapped.version}";
       inherit (nimUnwrapped) version;
-      preferLocalBuild = true;
+
       strictDeps = true;
 
       nativeBuildInputs = [ makeWrapper ];

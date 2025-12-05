@@ -42,7 +42,6 @@ lib.makeOverridable (
       in
       {
         dontBuild = true;
-        preferLocalBuild = true;
 
         # Prevent `patch` from emitting `.orig` files (that end up in the output)
         patchFlags = [

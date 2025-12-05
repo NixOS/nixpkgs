@@ -31,9 +31,6 @@ stdenv.mkDerivation {
   dontConfigure = true;
   dontBuild = true;
 
-  preferLocalBuild = true;
-  allowSubstitutes = false;
-
   installPhase = ''
     mkdir -p $out
     for i in $(cat $pathsPath); do

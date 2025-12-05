@@ -16,7 +16,7 @@ lib.makeOverridable (
         {
           nativeBuildInputs = [ git ];
           dummy = builtins.currentTime; # impure, do every time
-          preferLocalBuild = true;
+
         }
         ''
           cd ${srcStr}
@@ -40,7 +40,7 @@ lib.makeOverridable (
       runCommand "put-in-nix"
         {
           nativeBuildInputs = [ git ];
-          preferLocalBuild = true;
+
         }
         ''
           mkdir $out

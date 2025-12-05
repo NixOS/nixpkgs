@@ -52,7 +52,7 @@ let
     else
       "";
 
-  scriptDir = pkgs.runCommand "apcupsd-scriptdir" { preferLocalBuild = true; } (
+  scriptDir = pkgs.runCommand "apcupsd-scriptdir" { } (
     ''
       mkdir "$out"
       # Copy SCRIPTDIR from apcupsd package
@@ -75,7 +75,7 @@ let
   wrappedBinaries =
     pkgs.runCommand "apcupsd-wrapped-binaries"
       {
-        preferLocalBuild = true;
+
         nativeBuildInputs = [ pkgs.makeWrapper ];
       }
       ''

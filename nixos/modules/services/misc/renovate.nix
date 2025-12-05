@@ -26,7 +26,7 @@ let
           ];
           value = builtins.toJSON value;
           passAsFile = [ "value" ];
-          preferLocalBuild = true;
+
         }
         ''
           jq . "$valuePath"> $out

@@ -155,9 +155,6 @@ stdenv.mkDerivation rec {
   # Firefox uses "relrhack" to manually process relocations from a fixed offset
   patchelfFlags = [ "--no-clobber-old-sections" ];
 
-  preferLocalBuild = true;
-  allowSubstitutes = false;
-
   desktopItems = [
     (makeDesktopItem {
       name = "mullvad-browser";

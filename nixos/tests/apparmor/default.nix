@@ -82,7 +82,7 @@ in
               "${getExe' pkgs.diffutils "diff"} -u ${
                 pkgs.writeText "expected.rules" (import ./makeExpectedPolicies.nix { inherit pkgs; })
               } ${
-                pkgs.runCommand "actual.rules" { preferLocalBuild = true; } ''
+                pkgs.runCommand "actual.rules" { } ''
                   ${getExe pkgs.gnused} -e 's:^[^ ]* ${builtins.storeDir}/[^,/-]*-\([^/,]*\):\1 \0:' ${
                     pkgs.apparmorRulesFromClosure {
                       name = "ping";

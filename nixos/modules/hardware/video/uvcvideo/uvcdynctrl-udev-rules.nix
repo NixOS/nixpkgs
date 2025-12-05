@@ -32,7 +32,7 @@ runCommand "uvcdynctrl-udev-rules-${version}"
     ];
     dontPatchELF = true;
     dontStrip = true;
-    preferLocalBuild = true;
+
   }
   ''
     mkdir -p "$out/lib/udev"

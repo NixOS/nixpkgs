@@ -92,8 +92,6 @@ stdenv.mkDerivation {
   outputHashMode = "flat";
   outputHash = sha256;
 
-  preferLocalBuild = true;
-
   impureEnvVars = [
     "DOCKER_USER"
     "DOCKER_PASS"

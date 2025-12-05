@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  preferLocalBuild = true;
-
   installPhase = ''
     mkdir -p $out/bin $out/lib/minecraft
     cp -v $src $out/lib/minecraft/server.jar

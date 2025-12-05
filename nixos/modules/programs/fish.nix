@@ -265,8 +265,7 @@ in
                 mkdir -p $out
                 cp * $out/
               '';
-              preferLocalBuild = true;
-              allowSubstitutes = false;
+
             };
             generateCompletions =
               package:

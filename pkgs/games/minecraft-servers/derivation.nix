@@ -16,8 +16,6 @@ stdenv.mkDerivation {
 
   src = fetchurl { inherit url sha1; };
 
-  preferLocalBuild = true;
-
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''

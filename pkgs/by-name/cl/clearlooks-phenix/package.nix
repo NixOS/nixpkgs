@@ -19,8 +19,6 @@ stdenv.mkDerivation rec {
     cp -r . $out/share/themes/Clearlooks-Phenix/
   '';
 
-  preferLocalBuild = true;
-
   meta = with lib; {
     description = "GTK3 port of the Clearlooks theme";
     longDescription = ''

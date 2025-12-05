@@ -33,8 +33,6 @@ let
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}")
     );
 
-    preferLocalBuild = true;
-
     unpackCmd = "dpkg -x $curSrc source";
 
     nativeBuildInputs = [

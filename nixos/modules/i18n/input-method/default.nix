@@ -19,8 +19,7 @@ let
   gtk2_cache =
     pkgs.runCommand "gtk2-immodule.cache"
       {
-        preferLocalBuild = true;
-        allowSubstitutes = false;
+
         buildInputs = [
           cfg.package
         ];
@@ -33,8 +32,7 @@ let
   gtk3_cache =
     pkgs.runCommand "gtk3-immodule.cache"
       {
-        preferLocalBuild = true;
-        allowSubstitutes = false;
+
         buildInputs = [
           cfg.package
         ];

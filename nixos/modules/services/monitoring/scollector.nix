@@ -7,7 +7,7 @@
 let
   cfg = config.services.scollector;
 
-  collectors = pkgs.runCommand "collectors" { preferLocalBuild = true; } ''
+  collectors = pkgs.runCommand "collectors" { } ''
     mkdir -p $out
     ${lib.concatStringsSep "\n" (
       lib.mapAttrsToList (

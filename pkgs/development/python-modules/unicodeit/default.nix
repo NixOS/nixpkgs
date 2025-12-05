@@ -41,7 +41,7 @@ buildPythonPackage rec {
     runCommand "python3-unicodeit-test-entrypoint"
       {
         nativeBuildInputs = [ unicodeit ];
-        preferLocalBuild = true;
+
       }
       ''
         [[ "$(unicodeit "\BbbR")" = "ℝ" ]]

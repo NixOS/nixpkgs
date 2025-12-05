@@ -20,18 +20,13 @@ let
       }) cfg.plugins
     );
   };
-  plugins =
-    pkgs.runCommand "thelounge-plugins"
-      {
-        preferLocalBuild = true;
-      }
-      ''
-        mkdir -p $out/node_modules
-        echo ${escapeShellArg (builtins.toJSON pluginManifest)} >> $out/package.json
-        ${concatMapStringsSep "\n" (pkg: ''
-          ln -s ${pkg}/lib/node_modules/${getName pkg} $out/node_modules/${getName pkg}
-        '') cfg.plugins}
-      '';
+  plugins = pkgs.runCommand "thelounge-plugins" { } ''
+    mkdir -p $out/node_modules
+    echo ${escapeShellArg (builtins.toJSON pluginManifest)} >> $out/package.json
+    ${concatMapStringsSep "\n" (pkg: ''
+      ln -s ${pkg}/lib/node_modules/${getName pkg} $out/node_modules/${getName pkg}
+    '') cfg.plugins}
+  '';
 in
 {
   imports = [

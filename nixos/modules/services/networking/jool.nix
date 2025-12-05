@@ -290,7 +290,7 @@ in
       pkgs.runCommand "jool-validated"
         {
           nativeBuildInputs = [ jool-cli ];
-          preferLocalBuild = true;
+
         }
         (
           lib.concatStrings (lib.mapAttrsToList checkNat64 cfg.nat64 ++ lib.mapAttrsToList checkSiit cfg.siit)

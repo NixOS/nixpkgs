@@ -10,7 +10,7 @@ let
   configFile = pkgs.stdenv.mkDerivation {
     name = "ferm.conf";
     text = cfg.config;
-    preferLocalBuild = true;
+
     buildCommand = ''
       echo -n "$text" > $out
       ${cfg.package}/bin/ferm --noexec $out

@@ -151,7 +151,7 @@ in
     environment.etc = lib.mapAttrs' (
       name: opts:
       lib.nameValuePair "awstats/awstats.${name}.conf" {
-        source = pkgs.runCommand "awstats.${name}.conf" { preferLocalBuild = true; } (
+        source = pkgs.runCommand "awstats.${name}.conf" { } (
           ''
             sed \
           ''

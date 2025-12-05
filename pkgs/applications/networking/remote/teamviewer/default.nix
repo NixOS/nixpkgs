@@ -150,7 +150,6 @@ mkDerivation rec {
 
   dontStrip = true;
   dontWrapQtApps = true;
-  preferLocalBuild = true;
 
   passthru.updateScript = ./update-teamviewer.sh;
 

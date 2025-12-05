@@ -25,8 +25,6 @@ stdenv.mkDerivation {
     substituteInPlace Makefile.am --replace '$(DESTDIR)'/usr $out
   '';
 
-  preferLocalBuild = true;
-
   meta = with lib; {
     description = "Modern desktop theme suite featuring a mostly flat with a minimal use of shadows for depth";
     homepage = "https://snwh.org/paper";

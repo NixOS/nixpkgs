@@ -15,7 +15,7 @@ let
 in
 runCommand "llvm-binutils-${version}"
   {
-    preferLocalBuild = true;
+
     passthru = {
       isLLVM = true;
       inherit targetPrefix;

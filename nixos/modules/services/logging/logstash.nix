@@ -32,7 +32,7 @@ let
       {
         inherit logstashJvmOptionsFile;
         inherit logstashSettingsYml;
-        preferLocalBuild = true;
+
       }
       ''
         mkdir -p $out

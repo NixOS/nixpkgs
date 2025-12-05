@@ -39,8 +39,7 @@ let
     runCommandCC "libvapoursynth-nix-plugins${ext}"
       {
         executable = true;
-        preferLocalBuild = true;
-        allowSubstitutes = false;
+
         src = ''
           char const nixPluginDir[] = "${pluginsEnv}/lib/vapoursynth";
         '';

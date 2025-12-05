@@ -106,7 +106,6 @@ stdenv.mkDerivation {
       ln -s ${unwrapped}/bin/$f $out/bin
     done
   '';
-  preferLocalBuild = true;
 
   inherit (unwrapped) meta passthru;
 }

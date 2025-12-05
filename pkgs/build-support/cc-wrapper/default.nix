@@ -397,8 +397,6 @@ stdenvNoCC.mkDerivation {
   pname = targetPrefix + (if name != "" then name else "${ccName}-wrapper");
   version = optionalString (cc != null) ccVersion;
 
-  preferLocalBuild = true;
-
   outputs = [
     "out"
   ]

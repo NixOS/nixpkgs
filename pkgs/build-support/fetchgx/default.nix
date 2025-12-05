@@ -43,6 +43,5 @@ lib.fetchers.withNormalizedHash { } (
       mv vendor $out
     '';
 
-    preferLocalBuild = true;
   }
 )

@@ -10,9 +10,6 @@ stdenvNoCC.mkDerivation {
   inherit newlib;
   inherit msp430GccSupport;
 
-  preferLocalBuild = true;
-  allowSubstitutes = false;
-
   buildCommand = ''
     mkdir $out
     ${xorg.lndir}/bin/lndir -silent $newlib $out

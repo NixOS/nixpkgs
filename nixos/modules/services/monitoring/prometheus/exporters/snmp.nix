@@ -36,7 +36,7 @@ let
     file:
     pkgs.runCommand "checked-snmp-exporter-config.yml"
       {
-        preferLocalBuild = true;
+
         nativeBuildInputs = [ pkgs.buildPackages.prometheus-snmp-exporter ];
       }
       ''

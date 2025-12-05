@@ -16,7 +16,7 @@ let
       {
         nativeBuildInputs = [ pkgs.buildPackages.kbd ];
         LOADKEYS_KEYMAP_PATH = "${consoleEnv pkgs.kbd}/share/keymaps/**";
-        preferLocalBuild = true;
+
       }
       ''
         loadkeys -b ${lib.optionalString isUnicode "-u"} "${cfg.keyMap}" > $out
@@ -141,7 +141,7 @@ in
       console.keyMap =
         with config.services.xserver;
         lib.mkIf cfg.useXkbConfig (
-          pkgs.runCommand "xkb-console-keymap" { preferLocalBuild = true; } ''
+          pkgs.runCommand "xkb-console-keymap" { } ''
             '${pkgs.buildPackages.ckbcomp}/bin/ckbcomp' \
               ${
                 lib.optionalString (

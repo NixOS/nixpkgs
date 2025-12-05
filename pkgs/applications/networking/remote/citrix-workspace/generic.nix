@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontConfigure = true;
   sourceRoot = ".";
-  preferLocalBuild = true;
+
   passthru.icaroot = "${placeholder "out"}/opt/citrix-icaclient";
 
   nativeBuildInputs = [

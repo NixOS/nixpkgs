@@ -11,8 +11,6 @@
 
 runCommand (radian.name + "-wrapper")
   {
-    preferLocalBuild = true;
-    allowSubstitutes = false;
 
     buildInputs = [
       R

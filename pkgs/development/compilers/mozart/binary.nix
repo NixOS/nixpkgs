@@ -25,8 +25,6 @@ stdenv.mkDerivation {
   pname = "mozart-binary";
   inherit version;
 
-  preferLocalBuild = true;
-
   src =
     binaries.${stdenv.hostPlatform.system}
       or (throw "unsupported system: ${stdenv.hostPlatform.system}");

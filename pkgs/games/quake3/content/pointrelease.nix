@@ -23,8 +23,6 @@ stdenv.mkDerivation {
     cp baseq3/*.pk3 $out/baseq3
   '';
 
-  preferLocalBuild = true;
-
   meta = with lib; {
     description = "Quake 3 Arena point release";
     license = licenses.unfreeRedistributable;

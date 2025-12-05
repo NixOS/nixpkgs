@@ -16,7 +16,7 @@ let
     }:
     runCommand "X11-fonts"
       {
-        preferLocalBuild = true;
+
         nativeBuildInputs = [
           gzip
           xorg.mkfontscale

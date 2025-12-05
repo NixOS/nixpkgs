@@ -337,7 +337,7 @@ stdenv.mkDerivation (self: {
     runCommand "xdg-mime-test"
       {
         nativeBuildInputs = [ self.finalPackage ];
-        preferLocalBuild = true;
+
         xenias = lib.mapAttrsToList (hash: urls: fetchurl { inherit hash urls; }) {
           "sha256-SL95tM1AjOi7vDnCyT10s0tvQvc+ZSZBbkNOYXfbOy0=" = [
             "https://static1.e621.net/data/0e/76/0e7672980d48e48c2d1373eb2505db5a.png"

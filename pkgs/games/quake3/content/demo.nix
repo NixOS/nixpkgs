@@ -23,8 +23,6 @@ stdenv.mkDerivation {
     cp demoq3/*.pk3 $out/baseq3
   '';
 
-  preferLocalBuild = true;
-
   meta = with lib; {
     description = "Demo of Quake 3 Arena, a classic first-person shooter";
     longDescription = ''

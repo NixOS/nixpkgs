@@ -19,7 +19,6 @@ stdenvNoCC.mkDerivation (self: {
 
   dontConfigure = true;
   dontBuild = true;
-  preferLocalBuild = true;
 
   sourceRoot = "${self.src.name}/themes";
   installPhase = ''

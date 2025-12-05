@@ -30,6 +30,6 @@ lib.fetchers.withNormalizedHash { } (
     outputHashMode = "recursive";
 
     inherit url rev;
-    preferLocalBuild = true;
+
   }
 )

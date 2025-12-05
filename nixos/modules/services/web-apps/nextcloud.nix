@@ -52,27 +52,22 @@ let
     };
   };
 
-  webroot =
-    pkgs.runCommand "${overridePackage.name or "nextcloud"}-with-apps"
-      {
-        preferLocalBuild = true;
-      }
-      ''
-        mkdir $out
-        ln -sfv "${overridePackage}"/* "$out"
-        ${lib.concatStrings (
-          lib.mapAttrsToList (
-            name: store:
-            lib.optionalString (store.enabled && store ? linkTarget) ''
-              if [ -e "$out"/${name} ]; then
-                echo "Didn't expect ${name} already in $out!"
-                exit 1
-              fi
-              ln -sfTv ${store.linkTarget} "$out"/${name}
-            ''
-          ) appStores
-        )}
-      '';
+  webroot = pkgs.runCommand "${overridePackage.name or "nextcloud"}-with-apps" { } ''
+    mkdir $out
+    ln -sfv "${overridePackage}"/* "$out"
+    ${lib.concatStrings (
+      lib.mapAttrsToList (
+        name: store:
+        lib.optionalString (store.enabled && store ? linkTarget) ''
+          if [ -e "$out"/${name} ]; then
+            echo "Didn't expect ${name} already in $out!"
+            exit 1
+          fi
+          ln -sfTv ${store.linkTarget} "$out"/${name}
+        ''
+      ) appStores
+    )}
+  '';
 
   inherit (cfg) datadir;
 

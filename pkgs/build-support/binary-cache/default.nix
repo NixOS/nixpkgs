@@ -34,8 +34,6 @@ stdenv.mkDerivation {
 
   exportReferencesGraph.closure = rootPaths;
 
-  preferLocalBuild = true;
-
   nativeBuildInputs = [
     coreutils
     jq

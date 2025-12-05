@@ -92,7 +92,6 @@ rec {
       }
       // (lib.optionalAttrs runLocal {
         preferLocalBuild = true;
-        allowSubstitutes = false;
       })
       // removeAttrs derivationArgs [ "passAsFile" ]
     );
@@ -108,8 +107,8 @@ rec {
       checkPhase ? "",
       meta ? { },
       passthru ? { },
-      allowSubstitutes ? false,
-      preferLocalBuild ? true,
+      allowSubstitutes ? true,
+      preferLocalBuild ? false,
       derivationArgs ? { },
     }:
     assert lib.assertMsg (destination != "" -> (lib.hasPrefix "/" destination && destination != "/")) ''
@@ -343,7 +342,6 @@ rec {
         ;
       executable = true;
       destination = "/bin/${name}";
-      allowSubstitutes = true;
       preferLocalBuild = false;
       text = ''
         #!${runtimeShell}
@@ -400,9 +398,6 @@ rec {
         inherit pname code;
         executable = true;
         passAsFile = [ "code" ];
-        # Pointless to do this on a remote machine.
-        preferLocalBuild = true;
-        allowSubstitutes = false;
         meta = {
           mainProgram = pname;
         };
@@ -580,8 +575,8 @@ rec {
         "${args_.pname}-${args_.version}",
       paths,
       stripPrefix ? "",
-      preferLocalBuild ? true,
-      allowSubstitutes ? false,
+      preferLocalBuild ? false,
+      allowSubstitutes ? true,
       postBuild ? "",
       failOnMissing ? stripPrefix == "",
       ...
@@ -675,8 +670,6 @@ rec {
     in
     runCommand name
       {
-        preferLocalBuild = true;
-        allowSubstitutes = false;
         passthru.entries = entries';
       }
       ''
@@ -1049,8 +1042,6 @@ rec {
             prePatch
             postPatch
             ;
-          preferLocalBuild = true;
-          allowSubstitutes = false;
           phases = "unpackPhase patchPhase installPhase";
           installPhase = "cp -R ./ $out";
         }

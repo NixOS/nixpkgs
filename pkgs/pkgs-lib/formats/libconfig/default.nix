@@ -90,7 +90,6 @@ in
               inherit name;
 
               dontUnpack = true;
-              preferLocalBuild = true;
 
               json = builtins.toJSON value;
               passAsFile = [ "json" ];

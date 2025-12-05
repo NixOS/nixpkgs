@@ -346,33 +346,29 @@ in
 
     ###### wrappers consistency checks
     system.checks = lib.singleton (
-      pkgs.runCommand "ensure-all-wrappers-paths-exist"
-        {
-          preferLocalBuild = true;
-        }
-        ''
-          # make sure we produce output
-          mkdir -p $out
+      pkgs.runCommand "ensure-all-wrappers-paths-exist" { } ''
+        # make sure we produce output
+        mkdir -p $out
 
-          echo -n "Checking that Nix store paths of all wrapped programs exist... "
+        echo -n "Checking that Nix store paths of all wrapped programs exist... "
 
-          declare -A wrappers
-          ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: "wrappers['${n}']='${v.source}'") wrappers)}
+        declare -A wrappers
+        ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: "wrappers['${n}']='${v.source}'") wrappers)}
 
-          for name in "''${!wrappers[@]}"; do
-            path="''${wrappers[$name]}"
-            if [[ "$path" =~ /nix/store ]] && [ ! -e "$path" ]; then
-              test -t 1 && echo -ne '\033[1;31m'
-              echo "FAIL"
-              echo "The path $path does not exist!"
-              echo 'Please, check the value of `security.wrappers."'$name'".source`.'
-              test -t 1 && echo -ne '\033[0m'
-              exit 1
-            fi
-          done
+        for name in "''${!wrappers[@]}"; do
+          path="''${wrappers[$name]}"
+          if [[ "$path" =~ /nix/store ]] && [ ! -e "$path" ]; then
+            test -t 1 && echo -ne '\033[1;31m'
+            echo "FAIL"
+            echo "The path $path does not exist!"
+            echo 'Please, check the value of `security.wrappers."'$name'".source`.'
+            test -t 1 && echo -ne '\033[0m'
+            exit 1
+          fi
+        done
 
-          echo "OK"
-        ''
+        echo "OK"
+      ''
     );
   };
 }

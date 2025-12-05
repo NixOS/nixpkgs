@@ -11,8 +11,7 @@ let
   wrappedBins =
     pkgs.runCommand "firejail-wrapped-binaries"
       {
-        preferLocalBuild = true;
-        allowSubstitutes = false;
+
         # take precedence over non-firejailed versions
         meta.priority = -1;
       }

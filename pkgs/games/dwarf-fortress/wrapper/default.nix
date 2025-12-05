@@ -214,7 +214,7 @@ lib.throwIf (enableTWBT' && !enableDFHack) "dwarf-fortress: TWBT requires DFHack
 
     dontUnpack = true;
     dontBuild = true;
-    preferLocalBuild = true;
+
     installPhase = ''
       mkdir -p $out/bin
 

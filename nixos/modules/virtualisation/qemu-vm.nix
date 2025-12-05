@@ -1464,7 +1464,7 @@ in
     system.build.vm =
       hostPkgs.runCommand "nixos-vm"
         {
-          preferLocalBuild = true;
+
           meta.mainProgram = "run-${config.system.name}-vm";
         }
         ''

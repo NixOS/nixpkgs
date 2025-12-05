@@ -52,8 +52,7 @@ let
     }:
     pkgs.runCommand name
       {
-        preferLocalBuild = true;
-        allowSubstitutes = false;
+
         packages = lib.unique (map toString udevPackages);
 
         nativeBuildInputs = [
@@ -170,8 +169,7 @@ let
   hwdbBin =
     pkgs.runCommand "hwdb.bin"
       {
-        preferLocalBuild = true;
-        allowSubstitutes = false;
+
         packages = lib.unique (map toString ([ udev ] ++ cfg.packages));
       }
       ''

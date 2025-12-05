@@ -39,7 +39,7 @@ let
     pkgs.runCommand "php.ini"
       {
         inherit (poolOpts) phpPackage phpOptions;
-        preferLocalBuild = true;
+
         passAsFile = [ "phpOptions" ];
       }
       ''

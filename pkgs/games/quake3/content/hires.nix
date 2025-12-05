@@ -63,8 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm444 ${finalAttrs.ioquake3_mac}/extras/zpack-weapons.pk3 $out/baseq3/zpack-weapons.pk3
   '';
 
-  preferLocalBuild = true;
-
   meta = with lib; {
     description = "Quake 3 high-resolution textures";
     license = licenses.cc0;

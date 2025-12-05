@@ -30,8 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  preferLocalBuild = true;
-
   meta = with lib; {
     description = "Database schema discovery and comprehension tool";
     mainProgram = "schemacrawler";

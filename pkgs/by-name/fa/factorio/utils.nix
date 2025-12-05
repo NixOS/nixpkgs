@@ -23,7 +23,6 @@ in
     stdenv.mkDerivation {
       name = "factorio-mod-directory";
 
-      preferLocalBuild = true;
       buildCommand = ''
         mkdir -p $out
         for modDrv in ${toString modDrvs}; do
@@ -57,7 +56,6 @@ in
       deps =
         deps ++ optionals allOptionalMods optionalDeps ++ optionals allRecommendedMods recommendedDeps;
 
-      preferLocalBuild = true;
       buildCommand = ''
         mkdir -p $out
         srcBase=$(basename $src)

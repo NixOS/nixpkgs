@@ -20,7 +20,6 @@ let
           (pkgs.python3.withPackages (ps: [ ps.jsonschema ]))
           pkgs.remarshal
         ];
-        preferLocalBuild = true;
 
         config = builtins.toJSON cfg.settings;
         passAsFile = [ "config" ];

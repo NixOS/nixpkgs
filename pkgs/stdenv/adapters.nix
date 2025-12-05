@@ -367,7 +367,6 @@ rec {
 
         NIX_ENFORCE_NO_NATIVE = false;
 
-        preferLocalBuild = true;
         allowSubstitutes = false;
       });
     });

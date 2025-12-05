@@ -22,7 +22,7 @@ let
           "man"
         ];
         inherit (cfg.package) meta;
-        preferLocalBuild = true;
+
       }
       ''
         mkdir -p $out/bin
@@ -313,7 +313,7 @@ in
         (pkgs.runCommand "podman-tmpfiles-nixos"
           {
             package = cfg.package;
-            preferLocalBuild = true;
+
           }
           ''
             mkdir -p $out/lib/tmpfiles.d/

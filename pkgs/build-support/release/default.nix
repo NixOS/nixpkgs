@@ -128,7 +128,7 @@ rec {
     pkgs.runCommand name
       {
         inherit constituents meta;
-        preferLocalBuild = true;
+
         _hydraAggregate = true;
       }
       ''
@@ -172,7 +172,7 @@ rec {
     }@args:
     stdenv.mkDerivation (
       {
-        preferLocalBuild = true;
+
         _hydraAggregate = true;
 
         dontConfigure = true;

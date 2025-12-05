@@ -27,8 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = finalAttrs.passthru.sources."gtk${if withGTK3 then "3" else "2"}";
 
-  preferLocalBuild = true;
-
   strictDeps = true;
 
   nativeBuildInputs = [

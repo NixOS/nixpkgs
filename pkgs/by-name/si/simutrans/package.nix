@@ -87,7 +87,7 @@ let
     stdenv.mkDerivation {
       name = "simutrans-${pakName}";
       dontUnpack = true;
-      preferLocalBuild = true;
+
       installPhase =
         let
           src = fetchurl { inherit url sha256; };

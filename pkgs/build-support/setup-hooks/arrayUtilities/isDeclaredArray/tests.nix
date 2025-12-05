@@ -12,7 +12,7 @@ let
   commonArgs = {
     __structuredAttrs = true;
     strictDeps = true;
-    preferLocalBuild = true;
+
     nativeBuildInputs = [ isDeclaredArray ];
   };
 

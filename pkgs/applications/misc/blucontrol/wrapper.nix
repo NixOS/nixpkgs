@@ -20,8 +20,6 @@ stdenv.mkDerivation {
   '';
 
   # trivial derivation
-  preferLocalBuild = true;
-  allowSubstitutes = false;
 
   meta = with lib; {
     description = "Configurable blue light filter";

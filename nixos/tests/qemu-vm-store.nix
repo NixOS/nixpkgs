@@ -36,7 +36,6 @@
         builder = "/bin/sh";
         args = ["-c" "echo something > $out"];
         system = builtins.currentSystem;
-        preferLocalBuild = true;
       }'
     """
 

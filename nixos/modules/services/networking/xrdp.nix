@@ -10,7 +10,7 @@ with lib;
 let
   cfg = config.services.xrdp;
 
-  confDir = pkgs.runCommand "xrdp.conf" { preferLocalBuild = true; } ''
+  confDir = pkgs.runCommand "xrdp.conf" { } ''
     mkdir -p $out
 
     cp -r ${cfg.package}/etc/xrdp/* $out

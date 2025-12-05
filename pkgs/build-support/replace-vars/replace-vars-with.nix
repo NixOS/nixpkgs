@@ -79,8 +79,6 @@ let
   forcedAttrs = {
     doCheck = true;
     dontUnpack = true;
-    preferLocalBuild = true;
-    allowSubstitutes = false;
 
     buildPhase = ''
       runHook preBuild

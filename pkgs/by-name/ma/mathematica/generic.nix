@@ -220,9 +220,6 @@ stdenv.mkDerivation {
   dontConfigure = true;
   dontBuild = true;
 
-  # This is primarily an IO bound build; there's little benefit to building remotely
-  preferLocalBuild = true;
-
   # All binaries are already stripped
   dontStrip = true;
 
