@@ -1,6 +1,6 @@
 /*
- TODO a basic test
- - comprehensive tests later if there's time
+  TODO a basic test
+  - comprehensive tests later if there's time
 */
 { pkgs, ... }:
 {
