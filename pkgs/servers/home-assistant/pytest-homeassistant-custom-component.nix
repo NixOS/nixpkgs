@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-homeassistant-custom-component";
-  version = "0.13.297";
+  version = "0.13.298";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "MatthewFlamm";
     repo = "pytest-homeassistant-custom-component";
     tag = version;
-    hash = "sha256-5s8c1OpVqQ63BNLZz0mTyqwbsIZLUmckF5yJkyNgzrw=";
+    hash = "sha256-5yQnEjqG8SKv/RSoTKlpImtOHfs2I9tuyQit0NQ5X6Y=";
   };
 
   build-system = [ setuptools ];
@@ -49,11 +49,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pytest_homeassistant_custom_component.plugins" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    # incompatible with Home Assistant 2025.12.0
-    "test_entry_diagnostics"
-  ];
 
   meta = {
     changelog = "https://github.com/MatthewFlamm/pytest-homeassistant-custom-component/blob/${src.tag}/CHANGELOG.md";
