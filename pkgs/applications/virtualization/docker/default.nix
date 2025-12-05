@@ -18,6 +18,8 @@ let
       composeSupport ? true,
       sbomSupport ? false,
       initSupport ? false,
+      # Enables build changes specific to v29+ (nftables, runc shim v2)
+      mobyV29 ? false,
       # package dependencies
       stdenv,
       fetchFromGitHub,
@@ -39,6 +41,7 @@ let
       docker-sbom,
       docker-init,
       iptables,
+      nftables,
       e2fsprogs,
       xz,
       util-linuxMinimal,
@@ -167,19 +170,23 @@ let
           ++ lib.optionals withLvm [ lvm2 ]
           ++ lib.optionals withBtrfs [ btrfs-progs ]
           ++ lib.optionals withSystemd [ systemd ]
-          ++ lib.optionals withSeccomp [ libseccomp ];
+          ++ lib.optionals withSeccomp [ libseccomp ]
+          ++ lib.optionals mobyV29 [ nftables ];
 
           extraPath = lib.optionals stdenv.hostPlatform.isLinux (
-            lib.makeBinPath [
-              iproute2
-              iptables
-              e2fsprogs
-              xz
-              xfsprogs
-              procps
-              util-linuxMinimal
-              gitMinimal
-            ]
+            lib.makeBinPath (
+              [
+                iproute2
+                iptables
+                e2fsprogs
+                xz
+                xfsprogs
+                procps
+                util-linuxMinimal
+                gitMinimal
+              ]
+              ++ lib.optionals mobyV29 [ nftables ]
+            )
           );
 
           extraUserPath = lib.optionals (stdenv.hostPlatform.isLinux && !clientOnly) (
@@ -190,9 +197,15 @@ let
             ]
           );
 
-          postPatch = ''
-            patchShebangs hack/make.sh hack/make/ hack/with-go-mod.sh
-          '';
+          postPatch =
+            if mobyV29 then
+              ''
+                patchShebangs hack/make.sh hack/make/
+              ''
+            else
+              ''
+                patchShebangs hack/make.sh hack/make/ hack/with-go-mod.sh
+              '';
 
           buildPhase = ''
             runHook preBuild
@@ -217,7 +230,18 @@ let
               --prefix PATH : "$out/libexec/docker:$extraPath"
 
             ln -s ${docker-containerd}/bin/containerd $out/libexec/docker/containerd
-            ln -s ${docker-containerd}/bin/containerd-shim $out/libexec/docker/containerd-shim
+          ''
+          + (
+            if mobyV29 then
+              ''
+                ln -s ${docker-containerd}/bin/containerd-shim-runc-v2 $out/libexec/docker/containerd-shim-runc-v2
+              ''
+            else
+              ''
+                ln -s ${docker-containerd}/bin/containerd-shim $out/libexec/docker/containerd-shim
+              ''
+          )
+          + ''
             ln -s ${docker-runc}/bin/runc $out/libexec/docker/runc
             ln -s ${docker-tini}/bin/tini-static $out/libexec/docker/docker-init
 
@@ -423,6 +447,25 @@ in
       containerdHash = "sha256-vz7RFJkFkMk2gp7bIMx1kbkDFUMS9s0iH0VoyD9A21s=";
       tiniRev = "369448a167e8b3da4ca5bca0b3307500c3371828";
       tiniHash = "sha256-jCBNfoJAjmcTJBx08kHs+FmbaU82CbQcf0IVjd56Nuw=";
+    };
+
+  docker_29 =
+    let
+      version = "29.1.2";
+    in
+    callPackage dockerGen {
+      inherit version;
+      cliRev = "v${version}";
+      cliHash = "sha256-dmoCHxXOYalJCaqq32MdsAEJ+xq0aH/8fOpJHVnBxxU=";
+      mobyRev = "docker-v${version}";
+      mobyHash = "sha256-SRMaPAdg2nlWuKKQILZEGHZO6TGLh2Ci1UIWqcyo6IM=";
+      runcRev = "v1.3.4";
+      runcHash = "sha256-1IfY08sBoDpbLrwz1AKBRSTuCZyOgQzYPHTDUI6fOZ8=";
+      containerdRev = "v2.2.0";
+      containerdHash = "sha256-LXBGA03FTrrbxlH+DxPBFtp3/AYQf096YE2rpe6A+WM=";
+      tiniRev = "369448a167e8b3da4ca5bca0b3307500c3371828";
+      tiniHash = "sha256-jCBNfoJAjmcTJBx08kHs+FmbaU82CbQcf0IVjd56Nuw=";
+      mobyV29 = true;
     };
 
 }
