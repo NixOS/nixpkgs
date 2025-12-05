@@ -37,6 +37,7 @@ let
     "Compiler/codegen"
     "precompile"
     "compileall"
+    "Distributed"
   ]
   ++ lib.optionals (lib.versionOlder version "1.12") [
     "compiler/codegen" # older versions' test was in lowercase
