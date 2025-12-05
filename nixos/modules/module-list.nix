@@ -398,6 +398,7 @@
   ./security/polkit.nix
   ./security/rngd.nix
   ./security/rtkit.nix
+  ./security/run0.nix
   ./security/soteria.nix
   ./security/sudo-rs.nix
   ./security/sudo.nix
