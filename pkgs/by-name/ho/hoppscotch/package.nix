@@ -8,7 +8,7 @@
 
 let
   pname = "hoppscotch";
-  version = "25.9.1-0";
+  version = "25.10.0-0";
 
   src =
     fetchurl
@@ -23,7 +23,7 @@ let
         };
         x86_64-linux = {
           url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_linux_x64.AppImage";
-          hash = "sha256-aW83wSbIV31sakiZxOaUd2QjxOwK2tcnaEMF9jrvrHg=";
+          hash = "sha256-gjg9DHPPsKLoiuKmbKkMO3gBO3uk71T7GdVrGe3ExGQ=";
         };
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
