@@ -13822,6 +13822,8 @@ self: super: with self; {
 
   pymorphy3-dicts-uk = callPackage ../development/python-modules/pymorphy3-dicts-uk { };
 
+  pymp4 = callPackage ../development/python-modules/pymp4 { };
+
   pympler = callPackage ../development/python-modules/pympler { };
 
   pymsgbox = callPackage ../development/python-modules/pymsgbox { };
@@ -15730,6 +15732,8 @@ self: super: with self; {
   pywerview = callPackage ../development/python-modules/pywerview { };
 
   pywfa = callPackage ../development/python-modules/pywfa { };
+
+  pywidevine = callPackage ../development/python-modules/pywidevine { };
 
   pywikibot = callPackage ../development/python-modules/pywikibot { };
 
