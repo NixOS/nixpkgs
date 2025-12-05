@@ -10,9 +10,9 @@
     "version": "0.0.93"
   },
   "linux-ptb": {
-    "hash": "sha256-uz3QNIDzmB/4aLNRNgB1wzpNJlc8ous8aUvcqGaHE7c=",
-    "url": "https://ptb.dl2.discordapp.net/apps/linux/0.0.168/discord-ptb-0.0.168.tar.gz",
-    "version": "0.0.168"
+    "hash": "sha256-IK02ro+c2fzsu7vMf/zl0cFxA2jmf7NCv3M2XJ5/EMs=",
+    "url": "https://ptb.dl2.discordapp.net/apps/linux/0.0.169/discord-ptb-0.0.169.tar.gz",
+    "version": "0.0.169"
   },
   "linux-stable": {
     "hash": "sha256-PN1E8GjVopEPGW9ISb0y1Lo7nnj30CXylW0nTR1Pc6U=",
@@ -30,9 +30,9 @@
     "version": "0.0.105"
   },
   "osx-ptb": {
-    "hash": "sha256-Yk9q4GageNb/Tt+R1SGwWnJBRrjG4QIO6qYLjhak460=",
-    "url": "https://ptb.dl2.discordapp.net/apps/osx/0.0.200/DiscordPTB.dmg",
-    "version": "0.0.200"
+    "hash": "sha256-WWWeVzutLK8s1/asR95fMx6CuqM4Q/XFalMNWrBZbrc=",
+    "url": "https://ptb.dl2.discordapp.net/apps/osx/0.0.201/DiscordPTB.dmg",
+    "version": "0.0.201"
   },
   "osx-stable": {
     "hash": "sha256-k4S9UyO2GLmT/nnR1BUcUVjhFvxjGeQv2tbuZzEh8Ro=",
