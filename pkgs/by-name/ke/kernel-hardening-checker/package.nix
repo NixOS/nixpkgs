@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "kernel-hardening-checker";
-  version = "0.6.10.2";
+  version = "0.6.17.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "a13xp0p0v";
     repo = "kernel-hardening-checker";
     rev = "v${version}";
-    hash = "sha256-9FhDDKTx/YwlEuGf7fgugC5tPgslzXZdlXCCfuM09Dg=";
+    hash = "sha256-wkRbiXHLtTDYBrxn9ZPxXMmWJiIBI5AImjFo6NVaKRM=";
   };
 
   build-system = with python3Packages; [ setuptools ];
