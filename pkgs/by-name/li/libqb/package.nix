@@ -8,14 +8,14 @@
   libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libqb";
   version = "2.0.9";
 
   src = fetchFromGitHub {
     owner = "ClusterLabs";
     repo = "libqb";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-e3lXieKy3JqvuAIzXQjq6kDMfMmokXR/v3p4VQDIuOI=";
   };
 
@@ -26,14 +26,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libxml2 ];
 
+  # Remove configure check for linker flag `--enable-new-dtags`, which fails
+  # on darwin. The flag is never used by the Makefile anyway.
   postPatch = ''
     sed -i '/# --enable-new-dtags:/,/esac/ d' configure.ac
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/clusterlabs/libqb";
     description = "Library providing high performance logging, tracing, ipc, and poll";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})
