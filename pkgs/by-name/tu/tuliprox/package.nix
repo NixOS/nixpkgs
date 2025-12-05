@@ -56,6 +56,9 @@ rustPlatform.buildRustPackage rec {
     popd
   '';
 
+  # Tests don't compile in 3.2.0
+  doCheck = lib.versionAtLeast version "3.2.1";
+
   checkFlags = [
     "--skip=processing::parser::xmltv::tests::normalize"
     "--skip=processing::parser::xtream::tests::test_read_json_file_into_struct"
