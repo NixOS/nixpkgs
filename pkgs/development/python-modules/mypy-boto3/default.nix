@@ -1241,8 +1241,8 @@ in
       "sha256-pCZjmXqOAWJVmiuL0q8nsCN6RZJDWYH9sM/a8NYe84A=";
 
   mypy-boto3-servicecatalog-appregistry =
-    buildMypyBoto3Package "servicecatalog-appregistry" "1.41.0"
-      "sha256-qszMPhXSFEo6YDMoqaZfY3zp0X3NNERC24DUSiP1m9o=";
+    buildMypyBoto3Package "servicecatalog-appregistry" "1.42.3"
+      "sha256-Duojb0uujD4zvfXBRiCSq33Gj/Fdf8t0VDfGKxhnGjw=";
 
   mypy-boto3-servicediscovery =
     buildMypyBoto3Package "servicediscovery" "1.41.0"
