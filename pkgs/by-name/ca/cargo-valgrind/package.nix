@@ -32,11 +32,13 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/cargo-valgrind --prefix PATH : ${lib.makeBinPath [ valgrind ]}
   '';
 
-  checkFlags = [
-    "--skip tests_are_runnable"
-    "--skip default_cargo_project_reports_no_violations"
-    "--skip empty_tests_not_leak_in_release_mode"
-  ];
+  # Valgrind detects a memory leak in the std library of rustc 1.88 in nixos,
+  # but not in the version available via rustup
+  # (https://github.com/NixOS/nixpkgs/issues/428375#issuecomment-3125921626).
+  # This suppresses reporting this leak.
+  postPatch = ''
+    cp ${./suppressions-rust-1.88} suppressions/rust-1.88
+  '';
 
   meta = with lib; {
     description = ''Cargo subcommand "valgrind": runs valgrind and collects its output in a helpful manner'';
