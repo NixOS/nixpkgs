@@ -133,7 +133,7 @@ in
       rabbitmq = 85;
       activemq = 86;
       gnunet = 87;
-      oidentd = 88;
+      # oidentd = 88; # dropping privs to 'nobody' as of 2025-10-27
       quassel = 89;
       amule = 90;
       minidlna = 91;
@@ -475,7 +475,7 @@ in
       rabbitmq = 85;
       activemq = 86;
       gnunet = 87;
-      oidentd = 88;
+      # oidentd = 88; # dropping privs to 'nogroup' as of 2025-10-27
       quassel = 89;
       amule = 90;
       minidlna = 91;
