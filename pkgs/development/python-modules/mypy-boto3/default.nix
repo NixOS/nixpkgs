@@ -186,8 +186,8 @@ in
       "sha256-7/ThXdlFlGzPsvdDnrilv9+wBHvmlJ0qwOJgpF86pLQ=";
 
   mypy-boto3-chime =
-    buildMypyBoto3Package "chime" "1.41.0"
-      "sha256-6NTv5YOH88yQVGgMd7vFxey6gk6jRU/0KD77JXJnTT4=";
+    buildMypyBoto3Package "chime" "1.42.3"
+      "sha256-7p41zcpRdNp1A09ipeKMnsLzws+z/Zsq6AMk6aePvoA=";
 
   mypy-boto3-chime-sdk-identity =
     buildMypyBoto3Package "chime-sdk-identity" "1.41.0"
