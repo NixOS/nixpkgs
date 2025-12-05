@@ -371,7 +371,8 @@ in
               AmbientCapabilities = [
                 # Needed to be able to manipulate the rulesets
                 "CAP_NET_ADMIN"
-              ];
+              ]
+              ++ lib.optional ((cfg.settings.mode == "iptables") || (cfg.settings.mode == "ipset")) "CAP_NET_RAW";
               CapabilityBoundingSet = AmbientCapabilities;
               SystemCallFilter = [
                 "@system-service"
