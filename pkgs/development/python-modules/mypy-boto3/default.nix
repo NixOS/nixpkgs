@@ -178,8 +178,8 @@ in
       "sha256-p8bdld0zrW6NzBndSczyHclvkhKb4VW8npiAKz+8Ge4=";
 
   mypy-boto3-budgets =
-    buildMypyBoto3Package "budgets" "1.41.1"
-      "sha256-n0gipTIbrw5NiLK26uhDpIww2Dlw6GFaHmnzzzkBt4M=";
+    buildMypyBoto3Package "budgets" "1.42.3"
+      "sha256-ycyUNWVH6be7P5uutkkjDBBfNKwMdRQxOO27fn6v/gU=";
 
   mypy-boto3-ce =
     buildMypyBoto3Package "ce" "1.42.1"
