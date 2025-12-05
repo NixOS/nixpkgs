@@ -219,9 +219,16 @@ in
     users.groups.vaultwarden = { };
 
     systemd.services.vaultwarden = {
-      after = [ "network-online.target" ];
+      after = [
+        "network-online.target"
+      ]
+      ++ (lib.optionals (cfg.dbBackend == "postgresql") [ "postgresql.service" ])
+      ++ (lib.optionals (cfg.dbBackend == "mysql") [ "mysql.service" ]);
       wants = [ "network-online.target" ];
-      path = with pkgs; [ openssl ];
+      requires =
+        (lib.optionals (cfg.dbBackend == "postgresql") [ "postgresql.service" ])
+        ++ (lib.optionals (cfg.dbBackend == "mysql") [ "mysql.service" ]);
+      path = [ pkgs.openssl ];
       serviceConfig = {
         User = user;
         Group = group;
@@ -277,7 +284,7 @@ in
         DATA_FOLDER = dataDir;
         BACKUP_FOLDER = cfg.backupDir;
       };
-      path = with pkgs; [ sqlite ];
+      path = [ pkgs.sqlite ];
       # if both services are started at the same time, vaultwarden fails with "database is locked"
       before = [ "vaultwarden.service" ];
       serviceConfig = {
