@@ -403,7 +403,7 @@ in
       fi
     '';
 
-    environment.variables.SSH_ASKPASS = lib.optionalString cfg.enableAskPassword cfg.askPassword;
+    environment.sessionVariables.SSH_ASKPASS = lib.optionalString cfg.enableAskPassword cfg.askPassword;
 
   };
 }
