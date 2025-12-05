@@ -580,6 +580,12 @@ let
     shouldSymlink = shouldAdd && doInstallIntermediates;
   };
 
+  testRunner =
+    "exec"
+    + lib.optionalString isCross (
+      " " + (if stdenv.hostPlatform.isGhcjs then "node" else crossSupport.emulator)
+    );
+
   # This is a script suitable for --test-wrapper of Setup.hs' test command
   # (https://cabal.readthedocs.io/en/3.12/setup-commands.html#cmdoption-runhaskell-Setup.hs-test-test-wrapper).
   # We use it to set some environment variables that the test suite may need,
@@ -602,7 +608,7 @@ let
       export GHC_PACKAGE_PATH="''${NIX_GHC_PACKAGE_PATH_FOR_TEST}"
     fi
 
-    exec "$@"
+    ${testRunner} "$@"
   '';
 
   testTargetsString =
