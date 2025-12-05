@@ -84,13 +84,15 @@ in
       ibusPackage
     ];
 
-    environment.variables = {
-      XMODIFIERS = "@im=ibus";
-    }
-    // lib.optionalAttrs (!cfg.waylandFrontend) {
-      GTK_IM_MODULE = "ibus";
-      QT_IM_MODULE = "ibus";
-    };
+    environment.sessionVariables = lib.mkMerge [
+      {
+        XMODIFIERS = "@im=ibus";
+      }
+      (lib.optionalAttrs (!cfg.waylandFrontend) {
+        GTK_IM_MODULE = "ibus";
+        QT_IM_MODULE = "ibus";
+      })
+    ];
 
     xdg.portal.extraPortals = lib.mkIf config.xdg.portal.enable [
       ibusPackage
