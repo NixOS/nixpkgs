@@ -1429,8 +1429,8 @@ in
       "sha256-YfqjqAgZDNBUqqhwXG/GXF+rkAaYa1NTkKW02zt7yjE=";
 
   mypy-boto3-workspaces-web =
-    buildMypyBoto3Package "workspaces-web" "1.41.0"
-      "sha256-MCL/FaNV3RctO9k6CBZAAtCYhN1puWdm5a00WpFTsHs=";
+    buildMypyBoto3Package "workspaces-web" "1.42.3"
+      "sha256-BLSJb/oJ4OIZIUpcKws+bR8cqgmh/MT8mgigBiBW/r4=";
 
   mypy-boto3-xray =
     buildMypyBoto3Package "xray" "1.41.0"
