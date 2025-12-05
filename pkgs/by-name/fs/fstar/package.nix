@@ -105,7 +105,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "v(\d{4}\.\d{2}\.\d{2})$"
+        "^v([0-9]{4}\.[0-9]{2}\.[0-9]{2})$"
       ];
     };
     z3 = fstarZ3;
