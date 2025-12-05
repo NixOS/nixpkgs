@@ -9250,6 +9250,8 @@ self: super: with self; {
 
   materialyoucolor = callPackage ../development/python-modules/materialyoucolor { };
 
+  mathics-scanner = callPackage ../development/python-modules/mathics-scanner { };
+
   mathutils = callPackage ../development/python-modules/mathutils { };
 
   matplotlib = callPackage ../development/python-modules/matplotlib {
