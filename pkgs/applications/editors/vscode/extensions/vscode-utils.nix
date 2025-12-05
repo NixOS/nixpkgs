@@ -6,10 +6,40 @@
   fetchurl,
   vscode,
   unzip,
+  makeSetupHook,
+  bashNonInteractive,
+  writeScript,
   jq,
   vscode-extension-update-script,
 }:
 let
+  unpackVsixSetupHook = (
+    makeSetupHook
+      {
+        name = "unpack-vsix-setup-hook";
+        propagatedBuildInputs = [ unzip ];
+        substitutions = {
+          shell = "${bashNonInteractive}/bin/bash";
+          unzip = "${unzip}/bin/unzip";
+        };
+      }
+      (
+        writeScript "unpack-vsix-setup-hook.sh" ''
+          #!@shell@
+          unpackCmdHooks+=(_tryUnpackVsix)
+          _tryUnpackVsix() {
+              if ! [[ "$curSrc" =~ \.vsix$ ]]; then return 1; fi
+
+              # UTF-8 locale is needed for unzip on glibc to handle UTF-8 symbols:
+              #   https://github.com/NixOS/nixpkgs/issues/176225#issuecomment-1146617263
+              # Otherwise unzip unpacks escaped file names as if '-U' options was in effect.
+              #
+              # Pick en_US.UTF-8 as most possible to be present on glibc, musl and darwin.
+              LANG=en_US.UTF-8 @unzip@ -qq "$curSrc"
+          }
+        ''
+      )
+  );
   buildVscodeExtension = lib.extendMkDerivation {
     constructDrv = stdenv.mkDerivation;
     excludeDrvArgNames = [
@@ -63,7 +93,11 @@ let
         # This cannot be removed, it is used by some extensions.
         installPrefix = "share/vscode/extensions/${vscodeExtUniqueId}";
 
-        nativeBuildInputs = [ unzip ] ++ nativeBuildInputs;
+        nativeBuildInputs = [
+          unzip
+          unpackVsixSetupHook
+        ]
+        ++ nativeBuildInputs;
 
         installPhase =
           args.installPhase or ''
