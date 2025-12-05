@@ -5,6 +5,7 @@
   autoconf,
   automake,
   libtool,
+  bash,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,10 +19,22 @@ stdenv.mkDerivation rec {
     hash = "sha256-P3LaDMMNPyEnA8nO1Bm7H0mW/hVBr0cFdg+p2JmWcGI=";
   };
 
+  strictDeps = true;
+  enableParallelBuilding = true;
+
+  outputs = [
+    "out"
+    "lib"
+  ];
+
   nativeBuildInputs = [
     autoconf
     automake
     libtool
+  ];
+
+  buildInputs = [
+    bash
   ];
 
   preConfigure = "./autogen.sh";
