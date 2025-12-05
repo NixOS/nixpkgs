@@ -12978,6 +12978,12 @@
     name = "Joshua Suskalo";
     githubId = 27734541;
   };
+  jtamagnan = {
+    email = "jtamagnan@gmail.com";
+    github = "jtamagnan";
+    githubId = 5892061;
+    name = "Jules Tamagnan";
+  };
   jtbx = {
     email = "jeremy@baxters.nz";
     name = "Jeremy Baxter";
