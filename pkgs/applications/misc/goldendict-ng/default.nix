@@ -28,16 +28,18 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "goldendict-ng";
-  version = "25.05.0";
+  version = "25.10.2";
 
   src = fetchFromGitHub {
     owner = "xiaoyifang";
     repo = "goldendict-ng";
-    tag = "v25.05.0-Release.2a2b0e16";
-    hash = "sha256-PBqkVac867xE4ZcvwTysAK6rQSoEZelKrV9USvFsaLk=";
+    tag = "v${finalAttrs.version}-Release.673d1b90";
+    hash = "sha256-afzMUko09vGmQvu6sob8jYfVUvQECoUdAmIbLIoh1Dw=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     pkg-config
@@ -45,6 +47,7 @@ stdenv.mkDerivation {
     wrapQtAppsHook
     wrapGAppsHook3
   ];
+
   buildInputs = [
     qtbase
     qtsvg
@@ -68,7 +71,7 @@ stdenv.mkDerivation {
     libzim
   ];
 
-  # to prevent double wrapping of wrapQtApps and wrapGApps
+  # Prevent double wrapping of wrapQtApps and wrapGApps
   dontWrapGApps = true;
 
   preFixup = ''
@@ -84,16 +87,16 @@ stdenv.mkDerivation {
     "-DUSE_SYSTEM_TOML=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://xiaoyifang.github.io/goldendict-ng/";
     description = "Advanced multi-dictionary lookup program";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "goldendict";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       slbtty
       michojel
       linsui
     ];
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
-}
+})
