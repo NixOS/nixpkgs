@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dsearch";
   version = "0.0.7";
 
   src = fetchFromGitHub {
     owner = "AvengeMedia";
     repo = "danksearch";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rtfymtzsxEuto1mOm8A5ubREJzXKCai6dw9Na1Fa21Q=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -45,10 +45,10 @@ buildGoModule rec {
   meta = {
     description = "Fast, configurable filesystem search with fuzzy matching";
     homepage = "https://github.com/AvengeMedia/danksearch";
-    changelog = "https://github.com/AvengeMedia/danksearch/releases/tag/v${version}";
+    changelog = "https://github.com/AvengeMedia/danksearch/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ luckshiba ];
     mainProgram = "dsearch";
     platforms = lib.platforms.unix;
   };
-}
+})
