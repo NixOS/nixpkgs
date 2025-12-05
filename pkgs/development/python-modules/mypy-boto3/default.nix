@@ -322,8 +322,8 @@ in
       "sha256-hRjavmc5Uz2JInrXnUrFlby+XPaP2hIShhPbHreE5/4=";
 
   mypy-boto3-comprehend =
-    buildMypyBoto3Package "comprehend" "1.41.0"
-      "sha256-hfHr98Yl2rytJLs/VsoDEmBtT7xy0N+JONVlOhnkXxY=";
+    buildMypyBoto3Package "comprehend" "1.42.3"
+      "sha256-b+dX5aCg7czhnGTapZ1DdIYyNcr8bb1SGEmw96oe2jI=";
 
   mypy-boto3-comprehendmedical =
     buildMypyBoto3Package "comprehendmedical" "1.41.0"
