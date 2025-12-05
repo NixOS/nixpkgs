@@ -641,8 +641,8 @@ in
       "sha256-Giui5uqyTCAjCfpA5n/z+KwRNyqeMbd6fuxo+9Df8Ao=";
 
   mypy-boto3-iot-jobs-data =
-    buildMypyBoto3Package "iot-jobs-data" "1.41.0"
-      "sha256-Hj+hvG+0Qi0csGyl53ei/o4wvGDSO1lT9Vl0RUDBTZU=";
+    buildMypyBoto3Package "iot-jobs-data" "1.42.3"
+      "sha256-rm1KJfUHizaTEOylpdQP5XzF3JbwBaBh2IfJWW0b5bs=";
 
   mypy-boto3-iot1click-devices =
     buildMypyBoto3Package "iot1click-devices" "1.35.93"
