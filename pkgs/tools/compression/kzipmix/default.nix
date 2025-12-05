@@ -26,6 +26,5 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     homepage = "http://advsys.net/ken/utils.htm";
-    maintainers = [ maintainers.sander ];
   };
 }
