@@ -19127,6 +19127,12 @@
     github = "nullishamy";
     githubId = 99221043;
   };
+  nullstring1 = {
+    email = "nullstring1+nixpkgs@nullstring.one";
+    name = "nullstring1";
+    github = "nullstring1";
+    githubId = 53035336;
+  };
   numinit = {
     email = "me+nixpkgs@numin.it";
     name = "Morgan Jones";
