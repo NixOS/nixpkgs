@@ -7,7 +7,7 @@
   ffmpeg,
   which,
   rustc,
-  wasm-bindgen-cli_0_2_104,
+  wasm-bindgen-cli_0_2_105,
   trunk,
   binaryen,
   dart-sass,
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     ffmpeg
     which
-    wasm-bindgen-cli_0_2_104
+    wasm-bindgen-cli_0_2_105
     trunk
     rustc.llvmPackages.lld
     binaryen
