@@ -8,14 +8,14 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "virtiofsd";
   version = "1.13.3";
 
   src = fetchFromGitLab {
     owner = "virtio-fs";
     repo = "virtiofsd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-H8FjnrwB6IfZ7pVFesEWZkWpWjVYGrewlPRZc97Nlh8=";
   };
 
@@ -58,4 +58,4 @@ rustPlatform.buildRustPackage rec {
       bsd3
     ];
   };
-}
+})
