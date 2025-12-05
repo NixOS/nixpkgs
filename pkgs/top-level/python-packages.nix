@@ -18084,6 +18084,8 @@ self: super: with self; {
 
   streamlit = callPackage ../development/python-modules/streamlit { };
 
+  streamlit-sortables = callPackage ../development/python-modules/streamlit-sortables { };
+
   streamz = callPackage ../development/python-modules/streamz { };
 
   strenum = callPackage ../development/python-modules/strenum { };
