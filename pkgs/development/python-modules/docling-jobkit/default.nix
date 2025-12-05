@@ -19,6 +19,8 @@
   httpx,
 
   # optional dependencies
+  google-api-python-client,
+  google-auth-oauthlib,
   ray,
   rq,
   msgpack,
@@ -31,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "docling-jobkit";
-  version = "1.5.0";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-jobkit";
     tag = "v${version}";
-    hash = "sha256-/rFMP5KiWHBsGaA2LVOWP2TkJLVeguIlrmO+JL610hQ=";
+    hash = "sha256-9Y6x94RV0FyMLTBaAXwb6Odf0GTN5/fKwIvLqoChktg=";
   };
 
   build-system = [
@@ -58,6 +60,10 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+    drive = [
+      google-api-python-client
+      google-auth-oauthlib
+    ];
     ray = [ ray ];
     rq = [
       rq
