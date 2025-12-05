@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "hdf5plugin";
-  version = "5.1.0";
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "silx-kit";
     repo = "hdf5plugin";
     tag = "v${version}";
-    hash = "sha256-12OWsNZfKToNLyokNrwgPc7WRISJI4nRA0J/zwgCZwI=";
+    hash = "sha256-LW6rY+zLta4hENBbTll+1amf9TYJiuAumwzgpk1LZ3M=";
   };
 
   build-system = [
