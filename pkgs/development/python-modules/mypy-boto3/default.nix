@@ -386,8 +386,8 @@ in
       "sha256-ApctgKap9Tq0pEV59aqZRap+OwnmSPiXomUmFeZYPso=";
 
   mypy-boto3-dax =
-    buildMypyBoto3Package "dax" "1.41.0"
-      "sha256-qxlAzYN/IXbXKbbNQS/zdEIY0bFba99jQVXkhMrurWo=";
+    buildMypyBoto3Package "dax" "1.42.3"
+      "sha256-ckBSxGRvIg5zvbjpXiWK04FLfbf77kWkxlVGhYJBGps=";
 
   mypy-boto3-detective =
     buildMypyBoto3Package "detective" "1.41.0"
