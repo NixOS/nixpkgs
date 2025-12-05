@@ -1,6 +1,6 @@
 {
   lib,
-  flutter335,
+  flutter338,
   fetchFromGitHub,
   gst_all_1,
   libunwind,
@@ -24,16 +24,16 @@ let
     ln -s ${zlib}/lib $out/lib
   '';
 
-  version = "0.26.10";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "saber-notes";
     repo = "saber";
     tag = "v${version}";
-    hash = "sha256-PmkhIyRbRWp+ZujP8R1/h7NpKwYsaKx4JtYIikZjVzc=";
+    hash = "sha256-2Toz4vR37tw6QJPimHk/f/vR4WfZy+lLW1jYsKURwtc=";
   };
 in
-flutter335.buildFlutterApplication {
+flutter338.buildFlutterApplication {
   pname = "saber";
   inherit version src;
 
