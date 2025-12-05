@@ -1,88 +1,72 @@
 {
-  config,
   lib,
-  pkgs,
+  utils,
   options,
+  config,
+  pkgs,
   ...
 }:
 
 let
-  logPrefix = "services.prometheus.exporter.blackbox";
   cfg = config.services.prometheus.exporters.blackbox;
-  inherit (lib)
-    mkOption
-    types
-    concatStringsSep
-    escapeShellArg
-    ;
-
-  # This ensures that we can deal with string paths, path types and
-  # store-path strings with context.
-  coerceConfigFile =
-    file:
-    if (builtins.isPath file) || (lib.isStorePath file) then
-      file
-    else
-      (
-        lib.warn ''
-          ${logPrefix}: configuration file "${file}" is being copied to the nix-store.
-          If you would like to avoid that, please set enableConfigCheck to false.
-        '' /.
-        + file
-      );
-  checkConfigLocation =
-    file:
-    if lib.hasPrefix "/tmp/" file then
-      throw "${logPrefix}: configuration file must not reside within /tmp - it won't be visible to the systemd service."
-    else
-      file;
-  checkConfig =
-    file:
+  settingsFormat = pkgs.formats.yaml { };
+  dummyConfigFile =
     pkgs.runCommand "checked-blackbox-exporter.conf"
       {
         preferLocalBuild = true;
         nativeBuildInputs = [ pkgs.buildPackages.prometheus-blackbox-exporter ];
       }
       ''
-        ln -s ${coerceConfigFile file} $out
+        ${utils.genJqSecretsReplacementSnippetDummy cfg.settings "${placeholder "out"}"}
         blackbox_exporter --config.check --config.file $out
       '';
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "configFile" ] ''
+      Use services.prometheus.exporters.blackbox.settings instead.
+    '')
+    (lib.mkRemovedOptionModule [ "enableConfigCheck" ] ''
+      The configuration file is now always checked.
+    '')
+    {
+      options.warnings = options.warnings;
+      options.assertions = options.assertions;
+    }
+  ];
+
   port = 9115;
   extraOpts = {
-    configFile = mkOption {
-      type = types.path;
+    settings = lib.mkOption {
+      inherit (settingsFormat) type;
+      default = { };
       description = ''
-        Path to configuration file.
-      '';
-    };
-    enableConfigCheck = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        Whether to run a correctness check for the configuration file. This depends
-        on the configuration file residing in the nix-store. Paths passed as string will
-        be copied to the store.
+        Structured configuration that is being written into blackbox' configFile option.
+
+        See <https://github.com/prometheus/blackbox_exporter/blob/master/CONFIGURATION.md> for upstream documentation.
+
+        Secrets can be passed using the corresponding `file`-options. (ex. username -> username_file)
+        See the upstream documentation for available `file`-options.
       '';
     };
   };
 
-  serviceOpts =
-    let
-      adjustedConfigFile =
-        if cfg.enableConfigCheck then checkConfig cfg.configFile else checkConfigLocation cfg.configFile;
-    in
-    {
-      serviceConfig = {
-        AmbientCapabilities = [ "CAP_NET_RAW" ]; # for ping probes
-        ExecStart = ''
-          ${pkgs.prometheus-blackbox-exporter}/bin/blackbox_exporter \
-            --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
-            --config.file ${escapeShellArg adjustedConfigFile} \
-            ${concatStringsSep " \\\n  " cfg.extraFlags}
-        '';
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-      };
+  serviceOpts = {
+    preStart = utils.genJqSecretsReplacementSnippet cfg.settings "/run/prometheus-blackbox-exporter/blackbox-exporter.conf";
+
+    # just add it somewhere to it actually get build and the configuration gets validated at build time
+    restartTriggers = [ dummyConfigFile ];
+
+    serviceConfig = {
+      AmbientCapabilities = [ "CAP_NET_RAW" ]; # for ping probes
+      ExecStart = ''
+        ${lib.getExe pkgs.prometheus-blackbox-exporter} \
+          --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
+          --config.file /run/prometheus-blackbox-exporter/blackbox-exporter.conf \
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
+      '';
+      ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+      RuntimeDirectory = "prometheus-blackbox-exporter";
     };
+  };
 }
