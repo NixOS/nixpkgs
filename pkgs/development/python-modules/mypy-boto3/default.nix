@@ -1261,8 +1261,8 @@ in
       "sha256-AXqV0TsOLNYBdDVFzigW99tfKCUvvrS7S/F8nT3xSOw=";
 
   mypy-boto3-signer =
-    buildMypyBoto3Package "signer" "1.41.0"
-      "sha256-79S2Qb2lj8qpcvZXEc1gMgRpyvURZl5BKT3Q4bNDm6w=";
+    buildMypyBoto3Package "signer" "1.42.3"
+      "sha256-L1rqSLDwrqyezgLio1BWJQDZ1pclQLyvuNvt3kynQmQ=";
 
   mypy-boto3-simspaceweaver =
     buildMypyBoto3Package "simspaceweaver" "1.41.0"
