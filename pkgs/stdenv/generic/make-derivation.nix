@@ -878,8 +878,7 @@ let
         inputDerivation = derivation (
           deleteFixedOutputRelatedAttrs derivationArg
           // {
-            # Add a name in case the original drv didn't have one
-            name = derivationArg.name or "inputDerivation";
+            name = "inputDerivation${lib.optionalString (derivationArg ? name) "-${derivationArg.name}"}";
             # This always only has one output
             outputs = [ "out" ];
 
@@ -912,23 +911,20 @@ let
             ];
           }
           // (
-            let
-              sharedOutputChecks = {
-                # inputDerivation produces the inputs; not the outputs, so any
-                # restrictions on what used to be the outputs don't serve a purpose
-                # anymore.
+            # inputDerivation produces the inputs; not the outputs, so any
+            # restrictions on what used to be the outputs don't serve a purpose
+            # anymore.
+            if __structuredAttrs then
+              {
+                outputChecks = { };
+              }
+            else
+              {
                 allowedReferences = null;
                 allowedRequisites = null;
                 disallowedReferences = [ ];
                 disallowedRequisites = [ ];
-              };
-            in
-            if __structuredAttrs then
-              {
-                outputChecks.out = sharedOutputChecks;
               }
-            else
-              sharedOutputChecks
           )
         );
 
