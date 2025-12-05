@@ -399,9 +399,9 @@ stdenv.mkDerivation (finalAttrs: {
     # backport fix for https://github.com/python/cpython/issues/95855
     ./platform-triplet-detection.patch
   ]
-  ++ optionals (version == "3.14.1") [
-    # https://github.com/python/cpython/issues/142214
-    ./3.14/gh-142214.patch
+  ++ optionals (version == "3.13.10" || version == "3.14.1") [
+    # https://github.com/python/cpython/issues/142218
+    ./${lib.versions.majorMinor version}/gh-142218.patch
   ]
   ++ optionals (stdenv.hostPlatform.isMinGW) (
     let
