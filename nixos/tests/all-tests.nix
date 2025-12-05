@@ -478,6 +478,7 @@ in
   docker-tools-nix-shell = runTest ./docker-tools-nix-shell.nix;
   docker-tools-overlay = runTestOn [ "x86_64-linux" ] ./docker-tools-overlay.nix;
   docling-serve = runTest ./docling-serve.nix;
+  documenso = runTest ./documenso.nix;
   documentation = pkgs.callPackage ../modules/misc/documentation/test.nix { inherit nixosLib; };
   documize = runTest ./documize.nix;
   docuseal-psql = runTest ./docuseal-postgres.nix;
