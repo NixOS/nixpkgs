@@ -10491,10 +10491,6 @@ with pkgs;
   source-han-serif-vf-otf = sourceHanPackages.serif-vf-otf;
   source-han-serif-vf-ttf = sourceHanPackages.serif-vf-ttf;
 
-  tango-icon-theme = callPackage ../data/icons/tango-icon-theme {
-    gtk = res.gtk2;
-  };
-
   themes = name: callPackage (../data/misc/themes + ("/" + name + ".nix")) { };
 
   tex-gyre = recurseIntoAttrs (callPackages ../data/fonts/tex-gyre { });
