@@ -925,8 +925,8 @@ in
       "sha256-d42VxAv6JSb35fAax31Sk5qsINDFqMWcvh0KQt1GmZQ=";
 
   mypy-boto3-migrationhubstrategy =
-    buildMypyBoto3Package "migrationhubstrategy" "1.41.0"
-      "sha256-twh9VUH/W9MLhaTmU15YXmc+NiJXxBewkVoabq/A0Zc=";
+    buildMypyBoto3Package "migrationhubstrategy" "1.42.3"
+      "sha256-MmYBlk+qaxdFtmp0XMK30JwBLxxrlh3tIgdB6Bau19o=";
 
   mypy-boto3-mq =
     buildMypyBoto3Package "mq" "1.41.0"
