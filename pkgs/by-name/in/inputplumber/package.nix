@@ -34,6 +34,9 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     cp -r rootfs/usr/* $out/
+
+    # remove testing dbus service
+    rm $out/share/dbus-1/system-services/org.shadowblip.InputPlumber.service
   '';
 
   meta = {
