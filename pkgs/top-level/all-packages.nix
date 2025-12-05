@@ -10433,10 +10433,6 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  numix-icon-theme = callPackage ../data/icons/numix-icon-theme {
-    inherit (plasma5Packages) breeze-icons;
-  };
-
   openmoji-color = callPackage ../data/fonts/openmoji { fontFormats = [ "glyf_colr_0" ]; };
 
   openmoji-black = callPackage ../data/fonts/openmoji { fontFormats = [ "glyf" ]; };
