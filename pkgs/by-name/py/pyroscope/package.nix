@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "pyroscope";
-  version = "1.13.4";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "pyroscope";
-    rev = "v1.13.4";
-    hash = "sha256-nyb91BO4zzJl3AG/ojBO+q7WiicZYmOtztW6FTlQHMM=";
+    rev = "v1.16.0";
+    hash = "sha256-bQPZlBS74tXg9q3W1A7Icvm7K8KWCufTjWoN949ySow=";
   };
 
-  vendorHash = "sha256-GZMoXsoE3pL0T3tkWY7i1f9sGy5uVDqeurCvBteqV9A=";
+  vendorHash = "sha256-6biMergqYdsasv04gXzNIV0XzldZs/wPsAfC/7SoW1g=";
   proxyVendor = true;
 
   subPackages = [
