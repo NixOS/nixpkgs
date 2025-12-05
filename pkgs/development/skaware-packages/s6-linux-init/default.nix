@@ -26,14 +26,14 @@ skawarePackages.buildPackage {
   configureFlags = [
     "--bindir=\${bin}/bin"
     "--includedir=\${dev}/include"
-    "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
+    "--with-sysdeps=${lib.getLib skalibs}/lib/skalibs/sysdeps"
     "--with-include=${skalibs.dev}/include"
     "--with-include=${execline.dev}/include"
     "--with-include=${s6.dev}/include"
-    "--with-lib=${skalibs.lib}/lib"
+    "--with-lib=${lib.getLib skalibs}/lib"
     "--with-lib=${s6.out}/lib"
     "--with-lib=${execline.lib}/lib"
-    "--with-dynlib=${skalibs.lib}/lib"
+    "--with-dynlib=${lib.getLib skalibs}/lib"
     "--with-dynlib=${execline.lib}/lib"
     "--with-dynlib=${s6.out}/lib"
   ];

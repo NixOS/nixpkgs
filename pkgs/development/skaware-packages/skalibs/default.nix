@@ -3,6 +3,7 @@
   stdenv,
   skawarePackages,
   pkgs,
+  pkg-config,
 }:
 
 skawarePackages.buildPackage {
@@ -13,23 +14,23 @@ skawarePackages.buildPackage {
   description = "Set of general-purpose C programming libraries";
 
   outputs = [
-    "lib"
     "dev"
     "doc"
     "out"
   ];
 
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
   configureFlags = [
     # assume /dev/random works
     "--enable-force-devr"
-    "--libdir=\${lib}/lib"
-    "--dynlibdir=\${lib}/lib"
     "--includedir=\${dev}/include"
-    "--sysdepdir=\${lib}/lib/skalibs/sysdeps"
     # Empty the default path, which would be "/usr/bin:bin".
     # It would be set when PATH is empty. This hurts hermeticity.
     "--with-default-path="
-
+    "--enable-pkgconfig"
   ]
   ++ lib.optionals (stdenv.buildPlatform.config != stdenv.hostPlatform.config) [
     # There's a fallback path for BSDs.

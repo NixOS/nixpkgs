@@ -44,7 +44,7 @@ stdenv.mkDerivation {
       conf-compile/defaults/host_compile.sh \
       > conf-compile/host_compile.sh
 
-    echo "${skalibs.lib}/lib/skalibs/sysdeps" \
+    echo "${lib.getLib skalibs}/lib/skalibs/sysdeps" \
       > conf-compile/depend_skalibs_sysdeps
   '';
 
