@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "hue-plus";
-  version = "1.4.5";
+  version = ".1.4.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
