@@ -1,0 +1,24 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 61f7c40..2740d3d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -28,11 +28,18 @@ target_include_directories(${PROJECT_NAME} PUBLIC
+ 	${Intl_INCLUDE_DIRS}
+ )
+ 
++set(EXTRA_LIBS "")
++find_library(ARGP argp)
++if(ARGP)
++	list(APPEND EXTRA_LIBS argp)
++endif()
++
+ target_link_libraries(${PROJECT_NAME} PRIVATE
+ 	${GD_LIBRARIES}
+ 	${LIBUSB_LIBRARIES}
+ 	${LIBUSB_LINK_LIBRARIES}
+ 	${Intl_LIBRARIES}
++	${EXTRA_LIBS}
+ )
+ 
+ target_sources(${PROJECT_NAME} PRIVATE
+
