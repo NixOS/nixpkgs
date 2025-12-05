@@ -1405,8 +1405,8 @@ in
       "sha256-+grWgv9THkvVIf3IPxN4bai4cpMHsv5NdJQnEKB5Ivo=";
 
   mypy-boto3-wisdom =
-    buildMypyBoto3Package "wisdom" "1.41.0"
-      "sha256-uNA/i9FUZvAC1yYYup9UsXA/ZNyOGapcYk2z8SWcxPA=";
+    buildMypyBoto3Package "wisdom" "1.42.3"
+      "sha256-r2iOH2Uc9dPqglIaSwNVv3yemOWVI3KY+M4bLaOFLio=";
 
   mypy-boto3-workdocs =
     buildMypyBoto3Package "workdocs" "1.41.0"
