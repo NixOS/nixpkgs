@@ -6,7 +6,7 @@
   qcheck-core,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "algaeff";
   version = "2.0.0";
 
@@ -14,8 +14,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "RedPRL";
-    repo = pname;
-    rev = version;
+    repo = "algaeff";
+    tag = finalAttrs.version;
     hash = "sha256-VRZfULbXKRcExU1bnEu/X1KPX+L+dzcRYZVD985rQT4=";
   };
 
@@ -29,6 +29,6 @@ buildDunePackage rec {
     description = "Reusable Effects-Based Components";
     homepage = "https://github.com/RedPRL/algaeff";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = with lib.maintainers; [ vbgl ];
   };
-}
+})

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildDunePackage,
-  fetchurl,
+  fetchFromGitHub,
   cstruct,
   duration,
   ethernet,
@@ -16,13 +16,15 @@
   mirage-vnetif,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "arp";
   version = "4.0.0";
 
-  src = fetchurl {
-    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-${version}.tbz";
-    hash = "sha256-C2Bh/2NwZqCJEidCnkhwRMoW3AsbQtvwdFh9IiJkDaU=";
+  src = fetchFromGitHub {
+    owner = "mirage";
+    repo = "arp";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-B19xVWcN5q3/+JcitcW1kQp9X0HZOKH89eoJrdwaGdI=";
   };
 
   minimalOCamlVersion = "4.08";
@@ -46,10 +48,10 @@ buildDunePackage rec {
     mirage-vnetif
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Address Resolution Protocol purely in OCaml";
     homepage = "https://github.com/mirage/arp";
-    license = licenses.isc;
-    maintainers = with maintainers; [ sternenseemann ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
-}
+})
