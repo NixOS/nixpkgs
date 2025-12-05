@@ -1,0 +1,62 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Philip Taron <philip.taron@gmail.com>
+Date: Thu, 23 Oct 2025 10:32:59 -0700
+Subject: [PATCH] exe: allow pinning a specific Nix version
+
+---
+ exe/Main.hs | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/exe/Main.hs b/exe/Main.hs
+index 5e0f010..01b9e06 100644
+--- a/exe/Main.hs
++++ b/exe/Main.hs
+@@ -72,18 +72,18 @@ runApp :: String -> [String] -> IO Void
+ runApp = \cases
+   _ ["--version"] -> do
+     hPutStrLn stderr ("nix-output-monitor " <> fromString (showVersion version))
+-    exitWith =<< runProcess (proc "nix" ["--version"])
+-  "nom-build" args -> exitWith =<< runMonitoredCommand defaultConfig (proc "nix-build" (withJSON args))
++    exitWith =<< runProcess (proc "@nix@" ["--version"])
++  "nom-build" args -> exitWith =<< runMonitoredCommand defaultConfig (proc "@nix-build@" (withJSON args))
+   "nom-shell" args -> do
+-    exitOnFailure =<< runMonitoredCommand defaultConfig{silent = True} (proc "nix-shell" (withJSON args <> ["--run", "exit"]))
+-    exitWith =<< runProcess (proc "nix-shell" args)
+-  "nom" ("build" : args) -> exitWith =<< runMonitoredCommand defaultConfig (proc "nix" ("build" : withJSON args))
++    exitOnFailure =<< runMonitoredCommand defaultConfig{silent = True} (proc "@nix-shell@" (withJSON args <> ["--run", "exit"]))
++    exitWith =<< runProcess (proc "@nix-shell@" args)
++  "nom" ("build" : args) -> exitWith =<< runMonitoredCommand defaultConfig (proc "@nix@" ("build" : withJSON args))
+   "nom" ("shell" : args) -> do
+-    exitOnFailure =<< runMonitoredCommand defaultConfig{silent = True} (proc "nix" ("shell" : withJSON (replaceCommandWithExit args)))
+-    exitWith =<< runProcess (proc "nix" ("shell" : args))
++    exitOnFailure =<< runMonitoredCommand defaultConfig{silent = True} (proc "@nix@" ("shell" : withJSON (replaceCommandWithExit args)))
++    exitWith =<< runProcess (proc "@nix@" ("shell" : args))
+   "nom" ("develop" : args) -> do
+-    exitOnFailure =<< runMonitoredCommand defaultConfig{silent = True} (proc "nix" ("develop" : withJSON (replaceCommandWithExit args)))
+-    exitWith =<< runProcess (proc "nix" ("develop" : args))
++    exitOnFailure =<< runMonitoredCommand defaultConfig{silent = True} (proc "@nix@" ("develop" : withJSON (replaceCommandWithExit args)))
++    exitWith =<< runProcess (proc "@nix@" ("develop" : args))
+   "nom" [] -> do
+     finalState <- monitorHandle @OldStyleInput defaultConfig{piping = True} stdin
+     if CMap.size finalState.fullSummary.failedBuilds + length finalState.nixErrors == 0
+@@ -108,7 +108,7 @@ printNixCompletion = \cases
+     exitSuccess
+   "nom" args@(sub_cmd : _)
+     | sub_cmd `elem` knownSubCommands ->
+-        exitWith =<< Process.runProcess (Process.proc "nix" args)
++        exitWith =<< Process.runProcess (Process.proc "@nix@" args)
+   prog args -> do
+     putTextLn $ "No completion support for " <> unwords (toText <$> prog : args)
+     exitFailure
+@@ -170,7 +170,7 @@ monitorHandle config input_handle = withParser @a \streamParser -> do
+       Terminal.hHideCursor outputHandle
+       hSetBuffering stdout (BlockBuffering (Just 1_000_000))
+ 
+-      current_system <- Exception.handle ((Nothing <$) . printIOException) $ Just . decodeUtf8 <$> Process.readProcessStdout_ (Process.proc "nix" ["eval", "--extra-experimental-features", "nix-command", "--impure", "--raw", "--expr", "builtins.currentSystem"])
++      current_system <- Exception.handle ((Nothing <$) . printIOException) $ Just . decodeUtf8 <$> Process.readProcessStdout_ (Process.proc "@nix@" ["eval", "--extra-experimental-features", "nix-command", "--impure", "--raw", "--expr", "builtins.currentSystem"])
+       first_state <- initalStateFromBuildPlatform current_system
+       -- We enforce here, that the state type is completely strict so that we don‘t accumulate thunks while running the program.
+       let first_process_state = MkProcessState (StrictType.Strict $ firstState @a first_state) (stateToText config first_state)
+-- 
+2.51.0
+
