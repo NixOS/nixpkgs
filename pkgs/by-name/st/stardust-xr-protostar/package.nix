@@ -7,18 +7,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "stardust-xr-protostar";
-  version = "0-unstable-2024-12-29";
+  version = "0.50.0-unstable-2025-12-01";
 
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "protostar";
-    rev = "9b73eb1e128b49a6d40a27a4cde7715d8cbd2674";
-    hash = "sha256-9KJO1Z3Aq0+hh9QqufWBxpMmfFOmdgMUJxfgGZMg2n4=";
+    rev = "11bf3972f261f93dd78c688ea282ce2fb89ee505";
+    hash = "sha256-FOscWbNxVsRQXfMUyOLHOcskY+hkwnUTzA4Az8OYEEw=";
   };
 
   env.STARDUST_RES_PREFIXES = "${src}/res";
 
-  cargoHash = "sha256-9XJ+nnvpTzr/3ii9dFkfZDex/++W5Mq9k0bh2Y6tueA=";
+  cargoHash = "sha256-8T21KPqYzJGj9gptZ0lcN4hIEKNFkLog7w145q2A/AE=";
 
   checkFlags = [
     # ---- xdg::test_get_desktop_files stdout ----
