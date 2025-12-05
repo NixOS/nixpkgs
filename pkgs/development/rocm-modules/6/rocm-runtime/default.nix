@@ -79,6 +79,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/ROCm/ROCR-Runtime/commit/41bfc66aef437a5b349f71105fa4b907cc7e17d5.patch";
       hash = "sha256-A7VhPR3eSsmjq2cTBSjBIz9i//WiNjoXm0EsRKtF+ns=";
     })
+    # Fix build with gcc15
+    (fetchpatch {
+      # [PATCH] rocr:Add missing cstdint include
+      url = "https://github.com/ROCm/ROCR-Runtime/commit/5cc61b714d5b59ed5405639a37a582d839e6ebe9.patch";
+      hash = "sha256-IPxDShpoFB0PjCG+zwFbnW9IBTCG3G2o9sfITGs+bN4=";
+    })
     # This causes a circular dependency, aqlprofile relies on hsa-runtime64
     # which is part of rocm-runtime
     # Worked around by having rocprofiler load aqlprofile directly
