@@ -13,6 +13,9 @@ let
   # Oracle MySQL has supported "notify" service type since 8.0
   hasNotify = isMariaDB || (isOracle && lib.versionAtLeast cfg.package.version "8.0");
 
+  isRenamedMariaDB = isMariaDB && lib.versionAtLeast cfg.package.version "10.5";
+  binaryPrefix = if isRenamedMariaDB then "mariadb" else "mysql";
+
   mysqldOptions = "--user=${cfg.user} --datadir=${cfg.dataDir} --basedir=${cfg.package}";
 
   format = pkgs.formats.ini { listsAsDuplicateKeys = true; };
@@ -546,14 +549,16 @@ in
         if isMariaDB then
           ''
             if ! test -e ${cfg.dataDir}/mysql; then
-              ${cfg.package}/bin/mysql_install_db --defaults-file=/etc/my.cnf ${mysqldOptions}
+              ${
+                lib.getExe' cfg.package (if isRenamedMariaDB then "mariadb-install-db" else "mysql_install_db")
+              } --defaults-file=/etc/my.cnf ${mysqldOptions}
               touch ${cfg.dataDir}/mysql_init
             fi
           ''
         else
           ''
             if ! test -e ${cfg.dataDir}/mysql; then
-              ${cfg.package}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} --initialize-insecure
+              ${lib.getExe' cfg.package "mysqld"} --defaults-file=/etc/my.cnf ${mysqldOptions} --initialize-insecure
               touch ${cfg.dataDir}/mysql_init
             fi
           '';
@@ -567,7 +572,7 @@ in
         fi
 
         # The last two environment variables are used for starting Galera clusters
-        exec ${cfg.package}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} $_WSREP_NEW_CLUSTER $_WSREP_START_POSITION
+        exec ${lib.getExe' cfg.package "${binaryPrefix}d"} --defaults-file=/etc/my.cnf ${mysqldOptions} $_WSREP_NEW_CLUSTER $_WSREP_START_POSITION
       '';
 
       postStart =
@@ -589,10 +594,10 @@ in
             # If MariaDB is used in an Galera cluster, we have to check if the sync is done,
             # or it will fail to init the database while joining, so we get in an broken non recoverable state
             # so we wait until we have an synced state
-            if ${cfg.package}/bin/mysql -u ${superUser} -N -e "SHOW VARIABLES LIKE 'wsrep_on'" 2>/dev/null | ${lib.getExe' pkgs.gnugrep "grep"} -q 'ON'; then
+            if ${lib.getExe' cfg.package binaryPrefix} -u ${superUser} -N -e "SHOW VARIABLES LIKE 'wsrep_on'" 2>/dev/null | ${lib.getExe' pkgs.gnugrep "grep"} -q 'ON'; then
               echo "Galera cluster detected, waiting for node to be synced..."
               while true; do
-                STATE=$(${cfg.package}/bin/mysql -u ${superUser} -N -e "SHOW STATUS LIKE 'wsrep_local_state_comment'" | ${lib.getExe' pkgs.gawk "awk"} '{print $2}')
+                STATE=$(${lib.getExe' cfg.package binaryPrefix} -u ${superUser} -N -e "SHOW STATUS LIKE 'wsrep_local_state_comment'" | ${lib.getExe' pkgs.gawk "awk"} '{print $2}')
                 if [ "$STATE" = "Synced" ]; then
                   echo "Node is synced"
                   break
@@ -612,7 +617,7 @@ in
                 if isMariaDB then "unix_socket" else "auth_socket"
               };"
                 echo "GRANT ALL PRIVILEGES ON *.* TO '${cfg.user}'@'localhost' WITH GRANT OPTION;"
-              ) | ${cfg.package}/bin/mysql -u ${superUser} -N
+              ) | ${lib.getExe' cfg.package binaryPrefix} -u ${superUser} -N
 
               ${lib.concatMapStrings (database: ''
                 # Create initial databases
@@ -633,7 +638,7 @@ in
                             cat ${database.schema}/mysql-databases/*.sql
                         fi
                       ''}
-                    ) | ${cfg.package}/bin/mysql -u ${superUser} -N
+                    ) | ${lib.getExe' cfg.package binaryPrefix} -u ${superUser} -N
                 fi
               '') cfg.initialDatabases}
 
@@ -644,7 +649,7 @@ in
                   echo "CREATE USER '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}' IDENTIFIED WITH mysql_native_password;"
                   echo "SET PASSWORD FOR '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}' = PASSWORD('${cfg.replication.masterPassword}');"
                   echo "GRANT REPLICATION SLAVE ON *.* TO '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}';"
-                ) | ${cfg.package}/bin/mysql -u ${superUser} -N
+                ) | ${lib.getExe' cfg.package binaryPrefix} -u ${superUser} -N
               ''}
 
               ${lib.optionalString (cfg.replication.role == "slave") ''
@@ -653,14 +658,14 @@ in
                 ( echo "STOP SLAVE;"
                   echo "CHANGE MASTER TO MASTER_HOST='${cfg.replication.masterHost}', MASTER_USER='${cfg.replication.masterUser}', MASTER_PASSWORD='${cfg.replication.masterPassword}';"
                   echo "START SLAVE;"
-                ) | ${cfg.package}/bin/mysql -u ${superUser} -N
+                ) | ${lib.getExe' cfg.package binaryPrefix} -u ${superUser} -N
               ''}
 
               ${lib.optionalString (cfg.initialScript != null) ''
                 # Execute initial script
                 # using toString to avoid copying the file to nix store if given as path instead of string,
                 # as it might contain credentials
-                cat ${toString cfg.initialScript} | ${cfg.package}/bin/mysql -u ${superUser} -N
+                cat ${toString cfg.initialScript} | ${lib.getExe' cfg.package binaryPrefix} -u ${superUser} -N
               ''}
 
               rm ${cfg.dataDir}/mysql_init
@@ -671,7 +676,7 @@ in
             ${lib.concatMapStrings (database: ''
               echo "CREATE DATABASE IF NOT EXISTS \`${database}\`;"
             '') cfg.ensureDatabases}
-            ) | ${cfg.package}/bin/mysql -N
+            ) | ${lib.getExe' cfg.package binaryPrefix} -N
           ''}
 
           ${lib.concatMapStrings (user: ''
@@ -683,7 +688,7 @@ in
                   echo "GRANT ${permission} ON ${database} TO '${user.name}'@'localhost';"
                 '') user.ensurePermissions
               )}
-            ) | ${cfg.package}/bin/mysql -N
+            ) | ${lib.getExe' cfg.package binaryPrefix} -N
           '') cfg.ensureUsers}
         '';
 
