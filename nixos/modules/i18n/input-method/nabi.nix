@@ -11,7 +11,7 @@ in
   config = lib.mkIf (imcfg.enable && imcfg.type == "nabi") {
     i18n.inputMethod.package = pkgs.nabi;
 
-    environment.variables = {
+    environment.sessionVariables = {
       GTK_IM_MODULE = "nabi";
       QT_IM_MODULE = "nabi";
       XMODIFIERS = "@im=nabi";
