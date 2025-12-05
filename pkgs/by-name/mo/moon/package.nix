@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moon";
-  version = "1.41.5";
+  version = "1.41.7";
 
   src = fetchFromGitHub {
     owner = "moonrepo";
     repo = "moon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BcDKjw2k102TQmLeq6+59Z6b4IpnGDRbQ4/nAXXIPBo=";
+    hash = "sha256-8yXyPQkVh6O/y9fH3u7PyJxPOi8VN5HVCJaBRmapB6Q=";
   };
 
-  cargoHash = "sha256-mc3A573QaovLwhcZshe9Z60ebHmcCyW/izbxlb2FNpk=";
+  cargoHash = "sha256-iMO/zGF3xddyQTr4JzcgAh01xC1XKOhdzCeEafNrrzQ=";
 
   env = {
     RUSTFLAGS = "-C strip=symbols";
