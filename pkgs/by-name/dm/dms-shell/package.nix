@@ -9,25 +9,25 @@
   bashNonInteractive,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dms-shell";
   version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "AvengeMedia";
     repo = "DankMaterialShell";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dLbiTWsKoF0if/Wqet/+L90ILdAaBqp+REGOou8uH3k=";
   };
 
-  sourceRoot = "${src.name}/core";
+  sourceRoot = "${finalAttrs.src.name}/core";
 
   vendorHash = "sha256-nc4CvEPfJ6l16/zmhnXr1jqpi6BeSXd3g/51djbEfpQ=";
 
   ldflags = [
     "-w"
     "-s"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/dms" ];
@@ -39,11 +39,11 @@ buildGoModule rec {
 
   postInstall = ''
     mkdir -p $out/share/quickshell
-    cp -r ${src}/quickshell $out/share/quickshell/dms
+    cp -r ${finalAttrs.src}/quickshell $out/share/quickshell/dms
 
     wrapProgram $out/bin/dms --add-flags "-c $out/share/quickshell/dms"
 
-    install -Dm644 ${src}/quickshell/assets/systemd/dms.service \
+    install -Dm644 ${finalAttrs.src}/quickshell/assets/systemd/dms.service \
       $out/lib/systemd/user/dms.service
     substituteInPlace $out/lib/systemd/user/dms.service \
       --replace-fail /usr/bin/dms $out/bin/dms \
@@ -65,10 +65,10 @@ buildGoModule rec {
   meta = {
     description = "Desktop shell for wayland compositors built with Quickshell & GO";
     homepage = "https://danklinux.com";
-    changelog = "https://github.com/AvengeMedia/DankMaterialShell/releases/tag/v${version}";
+    changelog = "https://github.com/AvengeMedia/DankMaterialShell/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ luckshiba ];
     mainProgram = "dms";
     platforms = lib.platforms.linux;
   };
-}
+})
