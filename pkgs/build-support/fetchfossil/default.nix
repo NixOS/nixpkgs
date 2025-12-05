@@ -3,6 +3,9 @@
   lib,
   fossil,
   cacert,
+
+  # Used in `pkgs/build-support/prefer-remote-fetch/default.nix`
+  preferLocalBuild ? true,
 }:
 
 lib.fetchers.withNormalizedHash { } (
@@ -29,7 +32,6 @@ lib.fetchers.withNormalizedHash { } (
     inherit outputHash outputHashAlgo;
     outputHashMode = "recursive";
 
-    inherit url rev;
-    preferLocalBuild = true;
+    inherit url rev preferLocalBuild;
   }
 )

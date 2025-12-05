@@ -7,9 +7,13 @@
   glibcLocales,
   sshSupport ? true,
   openssh ? null,
+
+  # Used in `pkgs/build-support/prefer-remote-fetch/default.nix`
+  preferLocalBuild ? true,
 }:
 
 let
+  preferLocalBuildDefault = preferLocalBuild;
   repoToName =
     url: rev:
     let
@@ -48,7 +52,7 @@ in
   hash ? "",
   ignoreExternals ? false,
   ignoreKeywords ? false,
-  preferLocalBuild ? true,
+  preferLocalBuild ? preferLocalBuildDefault,
 }:
 
 assert sshSupport -> openssh != null;

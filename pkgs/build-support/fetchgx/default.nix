@@ -5,6 +5,9 @@
   gx-go,
   go,
   cacert,
+
+  # Used in `pkgs/build-support/prefer-remote-fetch/default.nix`
+  preferLocalBuild ? true,
 }:
 
 lib.fetchers.withNormalizedHash { } (
@@ -17,7 +20,7 @@ lib.fetchers.withNormalizedHash { } (
 
   stdenvNoCC.mkDerivation {
     name = "${name}-gxdeps";
-    inherit src;
+    inherit src preferLocalBuild;
 
     nativeBuildInputs = [
       cacert
@@ -42,7 +45,5 @@ lib.fetchers.withNormalizedHash { } (
     installPhase = ''
       mv vendor $out
     '';
-
-    preferLocalBuild = true;
   }
 )
