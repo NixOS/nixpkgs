@@ -21,7 +21,19 @@ in
     };
 
     environment = lib.mkOption {
-      type = lib.types.attrsOf lib.types.str;
+      type = lib.types.submodule {
+        freeformType = lib.types.attrsOf lib.types.str;
+        options = {
+          SKIP_SYSTEMD = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = ''
+              Whether to disable systemd service monitoring.
+              Enabling this option will skip systemd tracking and its setup in NixOS.
+            '';
+          };
+        };
+      };
       default = { };
       description = ''
         Environment variables for configuring the beszel-agent service.
@@ -47,6 +59,15 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Static user required for D-Bus authentication and systemd monitoring.
+    # DynamicUser does not work reliably with D-Bus peer credential verification.
+    users.users.beszel-agent = lib.mkIf (!cfg.environment.SKIP_SYSTEMD) {
+      isSystemUser = true;
+      group = "beszel-agent";
+    };
+
+    users.groups.beszel-agent = lib.mkIf (!cfg.environment.SKIP_SYSTEMD) { };
+
     systemd.services.beszel-agent = {
       description = "Beszel Server Monitoring Agent";
 
@@ -54,7 +75,10 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
 
-      environment = cfg.environment;
+      environment = lib.mapAttrs (
+        _: value: if lib.isBool value then (lib.boolToString value) else value
+      ) cfg.environment;
+
       path =
         cfg.extraPath
         ++ lib.optionals (builtins.elem "nvidia" config.services.xserver.videoDrivers) [
@@ -74,15 +98,18 @@ in
 
         EnvironmentFile = cfg.environmentFile;
 
-        # adds ability to monitor docker/podman containers
+        # Adds ability to monitor docker/podman containers and systemd services.
+        # messagebus group is required for D-Bus system bus access to query systemd.
         SupplementaryGroups =
-          lib.optionals config.virtualisation.docker.enable [ "docker" ]
+          lib.optionals (!cfg.environment.SKIP_SYSTEMD) [ "messagebus" ]
+          ++ lib.optionals config.virtualisation.docker.enable [ "docker" ]
           ++ lib.optionals (
             config.virtualisation.podman.enable && config.virtualisation.podman.dockerSocket.enable
           ) [ "podman" ];
 
-        DynamicUser = true;
+        DynamicUser = cfg.environment.SKIP_SYSTEMD;
         User = "beszel-agent";
+        Group = lib.mkIf (!cfg.environment.SKIP_SYSTEMD) "beszel-agent";
         LockPersonality = true;
         NoNewPrivileges = true;
         PrivateTmp = true;
