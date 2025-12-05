@@ -16,12 +16,12 @@
 
 stdenv.mkDerivation rec {
   pname = "IPMIView";
-  version = "2.21.0";
-  buildVersion = "221118";
+  version = "2.23.0";
+  buildVersion = "250519";
 
   src = fetchurl {
-    url = "https://www.supermicro.com/wftp/utility/IPMIView/Linux/IPMIView_${version}_build.${buildVersion}_bundleJRE_Linux_x64.tar.gz";
-    hash = "sha256-ZN0vadGbjGj9U2wPqvHLjS9fsk3DNCbXoNvzUfnn8IM=";
+    url = "https://www.supermicro.com/Bios/sw_download/960/IPMIView_${version}_build.${buildVersion}_bundleJRE_Linux_x64.tar.gz";
+    hash = "sha256-MpgBReek891jBgbX7HvNAKzBqwKMO2qdkuqrEV90oI0=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +54,10 @@ stdenv.mkDerivation rec {
       patchelf --set-rpath "${lib.makeLibraryPath [ freetype ]}" ./jre/lib/libfontmanager.so
       patchelf --set-rpath "${gcc.cc}/lib:$out/jre/lib/jli" --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./jre/bin/java
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./BMCSecurity/${stunnelBinary}
+
+      # Enable TLSv1 to connect to older hosts
+      substituteInPlace jre/conf/security/java.security \
+        --replace-fail "SSLv3, TLSv1, TLSv1.1," "SSLv3,"
 
       runHook postBuild
     '';
@@ -101,7 +105,10 @@ stdenv.mkDerivation rec {
       binaryNativeCode
     ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ vlaci ];
+    maintainers = with maintainers; [
+      vlaci
+      xddxdd
+    ];
     platforms = [
       "x86_64-linux"
       "i686-linux"
