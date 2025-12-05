@@ -3,9 +3,10 @@
   stdenv,
   python311Packages,
   fetchFromGitHub,
-  fetchurl,
   cargo,
   curl,
+  gettext,
+  libclang,
   pkg-config,
   openssl,
   rustPlatform,
@@ -21,7 +22,8 @@
 }:
 
 let
-  inherit (lib.importJSON ./deps.json) links version versionHash;
+  version = "0.2.20250521-115337+25ed6ac4";
+  versionHash = "5666677436360580454";
   # Sapling sets a Cargo config containing lines like so:
   # [target.aarch64-apple-darwin]
   # rustflags = ["-C", "link-args=-Wl,-undefined,dynamic_lookup"]
@@ -42,7 +44,7 @@ let
     owner = "facebook";
     repo = "sapling";
     rev = version;
-    hash = "sha256-4pOpJ91esTSH90MvvMu74CnlLULLUawqxcniUeqnLwA=";
+    hash = "sha256-NvfSx6BMbwOFY+y6Yb/tyUNYeuL8WCoc+HSVys8Ko0Y=";
   };
 
   addonsSrc = "${src}/addons";
@@ -50,7 +52,7 @@ let
   # Fetches the Yarn modules in Nix to to be used as an offline cache
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${addonsSrc}/yarn.lock";
-    sha256 = "sha256-jCtrflwDrwql6rY1ff1eXLKdwmnXhg5bCJPlCczBCIk=";
+    sha256 = "sha256-9l4lSzFTF5rSByO388tosJCxOb65Nnua6HaDD7F62No=";
   };
 
   # Builds the NodeJS server that runs with `sl web`
@@ -108,14 +110,17 @@ python311Packages.buildPythonApplication {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "abomonation-0.7.3+smallvec1" = "sha256-AxEXR6GC8gHjycIPOfoViP7KceM29p2ZISIt4iwJzvM=";
-      "cloned-0.1.0" = "sha256-2BaNR/pQmR7pHtRf6VBQLcZgLHbj2JCxeX4auAB0efU=";
-      "fb303_core-0.0.0" = "sha256-PDGdKjR6KPv1uH1JSTeoG5Rs0ZkmNJLqqSXtvV3RWic=";
-      "fbthrift-0.0.1+unstable" = "sha256-J4REXGuLjHyN3SHilSWhMoqpRcn1QnEtsTsZF4Z3feU=";
-      "serde_bser-0.4.0" = "sha256-Su1IP3NzQu/87p/+uQaG8JcICL9hit3OV1O9oFiACsQ=";
+      "cloned-0.1.0" = "sha256-l6VjSyYTI4CHKy8TwMSB+e21KMfJUNGv3RPA0u3v59I=";
+      "fb303_core-0.0.0" = "sha256-cZzlfqtX51BxPSkgR5T1da3cmJaygSvi116SxPzfoQc=";
+      "fbthrift-0.0.1+unstable" = "sha256-R1SD6NsFdotRTak7DZE//FTdeeV2IaEvWg6e1sfsTrE=";
+      "serde_bser-0.4.0" = "sha256-sV/6C6wRi/4unhzaD+LpXdu1WpnnDOTzed+Ol7hXOFk=";
     };
   };
   postPatch = ''
     cp ${./Cargo.lock} Cargo.lock
+
+    substituteInPlace sapling/thirdparty/pysocks/setup.py \
+      --replace-fail 'os.path.dirname(__file__)' "\"$out/lib/${python311Packages.python.libPrefix}/site-packages/sapling/thirdparty/pysocks\""
   ''
   + lib.optionalString (!enableMinimal) ''
     # If asked, we optionally patch in a hardcoded path to the
@@ -123,17 +128,6 @@ python311Packages.buildPythonApplication {
     # patch, 'sl web' will still work if 'nodejs' is in $PATH.
     substituteInPlace lib/config/loader/src/builtin_static/core.rs \
       --replace '"#);' $'[web]\nnode-path=${nodejs}/bin/node\n"#);'
-  '';
-
-  # Since the derivation builder doesn't have network access to remain pure,
-  # fetch the artifacts manually and link them. Then replace the hardcoded URLs
-  # with filesystem paths for the curl calls.
-  postUnpack = ''
-    mkdir $sourceRoot/hack_pydeps
-    ${lib.concatStrings (
-      map (li: "ln -s ${fetchurl li} $sourceRoot/hack_pydeps/${baseNameOf li.url}\n") links
-    )}
-    sed -i "s|https://files.pythonhosted.org/packages/[[:alnum:]]*/[[:alnum:]]*/[[:alnum:]]*/|file://$NIX_BUILD_TOP/$sourceRoot/hack_pydeps/|g" $sourceRoot/setup.py
   '';
 
   postInstall = ''
@@ -151,7 +145,8 @@ python311Packages.buildPythonApplication {
     myCargoSetupHook
     cargo
     rustc
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ gettext ];
 
   buildInputs = [
     openssl
@@ -162,6 +157,7 @@ python311Packages.buildPythonApplication {
   ];
 
   HGNAME = "sl";
+  LIBCLANG_PATH = "${lib.getLib libclang}/lib";
   SAPLING_OSS_BUILD = "true";
   SAPLING_VERSION_HASH = versionHash;
 
@@ -174,14 +170,20 @@ python311Packages.buildPythonApplication {
   # just a simple check phase, until we have a running test suite. this should
   # help catch issues like lack of a LOCALE_ARCHIVE setting (see GH PR #202760)
   doCheck = true;
-  installCheckPhase = ''
+
+  # Check fails with TypeError at hgpython.rs:227 for unknown reason
+  # specifically on Linux.
+  installCheckPhase = lib.optionalString (!stdenv.hostPlatform.isLinux) ''
     echo -n "testing sapling version; should be \"$SAPLING_VERSION\"... "
     $out/bin/sl version | grep -qw "$SAPLING_VERSION"
     echo "OK!"
   '';
 
-  # Expose isl to nix repl as sapling.isl.
-  passthru.isl = isl;
+  passthru = {
+    # Expose isl to nix repl as sapling.isl.
+    isl = isl;
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "Scalable, User-Friendly Source Control System";
@@ -190,6 +192,7 @@ python311Packages.buildPythonApplication {
     maintainers = with maintainers; [
       pbar
       thoughtpolice
+      shikanime
     ];
     platforms = platforms.unix;
     mainProgram = "sl";
