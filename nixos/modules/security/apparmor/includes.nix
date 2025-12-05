@@ -19,7 +19,7 @@ let
           mode ? "r",
           trail ? "",
         }:
-        lib.optionalString (hasAttr path etc) "${mode} ${config.environment.etc.${path}.source}${trail},";
+        lib.optionalString (hasAttr path etc) "${config.environment.etc.${path}.source}${trail} ${mode},";
     in
     if isAttrs arg then go arg else go { path = arg; };
 in
@@ -93,19 +93,19 @@ in
     ];
     "abstractions/base" = ''
       include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/base"
-      r ${pkgs.stdenv.cc.libc}/share/locale/**,
-      r ${pkgs.stdenv.cc.libc}/share/locale.alias,
-      r ${config.i18n.glibcLocales}/lib/locale/locale-archive,
+      ${pkgs.stdenv.cc.libc}/share/locale/** r,
+      ${pkgs.stdenv.cc.libc}/share/locale.alias r,
+      ${config.i18n.glibcLocales}/lib/locale/locale-archive r,
       ${etcRule "localtime"}
-      r ${pkgs.tzdata}/share/zoneinfo/**,
-      r ${pkgs.stdenv.cc.libc}/share/i18n/**,
+      ${pkgs.tzdata}/share/zoneinfo/** r,
+      ${pkgs.stdenv.cc.libc}/share/i18n/** r,
     '';
     "abstractions/bash" = ''
       include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/bash"
 
       # bash inspects filesystems at startup
       # and /etc/mtab is linked to /proc/mounts
-      r @{PROC}/mounts,
+      @{PROC}/mounts r,
 
       # system-wide bash configuration
     ''
@@ -296,8 +296,8 @@ in
       # looking up users by name or id, groups by name or id, hosts by name
       # or IP, etc. These operations may be performed through files, dns,
       # NIS, NIS+, LDAP, hesiod, wins, etc. Allow them all here.
-      mr ${getLib pkgs.nss}/lib/libnss_*.so*,
-      mr ${getLib pkgs.nss}/lib64/libnss_*.so*,
+      ${getLib pkgs.nss}/lib/libnss_*.so* mr,
+      ${getLib pkgs.nss}/lib64/libnss_*.so* mr,
     ''
     + lib.concatMapStringsSep "\n" etcRule [
       "group"
@@ -431,6 +431,13 @@ in
     "abstractions/python" = ''
       include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/python"
     '';
+    "abstractions/golang" = ''
+      # Container-aware GOMAXPROCS
+      owner @{PROC}/@{pid}/mountinfo r,
+      owner @{PROC}/@{pid}/cgroup r,
+      @{sys}/fs/cgroup/**/{cpu.cfs_quota_us,cpu.cfs_period_us} r, # V1
+      @{sys}/fs/cgroup/**/cpu.max r, # V2
+    '';
     "abstractions/qt5" = ''
       include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/qt5"
     ''
@@ -456,11 +463,11 @@ in
       include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/ssl_certs"
 
       # For the NixOS module: security.acme
-      r /var/lib/acme/*/cert.pem,
-      r /var/lib/acme/*/chain.pem,
-      r /var/lib/acme/*/fullchain.pem,
+      /var/lib/acme/*/cert.pem r,
+      /var/lib/acme/*/chain.pem r,
+      /var/lib/acme/*/fullchain.pem r,
 
-      r /etc/pki/tls/certs/,
+      /etc/pki/tls/certs/ r,
 
     ''
     + lib.concatMapStringsSep "\n" etcRule [
@@ -503,8 +510,8 @@ in
     ];
     "abstractions/ssl_keys" = ''
       # security.acme NixOS module
-      r /var/lib/acme/*/full.pem,
-      r /var/lib/acme/*/key.pem,
+      /var/lib/acme/*/full.pem r,
+      /var/lib/acme/*/key.pem r,
     '';
     "abstractions/vulkan" = ''
       include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/vulkan"

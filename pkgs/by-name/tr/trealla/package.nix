@@ -23,13 +23,13 @@ assert lib.elem lineEditingLibrary [
 ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "trealla";
-  version = "2.83.17";
+  version = "2.86.5";
 
   src = fetchFromGitHub {
     owner = "trealla-prolog";
     repo = "trealla";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mJuafIfRfyhD8yMqAjM749qbLqX4n+Gq53YZKCibB7A=";
+    hash = "sha256-0r73id/Yy9CrLM56x66iJtzrC7WCC/VSA+rRKiz9cDk=";
   };
 
   postPatch = ''

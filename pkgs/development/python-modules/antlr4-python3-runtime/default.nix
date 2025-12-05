@@ -10,13 +10,11 @@ buildPythonPackage rec {
   pname = "antlr4-python3-runtime";
   inherit (antlr4.runtime.cpp) version src;
 
-  format = "pyproject";
-
-  disabled = python.pythonOlder "3.6";
+  pyproject = true;
 
   sourceRoot = "${src.name}/runtime/Python3";
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   postPatch = ''
     substituteInPlace tests/TestIntervalSet.py \
@@ -36,10 +34,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Runtime for ANTLR";
     mainProgram = "pygrun";
     homepage = "https://www.antlr.org/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sarahec ];
   };
 }

@@ -67,20 +67,19 @@
 
 buildPythonPackage rec {
   pname = "chromadb";
-  version = "1.1.1";
+  version = "1.3.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "chroma";
     tag = version;
-    hash = "sha256-WFN4z+LQwqy6bd59yWlglpXFqNZPEd3jcgeWhdphxYM=";
+    hash = "sha256-pIVoPW7Sdc3XN66SuA6IILQkhoNwqy/X4OWgW08CC58=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}-vendor";
-    hash = "sha256-LZXtAt4rP0rKaleMht1eFPdqgE8nu5NdLzhWBW69WW8=";
+    inherit pname version src;
+    hash = "sha256-3cY9d28dE7Ndh0o1MiBLSwRggkjjnXRcnmsvC2t5S7A=";
   };
 
   # Can't use fetchFromGitHub as the build expects a zipfile
@@ -93,6 +92,11 @@ buildPythonPackage rec {
     # Nixpkgs is taking the version from `chromadb_rust_bindings` which is versioned independently
     substituteInPlace pyproject.toml \
       --replace-fail "dynamic = [\"version\"]" "version = \"${version}\""
+
+    # Flip anonymized telemetry to opt in versus current opt-in out for privacy
+    substituteInPlace chromadb/config.py \
+      --replace-fail "anonymized_telemetry: bool = True" \
+                     "anonymized_telemetry: bool = False"
   '';
 
   pythonRelaxDeps = [
@@ -212,6 +216,10 @@ buildPythonPackage rec {
     # No such file or directory: 'openssl'
     "test_ssl_self_signed_without_ssl_verify"
     "test_ssl_self_signed"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fails in nixpkgs-review on Darwin due to concurrent copies running and the lack of network namespaces.
+    "test_add_then_delete_n_minus_1"
   ];
 
   disabledTestPaths = [
@@ -220,6 +228,7 @@ buildPythonPackage rec {
     "chromadb/test/ef"
     "chromadb/test/property/test_cross_version_persist.py"
     "chromadb/test/stress"
+    "chromadb/test/api/test_schema_e2e.py"
 
     # Excessively slow
     "chromadb/test/property/test_add.py"

@@ -10,6 +10,7 @@
   certifi,
   filelock,
   isodate,
+  jaconv,
   jsonschema,
   lxml,
   numpy,
@@ -25,17 +26,17 @@
   tkinter,
 
   aniso8601,
-  pycryptodome,
+  cheroot,
+  graphviz,
+  holidays,
+  matplotlib,
   pg8000,
+  pycryptodome,
   pymysql,
   pyodbc,
-  rdflib,
-  holidays,
   pytz,
+  rdflib,
   tinycss2,
-  graphviz,
-  cheroot,
-  cherrypy,
   tornado,
 
   sphinxHook,
@@ -44,20 +45,21 @@
   sphinx-copybutton,
   furo,
 
+  writableTmpDirAsHomeHook,
   pytestCheckHook,
   boto3,
 }:
 
 buildPythonPackage rec {
   pname = "arelle${lib.optionalString (!gui) "-headless"}";
-  version = "2.37.61";
+  version = "2.37.72";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Arelle";
     repo = "Arelle";
     tag = version;
-    hash = "sha256-xz3sDAgE1Qpml8V+2y+q/tTda6uGZuMnNSEGdIjLlzI=";
+    hash = "sha256-wytYETzntY1sGHgXua/MOkceiNKjr5qddAGWPMJni98=";
   };
 
   outputs = [
@@ -71,6 +73,10 @@ buildPythonPackage rec {
         'requires = ["setuptools", "wheel", "setuptools_scm[toml]"]'
   '';
 
+  pythonRelaxDeps = [
+    "pillow" # pillow's current version is above what arelle officially supports, but it should be fine
+  ];
+
   build-system = [
     setuptools
     setuptools-scm
@@ -81,6 +87,7 @@ buildPythonPackage rec {
     certifi
     filelock
     isodate
+    jaconv
     jsonschema
     lxml
     numpy
@@ -103,14 +110,15 @@ buildPythonPackage rec {
       rdflib
     ];
     efm = [
+      aniso8601
       holidays
+      matplotlib
       pytz
     ];
     esef = [ tinycss2 ];
     objectmaker = [ graphviz ];
     webserver = [
       cheroot
-      cherrypy
       tornado
     ];
     xule = [ aniso8601 ];
@@ -131,14 +139,11 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    writableTmpDirAsHomeHook
     pytestCheckHook
     boto3
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     "tests/integration_tests"

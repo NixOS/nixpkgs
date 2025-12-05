@@ -41,7 +41,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Recommends instance types based on resource criteria like vcpus and memory";
     homepage = "https://github.com/aws/amazon-ec2-instance-selector";
-    changelog = "https://github.com/aws/amazon-ec2-instance-selector/tags/v${finalAttrs.version}";
+    changelog = "https://github.com/aws/amazon-ec2-instance-selector/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ wcarlsen ];
     mainProgram = "ec2-instance-selector";

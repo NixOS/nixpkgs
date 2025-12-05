@@ -6,10 +6,14 @@
   libyaml,
   pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "yaml-filter";
   version = "0.2.0";
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2." "cmake_minimum_required(VERSION 3.10"
+  '';
 
   src = fetchFromGitHub {
     owner = "OpenSCAP";

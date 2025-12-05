@@ -2,25 +2,32 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "doxx";
-  version = "0-unstable-2025-08-18";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "bgreenwell";
     repo = "doxx";
-    rev = "5c957470de1fa937cf96cd847286e2d3ee37cbee";
-    hash = "sha256-ZCvb8FnGdpzEDqYCIFjg+hiO3OZNnZ2+dSDVLx+crTU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-V0pBeh9u6iNt6hS1MpUau6nYBdfn9bELhR0GAMqTRmc=";
   };
 
-  cargoHash = "sha256-1i+IAQc55HYrqJm3Hx0frphSQp7jYGa6i0eOvHVMdCI=";
+  cargoHash = "sha256-WsV6IGKO3mwAXtqXHu+CP1dQ/tw1jsuZlfSZx4L2WIM=";
+
+  # https://github.com/bgreenwell/doxx/issues/65
+  checkFlags = [ "--skip=terminal_image::tests::test_renderer_creation" ];
 
   postInstall = ''
     rm $out/bin/generate_test_docs
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
@@ -34,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       capabilities.
     '';
     homepage = "https://github.com/bgreenwell/doxx";
-    changelog = "https://github.com/bgreenwell/doxx/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/bgreenwell/doxx/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yiyu ];
     mainProgram = "doxx";

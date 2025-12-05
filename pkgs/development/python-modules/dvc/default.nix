@@ -86,7 +86,7 @@ buildPythonPackage rec {
     substituteInPlace dvc/analytics.py \
       --replace-fail 'enabled = not os.getenv(DVC_NO_ANALYTICS)' 'enabled = False'
     substituteInPlace dvc/daemon.py \
-      --subst-var-by dvc "$out/bin/dcv"
+      --subst-var-by dvc "$out/bin/dvc"
   '';
 
   build-system = [ setuptools-scm ];

@@ -1,94 +1,52 @@
-diff --git c/src/CMakeLists.txt w/src/CMakeLists.txt
-index f9e020ce..c5f71914 100644
---- c/src/CMakeLists.txt
+diff --git i/src/CMakeLists.txt w/src/CMakeLists.txt
+index de474c4d..36b6cf2c 100644
+--- i/src/CMakeLists.txt
 +++ w/src/CMakeLists.txt
-@@ -68,6 +68,10 @@ set(BUILD_SHARED_LIBS OFF)
- 
+@@ -129,26 +129,37 @@ set(BUILD_SHARED_LIBS OFF)
  include(FetchContent)
  
-+find_package(LibLZMA)
-+if(LIBLZMA_FOUND)
-+    set(EXTRALIBS ${EXTRALIBS} LibLZMA::LibLZMA)
-+else()
  # Bundled liblzma
- set(LIBLZMA_VERSION "5.8.1")
- FetchContent_Declare(xz
-@@ -114,7 +118,10 @@ set(LIBLZMA_LIBRARIES ${xz_BINARY_DIR}/liblzma.a CACHE FILEPATH "" FORCE)
- set(LIBLZMA_HAS_AUTO_DECODER true CACHE BOOL "" FORCE)
- set(LIBLZMA_HAS_EASY_ENCODER true CACHE BOOL "" FORCE)
- set(LIBLZMA_HAS_LZMA_PRESET true CACHE BOOL "" FORCE)
++find_package(LibLZMA)
++if(NOT LIBLZMA_FOUND)
+ include(dependencies/xz.cmake)
 +endif()
  
+ # Bundled zstd
 +find_package(zstd ${ZSTD_VERSION})
 +if(NOT zstd_FOUND)
- # Bundled zstd
- set(ZSTD_VERSION "1.5.7")
- FetchContent_Declare(zstd
-@@ -147,32 +154,12 @@ set(ZSTD_INCLUDE_DIRS ${CMAKE_CURRENT_BINARY_DIR}/_deps/zstd-src/lib CACHE PATH
- set(Zstd_LIBRARIES libzstd_static CACHE FILEPATH "" FORCE)
- set(ZSTD_LIBRARIES libzstd_static CACHE FILEPATH "" FORCE)
- set(ZSTD_LIBRARY ${CMAKE_CURRENT_BINARY_DIR}/_deps/zstd-build/lib/libzstd.a CACHE FILEPATH "" FORCE)
--
--# Remote nghttp2
--set(NGHTTP2_VERSION "1.66.0")
--FetchContent_Declare(nghttp2
--    GIT_REPOSITORY https://github.com/nghttp2/nghttp2.git
--    GIT_TAG        v${NGHTTP2_VERSION}
--    ${USE_OVERRIDE_FIND_PACKAGE}
--)
--set(BUILD_EXAMPLES OFF)
--set(ENABLE_LIB_ONLY ON)
--set(ENABLE_FAILMALLOC OFF)
--FetchContent_GetProperties(nghttp2)
--if(NOT nghttp2_POPULATED)
--    FetchContent_Populate(nghttp2)
--    add_subdirectory(${nghttp2_SOURCE_DIR} ${nghttp2_BINARY_DIR} EXCLUDE_FROM_ALL)
- endif()
--unset(ENABLE_LIB_ONLY)
--unset(ENABLE_FAILMALLOC)
--unset(BUILD_EXAMPLES)
--set(NGHTTP2_LIBRARIES nghttp2_static CACHE FILEPATH "" FORCE)
--set(NGHTTP2_LIBRARY nghttp2_static CACHE FILEPATH "" FORCE)
--set(NGHTTP2_INCLUDE_DIR ${nghttp2_SOURCE_DIR}/lib CACHE PATH "" FORCE)
--set(NGHTTP2_INCLUDE_DIRS ${nghttp2_SOURCE_DIR}/lib CACHE PATH "" FORCE)
--set(NGHTTP2_FOUND true CACHE BOOL "" FORCE)
--
- 
-+find_package(ZLIB)
-+if(ZLIB_FOUND)
-+    set(EXTRALIBS ${EXTRALIBS} ZLIB::ZLIB)
-+else()
- # Bundled zlib
- set(ZLIB_VERSION "1.4.1.1")
- set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-@@ -236,7 +223,10 @@ endif()
- message(STATUS "ZLIB_LIBRARY set to: ${ZLIB_LIBRARY}")
- message(STATUS "ZLIB_LIBRARIES set to: ${ZLIB_LIBRARIES}")
- message(STATUS "ZLIB_INCLUDE_DIRS set to: ${ZLIB_INCLUDE_DIRS}")
+ include(dependencies/zstd.cmake)
 +endif()
  
+ # Remote nghttp2
+-include(dependencies/nghttp2.cmake)
+ 
+ # Bundled yescrypt
+ include(dependencies/yescrypt.cmake)
+ 
+ 
+ # Bundled zlib
++find_package(ZLIB)
++if(NOT ZLIB_FOUND)
+ include(dependencies/zlib.cmake)
++endif()
+ 
+ # Bundled libarchive
 +find_package(LibArchive)
 +if(NOT LibArchive_FOUND)
- # Bundled libarchive
- 
- set(ENABLE_WERROR OFF CACHE BOOL "")
-@@ -368,8 +358,11 @@ set(LibArchive_FOUND true CACHE BOOL "" FORCE)
- set(LibArchive_LIBRARIES archive_static CACHE FILEPATH "" FORCE)
- set(LibArchive_INCLUDE_DIR ${libarchive_SOURCE_DIR}/libarchive CACHE PATH "" FORCE)
- set(LibArchive_INCLUDE_DIRS ${libarchive_SOURCE_DIR}/libarchive CACHE PATH "" FORCE)
+ include(dependencies/libarchive.cmake)
 +endif()
  
- # Bundled libcurl
-+find_package(CURL)
-+if(NOT CURL_FOUND)
- set(CURL_VERSION "8.14.1")
- string(REPLACE "." "_" CURL_TAG ${CURL_VERSION})
- FetchContent_Declare(curl
-@@ -516,6 +509,7 @@ set(CURL_FOUND true CACHE BOOL "" FORCE)
- set(CURL_LIBRARIES libcurl_static CACHE FILEPATH "" FORCE)
- set(CURL_INCLUDE_DIR ${curl_SOURCE_DIR}/include CACHE PATH "" FORCE)
- set(CURL_INCLUDE_DIRS ${curl_SOURCE_DIR}/include CACHE PATH "" FORCE)
-+endif()
+ # libcurl
+-if(APPLE)
++if(APPLE OR TRUE)
+     # In version 8.15.0, libcurl dropped support for Secure Transport, because it
+     # does not implement TLS 1.3. Unfortunately, there was no replacement Network.framework implementation,
+     # so on macOS we're forced to use the macOS SDK version of libcurl, including libcurl's own OpenSSL-analogue.
+@@ -506,7 +517,6 @@ else()
+     include(linux/PlatformPackaging.cmake)
+ endif()
  
- # Adding headers explicity so they are displayed in Qt Creator
- set(HEADERS config.h imagewriter.h networkaccessmanagerfactory.h nan.h drivelistitem.h drivelistmodel.h drivelistmodelpollthread.h driveformatthread.h powersaveblocker.h cli.h
+-add_dependencies(${PROJECT_NAME} zlibstatic yescrypt)
+ include_directories(${CURL_INCLUDE_DIR} ${LibArchive_INCLUDE_DIR} ${LIBLZMA_INCLUDE_DIRS} ${LIBDRM_INCLUDE_DIRS} ${ZLIB_INCLUDE_DIRS} ${ZSTD_INCLUDE_DIR} ${YESCRYPT_INCLUDE_DIR})
+ 
+ # Link different Qt components based on build type

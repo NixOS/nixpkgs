@@ -1,5 +1,5 @@
 diff --git a/3party/CMakeLists.txt b/3party/CMakeLists.txt
-index 5178ae0..abe103f 100644
+index dd851d7d..1b4e3ed3 100644
 --- a/3party/CMakeLists.txt
 +++ b/3party/CMakeLists.txt
 @@ -41,9 +41,6 @@ if (NOT WITH_SYSTEM_PROVIDED_3PARTY)
@@ -21,4 +21,34 @@ index 5178ae0..abe103f 100644
 +
  add_subdirectory(agg)
  add_subdirectory(bsdiff-courgette)
- add_subdirectory(minizip)
+ add_subdirectory(glaze)
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3ba193a9..dd2df855 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -225,25 +225,6 @@ endif()
+ # Used in qt/ and shaders/
+ find_package(Python3 REQUIRED COMPONENTS Interpreter)
+
+-execute_process(
+-    COMMAND ${Python3_EXECUTABLE} -c "import google.protobuf; 
+-print(google.protobuf.__version__)"
+-    RESULT_VARIABLE PROTOBUF_CHECK
+-    OUTPUT_VARIABLE PROTOBUF_VERSION
+-    OUTPUT_STRIP_TRAILING_WHITESPACE
+-    ERROR_QUIET
+-)
+-
+-if(PROTOBUF_CHECK EQUAL 0)
+-    if(PROTOBUF_VERSION VERSION_LESS "4.0.0")
+-        message(STATUS "Python protobuf ${PROTOBUF_VERSION} found (< 4.0)")
+-    else()
+-        message(FATAL_ERROR "Python protobuf ${PROTOBUF_VERSION} found, but version < 4.0 required")
+-    endif()
+-else()
+-    message(FATAL_ERROR "Python protobuf not found. Install version <4.0")
+-endif()
+-
+
+ add_subdirectory(libs)
+

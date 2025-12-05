@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "django-webpack-loader";
-  version = "3.2.1";
+  version = "3.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-webpack";
     repo = "django-webpack-loader";
     tag = version;
-    hash = "sha256-2CmIaVDSZlqfSJVPVBmOcT89znjxQhe7ZHhe7i6DCGY=";
+    hash = "sha256-ZT+c6oYpES+3idHO1Dty3r8DHGNtD44ljEbBVOlEmW0=";
   };
 
   build-system = [ setuptools-scm ];
@@ -31,6 +31,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/owais/django-webpack-loader";
     changelog = "https://github.com/django-webpack/django-webpack-loader/blob/${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ peterromfeldhk ];
   };
 }

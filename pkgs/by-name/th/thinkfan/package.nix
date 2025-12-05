@@ -7,6 +7,7 @@
   yaml-cpp,
   pkg-config,
   procps,
+  coreutils,
   smartSupport ? false,
   libatasmart,
 }:
@@ -31,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   + ''
     substituteInPlace rcscripts/systemd/thinkfan-sleep.service \
       --replace-fail "/usr/bin/pkill" "${lib.getExe' procps "pkill"}"
+    substituteInPlace rcscripts/systemd/thinkfan-sleep.service \
+      --replace-fail "ExecStart=sleep " "ExecStart=${lib.getExe' coreutils "sleep"} "
     substituteInPlace rcscripts/systemd/thinkfan-wakeup.service \
       --replace-fail "/usr/bin/pkill" "${lib.getExe' procps "pkill"}"
     substituteInPlace rcscripts/systemd/thinkfan.service.cmake \

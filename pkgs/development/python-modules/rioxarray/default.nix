@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "rioxarray";
-  version = "0.19.0";
+  version = "0.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "corteva";
     repo = "rioxarray";
     tag = version;
-    hash = "sha256-tNcBuMyBVDVPbmujfn4WauquutOEn727lxcR19hfyuE=";
+    hash = "sha256-yLWCDaAcwQT2C0Nt1GaIA3NWXe6k2CDkBAr3rsm8eQs=";
   };
 
   build-system = [ setuptools ];
@@ -56,8 +56,6 @@ buildPythonPackage rec {
     # Fails with small numerical errors on GDAL 3.11
     "test_rasterio_vrt_gcps"
     "test_reproject__gcps"
-    # https://github.com/corteva/rioxarray/issues/862
-    "test_merge_datasets__mask_and_scale"
   ]
   ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     # numerical errors

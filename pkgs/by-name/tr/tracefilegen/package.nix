@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
     cp -ar $src/Documentation/html $out/share/doc/${pname}-${version}/.
   '';
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = with lib; {
     description = "Automatically generate all types of basic memory management operations and write into trace files";
     mainProgram = "TraceFileGen";

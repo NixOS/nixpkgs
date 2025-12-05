@@ -75,7 +75,7 @@ buildPythonPackage rec {
     pymysql
     pyodbc
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies)
+  ++ lib.concatAttrValues optional-dependencies
   ++ lib.optionals (pythonOlder "3.12") [
     # requires distutils, which were removed in 3.12
     psycopg2cffi

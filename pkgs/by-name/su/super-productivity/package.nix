@@ -14,13 +14,13 @@
 
 buildNpmPackage rec {
   pname = "super-productivity";
-  version = "15.0.3";
+  version = "16.4.1";
 
   src = fetchFromGitHub {
     owner = "johannesjo";
     repo = "super-productivity";
     tag = "v${version}";
-    hash = "sha256-Nc9S8vAj8HFFSkVexBpHW1Sd3hGSVNqY0YRWeDyOA3w=";
+    hash = "sha256-d4mkIy+iFTM1fZxwUVLFgIIjen6+P/l4jsYeEP1kojc=";
 
     postFetch = ''
       find $out -name package-lock.json -exec ${lib.getExe npm-lockfile-fix} -r {} \;
@@ -63,7 +63,7 @@ buildNpmPackage rec {
       dontInstall = true;
 
       outputHashMode = "recursive";
-      hash = "sha256-PilTsWaNCP6OTFCgIKtwxLGjUCKpCM+HLXwpWNwYTtA=";
+      hash = "sha256-lIkIxR/SfmbmBLEkhUZkTXSy6RIGcPVoNP8T2EgamEo=";
     }
   );
 
@@ -101,7 +101,8 @@ buildNpmPackage rec {
     npm run build
     npm exec electron-builder -- --dir \
       -c.electronDist=electron-dist \
-      -c.electronVersion=${electron.version}
+      -c.electronVersion=${electron.version} \
+      -c.mac.identity=null
 
     runHook postBuild
   '';

@@ -54,7 +54,7 @@ buildPythonPackage rec {
     pytest-mypy-plugins
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # AttributeError: module 'django.contrib.auth.forms' has no attribute 'SetUnusablePasswordMixin'

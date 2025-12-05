@@ -22,23 +22,23 @@
 }:
 
 let
-  version = "469e-rc9";
+  version = "469e";
   srcs = rec {
     x86_64-linux = fetchurl {
       url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${builtins.elemAt (lib.strings.splitString "-" version) 0}-Linux-amd64.tar.bz2";
-      hash = "sha256-1hEWiUjgzb1mKTs/2p2/Whj8FdpqpvfaDtXf63S/W44=";
+      hash = "sha256-CMgGqjchsZcARaoVitkAUTKdmC6KmjZhFTkA6cy/aww=";
     };
     aarch64-linux = fetchurl {
       url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${builtins.elemAt (lib.strings.splitString "-" version) 0}-Linux-arm64.tar.bz2";
-      hash = "sha256-ZYbwwefn5ifzz9rkx9X8PSVy1c8t2Z24VXt6dignUtg=";
+      hash = "sha256-TDl4BzsSsEnD/9600nXPx6IxNlDz61uU2wb7/ud8Pjs=";
     };
     i686-linux = fetchurl {
       url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${builtins.elemAt (lib.strings.splitString "-" version) 0}-Linux-x86.tar.bz2";
-      hash = "sha256-afpDtlU01tEpGnfgichWqsUj80Lk2K//s/6iyqS/Vq8=";
+      hash = "sha256-y9bYAW77MOOYJ1elgsaIUygDch7B7HOPwor5s+FdPBQ=";
     };
     x86_64-darwin = fetchurl {
       url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${builtins.elemAt (lib.strings.splitString "-" version) 0}-macOS.dmg";
-      hash = "sha256-rFbgSQNeYwgd3Dzs/F+ljUFaGRwHCddLEuJBCehKktQ=";
+      hash = "sha256-trOh9GLktwLfDuz5DWY+8fhHzDaq3KHsbdNSeNCR+g0=";
     };
     # fat binary
     aarch64-darwin = x86_64-darwin;
@@ -70,7 +70,7 @@ let
     .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 in
 stdenv.mkDerivation (finalAttrs: {
-  name = "ut1999";
+  pname = "ut1999";
   inherit version;
   sourceRoot = ".";
   src =
@@ -179,17 +179,6 @@ stdenv.mkDerivation (finalAttrs: {
     + ''
       runHook postInstall
     '';
-
-  # This can be removed with version 469e as that contains this file already
-  # Workaround for bug https://github.com/OldUnreal/UnrealTournamentPatches/issues/1578
-  # that prevented starting or joining a multi player game
-  missing-file = fetchurl {
-    url = "https://gist.github.com/dwt/733d620fbbfd5c49da88683aef60d889/raw/73b271ef019412cf1be5ce1966842ef63a18ba39/de.u";
-    hash = "sha256-M14imMl35KUT0tG8dgB+DBoXve/1saVL7hPNgUFo1hY=";
-  };
-  postInstall = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
-    cp ${finalAttrs.missing-file} $out/Applications/UnrealTournament.app/Contents/MacOS/System/de.u
-  '';
 
   # Bring in game's .so files into lookup. Otherwise game fails to start
   # as: `Object not found: Class Render.Render`

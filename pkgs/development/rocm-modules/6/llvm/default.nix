@@ -10,7 +10,6 @@
   runCommand,
   symlinkJoin,
   rdfind,
-  wrapBintoolsWith,
   zstd,
   zlib,
   gcc-unwrapped,
@@ -32,7 +31,7 @@
   withLto ? true,
   # whether rocm stdenv uses libcxx (clang c++ stdlib) instead of gcc stdlibc++
   withLibcxx ? false,
-}@args:
+}:
 
 let
   version = "6.4.3";
@@ -142,6 +141,28 @@ let
     stdenv.cc.cc
     stdenv.cc.bintools
   ];
+  # Hacky way to avoid nixfmt indenting the entire scope body suggested by @emilazy
+  overrideLlvmPackagesRocm =
+    f:
+    let
+      overridenScope = llvmPackagesRocm.overrideScope (final: prev: f { inherit final prev; });
+    in
+    {
+      inherit (overridenScope)
+        # Expose only a limited set of packages that we care about for ROCm
+        bintools
+        compiler-rt
+        compiler-rt-libc
+        clang
+        clang-unwrapped
+        libcxx
+        lld
+        llvm
+        rocm-toolchain
+        rocmClangStdenv
+        openmp
+        ;
+    };
   sysrootCompiler =
     {
       cc,
@@ -191,13 +212,6 @@ let
         echo 'export CC=clang' >> $out/nix-support/setup-hook
         echo 'export CXX=clang++' >> $out/nix-support/setup-hook
       '';
-  # Removes patches which either aren't desired, or don't apply against ROCm LLVM
-  removeInapplicablePatches =
-    x:
-    (
-      (lib.strings.hasSuffix "add-nostdlibinc-flag.patch" (baseNameOf x))
-      || (lib.strings.hasSuffix "clang-at-least-16-LLVMgold-path.patch" (baseNameOf x))
-    );
   tablegenUsage = x: !(lib.strings.hasInfix "llvm-tblgen" x);
   llvmTargetsFlag = "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${
     {
@@ -258,13 +272,8 @@ let
     ]
   );
 in
-rec {
-  inherit (llvmPackagesRocm) libcxx;
-  inherit args;
-  # Pass through original attrs for debugging where non-overridden llvm/clang is getting used
-  # llvm-orig = llvmPackagesRocm.llvm; # nix why-depends --derivation .#rocmPackages.clr .#rocmPackages.llvm.llvm-orig
-  # clang-orig = llvmPackagesRocm.clang; # nix why-depends --derivation .#rocmPackages.clr .#rocmPackages.llvm.clang-orig
-  llvm = llvmPackagesRocm.llvm.overrideAttrs (old: {
+overrideLlvmPackagesRocm (s: {
+  libllvm = (s.prev.libllvm.override { }).overrideAttrs (old: {
     patches = old.patches ++ [
       (fetchpatch {
         # fix compile error in tools/gold/gold-plugin.cpp
@@ -310,8 +319,7 @@ rec {
     meta = old.meta // llvmMeta;
   });
   lld =
-    (llvmPackagesRocm.lld.override {
-      libllvm = llvm;
+    (s.prev.lld.override {
     }).overrideAttrs
       (old: {
         dontStrip = profilableStdenv;
@@ -336,96 +344,86 @@ rec {
         meta = old.meta // llvmMeta;
       });
   clang-unwrapped = (
-    (llvmPackagesRocm.clang-unwrapped.override {
-      libllvm = llvm;
+    (s.prev.clang-unwrapped.override {
       enableClangToolsExtra = false;
     }).overrideAttrs
-      (
-        old:
-        let
-          filteredPatches = builtins.filter (x: !(removeInapplicablePatches x)) old.patches;
-        in
-        {
-          passthru = old.passthru // {
-            inherit gcc-prefix;
-          };
-          patches = [
-            (fetchpatch {
-              # [PATCH] [clang] Install scan-build-py into plain "lib" directory
-              # Backported so 19/clang/gnu-install-dirs patch applies to AMD's LLVM fork
-              hash = "sha256-bOqAjBwRKcERpQkiBpuojGs6ddd5Ht3zL5l3TuJK2w8=";
-              url = "https://github.com/llvm/llvm-project/commit/816fde1cbb700ebcc8b3df81fb93d675c04c12cd.patch";
-              relative = "clang";
-            })
-          ]
-          ++ filteredPatches
-          ++ [
-            # Never add FHS include paths
-            ./clang-bodge-ignore-systemwide-incls.diff
-            # Prevents builds timing out if a single compiler invocation is very slow but
-            # per-arch jobs are completing by ensuring there's terminal output
-            ./clang-log-jobs.diff
-            ./opt-offload-compress-on-by-default.patch
-            ./perf-shorten-gcclib-include-paths.patch
-            (fetchpatch {
-              # [ClangOffloadBundler]: Add GetBundleIDsInFile to OffloadBundler
-              sha256 = "sha256-G/mzUdFfrJ2bLJgo4+mBcR6Ox7xGhWu5X+XxT4kH2c8=";
-              url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/6d296f879b0fed830c54b2a9d26240da86c8bb3a.patch";
-              relative = "clang";
-            })
-            # FIXME: Needed due to https://github.com/NixOS/nixpkgs/issues/375431
-            # Once we can switch to overrideScope this can be removed
-            (replaceVars ./../../../compilers/llvm/common/clang/clang-at-least-16-LLVMgold-path.patch {
-              libllvmLibdir = "${llvm.lib}/lib";
-            })
+      (old: {
+        passthru = old.passthru // {
+          inherit gcc-prefix;
+        };
+        patches = [
+          (fetchpatch {
+            # [PATCH] [clang] Install scan-build-py into plain "lib" directory
+            # Backported so 19/clang/gnu-install-dirs patch applies to AMD's LLVM fork
+            hash = "sha256-bOqAjBwRKcERpQkiBpuojGs6ddd5Ht3zL5l3TuJK2w8=";
+            url = "https://github.com/llvm/llvm-project/commit/816fde1cbb700ebcc8b3df81fb93d675c04c12cd.patch";
+            relative = "clang";
+          })
+        ]
+        ++ old.patches
+        ++ [
+          # Never add FHS include paths
+          ./clang-bodge-ignore-systemwide-incls.diff
+          # Prevents builds timing out if a single compiler invocation is very slow but
+          # per-arch jobs are completing by ensuring there's terminal output
+          ./clang-log-jobs.diff
+          ./opt-offload-compress-on-by-default.patch
+          ./perf-shorten-gcclib-include-paths.patch
+          (fetchpatch {
+            # [ClangOffloadBundler]: Add GetBundleIDsInFile to OffloadBundler
+            sha256 = "sha256-G/mzUdFfrJ2bLJgo4+mBcR6Ox7xGhWu5X+XxT4kH2c8=";
+            url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/6d296f879b0fed830c54b2a9d26240da86c8bb3a.patch";
+            relative = "clang";
+          })
+        ];
+        hardeningDisable = [ "all" ];
+        nativeBuildInputs = old.nativeBuildInputs ++ [
+          removeReferencesTo
+        ];
+        buildInputs = old.buildInputs ++ [
+          zstd
+          zlib
+        ];
+        env = (old.env or { }) // {
+          NIX_CFLAGS_COMPILE = "${(old.env or { }).NIX_CFLAGS_COMPILE or ""} ${llvmExtraCflags}";
+        };
+        dontStrip = profilableStdenv;
+        # Ensure we don't leak refs to compiler that was used to bootstrap this LLVM
+        disallowedReferences = (old.disallowedReferences or [ ]) ++ disallowedRefsForToolchain;
+        # Enable structured attrs for separateDebugInfo, because it is required with disallowedReferences set
+        __structuredAttrs = true;
+        # https://github.com/llvm/llvm-project/blob/6976deebafa8e7de993ce159aa6b82c0e7089313/clang/cmake/caches/DistributionExample-stage2.cmake#L9-L11
+        cmakeFlags =
+          # TODO: Remove in followup, tblgen now works correctly but would rebuild
+          (builtins.filter tablegenUsage old.cmakeFlags)
+          ++ commonCmakeFlags
+          ++ lib.optionals (!withLibcxx) [
+            # FIXME: Config file in rocm-toolchain instead of GCC_INSTALL_PREFIX?
+            # Expected to be fully removed eventually
+            "-DUSE_DEPRECATED_GCC_INSTALL_PREFIX=ON"
+            "-DGCC_INSTALL_PREFIX=${gcc-prefix}"
           ];
-          hardeningDisable = [ "all" ];
-          nativeBuildInputs = old.nativeBuildInputs ++ [
-            removeReferencesTo
-          ];
-          buildInputs = old.buildInputs ++ [
-            zstd
-            zlib
-          ];
-          env = (old.env or { }) // {
-            NIX_CFLAGS_COMPILE = "${(old.env or { }).NIX_CFLAGS_COMPILE or ""} ${llvmExtraCflags}";
-          };
-          dontStrip = profilableStdenv;
-          # Ensure we don't leak refs to compiler that was used to bootstrap this LLVM
-          disallowedReferences = (old.disallowedReferences or [ ]) ++ disallowedRefsForToolchain;
-          # Enable structured attrs for separateDebugInfo, because it is required with disallowedReferences set
-          __structuredAttrs = true;
-          # https://github.com/llvm/llvm-project/blob/6976deebafa8e7de993ce159aa6b82c0e7089313/clang/cmake/caches/DistributionExample-stage2.cmake#L9-L11
-          cmakeFlags =
-            (builtins.filter tablegenUsage old.cmakeFlags)
-            ++ commonCmakeFlags
-            ++ lib.optionals (!withLibcxx) [
-              # FIXME: Config file in rocm-toolchain instead of GCC_INSTALL_PREFIX?
-              # Expected to be fully removed eventually
-              "-DUSE_DEPRECATED_GCC_INSTALL_PREFIX=ON"
-              "-DGCC_INSTALL_PREFIX=${gcc-prefix}"
-            ];
-          preFixup = ''
-            ${toString old.preFixup or ""}
-            moveToOutput "lib/lib*.a" "$dev"
-            moveToOutput "lib/cmake" "$dev"
-            mkdir -p $dev/lib/clang/
-            ln -s $lib/lib/clang/${llvmMajorVersion} $dev/lib/clang/
-            sed -Ei "s|$lib/lib/(lib[^/]*)\.a|$dev/lib/\1.a|g" $dev/lib/cmake/clang/*.cmake
-          '';
-          postFixup = ''
-            ${toString old.postFixup or ""}
-            find $lib -type f -exec remove-references-to -t ${refsToRemove} {} +
-            find $dev -type f -exec remove-references-to -t ${refsToRemove} {} +
-          '';
-          meta = old.meta // llvmMeta;
-        }
-      )
+        preFixup = ''
+          ${toString old.preFixup or ""}
+          moveToOutput "lib/lib*.a" "$dev"
+          moveToOutput "lib/cmake" "$dev"
+          mkdir -p $dev/lib/clang/
+          ln -s $lib/lib/clang/${llvmMajorVersion} $dev/lib/clang/
+          sed -Ei "s|$lib/lib/(lib[^/]*)\.a|$dev/lib/\1.a|g" $dev/lib/cmake/clang/*.cmake
+        '';
+        postFixup = ''
+          ${toString old.postFixup or ""}
+          find $lib -type f -exec remove-references-to -t ${refsToRemove} {} +
+          find $dev -type f -exec remove-references-to -t ${refsToRemove} {} +
+        '';
+        meta = old.meta // llvmMeta;
+      })
   );
   # A clang that understands standard include searching in a GNU sysroot and will put GPU libs in include path
   # in the right order
   # and expects its libc to be in the sysroot
   rocm-toolchain =
+    with s.final;
     (sysrootCompiler {
       cc = clang-unwrapped;
       name = "rocm-toolchain";
@@ -458,45 +456,33 @@ rec {
       isClang = true;
       isGNU = false;
     };
-  compiler-rt-libc =
-    (llvmPackagesRocm.compiler-rt-libc.override {
-      libllvm = llvm;
-    }).overrideAttrs
-      (old: {
-        patches = old.patches ++ [
-          (fetchpatch {
-            name = "Fix-missing-main-function-in-float16-bfloat16-support-checks.patch";
-            url = "https://github.com/ROCm/llvm-project/commit/68d8b3846ab1e6550910f2a9a685690eee558af2.patch";
-            hash = "sha256-Db+L1HFMWVj4CrofsGbn5lnMoCzEcU+7q12KKFb17/g=";
-            relative = "compiler-rt";
-          })
-          (fetchpatch {
-            # Fixes fortify hardening compile error related to openat usage
-            hash = "sha256-pgpN1q1vIQrPXHPxNSZ6zfgV2EflHO5Amzl+2BDjXbs=";
-            url = "https://github.com/llvm/llvm-project/commit/155b7a12820ec45095988b6aa6e057afaf2bc892.patch";
-            relative = "compiler-rt";
-          })
-        ];
-        meta = old.meta // llvmMeta;
-      });
-  compiler-rt = compiler-rt-libc;
-  bintools = wrapBintoolsWith {
-    bintools = llvmPackagesRocm.bintools-unwrapped.override {
-      inherit lld llvm;
-    };
-  };
+  compiler-rt-libc = s.prev.compiler-rt-libc.overrideAttrs (old: {
+    patches = old.patches ++ [
+      (fetchpatch {
+        name = "Fix-missing-main-function-in-float16-bfloat16-support-checks.patch";
+        url = "https://github.com/ROCm/llvm-project/commit/68d8b3846ab1e6550910f2a9a685690eee558af2.patch";
+        hash = "sha256-Db+L1HFMWVj4CrofsGbn5lnMoCzEcU+7q12KKFb17/g=";
+        relative = "compiler-rt";
+      })
+      (fetchpatch {
+        # Fixes fortify hardening compile error related to openat usage
+        hash = "sha256-pgpN1q1vIQrPXHPxNSZ6zfgV2EflHO5Amzl+2BDjXbs=";
+        url = "https://github.com/llvm/llvm-project/commit/155b7a12820ec45095988b6aa6e057afaf2bc892.patch";
+        relative = "compiler-rt";
+      })
+    ];
+    meta = old.meta // llvmMeta;
+  });
+  compiler-rt = s.final.compiler-rt-libc;
+  clang = s.final.rocm-toolchain;
 
-  clang = rocm-toolchain;
-
-  rocmClangStdenv = overrideCC (
-    if withLibcxx then llvmPackagesRocm.libcxxStdenv else llvmPackagesRocm.stdenv
-  ) clang;
+  rocmClangStdenv = with s.final; overrideCC (if withLibcxx then libcxxStdenv else stdenv) clang;
 
   # Projects
   openmp =
+    with s.final;
     (llvmPackagesRocm.openmp.override {
       llvm = llvm;
-      targetLlvm = llvm;
       clang-unwrapped = clang-unwrapped;
     }).overrideAttrs
       (old: {
@@ -521,4 +507,7 @@ rec {
           libffi
         ];
       });
-}
+  # AMD has a separate MLIR impl which we package under rocmPackages.rocmlir
+  # It would be an error to rely on the original mlir package from this scope
+  mlir = null;
+})

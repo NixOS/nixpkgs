@@ -95,13 +95,13 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "fex";
-  version = "2509.1";
+  version = "2511";
 
   src = fetchFromGitHub {
     owner = "FEX-Emu";
     repo = "FEX";
     tag = "FEX-${finalAttrs.version}";
-    hash = "sha256-eTm1ee8eS+OwzEUoklrrQDRIAJVX0FWBaWi2/TJrx48=";
+    hash = "sha256-CulENHssPkCXI+oyVKwf3GN5bjxUok2+AHsoOQ+Mchc=";
 
     leaveDotGit = true;
     postFetch = ''

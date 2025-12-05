@@ -34,7 +34,8 @@
   uvicorn,
   pydantic,
   aioprometheus,
-  pynvml,
+  anthropic,
+  nvidia-ml-py,
   openai,
   pyzmq,
   tiktoken,
@@ -53,6 +54,7 @@
   compressed-tensors,
   mistral-common,
   msgspec,
+  model-hosting-container-standards,
   numactl,
   tokenizers,
   oneDNN,
@@ -72,6 +74,11 @@
   py-libnuma,
   setproctitle,
   openai-harmony,
+
+  # optional-dependencies
+  # audio
+  librosa,
+  soundfile,
 
   # internal dependency - for overriding in overlays
   vllm-flash-attn ? null,
@@ -98,10 +105,25 @@ let
   # see CMakeLists.txt, grepping for CUTLASS_REVISION
   # https://github.com/vllm-project/vllm/blob/v${version}/CMakeLists.txt
   cutlass = fetchFromGitHub {
+    name = "cutlass-source";
     owner = "NVIDIA";
     repo = "cutlass";
-    tag = "v4.0.0";
-    hash = "sha256-HJY+Go1viPkSVZPEs/NyMtYJzas4mMLiIZF3kNX+WgA=";
+    tag = "v4.2.1";
+    hash = "sha256-iP560D5Vwuj6wX1otJhwbvqe/X4mYVeKTpK533Wr5gY=";
+  };
+
+  # FlashMLA's Blackwell (SM100) kernels were developed against CUTLASS v3.9.0
+  # (since https://github.com/vllm-project/FlashMLA/commit/9c5dfab6d1746b4a27af14f440e7afd5c01ece68)
+  # and are currently incompatible with CUTLASS v4.x APIs. The rest of the vLLM
+  # build uses a newer CUTLASS, so we package both versions.
+  # See upstream issue: https://github.com/vllm-project/vllm/issues/27425
+  # See git submodule commit at:
+  # https://github.com/vllm-project/FlashMLA/tree/${flashmla.src.rev}/csrc
+  cutlass-flashmla = fetchFromGitHub {
+    owner = "NVIDIA";
+    repo = "cutlass";
+    tag = "v3.9.0";
+    hash = "sha256-Q6y/Z6vahASeSsfxvZDwbMFHGx8CnsF90IlveeVLO9g=";
   };
 
   flashmla = stdenv.mkDerivation {
@@ -112,10 +134,11 @@ let
     # grep for GIT_TAG in the following file
     # https://github.com/vllm-project/vllm/blob/v${version}/cmake/external_projects/flashmla.cmake
     src = fetchFromGitHub {
+      name = "FlashMLA-source";
       owner = "vllm-project";
       repo = "FlashMLA";
-      rev = "5f65b85703c7ed75fda01e06495077caad207c3f";
-      hash = "sha256-DO9EFNSoAgyfRRc095v1UjT+Zdzk4cFY0+n28FVEwI0=";
+      rev = "46d64a8ebef03fa50b4ae74937276a5c940e3f95";
+      hash = "sha256-jtMzWB5hKz8mJGsdK6q4YpQbGp9IrQxbwmB3a64DIl0=";
     };
 
     dontConfigure = true;
@@ -123,12 +146,22 @@ let
     # flashmla normally relies on `git submodule update` to fetch cutlass
     buildPhase = ''
       rm -rf csrc/cutlass
-      ln -sf ${cutlass} csrc/cutlass
+      ln -sf ${cutlass-flashmla} csrc/cutlass
     '';
 
     installPhase = ''
       cp -rva . $out
     '';
+  };
+
+  # grep for GIT_TAG in the following file
+  # https://github.com/vllm-project/vllm/blob/v${version}/cmake/external_projects/qutlass.cmake
+  qutlass = fetchFromGitHub {
+    name = "qutlass-source";
+    owner = "IST-DASLab";
+    repo = "qutlass";
+    rev = "830d2c4537c7396e14a02a46fbddd18b5d107c65";
+    hash = "sha256-aG4qd0vlwP+8gudfvHwhtXCFmBOJKQQTvcwahpEqC84=";
   };
 
   vllm-flash-attn' = lib.defaultTo (stdenv.mkDerivation {
@@ -139,10 +172,11 @@ let
     # grep for GIT_TAG in the following file
     # https://github.com/vllm-project/vllm/blob/v${version}/cmake/external_projects/vllm_flash_attn.cmake
     src = fetchFromGitHub {
+      name = "flash-attention-source";
       owner = "vllm-project";
       repo = "flash-attention";
-      rev = "ee4d25bd84e0cbc7e0b9b9685085fd5db2dcb62a";
-      hash = "sha256-2r0Habd/kBpvM4/aQFIYyj+uQAa3M9gjk3DcBZHFNfA=";
+      rev = "58e0626a692f09241182582659e3bf8f16472659";
+      hash = "sha256-ewdZd7LuBKBV0y3AaGRWISJzjg6cu59D2OtgqoDjrbM=";
     };
 
     patches = [
@@ -199,19 +233,16 @@ let
         "8.9"
         "9.0"
         "9.0a"
-        # Blackwell (SM100+) capabilities temporarily disabled due to CUTLASS API incompatibility
-        # FlashMLA kernels require CUTLASS v4.2.1+ APIs not available in bundled v4.0.0
-        # TODO: Re-enable when vLLM upgrades CUTLASS (see https://github.com/vllm-project/vllm/pull/24673)
-        # "10.0"
-        # "10.0a"
-        # "10.1"
-        # "10.1a"
-        # "10.3"
-        # "10.3a"
-        # "12.0"
-        # "12.0a"
-        # "12.1"
-        # "12.1a"
+        "10.0"
+        "10.0a"
+        "10.1"
+        "10.1a"
+        "10.3"
+        "10.3a"
+        "12.0"
+        "12.0a"
+        "12.1"
+        "12.1a"
       ];
       ptx = lists.map (x: "${x}+PTX") real;
     in
@@ -273,7 +304,7 @@ in
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.11.0";
+  version = "0.11.2";
   pyproject = true;
 
   stdenv = torch.stdenv;
@@ -282,31 +313,31 @@ buildPythonPackage rec {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${version}";
-    hash = "sha256-uYK/e9McEyrDTACMk5S0cGCjai9rf6HMR9dpPL7ISYc=";
+    hash = "sha256-DoSlkFmR3KKEtfSfdRB++0CZeeXgxmM3zZjONlxbe8U=";
   };
 
   patches = [
     ./0002-setup.py-nix-support-respect-cmakeFlags.patch
     ./0003-propagate-pythonpath.patch
     ./0005-drop-intel-reqs.patch
-    # TODO: Remove the below patches when included in vLLM release
-    (fetchpatch {
-      url = "https://github.com/vllm-project/vllm/commit/9705fba7b727a3b9c275b012258608531e2223d1.patch";
-      hash = "sha256-DxRGLiwkegMlMjqFmFc0igpaVv06/Y2WjL+ISoIOET4=";
-    })
-    # patch above is previous commit needed to apply patch below
-    # oneDNN / CPU fix from https://github.com/vllm-project/vllm/pull/26401
-    (fetchpatch {
-      url = "https://github.com/vllm-project/vllm/commit/d7be1f2a480bdc62a6a1ec0126a401e3d42985fe.patch";
-      hash = "sha256-Zi1k5wiOPjsbWHFKpcLq9Ns43wIP37Mbvesi5K80zaQ=";
-    })
   ];
 
   postPatch = ''
+    # Remove vendored pynvml entirely
+    rm vllm/third_party/pynvml.py
+    substituteInPlace tests/utils.py \
+      --replace-fail \
+        "from vllm.third_party.pynvml import" \
+        "from pynvml import"
+    substituteInPlace vllm/utils/import_utils.py \
+      --replace-fail \
+        "import vllm.third_party.pynvml as pynvml" \
+        "import pynvml"
+
     # pythonRelaxDeps does not cover build-system
     substituteInPlace pyproject.toml \
       --replace-fail "torch ==" "torch >=" \
-      --replace-fail "setuptools>=77.0.3,<80.0.0" "setuptools"
+      --replace-fail "setuptools>=77.0.3,<81.0.0" "setuptools"
 
     # Ignore the python version check because it hard-codes minor versions and
     # lags behind `ray`'s python interpreter support
@@ -375,6 +406,7 @@ buildPythonPackage rec {
 
   dependencies = [
     aioprometheus
+    anthropic
     blake3
     cachetools
     cbor2
@@ -406,6 +438,7 @@ buildPythonPackage rec {
     partial-json-parser
     compressed-tensors
     mistral-common
+    model-hosting-container-standards
     torch
     torchaudio
     torchvision
@@ -431,9 +464,18 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals cudaSupport [
     cupy
-    pynvml
+    nvidia-ml-py
     flashinfer
   ];
+
+  optional-dependencies = {
+    audio = [
+      librosa
+      soundfile
+      mistral-common
+    ]
+    ++ mistral-common.optional-dependencies.audio;
+  };
 
   dontUseCmakeConfigure = true;
   cmakeFlags = [
@@ -442,6 +484,7 @@ buildPythonPackage rec {
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${lib.getDev cutlass}")
     (lib.cmakeFeature "FLASH_MLA_SRC_DIR" "${lib.getDev flashmla}")
     (lib.cmakeFeature "VLLM_FLASH_ATTN_SRC_DIR" "${lib.getDev vllm-flash-attn'}")
+    (lib.cmakeFeature "QUTLASS_SRC_DIR" "${lib.getDev qutlass}")
     (lib.cmakeFeature "TORCH_CUDA_ARCH_LIST" "${gpuTargetString}")
     (lib.cmakeFeature "CUTLASS_NVCC_ARCHS_ENABLED" "${cudaPackages.flags.cmakeCudaArchitecturesString}")
     (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${symlinkJoin {

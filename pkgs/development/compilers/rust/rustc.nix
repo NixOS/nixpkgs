@@ -62,12 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     passthru.isReleaseTarball = true;
   };
 
-  hardeningDisable = optionals stdenv.cc.isClang [
-    # remove once https://github.com/NixOS/nixpkgs/issues/318674 is
-    # addressed properly
-    "zerocallusedregs"
-  ];
-
   __darwinAllowLocalNetworking = true;
 
   # rustc complains about modified source files otherwise
@@ -97,8 +91,17 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optional stdenv.hostPlatform.isDarwin "-rpath ${llvmSharedForHost.lib}/lib"
   );
 
-  # Increase codegen units to introduce parallelism within the compiler.
-  RUSTFLAGS = "-Ccodegen-units=10";
+  RUSTFLAGS = lib.concatStringsSep " " (
+    [
+      # Increase codegen units to introduce parallelism within the compiler.
+      "-Ccodegen-units=10"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.rust.rustcTargetSpec == "x86_64-unknown-linux-gnu") [
+      # Upstream defaults to lld on x86_64-unknown-linux-gnu, we want to use our linker
+      "-Clinker-features=-lld"
+      "-Clink-self-contained=-linker"
+    ]
+  );
   RUSTDOCFLAGS = "-A rustdoc::broken-intra-doc-links";
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
@@ -229,6 +232,11 @@ stdenv.mkDerivation (finalAttrs: {
       # doesn't work) to build a linker.
       "--disable-llvm-bitcode-linker"
     ]
+    ++ optionals (!fastCross && stdenv.targetPlatform.config != "wasm32-unknown-none") [
+      # See https://github.com/rust-lang/rust/issues/132802
+      "--set=target.wasm32-unknown-unknown.optimized-compiler-builtins=false"
+      "--set=target.wasm32v1-none.optimized-compiler-builtins=false"
+    ]
     ++ optionals (stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.useLLVM or false)) [
       "--enable-profiler" # build libprofiler_builtins
     ]
@@ -272,12 +280,13 @@ stdenv.mkDerivation (finalAttrs: {
       ''
         runHook preBuild
 
-        mkdir -p build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-{std,rustc}/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/
+        mkdir -p build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage{0,1}-{std,rustc}/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/
         ln -s ${rustc.unwrapped}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/libstd-*.so build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/libstd.so
         ln -s ${rustc.unwrapped}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/librustc_driver-*.so build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/librustc.so
         ln -s ${rustc.unwrapped}/bin/rustc build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/rustc-main
+        ln -s ${rustc.unwrapped}/bin/rustc build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage1-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/rustc-main
         touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.libstd-stamp
-        touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.librustc-stamp
+        touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage{0,1}-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.librustc-stamp
         python ./x.py --keep-stage=0 --stage=1 build library
 
         runHook postBuild
@@ -436,7 +445,6 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://www.rust-lang.org/";
     description = "Safe, concurrent, practical language";
-    maintainers = with maintainers; [ havvy ];
     teams = [ teams.rust ];
     license = [
       licenses.mit

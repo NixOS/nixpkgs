@@ -163,7 +163,7 @@ python.pkgs.buildPythonApplication rec {
 
       poppler-utils
     ]
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+    ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "mediagoblin" ];
 

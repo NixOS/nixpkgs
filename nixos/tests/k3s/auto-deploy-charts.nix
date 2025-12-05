@@ -82,15 +82,16 @@ import ../make-test-python.nix (
             values-file = testChart // {
               # Remove unsafeDiscardStringContext workaround when Nix can convert a string to a path
               # https://github.com/NixOS/nix/issues/12407
-              values = /.
-              + builtins.unsafeDiscardStringContext (
-                builtins.toFile "k3s-test-chart-values.yaml" ''
-                  runCommand: "echo 'Hello, file!'"
-                  image:
-                    repository: test.local/test
-                    tag: local
-                ''
-              );
+              values =
+                /.
+                + builtins.unsafeDiscardStringContext (
+                  builtins.toFile "k3s-test-chart-values.yaml" ''
+                    runCommand: "echo 'Hello, file!'"
+                    image:
+                      repository: test.local/test
+                      tag: local
+                  ''
+                );
             };
             # advanced chart that should get installed in the "test" namespace with a custom
             # timeout and overridden values
@@ -134,7 +135,7 @@ import ../make-test-python.nix (
         machine.succeed("test -e /var/lib/rancher/k3s/server/manifests/values-file.yaml")
         machine.succeed("test -e /var/lib/rancher/k3s/server/manifests/advanced.yaml")
         # check that the timeout is set correctly, select only the first doc in advanced.yaml
-        advancedManifest = json.loads(machine.succeed("yq -o json 'select(di == 0)' /var/lib/rancher/k3s/server/manifests/advanced.yaml"))
+        advancedManifest = json.loads(machine.succeed("yq -o json '.items[0]' /var/lib/rancher/k3s/server/manifests/advanced.yaml"))
         t.assertEqual(advancedManifest["spec"]["timeout"], "69s", "unexpected value for spec.timeout")
         # wait for test jobs to complete
         machine.wait_until_succeeds("kubectl wait --for=condition=complete job/hello", timeout=180)

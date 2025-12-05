@@ -228,6 +228,17 @@ let
       "tests/"
     ];
 
+    disabledTests = [
+      # AssertionError: The following responses are mocked but not requested:
+      # - Match POST request on https://api.openai.com/v1/chat/completions
+      # https://github.com/simonw/llm/issues/1292
+      "test_gpt4o_mini_sync_and_async"
+
+      # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr
+      # https://github.com/simonw/llm/issues/1293
+      "test_embed_multi_files_encoding"
+    ];
+
     pythonImportsCheck = [ "llm" ];
 
     passthru = {

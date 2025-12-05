@@ -27,6 +27,6 @@ buildGoModule rec {
     mainProgram = "anew";
     homepage = "https://github.com/tomnomnom/anew";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

@@ -7,7 +7,7 @@
   curl,
   dbus,
   ffmpeg,
-  fmt,
+  fmt_11,
   libwebp,
   mpv,
   SDL2,
@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchfin";
-  version = "0.7.5";
+  version = "0.7.7";
 
   src = fetchFromGitHub {
     owner = "dragonflylee";
     repo = "switchfin";
     rev = version;
-    hash = "sha256-vmf7urq3lnfvmdZUJ+G5zn4ZpNA2N4jlLo8D5ZG3tUQ=";
+    hash = "sha256-swNwaZg6W5Ox08poc3gC3MOsIHv08/Q9BOMwD9FNf3g=";
     fetchSubmodules = true;
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     curl
     dbus
     ffmpeg
-    fmt
+    fmt_11
     libwebp
     mpv
     SDL2
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/dragonflylee/switchfin/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.k900 ];
-    mainProgram = "switchfin";
+    mainProgram = "Switchfin";
     platforms = lib.platforms.all;
   };
 }

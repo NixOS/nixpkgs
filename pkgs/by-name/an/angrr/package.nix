@@ -11,19 +11,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "angrr";
-  version = "0.1.1";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "linyinfeng";
     repo = "angrr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SL4UBDoD0pvpCKokQvKLAcS9cQJaFiA+IjswFARswdM=";
+    hash = "sha256-pBVbzrTy/IWIo6WlhM1qgowfxSU31awyHcRDHNArBMo=";
   };
 
-  cargoHash = "sha256-lo9JpsHkvyrEqFnIiGlU2o4rREeQeqWpe9WMwisvw+4=";
+  cargoHash = "sha256-DoQIJCs36ZmTxdsDCzquKAeOSIUBbo2V+DTx68FZiu4=";
 
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
+    install -m400 -D ./direnv/angrr.sh $out/share/direnv/lib/angrr.sh
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd angrr \
       --bash <($out/bin/angrr completion bash) \
       --fish <($out/bin/angrr completion fish) \

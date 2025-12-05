@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "argocd-autopilot";
-  version = "0.4.19";
+  version = "0.4.20";
 
   src = fetchFromGitHub {
     owner = "argoproj-labs";
     repo = "argocd-autopilot";
     rev = "v${version}";
-    sha256 = "sha256-ZJVlmZX/eQnOM2mlAe7DOyvykjgi5DHMqHoPAHPZlXM=";
+    sha256 = "sha256-JLh41ZWiDcDrUtd8d+Ak5TFca4L6VHzUguS55P9lmj0=";
   };
 
-  vendorHash = "sha256-GzSkA8JO0LEVeGIRKkr1Ff1P8WhNIEvRmry91agYJRo=";
+  vendorHash = "sha256-Ur0BfIg4lZakjx01UOL4n5/O1yjTJJcGuDxWVDqUOyY=";
 
   proxyVendor = true;
 
@@ -58,7 +58,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [
       sagikazarmark
-      bryanasdev000
     ];
   };
 }

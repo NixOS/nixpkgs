@@ -13,7 +13,7 @@ hash=()
 for i in amd64 arm64 loongarch64
 do
     current_url=$base_url_suffix$i$base_url_appendix
-    curl -A "debian APT-HTTP/1.3 (1.6.11)" -v -L -O $current_url
+    curl -A "apt" -v -L -O $current_url
     current_version=$(zgrep -A 20 "Package: $target_package" "$packages_file" | awk -v pkg="$target_package" '
     BEGIN { found = 0 }
     {
@@ -48,15 +48,15 @@ cat >sources.nix <<EOF
 # Last updated: $(date +%F)
 {
   version = "${version[0]}";
-  amd64 = {
+  x86_64-linux = {
     url = "${url[0]}";
     hash = "${hash[0]}";
   };
-  arm64 = {
+  aarch64-linux = {
     url = "${url[1]}";
     hash = "${hash[1]}";
   };
-  loongarch64 = {
+  loongarch64-linux = {
     url = "${url[2]}";
     hash = "${hash[2]}";
   };

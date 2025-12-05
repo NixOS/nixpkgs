@@ -40,8 +40,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
     scipy
-  ]
-  ++ optional-dependencies.design;
+  ];
 
   disabledTests = lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
     # crashing the interpreter

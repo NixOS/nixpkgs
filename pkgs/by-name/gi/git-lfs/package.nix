@@ -12,13 +12,13 @@
 
 buildGoModule rec {
   pname = "git-lfs";
-  version = "3.7.0";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "git-lfs";
     repo = "git-lfs";
     tag = "v${version}";
-    hash = "sha256-EFuuyD83aYe6XMKbRfAykVMfGFOQ4I6ORvMRm0Q8vfM=";
+    hash = "sha256-N5ckTnyA3mueZre+rMhFZBiAFgEu4pmtzkiUidXnan8=";
   };
 
   vendorHash = "sha256-6H0KpLin+DqwEg5bdzaxj2CoNSneZ/ET43MTrrdF3h8=";

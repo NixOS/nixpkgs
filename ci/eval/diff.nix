@@ -76,11 +76,36 @@ let
   afterAttrs = getAttrs after;
   diffAttrs = diff beforeAttrs afterAttrs;
   diffJson = writeText "diff.json" (builtins.toJSON diffAttrs);
+
+  # The maintainer list is not diffed, but just taken as is, to provide a map
+  # of maintainers on the target branch. A list of GitHub IDs is sufficient for
+  # all our purposes and reduces size massively.
+  meta = lib.importJSON "${after}/${evalSystem}/meta.json";
+  maintainers = lib.pipe meta [
+    (lib.mapAttrsToList (
+      k: v: {
+        # splits off the platform suffix
+        package = lib.pipe k [
+          (lib.splitString ".")
+          lib.init
+          (lib.concatStringsSep ".")
+        ];
+        maintainers = map (m: m.githubId) v.maintainers or [ ];
+      }
+    ))
+    # Some paths don't have a platform suffix, those will appear with an empty package here.
+    (lib.filter ({ package, maintainers }: package != "" && maintainers != [ ]))
+  ];
+  maintainersJson = writeText "maintainers.json" (builtins.toJSON maintainers);
 in
 runCommand "diff" { } ''
   mkdir -p $out/${evalSystem}
 
-  cp -r ${before} $out/before
-  cp -r ${after} $out/after
+  cp -r --no-preserve=mode ${before} $out/before
+  cp -r --no-preserve=mode ${after} $out/after
+  # JSON files will be processed above explicitly, so avoid copying over
+  # the source files to keep the artifacts smaller.
+  find $out/before $out/after -iname '*.json' -delete
   cp ${diffJson} $out/${evalSystem}/diff.json
+  cp ${maintainersJson} $out/${evalSystem}/maintainers.json
 ''

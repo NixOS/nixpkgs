@@ -22,6 +22,7 @@
   ncurses,
   ninja,
   libffi,
+  jemalloc,
   zlib,
   zstd,
   rocmUpdateScript,
@@ -54,7 +55,6 @@ let
     ps.setuptools
     ps.packaging
     ps.nanobind
-    ps.joblib
     ps.msgpack
   ]);
   # workaround: build for one working target if no targets are supported
@@ -86,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
   env.ROCM_PATH = "${clr}";
   env.TENSILE_ROCM_ASSEMBLER_PATH = lib.getExe' clr "amdclang++";
   env.TENSILE_GEN_ASSEMBLY_TOOLCHAIN = lib.getExe' clr "amdclang++";
+  env.LD_PRELOAD = "${jemalloc}/lib/libjemalloc.so";
+  env.MALLOC_CONF = "background_thread:true,metadata_thp:auto,dirty_decay_ms:10000,muzzy_decay_ms:10000";
   requiredSystemFeatures = [ "big-parallel" ];
 
   __structuredAttrs = true;
@@ -111,9 +113,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Support loading zstd compressed .dat files, required to keep output under
     # hydra size limit
     ./messagepack-compression-support.patch
-    # excessive comments are written to temporary asm files in build dir
-    # TODO: report upstream, find a better solution
-    ./reduce-comment-spam.patch
+    # [hipblaslt] Refactor Parallel.py to drop joblib, massively reduce peak disk space usage
+    # https://github.com/ROCm/rocm-libraries/pull/2073
+    ./TensileCreateLibrary-refactor.patch
+    ./Tensile-interning.patch
   ];
 
   postPatch = ''
@@ -125,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   doCheck = false;
-  doInstallCheck = false;
+  doInstallCheck = true;
 
   nativeBuildInputs = [
     cmake
@@ -136,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     ninja
     rocm-smi
+    zstd
   ];
 
   buildInputs = [
@@ -154,7 +158,6 @@ stdenv.mkDerivation (finalAttrs: {
     msgpack-cxx
     libxml2
     python3Packages.msgpack
-    python3Packages.joblib
     zlib
     zstd
   ]
@@ -210,6 +213,18 @@ stdenv.mkDerivation (finalAttrs: {
         mv $out/bin/example-* $sample/bin
       ''}
       rmdir $out/bin
+    '';
+
+  installCheckPhase =
+    # Verify compression worked and .dat files aren't huge
+    ''
+      runHook preInstallCheck
+      find "$out" -type f -name "*.dat" -size "+2M" -exec sh -c '
+          echo "ERROR: oversized .dat file, check for issues with install compression: {}" >&2
+          exit 1
+      ' {} \;
+      echo "Verified .dat files in $out are not huge"
+      runHook postInstallCheck
     '';
 
   # If this is false there are no kernels in the output lib

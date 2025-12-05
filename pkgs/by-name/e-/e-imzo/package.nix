@@ -20,11 +20,11 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "e-imzo";
-  version = "4.73";
+  version = "5.00";
 
   src = fetchurl {
     url = "https://cdn.xinux.uz/e-imzo/E-IMZO-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-pkBpU0pyI1kmISNShhB17psLHmTZn3JdHbnRZCgLuGc==";
+    hash = "sha256-jPAZu98prkC4NQlfA8/kJuw9qdCrSSSyzySSWPlIXpY=";
   };
 
   installPhase = ''

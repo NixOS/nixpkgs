@@ -9,11 +9,10 @@
   aiohttp,
   jsons,
   requests,
+  cryptography,
   # Test inputs
   pytestCheckHook,
-  pyyaml,
   pytest-asyncio,
-  async-timeout,
 }:
 
 buildPythonPackage rec {
@@ -34,15 +33,14 @@ buildPythonPackage rec {
     requests
     aiohttp
     semantic-version
+    cryptography
     scapy
     urllib3
-    pyyaml
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
-    async-timeout
   ];
 
   disabledTestPaths = [

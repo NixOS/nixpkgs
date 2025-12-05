@@ -8,7 +8,6 @@
 let
   inherit (lib)
     hasPrefix
-    literalExpression
     mkEnableOption
     mkIf
     mkMerge

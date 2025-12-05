@@ -19,6 +19,7 @@
       # work.
       environment.binsh = lib.mkForce null;
       boot.initrd.systemd.shell.enable = false;
+      systemd.shutdownRamfs.shell.enable = false;
 
       # This ensures that we only have the store paths of our closure in the
       # in the guest. This is necessary so we can grep in the store.
@@ -31,6 +32,7 @@
       environment.systemPackages = [
         pkgs.coreutils
         pkgs.gnugrep
+        pkgs.findutils
       ];
 
       # Unset the regex because the tests instrumentation needs bash.
@@ -42,6 +44,12 @@
 
     with subtest("/bin/sh doesn't exist"):
       machine.fail("stat /bin/sh")
+
+    with subtest("shutdown ramfs is bashless"):
+      machine.systemctl("start generate-shutdown-ramfs.service")
+      shutdown_ramfs_bash_paths = machine.succeed("find /run/initramfs -type d,f -name '*bash*'")
+      print(shutdown_ramfs_bash_paths)
+      t.assertNotIn("bash", shutdown_ramfs_bash_paths)
 
     bash_store_paths = machine.succeed("ls /nix/store | grep bash || true")
     print(bash_store_paths)

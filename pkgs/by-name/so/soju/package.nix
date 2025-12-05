@@ -9,17 +9,17 @@
 
 buildGoModule rec {
   pname = "soju";
-  version = "0.9.0";
+  version = "0.10.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "emersion";
     repo = "soju";
     rev = "v${version}";
-    hash = "sha256-qbSTaE0qOeXVcEmOver8Tu+gwV4cP4gNzIxByLKApCU=";
+    hash = "sha256-kOV7EFRr+Ca9bQ1bdDMNf1FiiniIHDebsf5SpbJshsI=";
   };
 
-  vendorHash = "sha256-JhoAtBw4O6lOd27dIXBNvA9EfUH5AD3ZHuGcWgU/Xv0=";
+  vendorHash = "sha256-NP4njea0hcklxWFoxPQqrvyWExeRP/TOzUJcamRnx+s=";
 
   nativeBuildInputs = [
     installShellFiles

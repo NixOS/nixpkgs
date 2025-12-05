@@ -60,7 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gnu.org/software/gforth";
     downloadPage = "https://github.com/forthy42/gforth";
     license = lib.licenses.gpl3Plus;
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64; # segfault when running ./gforthmi
+    # segfault when running ./gforthmi on aarch64 darwin
+    # The last successful Darwin Hydra build was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
     platforms = lib.platforms.all;
     mainProgram = "gforth";
   };

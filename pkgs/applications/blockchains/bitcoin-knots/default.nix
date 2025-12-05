@@ -10,6 +10,7 @@
   wrapQtAppsHook ? null,
   boost,
   libevent,
+  libsodium,
   zeromq,
   zlib,
   db48,
@@ -31,19 +32,18 @@
   # The list can be found at https://github.com/bitcoinknots/guix.sigs/tree/knots/builder-keys
   builderKeys ? [
     "1A3E761F19D2CC7785C5502EA291A2C45D0C504A" # luke-jr.gpg
-    "55058E8947E136A64F9E8AD5C4512A878E4AC2BF" # nsvrn
     "DAED928C727D3E613EC46635F5073C4F4882FFFC" # leo-haf.gpg
   ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = if withGui then "bitcoin-knots" else "bitcoind-knots";
-  version = "29.1.knots20250903";
+  version = "29.2.knots20251110";
 
   src = fetchurl {
     url = "https://bitcoinknots.org/files/29.x/${finalAttrs.version}/bitcoin-${finalAttrs.version}.tar.gz";
     # hash retrieved from signed SHA256SUMS
-    hash = "sha256-2DlJlGNrCOe8UouZ+TLdZ2OahU18AWL6K/KI1YA29QY=";
+    hash = "sha256-ZoFQsrNSkIFdSkiwMX64UnWtjVZu+g+64AV7OjtCcBI=";
   };
 
   nativeBuildInputs = [
@@ -67,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     libevent
+    libsodium
     zeromq
     zlib
   ]
@@ -87,18 +88,18 @@ stdenv.mkDerivation (finalAttrs: {
       publicKeys = fetchFromGitHub {
         owner = "bitcoinknots";
         repo = "guix.sigs";
-        rev = "d441685d5179b91070fadbc764be3a41616f36df";
-        sha256 = "sha256-XO/E51yOFrRYrGnxsyH/ZPF4Yf192x+lT2FPdilkacA=";
+        rev = "cc710f4715ff5ff74a9e89d8b6798884fe1e9d40";
+        sha256 = "sha256-PVvsqY//75dv+VrtapCNroD1z1zUaA/UBGvfq3zNySo=";
       };
 
       checksums = fetchurl {
         url = "https://bitcoinknots.org/files/${majorVersion}.x/${finalAttrs.version}/SHA256SUMS";
-        hash = "sha256-CH5p+u2XvIpWC/yv+UrP3JSq/dcAxq/eCZ+fPzqaI+Q=";
+        hash = "sha256-A6UPWZtdm3/P62JmEvzIxHC8zdPpHdLnbdD/xXMMo+I=";
       };
 
       signatures = fetchurl {
         url = "https://bitcoinknots.org/files/${majorVersion}.x/${finalAttrs.version}/SHA256SUMS.asc";
-        hash = "sha256-abCiaE3etiXfqC1nrmHMP77HO94L+ZZv4B2s08p1d2k=";
+        hash = "sha256-tEw/GnnwDf1G16fx6NzXPCvAnOzWY16iW93CowoFfA8=";
       };
 
       verifyBuilderKeys =

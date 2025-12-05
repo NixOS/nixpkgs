@@ -10,22 +10,22 @@
 
 buildPythonPackage rec {
   pname = "dissect-cramfs";
-  version = "1.0";
+  version = "1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.cramfs";
     tag = version;
-    hash = "sha256-0BHt7v2sI9uxZFUVsTkPZHy+wC6twaHeBmgH04anmp0=";
+    hash = "sha256-hoH93iQwJ1m8RqrpSOtLCUCQOgT7llkAiqCsJUcNr84=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];

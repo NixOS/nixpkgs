@@ -2,31 +2,29 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "atproto-goat";
-  version = "0-unstable-2025-02-01";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "bluesky-social";
     repo = "goat";
-    rev = "e79169f1d8fba9838274b1106d74751fc54eeb9c";
-    hash = "sha256-cLS44J6MlSSti7NRd9vSsdWXoYiMGwt3odg5p60W6ew=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xbvSO3keFheklnzPNEceS01CjIG3pPB+8e2M+3PD85U=";
   };
 
   postPatch = ''
     substituteInPlace main.go \
-      --replace-fail "versioninfo.Short()" '"${version}"' \
+      --replace-fail "versioninfo.Short()" '"${finalAttrs.version}"' \
       --replace-fail '"github.com/earthboundkid/versioninfo/v2"' ""
   '';
 
-  vendorHash = "sha256-l9oSdTAO1YxfrBjMWJDzlmhaZkbo90FGTk5LedjbZB8=";
+  vendorHash = "sha256-hLsMme054E23NV8GDHsmZTYh/vY/w8gKWvpVIPeAiCY=";
 
-  passthru.updateScript = unstableGitUpdater {
-    hardcodeZeroVersion = true;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Go AT protocol CLI tool";
@@ -38,4 +36,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ pyrox0 ];
     mainProgram = "goat";
   };
-}
+})

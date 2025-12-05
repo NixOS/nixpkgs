@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "brother";
-  version = "5.1.0";
+  version = "6.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "bieniu";
     repo = "brother";
     tag = version;
-    hash = "sha256-g0Xg12JV7CpgSzitEEzsFFpTKF644m6mbo1KgvhQOO4=";
+    hash = "sha256-kvR4891kaZFHKZhtgrrgtGJZUIwoYE5CsGUEQM7eKvs=";
   };
 
   build-system = [ setuptools ];

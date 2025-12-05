@@ -24,7 +24,6 @@ let
     format = "setuptools";
 
     src = fetchFromGitHub {
-      name = "${pname}-${version}-source";
       owner = "klen";
       repo = "pylama";
       rev = version;

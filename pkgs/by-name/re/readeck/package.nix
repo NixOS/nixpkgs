@@ -2,39 +2,22 @@
   lib,
   fetchFromGitea,
   fetchNpmDeps,
-  buildGo125Module,
+  buildGoModule,
   nodejs,
   npmHooks,
   python3,
 }:
 
-let
-  file-compose = buildGo125Module {
-    pname = "file-compose";
-    version = "unstable-2023-10-21";
-
-    src = fetchFromGitea {
-      domain = "codeberg.org";
-      owner = "readeck";
-      repo = "file-compose";
-      rev = "afa938655d412556a0db74b202f9bcc1c40d8579";
-      hash = "sha256-rMANRqUQRQ8ahlxuH1sWjlGpNvbReBOXIkmBim/wU2o=";
-    };
-
-    vendorHash = "sha256-Qwixx3Evbf+53OFeS3Zr7QCkRMfgqc9hUA4eqEBaY0c=";
-  };
-in
-
-buildGo125Module rec {
+buildGoModule rec {
   pname = "readeck";
-  version = "0.20.1";
+  version = "0.21.3";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "readeck";
     repo = "readeck";
     tag = version;
-    hash = "sha256-7ZLEAMma0eLrcCbwbeK8EPDY1+ZOJy3i4Rz+obDsuko=";
+    hash = "sha256-d4FLyD2uOngUANc7fai8j0wZSY1ISS18JEBDxCqXdQw=";
   };
 
   nativeBuildInputs = [
@@ -48,10 +31,7 @@ buildGo125Module rec {
   NODE_PATH = "$npmDeps";
 
   preBuild = ''
-    make web-build
-    python3 locales/messages.py compile
-    ${file-compose}/bin/file-compose -format json docs/api/api.yaml docs/assets/api.json
-    go run ./tools/docs docs/src docs/assets
+    make generate
   '';
 
   subPackages = [ "." ];
@@ -69,6 +49,8 @@ buildGo125Module rec {
   ldflags = [
     "-X"
     "codeberg.org/readeck/readeck/configs.version=${version}"
+    "-X"
+    "codeberg.org/readeck/readeck/configs.buildTimeStr=1970-01-01T08:00:00Z"
   ];
 
   overrideModAttrs = oldAttrs: {
@@ -80,10 +62,10 @@ buildGo125Module rec {
 
   npmDeps = fetchNpmDeps {
     src = "${src}/web";
-    hash = "sha256-/imn3IoRh6aoQFNH0yMmgYNktfkN647H4KfpcVVC728=";
+    hash = "sha256-XT+4IR1xVXiDY4wx2smt0pcNUx6UFoXYq+zxvbGsQ8A=";
   };
 
-  vendorHash = "sha256-8SdDuMsFKpEhJ3qnH/9nly54A/PJCCh5xIyKNLDs740=";
+  vendorHash = "sha256-IWRlruj+zYixCRgbaf7QYBeCGwzf0qRY8OFa4s/PzME=";
 
   meta = {
     description = "Web application that lets you save the readable content of web pages you want to keep forever";
@@ -91,6 +73,9 @@ buildGo125Module rec {
     homepage = "https://readeck.org/";
     changelog = "https://codeberg.org/readeck/readeck/releases/tag/${version}";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ julienmalka ];
+    maintainers = with lib.maintainers; [
+      julienmalka
+      linsui
+    ];
   };
 }

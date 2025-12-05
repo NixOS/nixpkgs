@@ -9,7 +9,7 @@
   cmake,
   ninja,
   pkg-config,
-  curl,
+  curlFull, # Websocket support
   libavif,
   angle, # libEGL
   libjxl,
@@ -27,20 +27,19 @@
   skia,
   nixosTests,
   unstableGitUpdater,
-  apple-sdk_14,
   libtommath,
   sdl3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2025-09-19";
+  version = "0-unstable-2025-11-27";
 
   src = fetchFromGitHub {
     owner = "LadybirdBrowser";
     repo = "ladybird";
-    rev = "5bd867f1dcb1f1b1c1397c4615ce7f091c8370aa";
-    hash = "sha256-/SPWjgHiWgrLThgAxBt9gZVELH+rrJWkfhxnuKEIxd8=";
+    rev = "c790de24ddc7575a4ed2ea754d27afb6cde0ac22";
+    hash = "sha256-DZ4qj4polUH2xQvopY6ia/GyRe+L8WCGJPEryQAn/4E=";
   };
 
   postPatch = ''
@@ -80,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    curl
+    curlFull
     fast-float
     ffmpeg
     fontconfig
@@ -107,9 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isLinux [
     libpulseaudio.dev
     qt6Packages.qtwayland
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_14
   ];
 
   cmakeFlags = [

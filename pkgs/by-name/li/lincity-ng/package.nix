@@ -1,22 +1,19 @@
 {
   stdenv,
   SDL2,
-  SDL2_gfx,
   SDL2_image,
   SDL2_mixer,
   SDL2_ttf,
   cmake,
   fetchFromGitHub,
+  fmt,
   lib,
-  libGL,
-  libGLU,
   libwebp,
   libtiff,
   libX11,
   libxml2,
   libxmlxx5,
   libxslt,
-  physfs_2,
   pkg-config,
   xorgproto,
   zlib,
@@ -24,23 +21,20 @@
   include-what-you-use,
 }:
 
-let
-  # https://github.com/lincity-ng/lincity-ng/issues/25
-  physfs = physfs_2;
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "lincity-ng";
-  version = "2.13.1";
+  version = "2.14.2";
 
   src = fetchFromGitHub {
     owner = "lincity-ng";
     repo = "lincity-ng";
     tag = "lincity-ng-${finalAttrs.version}";
-    hash = "sha256-ACJVhMq2IEJNrbAdmkgHxQV0uKSXpwR8a/5jcrQS+oI=";
+    hash = "sha256-HW+bB9xnrok8tWKIJJUt3Qgo5e9HmI6NZORG4PazmEM=";
   };
 
   hardeningDisable = [ "format" ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -48,23 +42,21 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     include-what-you-use
     libxml2
+    libxslt
   ];
 
   buildInputs = [
+    fmt
     SDL2
-    SDL2_gfx
     SDL2_image
     SDL2_mixer
     SDL2_ttf
-    libGL
-    libGLU
     libX11
     libwebp
     libtiff
     libxmlxx5
     libxml2
     libxslt
-    physfs
     xorgproto
     zlib
   ];
@@ -81,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   ";
 
   meta = {
+    homepage = "https://github.com/lincity-ng/lincity-ng";
     description = "City building game";
     mainProgram = "lincity-ng";
     license = lib.licenses.gpl2Plus;

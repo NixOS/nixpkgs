@@ -13,19 +13,18 @@
   sqlalchemy,
   websocket-client,
   websockets,
-  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.37.0";
+  version = "3.39.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "python-slack-sdk";
     tag = "v${version}";
-    hash = "sha256-yckw0qA/NhnqN9HvF06Q5IqDmUTsPuo4JSKMrKXUGuc=";
+    hash = "sha256-c9MPcamxXPxWnj5OpJNME/PTHssOxOJP6zjSLu5cW7Y=";
   };
 
   build-system = [ setuptools ];
@@ -52,8 +51,12 @@ buildPythonPackage rec {
   disabledTests = [
     # Requires internet access (to slack API)
     "test_start_raises_an_error_if_rtm_ws_url_is_not_returned"
-    # Requires network access: [Errno 111] Connection refused
     "test_send_message_while_disconnection"
+    "TestWebClient_HttpRetry"
+    "test_issue_690_oauth_access"
+    "test_issue_690_oauth_v2_access"
+    "test_error_response"
+    "test_issue_1441_mixing_user_and_bot_installations"
   ];
 
   disabledTestPaths = [

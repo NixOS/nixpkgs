@@ -9,16 +9,16 @@
 
 buildGo125Module (finalAttrs: {
   pname = "upcloud-cli";
-  version = "3.23.0";
+  version = "3.26.0";
 
   src = fetchFromGitHub {
     owner = "UpCloudLtd";
     repo = "upcloud-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oATz3ZvOeFT0wJ7R69cleGdpD9ICWQVOINKelJguBR4=";
+    hash = "sha256-fJYb5p3+YUr+I3ibORbKg9SCwxv0AX9j2UdLCFYbQDA=";
   };
 
-  vendorHash = "sha256-Q/FokLGjc65ptbouRT5L0bxPIzzctTo87oFu9qd/NHs=";
+  vendorHash = "sha256-3jkV4tE0uz7reIAjicSXaeSUjTFMiaFOl41V0DVbSCc=";
 
   ldflags = [
     "-s -w -X github.com/UpCloudLtd/upcloud-cli/v3/internal/config.Version=${finalAttrs.version}"

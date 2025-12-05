@@ -44,4 +44,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "tdf";
     platforms = lib.platforms.unix;
   };
+
+  # Only used for development
+  postInstall = ''
+    rm "$out/bin/for_profiling"
+  '';
 })

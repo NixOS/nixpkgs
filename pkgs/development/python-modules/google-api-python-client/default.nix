@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "google-api-python-client";
-  version = "2.177.0";
+  version = "2.185.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-api-python-client";
     tag = "v${version}";
-    hash = "sha256-CEjbUIXtG5z1/28DsNCm/npMSd/+DyY5PMJHm9XDe2M=";
+    hash = "sha256-uItN7P6tZTxEHfma+S0p4grRRnAaIhuTezvJzWjvkfE=";
   };
 
   build-system = [ setuptools ];

@@ -50,7 +50,6 @@ stdenv.mkDerivation rec {
     mainProgram = "svaba";
     license = licenses.gpl3;
     homepage = "https://github.com/walaj/svaba";
-    maintainers = with maintainers; [ scalavision ];
     platforms = platforms.linux;
     longDescription = ''
       SvABA is a method for detecting structural variants in sequencing data

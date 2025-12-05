@@ -120,6 +120,8 @@ Unless you understand how the fetcher you're using calculates the hash from the 
    - `cvs`
    - `bzr`
    - `svn`
+   - `darcs`
+   - `pijul`
 
    The hash is printed to stdout.
 
@@ -505,8 +507,8 @@ fetchurl {
 
   downloadToTemp = true;
   postFetch = ''
-    ${lib.getExe hello} >> $downloadedFile
-    mv $downloadedFile $out
+    hello >> "$downloadedFile"
+    mv "$downloadedFile" "$out"
   '';
 
   hash = "sha256-ceooQQYmDx5+0nfg40uU3NNI2yKrixP7HZ/xLZUNv+w=";
@@ -699,6 +701,9 @@ MSCREATE.DIR  PINBALL.DOC  PINBALL.MID	Sounds	     WAVEMIX.INF
 - `extraPrefix`: Prefix pathnames by this string.
 - `excludes`: Exclude files matching these patterns (applies after the above arguments).
 - `includes`: Include only files matching these patterns (applies after the above arguments).
+- `hunks`: Choose the specified hunks from each file (applies after the above arguments).
+  Note that you can specify a list of numbers or ranges of numbers
+  (for example, `[ 1 2 3 4 ]`, `[ "1-4" ]`, `[ "-4" ]`, or `[ "1-" ]` would all be the same effective range in a patch applying 4 hunks to a single file).
 - `revert`: Revert the patch.
 
 Note that because the checksum is computed after applying these effects, using or modifying these arguments will have no effect unless the `hash` argument is changed as well.

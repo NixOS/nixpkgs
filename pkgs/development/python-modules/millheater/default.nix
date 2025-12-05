@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "millheater";
-  version = "0.14.0";
+  version = "0.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pymill";
     tag = version;
-    hash = "sha256-s2uufn4G3yTDLd0v72KAL8AuZNSBYwQRkAX8UKXcex4=";
+    hash = "sha256-CDPk3AiLFNOovjNi4fDy91BBcxpbyFV9FCN1uU5bxbc=";
   };
 
   build-system = [ setuptools ];

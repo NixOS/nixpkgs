@@ -87,6 +87,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyfx" ];
 
+  disabledTests = [
+    # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr'
+    "test_start"
+  ];
+
   meta = with lib; {
     description = "Module to view JSON in a TUI";
     homepage = "https://github.com/cielong/pyfx";

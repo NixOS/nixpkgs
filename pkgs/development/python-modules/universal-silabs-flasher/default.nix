@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "universal-silabs-flasher";
-  version = "0.0.35";
+  version = "0.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = "universal-silabs-flasher";
     tag = "v${version}";
-    hash = "sha256-6NOcEH1UUicZHKOQ91o4l7JiC1Qwpc8vWyRR7TRENqs=";
+    hash = "sha256-Qeudh75PzIxI4vr3H4nBULhM2X8WSPF8hrT2uMWopHQ=";
   };
 
   postPatch = ''

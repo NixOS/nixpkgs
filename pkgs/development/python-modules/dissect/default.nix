@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  dissect-apfs,
   dissect-archive,
   dissect-btrfs,
   dissect-cim,
@@ -31,23 +32,20 @@
   dissect-volume,
   dissect-xfs,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "dissect";
-  version = "3.20.1";
+  version = "3.21";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect";
     tag = version;
-    hash = "sha256-Zc9NBrRDbSP5Yk3gJoMG+6nAGFxBHiPKvvfQLMcu+tk=";
+    hash = "sha256-INqZwN3x5MzrACyaUOa2A7mrKvld9reN1PJVxkq837o=";
   };
 
   pythonRelaxDeps = true;
@@ -58,6 +56,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    dissect-apfs
     dissect-archive
     dissect-btrfs
     dissect-cim

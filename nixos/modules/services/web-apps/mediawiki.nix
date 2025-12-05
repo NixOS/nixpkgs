@@ -40,8 +40,10 @@ let
   cacheDir = "/var/cache/mediawiki";
   stateDir = "/var/lib/mediawiki";
 
-  # https://www.mediawiki.org/wiki/Compatibility
-  php = pkgs.php82;
+  toolsPath = pkgs.symlinkJoin {
+    name = "mediawiki-path";
+    paths = cfg.path;
+  };
 
   pkg = pkgs.stdenv.mkDerivation rec {
     pname = "mediawiki-full";
@@ -51,6 +53,10 @@ let
     installPhase = ''
       mkdir -p $out
       cp -r * $out/
+
+      substituteInPlace $out/share/mediawiki/includes/config-schema.php \
+        --replace-fail "/usr/bin/" "${toolsPath}/bin/" \
+        --replace-fail "\$path/" "${toolsPath}/bin/"
 
       # try removing directories before symlinking to allow overwriting any builtin extension or skin
       ${concatStringsSep "\n" (
@@ -79,11 +85,11 @@ let
       }
       ''
         mkdir -p $out/bin
-        makeWrapper ${php}/bin/php $out/bin/mediawiki-maintenance \
+        makeWrapper ${cfg.phpPackage}/bin/php $out/bin/mediawiki-maintenance \
           --set MEDIAWIKI_CONFIG ${mediawikiConfig} \
           --add-flags ${pkg}/share/mediawiki/maintenance/run.php
 
-        for i in changePassword createAndPromote deleteUserEmail resetUserEmail userOptions edit nukePage update importDump run; do
+        for i in changePassword createAndPromote deleteUserEmail renameUser resetUserEmail userOptions edit nukePage update importDump run; do
           script="$out/bin/mediawiki-$i"
         cat <<'EOF' >"$script"
         #!${pkgs.runtimeShell}
@@ -115,7 +121,7 @@ let
   mediawikiConfig = pkgs.writeTextFile {
     name = "LocalSettings.php";
     checkPhase = ''
-      ${php}/bin/php --syntax-check "$target"
+      ${cfg.phpPackage}/bin/php --syntax-check "$target"
     '';
     text = ''
       <?php
@@ -190,7 +196,6 @@ let
         ''}
 
         $wgUseImageMagick = true;
-        $wgImageMagickConvertCommand = "${pkgs.imagemagick}/bin/convert";
 
         # InstantCommons allows wiki to use images from https://commons.wikimedia.org
         $wgUseInstantCommons = false;
@@ -226,10 +231,6 @@ let
         $wgRightsText = "";
         $wgRightsIcon = "";
 
-        # Path to the GNU diff3 utility. Used for conflict resolution.
-        $wgDiff = "${pkgs.diffutils}/bin/diff";
-        $wgDiff3 = "${pkgs.diffutils}/bin/diff3";
-
         # Enabled skins.
         ${concatStringsSep "\n" (mapAttrsToList (k: v: "wfLoadSkin('${k}');") cfg.skins)}
 
@@ -247,13 +248,17 @@ let
   withTrailingSlash = str: if lib.hasSuffix "/" str then str else "${str}/";
 in
 {
-  # interface
   options = {
     services.mediawiki = {
 
       enable = mkEnableOption "MediaWiki";
 
       package = mkPackageOption pkgs "mediawiki" { };
+
+      # https://www.mediawiki.org/wiki/Compatibility
+      phpPackage = mkPackageOption pkgs "php" {
+        default = "php82";
+      };
 
       finalPackage = mkOption {
         type = types.package;
@@ -335,6 +340,13 @@ in
               config.services.httpd.adminAddr else "root@localhost"
         '';
         description = "Contact address for password reset.";
+      };
+
+      path = mkOption {
+        type = types.listOf types.package;
+        defaultText = lib.literalExpression "with pkgs; [ diffutils imagemagick ]";
+        example = lib.literalExpression "with pkgs; [ librsvg ]";
+        description = "Extra packages to add to the PATH of phpfpm-pool.";
       };
 
       skins = mkOption {
@@ -530,7 +542,6 @@ in
     )
   ];
 
-  # implementation
   config = mkIf cfg.enable {
 
     assertions = [
@@ -554,10 +565,16 @@ in
       }
     ];
 
-    services.mediawiki.skins = {
-      MonoBook = "${cfg.package}/share/mediawiki/skins/MonoBook";
-      Timeless = "${cfg.package}/share/mediawiki/skins/Timeless";
-      Vector = "${cfg.package}/share/mediawiki/skins/Vector";
+    services.mediawiki = {
+      path = with pkgs; [
+        diffutils
+        imagemagick
+      ];
+      skins = {
+        MonoBook = "${cfg.package}/share/mediawiki/skins/MonoBook";
+        Timeless = "${cfg.package}/share/mediawiki/skins/Timeless";
+        Vector = "${cfg.package}/share/mediawiki/skins/Vector";
+      };
     };
 
     services.mysql = mkIf (cfg.database.type == "mysql" && cfg.database.createLocally) {
@@ -588,7 +605,7 @@ in
     services.phpfpm.pools.mediawiki = {
       inherit user group;
       phpEnv.MEDIAWIKI_CONFIG = "${mediawikiConfig}";
-      phpPackage = php;
+      phpPackage = cfg.phpPackage;
       settings =
         (
           if (cfg.webserver == "apache") then
@@ -712,8 +729,8 @@ in
         fi
 
         echo "exit( \$this->getPrimaryDB()->tableExists( 'user' ) ? 1 : 0 );" | \
-        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/run.php eval --conf ${mediawikiConfig} && \
-        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/install.php \
+        ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/run.php eval --conf ${mediawikiConfig} && \
+        ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/install.php \
           --confpath /tmp \
           --scriptpath / \
           --dbserver ${lib.escapeShellArg dbAddr} \
@@ -735,7 +752,7 @@ in
           ${lib.escapeShellArg cfg.name} \
           admin
 
-        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/update.php --conf ${mediawikiConfig} --quick --skip-external-dependencies
+        ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/update.php --conf ${mediawikiConfig} --quick --skip-external-dependencies
       '';
 
       serviceConfig = {

@@ -57,7 +57,7 @@ buildPythonPackage rec {
     pytestCheckHook
     testfixtures
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     substituteInPlace okonomiyaki/runtimes/tests/test_runtime.py \

@@ -6,20 +6,19 @@
   makeWrapper,
   fetchFromGitHub,
   versionCheckHook,
-  nix-update-script,
   installShellFiles,
   stripJavaArchivesHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pakku";
-  version = "1.2.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "juraj-hrivnak";
     repo = "Pakku";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hWQq2awZV07wX4jK9K/QoXekrlZukuDv6CtY1O09ZkQ=";
+    hash = "sha256-PVET+A9LVWnqLCXz3R9EP7gk6GOViSzhRLrXTjNFPaA=";
   };
 
   gradleBuildTask = "jvmJar";
@@ -64,12 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "mitmCache"
-    ];
-  };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Multiplatform modpack manager for Minecraft: Java Edition";

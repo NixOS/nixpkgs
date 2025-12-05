@@ -81,6 +81,13 @@
     cp arch/$MACHINE/compile/$CONFIG/netbsd $out
   '';
 
+  postIncludes = ''
+    install $BSDSRCDIR/lib/libossaudio/soundcard.h $out/include/soundcard.h
+  '';
+
   meta.platforms = lib.platforms.netbsd;
-  extraPaths = [ "common" ];
+  extraPaths = [
+    "common"
+    "lib/libossaudio"
+  ];
 }

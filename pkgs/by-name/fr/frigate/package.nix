@@ -2,7 +2,7 @@
   lib,
   stdenv,
   callPackage,
-  python312Packages,
+  python313Packages,
   fetchFromGitHub,
   fetchurl,
   ffmpeg-headless,
@@ -13,21 +13,21 @@
 }:
 
 let
-  version = "0.16.1";
+  version = "0.16.2";
 
   src = fetchFromGitHub {
     name = "frigate-${version}-source";
     owner = "blakeblackshear";
     repo = "frigate";
     tag = "v${version}";
-    hash = "sha256-Uhqs9n4igP9+BtIHiEiurjvKfo2prIXnnVXqyPDbzQ8=";
+    hash = "sha256-8Lm4iLRdMqgZvy24WS1SOkbj855c2t9yg8n91WMg5Fg=";
   };
 
   frigate-web = callPackage ./web.nix {
     inherit version src;
   };
 
-  python = python312Packages.python.override {
+  python = python313Packages.python.override {
     packageOverrides = self: super: {
       joserfc = super.joserfc.overridePythonAttrs (oldAttrs: {
         version = "1.1.0";
@@ -141,7 +141,6 @@ python3Packages.buildPythonApplication rec {
     distlib
     fastapi
     filelock
-    future
     importlib-metadata
     importlib-resources
     google-generativeai

@@ -1,12 +1,10 @@
 {
   pkgs,
   linuxKernel,
+  kernelPackagesExtensions,
   config,
   buildPackages,
   callPackage,
-  makeOverridable,
-  recurseIntoAttrs,
-  dontRecurseIntoAttrs,
   stdenv,
   stdenvNoCC,
   newScope,
@@ -18,9 +16,20 @@
 # - Update packageAliases.linux_latest to the latest version
 # - Update linux_latest_hardened when the patches become available
 
-with linuxKernel;
-
 let
+  inherit (lib) recurseIntoAttrs dontRecurseIntoAttrs;
+  inherit (linuxKernel)
+    kernels
+    kernelPatches
+    manualConfig
+    packages
+    packagesFor
+    packageAliases
+    vanillaPackages
+    rtPackages
+    rpiPackages
+    ;
+
   markBroken =
     drv:
     drv.overrideAttrs (
@@ -115,22 +124,6 @@ in
           rpiVersion = 4;
         };
 
-        linux_5_4 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "5.4";
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-            kernelPatches.rtl8761b_support
-          ];
-        };
-
-        linux_rt_5_4 = callPackage ../os-specific/linux/kernel/linux-rt-5.4.nix {
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-          ];
-        };
-
         linux_5_10 = callPackage ../os-specific/linux/kernel/mainline.nix {
           branch = "5.10";
           kernelPatches = [
@@ -203,16 +196,16 @@ in
           ];
         };
 
-        linux_6_16 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "6.16";
+        linux_6_17 = callPackage ../os-specific/linux/kernel/mainline.nix {
+          branch = "6.17";
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
           ];
         };
 
-        linux_6_17 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "6.17";
+        linux_6_18 = callPackage ../os-specific/linux/kernel/mainline.nix {
+          branch = "6.18";
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
@@ -292,12 +285,14 @@ in
         linux_latest_libre = throw "linux_latest_libre has been removed due to lack of maintenance";
 
         linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11";
+        linux_5_4 = throw "linux 5.4 was removed because it will reach its end of life within 25.11";
         linux_6_9 = throw "linux 6.9 was removed because it has reached its end of life upstream";
         linux_6_10 = throw "linux 6.10 was removed because it has reached its end of life upstream";
         linux_6_11 = throw "linux 6.11 was removed because it has reached its end of life upstream";
         linux_6_13 = throw "linux 6.13 was removed because it has reached its end of life upstream";
         linux_6_14 = throw "linux 6.14 was removed because it has reached its end of life upstream";
         linux_6_15 = throw "linux 6.15 was removed because it has reached its end of life upstream";
+        linux_6_16 = throw "linux 6.16 was removed because it has reached its end of life upstream";
 
         linux_5_10_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
         linux_5_15_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
@@ -313,6 +308,8 @@ in
         linux_6_14_hardened = throw "linux 6.14 was removed because it has reached its end of life upstream";
         linux_6_15_hardened = throw "linux 6.15 was removed because it has reached its end of life upstream";
 
+        linux_rt_5_4 = throw "linux_rt 5.4 has been removed because it will reach its end of life within 25.11";
+
         linux_ham = throw "linux_ham has been removed in favour of the standard kernel packages";
       }
     )
@@ -327,7 +324,7 @@ in
 
   packagesFor =
     kernel_:
-    lib.makeExtensible (
+    (lib.makeExtensible (
       self:
       with self;
       let
@@ -577,6 +574,8 @@ in
 
         mba6x_bl = callPackage ../os-specific/linux/mba6x_bl { };
 
+        mdio-netlink = callPackage ../os-specific/linux/mdio-netlink { };
+
         mwprocapture = callPackage ../os-specific/linux/mwprocapture { };
 
         mxu11x0 = callPackage ../os-specific/linux/mxu11x0 { };
@@ -665,10 +664,6 @@ in
 
         zenpower = callPackage ../os-specific/linux/zenpower { };
 
-        zfs_2_2 = callPackage ../os-specific/linux/zfs/2_2.nix {
-          configFile = "kernel";
-          inherit pkgs kernel;
-        };
         zfs_2_3 = callPackage ../os-specific/linux/zfs/2_3.nix {
           configFile = "kernel";
           inherit pkgs kernel;
@@ -721,38 +716,42 @@ in
         phc-intel = throw "phc-intel drivers are no longer supported by any kernel >=4.17"; # added 2025-07-18
         prl-tools = throw "Parallel Tools no longer provide any kernel module, please use pkgs.prl-tools instead."; # added 2025-10-04
       }
-    );
+    )).extend
+      (lib.fixedPoints.composeManyExtensions kernelPackagesExtensions);
 
   hardenedPackagesFor = kernel: overrides: packagesFor (hardenedKernelFor kernel overrides);
 
   vanillaPackages = {
     # recurse to build modules for the kernels
-    linux_5_4 = recurseIntoAttrs (packagesFor kernels.linux_5_4);
     linux_5_10 = recurseIntoAttrs (packagesFor kernels.linux_5_10);
     linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
     linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
     linux_6_12 = recurseIntoAttrs (packagesFor kernels.linux_6_12);
-    linux_6_16 = recurseIntoAttrs (packagesFor kernels.linux_6_16);
     linux_6_17 = recurseIntoAttrs (packagesFor kernels.linux_6_17);
+    linux_6_18 = recurseIntoAttrs (packagesFor kernels.linux_6_18);
   }
   // lib.optionalAttrs config.allowAliases {
     linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11"; # Added 2024-09-21
+    linux_5_4 = throw "linux 5.4 was removed because it will reach its end of life within 25.11"; # Added 2025-10-22
     linux_6_9 = throw "linux 6.9 was removed because it reached its end of life upstream"; # Added 2024-08-02
     linux_6_10 = throw "linux 6.10 was removed because it reached its end of life upstream"; # Added 2024-10-23
     linux_6_11 = throw "linux 6.11 was removed because it reached its end of life upstream"; # Added 2025-03-23
     linux_6_13 = throw "linux 6.13 was removed because it reached its end of life upstream"; # Added 2025-06-22
     linux_6_14 = throw "linux 6.14 was removed because it reached its end of life upstream"; # Added 2025-06-22
     linux_6_15 = throw "linux 6.15 was removed because it reached its end of life upstream"; # Added 2025-08-23
+    linux_6_16 = throw "linux 6.16 was removed because it reached its end of life upstream"; # Added 2025-10-22
   };
 
   rtPackages = {
     # realtime kernel packages
-    linux_rt_5_4 = packagesFor kernels.linux_rt_5_4;
     linux_rt_5_10 = packagesFor kernels.linux_rt_5_10;
     linux_rt_5_15 = packagesFor kernels.linux_rt_5_15;
     linux_rt_6_1 = packagesFor kernels.linux_rt_6_1;
     linux_rt_6_6 = packagesFor kernels.linux_rt_6_6;
+  }
+  // lib.optionalAttrs config.allowAliases {
+    linux_rt_5_4 = throw "linux_rt 5.4 was removed because it will reach its end of life within 25.11"; # Added 2025-10-22
   };
 
   rpiPackages = {
@@ -805,7 +804,7 @@ in
   packageAliases = {
     linux_default = packages.linux_6_12;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_6_17;
+    linux_latest = packages.linux_6_18;
     linux_rt_default = packages.linux_rt_5_15;
     linux_rt_latest = packages.linux_rt_6_6;
   }
@@ -813,7 +812,7 @@ in
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
   };
 
-  manualConfig = callPackage ../os-specific/linux/kernel/manual-config.nix { };
+  manualConfig = callPackage ../os-specific/linux/kernel/build.nix { };
 
   customPackage =
     {

@@ -194,9 +194,9 @@ rec {
   mkTerraform = attrs: pluggable (generic attrs);
 
   terraform_1 = mkTerraform {
-    version = "1.13.3";
-    hash = "sha256-8C6OxeTjitDMi3J2KIfI6Q+w4FASS6zxjZHfSo7eZko=";
-    vendorHash = "sha256-UcsB5cTae55meJ945fvgowch4EBdaTET2+t5KWvpPQ8=";
+    version = "1.14.1";
+    hash = "sha256-qqIoVAzVpsdGNbA04jpsiN1HR94xhcfDJvz8UyEweyw=";
+    vendorHash = "sha256-+mWMU3FWF/VTyPMnOj9AGy1kfvv2W4UB9EDZI7bqSh0=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = {
       inherit plugins;
@@ -213,7 +213,7 @@ rec {
       mainTf = writeText "main.tf" ''
         resource "random_id" "test" {}
       '';
-      terraform = terraform_1.withPlugins (p: [ p.random ]);
+      terraform = terraform_1.withPlugins (p: [ p.hashicorp_random ]);
       test = runCommand "terraform-plugin-test" { buildInputs = [ terraform ]; } ''
         set -e
         # make it fail outside of sandbox

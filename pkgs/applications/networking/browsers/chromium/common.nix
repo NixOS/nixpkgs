@@ -96,8 +96,8 @@
   ungoogled-chromium,
   # Optional dependencies:
   libgcrypt ? null, # cupsSupport
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
 }:
 
 buildFun:
@@ -157,7 +157,11 @@ let
     # "snappy"
     "flac"
     "libjpeg"
+  ]
+  ++ lib.optionals needsLibpng [
     "libpng"
+  ]
+  ++ [
     # Use the vendored libwebp for M124+ until we figure out how to solve:
     # Running phase: configurePhase
     # ERROR Unresolved dependencies.
@@ -217,6 +221,9 @@ let
 
   isElectron = packageName == "electron";
   rustcVersion = buildPackages.rustc.version;
+  # libpng has been replaced by the png rust crate
+  # https://github.com/image-rs/image-png/discussions/562
+  needsLibpng = !chromiumVersionAtLeast "143";
 
   chromiumDeps = lib.mapAttrs (
     path: args:
@@ -321,8 +328,10 @@ let
     # maintain a separate list of buildPlatform-dependencies, we
     # simply throw in the kitchen sink.
     # ** Because of overrides, we have to copy the list as it otherwise mess with splicing **
-    ++ [
+    ++ lib.optionals needsLibpng [
       (buildPackages.libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
+    ]
+    ++ [
       (buildPackages.libopus.override { withCustomModes = true; })
       bzip2
       flac
@@ -370,7 +379,7 @@ let
       libffi
       libevdev
     ]
-    ++ lib.optional systemdSupport systemd
+    ++ lib.optional systemdSupport systemdLibs
     ++ lib.optionals cupsSupport [
       libgcrypt
       cups
@@ -378,7 +387,11 @@ let
     ++ lib.optional pulseSupport libpulseaudio;
 
     buildInputs = [
+    ]
+    ++ lib.optionals needsLibpng [
       (libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
+    ]
+    ++ [
       (libopus.override { withCustomModes = true; })
       bzip2
       flac
@@ -427,7 +440,7 @@ let
       libffi
       libevdev
     ]
-    ++ lib.optional systemdSupport systemd
+    ++ lib.optional systemdSupport systemdLibs
     ++ lib.optionals cupsSupport [
       libgcrypt
       cups
@@ -467,10 +480,13 @@ let
       # Chromium reads initial_preferences from its own executable directory
       # This patch modifies it to read /etc/chromium/initial_preferences
       ./patches/chromium-initial-prefs.patch
+    ]
+    ++ lib.optionals (!chromiumVersionAtLeast "142") [
       # https://github.com/chromium/chromium/commit/02b6456643700771597c00741937e22068b0f956
       # https://github.com/chromium/chromium/commit/69736ffe943ff996d4a88d15eb30103a8c854e29
       # Rebased variant of patch to build M126+ with LLVM 17.
       # staging-next will bump LLVM to 18, so we will be able to drop this soon.
+      # Started failing to apply with M142, but this is no longer needed anyway.
       ./patches/chromium-126-llvm-17.patch
     ]
     ++ lib.optionals (!chromiumVersionAtLeast "140") [
@@ -529,7 +545,7 @@ let
       # electron 35 (M134) and 36 (M136)
       ./patches/chromium-134-rust-1.86-mismatched_lifetime_syntaxes.patch
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "141") [
+    ++ lib.optionals (versionRange "141" "142") [
       (fetchpatch {
         # Fix "invalid application of 'sizeof' to an incomplete type 'blink::CSSStyleSheet'"
         # by reverting https://chromium-review.googlesource.com/c/chromium/src/+/6892157
@@ -538,6 +554,49 @@ let
         decode = "base64 -d";
         revert = true;
         hash = "sha256-pnEus2NHpNWZ6ZSXLgdTn+it7oy1MPZPbD8SOAKLWbw=";
+      })
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "142" && lib.versionOlder rustcVersion "1.90") [
+      (fetchpatch {
+        # Fix "ld.lld: error: undefined symbol: __rustc::__rust_alloc_error_handler_should_panic'"
+        # with Rust < 1.90 by reverting https://chromium-review.googlesource.com/c/chromium/src/+/6935385
+        name = "chromium-142-Revert-rust-Remove-the-old-__rust_alloc_error_handler_should_panic-symbol.patch";
+        url = "https://chromium.googlesource.com/chromium/src/+/e33287758f2234d6aabfc5d4e011c4e81e3a47cf^!?format=TEXT";
+        decode = "base64 -d";
+        revert = true;
+        hash = "sha256-0vRDz7wwGCsqm38fVvkLLzOOtEtd8CnqyjDLgGofh/o=";
+      })
+    ]
+    ++ lib.optionals (versionRange "142" "143") [
+      (fetchpatch {
+        # Fix https://issues.chromium.org/issues/450752866 by backporting
+        # https://chromium-review.googlesource.com/c/chromium/src/+/7030724 from M143
+        name = "chromium-142-Backport-Add-missing-include-for-FormFieldData-type-completeness.patch";
+        url = "https://chromium.googlesource.com/chromium/src/+/069d424e41f42c6f4a4551334eafc7cfaed6e880^!?format=TEXT";
+        decode = "base64 -d";
+        hash = "sha256-0ueOCHYheSFHRFzEat3TDhnU3Avf0TcNBBBpTkz+saw=";
+      })
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "142" && lib.versionOlder rustcVersion "1.91") [
+      # Fix the following error when compiling CrabbyAvif with Rust < 1.91 due to
+      # https://github.com/rust-lang/rust/pull/142681 by reverting
+      # https://github.com/webmproject/CrabbyAvif/pull/663 and
+      # https://github.com/webmproject/CrabbyAvif/pull/654 and
+      # https://chromium-review.googlesource.com/c/chromium/src/+/6960510
+      #
+      #  error: cannot find attribute `sanitize` in this scope
+      #    --> ../../third_party/crabbyavif/src/src/capi/io.rs:210:41
+      #      |
+      #  210 |     #[cfg_attr(feature = "disable_cfi", sanitize(cfi = "off"))]
+      #      |                                         ^^^^^^^^
+      #
+      ./patches/chromium-142-crabbyavif-rust-no_sanitize.patch
+      (fetchpatch {
+        name = "chromium-142-crabbyavif-Revert-Enable-disable_cfi-feature.patch";
+        url = "https://chromium.googlesource.com/chromium/src/+/9415f40bc6f853547f791e633be638c71368ce56^!?format=TEXT";
+        decode = "base64 -d";
+        revert = true;
+        hash = "sha256-bYcJqPMbE7hMvhZVnzqHok1crUAdqrzqxr+4IHNzAtg=";
       })
     ];
 
@@ -568,13 +627,24 @@ let
         /* Generated by lastchange.py, do not edit.*/
         #ifndef SKIA_EXT_SKIA_COMMIT_HASH_H_
         #define SKIA_EXT_SKIA_COMMIT_HASH_H_
-        #define SKIA_COMMIT_HASH "${upstream-info.DEPS."src/third_party/skia".rev}-"
+        #define SKIA_COMMIT_HASH "${upstream-info.DEPS."src/third_party/skia".rev}${
+          lib.optionalString (!chromiumVersionAtLeast "142") "-"
+        }"
         #endif  // SKIA_EXT_SKIA_COMMIT_HASH_H_
         EOF
 
         echo -n '${upstream-info.DEPS."src/third_party/dawn".rev}' > gpu/webgpu/DAWN_VERSION
 
         mkdir -p third_party/jdk/current/bin
+      ''
+      + lib.optionalString (!isElectron && chromiumVersionAtLeast "142") ''
+        cat << EOF > gpu/webgpu/dawn_commit_hash.h
+        /* Generated by lastchange.py, do not edit.*/
+        #ifndef GPU_WEBGPU_DAWN_COMMIT_HASH_H_
+        #define GPU_WEBGPU_DAWN_COMMIT_HASH_H_
+        #define DAWN_COMMIT_HASH "${upstream-info.DEPS."src/third_party/dawn".rev}"
+        #endif  // GPU_WEBGPU_DAWN_COMMIT_HASH_H_
+        EOF
       ''
       + ''
         # Workaround/fix for https://bugs.chromium.org/p/chromium/issues/detail?id=1313361:
@@ -628,10 +698,6 @@ let
             '/usr/share/locale/' \
             '${glibc}/share/locale/'
 
-      ''
-      + lib.optionalString systemdSupport ''
-        sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
-          device/udev_linux/udev?_loader.cc
       ''
       + ''
         # Allow to put extensions into the system-path.

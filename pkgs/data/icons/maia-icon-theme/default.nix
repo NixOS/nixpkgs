@@ -39,6 +39,13 @@ stdenv.mkDerivation {
 
   dontWrapQtApps = true;
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace {icons,icons-dark}/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   postInstall = ''
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache $theme
@@ -49,7 +56,6 @@ stdenv.mkDerivation {
     description = "Icons based on Breeze and Super Flat Remix";
     homepage = "https://gitlab.manjaro.org/artwork/themes/maia";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ mounium ];
     platforms = platforms.all;
   };
 }

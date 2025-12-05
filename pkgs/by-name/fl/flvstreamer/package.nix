@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://savannah.nongnu.org/projects/flvstreamer";
 
-    maintainers = [ lib.maintainers.thammers ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin;
   };
 }

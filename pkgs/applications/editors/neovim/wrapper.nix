@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  wayland,
   makeWrapper,
   bundlerEnv,
   wl-clipboard,
@@ -40,7 +41,7 @@ let
       # the function you would have passed to python3.withPackages
       extraPython3Packages ? (_: [ ]),
 
-      waylandSupport ? stdenv.hostPlatform.isLinux,
+      waylandSupport ? lib.meta.availableOn stdenv.hostPlatform wayland,
       withNodeJs ? false,
       withPerl ? false,
       withRuby ? true,

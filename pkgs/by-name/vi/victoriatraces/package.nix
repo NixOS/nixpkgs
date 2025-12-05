@@ -13,14 +13,21 @@
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaTraces";
-  version = "0.2.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaTraces";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b4/ix191xtW2HpczfRbez2gibgGx7jBRm0hvuP/rTpA=";
+    hash = "sha256-RvP3hLM8SoDN91PATTI5RTKwnJsomBtWIakRlBprEPA=";
   };
+
+  postPatch = ''
+    substituteInPlace go.mod \
+      --replace-fail "go 1.25.4" "go 1.25.3"
+    substituteInPlace vendor/modules.txt \
+      --replace-fail "go 1.25.4" "go 1.25.3"
+  '';
 
   vendorHash = null;
 
@@ -30,12 +37,6 @@ buildGoModule (finalAttrs: {
     ++ lib.optionals withVtSelect [ "app/vtselect" ]
     ++ lib.optionals withVtStorage [ "app/vtstorage" ]
     ++ lib.optionals withVtGen [ "app/vtgen" ];
-
-  postPatch = ''
-    # Allow older go versions
-    substituteInPlace go.mod \
-      --replace-fail "go 1.24.6" "go ${finalAttrs.passthru.go.version}"
-  '';
 
   ldflags = [
     "-s"
@@ -56,7 +57,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://docs.victoriametrics.com/victoriatraces/";
     description = "Fast open-source observability solution for distributed traces";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ cmacrae ];
+    maintainers = with lib.maintainers; [
+      cmacrae
+      ma27
+    ];
     changelog = "https://github.com/VictoriaMetrics/VictoriaTraces/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "victoria-traces";
   };

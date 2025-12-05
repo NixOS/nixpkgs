@@ -49,6 +49,5 @@ stdenv.mkDerivation rec {
     '';
     mainProgram = "kdbg";
     license = licenses.gpl2;
-    maintainers = [ maintainers.catern ];
   };
 }

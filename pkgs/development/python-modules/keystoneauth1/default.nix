@@ -46,7 +46,7 @@ buildPythonPackage rec {
     typing-extensions
   ]
   # TODO: remove this workaround and fix breakages
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   optional-dependencies = {
     betamax = [
@@ -69,7 +69,7 @@ buildPythonPackage rec {
     testresources
     testtools
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # test_keystoneauth_betamax_fixture is incompatible with urllib3 2.0.0
   # https://bugs.launchpad.net/keystoneauth/+bug/2020112

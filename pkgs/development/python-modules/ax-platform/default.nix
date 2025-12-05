@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "ax-platform";
-  version = "1.1.2";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "ax";
     tag = version;
-    hash = "sha256-DHB/BcD913gano5N7dlAbB+Tfg1dMTRP3AR1HwJjkLg=";
+    hash = "sha256-WjJhBSj5lKt1ygrJ2QdxUxEvCrfnanLY8yWs7qy/GIY=";
   };
 
   env.ALLOW_BOTORCH_LATEST = "1";
@@ -85,6 +85,9 @@ buildPythonPackage rec {
     # sqlalchemy.exc.ArgumentError: Strings are not accepted for attribute names in loader options; please use class-bound attributes directly.
     "SQAStoreUtilsTest"
     "SQAStoreTest"
+
+    # ValueError: Expected dim to be an integer greater than or equal to 2. Found dim=1.
+    "test_get_model"
 
     # ValueError: `db_settings` argument should be of type ax.storage.sqa_store
     "test_get_next_trials_with_db"

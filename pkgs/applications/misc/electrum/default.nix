@@ -7,6 +7,7 @@
   python3,
   zbar,
   enableQt ? true,
+  enablePythonEcdsa ? false,
   callPackage,
   qtwayland,
 }:
@@ -22,15 +23,25 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "electrum";
-  version = "4.6.0";
-  format = "setuptools";
+  version = "4.6.2";
+  pyproject = true;
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    hash = "sha256-aQqZXyfqFgc1j2r836eaaayOmSzDijHlYXmF+OBw418=";
+    hash = "sha256-ZrwzAeeMNrs6KzLGDg5oBF7E+GGLYCVczO6R18TKRuE=";
   };
 
-  build-system = [ protobuf ] ++ lib.optionals enableQt [ wrapQtAppsHook ];
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  nativeBuildInputs = [
+    protobuf
+    python3.pkgs.pythonRelaxDepsHook
+  ]
+  ++ lib.optionals enableQt [
+    wrapQtAppsHook
+  ];
   buildInputs = lib.optional (stdenv.hostPlatform.isLinux && enableQt) qtwayland;
 
   dependencies =
@@ -56,17 +67,30 @@ python3.pkgs.buildPythonApplication rec {
       electrum-ecc
       # plugins
       ledger-bitcoin
+      cbor2
+      pyserial
+    ]
+    ++ lib.optionals enablePythonEcdsa [
+      # enablePythonEcdsa gates plugins known to pull in python-ecdsa, which we
+      # avoid by default due to CVE-2024-23342.
       ckcc-protocol
       keepkey
       trezor
       bitbox02
-      cbor2
-      pyserial
     ]
     ++ lib.optionals enableQt [
       pyqt6
       qdarkstyle
     ];
+
+  pythonRelaxDeps = [
+    "attrs"
+    "dnspython"
+  ];
+
+  pythonRemoveDeps = [
+    "protobuf"
+  ];
 
   checkInputs =
     with python3.pkgs;
@@ -77,7 +101,11 @@ python3.pkgs.buildPythonApplication rec {
     "tests/test_qml_types.py"
   ];
 
-  postPatch =
+  postPatch = ''
+    # Upstream tarball omits regenerated protobuf bindings in some releases.
+    protoc --python_out=. electrum/paymentrequest.proto
+  ''
+  + (
     if enableQt then
       ''
         substituteInPlace ./electrum/qrscanner.py \
@@ -86,7 +114,8 @@ python3.pkgs.buildPythonApplication rec {
     else
       ''
         sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
-      '';
+      ''
+  );
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $out/share/applications/electrum.desktop \
@@ -98,7 +127,15 @@ python3.pkgs.buildPythonApplication rec {
     wrapQtApp $out/bin/electrum
   '';
 
+  preFixup = ''
+    makeWrapperArgs+=(--prefix PYTHONPATH : ${python3.pkgs.protobuf}/${python3.sitePackages})
+  ''
+  + lib.optionalString enableQt ''
+    qtWrapperArgs+=(--prefix PYTHONPATH : ${python3.pkgs.protobuf}/${python3.sitePackages})
+  '';
+
   nativeCheckInputs = with python3.pkgs; [
+    protobuf
     pytestCheckHook
     pyaes
     pycryptodomex
@@ -108,6 +145,7 @@ python3.pkgs.buildPythonApplication rec {
 
   # avoid homeless-shelter error in tests
   preCheck = ''
+    export PYTHONPATH=${python3.pkgs.protobuf}/${python3.sitePackages}:$PYTHONPATH
     export HOME="$(mktemp -d)"
   '';
 

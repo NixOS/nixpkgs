@@ -75,7 +75,7 @@ let
 
     pnpmDeps = pnpm_10.fetchDeps {
       inherit src pname version;
-      fetcherVersion = 1;
+      fetcherVersion = 2;
       hash = pnpmHash;
     };
 
@@ -152,7 +152,6 @@ buildGoModule (finalAttrs: {
   patches = extPatches ++ [
     ./0001-fix-add-nix-path-to-exec-env.patch
     ./rdpclient.patch
-    ./tsh.patch
   ];
 
   # Reduce closure size for client machines
@@ -203,7 +202,6 @@ buildGoModule (finalAttrs: {
       justinas
       sigma
       tomberek
-      freezeboy
       techknowlogick
       juliusfreudenberger
     ];

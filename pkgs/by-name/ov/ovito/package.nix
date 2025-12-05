@@ -16,17 +16,18 @@
   python3,
   qt6Packages,
   copyDesktopItems,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ovito";
-  version = "3.12.2";
+  version = "3.14.1";
 
   src = fetchFromGitLab {
     owner = "stuko";
     repo = "ovito";
-    rev = "v${version}";
-    hash = "sha256-qpKQAO2f1TfspqjbCLA/3ERWdMeknKe0a54yd9PZbsA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SKE07bk/8cZ2etQtLrGZyp2DrNiyVk6mrgxlvJmG+Xk=";
     fetchSubmodules = true;
   };
   patches = [ ./zstd.patch ];
@@ -81,18 +82,22 @@ stdenv.mkDerivation rec {
       install -Dm644 ${icon} $out/share/pixmaps/ovito.png
     '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Scientific visualization and analysis software for atomistic and particle simulation data";
     mainProgram = "ovito";
     homepage = "https://ovito.org";
-    license = with licenses; [
+    changelog = "https://docs.ovito.org/new_features.html";
+    license = with lib.licenses; [
       gpl3Only
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       twhitehead
       chn
+      chillcicada
     ];
     broken = stdenv.hostPlatform.isDarwin; # clang-11: error: no such file or directory: '$-DOVITO_COPYRIGHT_NOTICE=...
   };
-}
+})

@@ -1,23 +1,20 @@
 {
   lib,
   stdenv,
-  appstream-glib,
   calf,
+  cmake,
   deepfilternet,
-  desktop-file-utils,
   fetchFromGitHub,
   fftw,
   fftwFloat,
-  fmt_9,
   glib,
   gsl,
-  gtk4,
-  itstool,
+  intltool,
+  kdePackages,
   ladspaH,
-  libadwaita,
   libbs2b,
   libebur128,
-  libportal-gtk4,
+  libportal-qt6,
   libsamplerate,
   libsigcxx30,
   libsndfile,
@@ -25,61 +22,88 @@
   lsp-plugins,
   lv2,
   mda_lv2,
-  meson,
   ninja,
   nix-update-script,
   nlohmann_json,
   pipewire,
   pkg-config,
+  qt6,
   rnnoise,
   rubberband,
   soundtouch,
   speexdsp,
   onetbb,
-  wrapGAppsHook4,
+  webrtc-audio-processing,
   zam-plugins,
   zita-convolver,
+  wrapGAppsNoGuiHook,
 }:
 
 let
-  # Fix crashes with speexdsp effects
-  speexdsp' = speexdsp.override { withFftw3 = false; };
+  inherit (qt6)
+    qtbase
+    qtgraphs
+    qtwebengine
+    wrapQtAppsHook
+    ;
+  inherit (kdePackages)
+    appstream-qt
+    breeze
+    breeze-icons
+    extra-cmake-modules
+    kcolorscheme
+    kconfigwidgets
+    kiconthemes
+    kirigami
+    kirigami-addons
+    qqc2-desktop-style
+    ;
 in
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "7.2.5";
+  version = "8.0.6";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     tag = "v${version}";
-    hash = "sha256-w3Mb13LOSF8vgcdJrqbesLqyyilI5AoA19jFquE5lEw=";
+    hash = "sha256-5UPwCdpFU1SiD9nlQd99lAK7QdC9jcizj5X3BhBYJ4U=";
   };
 
+  patches = [ ./qmlmodule-fix.patch ];
+
   nativeBuildInputs = [
-    desktop-file-utils
-    itstool
-    meson
+    cmake
+    extra-cmake-modules
+    intltool
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsNoGuiHook
+    wrapQtAppsHook
   ];
 
+  dontWrapGApps = true;
+
   buildInputs = [
-    appstream-glib
+    appstream-qt
+    breeze
+    breeze-icons
     deepfilternet
     fftw
     fftwFloat
-    fmt_9
     glib
     gsl
-    gtk4
+    kcolorscheme
+    kconfigwidgets
+    kiconthemes
+    kirigami
+    kirigami-addons
     ladspaH
-    libadwaita
+    qqc2-desktop-style
     libbs2b
     libebur128
-    libportal-gtk4
+    libportal-qt6
     libsamplerate
     libsigcxx30
     libsndfile
@@ -87,11 +111,15 @@ stdenv.mkDerivation rec {
     lv2
     nlohmann_json
     pipewire
+    qtbase
+    qtgraphs
+    qtwebengine
     rnnoise
     rubberband
     soundtouch
-    speexdsp'
+    speexdsp
     onetbb
+    webrtc-audio-processing
     zita-convolver
   ];
 
@@ -110,7 +138,8 @@ stdenv.mkDerivation rec {
       ];
     in
     ''
-      gappsWrapperArgs+=(
+      qtWrapperArgs+=(
+        "''${gappsWrapperArgs[@]}"
         --set LV2_PATH "${lib.makeSearchPath "lib/lv2" lv2Plugins}"
         --set LADSPA_PATH "${lib.makeSearchPath "lib/ladspa" ladspaPlugins}"
       )
@@ -130,6 +159,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       getchoo
       aleksana
+      Gliczy
     ];
     mainProgram = "easyeffects";
     platforms = lib.platforms.linux;

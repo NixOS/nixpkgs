@@ -1,15 +1,11 @@
 {
   aiohttp,
   alive-progress,
-  appdirs,
-  appnope,
-  black,
   build,
   clang-tools,
   click,
   colorama,
   coloredlogs,
-  coverage,
   cryptography,
   debugpy,
   diskcache,
@@ -18,7 +14,6 @@
   glib,
   gn,
   googleapis-common-protos,
-  google-cloud-storage,
   ipython,
   jinja2,
   json5,
@@ -28,7 +23,6 @@
   libnl,
   mobly,
   mypy,
-  mypy-extensions,
   mypy-protobuf,
   ninja,
   openssl,
@@ -45,7 +39,6 @@
   pyfakefs,
   pygments,
   pykwalify,
-  pylint,
   pyperclip,
   pyserial,
   python,
@@ -60,18 +53,12 @@
   sphinx-argparse,
   sphinx-design,
   stdenv,
-  stringcase,
   tabulate,
-  toml,
   tornado,
-  types-protobuf,
   types-pyyaml,
   types-requests,
-  types-setuptools,
   watchdog,
   websockets,
-  wheel,
-  yapf,
   zap-chip,
 }:
 
@@ -122,11 +109,8 @@ stdenv.mkDerivation rec {
     lark
     python-path
     setuptools
-    stringcase
     build
     pip-tools
-    black
-    yapf
   ];
 
   propagatedBuildInputs = [
@@ -165,6 +149,9 @@ stdenv.mkDerivation rec {
     for patch in ../*.patch; do
       patch -p1 < $patch
     done
+
+    # ecdsa is insecure and only used in tests
+    patch -p1 < ${./dont-import-ecdsa.patch}
 
     # unpin dependencies
     # there are many files to modify, in different formats
@@ -208,19 +195,13 @@ stdenv.mkDerivation rec {
       dependencies = [
         aiohttp
         alive-progress
-        appdirs
-        appnope
-        black
-        build
         colorama
         coloredlogs
-        coverage
         click
         cryptography
         debugpy
         diskcache
         googleapis-common-protos
-        google-cloud-storage
         ipython
         jinja2
         json5
@@ -228,11 +209,9 @@ stdenv.mkDerivation rec {
         lark
         mobly
         mypy
-        mypy-extensions
         mypy-protobuf
         packaging
         parameterized
-        pip-tools
         pkgconfig
         prompt-toolkit
         protobuf
@@ -242,30 +221,22 @@ stdenv.mkDerivation rec {
         pyelftools
         pygments
         pykwalify
-        pylint
         pyperclip
         pyserial
         python-daemon
         python-path
         pyyaml
         requests
-        setuptools
         six
         sphinx
         sphinx-argparse
         sphinx-design
-        stringcase
         tabulate
-        toml
         tornado
-        types-protobuf
         types-pyyaml
         types-requests
-        types-setuptools
         watchdog
         websockets
-        wheel
-        yapf
       ];
       filterNull = list: lib.filter (dep: dep != null) list;
       toItem = dep: {

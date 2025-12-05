@@ -42,15 +42,23 @@
   p11-kit,
   openldap,
   spamassassin,
+  gnutar,
+  gzip,
+  xz,
 }:
 
 stdenv.mkDerivation rec {
   pname = "evolution";
-  version = "3.56.2";
+  version = "3.58.2";
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-ff3JrrLasybav9wfhXfE7MEjoS2gAS+MZKcmBlo8Cys=";
+    hash = "sha256-uhvDtXKKMbjJ6qDaHuiulG7dzFRO6CQtzMIJ2W3KozA=";
   };
 
   nativeBuildInputs = [
@@ -110,6 +118,18 @@ stdenv.mkDerivation rec {
     "-DWITH_BOGOFILTER=${bogofilter}/bin/bogofilter"
     "-DWITH_OPENLDAP=${openldap}"
   ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "${
+        lib.makeBinPath [
+          gnutar
+          gzip
+          xz
+        ]
+      }"
+    )
+  '';
 
   requiredSystemFeatures = [
     "big-parallel"

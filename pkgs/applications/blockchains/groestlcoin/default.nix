@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
       with each other, with the help of a P2P network to check for double-spending.
     '';
     homepage = "https://groestlcoin.org/";
-    downloadPage = "https://github.com/Groestlcoin/groestlcoin/releases/tag/v{version}/";
+    downloadPage = "https://github.com/Groestlcoin/groestlcoin/releases/tag/v${version}/";
     maintainers = with maintainers; [ gruve-p ];
     license = licenses.mit;
     platforms = platforms.unix;

@@ -28,7 +28,7 @@ buildPythonPackage rec {
     pytest-asyncio_0
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # network access

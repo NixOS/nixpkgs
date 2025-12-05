@@ -1,9 +1,9 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  addBinToPathHook,
   curl-impersonate-chrome,
   cffi,
   certifi,
@@ -18,23 +18,44 @@
   python-multipart,
   trustme,
   uvicorn,
-  websockets,
   writableTmpDirAsHomeHook,
 }:
+let
+  # This is only used for testing and requires 12.0 specifically
+  # due to incompatible API changes in later versions.
+  websockets = buildPythonPackage rec {
+    pname = "websockets";
+    version = "12.0";
+    pyproject = true;
 
+    src = fetchFromGitHub {
+      owner = "aaugustin";
+      repo = "websockets";
+      tag = version;
+      hash = "sha256-sOL3VI9Ib/PncZs5KN4dAIHOrBc7LfXqT15LO4M6qKg=";
+    };
+
+    build-system = [ setuptools ];
+
+    doCheck = false;
+
+    pythonImportsCheck = [ "websockets" ];
+  };
+in
 buildPythonPackage rec {
   pname = "curl-cffi";
-  version = "0.12.0";
+  version = "0.14.0b2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lexiforest";
     repo = "curl_cffi";
     tag = "v${version}";
-    hash = "sha256-VE/b1Cs/wpZlu7lOURT/QfP7DuNudD441zG603LT4LM=";
+    hash = "sha256-JXfqZTf26kl2P0OMAw/aTdjQaGtdyTpNnhRPlwMiZNw=";
   };
 
   patches = [ ./use-system-libs.patch ];
+
   buildInputs = [ curl-impersonate-chrome ];
 
   build-system = [
@@ -47,13 +68,10 @@ buildPythonPackage rec {
     certifi
   ];
 
-  env = lib.optionalAttrs stdenv.cc.isGNU {
-    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
-  };
-
   pythonImportsCheck = [ "curl_cffi" ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     charset-normalizer
     cryptography
     fastapi
@@ -81,6 +99,15 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # test accesses network
     "tests/unittest/test_smoke.py::test_async"
+    # Hangs the build (possibly forever) under websockets > 12
+    # https://github.com/lexiforest/curl_cffi/issues/657
+    "tests/unittest/test_websockets.py::test_websocket"
+    # Runs out of memory while testing
+    "tests/unittest/test_websockets.py::test_receive_large_messages_run_forever"
+    # Fails on high core-count machines (including x86_64)
+    "tests/unittest/test_websockets.py::on_message"
+    "tests/unittest/test_websockets.py::test_on_data_callback"
+    "tests/unittest/test_websockets.py::test_hello_twice_async"
   ];
 
   disabledTests = [
@@ -97,11 +124,14 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/lexiforest/curl_cffi/releases/tag/${src.tag}";
     description = "Python binding for curl-impersonate via cffi";
     homepage = "https://curl-cffi.readthedocs.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ chuangzhu ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      chuangzhu
+      sarahec
+    ];
   };
 }

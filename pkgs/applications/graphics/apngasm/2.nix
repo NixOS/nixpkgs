@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     mainProgram = "apngasm";
     homepage = "https://apngasm.sourceforge.net/";
     license = licenses.zlib;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 

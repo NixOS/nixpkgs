@@ -45,7 +45,7 @@ buildGoModule {
     substituteInPlace internal/commands/passwd.go --replace-fail '/bin/stty' "${coreutils}/bin/stty"
   '';
 
-  vendorHash = "sha256-8uy0uLhGOyedqi3AvMsEdDQnFvGgeeZcL4tFgI6bzU8=";
+  vendorHash = "sha256-yLzIjoN1csyNpounvbQ6r1nudPypwjabAbdhyjna2+s=";
 
   subPackages = [ "cmd/photoprism" ];
 

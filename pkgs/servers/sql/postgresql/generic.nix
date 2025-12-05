@@ -6,6 +6,7 @@ let
       stdenv,
       fetchFromGitHub,
       fetchurl,
+      fetchpatch2,
       lib,
       replaceVars,
       writeShellScriptBin,
@@ -162,11 +163,12 @@ let
 
       dlSuffix = if olderThan "16" then ".so" else stdenv.hostPlatform.extensions.sharedLibrary;
 
-      # Pin LLVM 20 until upstream has resolved:
+      # Pin LLVM 20 until upstream has fully resolved:
       # https://www.postgresql.org/message-id/flat/d25e6e4a-d1b4-84d3-2f8a-6c45b975f53d%40applied-asynchrony.com
+      # Currently still a problem on aarch64.
       # TODO: Remove with next minor releases
       llvmPackages = lib.warnIf (
-        version == "17.7"
+        version == "17.8"
       ) "PostgreSQL: Is the pin for LLVM 20 still needed?" llvmPackages_20;
 
       stdenv' =

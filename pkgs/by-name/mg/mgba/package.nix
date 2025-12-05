@@ -71,6 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ];
 
   cmakeFlags = [
+    # TODO: drop in the next version bump
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
     (lib.cmakeBool "USE_DISCORD_RPC" enableDiscordRpc)
   ];
 

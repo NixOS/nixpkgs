@@ -12,25 +12,28 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "harlequin";
-  version = "2.1.2";
+  version = "2.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "harlequin";
     tag = "v${version}";
-    hash = "sha256-uHzhAI8ppp6aoveMPcLCQX2slhbor5Qy+IoTui+RP7M=";
+    hash = "sha256-W/Za/k/XusZmPLiX4ER9XaQWG4jdkrIh7JualHeeqZM=";
   };
 
   pythonRelaxDeps = [
+    "click"
     "numpy"
     "pyarrow"
+    "questionary"
+    "rich-click"
     "textual"
     "tree-sitter"
     "tree-sitter-sql"
   ];
 
-  build-system = with python3Packages; [ poetry-core ];
+  build-system = with python3Packages; [ hatchling ];
 
   nativeBuildInputs = [ glibcLocales ];
 
@@ -78,6 +81,10 @@ python3Packages.buildPythonApplication rec {
     # Tests require network access
     "test_connect_extensions"
     "test_connect_prql"
+
+    # Broken since click was updated to 8.2.1 in https://github.com/NixOS/nixpkgs/pull/448189
+    # AssertionError
+    "test_bad_adapter_opt"
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
     # Test incorrectly tries to load a dylib/so compiled for x86_64

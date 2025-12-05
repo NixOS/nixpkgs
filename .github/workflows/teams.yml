@@ -1,0 +1,80 @@
+name: Teams
+
+on:
+  schedule:
+    # Every Tuesday at 19:42 (randomly chosen)
+    - cron: '42 19 * * 1'
+  workflow_dispatch:
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  sync:
+    if: github.event_name != 'schedule' || github.repository_owner == 'NixOS'
+    runs-on: ubuntu-slim
+    steps:
+      # Use a GitHub App to create the PR so that CI gets triggered and to
+      # request team member lists.
+      - uses: actions/create-github-app-token@7e473efe3cb98aa54f8d4bac15400b15fad77d94 # v2.2.0
+        id: app-token
+        with:
+          app-id: ${{ vars.NIXPKGS_CI_APP_ID }}
+          private-key: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
+          permission-administration: read
+          permission-contents: write
+          permission-members: read
+          permission-pull-requests: write
+
+      - name: Fetch source
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            ci/github-script
+            maintainers/github-teams.json
+
+      - name: Install dependencies
+        run: npm install bottleneck
+
+      - name: Synchronise teams
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        with:
+          github-token: ${{ steps.app-token.outputs.token }}
+          script: |
+            require('./ci/github-script/get-teams.js')({
+              github,
+              context,
+              core,
+              outFile: "maintainers/github-teams.json"
+            })
+
+      - name: Get GitHub App User Git String
+        id: user
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
+        run: |
+          name="${APP_SLUG}[bot]"
+          userId=$(gh api "/users/$name" --jq .id)
+          email="$userId+$name@users.noreply.github.com"
+          echo "git-string=$name <$email>" >> "$GITHUB_OUTPUT"
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@84ae59a2cdc2258d6fa0732dd66352dddae2a412 # v7.0.9
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          add-paths: maintainers/github-teams.json
+          author: ${{ steps.user.outputs.git-string }}
+          committer: ${{ steps.user.outputs.git-string }}
+          commit-message: "maintainers/github-teams.json: Automated sync"
+          branch: pr/github-team-sync
+          title: "maintainers/github-teams.json: Automated sync"
+          body: |
+            This is an automated PR to sync the GitHub teams with access to this repository to the `lib.teams` list.
+
+            This PR can be merged without taking any further action.
+

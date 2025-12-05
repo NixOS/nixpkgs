@@ -72,8 +72,15 @@ let
         (with pkgs; [
           # ld-linux-x86-64-linux.so.2 and others
           glibc
+          # required by at least https://github.com/zed-industries/package-version-server
+          openssl
         ])
         ++ additionalPkgs pkgs;
+
+      extraBwrapArgs = [
+        "--bind-try /etc/nixos/ /etc/nixos/"
+        "--ro-bind-try /etc/xdg/ /etc/xdg/"
+      ];
 
       # symlink shared assets, including icons and desktop entries
       extraInstallCommands = ''
@@ -99,7 +106,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.207.4";
+  version = "0.215.3";
 
   outputs = [
     "out"
@@ -112,22 +119,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IKACHMKHIyq8UuqWlA6U/cdCi+wrevZwl2CINSWmmRc=";
+    hash = "sha256-/Euok+pyp81iR900M99Jw026lgB4rbgrQKT5Vn7Kufk=";
   };
-
-  cargoPatches = [
-    ./0001-fix-duplicate-reqwest.patch
-  ];
 
   postPatch = ''
     # Dynamically link WebRTC instead of static
     substituteInPlace $cargoDepsCopy/webrtc-sys-*/build.rs \
       --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
-
-    # Zed team renamed the function but forgot to update its usage in this file
-    # We rename it ourselves for now, until upstream fixes the issue
-    substituteInPlace $cargoDepsCopy/reqwest-0.12*/src/blocking/client.rs \
-      --replace-fail "inner.redirect(policy)" "inner.redirect_policy(policy)"
 
     # The generate-licenses script wants a specific version of cargo-about eventhough
     # newer versions work just as well.
@@ -141,7 +139,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm -r $out/git/*/candle-book/
   '';
 
-  cargoHash = "sha256-jv8ytsttXFG5VlFWI885zLJsZn8rFkiFdPhUvNKOwpY=";
+  cargoHash = "sha256-b4tH6oc/qVSwn4JWe6ukywPTyIW2QeQo8ime6rPpFpM=";
 
   nativeBuildInputs = [
     cmake

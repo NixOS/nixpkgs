@@ -21,13 +21,13 @@ assert !with_boost_asio -> asio != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "restinio";
-  version = "0.7.7";
+  version = "0.7.8";
 
   src = fetchFromGitHub {
     owner = "Stiffstream";
     repo = "restinio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bbiBz/WkQc3HiS7+x/qsRdHoravPX8LBKb+a2WeC81s=";
+    hash = "sha256-PXm9s586V1aZ7D5GwYzBc/Fljif/Iq3VChDe2NHWKSU=";
   };
 
   # https://www.github.com/Stiffstream/restinio/issues/230

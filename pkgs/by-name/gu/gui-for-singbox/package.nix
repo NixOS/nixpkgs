@@ -16,13 +16,13 @@
 
 let
   pname = "gui-for-singbox";
-  version = "1.9.9";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.SingBox";
     tag = "v${version}";
-    hash = "sha256-6Y0eEJmPBp+J1r6LCxYEM6i3fdCYSo4LrimpqwOCVT8=";
+    hash = "sha256-OMZrLceu/7QTyLCPPIIx4c+iyfZlVyOiDKLCTeXoEbE=";
   };
 
   metaCommon = {
@@ -50,7 +50,7 @@ let
         sourceRoot
         ;
       fetcherVersion = 2;
-      hash = "sha256-kSIPkXD0Wxe8TaKDd4DUAL7pkQeU8xyLY9K3lFSAODI=";
+      hash = "sha256-MA0CNF2MTCGvsxvEpRbTFu5Diap4XkIHKnxeROkgwnU=";
     };
 
     buildPhase = ''
@@ -87,7 +87,7 @@ buildGoModule {
       --subst-var out
   '';
 
-  vendorHash = "sha256-UArCB5U2bF5HXFDU1oCfm+SaURe6e9gyCx+UjtWI/ug=";
+  vendorHash = "sha256-A39CVQTWMmOGa/XwM+cZQBsqINiN2UoUYC9voQTL7aU=";
 
   nativeBuildInputs = [
     autoPatchelfHook

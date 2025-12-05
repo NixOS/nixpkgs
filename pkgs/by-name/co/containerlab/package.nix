@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "containerlab";
-  version = "0.69.3";
+  version = "0.71.0";
 
   src = fetchFromGitHub {
     owner = "srl-labs";
     repo = "containerlab";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RJNJ5LUCGaARn5NOSepTL/0Owr/ozFUYAvlynDTyqfY=";
+    hash = "sha256-wfkkRQ0F8G57pEuyLP1qjoZGkDNW/Ix4Nh3ZKoWK+w8=";
   };
 
-  vendorHash = "sha256-28Q1R6P2rpER5RxagnsKy9W3b4FUeRRbkPPovzag//U=";
+  vendorHash = "sha256-s5WBCYOdNooygEL0AbhIqZLeWd4gnpAvWjJu38QTKYU=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -27,9 +27,9 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/srl-labs/containerlab/cmd/version.Version=${finalAttrs.version}"
-    "-X github.com/srl-labs/containerlab/cmd/version.commit=${finalAttrs.src.rev}"
-    "-X github.com/srl-labs/containerlab/cmd/version.date=1970-01-01T00:00:00Z"
+    "-X github.com/srl-labs/containerlab/cmd.Version=${finalAttrs.version}"
+    "-X github.com/srl-labs/containerlab/cmd.commit=${finalAttrs.src.rev}"
+    "-X github.com/srl-labs/containerlab/cmd.date=1970-01-01T00:00:00Z"
   ];
 
   preCheck = ''
@@ -37,9 +37,11 @@ buildGoModule (finalAttrs: {
     export USER="runner"
   '';
 
-  # TestVerifyLinks wants to use docker.sock, which is not available in the Nix build environment.
   checkFlags = [
-    "-skip=^TestVerifyLinks$"
+    # Not available in sandbox:
+    # - docker.sock needed for TestVerifyLinks
+    # - /proc/modules needed for KernelModulesLoaded
+    "-skip=^TestVerifyLinks$|^TestIsKernelModuleLoaded$"
   ];
 
   postInstall = ''
@@ -59,7 +61,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/srl-labs/containerlab/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ _0x4A6F ];
     mainProgram = "containerlab";
   };
 })

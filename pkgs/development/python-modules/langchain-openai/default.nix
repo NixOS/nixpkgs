@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   langchain-core,
@@ -13,6 +13,7 @@
 
   # tests
   freezegun,
+  langchain,
   langchain-tests,
   lark,
   pandas,
@@ -32,25 +33,19 @@
 
 buildPythonPackage rec {
   pname = "langchain-openai";
-  version = "0.3.28";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-openai==${version}";
-    hash = "sha256-HpAdCHxmfGJcqXArvtlYagNuEBGBjrbICIwh9nI0qMQ=";
+    hash = "sha256-dmuDgKQW1yAz/8tjQx7LaUiuz5Sh4cAyd9nt33mCPbI=";
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
 
-  build-system = [ pdm-backend ];
-
-  pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     langchain-core
@@ -60,6 +55,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    langchain
     langchain-tests
     lark
     pandas
@@ -78,26 +74,12 @@ buildPythonPackage rec {
 
   disabledTests = [
     # These tests require network access
-    "test__convert_dict_to_message_tool_call"
     "test__get_encoding_model"
-    "test_azure_openai_api_key_is_secret_string"
-    "test_azure_openai_api_key_masked_when_passed_from_env"
-    "test_azure_openai_api_key_masked_when_passed_via_constructor"
-    "test_azure_openai_secrets"
-    "test_azure_openai_uses_actual_secret_value_from_secretstr"
-    "test_azure_serialized_secrets"
     "test_chat_openai_get_num_tokens"
     "test_embed_documents_with_custom_chunk_size"
     "test_get_num_tokens_from_messages"
     "test_get_token_ids"
-    "test_init_o1"
-    "test_openai_get_num_tokens"
-  ];
-
-  disabledTestPaths = [
-    # TODO recheck on next update. Langchain has been working on Pydantic errors.
-    # ValidationError from pydantic
-    "tests/unit_tests/chat_models/test_responses_stream.py"
+    "test_embeddings_respects_token_limit"
   ];
 
   pythonImportsCheck = [ "langchain_openai" ];

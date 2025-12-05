@@ -13,7 +13,6 @@
   libXrandr,
   libXrender,
   libjack2,
-  webkitgtk_4_0,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +34,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     freetype
     libglvnd
-    webkitgtk_4_0
+    # webkitgtk_4_0
   ]
   ++ runtimeDependencies;
 
@@ -56,6 +55,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    # webkitgtk_4_0 was removed
+    broken = true;
     description = "ToneLib Zoom – change and save all the settings in your Zoom(r) guitar pedal";
     homepage = "https://tonelib.net/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

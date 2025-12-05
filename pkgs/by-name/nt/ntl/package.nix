@@ -15,11 +15,11 @@ assert withGf2x -> gf2x != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ntl";
-  version = "11.5.1";
+  version = "11.6.0";
 
   src = fetchurl {
     url = "http://www.shoup.net/ntl/ntl-${finalAttrs.version}.tar.gz";
-    hash = "sha256-IQ0GwxMGy8bq9oFEU8Vsd22djo3zbXTrMG9qUj0caoo=";
+    hash = "sha256-vA75rOsHWmoGc6yNj0fV+EWMcv6AbkRo+9XT2v8FYYI=";
   };
 
   strictDeps = true;

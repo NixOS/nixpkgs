@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "tiledb";
-  version = "0.35.0";
+  version = "0.35.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB-Py";
     tag = version;
-    hash = "sha256-uxfF2uyGlO1Dfsrw0hxuU6LmymWXmuvOe+9DEY8BEdQ=";
+    hash = "sha256-9usfNam7PPjIybYV8i+lGkWwkBA7KcYfoUOqC20j1Ag=";
   };
 
   build-system = [

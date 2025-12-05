@@ -7,24 +7,25 @@
   editorconfig-checker,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "editorconfig-checker";
-  version = "3.4.1";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "editorconfig-checker";
     repo = "editorconfig-checker";
-    rev = "v${version}";
-    hash = "sha256-qQXIsG7g75Q3Ue7tYsGviNsV+9ljg8Y6adRozdX085A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HQYZXwxysGpbNDAzgAruzBtSlPxfwrLuzirkZSV2Xhs=";
   };
 
-  vendorHash = "sha256-uj+/cAF22dvg0QBjxjqF0WIRlfvQtoW2/kEh/pY8TfE=";
+  vendorHash = "sha256-zlARI7bKf+4bdgCha9AlDZyTRbrOHtmvHeExJWhB85I=";
 
+  # Tests run on source and don't expect vendor dir.
   doCheck = false;
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-X main.version=${version}" ];
+  ldflags = [ "-X main.version=${finalAttrs.version}" ];
 
   postInstall = ''
     installManPage docs/editorconfig-checker.1
@@ -34,15 +35,15 @@ buildGoModule rec {
     package = editorconfig-checker;
   };
 
-  meta = with lib; {
-    changelog = "https://github.com/editorconfig-checker/editorconfig-checker/releases/tag/${src.rev}";
+  meta = {
+    changelog = "https://github.com/editorconfig-checker/editorconfig-checker/releases/tag/${finalAttrs.src.tag}";
     description = "Tool to verify that your files are in harmony with your .editorconfig";
     mainProgram = "editorconfig-checker";
     homepage = "https://editorconfig-checker.github.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       uri-canva
       zowoq
     ];
   };
-}
+})

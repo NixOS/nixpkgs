@@ -6,19 +6,19 @@
   vulkan-loader,
   wayland,
   wrapQtAppsHook,
-  x11Support ? true,
+  x11Support ? !stdenv.hostPlatform.isDarwin,
   qtx11extras,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vulkan-caps-viewer";
-  version = "4.02";
+  version = "4.03";
 
   src = fetchFromGitHub {
     owner = "SaschaWillems";
     repo = "VulkanCapsViewer";
     rev = version;
-    hash = "sha256-89W/1E9IJaPUzeki0vegXzprGFAFIgb1mRx0OMC4+ec=";
+    hash = "sha256-LaZdQ5w7QYaD3Nxl9ML30kGws8Yyr3c0jzO3ElUvJ/I=";
     # Note: this derivation strictly requires vulkan-header to be the same it was developed against.
     # To help us, they've put it in a git-submodule.
     # The result will work with any vulkan-loader version.
@@ -32,13 +32,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     vulkan-loader
-    wayland
   ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform wayland) [ wayland ]
   ++ lib.lists.optionals x11Support [ qtx11extras ];
 
   patchPhase = ''
     substituteInPlace vulkanCapsViewer.pro \
-      --replace '/usr/' "/"
+      --replace-fail '/usr/' "/" \
+      --replace-fail '$(VULKAN_SDK)/lib/libvulkan.dylib' '${lib.getLib vulkan-loader}/lib/libvulkan.dylib'
   '';
 
   qmakeFlags = [
@@ -46,6 +47,11 @@ stdenv.mkDerivation rec {
   ];
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$out/Applications"
+    cp -r vulkanCapsViewer.app "$out/Applications"
+  '';
 
   meta = with lib; {
     mainProgram = "vulkanCapsViewer";
@@ -59,7 +65,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ pedrohlc ];
     changelog = "https://github.com/SaschaWillems/VulkanCapsViewer/releases/tag/${version}";
-    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

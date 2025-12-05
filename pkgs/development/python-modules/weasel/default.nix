@@ -14,7 +14,7 @@
   requests,
   smart-open,
   srsly,
-  typer,
+  typer-slim,
   wasabi,
 
   # tests
@@ -23,21 +23,15 @@
 
 buildPythonPackage rec {
   pname = "weasel";
-  version = "0.4.1";
+  version = "0.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "weasel";
-    tag = "v${version}";
-    hash = "sha256-gXPHEoEY0qKcpAtqHlUw5c43/6hKseCx+vBNzEXFF2A=";
+    tag = "release-v${version}";
+    hash = "sha256-Xd7cJlUi/a8gwtnuO9wqZiHT1xVMbp6V6Ha+Kyr4tFE=";
   };
-
-  pythonRelaxDeps = [
-    "cloudpathlib"
-    "smart-open"
-    "typer"
-  ];
 
   build-system = [ setuptools ];
 
@@ -49,7 +43,7 @@ buildPythonPackage rec {
     requests
     smart-open
     srsly
-    typer
+    typer-slim
     wasabi
   ];
 
@@ -60,7 +54,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # This test requires internet access
+    # These tests require internet access
     "test_project_assets"
     "test_project_git_dir_asset"
     "test_project_git_file_asset"
@@ -69,7 +63,7 @@ buildPythonPackage rec {
   meta = {
     description = "Small and easy workflow system";
     homepage = "https://github.com/explosion/weasel/";
-    changelog = "https://github.com/explosion/weasel/releases/tag/v${version}";
+    changelog = "https://github.com/explosion/weasel/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "weasel";

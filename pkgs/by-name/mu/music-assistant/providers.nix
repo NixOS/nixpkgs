@@ -1,10 +1,14 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.5.8";
+  version = "2.6.3";
   providers = {
     airplay = ps: [
     ];
+    alexa =
+      ps: with ps; [
+        alexapy
+      ];
     apple_music = ps: [
     ]; # missing pywidevine
     audible =
@@ -68,7 +72,16 @@
       ];
     listenbrainz_scrobble = ps: [
     ]; # missing liblistenbrainz
+    lrclib = ps: [
+    ];
     musicbrainz = ps: [
+    ];
+    musiccast =
+      ps: with ps; [
+        aiomusiccast
+        setuptools
+      ];
+    nugs = ps: [
     ];
     opensubsonic =
       ps: with ps; [
@@ -117,6 +130,8 @@
       ps: with ps; [
         aioslimproto
       ];
+    subsonic_scrobble = ps: [
+    ];
     template_player_provider = ps: [
     ];
     test = ps: [
@@ -135,6 +150,6 @@
         duration-parser
         yt-dlp
         ytmusicapi
-      ];
+      ]; # missing deno
   };
 }

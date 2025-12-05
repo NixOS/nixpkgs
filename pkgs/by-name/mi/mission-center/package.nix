@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchFromGitLab,
   rustPlatform,
+  systemdMinimal,
   symlinkJoin,
 
   # nativeBuildInputs
@@ -38,12 +39,13 @@
   udev,
   wayland,
 
+  # tests
+  versionCheckHook,
+
   # magpie wrapper
   addDriverRunpath,
   libGL,
   vulkan-loader,
-
-  versionCheckHook,
 }:
 
 # UPDATE PROCESS:
@@ -63,20 +65,20 @@ let
   nvtop = fetchFromGitHub {
     owner = "Syllo";
     repo = "nvtop";
-    rev = "73291884d926445e499d6b9b71cb7a9bdbc7c393";
-    hash = "sha256-8iChT55L2NSnHg8tLIry0rgi/4966MffShE0ib+2ywc=";
+    rev = "339ee0b10a64ec51f43d27357b0068a40f16e9e4";
+    hash = "sha256-QxGP6lHbjS7GAQGWUnxFdrYgxBVhtuk5CzS2EUVFjOs=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mission-center";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitLab {
     owner = "mission-center-devs";
     repo = "mission-center";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-TvrYwuJR03mvPc8oXBx6GClOLc+r5kblaOj0uaLwbwE=";
+    hash = "sha256-KETaCjKTxEvh3tgLzJw5PLJHAQivqXhGYcluvFhGGd8=";
   };
 
   postPatch =
@@ -110,6 +112,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Patch the shebang of this python script called at build time
     + ''
       patchShebangs $SRC_MAGPIE_DIR/platform-linux/hwdb/generate_hwdb.py
+    ''
+    # Inject the absolute path to the udevadm binary in magpie's source code
+    + ''
+      substituteInPlace subprojects/magpie/platform-linux/src/memory.rs \
+        --replace-fail "udevadm" "${lib.getExe' systemdMinimal "udevadm"}"
     '';
 
   cargoDeps = symlinkJoin {
@@ -117,18 +124,19 @@ stdenv.mkDerivation (finalAttrs: {
     paths = [
       (rustPlatform.fetchCargoVendor {
         inherit (finalAttrs) pname version src;
-        hash = "sha256-1Bcxp0EuHbJrLQIb2STLNIL2BM2eOgL8ftx4g1o/JY4=";
+        hash = "sha256-XS+/gpCMIqDgFR6AjuT2q+p+85GklUuRhKWzaBfQjZg=";
       })
       (rustPlatform.fetchCargoVendor {
         pname = "${finalAttrs.pname}-magpie";
         inherit (finalAttrs) version src;
         sourceRoot = "${finalAttrs.src.name}/subprojects/magpie";
-        hash = "sha256-ouY9zSQ7csAqPzQrbWGtCTB9ECVBKOUX78K5SiqTTxg=";
+        hash = "sha256-9YZ2dgIaq0AtS8QsIC/0cJlELIy/UbOvulgZFL/qRRs=";
       })
     ];
   };
 
   nativeBuildInputs = [
+    cmake
     addDriverRunpath
     blueprint-compiler
     cargo
@@ -149,7 +157,6 @@ stdenv.mkDerivation (finalAttrs: {
     appstream-glib
     blueprint-compiler
     cairo
-    cmake
     dbus
     desktop-file-utils
     gdk-pixbuf

@@ -34,7 +34,7 @@ buildPythonPackage rec {
     zlib_ng = [ zlib-ng ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "aiohttp_fast_zlib" ];
 

@@ -20,8 +20,8 @@
   libXxf86vm,
   glib,
   alsa-lib,
-  ffmpeg,
-  ffmpeg-headless,
+  ffmpeg_7,
+  ffmpeg_7-headless,
 
   writeText,
 
@@ -35,13 +35,11 @@
 
   jdk17_headless,
   jdk21_headless,
-  jdk23_headless,
   jdk25_headless,
   jdk-bootstrap ?
     {
       "17" = jdk17_headless;
       "21" = jdk21_headless;
-      "23" = jdk23_headless;
       "25" = jdk25_headless;
     }
     .${featureVersion},
@@ -57,7 +55,7 @@ let
   atLeast21 = lib.versionAtLeast featureVersion "21";
   atLeast23 = lib.versionAtLeast featureVersion "23";
 
-  gradle_openjfx = if atLeast23 then gradle_8 else gradle_7;
+  gradle_openjfx = if atLeast21 then gradle_8 else gradle_7;
 in
 
 assert lib.assertMsg (lib.pathExists sourceFile)
@@ -98,7 +96,7 @@ stdenv.mkDerivation {
     libXxf86vm
     glib
     alsa-lib
-    (if atLeast21 then ffmpeg else ffmpeg-headless)
+    (if atLeast21 then ffmpeg_7 else ffmpeg_7-headless)
   ];
 
   mitmCache = gradle_openjfx.fetchDeps {

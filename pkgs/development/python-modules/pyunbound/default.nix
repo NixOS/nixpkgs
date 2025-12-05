@@ -85,7 +85,6 @@ buildPythonPackage rec {
     description = "Python library for Unbound, the validating, recursive, and caching DNS resolver";
     license = licenses.bsd3;
     homepage = "https://www.unbound.net";
-    maintainers = with maintainers; [ leenaars ];
     platforms = platforms.unix;
   };
 }

@@ -9,6 +9,7 @@
   dav1d,
   installShellFiles,
   scdoc,
+  rust-jemalloc-sys,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libGL
     libxkbcommon
     dav1d
+    rust-jemalloc-sys
   ];
 
   buildFeatures = [

@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/hashcat/hashcat-utils";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fadenb ];
   };
 }

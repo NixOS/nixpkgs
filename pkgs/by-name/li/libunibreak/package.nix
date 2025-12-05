@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "Implementation of line breaking and word breaking algorithms as in the Unicode standard";
     license = licenses.zlib;
     platforms = platforms.unix;
-    maintainers = [ maintainers.coroa ];
+    maintainers = [ ];
   };
 }

@@ -28,13 +28,13 @@
   xorg,
 }:
 let
-  version = "2.18.4";
+  version = "2.20.0";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-sQ5laFO6DSg+4tF9jk2yuV0q2Vp7VC/+hu2XrVj8/bY=";
+    hash = "sha256-uf6/cl41lp2zEp3+gTbTYQlJcM3bdLTtOo+vEUrGIco=";
   };
 
   python = python3.override {
@@ -80,7 +80,7 @@ let
     pnpmDeps = pnpm.fetchDeps {
       inherit (finalAttrs) pname version src;
       fetcherVersion = 2;
-      hash = "sha256-fs9a2uI/TnWalQ/qRb6m4d1CsU7O6VYCJMz2xWLdC0I=";
+      hash = "sha256-JqFkA8t5D0SmhlKwhiKIztzWGXf+vO0Ro1ABVGXVzS8=";
     };
 
     nativeBuildInputs = [
@@ -168,11 +168,10 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "django-allauth"
-    "django-guardian"
-    "filelock"
-    "ocrmypdf"
-    "rapidfuzz"
+    "python-dotenv"
     "redis"
+    # requested by maintainer
+    "ocrmypdf"
   ];
 
   dependencies =
@@ -185,18 +184,7 @@ python.pkgs.buildPythonApplication rec {
       concurrent-log-handler
       dateparser
       django
-      # django-allauth version 65.9.X not yet supported
-      # See https://github.com/paperless-ngx/paperless-ngx/issues/10336
-      (django-allauth.overrideAttrs (
-        new: prev: rec {
-          version = "65.7.0";
-          src = prev.src.override {
-            tag = version;
-            hash = "sha256-1HmEJ5E4Vp/CoyzUegqQXpzKUuz3dLx2EEv7dk8fq8w=";
-          };
-          patches = [ ];
-        }
-      ))
+      django-allauth
       django-auditlog
       django-cachalot
       django-celery-results
@@ -207,6 +195,7 @@ python.pkgs.buildPythonApplication rec {
       django-guardian
       django-multiselectfield
       django-soft-delete
+      django-treenode
       djangorestframework
       djangorestframework-guardian
       drf-spectacular

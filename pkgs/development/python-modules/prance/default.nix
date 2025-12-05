@@ -55,7 +55,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # Disable tests that require network
   disabledTestPaths = [ "tests/test_convert.py" ];

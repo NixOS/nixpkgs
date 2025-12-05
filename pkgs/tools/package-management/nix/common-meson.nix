@@ -101,8 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
-
   hardeningDisable = [
     "shadowstack"
   ]

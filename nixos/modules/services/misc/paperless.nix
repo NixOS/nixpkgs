@@ -629,9 +629,10 @@ in
 
         users = lib.optionalAttrs (cfg.user == defaultUser) {
           users.${defaultUser} = {
+            extraGroups = [ config.services.redis.servers.paperless.group ];
             group = defaultUser;
-            uid = config.ids.uids.paperless;
             home = cfg.dataDir;
+            uid = config.ids.uids.paperless;
           };
 
           groups.${defaultUser} = {
@@ -686,7 +687,7 @@ in
           path = [ manage ];
           script = ''
             paperless-manage document_exporter ${cfg.exporter.directory} ${
-              lib.cli.toGNUCommandLineShell { } cfg.exporter.settings
+              lib.cli.toCommandLineShellGNU { } cfg.exporter.settings
             }
           '';
         };

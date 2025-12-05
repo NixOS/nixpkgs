@@ -10,15 +10,7 @@
     {
       services.loki = {
         enable = true;
-
-        # FIXME: revert to original file when upstream fix released
-        #  https://github.com/grafana/loki/issues/16990
-        #  https://github.com/grafana/loki/issues/17736
-        # configFile = "${pkgs.grafana-loki.src}/cmd/loki/loki-local-config.yaml";
-        configFile = pkgs.runCommand "patched-loki-cfg.yml" { } ''
-          substitute "${pkgs.grafana-loki.src}/cmd/loki/loki-local-config.yaml" "$out" \
-            --replace-fail "enable_multi_variant_queries: true" ""
-        '';
+        configFile = "${pkgs.grafana-loki.src}/cmd/loki/loki-local-config.yaml";
       };
       services.promtail = {
         enable = true;

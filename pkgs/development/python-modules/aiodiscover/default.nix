@@ -4,7 +4,6 @@
   async-timeout,
   buildPythonPackage,
   cached-ipaddress,
-  dnspython,
   fetchFromGitHub,
   ifaddr,
   netifaces,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   version = "2.7.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiodiscover";
@@ -33,13 +30,14 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   dependencies = [
-    async-timeout
     aiodns
     cached-ipaddress
-    dnspython
     ifaddr
     netifaces
     pyroute2
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
   ];
 
   nativeCheckInputs = [

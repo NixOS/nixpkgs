@@ -34,7 +34,7 @@
   # enable internal X11 support via libssh2
   enableX11 ? true,
   enableNVML ? config.cudaSupport,
-  nvml,
+  cudaPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -110,8 +110,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableNVML [
     (runCommand "collect-nvml" { } ''
       mkdir $out
-      ln -s ${lib.getDev nvml}/include $out/include
-      ln -s ${lib.getLib nvml}/lib/stubs $out/lib
+      ln -s ${lib.getOutput "include" cudaPackages.cuda_nvml_dev}/include $out/include
+      ln -s ${lib.getOutput "stubs" cudaPackages.cuda_nvml_dev}/lib/stubs $out/lib
     '')
   ];
 

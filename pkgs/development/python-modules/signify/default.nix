@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "signify";
-  version = "0.8.1";
+  version = "0.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "ralphje";
     repo = "signify";
     tag = "v${version}";
-    hash = "sha256-kEQPoCNO3jGucnqYKRKOivaBtHHX4SMW9KALBMqqqVo=";
+    hash = "sha256-UnhH9z5bjcydxM5DkEVFYkb9jGB8fcbYKAwyZIY99jQ=";
   };
 
   build-system = [ setuptools ];

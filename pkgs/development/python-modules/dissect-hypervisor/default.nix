@@ -7,23 +7,20 @@
   fetchFromGitHub,
   pycryptodome,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-hypervisor";
-  version = "3.19";
+  version = "3.20";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.hypervisor";
     tag = version;
-    hash = "sha256-P08gTV/gcwsk1JqwCUHc6jPKAm9MTaCgdmzPxAx23Ts=";
+    hash = "sha256-/b/7u3b0G3XRqXxjyhHn5dYzueQOPoacYGeDYv21I0w=";
   };
 
   build-system = [

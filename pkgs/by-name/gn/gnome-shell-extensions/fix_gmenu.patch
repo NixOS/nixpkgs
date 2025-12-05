@@ -15,7 +15,7 @@ index 6eb58f1..28e1195 100644
  import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
  import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
  
-+GIRepository.Repository.prepend_search_path('@gmenu_path@');
++GIRepository.Repository.dup_default().prepend_search_path('@gmenu_path@');
 +const {default: GMenu} = await import('gi://GMenu');
  const appSys = Shell.AppSystem.get_default();
  

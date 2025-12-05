@@ -7,16 +7,17 @@
   git,
   guile,
   curl,
+  nix-update-script,
 }:
 stdenv.mkDerivation rec {
   pname = "akku";
-  version = "1.1.0-unstable-2024-03-03";
+  version = "1.1.0-unstable-2025-11-08";
 
   src = fetchFromGitLab {
     owner = "akkuscm";
     repo = "akku";
-    rev = "cb996572fe0dbe74a42d2abeafadffaea2bf8ae3";
-    sha256 = "sha256-6xqASnFxzz0yE5oJnh15SOB74PVrVkMVwS3PwKAmgks=";
+    rev = "411b79ffb40f5ee3b50a72c5a2d5aea97f023c93";
+    sha256 = "sha256-5e4W33EnKvUoLvTsmTPp3GFZsMZp0p3wDwpD9t3clCk=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +38,10 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = with lib; {
     homepage = "https://akkuscm.org/";

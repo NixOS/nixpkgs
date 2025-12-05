@@ -34,6 +34,17 @@ stdenv.mkDerivation (finalAttrs: {
     xz
   ];
 
+  # CMake 2.8.7 is deprecated and is no longer supported by CMake > 4
+  # https://github.com/NixOS/nixpkgs/issues/445447
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required (VERSION 2.8.7 FATAL_ERROR)" \
+      "cmake_minimum_required (VERSION 3.10  FATAL_ERROR)"
+    substituteInPlace libs/genesis/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required (VERSION 2.8.12 FATAL_ERROR)" \
+      "cmake_minimum_required (VERSION 3.10   FATAL_ERROR)"
+  '';
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin

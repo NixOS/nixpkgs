@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "baddns";
-  version = "1.11.236";
+  version = "1.12.294";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blacklanternsecurity";
     repo = "baddns";
     tag = version;
-    hash = "sha256-GaUZ3WLIxACsdSe262Ie1R1m8K/5X2ILGs6PWm/poUI=";
+    hash = "sha256-HAVoCyI7yxCdAR4qq7yXJz3YxkPnhBdeXLJZmzZpwF4=";
   };
 
   pythonRelaxDeps = true;

@@ -1,47 +1,42 @@
 {
     "testing": {
-        "version": "6.17-rc7",
-        "hash": "sha256:11bjz14ncfbnz3h9a4vk71av664xrx1kh28i22w7yg6g46hifq65",
+        "version": "6.18-rc7",
+        "hash": "sha256:03k1kj4bqg3bn0p4lzkbz0yqj1p50v2yr94lrld8rrkbwdawxx3r",
         "lts": false
     },
     "6.1": {
-        "version": "6.1.155",
-        "hash": "sha256:0wsw99h2jsrcx9fff59nqjx66l40vywj8qi3j6yvqpq8xsp8g4y2",
+        "version": "6.1.158",
+        "hash": "sha256:1nmz4rknw82k9ylyrbm4g2m0hh4lmgkwi1g3gm7hzv04nvyqn1md",
         "lts": true
     },
     "5.15": {
-        "version": "5.15.194",
-        "hash": "sha256:0zi6ihvjmaf940arnc7jjvdqrjf3cvkc9mqc8n24dz85vam6z39l",
+        "version": "5.15.196",
+        "hash": "sha256:018ffzi91xh46l7r3fgc4mpri3pxzl6wc1n946vny0lbb59pj5c3",
         "lts": true
     },
     "5.10": {
-        "version": "5.10.245",
-        "hash": "sha256:17wxs8i8vd5ivv99ra0sri3wmkw5c22wsaw8nf1xcvys2kmpa7hk",
-        "lts": true
-    },
-    "5.4": {
-        "version": "5.4.300",
-        "hash": "sha256:0nl1l689d4jq2l39v816yy7z5lzc5dvv8aqn85xlv4najc022jcr",
+        "version": "5.10.246",
+        "hash": "sha256:0xd8r8qqgxh3zhqkl4a5plmgsycxrffhpc9q2rwhkp6jd717cszb",
         "lts": true
     },
     "6.6": {
-        "version": "6.6.111",
-        "hash": "sha256:1is6nrm5x54bw8zn8l5akp8ign185i19biks442yynfn63hp1i04",
+        "version": "6.6.118",
+        "hash": "sha256:0zdifhri9flxa99hzrk9bz8yqi8h1v6zpsvldz9cibvlakixrpab",
         "lts": true
     },
     "6.12": {
-        "version": "6.12.52",
-        "hash": "sha256:1ccyd9h9i3xia1gqq0mggis5yv04c9ys44xp707wfcm0f3v0r1dl",
+        "version": "6.12.60",
+        "hash": "sha256:1y6wkk4500pisk9l2dibmidqix1gpci7dy6brs1xc4bl2jr9cc56",
         "lts": true
     },
-    "6.16": {
-        "version": "6.16.12",
-        "hash": "sha256:0vm257d76hmimnac8hzg66gd1mdg330sai39lywfn4m9bjydx93w",
+    "6.17": {
+        "version": "6.17.10",
+        "hash": "sha256:1kf8slgkvv9x6i1111l78p93y65rscdxarh05spx1njh797k8zzs",
         "lts": false
     },
-    "6.17": {
-        "version": "6.17.2",
-        "hash": "sha256:0zzmcjkmxmcn45y20g8hz7dxs355rmczp9k8vjwc3xb5a03cpszx",
+    "6.18": {
+        "version": "6.18",
+        "hash": "sha256:0jzdvk3xdai1xsq0739hmf8rapw15dw5inarfvqizqx9bmha81li",
         "lts": false
     }
 }

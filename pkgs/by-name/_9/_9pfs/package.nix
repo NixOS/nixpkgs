@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "9pfs";
-  version = "0.4";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "ftrvxmtrx";
     repo = "9pfs";
     tag = version;
-    sha256 = "sha256-nlJ4Zh13T78r0Dn3Ky/XLhipeMbMFbn0qGCJnUCBd3Y=";
+    sha256 = "sha256-NT8oIQK8Os3HRZLOH2OvauiCvh5bXZFbeEtTFbzNvrs=";
   };
 
   postPatch = ''

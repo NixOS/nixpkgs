@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "bpython";
-  version = "0.25";
+  version = "0.26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bpython";
     repo = "bpython";
     tag = "${version}-release";
-    hash = "sha256-p5+IQiHNRRazqr+WRdx3Yw+ImG25tdZGLXvMf7woD9w=";
+    hash = "sha256-NmWM0fdzS9n5FSnNJOCdS1JE5ZHrmJXqCuHa54rT8GU=";
   };
 
   postPatch = ''
@@ -60,7 +60,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "bpython" ];
 

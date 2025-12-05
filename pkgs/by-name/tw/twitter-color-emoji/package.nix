@@ -9,14 +9,14 @@
 }:
 
 let
-  version = "15.0.2";
+  version = "17.0.2";
 
   twemojiSrc = fetchFromGitHub {
-    name = "twemoji";
+    name = "twemoji-src";
     owner = "jdecked";
     repo = "twemoji";
     rev = "v${version}";
-    hash = "sha256-FLOqXDpSFyClBlG5u3IRL0EKeu1mckCfRizJh++IWxo=";
+    hash = "sha256-LeAIXrPzp6rmmrz4ixehaD4/U1i15NDR0wvYyFOjw0U=";
   };
 in
 stdenvNoCC.mkDerivation rec {

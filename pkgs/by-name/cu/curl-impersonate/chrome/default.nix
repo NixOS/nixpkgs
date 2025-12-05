@@ -175,9 +175,7 @@ stdenv.mkDerivation rec {
 
     # Find the correct boringssl source file
     boringssl-source = builtins.head (
-      lib.mapAttrsToList (_: file: file) (
-        lib.filterAttrs (name: _: lib.strings.hasPrefix "boringssl-" name) passthru.deps
-      )
+      lib.attrValues (lib.filterAttrs (name: _: lib.strings.hasPrefix "boringssl-" name) passthru.deps)
     );
     boringssl-go-modules =
       (buildGoModule {

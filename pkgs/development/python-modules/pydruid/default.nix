@@ -42,7 +42,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pycurl
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "pydruid" ];
 

@@ -15,13 +15,13 @@
 let
   nodejs = nodejs_24;
 
-  version = "2025.8.4";
+  version = "2025.10.1";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
-    rev = "version/${version}";
-    hash = "sha256-pIzDaoDWc58cY/XhsyweCwc4dfRvkaT/zqsV1gDSnCI=";
+    tag = "version/${version}";
+    hash = "sha256-HowB6DTGCqz770fKYbnE+rQ11XRV0WSNkLD+HSWZwz8=";
   };
 
   meta = {
@@ -48,8 +48,8 @@ let
 
     outputHash =
       {
-        "aarch64-linux" = "sha256-fa/WGRb4lWSXMqBmGhCd+N2fZr1YZKsskr3Oowp8gRE=";
-        "x86_64-linux" = "sha256-jVi+pgcz96Dj25T4e/s+SHqsZfonzXs1WZYe0lCI48Q=";
+        "aarch64-linux" = "sha256-aXXlzTsZp5mOrsxy9oHNzcc+1cFSnbC9RmtawBohmLI=";
+        "x86_64-linux" = "sha256-Hi0HXzwTLuer0v4IKF3aim0tVe7AVLi67DiMimrIq5s=";
       }
       .${stdenvNoCC.hostPlatform.system} or (throw "authentik-website-deps: unsupported host platform");
 
@@ -119,8 +119,8 @@ let
 
     outputHash =
       {
-        "aarch64-linux" = "sha256-4JkNwQACS3tiiLuj41cGRWNspljVQxlsJvCM9KE2JrQ=";
-        "x86_64-linux" = "sha256-LD+zXc8neRbEwq1mx9y7b+08p8hxvo/RW6QzsFQgaUs=";
+        "aarch64-linux" = "sha256-t/jyzG3ibTW3fu8Gl1tWkSjMG6Lek/7JDccDrZX6sD0=";
+        "x86_64-linux" = "sha256-8I1YAKvgWjM3p9O1mCetZvhZelrfB31w0ZwkZBUEoh4=";
       }
       .${stdenvNoCC.hostPlatform.system} or (throw "authentik-webui-deps: unsupported host platform");
     outputHashMode = "recursive";
@@ -205,10 +205,32 @@ let
   python = python312.override {
     self = python;
     packageOverrides = final: prev: {
-      # https://github.com/goauthentik/authentik/pull/14709
-      django = final.django_5_1;
+      # https://github.com/goauthentik/authentik/pull/16324
+      django = final.django_5_2;
 
-      django-dramatiq-postgres = prev.buildPythonPackage {
+      django-channels-postgres = final.buildPythonPackage {
+        pname = "django-channels-postgres";
+        inherit version src meta;
+        pyproject = true;
+
+        sourceRoot = "${src.name}/packages/django-channels-postgres";
+
+        build-system = with final; [ hatchling ];
+
+        propagatedBuildInputs =
+          with final;
+          [
+            channels
+            django
+            django-pgtrigger
+            msgpack
+            psycopg
+            structlog
+          ]
+          ++ psycopg.optional-dependencies.pool;
+      };
+
+      django-dramatiq-postgres = final.buildPythonPackage {
         pname = "django-dramatiq-postgres";
         inherit version src meta;
         pyproject = true;
@@ -222,6 +244,7 @@ let
           [
             cron-converter
             django
+            django-pglock
             django-pgtrigger
             dramatiq
             structlog
@@ -230,10 +253,25 @@ let
           ++ dramatiq.optional-dependencies.watch;
       };
 
+      django-postgres-cache = final.buildPythonPackage {
+        pname = "django-postgres-cache";
+        inherit version src meta;
+        pyproject = true;
+
+        sourceRoot = "${src.name}/packages/django-postgres-cache";
+
+        build-system = with final; [ hatchling ];
+
+        propagatedBuildInputs = with final; [
+          django
+          django-postgres-extra
+        ];
+      };
+
       # Running authentik currently requires a custom version.
       # Look in `pyproject.toml` for changes to the rev in the `[tool.uv.sources]` section.
       # See https://github.com/goauthentik/authentik/pull/14057 for latest version bump.
-      djangorestframework = prev.buildPythonPackage {
+      djangorestframework = final.buildPythonPackage {
         pname = "djangorestframework";
         version = "3.16.0";
         format = "setuptools";
@@ -286,18 +324,7 @@ let
         };
       });
 
-      tenant-schemas-celery = prev.tenant-schemas-celery.overrideAttrs (_: rec {
-        version = "3.0.0";
-
-        src = fetchFromGitHub {
-          owner = "maciej-gol";
-          repo = "tenant-schemas-celery";
-          tag = version;
-          hash = "sha256-3ZUXSAOBMtj72sk/VwPV24ysQK+E4l1HdwKa78xrDtg=";
-        };
-      });
-
-      authentik-django = prev.buildPythonPackage {
+      authentik-django = final.buildPythonPackage {
         pname = "authentik-django";
         inherit version src meta;
         pyproject = true;
@@ -326,14 +353,13 @@ let
           with final;
           [
             argon2-cffi
-            celery
             channels
-            channels-redis
             cryptography
             dacite
             deepmerge
             defusedxml
             django
+            django-channels-postgres
             django-countries
             django-cte
             django-dramatiq-postgres
@@ -342,8 +368,9 @@ let
             django-model-utils
             django-pglock
             django-pgtrigger
+            django-postgres-cache
+            django-postgres-extra
             django-prometheus
-            django-redis
             django-storages
             django-tenants
             djangoql
@@ -354,7 +381,6 @@ let
             drf-spectacular
             duo-client
             fido2
-            flower
             geoip2
             geopy
             google-api-python-client
@@ -383,7 +409,6 @@ let
             setproctitle
             structlog
             swagger-spec-validator
-            tenant-schemas-celery
             twilio
             ua-parser
             unidecode
@@ -396,7 +421,6 @@ let
             zxcvbn
           ]
           ++ django-storages.optional-dependencies.s3
-          ++ opencontainers.optional-dependencies.reggie
           ++ psycopg.optional-dependencies.c
           ++ psycopg.optional-dependencies.pool
           ++ uvicorn.optional-dependencies.standard;
@@ -431,7 +455,7 @@ let
 
     env.CGO_ENABLED = 0;
 
-    vendorHash = "sha256-wTTEDBRYCW1UFaeX49ufLT0c17sacJzcCaW/8cPNYR4=";
+    vendorHash = "sha256-m2shrCwoVdbtr8B83ZcAyG+J6dEys2xdjtlfFFF4CDo=";
 
     postInstall = ''
       mv $out/bin/server $out/bin/authentik

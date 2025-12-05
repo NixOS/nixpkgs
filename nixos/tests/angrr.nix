@@ -15,6 +15,11 @@
       # For `nix build /run/current-system --out-link`,
       # `nix-build` does not support this use case.
       nix.settings.experimental-features = [ "nix-command" ];
+
+      # Test direnv integration
+      programs.direnv.enable = true;
+      # Verbose logging for angrr in direnv
+      environment.variables.ANGRR_DIRENV_LOG = "angrr=debug";
     };
   };
 
@@ -59,5 +64,25 @@
     # All auto GC roots are removed
     machine.succeed("test ! -f /tmp/root-auto-gc-root-2")
     machine.succeed("test ! -f /tmp/user-auto-gc-root-2")
+
+    # Direnv integration test
+    machine.succeed("mkdir /tmp/test-direnv")
+    machine.succeed("echo >/tmp/test-direnv/.envrc") # Simply create an empty .envrc
+    machine.succeed("nix build /run/current-system --out-link /tmp/test-direnv/.direnv/gc-root")
+    machine.succeed("cd /tmp/test-direnv; direnv allow; direnv exec . true")
+
+    # The root will be removed if we does not use the direnv recently
+    machine.succeed("date -s '8 days'")
+    machine.systemctl("start nix-gc.service")
+    machine.succeed("test ! -f /tmp/test-direnv/.direnv/gc-root")
+
+    # Recreate the root
+    machine.succeed("nix build /run/current-system --out-link /tmp/test-direnv/.direnv/gc-root")
+
+    # The root will not be remove if we use the direnv recently
+    machine.succeed("date -s '8 days'")
+    machine.succeed("cd /tmp/test-direnv; direnv exec . true")
+    machine.systemctl("start nix-gc.service")
+    machine.succeed("readlink /tmp/test-direnv/.direnv/gc-root")
   '';
 }

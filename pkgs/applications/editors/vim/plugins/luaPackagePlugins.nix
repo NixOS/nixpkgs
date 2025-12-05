@@ -8,6 +8,7 @@ let
   luaPackages = neovim-unwrapped.lua.pkgs;
 
   luarocksPackageNames = [
+    # # keep-sorted start case=no
     "fidget-nvim"
     "fzf-lua"
     "gitsigns-nvim"
@@ -37,10 +38,11 @@ let
     "rest-nvim"
     "rocks-config-nvim"
     "rocks-nvim"
-    "rustaceanvim"
     "rtp-nvim"
+    "rustaceanvim"
     "telescope-manix"
     "telescope-nvim"
+    # keep-sorted end
   ];
 in
 lib.genAttrs luarocksPackageNames (

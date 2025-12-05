@@ -45,6 +45,7 @@ in
       {
         systemd.packages = [ cfg.package ];
         systemd.services."esdm-server".wantedBy = [ "basic.target" ];
+        systemd.services."esdm-kernel-seeder".wantedBy = [ "basic.target" ];
       }
       # It is necessary to set those options for these services to be started by systemd in NixOS
       (lib.mkIf cfg.enableLinuxCompatServices {
@@ -64,7 +65,6 @@ in
   );
 
   meta.maintainers = with lib.maintainers; [
-    orichter
     thillux
   ];
 }

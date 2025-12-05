@@ -8,7 +8,10 @@ stdenv.mkDerivation {
   pname = "gpio-utils";
   version = linux.version;
 
-  inherit (linux) src makeFlags;
+  inherit (linux) src;
+  makeFlags = linux.commonMakeFlags ++ [
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   preConfigure = ''
     cd tools/gpio

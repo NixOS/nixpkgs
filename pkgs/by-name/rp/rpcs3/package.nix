@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchFromGitHub,
   nix-update-script,
   cmake,
@@ -13,7 +14,7 @@
   vulkan-loader,
   libpng,
   libSM,
-  ffmpeg,
+  ffmpeg_7,
   libevdev,
   libusb1,
   zlib,
@@ -119,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
     vulkan-loader
     libpng
-    ffmpeg
+    ffmpeg_7
     libevdev
     zlib
     libusb1
@@ -146,6 +147,14 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals waylandSupport [
     wayland
     qtwayland
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "fix-build-qt-6.10.patch";
+      url = "https://github.com/RPCS3/rpcs3/commit/038ee090b731bf63917371a3586c2f7d7cf4e585.patch";
+      hash = "sha256-jTIxsheG9b9zp0JEeWQ73BunAXmEIg5tj4SrWBfdHy8=";
+    })
   ];
 
   doInstallCheck = true;

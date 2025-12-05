@@ -6,17 +6,17 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "prisma-language-server";
-  version = "6.17.1";
+  version = "31.1.0";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "language-tools";
     tag = "${finalAttrs.version}";
-    hash = "sha256-L2THhIjCeoNRUWTQ0aMkXeatjunRPhd0m4No5UE11lI=";
+    hash = "sha256-hcLjvIi7EZQSr99OLHGWesziBc5HhkvD+dmGOTgOY/c=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/language-server";
-  npmDepsHash = "sha256-Fa6Eajzm3/NHHr4ngsgJ/CFfEcQ2J3DTEQEUcK7ZdeU=";
+  npmDepsHash = "sha256-lt/xIm7brU9itYhVdmmts5WpcZtQbWYcxXaRYKYp9H0=";
 
   meta = {
     description = "Language server for Prisma";

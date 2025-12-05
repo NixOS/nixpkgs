@@ -45,8 +45,6 @@ let
       partOf = [ "ceph-${daemonType}.target" ];
       wantedBy = [ "ceph-${daemonType}.target" ];
 
-      path = [ pkgs.getopt ];
-
       # Don't start services that are not yet initialized
       unitConfig.ConditionPathExists = "/var/lib/${stateDirectory}/keyring";
       startLimitBurst =

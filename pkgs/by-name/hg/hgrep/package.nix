@@ -7,7 +7,7 @@
 }:
 
 let
-  version = "0.3.8";
+  version = "0.3.9";
 in
 rustPlatform.buildRustPackage {
   pname = "hgrep";
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage {
     owner = "rhysd";
     repo = "hgrep";
     tag = "v${version}";
-    hash = "sha256-GcV6tZLhAtBE0/husOqZ3Gib9nXXg7kcxrNp9IK0eTo=";
+    hash = "sha256-xBLpEs0PvYb7sIca9yb3vhi2Bsr1BFqB0jlD+bZT2EI=";
   };
 
-  cargoHash = "sha256-NxfWY9OoMNASlWE48njuAdTI11JAV+rzjD0OU2cHLsc=";
+  cargoHash = "sha256-TP+PClv7FX3kRBwJ0RAKbKoTKpi7hTZgw/Z/ktFKbwQ=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

@@ -10,7 +10,6 @@
   marshmallow-dataclass,
   poetry-core,
   pyjwt,
-  pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
   syrupy,
@@ -20,16 +19,14 @@
 
 buildPythonPackage rec {
   pname = "renault-api";
-  version = "0.4.1";
+  version = "0.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = "renault-api";
     tag = "v${version}";
-    hash = "sha256-jnmfCYFtlfnFRMrNHfoiXgL8bael7IKmhuZCj+AOuz8=";
+    hash = "sha256-FH6x+hknNGgrSHaOt7RTYeuVLqb/DNy7X3065VvcFwA=";
   };
 
   build-system = [ poetry-core ];
@@ -56,7 +53,7 @@ buildPythonPackage rec {
     syrupy
     typeguard
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "renault_api" ];
 

@@ -57,7 +57,7 @@ let
 
     let
       inherit (lib)
-        any
+        elem
         optionalString
         optionals
         optional
@@ -66,11 +66,11 @@ let
 
       smartmon = smartmontools.override { inherit enableMail; };
 
-      buildKernel = any (n: n == configFile) [
+      buildKernel = elem configFile [
         "kernel"
         "all"
       ];
-      buildUser = any (n: n == configFile) [
+      buildUser = elem configFile [
         "user"
         "all"
       ];
@@ -151,6 +151,11 @@ let
                  systemd
                ]
              }"
+
+          # substitute path that ZFS will pass on when calling external helper scripts (/etc/zfs/zpool.d/*, zfs_prepare_disk)
+          substituteInPlace ./lib/libzfs/libzfs_util.c \
+            --replace-fail \"PATH=/bin:/sbin:/usr/bin:/usr/sbin\" \
+            \"PATH=/run/wrappers/bin:/run/current-system/sw/bin:/run/current-system/sw/sbin\"
 
           substituteInPlace ./config/zfs-build.m4 \
             --replace-fail "bashcompletiondir=/etc/bash_completion.d" \

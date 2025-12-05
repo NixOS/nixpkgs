@@ -18,7 +18,6 @@
   darwin,
   xcbuild,
   swiftPackages,
-  apple-sdk_13,
   openssl,
   getconf,
   python3,
@@ -112,15 +111,12 @@ stdenv.mkDerivation rec {
     krb5
     lttng-ust_2_12
   ]
-  ++ lib.optionals isDarwin (
-    [
-      xcbuild
-      swift
-      krb5
-      sigtool
-    ]
-    ++ lib.optional (lib.versionAtLeast version "10") apple-sdk_13
-  );
+  ++ lib.optionals isDarwin [
+    xcbuild
+    swift
+    krb5
+    sigtool
+  ];
 
   # This is required to fix the error:
   # > CSSM_ModuleLoad(): One or more parameters passed to a function were not valid.
@@ -138,22 +134,17 @@ stdenv.mkDerivation rec {
   '';
 
   patches =
-    lib.optionals (lib.versionAtLeast version "9" && lib.versionOlder version "10") [
+    lib.optionals (lib.versionAtLeast version "10") [
+      # https://github.com/dotnet/source-build/issues/5410
+      ./fix-prep-script.patch
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "9" && lib.versionOlder version "10") [
       ./UpdateNuGetConfigPackageSourcesMappings-don-t-add-em.patch
       ./vmr-compiler-opt-v9.patch
     ]
     ++ lib.optionals (lib.versionOlder version "9") [
       ./fix-aspnetcore-portable-build.patch
       ./vmr-compiler-opt-v8.patch
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "10") [
-      ./bundler-fix-file-size-estimation-when-bundling-symli.patch
-      (fetchpatch {
-        url = "https://github.com/dotnet/runtime/commit/118eacc4f40f1ef48b47c0b7ff40ac0b3ae8c28a.patch";
-        hash = "sha256-5sRGEpULAgjDjU1LKm7Pcx3Qfbr891CB9apOpYdzPyA=";
-        stripLen = 1;
-        extraPrefix = "src/runtime/";
-      })
     ];
 
   postPatch = ''
@@ -413,7 +404,7 @@ stdenv.mkDerivation rec {
     "--source-build"
   ]
   ++ lib.optionals (lib.versionAtLeast version "10") [
-    "--branding default"
+    "--branding rtm"
   ]
   ++ [
     "--"

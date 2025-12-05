@@ -3,6 +3,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
 
   # runPythonCommand
   runCommand,
@@ -134,7 +135,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "2.0.16";
+  version = "2.0.18";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -152,27 +153,27 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     tag = finalAttrs.version;
-    hash = "sha256-fsjW3Idaqg4pNGaRP0bm2R94FcW2MVfPQwPFWrN+Qy8=";
+    hash = "sha256-hF0fSn8lh0E0UQ+7HgMvqjltFajjx11s7THZYpt/hlE=";
   };
 
   patches = [
     # Install plug-ins and libfwupdplugin to $out output,
     # they are not really part of the library.
-    ./install-fwupdplugin-to-out.patch
+    ./0001-Install-fwupdplugin-to-out.patch
 
     # Installed tests are installed to different output
     # we also cannot have fwupd-tests.conf in $out/etc since it would form a cycle.
-    ./installed-tests-path.patch
+    ./0002-Add-output-for-installed-tests.patch
 
     # Since /etc is the domain of NixOS, not Nix,
     # we cannot install files there.
     # Let’s install the files to $prefix/etc
     # while still reading them from /etc.
     # NixOS module for fwupd will take take care of copying the files appropriately.
-    ./add-option-for-installation-sysconfdir.patch
+    ./0003-Add-option-for-installation-sysconfdir.patch
 
     # EFI capsule is located in fwupd-efi now.
-    ./efi-app-path.patch
+    ./0004-Get-the-efi-app-from-fwupd-efi.patch
   ];
 
   postPatch = ''
@@ -360,9 +361,11 @@ stdenv.mkDerivation (finalAttrs: {
       "fwupd/remotes.d/vendor-directory.conf"
       "pki/fwupd/GPG-KEY-Linux-Foundation-Firmware"
       "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"
+      "pki/fwupd/LVFS-CA-2025PQ.pem"
       "pki/fwupd/LVFS-CA.pem"
       "pki/fwupd-metadata/GPG-KEY-Linux-Foundation-Metadata"
       "pki/fwupd-metadata/GPG-KEY-Linux-Vendor-Firmware-Service"
+      "pki/fwupd-metadata/LVFS-CA-2025PQ.pem"
       "pki/fwupd-metadata/LVFS-CA.pem"
       "grub.d/35_fwupd"
     ];

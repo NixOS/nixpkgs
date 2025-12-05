@@ -37,14 +37,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "28.12";
+  version = "29.0";
   pname = "owntone";
 
   src = fetchFromGitHub {
     owner = "owntone";
     repo = "owntone-server";
     tag = finalAttrs.version;
-    hash = "sha256-Mj3G1+Hwa/zl0AM4SO6TcB4W3WJkpIDzrSPEFx0vaEk=";
+    hash = "sha256-Z9u5clC6m5gDAKkvyvrQs9muNK/P0ipHgQUmTHLRumE=";
   };
 
   nativeBuildInputs = [
@@ -82,6 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags =
     lib.optionals chromecastSupport [ "--enable-chromecast" ]
     ++ lib.optionals pulseSupport [ "--with-pulseaudio" ];
+
+  patches = [
+    ./gettext-0.25.patch
+  ];
 
   passthru.updateScript = nix-update-script { };
 

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   yarn,
+  dart-sass,
   fetchYarnDeps,
   fixup-yarn-lock,
   nodejs,
@@ -15,18 +16,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.2.3";
+  version = "3.2.9";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0LlZsyUSVuDakbNUzJ1ZUBe9KxWNd0ONKkPafwbCINY=";
+    hash = "sha256-rnW8itUsP2a09gQU3IXZI7kSVKIxxCgbt15NoH/g0a8=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-HLVHxjyymi0diurVamETrfwYM2mkUrIOHhbYCrqGkeg=";
+    hash = "sha256-V6N0RIjT3etoP6XdZhnQv4XViLRypp/JWxnb0sBc6Oo=";
   };
 
   patches = [
@@ -36,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     yarn
+    dart-sass
     fixup-yarn-lock
     nodejs
     makeWrapper
@@ -53,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
     fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
+    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
 
     runHook postConfigure
   '';

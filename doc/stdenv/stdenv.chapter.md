@@ -1631,19 +1631,6 @@ The following flags are disabled by default and should be enabled with `hardenin
 
 This flag adds the `-fno-strict-aliasing` compiler option, which prevents the compiler from assuming code has been written strictly following the standard in regards to pointer aliasing and therefore performing optimizations that may be unsafe for code that has not followed these rules.
 
-#### `pie` {#pie}
-
-This flag is disabled by default for normal `glibc` based NixOS package builds, but enabled by default for
-
-  - `musl`-based package builds, except on Aarch64 and Aarch32, where there are issues.
-
-  - Statically-linked for OpenBSD builds, where it appears to be required to get a working binary.
-
-Adds the `-fPIE` compiler and `-pie` linker options. Position Independent Executables are needed to take advantage of Address Space Layout Randomization, supported by modern kernel versions. While ASLR can already be enforced for data areas in the stack and heap (brk and mmap), the code areas must be compiled as position-independent. Shared libraries already do this with the `pic` flag, so they gain ASLR automatically, but binary .text regions need to be build with `pie` to gain ASLR. When this happens, ROP attacks are much harder since there are no static locations to bounce off of during a memory corruption attack.
-
-Static libraries need to be compiled with `-fPIE` so that executables can link them in with the `-pie` linker option.
-If the libraries lack `-fPIE`, you will get the error `recompile with -fPIE`.
-
 #### `strictflexarrays1` {#strictflexarrays1}
 
 This flag adds the `-fstrict-flex-arrays=1` compiler option, which reduces the cases the compiler treats as "flexible arrays" to those declared with length `[1]`, `[0]` or (the correct) `[]`. This increases the coverage of fortify checks, because such arrays declared as the trailing element of a structure can normally not have their intended length determined by the compiler.
@@ -1687,6 +1674,18 @@ sorry, unimplemented: __builtin_clear_padding not supported for variable length 
 Adds the `-D_GLIBCXX_ASSERTIONS` compiler flag. This flag only has an effect on libstdc++ targets, and when defined, enables extra error checking in the form of precondition assertions, such as bounds checking in c++ strings and null pointer checks when dereferencing c++ smart pointers.
 
 These checks may have an impact on performance in some cases.
+
+#### `libcxxhardeningfast` {#libcxxhardeningfast}
+
+Adds the `-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST` compiler flag. This flag only has an effect on libc++ targets, and when defined, enables a set of assertions that prevent undefined behavior caused by violating preconditions of the standard library. libc++ provides several hardening modes, and this "fast" mode contains a set of security-critical checks that can be done with relatively little overhead in constant time.
+
+Disabling `libcxxhardeningfast` implies disablement of checks from `libcxxhardeningextensive`.
+
+#### `libcxxhardeningextensive` {#libcxxhardeningextensive}
+
+Adds the `-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_EXTENSIVE` compiler flag. This flag only has an effect on libc++ targets, and when defined, enables a set of assertions that prevent undefined behavior caused by violating preconditions of the standard library. libc++ provides several hardening modes, and this "extensive" mode adds checks for undefined behavior that incur relatively little overhead but aren’t security-critical. The additional rigour impacts performance more than fast mode: benchmarking is recommended to determine if it is acceptable for a particular application.
+
+Enabling this flag implies enablement of checks from `libcxxhardeningfast`. Disabling this flag does not imply disablement of checks from `libcxxhardeningfast`.
 
 #### `pacret` {#pacret}
 

@@ -11,17 +11,14 @@
   withFzf ? false,
   fzf,
   perl,
-
   # rbw-rofi
   withRofi ? false,
   rofi,
   xclip,
-
   # pass-import
   withPass ? false,
   pass,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "rbw";
   version = "1.14.1";
@@ -52,6 +49,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --cmd rbw \
       --bash <($out/bin/rbw gen-completions bash) \
       --fish <($out/bin/rbw gen-completions fish) \
+      --nushell <($out/bin/rbw gen-completions nushell) \
       --zsh <($out/bin/rbw gen-completions zsh)
   ''
   + lib.optionalString withFzf ''

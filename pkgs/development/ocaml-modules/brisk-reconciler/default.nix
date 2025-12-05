@@ -8,11 +8,7 @@
 }:
 
 let
-  version =
-    if lib.versionAtLeast ocaml.version "5.3" then
-      throw "brisk-reconciler is not available for OCaml ${ocaml.version}"
-    else
-      "1.0.0-alpha1";
+  version = "1.0.0-alpha1";
 in
 
 buildDunePackage {
@@ -42,5 +38,6 @@ buildDunePackage {
     homepage = "https://github.com/briskml/brisk-reconciler";
     maintainers = with lib.maintainers; [ momeemt ];
     license = lib.licenses.mit;
+    broken = lib.versionAtLeast ocaml.version "5.3";
   };
 }

@@ -124,7 +124,7 @@ rec {
   concatMapStrings = f: list: concatStrings (map f list);
 
   /**
-    Like `concatMapStrings` except that the f functions also gets the
+    Like `concatMapStrings` except that the function `f` also gets the
     position as a parameter.
 
     # Inputs
@@ -733,7 +733,7 @@ rec {
       );
 
   /**
-    Depending on the boolean `cond', return either the given string
+    Depending on the boolean `cond`, return either the given string
     or the empty string. Useful to concatenate against a bigger string.
 
     # Inputs
@@ -1467,9 +1467,6 @@ rec {
       [ "\"" "'" "<" ">" "&" ]
       [ "&quot;" "&apos;" "&lt;" "&gt;" "&amp;" ];
 
-  # warning added 12-12-2022
-  replaceChars = lib.warn "lib.replaceChars is a deprecated alias of lib.replaceStrings." builtins.replaceStrings;
-
   # Case conversion utilities.
   lowerChars = stringToCharacters "abcdefghijklmnopqrstuvwxyz";
   upperChars = stringToCharacters "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -1940,7 +1937,7 @@ rec {
   versionOlder = v1: v2: compareVersions v2 v1 == 1;
 
   /**
-    Returns true if string v1 denotes a version equal to or newer than v2.
+    Returns true if string `v1` denotes a version equal to or newer than `v2`.
 
     # Inputs
 
@@ -2091,14 +2088,14 @@ rec {
 
     # Inputs
 
-    `feature`
-    : The feature to be set
-
     `type`
     : The type of the feature to be set, as described in
-      https://cmake.org/cmake/help/latest/command/set.html
+      [the CMake set documentation](https://cmake.org/cmake/help/latest/command/set.html)
       the possible values (case insensitive) are:
       BOOL FILEPATH PATH STRING INTERNAL LIST
+
+    `feature`
+    : The feature to be set
 
     `value`
     : The desired value
@@ -2138,7 +2135,7 @@ rec {
     "-D${feature}:${toUpper type}=${value}";
 
   /**
-    Create a -D<condition>={TRUE,FALSE} string that can be passed to typical
+    Create a `"-D<condition>={TRUE,FALSE}"` string that can be passed to typical
     CMake invocations.
 
     # Inputs
@@ -2173,7 +2170,7 @@ rec {
     cmakeOptionType "bool" condition (lib.toUpper (lib.boolToString flag));
 
   /**
-    Create a -D<feature>:STRING=<value> string that can be passed to typical
+    Create a `"-D<feature>:STRING=<value>"` string that can be passed to typical
     CMake invocations.
     This is the most typical usage, so it deserves a special case.
 
@@ -2209,7 +2206,7 @@ rec {
     cmakeOptionType "string" feature value;
 
   /**
-    Create a -D<feature>=<value> string that can be passed to typical Meson
+    Create a `"-D<feature>=<value>"` string that can be passed to typical Meson
     invocations.
 
     # Inputs
@@ -2244,7 +2241,7 @@ rec {
     "-D${feature}=${value}";
 
   /**
-    Create a -D<condition>={true,false} string that can be passed to typical
+    Create a `"-D<condition>={true,false}"` string that can be passed to typical
     Meson invocations.
 
     # Inputs
@@ -2281,7 +2278,7 @@ rec {
     mesonOption condition (lib.boolToString flag);
 
   /**
-    Create a -D<feature>={enabled,disabled} string that can be passed to
+    Create a `"-D<feature>={enabled,disabled}"` string that can be passed to
     typical Meson invocations.
 
     # Inputs
@@ -2318,7 +2315,7 @@ rec {
     mesonOption feature (if flag then "enabled" else "disabled");
 
   /**
-    Create an --{enable,disable}-<feature> string that can be passed to
+    Create an `"--{enable,disable}-<feature>"` string that can be passed to
     standard GNU Autoconf scripts.
 
     # Inputs
@@ -2355,8 +2352,8 @@ rec {
     "--${if flag then "enable" else "disable"}-${feature}";
 
   /**
-    Create an --{enable-<feature>=<value>,disable-<feature>} string that can be passed to
-    standard GNU Autoconf scripts.
+    Create an `"--{enable-<feature>=<value>,disable-<feature>}"` string that
+    can be passed to standard GNU Autoconf scripts.
 
     # Inputs
 
@@ -2393,7 +2390,7 @@ rec {
     enableFeature flag feature + optionalString flag "=${value}";
 
   /**
-    Create an --{with,without}-<feature> string that can be passed to
+    Create an `"--{with,without}-<feature>"` string that can be passed to
     standard GNU Autoconf scripts.
 
     # Inputs
@@ -2429,7 +2426,7 @@ rec {
     "--${if flag then "with" else "without"}-${feature}";
 
   /**
-    Create an --{with-<feature>=<value>,without-<feature>} string that can be passed to
+    Create an `"--{with-<feature>=<value>,without-<feature>}"` string that can be passed to
     standard GNU Autoconf scripts.
 
     # Inputs
@@ -2579,31 +2576,7 @@ rec {
     lib.warnIf (!precise) "Imprecise conversion from float to string ${result}" result;
 
   /**
-    Check whether a value `val` can be coerced to a string.
-
-    :::{.warning}
-    Soft-deprecated function. While the original implementation is available as
-    `isConvertibleWithToString`, consider using `isStringLike` instead, if suitable.
-    :::
-
-    # Inputs
-
-    `val`
-    : 1\. Function argument
-
-    # Type
-
-    ```
-    isCoercibleToString :: a -> bool
-    ```
-  */
-  isCoercibleToString =
-    lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2305)
-      "lib.strings.isCoercibleToString is deprecated in favor of either isStringLike or isConvertibleWithToString. Only use the latter if it needs to return true for null, numbers, booleans and list of similarly coercibles."
-      isConvertibleWithToString;
-
-  /**
-    Check whether a list or other value `x` can be passed to toString.
+    Check whether a list or other value `x` can be passed to `toString`.
 
     Many types of value are coercible to string this way, including `int`, `float`,
     `null`, `bool`, `list` of similarly coercible values.
@@ -2702,7 +2675,7 @@ rec {
 
   /**
     Parse a string as an int. Does not support parsing of integers with preceding zero due to
-    ambiguity between zero-padded and octal numbers. See toIntBase10.
+    ambiguity between zero-padded and octal numbers. See `toIntBase10`.
 
     # Inputs
 
@@ -2843,60 +2816,6 @@ rec {
       parsedInput;
 
   /**
-    Read a list of paths from `file`, relative to the `rootPath`.
-    Lines beginning with `#` are treated as comments and ignored.
-    Whitespace is significant.
-
-    :::{.warning}
-    This function is deprecated and should be avoided.
-    :::
-
-    :::{.note}
-    This function is not performant and should be avoided.
-    :::
-
-    # Inputs
-
-    `rootPath`
-    : 1\. Function argument
-
-    `file`
-    : 2\. Function argument
-
-    # Type
-
-    ```
-    readPathsFromFile :: string -> string -> [string]
-    ```
-
-    # Examples
-    :::{.example}
-    ## `lib.strings.readPathsFromFile` usage example
-
-    ```nix
-    readPathsFromFile /prefix
-      ./pkgs/development/libraries/qt-5/5.4/qtbase/series
-    => [ "/prefix/dlopen-resolv.patch" "/prefix/tzdir.patch"
-         "/prefix/dlopen-libXcursor.patch" "/prefix/dlopen-openssl.patch"
-         "/prefix/dlopen-dbus.patch" "/prefix/xdg-config-dirs.patch"
-         "/prefix/nix-profiles-library-paths.patch"
-         "/prefix/compose-search-path.patch" ]
-    ```
-
-    :::
-  */
-  readPathsFromFile = lib.warn "lib.readPathsFromFile is deprecated, use a list instead." (
-    rootPath: file:
-    let
-      lines = lib.splitString "\n" (readFile file);
-      removeComments = lib.filter (line: line != "" && !(lib.hasPrefix "#" line));
-      relativePaths = removeComments lines;
-      absolutePaths = map (path: rootPath + "/${path}") relativePaths;
-    in
-    absolutePaths
-  );
-
-  /**
     Read the contents of a file removing the trailing \n
 
     # Inputs
@@ -2985,7 +2904,7 @@ rec {
     Computes the Levenshtein distance between two strings `a` and `b`.
 
     Complexity O(n*m) where n and m are the lengths of the strings.
-    Algorithm adjusted from https://stackoverflow.com/a/9750974/6605742
+    Algorithm adjusted from [this stackoverflow comment](https://stackoverflow.com/a/9750974/6605742)
 
     # Inputs
 

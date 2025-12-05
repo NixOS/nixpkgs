@@ -21,23 +21,20 @@
   lazy-loader,
   h5io,
   pymatreader,
-  pythonOlder,
   procps,
   optipng,
 }:
 
 buildPythonPackage rec {
   pname = "mne";
-  version = "1.10.1";
+  version = "1.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "mne-tools";
     repo = "mne-python";
     tag = "v${version}";
-    hash = "sha256-xxkv+8RAkpRyMWznUMpwc6E72mb9DUPW6O5hFHiNz98=";
+    hash = "sha256-lssSHlWUj3TU0F/31jTFc+oFdBx1C+9aolee6M8mJtw=";
   };
 
   postPatch = ''
@@ -78,7 +75,7 @@ buildPythonPackage rec {
     pytest-timeout
     writableTmpDirAsHomeHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     export MNE_SKIP_TESTING_DATASET_TESTS=true

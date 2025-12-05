@@ -19,26 +19,23 @@
   meson,
   ninja,
 }:
-stdenv.mkDerivation {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "elementary-session-settings";
-  # Allow disabling x11 session
-  # nixpkgs-update: no auto update
-  version = "8.0.1-unstable-2025-09-15";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "session-settings";
-    rev = "e708fd49356f145acd926d30683012d9488f0f9d";
-    hash = "sha256-wb9UUrEtwtmqtfNS2YPli99ZeY17UdJFQijTKs8mHn4=";
+    tag = finalAttrs.version;
+    hash = "sha256-mdfmCzR9ikXDlDc7FeOITsdbPbz+G66jUrl1BobY+g8=";
   };
 
-  /*
-    This allows `elementary-session-settings` to not use gnome-keyring's ssh capabilities anymore, as they have been
-    moved to gcr upstream, in an effort to modularize gnome-keyring.
-
-    More info can be found here: https://gitlab.gnome.org/GNOME/gnome-keyring/-/merge_requests/60
-  */
-  patches = [ ./no-gnome-keyring-ssh-autostart.patch ];
+  patches = [
+    # See https://github.com/elementary/session-settings/issues/88 for gnome-keyring.
+    # See https://github.com/elementary/session-settings/issues/82 for onboard.
+    ./no-autostart.patch
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -91,4 +88,4 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     teams = [ teams.pantheon ];
   };
-}
+})

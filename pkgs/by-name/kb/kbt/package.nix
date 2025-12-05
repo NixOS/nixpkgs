@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     description = "Keyboard tester in terminal";
     homepage = "https://github.com/bloznelis/kbt";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "kbt";
   };
 }

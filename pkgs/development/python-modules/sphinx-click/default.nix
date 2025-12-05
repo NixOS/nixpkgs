@@ -4,8 +4,8 @@
   fetchPypi,
   sphinxHook,
   # Build system
-  pbr,
   setuptools,
+  setuptools-scm,
   # Dependencies
   click,
   docutils,
@@ -17,13 +17,21 @@
 
 buildPythonPackage rec {
   pname = "sphinx-click";
-  version = "6.0.0";
+  version = "6.1.0";
   pyproject = true;
 
   build-system = [
-    pbr
     setuptools
+    setuptools-scm
   ];
+
+  postPatch = ''
+    # Would require reno which would require the .git directory to stay around
+    substituteInPlace docs/changelog.rst \
+      --replace-fail '.. release-notes::' 'Check https://sphinx-click.readthedocs.io/en/latest/changelog/ for the Release Notes.'
+    substituteInPlace docs/conf.py \
+      --replace-fail "'reno.sphinxext'" ""
+  '';
 
   nativeBuildInputs = [
     sphinxHook
@@ -47,7 +55,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "sphinx_click";
-    hash = "sha256-9dZkMh3AxmIv8Bnx4chOWM4M7P3etRDgBM9gwqOrRls=";
+    hash = "sha256-xwLgdRwaC2rWSeT3+uvQ3AmjzHyjtQ+Vlpg4N3L1Du8=";
   };
 
   meta = {

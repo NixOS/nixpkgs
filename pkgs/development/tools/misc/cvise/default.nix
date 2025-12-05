@@ -13,6 +13,8 @@
   pebble,
   psutil,
   pytestCheckHook,
+  testers,
+  cvise,
 }:
 
 buildPythonApplication rec {
@@ -78,11 +80,21 @@ buildPythonApplication rec {
     "test_simple_reduction"
   ];
 
+  passthru = {
+    tests = {
+      # basic syntax check
+      help-output = testers.testVersion {
+        package = cvise;
+        command = "cvise --version";
+      };
+    };
+  };
+
   meta = with lib; {
     homepage = "https://github.com/marxin/cvise";
     description = "Super-parallel Python port of C-Reduce";
     license = licenses.ncsa;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

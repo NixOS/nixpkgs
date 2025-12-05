@@ -16,6 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-WrzdpE9t7vWpc8QFoFs+S/HgHwsidRNmfcHp7ltSWQw=";
   };
 
+  configureFlags = [
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+  ];
+
   nativeBuildInputs = [ autoreconfHook ];
 
   outputs = [
@@ -36,6 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "crond";
     maintainers = [ ];
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux;
   };
 })

@@ -16,18 +16,20 @@
   nixosTests,
   systemdLibs,
   which,
+  python3Packages,
   withSystemd ? true,
   withJanus ? true,
+  withPython ? true,
 }:
 stdenv.mkDerivation rec {
   pname = "ustreamer";
-  version = "6.39";
+  version = "6.40";
 
   src = fetchFromGitHub {
     owner = "pikvm";
     repo = "ustreamer";
     tag = "v${version}";
-    hash = "sha256-Lc0cwzt7rGfbJSLdZTDVdmkub6Z2KnTz5PRpEvtHsKM=";
+    hash = "sha256-jKltFQsx8Q9+TMTOg1p6nljII72CLEg6VYe60/KojUY=";
   };
 
   buildInputs = [
@@ -36,6 +38,15 @@ stdenv.mkDerivation rec {
     libjpeg
     libdrm
   ]
+  ++ lib.optionals withPython (
+    with python3Packages;
+    [
+      python
+      setuptools
+      build
+      pip
+    ]
+  )
   ++ lib.optionals withSystemd [
     systemdLibs
   ]
@@ -56,6 +67,9 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "WITH_V4P=1"
+  ]
+  ++ lib.optionals withPython [
+    "WITH_PYTHON=1"
   ]
   ++ lib.optionals withSystemd [
     "WITH_SYSTEMD=1"

@@ -29,6 +29,6 @@ buildPythonPackage rec {
     mainProgram = "fvs";
     homepage = "https://github.com/mirkobrombin/FVS";
     license = licenses.mit;
-    maintainers = with maintainers; [ bryanasdev000 ];
+    maintainers = [ ];
   };
 }

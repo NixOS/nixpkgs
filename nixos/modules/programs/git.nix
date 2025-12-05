@@ -115,5 +115,5 @@ in
     })
   ];
 
-  meta.maintainers = with lib.maintainers; [ figsoda ];
+  meta.maintainers = [ ];
 }

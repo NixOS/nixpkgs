@@ -4,6 +4,7 @@
   cmake,
   pkg-config,
   fetchFromGitHub,
+  fetchpatch,
   libmodbus,
 }:
 
@@ -17,6 +18,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-rO3j/p7MABlxcwRAZm26u7wgODGFTtetSDhPWPzTuEA=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "cmake4-fix";
+      url = "https://github.com/epsilonrt/mbpoll/commit/baad0efca89f0d8fe370591283d87a6e8e7dee4c.patch?full_index=1";
+      hash = "sha256-QwrfNeGbirYSrXvGI1lItwNBDN2d6VDF8yjvgcGELxE=";
+    })
+  ];
 
   buildInputs = [ libmodbus ];
   nativeBuildInputs = [

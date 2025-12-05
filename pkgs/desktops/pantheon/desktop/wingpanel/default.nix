@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   nix-update-script,
   wayland-scanner,
   wrapGAppsHook3,
@@ -10,6 +11,7 @@
   ninja,
   vala,
   gala,
+  glib,
   gtk3,
   libgee,
   granite,
@@ -34,6 +36,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./indicators.patch
+
+    # Fix build with gala 8.3.0
+    # https://github.com/elementary/wingpanel/pull/642
+    (fetchpatch {
+      url = "https://github.com/elementary/wingpanel/commit/4476df2573797310e254695a66c099b32afe9736.patch";
+      hash = "sha256-99zzXbaeW/ijqPXN7tQexMPWsUW4pX7e0tcxASBVbvI=";
+    })
   ];
 
   depsBuildBuild = [
@@ -54,11 +63,15 @@ stdenv.mkDerivation rec {
     elementary-icon-theme
     gala
     granite
-    gtk3
     json-glib
     libgee
     mutter
     wayland
+  ];
+
+  propagatedBuildInputs = [
+    glib
+    gtk3
   ];
 
   preFixup = ''

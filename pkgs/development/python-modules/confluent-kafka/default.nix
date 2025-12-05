@@ -94,7 +94,7 @@ buildPythonPackage rec {
     requests-mock
     respx
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "confluent_kafka" ];
 

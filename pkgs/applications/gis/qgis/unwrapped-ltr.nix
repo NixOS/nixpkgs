@@ -22,7 +22,6 @@
   gsl,
   hdf5,
   libpq,
-  libspatialindex,
   libspatialite,
   libzip,
   netcdf,
@@ -82,14 +81,14 @@ let
   ];
 in
 mkDerivation rec {
-  version = "3.40.11";
+  version = "3.40.13";
   pname = "qgis-ltr-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-HjdOLG/x8qXTDlMKW6+jBuwi+36rBkBFM1OCe3BcjWY=";
+    hash = "sha256-2VPgD7ycj26cTpl16BSEukNEuUXtP25HwG2fRWBXNrU=";
   };
 
   passthru = {
@@ -116,7 +115,6 @@ mkDerivation rec {
     gsl
     hdf5
     libpq
-    libspatialindex
     libspatialite
     libzip
     netcdf
@@ -163,6 +161,9 @@ mkDerivation rec {
     # Remove for QGIS 3.42
     "-DCMAKE_POLICY_DEFAULT_CMP0175=OLD"
     "-DCMAKE_POLICY_DEFAULT_CMP0177=OLD"
+
+    # See https://github.com/libspatialindex/libspatialindex/issues/276
+    "-DWITH_INTERNAL_SPATIALINDEX=True"
   ]
   ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
   ++ lib.optional withServer [

@@ -4,42 +4,45 @@
   buildDotnetModule,
   dotnetCorePackages,
   buildNpmPackage,
-  electron_37,
+  electron_39,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
   stdenv,
 }:
 let
+  electron = electron_39;
   dotnet = dotnetCorePackages.dotnet_9;
-  electron = electron_37;
 in
 buildNpmPackage (finalAttrs: {
   pname = "vrcx";
-  version = "2025.09.10";
+  version = "2025.11.16";
 
   src = fetchFromGitHub {
-    owner = "vrcx-team";
     repo = "VRCX";
-    rev = "b233bbc299fca9a956db387b83d90a4dbba61175";
-    hash = "sha256-7axYnsImG+VllQE1rhr8NmuMCm5t3bgNYGIIn9j2wMk=";
+    owner = "vrcx-team";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ipe5dQQxqIdzbaeUBFAlfCtXS5fwCEuaqpVQEvz8o2E=";
   };
 
-  npmDepsHash = "sha256-VFYWXPhZrg3q2PW4kWfVr5/DY8W6Uf1mvnwfB4mVBrs=";
-  npmFlags = [ "--ignore-scripts" ];
   makeCacheWritable = true;
+  npmFlags = [ "--ignore-scripts" ];
+  npmDepsHash = "sha256-k+jo2Iiflmrtg3LOM2KohPFih8gaDZqoFoh6WLFJRGM=";
 
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
   ];
 
+  preBuild = ''
+    # Build fails at executing dart from sass-embedded
+    rm -r node_modules/sass-embedded*
+  '';
+
   buildPhase = ''
     runHook preBuild
 
-    # need to run vue-demi postinstall for pinia
-    node ./node_modules/vue-demi/scripts/postinstall.js
-    env PLATFORM=linux npm exec webpack -- --config webpack.config.js --mode production
+    env PLATFORM=linux npm exec vite build src
     node ./src-electron/patch-package-version.js
     npm exec electron-builder -- --dir \
       -c.electronDist=${electron.dist} \
@@ -58,13 +61,13 @@ buildNpmPackage (finalAttrs: {
     cp -r ${finalAttrs.passthru.backend}/build/Electron/* "$out/share/vrcx/resources/app.asar.unpacked/build/Electron/"
 
     makeWrapper '${electron}/bin/electron' "$out/bin/vrcx"  \
-      --add-flags "--ozone-platform-hint=auto"              \
+      --add-flags "--ozone-platform-hint=auto --no-updater" \
       --add-flags "$out/share/vrcx/resources/app.asar"      \
       --set NODE_ENV production                             \
       --set DOTNET_ROOT ${dotnet.runtime}/share/dotnet      \
       --prefix PATH : ${lib.makeBinPath [ dotnet.runtime ]}
 
-    install -Dm644 VRCX.png "$out/share/icons/hicolor/256x256/apps/vrcx.png"
+    install -Dm644 images/VRCX.png "$out/share/icons/hicolor/256x256/apps/vrcx.png"
 
     runHook postInstall
   '';

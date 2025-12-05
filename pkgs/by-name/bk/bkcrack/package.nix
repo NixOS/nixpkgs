@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bkcrack";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "kimci86";
     repo = "bkcrack";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-MFY+YBw9cpmUHrL7fpop63ty0ZdESlAgrWRYwK0IowY=";
+    hash = "sha256-VZOHQzTsA/yfVhmrr4ISWnFif0o5an9w4gpRWS85ySU=";
   };
 
   passthru.updateScript = nix-update-script { };

@@ -1,6 +1,7 @@
 {
   lib,
   fetchurl,
+  fetchpatch,
   perlPackages,
   wrapGAppsHook3,
   # libs
@@ -17,18 +18,17 @@
   pdftk,
   # test dependencies
   xvfb-run,
-  liberation_ttf,
   file,
-  tesseract3,
+  tesseract,
 }:
 
 perlPackages.buildPerlPackage rec {
   pname = "gscan2pdf";
-  version = "2.13.4";
+  version = "2.13.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/gscan2pdf/gscan2pdf-${version}.tar.xz";
-    hash = "sha256-4HcTkVJBscBb8AxeN6orMQFVR0w4hFfkGhxQOzP3mWk=";
+    hash = "sha256-DUME9nI9B2+Gj+sBPj176SXfuxDc3CMXfby/Zga31fo=";
   };
 
   patches = [
@@ -74,18 +74,11 @@ perlPackages.buildPerlPackage rec {
     SubOverride
   ]);
 
-  postPatch =
-    let
-      fontSubstitute = "${liberation_ttf}/share/fonts/truetype/LiberationSans-Regular.ttf";
-    in
-    ''
-      # Required for the program to properly load its SVG assets
-      substituteInPlace bin/gscan2pdf \
-        --replace "/usr/share" "$out/share"
-
-      # Substitute the non-free Helvetica font in the tests
-      sed -i 's|-pointsize|-font ${fontSubstitute} -pointsize|g' t/*.t
-    '';
+  # Required for the program to properly load its SVG assets
+  postPatch = ''
+    substituteInPlace bin/gscan2pdf \
+      --replace-fail "/usr/share" "$out/share"
+  '';
 
   postInstall = ''
     # Remove impurity
@@ -123,33 +116,13 @@ perlPackages.buildPerlPackage rec {
 
     xvfb-run
     file
-    tesseract3 # tests are expecting tesseract 3.x precisely
+    tesseract
   ]
   ++ (with perlPackages; [
     TestPod
   ]);
 
   checkPhase = ''
-    # Temporarily disable a dubiously failing test:
-    # t/169_import_scan.t ........................... 1/1
-    # #   Failed test 'variable-height scan imported with expected size'
-    # #   at t/169_import_scan.t line 50.
-    # #          got: '179'
-    # #     expected: '296'
-    # # Looks like you failed 1 test of 1.
-    # t/169_import_scan.t ........................... Dubious, test returned 1 (wstat 256, 0x100)
-    rm t/169_import_scan.t
-
-    # Disable a test failing because of a warning interfering with the pinned output
-    # t/3722_user_defined.t ......................... 1/2
-    #   Failed test 'user_defined caught error injected in queue'
-    #   at t/3722_user_defined.t line 41.
-    #          got: 'error
-    # WARNING: The convert command is deprecated in IMv7, use "magick" instead of "convert" or "magick convert"'
-    #     expected: 'error'
-    # Looks like you failed 1 test of 2.
-    rm t/3722_user_defined.t
-
     export XDG_CACHE_HOME="$(mktemp -d)"
     xvfb-run -s '-screen 0 800x600x24' \
       make test

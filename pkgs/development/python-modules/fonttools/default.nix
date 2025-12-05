@@ -21,21 +21,19 @@
   xattr,
   skia-pathops,
   uharfbuzz,
-  pytest7CheckHook,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.59.0";
+  version = "4.60.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fonttools";
     repo = "fonttools";
     tag = version;
-    hash = "sha256-f3iedVwwh98XkFzPJ/+XZ2n4pcDXDoPlQki+neGVuXE=";
+    hash = "sha256-h/JRItD5IHlhNSamxRxk/dvyAKUFayzxHvlW7v4N1s8=";
   };
 
   build-system = [
@@ -68,9 +66,7 @@ buildPythonPackage rec {
     extras // { all = lib.concatLists (lib.attrValues extras); };
 
   nativeCheckInputs = [
-    # test suite fails with pytest>=8.0.1
-    # https://github.com/fonttools/fonttools/issues/3458
-    pytest7CheckHook
+    pytestCheckHook
   ]
   ++ lib.concatLists (
     lib.attrVals (

@@ -61,7 +61,7 @@ buildPythonPackage rec {
     requests
     ruamel-yaml
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     export HOME="$TEMPDIR"

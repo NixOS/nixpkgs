@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdeflate";
-  version = "1.24";
+  version = "1.25";
 
   src = fetchFromGitHub {
     owner = "ebiggers";
     repo = "libdeflate";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IaXXm9VrZ0Pgb3yTh1fPKkifJDvCxvCfTH08Sdho0Ko=";
+    hash = "sha256-2TiV3kmFs9j4aYetoYeWg3+MoZ542/0zaD0hwn9b8ZA=";
   };
 
   cmakeFlags = [
@@ -44,7 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/ebiggers/libdeflate/blob/v${finalAttrs.version}/NEWS.md";
     platforms = platforms.unix ++ platforms.windows;
     maintainers = with maintainers; [
-      orivej
       kaction
     ];
     pkgConfigModules = [ "libdeflate" ];

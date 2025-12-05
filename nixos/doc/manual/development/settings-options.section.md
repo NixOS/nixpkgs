@@ -358,6 +358,16 @@ have a predefined type and string generator already declared under
 
     :   Outputs the xml with header.
 
+`pkgs.formats.plist` { escape ? true }
+
+:   A function taking an attribute set with values
+
+    `escape`
+
+    :   Whether to escape XML special characters in string values and keys.
+
+    It returns a set with Property list (plist) specific attributes `type` and `generate` as specified [below](#pkgs-formats-result).
+
 `pkgs.formats.pythonVars` { }
 
 :   A function taking an empty attribute set (for future extensibility)

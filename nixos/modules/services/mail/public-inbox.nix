@@ -403,7 +403,7 @@ in
       }
     ];
     services.public-inbox.settings = filterAttrsRecursive (n: v: v != null) {
-      publicinbox = mapAttrs (n: filterAttrs (n: v: n != "description")) cfg.inboxes;
+      publicinbox = mapAttrs (n: v: removeAttrs v [ "description" ]) cfg.inboxes;
     };
     users = {
       users.public-inbox = {

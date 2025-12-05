@@ -5,6 +5,7 @@
 
   # build-system
   setuptools,
+  setuptools-scm,
 
   # dependencies
   click,
@@ -38,30 +39,20 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2025.7.0";
+  version = "2025.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask";
     tag = version;
-    hash = "sha256-bwM4Q95YTEp9pDz6LmBLOeYjmi8nH8Cc/srZlXfEIlg=";
+    hash = "sha256-cU4w4dqJQ3ew+fRyD7Lc4URNfW738kKqls6k6j65pIo=";
   };
 
-  postPatch = ''
-    # versioneer hack to set version of GitHub package
-    echo "def get_versions(): return {'dirty': False, 'error': None, 'full-revisionid': None, 'version': '${version}'}" > dask/_version.py
-
-    substituteInPlace setup.py \
-      --replace-fail "import versioneer" "" \
-      --replace-fail "version=versioneer.get_version()," "version='${version}'," \
-      --replace-fail "cmdclass=versioneer.get_cmdclass()," ""
-
-    substituteInPlace pyproject.toml \
-      --replace-fail ', "versioneer[toml]==0.29"' ""
-  '';
-
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     click
@@ -119,11 +110,6 @@ buildPythonPackage rec {
   disabledTestMarks = [
     # Don't run tests that require network access
     "network"
-  ];
-
-  disabledTests = [
-    # UserWarning: Insufficient elements for `head`. 10 elements requested, only 5 elements available. Try passing larger `npartitions` to `head`.
-    "test_set_index_head_nlargest_string"
   ];
 
   __darwinAllowLocalNetworking = true;

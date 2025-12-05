@@ -68,7 +68,7 @@ lib:
   socat,
   sqlite,
   stdenv,
-  su,
+  shadow,
   systemdMinimal,
   util-linuxMinimal,
   yq-go,
@@ -203,8 +203,9 @@ let
 
     # Let killall expect "containerd-shim" in the Nix store
     substituteInPlace install.sh \
+      --replace-fail '"''${K3S_DATA_DIR}"' "" \
       --replace-fail '/data/[^/]*/bin/containerd-shim' \
-        '/nix/store/.*k3s-containerd.*/bin/containerd-shim'
+        '/nix/store/[^/]*k3s-containerd[^/]*/bin/containerd-shim'
 
     remove_matching_line() {
       line_to_delete=$(grep -n "$1" install.sh | cut -d : -f 1 || true)
@@ -354,6 +355,13 @@ buildGoModule (finalAttrs: {
                  GOARCH="${pkgsBuildBuild.go.GOARCH}" \
                  CC="${pkgsBuildBuild.stdenv.cc}/bin/cc" \
                  "''${GO}" generate'
+
+    # Add the -e flag to process "errornous" packages. We need to modify this because the upstream
+    # build-time version detection doesn't work with a vendor directory.
+    substituteInPlace scripts/version.sh \
+      --replace-fail \
+        "go list -mod=readonly -m -f '{{if .Replace}}{{.Replace.Version}}{{else}}{{.Version}}{{end}}' \$1" \
+        "go list -mod=readonly -e -m -f '{{if .Replace}}{{.Replace.Version}}{{else}}{{.Version}}{{end}}' \$1"
   '';
 
   # Important utilities used by the kubelet, see
@@ -372,7 +380,7 @@ buildGoModule (finalAttrs: {
     conntrack-tools
     runc
     bash
-    su
+    shadow # kubelet wants 'getsubids' when using user namespaces
   ];
 
   k3sKillallDeps = [
@@ -478,5 +486,7 @@ buildGoModule (finalAttrs: {
   }
   // (lib.mapAttrs (_: value: fetchurl value) imagesVersions);
 
-  meta = baseMeta;
+  meta = baseMeta // {
+    mainProgram = "k3s";
+  };
 })

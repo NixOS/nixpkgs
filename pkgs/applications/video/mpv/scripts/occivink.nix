@@ -19,12 +19,12 @@ let
     let
       self = rec {
         pname = camelToKebab name;
-        version = "0-unstable-2025-03-09";
+        version = "0-unstable-2025-11-01";
         src = fetchFromGitHub {
           owner = "occivink";
           repo = "mpv-scripts";
-          rev = "65aa1da29570e9c21b49292725ec5dd719ab6bb4";
-          hash = "sha256-pca24cZY2ZNxkY1XP2T2WKo1UbD8gsGn+EskGH+CggE=";
+          rev = "01f3e99558915bb715b614d7f4b052230360eb21";
+          hash = "sha256-v3TGsCzSg+a1vrOgI5NbTVf8Bh/iMRRgwMy194sNq1Y=";
         };
         passthru.updateScript = unstableGitUpdater { };
 

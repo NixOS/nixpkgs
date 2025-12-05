@@ -24,7 +24,7 @@ buildNpmPackage rec {
     description = "Command-line collection runner for Postman";
     mainProgram = "newman";
     changelog = "https://github.com/postmanlabs/newman/releases/tag/v${version}";
-    maintainers = with lib.maintainers; [ freezeboy ];
+    maintainers = [ ];
     license = lib.licenses.asl20;
   };
 }

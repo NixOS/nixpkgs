@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   replaceVars,
   autoreconfHook,
   pkg-config,
@@ -63,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
+    "man"
   ];
 
   src = fetchurl {
@@ -88,6 +90,70 @@ stdenv.mkDerivation (finalAttrs: {
     # This has already been fixed for the upcoming GIMP 3, but the fix has not been backported to 2.x yet
     # (see https://gitlab.gnome.org/GNOME/gimp/-/issues/9080)
     ./force-enable-libheif.patch
+    (fetchurl {
+      name = "CVE-2025-2760.patch";
+      # https://gitlab.gnome.org/GNOME/gimp/-/commit/c17b324910204a47828d6fbb542bdcefbd66bcc1
+      url = "https://salsa.debian.org/gnome-team/gimp/-/raw/4cb293ec1a3b273281d5d9daf94b833c293797d7/debian/patches/CVE-2025-2760.patch";
+      hash = "sha256-BH5cCyg0IjfamHPchZ0HBe8EAPrWeHINQ6r7FHaz0qw=";
+    })
+    (fetchpatch {
+      name = "CVE-2025-2761.patch";
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/0806bc76ca74543d20e1307ccf6aebd26395c56c.patch";
+      hash = "sha256-I5dyD3gLbVdk5bTft3TveTWgBN7RouNpIByKbCYmGbo=";
+    })
+    (fetchpatch {
+      name = "CVE-2025-5473.patch";
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/c855d1df60ebaf5ef8d02807d448eb088f147a2b.patch";
+      hash = "sha256-QO8u5XQD3XR+sUN//LsvWpTxHe0i9m4VvdnsUGnor/0=";
+    })
+    (fetchurl {
+      name = "CVE-2025-6035.patch";
+      # https://gitlab.gnome.org/GNOME/gimp/-/commit/548bc3a46d54711d974aae9ce1bce291376c0436
+      url = "https://salsa.debian.org/gnome-team/gimp/-/raw/4cb293ec1a3b273281d5d9daf94b833c293797d7/debian/patches/CVE-2025-6035.patch";
+      hash = "sha256-cbALgUEUO8k5jaN5Y7jUR/dHJ9rHF06m9zEM/AOcFDk=";
+    })
+    (fetchpatch {
+      name = "CVE-2025-48797_1.patch";
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/8d309dd0385fdd298520b69148542375f56ef977.patch";
+      hash = "sha256-/JAUhbPko0EdHGSCnZIWVqPcXpdvRML5Fqx5w/B3P8k=";
+    })
+    (fetchpatch {
+      name = "CVE-2025-48797_2.patch";
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/97f8c2e468cffce70c6772e74cbff8eda4e8c180.patch";
+      hash = "sha256-tNG2fpZ0iRk0thrcxjZqb/zgvf4ctmXEy8iSOz5ufCo=";
+    })
+    (fetchpatch {
+      name = "CVE-2025-48797_3.patch";
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/d7f0829ae995ca7ca9c64851a1ed03b11702ef1c.patch";
+      hash = "sha256-Byvc0i8TS33ZAKONxkrS0iFdWTXZP2w8Ma+k15DGVkw=";
+    })
+    (fetchpatch {
+      name = "CVE-2025-48797_4.patch";
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/ffb7cad1a402377927bc2dc62dad324ae03cec92.patch";
+      hash = "sha256-PZvP4B3U+YalxWwmLhXyTZRacTtkG289JUWsQtZW4BE=";
+    })
+    (fetchpatch {
+      name = "CVE-2025-48798_1.patch";
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/ebf0b569a63f15b5dc7532f16936104af1e09f02.patch";
+      hash = "sha256-VyPbSyRTo+sYg2JkAH3h5exYHDMqIEHc9gYRcM/8wzg=";
+    })
+    (fetchpatch {
+      name = "CVE-2025-48798_2.patch";
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/e7523ed41271e48a909011b8598d496c1be642e2.patch";
+      hash = "sha256-ACoxobr2ySpH9VJVdJyWxQpZXOTSEs1me4Q0Rq3bDaE=";
+    })
+    (fetchurl {
+      name = "CVE-2025-10922.patch";
+      # https://gitlab.gnome.org/GNOME/gimp/-/commit/0f309f9a8d82f43fa01383bc5a5c41d28727d9e3
+      url = "https://salsa.debian.org/gnome-team/gimp/-/raw/4cb293ec1a3b273281d5d9daf94b833c293797d7/debian/patches/CVE-2025-10922.patch";
+      hash = "sha256-xkhmlOqk2QiOi4Le7v6e9PdTNxVHpSmuZJTTqKdThUo=";
+    })
+    (fetchurl {
+      name = "CVE-2025-10934.patch";
+      # https://gitlab.gnome.org/GNOME/gimp/-/commit/5c3e2122d53869599d77ef0f1bdece117b24fd7c
+      url = "https://salsa.debian.org/gnome-team/gimp/-/raw/4cb293ec1a3b273281d5d9daf94b833c293797d7/debian/patches/CVE-2025-10934.patch";
+      hash = "sha256-MmYdh74cky/dF3UTHC0xpDW6+aa8Vzh+4ADHCDtIDzo=";
+    })
   ];
 
   # error: possibly undefined macro: AM_NLS
@@ -181,7 +247,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = {
     NIX_CFLAGS_COMPILE = toString (
-      [ ]
+      [
+        "-Wno-error=int-conversion" # Needed for CVE-2025-10934 patch
+      ]
       ++ lib.optionals stdenv.cc.isGNU [ "-Wno-error=incompatible-pointer-types" ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DGDK_OSX_BIG_SUR=16" ]
     );

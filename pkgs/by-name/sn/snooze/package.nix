@@ -5,12 +5,12 @@
 }:
 stdenv.mkDerivation rec {
   pname = "snooze";
-  version = "0.5";
+  version = "0.5.1";
   src = fetchFromGitHub {
     owner = "leahneukirchen";
     repo = "snooze";
     rev = "v${version}";
-    sha256 = "sha256-K77axli/mapUr3yxpmUfFq4iWwgRmEVUlP6+/0Iezwo=";
+    sha256 = "sha256-ghWQ/bslWJCcsQ8OqS3MHZiiuGzbgzat6mkG2avSbEk=";
   };
   makeFlags = [
     "DESTDIR=$(out)"

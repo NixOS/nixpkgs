@@ -13,6 +13,7 @@
   lua,
   lz4,
   udevCheckHook,
+  nix-update-script,
   withGui ? true,
   wrapQtAppsHook,
   qtbase,
@@ -30,20 +31,14 @@
 assert withBlueshark -> stdenv.hostPlatform.isLinux;
 stdenv.mkDerivation (finalAttrs: {
   pname = "proxmark3";
-  version = "4.20469";
+  version = "4.20728";
 
   src = fetchFromGitHub {
     owner = "RfidResearchGroup";
     repo = "proxmark3";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Z87YCuNWQ66FTAq7qXUYKI25BEWrXD+YK0GczDmWc9A=";
+    hash = "sha256-dmWPi5xOcXXdvUc45keXGUNhYmQEzAHbKexpDOwIHhE=";
   };
-
-  patches = [
-    # Don't check for DISPLAY env variable on Darwin. pm3 uses this to test if
-    # XQuartz is installed, however it is not actually required for GUI features
-    ./darwin-always-gui.patch
-  ];
 
   postPatch = ''
     # Remove hardcoded paths on Darwin
@@ -90,6 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Client for proxmark3, powerful general purpose RFID tool";

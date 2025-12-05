@@ -3,18 +3,18 @@
   stdenvNoCC,
   fetchurl,
   makeWrapper,
-  jdk23_headless,
+  jdk25_headless,
   libwebp, # Fixes https://github.com/gotson/komga/issues/1294
   nixosTests,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "komga";
-  version = "1.23.5";
+  version = "1.23.6";
 
   src = fetchurl {
     url = "https://github.com/gotson/${pname}/releases/download/${version}/${pname}-${version}.jar";
-    sha256 = "sha256-b8HoXPY6ww4oXtI7ADWh/Mx4W6f2s8OVc7lQ7g3rOiI=";
+    sha256 = "sha256-MU3U9vFtFVUBOKtynwteQfvsCCsyoGHIKwc+0XqDswY=";
   };
 
   nativeBuildInputs = [
@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   buildCommand = ''
-    makeWrapper ${jdk23_headless}/bin/java $out/bin/komga --add-flags "-jar $src" \
+    makeWrapper ${jdk25_headless}/bin/java $out/bin/komga --add-flags "-jar $src" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libwebp ]}
   '';
 
@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Free and open source comics/mangas server";
     homepage = "https://komga.org/";
     license = lib.licenses.mit;
-    platforms = jdk23_headless.meta.platforms;
+    platforms = jdk25_headless.meta.platforms;
     maintainers = with lib.maintainers; [
       tebriel
       govanify

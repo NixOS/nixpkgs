@@ -11,24 +11,24 @@
 }:
 buildGoModule rec {
   pname = "headscale";
-  version = "0.26.1";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "juanfont";
     repo = "headscale";
     tag = "v${version}";
-    hash = "sha256-LnS6K3U4RgRRV4i92zcRZtLJF1QdbORQP9ZIis9u6rk=";
+    hash = "sha256-eMqGJL+dxBThtW+0uMvnP5n2gk2kwOao6SukA38OMOE=";
   };
 
-  vendorHash = "sha256-dR8xmUIDMIy08lhm7r95GNNMAbXv4qSH3v9HR40HlNk=";
+  postPatch = ''
+    substituteInPlace hscontrol/types/version.go \
+      --replace-fail 'Version:   "dev"' 'Version: "${version}"' \
+      --replace-fail 'Commit:    "unknown"' 'Commit: "${src.tag}"'
+  '';
+
+  vendorHash = "sha256-VOi4PGZ8I+2MiwtzxpKc/4smsL5KcH/pHVkjJfAFPJ0=";
 
   subPackages = [ "cmd/headscale" ];
-
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/juanfont/headscale/cmd/headscale/cli.Version=v${version}"
-  ];
 
   nativeBuildInputs = [ installShellFiles ];
 

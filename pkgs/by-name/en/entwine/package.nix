@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "entwine";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "connormanning";
     repo = "entwine";
     rev = version;
-    hash = "sha256-RpUV75Dlyd3wTWGC3btpAFSjqpgK9zLXTl670Oh0Z2o=";
+    hash = "sha256-K/mR3Js5F6JeS9xvEOhzX4sXGK/Zo+1mHCXDSaBdV2M=";
   };
 
   buildInputs = [

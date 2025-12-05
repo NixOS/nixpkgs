@@ -190,7 +190,7 @@ def copy_closure(
 
     sshopts = os.getenv("NIX_SSHOPTS", "")
     extra_env = {
-        "NIX_SSHOPTS": " ".join(filter(lambda x: x, [*SSH_DEFAULT_OPTS, sshopts]))
+        "NIX_SSHOPTS": " ".join(filter(lambda x: x, [sshopts, *SSH_DEFAULT_OPTS]))
     }
 
     def nix_copy_closure(host: Remote, to: bool) -> None:

@@ -7,10 +7,13 @@
   menhir,
   bos,
   cmdliner,
+  dolmen_model,
   dolmen_type,
+  dune-build-info,
   fpath,
   hc,
   menhirLib,
+  mtime,
   # fix eval on legacy ocaml versions
   ocaml_intrinsics ? null,
   patricia-tree,
@@ -23,15 +26,15 @@
   ounit2,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "smtml";
-  version = "0.10.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "formalsec";
     repo = "smtml";
-    tag = "v${version}";
-    hash = "sha256-WXGYk/zJnW6QzHKCHl0lkmYb/pG90/sAOK40wYzK35U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-z3DDdzU39tg2F3+pAFPILiKY3pQxOpehdoxwckyhZBI=";
   };
 
   nativeBuildInputs = [
@@ -41,10 +44,13 @@ buildDunePackage rec {
   propagatedBuildInputs = [
     bos
     cmdliner
+    dolmen_model
     dolmen_type
+    dune-build-info
     fpath
     hc
     menhirLib
+    mtime
     ocaml_intrinsics
     patricia-tree
     prelude
@@ -63,14 +69,19 @@ buildDunePackage rec {
     mdx.bin
   ];
 
-  doCheck = !(lib.versions.majorMinor ocaml.version == "5.0" || stdenv.hostPlatform.isDarwin);
+  doCheck =
+    !(
+      lib.versions.majorMinor ocaml.version == "5.0"
+      || lib.versions.majorMinor ocaml.version == "5.4"
+      || stdenv.hostPlatform.isDarwin
+    );
 
   meta = {
     description = "SMT solver frontend for OCaml";
     homepage = "https://formalsec.github.io/smtml/smtml/";
     downloadPage = "https://github.com/formalsec/smtml";
-    changelog = "https://github.com/formalsec/smtml/releases/tag/v${version}";
+    changelog = "https://github.com/formalsec/smtml/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ethancedwards8 ];
   };
-}
+})
