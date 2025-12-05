@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "robotframework";
-  version = "7.3.2";
+  version = "7.4b2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "robotframework";
     repo = "robotframework";
     tag = "v${version}";
-    hash = "sha256-JxZI0i9Aj/TX4BkIi+jeBdTy0ckv5Fdy5tHRI9vQ8Ss=";
+    hash = "sha256-K9YpMZ9wmZjKZGxXxQ3srK1r3f0D32Trr8iUXl93aLI=";
   };
 
   build-system = [ setuptools ];
