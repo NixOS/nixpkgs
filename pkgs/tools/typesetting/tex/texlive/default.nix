@@ -14,6 +14,7 @@
   buildEnv,
   callPackage,
   ghostscript_headless,
+  git-latexdiff,
   harfbuzz,
   makeWrapper,
   installShellFiles,
@@ -79,6 +80,7 @@ let
           gawk
           getopt
           ghostscript_headless
+          git-latexdiff
           gnugrep
           gnumake
           gnupg
