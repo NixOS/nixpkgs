@@ -102,7 +102,7 @@ gem 'mail'
 gem 'magic'
 gem 'markaby'
 gem 'method_source'
-gem 'mini_magick'
+gem 'mini_magick', '~> 5.2.0' # https://github.com/NixOS/nixpkgs/issues/464647
 gem 'msgpack'
 gem 'mysql2'
 # gem 'mysql' deprecated
