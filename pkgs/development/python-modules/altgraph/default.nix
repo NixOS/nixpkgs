@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "altgraph";
-  version = "0.17.4";
+  version = "0.17.5";
 
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-G1r7uY9sTcrbLirmq5+plLu4wddfT6ltNA+UN65FRAY=";
+    hash = "sha256-yHs5XdEvq96cmVc6l0nWfajSnvneASXH9TZpm0qbyec=";
   };
 
   dependencies = [
