@@ -67,6 +67,9 @@ stdenv.mkDerivation rec {
     openexr
   ];
 
+  # Gcc blindly tries to optimize all float operations instead of just marked ones.
+  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=122304
+  CXXFLAGS = "-ffp-contract=on";
   cmakeFlags = [
     "-DOCIO_INSTALL_EXT_PACKAGES=NONE"
     "-DOCIO_USE_SSE2NEON=OFF"
