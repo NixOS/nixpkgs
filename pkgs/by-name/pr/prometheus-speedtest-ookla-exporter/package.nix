@@ -2,6 +2,7 @@
   buildGoModule,
   fetchFromGitHub,
   lib,
+  nixosTests,
 }:
 buildGoModule (finalAttrs: {
   pname = "speedtest-ookla-exporter";
@@ -25,6 +26,8 @@ buildGoModule (finalAttrs: {
     "-X main.date=unknown"
     "-X main.version=${finalAttrs.version}"
   ];
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) speedtest-ookla; };
 
   meta = {
     homepage = "https://github.com/caarlos0/speedtest-exporter";
