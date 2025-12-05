@@ -13,6 +13,8 @@
   nix-update-script,
   installShellFiles,
   testers,
+  lld,
+  useLLD ? stdenv.hostPlatform.isArmv7,
 }:
 
 buildGoModule (finalAttrs: {
@@ -34,7 +36,10 @@ buildGoModule (finalAttrs: {
     yarn
     nodejs
     installShellFiles
-  ];
+  ]
+  ++ lib.optionals useLLD [ lld ];
+
+  env = lib.optionalAttrs useLLD { NIX_CFLAGS_LINK = "-fuse-ld=lld"; };
 
   ldflags =
     let
