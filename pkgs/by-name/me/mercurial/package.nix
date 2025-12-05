@@ -40,11 +40,11 @@ let
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
-    version = "7.1";
+    version = "7.1.2";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      hash = "sha256-6NkgyDw4xHXY6XO+YHYKSdw1w3ldZL1oduVq26Yi5cs=";
+      hash = "sha256-zie5pHZ88upJa1FGi65RL6am6vCJHkn4lh3GlLTcgco=";
     };
 
     pyproject = false;
