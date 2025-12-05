@@ -8,15 +8,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jsonschema-cli";
-  version = "0.37.2";
+  version = "0.37.4";
 
   src = fetchCrate {
     pname = "jsonschema-cli";
     inherit (finalAttrs) version;
-    hash = "sha256-d/l43flElIooDs/daz7kNVumY7WophO3RwnxMsUGXzc=";
+    hash = "sha256-qmxl4DzctXnDGeqZukMiurFoLt982ngDIo0Cum4kkcQ=";
   };
 
-  cargoHash = "sha256-8fiAzUsYvWNjNhurvh6U2BXiQsBpTzsTo5DstK2MSB4=";
+  cargoHash = "sha256-t2lRBVPk9bkvRsCxMNi30F3dkwr6angEGfD34UuH+EY=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
