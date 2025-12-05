@@ -7646,6 +7646,8 @@ self: super: with self; {
 
   joserfc = callPackage ../development/python-modules/joserfc { };
 
+  jpegiptc = callPackage ../development/python-modules/jpegiptc { };
+
   jplephem = callPackage ../development/python-modules/jplephem { };
 
   jproperties = callPackage ../development/python-modules/jproperties { };
@@ -18699,6 +18701,8 @@ self: super: with self; {
   throttler = callPackage ../development/python-modules/throttler { };
 
   thttp = callPackage ../development/python-modules/thttp { };
+
+  thumbor-plugins-gifv = callPackage ../development/python-modules/thumbor-plugins-gifv { };
 
   tianshou = callPackage ../development/python-modules/tianshou { };
 
