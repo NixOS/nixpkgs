@@ -4,29 +4,37 @@
   fetchFromGitHub,
   cmake,
   alsa-lib,
+  python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sof-tools";
-  version = "2.10";
+  version = "2.14";
 
   src = fetchFromGitHub {
     owner = "thesofproject";
     repo = "sof";
-    rev = "v${version}";
-    hash = "sha256-VmP0z3q1P8LqQ+ELZGkI7lEXGiMYdAPvS8Lbwv6dUyk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Y3byJmoANVeilJpO82aljBZas/6u6VqfynYl0csW1as=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ alsa-lib ];
-  sourceRoot = "${src.name}/tools";
+  postPatch = ''
+    patchShebangs ../scripts/gen-uuid-reg.py
+  '';
 
-  meta = with lib; {
+  nativeBuildInputs = [
+    cmake
+    python3
+  ];
+  buildInputs = [ alsa-lib ];
+  sourceRoot = "${finalAttrs.src.name}/tools";
+
+  meta = {
     description = "Tools to develop, test and debug SoF (Sund Open Firmware)";
     homepage = "https://thesofproject.github.io";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.johnazoidberg ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.johnazoidberg ];
     mainProgram = "sof-ctl";
   };
-}
+})
