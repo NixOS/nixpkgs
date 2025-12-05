@@ -6046,6 +6046,9 @@ with pkgs;
   rust_1_89 = callPackage ../development/compilers/rust/1_89.nix {
     llvm_20 = llvmPackages_20.libllvm;
   };
+  rust_1_90 = callPackage ../development/compilers/rust/1_90.nix {
+    llvm_20 = llvmPackages_20.libllvm;
+  };
   rust = rust_1_86;
 
   mrustc = callPackage ../development/compilers/mrustc { };
@@ -6057,6 +6060,7 @@ with pkgs;
   rustPackages_1_86 = rust_1_86.packages.stable;
   rustPackages_1_88 = rust_1_88.packages.stable;
   rustPackages_1_89 = rust_1_89.packages.stable;
+  rustPackages_1_90 = rust_1_90.packages.stable;
   rustPackages = rustPackages_1_86;
 
   inherit (rustPackages)
