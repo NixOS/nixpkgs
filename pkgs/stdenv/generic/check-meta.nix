@@ -27,6 +27,7 @@ let
     isAttrs
     isString
     mapAttrs
+    packageTypes
     ;
 
   inherit (lib.lists)
@@ -363,6 +364,7 @@ let
         any
         listOf
         bool
+        enum
         ;
       platforms = listOf (union [
         str
@@ -439,11 +441,16 @@ let
       isIbusEngine = bool;
       isGutenprint = bool;
 
+      type = listOf (enum (attrNames packageTypes));
+
       # Used for the original location of the maintainer and team attributes to assist with pings.
       maintainersPosition = any;
       teamsPosition = any;
 
       identifiers = attrs;
+
+      # Output-specific metadata (shallow check, because cyclic)
+      outputs = attrsOf attrs;
     };
 
   checkMetaAttr =
@@ -659,6 +666,8 @@ let
       # or nix-env complains: https://github.com/NixOS/nix/blob/2.18.8/src/nix-env/nix-env.cc#L963
       ${if maintainersPosition == null then null else "maintainersPosition"} = maintainersPosition;
       ${if teamsPosition == null then null else "teamsPosition"} = teamsPosition;
+
+      type = [ ];
     }
     // attrs.meta or { }
     // {

@@ -249,6 +249,52 @@ Code to be executed on a peripheral device or embedded controller, built by a th
 
 Code to run on a VM interpreter or JIT compiled into bytecode by a third party. This includes packages which download Java `.jar` files from another source.
 
+## Types {#sec-meta-type}
+
+As derivations are synonymous with packages in nixpkgs, it is difficult to determine what kind of package a derivation is. To solve this, the `type` attribute exists.
+These types are based on the [component type](https://cyclonedx.org/docs/1.7/json/#components_items_type) in the [CycloneDX SBOM](https://cyclonedx.org) format.
+More types may be added in the future.
+
+### `lib.packageTypes.application` {#lib.packageTypes.application}
+
+A generic application, commonly a GUI or CLI tool.
+
+### `lib.packageTypes.framework` {#lib.packageTypes.framework}
+
+A framework used for developing or running applications.
+
+### `lib.packageTypes.library` {#lib.packageTypes.library}
+
+A library, applications and frameworks usually depends on these.
+
+### `lib.packageTypes.container` {#lib.packageTypes.container}
+
+A derivation which contains a runtime format. An example would be a Docker or OCI container as a tarball.
+
+### `lib.packageTypes.runtime` {#lib.packageTypes.runtime}
+
+A derivation which contains a runtime environment. A wrapped environment produced by something like `buildEnv` is an example of this.
+
+### `lib.packageTypes.operating-system` {#lib.packageTypes.operating-system}
+
+A software operating system, a NixOS toplevel derivation is an example of an operating-system type.
+
+### `lib.packageTypes.firmware` {#lib.packageTypes.firmware}
+
+Firmware is a special type of software which provides low-level control of hardware.
+
+### `lib.packageTypes.device-driver` {#lib.packageTypes.device-driver}
+
+A device driver is a piece of software which is loaded in to provide software access to various hardware devices.
+
+### `lib.packageTypes.file` {#lib.packageTypes.file}
+
+A derivation which outputs a file.
+
+### `lib.packageTypes.data` {#lib.packageTypes.data}
+
+A derivation containing data.
+
 ## Software identifiers {#sec-meta-identifiers}
 
 Package's `meta.identifiers` attribute specifies information about software identifiers associated with this package. Software identifiers are used, for example:
