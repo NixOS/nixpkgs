@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem rec {
-      name = pname;
+      name = "deepgit";
       desktopName = "DeepGit";
       keywords = [ "git" ];
       comment = "Git-Client";
@@ -59,12 +59,12 @@ stdenv.mkDerivation rec {
       terminal = false;
       startupNotify = true;
       startupWMClass = desktopName;
-      exec = pname;
+      exec = "deepgit";
       mimeTypes = [
-        "x-scheme-handler/${pname}"
+        "x-scheme-handler/deepgit"
         "x-scheme-handler/sourcetree"
       ];
-      icon = pname;
+      icon = "deepgit";
     })
   ];
 
