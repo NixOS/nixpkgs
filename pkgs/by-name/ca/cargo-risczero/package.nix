@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchCrate,
   fetchurl,
   rustPlatform,

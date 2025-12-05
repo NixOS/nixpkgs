@@ -9,7 +9,6 @@
   pyyaml,
   referencing,
   typing-extensions,
-  pytestCheckHook,
   versionCheckHook,
 }:
 buildPythonPackage rec {
