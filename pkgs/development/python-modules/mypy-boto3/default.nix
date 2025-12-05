@@ -685,8 +685,8 @@ in
       "sha256-U94/P/4BgTFj7J3AYOLiAEGBvXM1keI2c5iAp3x05iM=";
 
   mypy-boto3-iotthingsgraph =
-    buildMypyBoto3Package "iotthingsgraph" "1.41.0"
-      "sha256-9lkekbxTKAXaUfezztqCZOQK8cWImXSg4prgNB7UluU=";
+    buildMypyBoto3Package "iotthingsgraph" "1.42.3"
+      "sha256-TxALbXgBraOVwmbJcIiWOx9ZbJA7LkzcswhuFw967/s=";
 
   mypy-boto3-iottwinmaker =
     buildMypyBoto3Package "iottwinmaker" "1.41.0"
