@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   replaceVars,
   cairo,
   cinnamon-desktop,
@@ -55,20 +54,13 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "muffin";
-    rev = version;
-    hash = "sha256-cGC1yGft3uEqefm2DvZrMaROoZKYd6LNY0IJ+58f6vs=";
+    rev = "6ea2c8c8becfd21ac0542d800d2e3994706700bf";
+    hash = "sha256-OmPI/uo84XqZyQjFhglOocfPDXrK21nXqt1vho82w0s=";
   };
 
   patches = [
     (replaceVars ./fix-paths.patch {
       inherit zenity;
-    })
-
-    # Fix Qt apps crashing on wayland
-    # https://github.com/linuxmint/muffin/pull/739
-    (fetchpatch {
-      url = "https://github.com/linuxmint/muffin/commit/760e2a3046e13610c4fda1291a9a28e589d2bd93.patch";
-      hash = "sha256-D0u8UxW5USzMW9KlP3Y4XCWxrQ1ySufDv+eCbrAP71c=";
     })
   ];
 
@@ -119,7 +111,6 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     # Based on Mint's debian/rules.
-    "-Degl_device=true"
     "-Dwayland_eglstream=true"
     "-Dxwayland_path=${lib.getExe xwayland}"
   ];

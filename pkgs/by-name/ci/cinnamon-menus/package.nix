@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-menus";
-  version = "6.4.0";
+  version = "6.6.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-menus";
     tag = version;
-    hash = "sha256-ug1RSP2TBrypi0aGhF05k39koY3rGgJi0LuWyuuICd0=";
+    hash = "sha256-vjgWPFNmRkJWynimvBuxCxLK5C7tQxqJ5Y4dkZXSDSA=";
   };
 
   buildInputs = [
