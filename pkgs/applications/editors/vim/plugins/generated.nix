@@ -16003,6 +16003,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  tv-nvim = buildVimPlugin {
+    pname = "tv.nvim";
+    version = "2025-12-05";
+    src = fetchFromGitHub {
+      owner = "alexpasmantier";
+      repo = "tv.nvim";
+      rev = "5142057ae5d1207129e26d98651525ffb781bce4";
+      sha256 = "1zxyr7wnwrxlmk14k4yd384j1ycf3c5zjydf4pn602drrip4z235";
+    };
+    meta.homepage = "https://github.com/alexpasmantier/tv.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   twilight-nvim = buildVimPlugin {
     pname = "twilight.nvim";
     version = "2025-10-28";
