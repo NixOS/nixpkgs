@@ -20,7 +20,7 @@
   libspectre,
   libgxps,
   webkitgtk_4_1,
-  nodePackages,
+  mathjax,
   ninja,
   djvulibre,
   backends ? [
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dmathjax-directory=${nodePackages.mathjax}"
+    "-Dmathjax-directory=${mathjax}"
     "-Dintrospection=true"
   ]
   ++ (map (x: "-D${x}=true") backends);
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     libspectre
     libgxps
     webkitgtk_4_1
-    nodePackages.mathjax
+    mathjax
     djvulibre
   ];
 
