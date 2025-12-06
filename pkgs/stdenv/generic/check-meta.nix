@@ -10,23 +10,23 @@
 let
   inherit (lib)
     all
-    attrNames
     attrValues
     concatMapStrings
-    concatMapStringsSep
     concatStrings
+    concatStringsSep
+    filter
     findFirst
+    getName
+    groupBy
     isDerivation
     length
     concatMap
+    mapAttrsToList
     mutuallyExclusive
     optional
-    optionalAttrs
     optionalString
-    optionals
     isAttrs
     isString
-    mapAttrs
     ;
 
   inherit (lib.lists)
@@ -47,6 +47,20 @@ let
     toPretty
     ;
 
+  inherit (builtins)
+    getEnv
+    trace
+    ;
+
+  inherit (import ./problems.nix { inherit lib; })
+    problemKindsManual
+    problemKindsManual'
+    problemKindsUnique'
+    ;
+  generateProblems = (import ./problems.nix { inherit lib; }).generateProblems {
+    inherit hasNoMaintainers;
+  } config.problems;
+
   # If we're in hydra, we can dispense with the more verbose error
   # messages and make problems easier to spot.
   inHydra = config.inHydra or false;
@@ -57,11 +71,11 @@ let
   getNameWithVersion =
     attrs: attrs.name or "${attrs.pname or "«name-missing»"}-${attrs.version or "«version-missing»"}";
 
-  allowUnfree = config.allowUnfree || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
+  allowUnfree = config.allowUnfree || getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
   allowNonSource =
     let
-      envVar = builtins.getEnv "NIXPKGS_ALLOW_NONSOURCE";
+      envVar = getEnv "NIXPKGS_ALLOW_NONSOURCE";
     in
     if envVar != "" then envVar != "0" else config.allowNonSource or true;
 
@@ -74,33 +88,34 @@ let
     else
       throw "allowlistedLicenses and blocklistedLicenses are not mutually exclusive.";
 
-  hasLicense = attrs: attrs ? meta.license;
-
   hasListedLicense =
     assert areLicenseListsValid;
-    list: attrs:
-    length list > 0
-    && hasLicense attrs
-    && (
-      if isList attrs.meta.license then
-        any (l: elem l list) attrs.meta.license
-      else
-        elem attrs.meta.license list
-    );
+    list:
+    if list == [ ] then
+      attrs: false
+    else
+      attrs:
+      attrs ? meta.license
+      && (
+        if isList attrs.meta.license then
+          any (l: elem l list) attrs.meta.license
+        else
+          elem attrs.meta.license list
+      );
 
-  hasAllowlistedLicense = attrs: hasListedLicense allowlist attrs;
+  hasAllowlistedLicense = hasListedLicense allowlist;
 
-  hasBlocklistedLicense = attrs: hasListedLicense blocklist attrs;
+  hasBlocklistedLicense = hasListedLicense blocklist;
 
-  allowBroken = config.allowBroken || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
+  allowBroken = config.allowBroken || getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
 
   allowUnsupportedSystem =
-    config.allowUnsupportedSystem || builtins.getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1";
+    config.allowUnsupportedSystem || getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1";
 
   isUnfree =
     licenses:
     if isAttrs licenses then
-      !licenses.free or true
+      !(licenses.free or true)
     # TODO: Returning false in the case of a string is a bug that should be fixed.
     # In a previous implementation of this function the function body
     # was `licenses: lib.lists.any (l: !l.free or true) licenses;`
@@ -108,9 +123,9 @@ let
     else if isString licenses then
       false
     else
-      any (l: !l.free or true) licenses;
+      any (l: !(l.free or true)) licenses;
 
-  hasUnfreeLicense = attrs: hasLicense attrs && isUnfree attrs.meta.license;
+  hasUnfreeLicense = attrs: attrs ? meta.license && isUnfree attrs.meta.license;
 
   hasNoMaintainers =
     # To get usable output, we want to avoid flagging "internal" derivations.
@@ -161,19 +176,13 @@ let
     attrs: hasUnfreeLicense attrs && !allowUnfree && !allowUnfreePredicate attrs;
 
   allowInsecureDefaultPredicate =
-    x: builtins.elem (getNameWithVersion x) (config.permittedInsecurePackages or [ ]);
-  allowInsecurePredicate = x: (config.allowInsecurePredicate or allowInsecureDefaultPredicate) x;
+    x: elem (getNameWithVersion x) (config.permittedInsecurePackages or [ ]);
+  allowInsecurePredicate = config.allowInsecurePredicate or allowInsecureDefaultPredicate;
 
-  hasAllowedInsecure =
-    attrs:
-    !(isMarkedInsecure attrs)
-    || allowInsecurePredicate attrs
-    || builtins.getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
+  allowInsecure = getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
 
-  isNonSource = sourceTypes: any (t: !t.isSource) sourceTypes;
-
-  hasNonSourceProvenance =
-    attrs: (attrs ? meta.sourceProvenance) && isNonSource attrs.meta.sourceProvenance;
+  hasDisallowedInsecure =
+    attrs: isMarkedInsecure attrs && !allowInsecure && !allowInsecurePredicate attrs;
 
   # Allow granular checks to allow only some non-source-built packages
   # Example:
@@ -188,7 +197,11 @@ let
   # package has non-source provenance and is not explicitly allowed by the
   # `allowNonSourcePredicate` function.
   hasDeniedNonSourceProvenance =
-    attrs: hasNonSourceProvenance attrs && !allowNonSource && !allowNonSourcePredicate attrs;
+    attrs:
+    attrs ? meta.sourceProvenance
+    && any (t: !t.isSource) attrs.meta.sourceProvenance
+    && !allowNonSource
+    && !allowNonSourcePredicate attrs;
 
   showLicenseOrSourceType =
     value: toString (map (v: v.shortName or v.fullName or "unknown") (toList value));
@@ -197,17 +210,6 @@ let
 
   pos_str = meta: meta.position or "«unknown-file»";
 
-  remediation = {
-    unfree = remediate_allowlist "Unfree" (remediate_predicate "allowUnfreePredicate");
-    non-source = remediate_allowlist "NonSource" (remediate_predicate "allowNonSourcePredicate");
-    broken = remediate_allowlist "Broken" (x: "");
-    unsupported = remediate_allowlist "UnsupportedSystem" (x: "");
-    blocklisted = x: "";
-    insecure = remediate_insecure;
-    broken-outputs = remediateOutputsToInstall;
-    unknown-meta = x: "";
-    maintainerless = x: "";
-  };
   remediation_env_var =
     allow_attr:
     {
@@ -230,7 +232,7 @@ let
 
     Alternatively you can configure a predicate to allow specific packages:
       { nixpkgs.config.${predicateConfigAttr} = pkg: builtins.elem (lib.getName pkg) [
-          "${lib.getName attrs}"
+          "${getName attrs}"
         ];
       }
   '';
@@ -295,12 +297,77 @@ let
 
     '';
 
+  remediate_problem =
+    pkg:
+    let
+      pkgName = lib.getName pkg;
+
+      fullMessage =
+        problem:
+        (if problem.kind != problem.name then problem.kind + ": " else "")
+        + problem.name
+        + ": "
+        + problem.message;
+      urlMessage =
+        problem:
+        let
+          urls = problem.urls or [ ];
+        in
+        lib.concatMapStrings (url: "\n  - " + url) urls;
+
+      printProblem = problem: "- " + fullMessage problem + urlMessage problem;
+
+      problems = generateProblems pkg;
+
+      ignorePattern =
+        indentation:
+        lib.pipe problems [
+          (lib.filter ({ handler, ... }: handler == "error"))
+          (builtins.map ({ name, ... }: ''"${pkgName}"."${name}" = "warn";''))
+          (lib.concatStringsSep ("\n" + indentation))
+        ];
+    in
+    ''
+
+
+      Package problems:
+
+      ${lib.pipe problems [
+        (lib.filter ({ handler, ... }: handler == "error"))
+        (builtins.map printProblem)
+        (lib.concatStringsSep "\n")
+      ]}
+
+      You can use it anyway by ignoring its problems, using one of the
+      following methods:
+
+      a) For `nixos-rebuild` you can add "warn" or "ignore" entries to
+        `nixpkgs.config.problems.handlers` inside configuration.nix,
+        like this:
+
+          {
+            nixpkgs.config.problems.handlers = {
+              ${ignorePattern "        "}
+            };
+          }
+
+      b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
+        "warn" or "ignore" to `problems.handlers` in
+        ~/.config/nixpkgs/config.nix, like this:
+
+          {
+            problems.handlers = {
+              ${ignorePattern "        "}
+            };
+          }
+    '';
+
   remediateOutputsToInstall =
     attrs:
     let
       expectedOutputs = attrs.meta.outputsToInstall or [ ];
       actualOutputs = attrs.outputs or [ "out" ];
-      missingOutputs = builtins.filter (output: !builtins.elem output actualOutputs) expectedOutputs;
+      missingOutputs = filter (output: !elem output actualOutputs) expectedOutputs;
     in
     ''
       The package ${getNameWithVersion attrs} has set meta.outputsToInstall to: ${builtins.concatStringsSep ", " expectedOutputs}
@@ -312,46 +379,7 @@ let
       ${concatStrings (map (output: "  - ${output}\n") missingOutputs)}
     '';
 
-  handleEvalIssue =
-    { meta, attrs }:
-    {
-      reason,
-      errormsg ? "",
-    }:
-    let
-      msg =
-        if inHydra then
-          "Failed to evaluate ${getNameWithVersion attrs}: «${reason}»: ${errormsg}"
-        else
-          ''
-            Package ‘${getNameWithVersion attrs}’ in ${pos_str meta} ${errormsg}, refusing to evaluate.
-
-          ''
-          + (builtins.getAttr reason remediation) attrs;
-
-      handler = if config ? handleEvalIssue then config.handleEvalIssue reason else throw;
-    in
-    handler msg;
-
-  handleEvalWarning =
-    { meta, attrs }:
-    {
-      reason,
-      errormsg ? "",
-    }:
-    let
-      remediationMsg = (builtins.getAttr reason remediation) attrs;
-      msg =
-        if inHydra then
-          "Warning while evaluating ${getNameWithVersion attrs}: «${reason}»: ${errormsg}"
-        else
-          "Package ${getNameWithVersion attrs} in ${pos_str meta} ${errormsg}, continuing anyway."
-          + (optionalString (remediationMsg != "") "\n${remediationMsg}");
-      isEnabled = findFirst (x: x == reason) null showWarnings;
-    in
-    if isEnabled != null then builtins.trace msg true else true;
-
-  metaTypes =
+  metaType =
     let
       types = import ./meta-types.nix { inherit lib; };
       inherit (types)
@@ -363,13 +391,15 @@ let
         any
         listOf
         bool
+        record
+        enum
         ;
       platforms = listOf (union [
         str
         (attrsOf any)
       ]); # see lib.meta.platformMatch
     in
-    {
+    record {
       # These keys are documented
       description = str;
       mainProgram = str;
@@ -407,6 +437,65 @@ let
       unfree = bool;
       unsupported = bool;
       insecure = bool;
+      # This is checked in more detail further down
+      problems =
+        let
+          kindType = enum problemKindsManual;
+          subRecord = record {
+            kind = kindType;
+            message = str;
+            urls = listOf str;
+          };
+        in
+        {
+          name = "problems";
+          verify =
+            v:
+            if v == { } then
+              true
+            else
+              let
+                kinds = groupBy (p: p) (mapAttrsToList (name: p: p.kind or name) v);
+              in
+              all (p: p ? message && subRecord.verify p) (attrValues v)
+              && all (k: problemKindsManual' ? ${k} && (problemKindsUnique' ? ${k} -> length kinds.${k} == 1)) (
+                lib.attrNames kinds
+              );
+          errors =
+            ctx: v:
+            let
+              kinds = groupBy (p: p.kind) (
+                mapAttrsToList (name: p: {
+                  inherit name;
+                  explicit = p ? kind;
+                  kind = p.kind or name;
+                }) v
+              );
+            in
+            lib.concatLists (
+              lib.mapAttrsToList (
+                name: p:
+                lib.optional (!p ? message) "${ctx}.${name}: `.message` not specified"
+                ++ subRecord.errors "${ctx}.${name}" p
+              ) v
+            )
+            ++ lib.concatLists (
+              lib.mapAttrsToList (
+                k: ks:
+                lib.optionals (!problemKindsManual ? ${k}) (
+                  map (
+                    k':
+                    "${ctx}.${k'.name}: Problem kind ${k}, inferred from the problem name, is invalid; expected ${kindType.name}. You can specify an explicit problem kind with `${ctx}.${k'.name}.kind`"
+                  ) (filter (k': !k'.explicit) ks)
+                )
+                ++
+                  lib.optional (problemKindsUnique' ? ${k} && length ks > 1)
+                    "${ctx}: Problem kind ${k} should be unique, but is used for these problems: ${
+                      lib.concatMapStringsSep ", " (k': k'.name) ks
+                    }"
+              ) kinds
+            );
+        };
       tests = {
         name = "test";
         verify =
@@ -446,102 +535,73 @@ let
       identifiers = attrs;
     };
 
-  checkMetaAttr =
-    let
-      # Map attrs directly to the verify function for performance
-      metaTypes' = mapAttrs (_: t: t.verify) metaTypes;
-    in
-    k: v:
-    if metaTypes ? ${k} then
-      if metaTypes'.${k} v then
-        [ ]
-      else
-        [
-          "key 'meta.${k}' has invalid value; expected ${metaTypes.${k}.name}, got\n    ${
-            toPretty { indent = "    "; } v
-          }"
-        ]
-    else
-      [
-        "key 'meta.${k}' is unrecognized; expected one of: \n  [${
-          concatMapStringsSep ", " (x: "'${x}'") (attrNames metaTypes)
-        }]"
-      ];
-  checkMeta =
-    meta:
-    optionals config.checkMeta (concatMap (attr: checkMetaAttr attr meta.${attr}) (attrNames meta));
+  metaInvalid = if config.checkMeta then meta: !metaType.verify meta else meta: false;
 
   checkOutputsToInstall =
-    attrs:
-    let
-      expectedOutputs = attrs.meta.outputsToInstall or [ ];
-      actualOutputs = attrs.outputs or [ "out" ];
-      missingOutputs = builtins.filter (output: !builtins.elem output actualOutputs) expectedOutputs;
-    in
-    if config.checkMeta then builtins.length missingOutputs > 0 else false;
+    if config.checkMeta then
+      attrs:
+      let
+        actualOutputs = attrs.outputs or [ "out" ];
+      in
+      any (output: !elem output actualOutputs) (attrs.meta.outputsToInstall or [ ])
+    else
+      attrs: false;
 
   # Check if a derivation is valid, that is whether it passes checks for
   # e.g brokenness or license.
   #
   # Return { valid: "yes", "warn" or "no" } and additionally
-  # { reason: String; errormsg: String } if it is not valid, where
+  # { reason: String; errormsg: String, remediation: String } if it is not valid, where
   # reason is one of "unfree", "blocklisted", "broken", "insecure", ...
   # !!! reason strings are hardcoded into OfBorg, make sure to keep them in sync
   # Along with a boolean flag for each reason
   checkValidity =
-    let
-      validYes = {
-        valid = "yes";
-        handled = true;
-      };
-    in
     attrs:
     # Check meta attribute types first, to make sure it is always called even when there are other issues
     # Note that this is not a full type check and functions below still need to by careful about their inputs!
-    let
-      res = checkMeta (attrs.meta or { });
-    in
-    if res != [ ] then
+    if metaInvalid (attrs.meta or { }) then
       {
-        valid = "no";
         reason = "unknown-meta";
-        errormsg = "has an invalid meta attrset:${concatMapStrings (x: "\n  - " + x) res}\n";
+        errormsg = "has an invalid meta attrset:${
+          concatMapStrings (x: "\n  - " + x) (metaType.errors "${getName attrs}.meta" attrs.meta)
+        }\n";
+        remediation = "";
       }
 
     # --- Put checks that cannot be ignored here ---
     else if checkOutputsToInstall attrs then
       {
-        valid = "no";
         reason = "broken-outputs";
         errormsg = "has invalid meta.outputsToInstall";
+        remediation = remediateOutputsToInstall attrs;
       }
 
     # --- Put checks that can be ignored here ---
     else if hasDeniedUnfreeLicense attrs && !(hasAllowlistedLicense attrs) then
       {
-        valid = "no";
         reason = "unfree";
         errormsg = "has an unfree license (‘${showLicense attrs.meta.license}’)";
+        remediation = remediate_allowlist "Unfree" (remediate_predicate "allowUnfreePredicate") attrs;
       }
     else if hasBlocklistedLicense attrs then
       {
-        valid = "no";
         reason = "blocklisted";
         errormsg = "has a blocklisted license (‘${showLicense attrs.meta.license}’)";
+        remediation = "";
       }
     else if hasDeniedNonSourceProvenance attrs then
       {
-        valid = "no";
         reason = "non-source";
         errormsg = "contains elements not built from source (‘${showSourceType attrs.meta.sourceProvenance}’)";
+        remediation = remediate_allowlist "NonSource" (remediate_predicate "allowNonSourcePredicate") attrs;
       }
     else if hasDeniedBroken attrs then
       {
-        valid = "no";
         reason = "broken";
         errormsg = "is marked as broken";
+        remediation = remediate_allowlist "Broken" (x: "");
       }
-    else if !allowUnsupportedSystem && hasUnsupportedPlatform attrs then
+    else if hasUnsupportedPlatform attrs && !allowUnsupportedSystem then
       let
         toPretty' = toPretty {
           allowPrettyValues = true;
@@ -549,7 +609,6 @@ let
         };
       in
       {
-        valid = "no";
         reason = "unsupported";
         errormsg = ''
           is not available on the requested hostPlatform:
@@ -557,25 +616,52 @@ let
             package.meta.platforms = ${toPretty' (attrs.meta.platforms or [ ])}
             package.meta.badPlatforms = ${toPretty' (attrs.meta.badPlatforms or [ ])}
         '';
+        remediation = remediate_allowlist "UnsupportedSystem" (x: "") attrs;
       }
-    else if !(hasAllowedInsecure attrs) then
+    else if hasDisallowedInsecure attrs then
       {
-        valid = "no";
         reason = "insecure";
         errormsg = "is marked as insecure";
+        remediation = remediate_insecure attrs;
       }
+    else
+      null;
 
-    # --- warnings ---
-    # Please also update the type in /pkgs/top-level/config.nix alongside this.
-    else if hasNoMaintainers attrs then
+  # Please also update the type in /pkgs/top-level/config.nix alongside this.
+  checkWarnings =
+    attrs:
+    if hasNoMaintainers attrs then
       {
-        valid = "warn";
         reason = "maintainerless";
         errormsg = "has no maintainers or teams";
+        remediation = "";
       }
-    # -----
+
     else
-      validYes;
+      ## --- RFC 127 problems ---
+      #let
+      #  problems = generateProblems attrs;
+      #  hasUnignoredProblems = lib.any ({ handler, ... }: handler != "ignore") problems;
+      #  hasErrorProblems = lib.any ({ handler, ... }: handler == "error") problems;
+      #in
+      #if hasUnignoredProblems then
+      #  {
+      #    valid = if hasErrorProblems then "no" else "warn";
+      #    reason = "problem";
+      #    errormsg =
+      #      if hasErrorProblems then
+      #        "has some problem that must be acknowledged"
+      #      else
+      #        "has the following problems: [ ${
+      #          lib.pipe problems [
+      #            (map (lib.getAttr "name"))
+      #            (map (x: ''"${x}"''))
+      #            (concatStringsSep " ")
+      #          ]
+      #        } ]";
+      #  }
+      #else
+      null;
 
   # Helper functions and declarations to handle identifiers, extracted to reduce allocations
   hasAllCPEParts =
@@ -730,34 +816,57 @@ let
 
       available =
         validity.valid != "no"
-        && (
-          if config.checkMetaRecursively or false then all (d: d.meta.available or true) references else true
-        );
+        && ((config.checkMetaRecursively or false) -> all (d: d.meta.available or true) references);
     };
+
+  validYes = {
+    valid = "yes";
+    handled = true;
+  };
 
   assertValidity =
     { meta, attrs }:
     let
-      validity = checkValidity attrs;
-      inherit (validity) valid;
+      invalid = checkValidity attrs;
+      warning = checkWarnings attrs;
     in
-    if validity ? handled then
-      validity
+    if isNull invalid then
+      if isNull warning then
+        validYes
+      else
+        let
+          msg =
+            if inHydra then
+              "Warning while evaluating ${getNameWithVersion attrs}: «${warning.reason}»: ${warning.errormsg}"
+            else
+              "Package ${getNameWithVersion attrs} in ${pos_str meta} ${warning.errormsg}, continuing anyway."
+              + (optionalString (warning.remediation != "") "\n${warning.remediation}");
+
+          handled = if elem warning.reason showWarnings then trace msg true else true;
+        in
+        warning
+        // {
+          valid = "warn";
+          handled = handled;
+        }
     else
-      validity
-      // {
-        # Throw an error if trying to evaluate a non-valid derivation
-        # or, alternatively, just output a warning message.
-        handled = (
-          if valid == "yes" then
-            true
-          else if valid == "no" then
-            (handleEvalIssue { inherit meta attrs; } { inherit (validity) reason errormsg; })
-          else if valid == "warn" then
-            (handleEvalWarning { inherit meta attrs; } { inherit (validity) reason errormsg; })
+      let
+        msg =
+          if inHydra then
+            "Failed to evaluate ${getNameWithVersion attrs}: «${invalid.reason}»: ${invalid.errormsg}"
           else
-            throw "Unknown validity: '${valid}'"
-        );
+            ''
+              Package ‘${getNameWithVersion attrs}’ in ${pos_str meta} ${invalid.errormsg}, refusing to evaluate.
+
+            ''
+            + invalid.remediation;
+
+        handled = if config ? handleEvalIssue then config.handleEvalIssue invalid.reason msg else throw msg;
+      in
+      invalid
+      // {
+        valid = "no";
+        handled = handled;
       };
 
 in
