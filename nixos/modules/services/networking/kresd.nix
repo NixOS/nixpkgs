@@ -135,8 +135,14 @@ in
 
   ###### implementation
   config = lib.mkIf cfg.enable {
-    assertions = lib.optionals (lib.versions.major cfg.package.version > 5) [
-      "services.kresd only works with knot-resolver 5. Please use services.knot-resolver for knot-resolver 6 and newer."
+    assertions = [
+      {
+        assertion = lib.versionOlder cfg.package.version "6.0.0";
+        message = ''
+          services.kresd only works with knot-resolver 5.
+          Please use services.knot-resolver for knot-resolver 6 and newer.
+        '';
+      }
     ];
     environment = {
       etc."knot-resolver/kresd.conf".source = configFile; # not required
