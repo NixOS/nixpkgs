@@ -40,7 +40,6 @@ buildGoModule rec {
     homepage = "https://github.com/prometheus/blackbox_exporter";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      globin
       fpletz
       Frostman
       ma27

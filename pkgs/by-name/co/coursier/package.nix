@@ -73,7 +73,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [
       adelbertc
-      nequissimus
     ];
     platforms = platforms.all;
   };

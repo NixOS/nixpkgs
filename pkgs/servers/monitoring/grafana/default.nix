@@ -161,7 +161,6 @@ buildGoModule (finalAttrs: {
     maintainers = with maintainers; [
       offline
       fpletz
-      globin
       ma27
       Frostman
       ryan4yin

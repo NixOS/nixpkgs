@@ -74,7 +74,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [
       maintainers.flokli
-      maintainers.jagajaga
     ];
   };
 }

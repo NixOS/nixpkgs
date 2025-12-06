@@ -86,6 +86,5 @@ stdenv.mkDerivation rec {
     description = "Complete open source solution for HDR photography";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.hrdinka ];
   };
 }

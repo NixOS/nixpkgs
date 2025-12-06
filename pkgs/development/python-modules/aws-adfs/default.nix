@@ -70,7 +70,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/venth/aws-adfs";
     changelog = "https://github.com/venth/aws-adfs/releases/tag/${src.tag}";
     license = licenses.psfl;
-    maintainers = with maintainers; [ bhipple ];
     mainProgram = "aws-adfs";
   };
 }

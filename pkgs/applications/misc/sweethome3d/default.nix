@@ -24,7 +24,6 @@ let
     description = "Design and visualize your future home";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      edwtjo
       DimitarNestorov
     ];
     platforms = [

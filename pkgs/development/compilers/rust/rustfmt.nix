@@ -60,7 +60,6 @@ rustPlatform.buildRustPackage {
     ];
     mainProgram = "rustfmt";
     maintainers = with maintainers; [
-      globin
       basvandijk
     ];
   };

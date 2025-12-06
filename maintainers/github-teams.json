@@ -49,8 +49,7 @@
       "ethercrow": 222467,
       "groodt": 343415,
       "kalbasit": 87115,
-      "mboes": 51356,
-      "uri-canva": 33242106
+      "mboes": 51356
     },
     "name": "Bazel"
   },
@@ -61,7 +60,6 @@
       "happysalada": 5317234
     },
     "members": {
-      "Br1ght0ne": 12615679,
       "DianaOlympos": 15774340,
       "adamcstephens": 2071575,
       "ankhers": 750786,
@@ -146,7 +144,6 @@
       "peterhoeg": 722550
     },
     "members": {
-      "Br1ght0ne": 12615679,
       "manveru": 3507
     },
     "name": "crystal-lang"
@@ -261,7 +258,6 @@
       "thefloweringash": 42933,
       "tricktron": 16036882,
       "uncenter": 47499684,
-      "uri-canva": 33242106,
       "usertam": 22500027,
       "veprbl": 245573,
       "viraptor": 188063,
@@ -501,7 +497,6 @@
     },
     "members": {
       "cpages": 411324,
-      "edwtjo": 54799,
       "minijackson": 1200507,
       "peterhoeg": 722550,
       "sephalon": 893474
@@ -529,7 +524,6 @@
     "members": {
       "K900": 386765,
       "Ma27": 6025220,
-      "NeQuissimus": 628342,
       "TredwellGit": 61860346
     },
     "name": "Linux kernel"
@@ -898,9 +892,7 @@
       "winterqt": 78392041,
       "zowoq": 59103226
     },
-    "members": {
-      "tjni": 3806110
-    },
+    "members": {},
     "name": "rust"
   },
   "scala": {

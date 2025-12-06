@@ -61,6 +61,5 @@ stdenv.mkDerivation rec {
     description = "Filter for HDF5 that uses the Blosc compressor";
     homepage = "https://github.com/Blosc/hdf5-blosc";
     license = licenses.mit;
-    maintainers = with maintainers; [ bhipple ];
   };
 }

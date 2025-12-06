@@ -79,7 +79,6 @@ rustPlatform.buildRustPackage {
     license = lib.licenses.mit;
     mainProgram = "gitui";
     maintainers = with lib.maintainers; [
-      Br1ght0ne
       yanganto
       mfrw
     ];

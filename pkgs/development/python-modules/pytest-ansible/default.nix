@@ -98,7 +98,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/ansible-community/pytest-ansible/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [
-      tjni
       robsliwi
     ];
   };

@@ -85,6 +85,5 @@ stdenv.mkDerivation rec {
     description = "Authoritative only, high performance, simple and open source name server";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.hrdinka ];
   };
 }

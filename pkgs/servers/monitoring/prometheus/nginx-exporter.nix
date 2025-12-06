@@ -41,7 +41,6 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       benley
       fpletz
-      globin
     ];
   };
 }

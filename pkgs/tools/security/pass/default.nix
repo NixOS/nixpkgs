@@ -197,7 +197,6 @@ stdenv.mkDerivation rec {
       lovek323
       fpletz
       tadfisher
-      globin
       ma27
       ryan4yin
     ];

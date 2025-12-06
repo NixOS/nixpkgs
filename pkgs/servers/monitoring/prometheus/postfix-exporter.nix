@@ -42,8 +42,6 @@ buildGoModule rec {
     description = "Prometheus exporter for Postfix";
     mainProgram = "postfix_exporter";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      globin
-    ];
+    maintainers = [ ];
   };
 }

@@ -53,7 +53,6 @@ buildGoModule rec {
     changelog = "https://github.com/slackhq/nebula/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      Br1ght0ne
       numinit
     ];
   };

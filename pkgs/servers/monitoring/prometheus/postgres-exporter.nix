@@ -43,7 +43,6 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       fpletz
-      globin
       ma27
     ];
   };

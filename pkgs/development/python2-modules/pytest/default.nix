@@ -97,7 +97,6 @@ buildPythonPackage rec {
     maintainers = with maintainers; [
       lovek323
       madjar
-      lsix
     ];
     license = licenses.mit;
     platforms = platforms.unix;

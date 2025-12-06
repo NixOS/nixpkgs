@@ -81,7 +81,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [
       obadz
-      ekleog
       vifino
     ];
   };

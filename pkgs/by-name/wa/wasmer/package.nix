@@ -68,7 +68,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [
-      Br1ght0ne
       shamilton
       nickcao
     ];

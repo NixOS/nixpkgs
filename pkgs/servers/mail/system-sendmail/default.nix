@@ -41,7 +41,6 @@ stdenv.mkDerivation {
       A sendmail wrapper that calls the system sendmail. Do not install as system-wide sendmail!
     '';
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ekleog ];
     mainProgram = "sendmail";
   };
 }

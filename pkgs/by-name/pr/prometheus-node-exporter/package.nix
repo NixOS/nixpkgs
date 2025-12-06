@@ -50,7 +50,6 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       benley
       fpletz
-      globin
       Frostman
     ];
   };
