@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "mailsuite";
-  version = "1.10.0";
+  version = "1.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xYM4/Ou91WtYwiobE9ihlYGu8ViNTVbSLFGi8Y9yPc4=";
+    hash = "sha256-+QPGSQQZaUjDmTGhZZoyTGegKV9DBqrgnxdQpEgszrI=";
   };
 
   pythonRelaxDeps = [ "mail-parser" ];
