@@ -26,12 +26,14 @@ let
 
       stdenvNoCC.mkDerivation (finalAttrs: {
         pname = "coreboot-toolchain-${arch}";
-        version = "25.03";
+        version = "25.09";
+
+        archives = ./stable.nix;
 
         src = fetchgit {
           url = "https://review.coreboot.org/coreboot";
           rev = finalAttrs.version;
-          hash = "sha256-zyfBQKVton+2vjYd6fqrUqkHY9bci411pujRGabvTjQ=";
+          hash = "sha256-GMLhGspaS+SsldYFwhMoxzpFgU6alm6WASv3lp/FRRY=";
           fetchSubmodules = false;
           leaveDotGit = true;
           postFetch = ''
@@ -63,7 +65,7 @@ let
           mkdir -p util/crossgcc/tarballs
 
           ${lib.concatMapStringsSep "\n" (file: "ln -s ${file.archive} util/crossgcc/tarballs/${file.name}") (
-            callPackage ./stable.nix { }
+            callPackage finalAttrs.archives { }
           )}
 
           patchShebangs util/genbuild_h/genbuild_h.sh
