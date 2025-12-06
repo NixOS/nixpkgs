@@ -154,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
     #   - Engine.BP.BPJoinedArray.MultiBlock.BP5.MPI
     #   - Bindings.Fortran.BPWriteReadHeatMap6D.MPI
     # due to insufficiently robust data generation and comparison for larger MPI sizes.
-    (lib.cmakeFeature "MPIEXEC_MAX_NUMPROCS" "4")
+    (lib.cmakeFeature "MPIEXEC_MAX_NUMPROCS" "24")
 
     # Enable support for Little/Big Endian Interoperability
     (lib.cmakeBool "ADIOS2_USE_Endian_Reverse" true)
@@ -191,8 +191,6 @@ stdenv.mkDerivation (finalAttrs: {
       moduleNames = [ "adios2" ];
       package = finalAttrs.finalPackage;
     };
-  }
-  // lib.optionalAttrs stdenv.hostPlatform.isLinux {
     withCheck = finalAttrs.finalPackage.overrideAttrs {
       doCheck = true;
     };
