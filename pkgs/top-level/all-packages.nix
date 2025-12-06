@@ -10069,8 +10069,6 @@ with pkgs;
 
   sddm-chili-theme = libsForQt5.callPackage ../data/themes/chili-sddm { };
 
-  sddm-sugar-dark = libsForQt5.callPackage ../data/themes/sddm-sugar-dark { };
-
   sgx-sdk = callPackage ../os-specific/linux/sgx/sdk { };
 
   sgx-psw = callPackage ../os-specific/linux/sgx/psw {
