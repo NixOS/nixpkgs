@@ -13,8 +13,8 @@
   libarchive,
   libmsym,
   jkqtplotter,
-  qttools,
-  wrapQtAppsHook,
+  qt5,
+  nix-update-script,
 }:
 
 let
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
     pythonWP
   ];
 
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     libarchive
     libmsym
     jkqtplotter
-    qttools
+    qt5.qttools
   ];
 
   # Fix the broken CMake files to use the correct paths
@@ -91,11 +91,13 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "_IMPORT_PREFIX}/$out" "_IMPORT_PREFIX}/"
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Molecule editor and visualizer";
-    maintainers = with maintainers; [ sheepforce ];
+    maintainers = with lib.maintainers; [ sheepforce ];
     homepage = "https://github.com/OpenChemistry/avogadrolibs";
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
   };
 })

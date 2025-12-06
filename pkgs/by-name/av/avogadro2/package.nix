@@ -9,28 +9,30 @@
   hdf5,
   jkqtplotter,
   openbabel,
-  qttools,
-  wrapQtAppsHook,
+  qt5,
   mesa,
+  nix-update-script,
 }:
 
 let
+  version = "1.102.1";
+
   avogadroI18N = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "avogadro-i18n";
-    tag = "1.102.1";
+    tag = version;
     hash = "sha256-doY+AWJ0GiE6VsTolgmFIRcRVl52lTgwNJLpXgVQ57c=";
   };
 
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
+  inherit version;
   pname = "avogadro2";
-  version = "1.102.1";
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "avogadroapp";
-    rev = finalAttrs.version;
+    tag = version;
     hash = "sha256-nBkOiw6JO/cG1Ob9gw7Tt/076OoRaRRmDc/a9YAfZCA=";
   };
 
@@ -40,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -49,19 +51,21 @@ stdenv.mkDerivation (finalAttrs: {
     eigen
     hdf5
     jkqtplotter
-    qttools
+    qt5.qttools
   ];
 
   propagatedBuildInputs = [ openbabel ];
 
   qtWrapperArgs = [ "--prefix PATH : ${lib.getBin openbabel}/bin" ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Molecule editor and visualizer";
     mainProgram = "avogadro2";
-    maintainers = with maintainers; [ sheepforce ];
+    maintainers = with lib.maintainers; [ sheepforce ];
     homepage = "https://github.com/OpenChemistry/avogadroapp";
     inherit (mesa.meta) platforms;
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
-})
+}

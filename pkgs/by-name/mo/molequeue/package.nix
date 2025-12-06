@@ -3,27 +3,27 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  qttools,
-  wrapQtAppsHook,
+  qt5,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "molequeue";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "molequeue";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-+NoY8YVseFyBbxc3ttFWiQuHQyy1GN8zvV1jGFjmvLg=";
   };
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
 
-  buildInputs = [ qttools ];
+  buildInputs = [ qt5.qttools ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -36,12 +36,14 @@ stdenv.mkDerivation rec {
       --replace "$out/" ""
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Desktop integration of high performance computing resources";
     mainProgram = "molequeue";
-    maintainers = with maintainers; [ sheepforce ];
+    maintainers = with lib.maintainers; [ sheepforce ];
     homepage = "https://github.com/OpenChemistry/molequeue";
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
   };
-}
+})
