@@ -8,19 +8,19 @@
   grub2,
 }:
 
-with python3Packages;
-
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "woeusb-ng";
   version = "0.2.12";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "WoeUSB";
     repo = "WoeUSB-ng";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-2opSiXbbk0zDRt6WqMh97iAt6/KhwNDopOas+OZn6TU=";
   };
+
+  build-system = [ python3Packages.setuptools ];
 
   postPatch = ''
     substituteInPlace setup.py WoeUSB/utils.py \
@@ -35,16 +35,22 @@ buildPythonApplication rec {
   ];
   dontWrapGApps = true;
   preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          p7zip
+          parted
+          grub2
+        ]
+      }"
+    )
   '';
 
-  propagatedBuildInputs = [
-    p7zip
-    parted
-    grub2
-    termcolor
-    wxpython
-    six
+  dependencies = [
+    python3Packages.termcolor
+    python3Packages.wxpython
+    python3Packages.six
   ];
 
   preConfigure = ''
@@ -59,7 +65,7 @@ buildPythonApplication rec {
     homepage = "https://github.com/WoeUSB/WoeUSB-ng";
     mainProgram = "woeusb";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ stunkymonkey ];
+    maintainers = [ lib.maintainers.stunkymonkey ];
     platforms = lib.platforms.linux;
   };
 }
