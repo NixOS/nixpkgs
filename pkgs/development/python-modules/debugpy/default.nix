@@ -46,11 +46,6 @@ buildPythonPackage rec {
   };
 
   patches = [
-    # Use nixpkgs version instead of versioneer
-    (replaceVars ./hardcode-version.patch {
-      inherit version;
-    })
-
     # Fix importing debugpy in:
     # - test_nodebug[module-launch(externalTerminal)]
     # - test_nodebug[module-launch(integratedTerminal)]
