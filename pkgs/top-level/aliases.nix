@@ -746,6 +746,7 @@ mapAliases {
   ipfs-migrator-all-fs-repo-migrations = throw "'ipfs-migrator-all-fs-repo-migrations' has been renamed to/replaced by 'kubo-fs-repo-migrations'"; # Converted to throw 2025-10-27
   ipfs-migrator-unwrapped = throw "'ipfs-migrator-unwrapped' has been renamed to/replaced by 'kubo-migrator-unwrapped'"; # Converted to throw 2025-10-27
   ir.lv2 = ir-lv2; # Added 2025-09-37
+  iroh = throw "iroh has been split into iroh-dns-server and iroh-relay"; # Added 2025-11-06
   isl_0_24 = throw "isl_0_24 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-10-18
   iso-flags-png-320x420 = throw "'iso-flags-png-320x420' has been renamed to/replaced by 'iso-flags-png-320x240'"; # Converted to throw 2025-10-27
   itktcl = throw "'itktcl' has been renamed to/replaced by 'tclPackages.itktcl'"; # Converted to throw 2025-10-27
