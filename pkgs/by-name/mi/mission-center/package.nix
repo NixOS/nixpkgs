@@ -179,8 +179,14 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgram = "${placeholder "out"}/bin/missioncenter";
   doInstallCheck = true;
 
+  dontWrapGApps = true;
+
   postFixup = ''
+    wrapProgram $out/bin/missioncenter \
+      "''${gappsWrapperArgs[@]}"
+
     wrapProgram $out/bin/missioncenter-magpie \
+      "''${gappsWrapperArgs[@]}" \
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
           # Make sure libGL libvulkan can be found by dlopen()
