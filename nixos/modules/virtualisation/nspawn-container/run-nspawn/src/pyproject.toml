@@ -1,0 +1,10 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "run-nspawn"
+version = "0.0.0"
+
+[tool.setuptools.packages]
+find = {}
