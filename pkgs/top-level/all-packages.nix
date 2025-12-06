@@ -10286,12 +10286,6 @@ with pkgs;
 
   ### DATA
 
-  adwaita-qt = libsForQt5.callPackage ../data/themes/adwaita-qt { };
-
-  adwaita-qt6 = qt6Packages.callPackage ../data/themes/adwaita-qt {
-    useQt6 = true;
-  };
-
   androguard = with python3.pkgs; toPythonApplication androguard;
 
   andromeda-gtk-theme = libsForQt5.callPackage ../data/themes/andromeda-gtk-theme { };
