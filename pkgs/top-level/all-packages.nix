@@ -1513,6 +1513,8 @@ with pkgs;
 
   azure-cli-extensions = recurseIntoAttrs azure-cli.extensions;
 
+  azure-sdk-for-cpp = callPackage ../development/libraries/azure-sdk-for-cpp { };
+
   # Derivation's result is not used by nixpkgs. Useful for validation for
   # regressions of bootstrapTools on hydra and on ofborg. Example:
   #     pkgsCross.aarch64-multiplatform.freshBootstrapTools.build
