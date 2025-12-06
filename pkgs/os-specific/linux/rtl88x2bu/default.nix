@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "rtl88x2bu";
-  version = "${kernel.version}-unstable-2025-12-4";
+  version = "${kernel.version}-unstable-2025-12-04";
 
   src = fetchFromGitHub {
     owner = "RinCat";
@@ -39,8 +39,11 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Realtek rtl88x2bu driver";
     homepage = "https://github.com/RinCat/RTL88x2BU-Linux-Driver";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ otavio claymorwan ];
+    maintainers = with maintainers; [
+      otavio
+      claymorwan
+    ];
   };
 }
