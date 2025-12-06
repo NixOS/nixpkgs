@@ -56,6 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/ubports/development/core/lomiri-content-hub/-/commit/cdd3371714c183d4caf166157082288c022bb98d.patch";
       hash = "sha256-Uubd425T+0KxPR9lJW6+ejO2fFzcDwEIpJATSZ9jYD4=";
     })
+
+    # Remove when https://gitlab.com/ubports/development/core/lomiri-content-hub/-/merge_requests/53 merged & in release
+    ./1001-lomiri-content-hub-Fix-gsettings-qt-includes.patch
   ];
 
   postPatch = ''
@@ -69,6 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Don't override default theme search path (which honours XDG_DATA_DIRS) with a FHS assumption
     substituteInPlace import/Lomiri/Content/contenthubplugin.cpp \
       --replace-fail 'QIcon::setThemeSearchPaths(QStringList() << ("/usr/share/icons/"));' ""
+
+    # Discussing upstream how to properly address this
+    substituteInPlace src/com/lomiri/content/service/registry.h \
+      --replace-fail '<QGSettings/QGSettings>' '<QGSettings>'
   '';
 
   strictDeps = true;
