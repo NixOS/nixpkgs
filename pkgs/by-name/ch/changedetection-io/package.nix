@@ -57,6 +57,7 @@ python3.pkgs.buildPythonApplication rec {
       openpyxl
       paho-mqtt
       panzi-json-logic
+      playwright
       pluggy
       price-parser
       psutil
