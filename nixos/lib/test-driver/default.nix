@@ -34,6 +34,7 @@ python3Packages.buildPythonApplication {
       ptpython
       ipython
       remote-pdb
+      pytest-testinfra
     ]
     ++ extraPythonPackages python3Packages;
 

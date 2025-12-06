@@ -181,6 +181,7 @@ in
           [[ 143 = $(cat $failed/testBuildFailure.exit) ]]
           touch $out
         '';
+    testinfra = runTest ./nixos-test-driver/testinfra.nix;
   };
 
   # NixOS vm tests and non-vm unit tests
