@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "iocsearcher";
-  version = "2.4.8";
+  version = "2.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
