@@ -1,5 +1,6 @@
 {
   lib,
+  protobuf,
   rustPlatform,
   fetchFromGitHub,
 }:
@@ -16,6 +17,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-q3GMizdBupQSMVCuRqLjuw0Mof1q3UYOdUBugmrTDMU=";
+
+  env.FALLBACK_INCLUDE_PATH = "${protobuf}/include";
 
   meta = {
     description = "Protocol Buffers language server written in Rust";
