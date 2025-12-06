@@ -44,6 +44,7 @@ stdenvNoCC.mkDerivation {
 
   meta = {
     description = "CUPS driver for the iDPRT MT888";
+    homepage = "https://www.idprt.com/";
     platforms = [
       "x86_64-linux"
       "x86-linux"

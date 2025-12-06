@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Extremely fast and small background setter for X";
+    homepage = "https://github.com/Gottox/bgs";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];

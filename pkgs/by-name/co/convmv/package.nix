@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Converts filenames from one encoding to another";
+    homepage = "https://www.j3e.de/linux/convmv/man/";
     downloadPage = "https://www.j3e.de/linux/convmv/";
     license = with licenses; [
       gpl2Only

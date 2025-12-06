@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Unicode font";
+    homepage = "https://web.archive.org/web/20090327112842/http://crl.nmsu.edu/~mleisher/cu.html";
     license = licenses.mit;
     maintainers = [ maintainers.raskin ];
   };

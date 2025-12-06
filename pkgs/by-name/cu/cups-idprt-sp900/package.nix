@@ -53,6 +53,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "CUPS driver for the iDPRT SP900";
+    homepage = "https://www.idprt.com/";
     platforms = [
       "x86_64-linux"
       "x86-linux"

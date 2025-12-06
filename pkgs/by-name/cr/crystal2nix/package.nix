@@ -37,6 +37,7 @@ crystal.buildCrystalPackage rec {
 
   meta = with lib; {
     description = "Utility to convert Crystal's shard.lock files to a Nix file";
+    homepage = "https://github.com/nix-community/crystal2nix";
     mainProgram = "crystal2nix";
     license = licenses.mit;
     maintainers = with maintainers; [
