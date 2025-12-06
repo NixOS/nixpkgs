@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "carapace-bridge";
-  version = "1.2.10";
+  version = "1.4.9";
 
   src = fetchFromGitHub {
     owner = "carapace-sh";
@@ -17,8 +17,8 @@ buildGoModule (finalAttrs: {
     hash = "sha256-XQtbOQw2a2B5zhTgFiAuECtY/uM7AQnbwyRpzoKcF8I=";
   };
 
-  # buildGoModule try to run `go mod vendor` instead of `go work vendor` on the
-  # workspace if proxyVendor is off
+  # buildGoModule tries to run `go mod vendor` instead of `go work vendor` on
+  # the workspace if proxyVendor is off
   proxyVendor = true;
   vendorHash = "sha256-01WRJJiAqxmb1grvz9gWdYJ4i9pVUYmxFg9BGEuUhdA=";
 
