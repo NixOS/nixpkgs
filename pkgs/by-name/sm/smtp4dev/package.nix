@@ -11,13 +11,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "smtp4dev";
-  version = "3.10.3";
+  version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "rnwood";
     repo = "smtp4dev";
     tag = finalAttrs.version;
-    hash = "sha256-bbo4kke0deZQoD08dbUKsLUhjg/z7TaIr5qmU4SETNg=";
+    hash = "sha256-+6UIfttIjBbsxptc1uI7K8golGwl+Fw6f5kCl89NPDA=";
   };
 
   patches = [ ./smtp4dev-npm-packages.patch ];
@@ -33,7 +33,7 @@ buildDotnetModule (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src patches;
-    hash = "sha256-c0/6kbMv5CmLxS0S/p3+oZvZsuHP9gt4X43uvGQFjTw=";
+    hash = "sha256-+rKqiGiIQAYCY/3z1m9cQI0WgtdX8UTr70v7nTtgkt0=";
     postPatch = "cd ${finalAttrs.npmRoot}";
   };
 
