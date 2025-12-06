@@ -51,6 +51,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       foo-dogsquared
       getchoo
+      zowoq
     ];
   };
 })
