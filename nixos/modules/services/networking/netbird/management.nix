@@ -30,8 +30,6 @@ let
 
   inherit (utils) escapeSystemdExecArgs genJqSecretsReplacementSnippet;
 
-  stateDir = "/var/lib/netbird-mgmt";
-
   settingsFormat = pkgs.formats.json { };
 
   defaultSettings = {
@@ -72,7 +70,7 @@ let
       TrustedPeers = [ "0.0.0.0/0" ];
     };
 
-    Datadir = "${stateDir}/data";
+    Datadir = "${cfg.stateDir}/data";
     DataStoreEncryptionKey = "very-insecure-key";
     StoreConfig = {
       Engine = "sqlite";
@@ -140,6 +138,12 @@ in
     enable = mkEnableOption "Netbird Management Service";
 
     package = mkPackageOption pkgs "netbird-management" { };
+
+    stateDir = mkOption {
+      type = str;
+      description = "Toplevel directory containing management server persistent state";
+      default = "/var/lib/netbird-mgmt";
+    };
 
     domain = mkOption {
       type = str;
@@ -258,7 +262,7 @@ in
             TrustedPeers = [ "0.0.0.0/0" ];
           };
 
-          Datadir = "''${stateDir}/data";
+          Datadir = "''${cfg.stateDir}/data";
           DataStoreEncryptionKey = "genEVP6j/Yp2EeVujm0zgqXrRos29dQkpvX0hHdEUlQ=";
           StoreConfig = { Engine = "sqlite"; };
 
@@ -381,7 +385,7 @@ in
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ managementFile ];
 
-      preStart = genJqSecretsReplacementSnippet managementConfig "${stateDir}/management.json";
+      preStart = genJqSecretsReplacementSnippet managementConfig "${cfg.stateDir}/management.json";
 
       serviceConfig = {
         ExecStart = escapeSystemdExecArgs (
@@ -390,10 +394,10 @@ in
             "management"
             # Config file
             "--config"
-            "${stateDir}/management.json"
+            "${cfg.stateDir}/management.json"
             # Data directory
             "--datadir"
-            "${stateDir}/data"
+            "${cfg.stateDir}/data"
             # DNS domain
             "--dns-domain"
             cfg.dnsDomain
@@ -427,7 +431,7 @@ in
         ];
         StateDirectoryMode = "0750";
         RuntimeDirectoryMode = "0750";
-        WorkingDirectory = stateDir;
+        WorkingDirectory = cfg.stateDir;
 
         # hardening
         LockPersonality = true;
