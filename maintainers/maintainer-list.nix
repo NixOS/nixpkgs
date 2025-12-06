@@ -17152,6 +17152,12 @@
     githubId = 5378535;
     name = "Milo Gertjejansen";
   };
+  milomc123 = {
+    email = "contact@milo.zip";
+    github = "milomc123";
+    githubId = 33701036;
+    name = "Milo Mc";
+  };
   mimame = {
     email = "miguel.madrid.mencia@gmail.com";
     github = "mimame";
