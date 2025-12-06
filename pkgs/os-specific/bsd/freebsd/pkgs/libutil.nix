@@ -7,7 +7,10 @@
 }:
 mkDerivation {
   path = "lib/libutil";
-  extraPaths = [ "lib/libc/gen" ];
+  extraPaths = [
+    "lib/libc/gen"
+    "lib/libc/Versions.def"
+  ];
 
   outputs = [
     "out"
