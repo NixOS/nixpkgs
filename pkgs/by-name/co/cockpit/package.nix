@@ -37,6 +37,9 @@
   systemd,
   udev,
   xmlto,
+  # Needed for cockpit-machines plugin
+  libosinfo,
+  osinfo-db,
   # Enables lightweight NixOS branding, replacing the default Cockpit icons
   withBranding ? true,
   nixos-icons,
@@ -191,7 +194,21 @@ stdenv.mkDerivation (finalAttrs: {
     for binary in $out/bin/cockpit-bridge $out/libexec/cockpit-askpass; do
       chmod +x $binary
       wrapProgram $binary \
-        --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}
+        --prefix PYTHONPATH : ${
+          lib.makeSearchPath python3Packages.python.sitePackages [
+            python3Packages.pygobject3
+            "$out"
+          ]
+        } \
+        --prefix GI_TYPELIB_PATH : ${
+          lib.makeSearchPathOutput "lib" "lib/girepository-1.0" [ libosinfo ]
+        } \
+        --prefix XDG_DATA_DIRS : ${
+          lib.makeSearchPath "share" [
+            libosinfo
+            osinfo-db
+          ]
+        }
     done
 
     patchShebangs $out/share/cockpit/issue/update-issue
@@ -262,9 +279,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://cockpit-project.org/";
     changelog = "https://cockpit-project.org/blog/cockpit-${finalAttrs.version}.html";
     license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [
-      lucasew
-      andre4ik3
-    ];
+    teams = [ lib.teams.cockpit ];
   };
 })
