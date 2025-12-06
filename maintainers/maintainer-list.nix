@@ -17502,6 +17502,11 @@
     githubId = 20619776;
     name = "moni";
   };
+  monk3yd = {
+    name = "monk3yd";
+    github = "monk3yd";
+    githubId = 59047243;
+  };
   monkieeboi = {
     name = "MonkieeBoi";
     github = "MonkieeBoi";
