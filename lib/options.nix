@@ -690,6 +690,34 @@ rec {
 
   /**
     For use in the `defaultText` and `example` option attributes. Causes the
+    given string to be rendered verbatim in the documentation as a code
+    block with the language bassed on the provided input tag.
+
+    If you wish to render Nix code, please see `literalExpression`.
+
+    # Inputs
+
+    `info`
+
+    : 1\. Function argument.
+
+    `text`
+
+    : 2\. Function argument
+  */
+  literalCode =
+    info: text:
+    if !isString text then
+      throw "literalCode expects a string."
+    else
+      {
+        _type = "literalCode";
+        _info = info;
+        inherit text;
+      };
+
+  /**
+    For use in the `defaultText` and `example` option attributes. Causes the
     given MD text to be inserted verbatim in the documentation, for when
     a `literalExpression` would be too hard to read.
 

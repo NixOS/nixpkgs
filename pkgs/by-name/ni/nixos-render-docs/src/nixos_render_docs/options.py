@@ -94,11 +94,15 @@ class BaseConverter(Converter[md.TR], Generic[md.TR]):
         return result
 
     def _render_code(self, option: Option, key: str) -> list[str]:
-        if lit := option_is(option, key, 'literalMD'):
-            return [ self._render(f"*{key.capitalize()}:*\n{lit['text']}") ]
-        elif lit := option_is(option, key, 'literalExpression'):
-            code = md_make_code(lit['text'])
-            return [ self._render(f"*{key.capitalize()}:*\n{code}") ]
+        if lit := option_is(option, key, "literalMD"):
+            return [self._render(f"*{key.capitalize()}:*\n{lit['text']}")]
+        elif lit := option_is(option, key, "literalExpression"):
+            code = md_make_code(lit["text"], info="nix")
+            return [self._render(f"*{key.capitalize()}:*\n{code}")]
+        elif lit := option_is(option, key, "literalCode"):
+            info = option[key].get("_info")
+            code = md_make_code(lit["text"], info=info)
+            return [self._render(f"*{key.capitalize()}:*\n{code}")]
         elif key in option:
             raise Exception(f"{key} has unrecognized type", option[key])
         else:
