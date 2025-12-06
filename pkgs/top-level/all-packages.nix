@@ -10067,8 +10067,6 @@ with pkgs;
 
   rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
 
-  sddm-astronaut = qt6Packages.callPackage ../data/themes/sddm-astronaut { };
-
   sddm-chili-theme = libsForQt5.callPackage ../data/themes/chili-sddm { };
 
   sddm-sugar-dark = libsForQt5.callPackage ../data/themes/sddm-sugar-dark { };
