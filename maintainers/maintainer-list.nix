@@ -4671,6 +4671,13 @@
     githubId = 1118859;
     name = "Scott Worley";
   };
+  chlorine = {
+    name = "Chlorine";
+    github = "chlorine3545";
+    githubId = 146422759;
+    email = "dev@chlo.is";
+    matrix = "@chlorine:spect.im";
+  };
   chmouel = {
     email = "chmouel@chmouel.com";
     github = "chmouel";
