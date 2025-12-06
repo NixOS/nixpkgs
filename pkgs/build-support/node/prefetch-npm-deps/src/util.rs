@@ -1,10 +1,10 @@
 use anyhow::bail;
-use backoff::{retry, ExponentialBackoff};
+use backoff::{ExponentialBackoff, retry};
 use data_encoding::BASE64;
 use digest::Digest;
 use isahc::{
-    config::{CaCertificate, Configurable, RedirectPolicy, SslOption},
     Body, Request, RequestExt,
+    config::{CaCertificate, Configurable, RedirectPolicy, SslOption},
 };
 use log::info;
 use nix_nar::{Encoder, NarError};
@@ -22,18 +22,19 @@ pub fn get_url(url: &Url) -> Result<Body, anyhow::Error> {
     let mut url = url.clone();
     // Respect NIX_NPM_REGISTRY_OVERRIDES environment variable, which should be a JSON mapping in the shape of:
     // `{ "registry.example.com": "my-registry.local", ... }`
-    if let Some(host) = url.host_str() {
-        if let Ok(npm_mirrors) = env::var("NIX_NPM_REGISTRY_OVERRIDES") {
-            if let Ok(mirrors) = serde_json::from_str::<Map<String, Value>>(&npm_mirrors) {
-                if let Some(mirror) = mirrors.get(host).and_then(serde_json::Value::as_str) {
-                    let mirror_url = Url::parse(mirror)?;
-                    url.set_path(&(mirror_url.path().to_owned() + url.path()));
-                    url.set_host(Some(mirror_url.host_str().expect(format!("Mirror URL without host part: {mirror_url}").as_str())))?;
-                    eprintln!("Replaced URL {url_} with {url}");
-                }
-            }
-        }
+    if let Some(host) = url.host_str()
+        && let Ok(npm_mirrors) = env::var("NIX_NPM_REGISTRY_OVERRIDES")
+        && let Ok(mirrors) = serde_json::from_str::<Map<String, Value>>(&npm_mirrors)
+        && let Some(mirror) = mirrors.get(host).and_then(serde_json::Value::as_str)
+    {
+        let mirror_url = Url::parse(mirror)?;
+        url.set_path(&(mirror_url.path().to_owned() + url.path()));
+        url.set_host(Some(mirror_url.host_str().unwrap_or_else(|| {
+            panic!("Mirror URL without host part: {mirror_url}")
+        })))?;
+        eprintln!("Replaced URL {url_} with {url}");
     }
+
     let mut request = Request::get(url.as_str()).redirect_policy(RedirectPolicy::Limit(10));
 
     // Respect SSL_CERT_FILE if environment variable exists
@@ -51,15 +52,13 @@ pub fn get_url(url: &Url) -> Result<Body, anyhow::Error> {
 
     // Respect NIX_NPM_TOKENS environment variable, which should be a JSON mapping in the shape of:
     // `{ "registry.example.com": "example-registry-bearer-token", ... }`
-    if let Some(host) = url.host_str() {
-        if let Ok(npm_tokens) = env::var("NIX_NPM_TOKENS") {
-            if let Ok(tokens) = serde_json::from_str::<Map<String, Value>>(&npm_tokens) {
-                if let Some(token) = tokens.get(host).and_then(serde_json::Value::as_str) {
-                    info!("Found NPM token for {}. Adding authorization header to request.", host);
-                    request = request.header("Authorization", format!("Bearer {token}"));
-                }
-            }
-        }
+    if let Some(host) = url.host_str()
+        && let Ok(npm_tokens) = env::var("NIX_NPM_TOKENS")
+        && let Ok(tokens) = serde_json::from_str::<Map<String, Value>>(&npm_tokens)
+        && let Some(token) = tokens.get(host).and_then(serde_json::Value::as_str)
+    {
+        info!("Found NPM token for {host}. Adding authorization header to request.");
+        request = request.header("Authorization", format!("Bearer {token}"));
     }
 
     let res = request.body(())?.send()?;

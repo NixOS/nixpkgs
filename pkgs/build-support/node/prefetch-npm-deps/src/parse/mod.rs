@@ -1,4 +1,4 @@
-use anyhow::{anyhow, bail, Context};
+use anyhow::{Context, anyhow, bail};
 use lock::UrlOrString;
 use log::{debug, info};
 use rayon::prelude::*;
@@ -8,7 +8,7 @@ use std::{
     io::Write,
     process::{Command, Stdio},
 };
-use tempfile::{tempdir, TempDir};
+use tempfile::{TempDir, tempdir};
 use url::Url;
 
 use crate::util;
@@ -33,7 +33,9 @@ pub fn lockfile(
         .collect::<anyhow::Result<Vec<_>>>()?;
 
     if packages.is_empty() && !force_empty_cache {
-        bail!("No cacheable dependencies were found. Please inspect the upstream `package-lock.json` file and ensure that remote dependencies have `resolved` URLs and `integrity` hashes. If the lockfile is missing this data, attempt to get upstream to fix it via a tool like <https://github.com/jeslie0/npm-lockfile-fix>. If generating an empty cache is intentional and you would like to do it anyways, set `forceEmptyCache = true`.");
+        bail!(
+            "No cacheable dependencies were found. Please inspect the upstream `package-lock.json` file and ensure that remote dependencies have `resolved` URLs and `integrity` hashes. If the lockfile is missing this data, attempt to get upstream to fix it via a tool like <https://github.com/jeslie0/npm-lockfile-fix>. If generating an empty cache is intentional and you would like to do it anyways, set `forceEmptyCache = true`."
+        );
     }
 
     let mut new = Vec::new();
@@ -49,7 +51,11 @@ pub fn lockfile(
 
         let path = dir.path().join("package");
 
-        info!("recursively parsing lockfile for {} at {path:?}", pkg.name);
+        info!(
+            "recursively parsing lockfile for {} at {}",
+            pkg.name,
+            path.display()
+        );
 
         let lockfile_contents = fs::read_to_string(path.join("package-lock.json"));
 
@@ -71,7 +77,10 @@ pub fn lockfile(
                 "prepare",
             ] {
                 if scripts.contains_key(typ) && lockfile_contents.is_err() && !force_git_deps {
-                    bail!("Git dependency {} contains install scripts, but has no lockfile, which is something that will probably break. Open an issue if you can't feasibly patch this dependency out, and we'll come up with a workaround.\nIf you'd like to attempt to try to use this dependency anyways, set `forceGitDeps = true`.", pkg.name);
+                    bail!(
+                        "Git dependency {} contains install scripts, but has no lockfile, which is something that will probably break. Open an issue if you can't feasibly patch this dependency out, and we'll come up with a workaround.\nIf you'd like to attempt to try to use this dependency anyways, set `forceGitDeps = true`.",
+                        pkg.name
+                    );
                 }
             }
         }
@@ -310,7 +319,9 @@ fn get_hosted_git_url(url: &Url) -> anyhow::Result<Option<Url>> {
 
         match get_url() {
             Some(u) => Ok(Some(u)),
-            None => Err(anyhow!("This lockfile either contains a Git dependency with an unsupported host, or a malformed URL in the lockfile: {url}"))
+            None => Err(anyhow!(
+                "This lockfile either contains a Git dependency with an unsupported host, or a malformed URL in the lockfile: {url}"
+            )),
         }
     } else {
         Ok(None)
@@ -327,15 +338,17 @@ mod tests {
         for (input, expected) in [
             (
                 "git+ssh://git@github.com/castlabs/electron-releases.git#fc5f78d046e8d7cdeb66345a2633c383ab41f525",
-                Some("https://codeload.github.com/castlabs/electron-releases/tar.gz/fc5f78d046e8d7cdeb66345a2633c383ab41f525"),
+                Some(
+                    "https://codeload.github.com/castlabs/electron-releases/tar.gz/fc5f78d046e8d7cdeb66345a2633c383ab41f525",
+                ),
             ),
             (
                 "git+ssh://bitbucket.org/foo/bar#branch",
-                Some("https://bitbucket.org/foo/bar/get/branch.tar.gz")
+                Some("https://bitbucket.org/foo/bar/get/branch.tar.gz"),
             ),
             (
                 "git+ssh://git.sr.ht/~foo/bar#branch",
-                Some("https://git.sr.ht/~foo/bar/archive/branch.tar.gz")
+                Some("https://git.sr.ht/~foo/bar/archive/branch.tar.gz"),
             ),
         ] {
             assert_eq!(
