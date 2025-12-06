@@ -39,6 +39,27 @@ let
     # https://github.com/NixOS/nixpkgs/pull/423662#issuecomment-3156362941
     doCheck = false;
 
+    postPatch = ''
+      # Remove keybinding overrides from shell completion scripts
+      # Users should configure their own keybindings
+
+      # Bash: Remove bind commands
+      sed -i '/^# Bind the functions to key combinations/,$d' \
+        television/utils/shell/completion.bash
+
+      # Fish: Remove bind commands for both modes
+      sed -i '/^for mode in default insert/,$d' \
+        television/utils/shell/completion.fish
+
+      # Nushell: Remove keybinding configuration
+      sed -i '/^# Bind custom keybindings/,$d' \
+        television/utils/shell/completion.nu
+
+      # Zsh: Remove zle and bindkey commands
+      sed -i '/^zle -N tv-smart-autocomplete/,$d' \
+        television/utils/shell/completion.zsh
+    '';
+
     postInstall = ''
       installManPage target/${stdenv.hostPlatform.rust.cargoShortTarget}/assets/tv.1
 
