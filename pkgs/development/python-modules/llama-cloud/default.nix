@@ -5,15 +5,12 @@
   httpx,
   poetry-core,
   pydantic,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-cloud";
   version = "0.1.45";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_cloud";
