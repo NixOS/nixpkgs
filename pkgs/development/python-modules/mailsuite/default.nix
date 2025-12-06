@@ -9,15 +9,12 @@
   imapclient,
   mail-parser,
   publicsuffix2,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mailsuite";
   version = "1.10.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
