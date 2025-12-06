@@ -9,17 +9,14 @@
   nix-update-script,
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-igitt";
   version = "0.1.18";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "mlange-42";
     repo = "git-igitt";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-JXEWnekL9Mtw0S3rI5aeO1HB9kJ7bRJDJ6EJ4ATlFeQ=";
   };
 
@@ -47,4 +44,4 @@ rustPlatform.buildRustPackage {
     maintainers = [ lib.maintainers.pinage404 ];
     mainProgram = "git-igitt";
   };
-}
+})
