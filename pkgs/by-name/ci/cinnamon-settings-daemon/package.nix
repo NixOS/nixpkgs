@@ -8,16 +8,13 @@
   gtk3,
   lcms2,
   libcanberra-gtk3,
-  libgnomekbd,
   libnotify,
-  libxklavier,
   wrapGAppsHook3,
   pkg-config,
   lib,
   stdenv,
   systemd,
   upower,
-  dconf,
   cups,
   polkit,
   librsvg,
@@ -33,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-settings-daemon";
-  version = "6.4.3";
+  version = "6.6.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-settings-daemon";
     tag = version;
-    hash = "sha256-L7+OgymYoYBdprw66RW8tiGA7XGWjTBpDpXhli8Fjoo=";
+    hash = "sha256-Ho7L4BqLJ0Vz9+ZijZ8ZhQr1NJmGVf8JWtUpplx1JF0=";
   };
 
   patches = [
@@ -54,12 +51,9 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     lcms2
     libcanberra-gtk3
-    libgnomekbd
     libnotify
-    libxklavier
     systemd
     upower
-    dconf
     cups
     polkit
     librsvg
@@ -67,7 +61,6 @@ stdenv.mkDerivation rec {
     xorg.libXext
     xorg.libX11
     xorg.libXi
-    xorg.libXfixes
     fontconfig
     nss
     libgudev
