@@ -77,7 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "PREFIX=$(out)"
     "VERSION=$(version)"
-    "SYSCONFDIR=$(out)/etc"
+    "SYSCONFDIR=/etc/xdg"
+    "SYSCONF_FORCE_NEW=0"
     "SERVICEDIR_DBUS=$(out)/share/dbus-1/services"
     "SERVICEDIR_SYSTEMD=$(out)/lib/systemd/user"
   ]
