@@ -9,13 +9,13 @@
 
 melpaBuild (finalAttrs: {
   pname = "codeium";
-  version = "1.6.13";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "Exafunction";
     repo = "codeium.el";
     tag = finalAttrs.version;
-    hash = "sha256-CjT21GhryO8/iM0Uzm/s/I32WqVo4M3tSlHC06iEDXA=";
+    hash = "sha256-NnCpoGMJKBsPa7KtavEg/4+tdqbrCCemvYYT1p6BcdY=";
   };
 
   patches = [
