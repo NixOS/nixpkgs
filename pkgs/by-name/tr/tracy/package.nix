@@ -2,13 +2,15 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchFromGitLab,
+  runCommand,
+  fetchurl,
 
   cmake,
   ninja,
   pkg-config,
   wayland-scanner,
 
-  capstone,
   dbus,
   freetype,
   glfw,
@@ -21,25 +23,65 @@
   libglvnd,
   libxkbcommon,
   wayland,
-  wayland-protocols,
+  libffi,
 }:
 
 assert withGtkFileSelector -> stdenv.hostPlatform.isLinux;
 
-stdenv.mkDerivation rec {
+let
+  cpmSourceCache = import ./cpm-dependencies.nix {
+    inherit
+      lib
+      fetchFromGitHub
+      fetchurl
+      fetchFromGitLab
+      runCommand
+      ;
+  };
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = if withWayland then "tracy-wayland" else "tracy-glfw";
-  version = "0.11.1";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "wolfpld";
     repo = "tracy";
-    rev = "v${version}";
-    hash = "sha256-HofqYJT1srDJ6Y1f18h7xtAbI/Gvvz0t9f0wBNnOZK8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-voHql8ETnrUMef14LYduKI+0LpdnCFsvpt8B6M/ZNmc=";
   };
 
-  patches = lib.optional (
-    stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11"
-  ) ./dont-use-the-uniformtypeidentifiers-framework.patch;
+  patches = [
+    # CPM uses hashes in its cache directory, that include things like the absolute path to the `patch` command.
+    # We cannot reasonably reconstruct that hash - therefore we simply replace all the hashes with "NIX_ORIGIN_HASH_STUB".
+    ./cpm-no-hash.patch
+
+    # CPM requires git to download the dependencies. We don't allow CPM to download the dependencies, and remove the git dependency
+    ./no-git.patch
+  ]
+  ++
+    lib.optionals
+      (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11")
+      [
+        ./dont-use-the-uniformtypeidentifiers-framework.patch
+      ];
+
+  postUnpack =
+    # Copy the CPM source cache to a directory where cpm expects it
+    ''
+      mkdir -p $sourceRoot/cpm_source_cache
+      cp -r --no-preserve=mode ${cpmSourceCache}/. $sourceRoot/cpm_source_cache
+    ''
+    # Darwin's sandbox requires explicit write permissions for CPM to manage the cache
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      chmod -R u+w $sourceRoot/cpm_source_cache
+    ''
+    # Manually apply the patches, that would have been applied to the downloaded source
+    # We need to do that here, because in the cpmSourceCache we don't know about these patches yet
+    + ''
+      patch -d $sourceRoot/cpm_source_cache/imgui/NIX_ORIGIN_HASH_STUB/ -p1 < $sourceRoot/cmake/imgui-emscripten.patch
+      patch -d $sourceRoot/cpm_source_cache/imgui/NIX_ORIGIN_HASH_STUB/ -p1 < $sourceRoot/cmake/imgui-loader.patch
+      patch -d $sourceRoot/cpm_source_cache/ppqsort/NIX_ORIGIN_HASH_STUB/ -p1 < $sourceRoot/cmake/ppqsort-nodebug.patch
+    '';
 
   nativeBuildInputs = [
     cmake
@@ -50,8 +92,8 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.cc.isClang [ stdenv.cc.cc.libllvm ];
 
   buildInputs = [
-    capstone
     freetype
+    libffi
     onetbb
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && withGtkFileSelector) [ gtk3 ]
@@ -60,15 +102,15 @@ stdenv.mkDerivation rec {
     libglvnd
     libxkbcommon
     wayland
-    wayland-protocols
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && !withWayland)) [
     glfw
   ];
 
   cmakeFlags = [
-    "-DDOWNLOAD_CAPSTONE=off"
-    "-DTRACY_STATIC=off"
+    (lib.cmakeBool "DOWNLOAD_CAPSTONE" false)
+    (lib.cmakeBool "TRACY_STATIC" false)
+    (lib.cmakeFeature "CPM_SOURCE_CACHE" "/build/source/cpm_source_cache")
   ]
   ++ lib.optional (stdenv.hostPlatform.isLinux && withGtkFileSelector) "-DGTK_FILESELECTOR=ON"
   ++ lib.optional (stdenv.hostPlatform.isLinux && !withWayland) "-DLEGACY=on";
@@ -127,4 +169,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.linux ++ lib.optionals (!withWayland) platforms.darwin;
   };
-}
+})
