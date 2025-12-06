@@ -9,13 +9,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tt-system-tools";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "tt-system-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZtEs1XRho/EJShAV6+8Db2wxCK2QQBuNp+TRqb+ZiM4=";
+    hash = "sha256-bJtDfOXwtIKQMu8B+5/UYLmwBv/KTtGEsxAUhF2w6OY=";
   };
 
   nativeBuildInputs = [
