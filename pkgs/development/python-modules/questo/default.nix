@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "questo";
-  version = "0.4.1";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "petereon";
     repo = "questo";
     rev = "v${version}";
-    hash = "sha256-XCxSH2TSU4YdfyqfLpVSEeDeU1S24C+NezP1IL5qj/4=";
+    hash = "sha256-1T8HRgIW9P5iX1a75Bn9XqiVMCPtL7tdQTpixPbTbv0=";
   };
 
   build-system = [
