@@ -35,7 +35,7 @@ let
             ln -s $f $man/share/man/man1/$basename
           done
         ''
-        + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+        + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
           export HOME=$(mktemp -d) # work around `docker <cmd>`
           installShellCompletion --cmd docker \
             --bash <($out/bin/docker completion bash) \
