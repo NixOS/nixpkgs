@@ -22,5 +22,6 @@ buildPecl {
     license = licenses.mit;
     homepage = "https://github.com/Microsoft/msphpsql";
     teams = [ teams.php ];
+    broken = lib.versionAtLeast php.version "8.5";
   };
 }

@@ -3,6 +3,7 @@
   lib,
   rabbitmq-c,
   fetchFromGitHub,
+  php,
 }:
 
 let
@@ -29,5 +30,6 @@ buildPecl {
     license = licenses.php301;
     homepage = "https://github.com/php-amqp/php-amqp";
     teams = [ teams.php ];
+    broken = lib.versionAtLeast php.version "8.5";
   };
 }
