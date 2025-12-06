@@ -10,13 +10,13 @@
 buildNimPackage (
   finalAttrs: prevAttrs: {
     pname = "nitter";
-    version = "0-unstable-2025-10-12";
+    version = "0-unstable-2025-12-05";
 
     src = fetchFromGitHub {
       owner = "zedeus";
       repo = "nitter";
-      rev = "662ae90e2246c8a01c811f68750b7e5033e0fa69";
-      hash = "sha256-icjbAG/VkhzgKO2dyJYL/yc1VrVmU25Ymkz/41Ckd3M=";
+      rev = "17fc2628f91f70b9bfda1915c76e94708a5197bf";
+      hash = "sha256-yl1ge/Vm5+gkbEl73B7n3Ooh3Rpn4f1lyq0RU4VQRRI=";
     };
 
     lockFile = ./lock.json;
