@@ -5,6 +5,7 @@
   acl,
   autoreconfHook,
   avahi,
+  bstring,
   db,
   libevent,
   libgcrypt,
@@ -18,6 +19,7 @@
   file,
   cracklib,
   cups,
+  cmake,
   libtirpc,
   openldap,
   glib,
@@ -28,11 +30,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netatalk";
-  version = "4.2.4";
+  version = "4.3.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/netatalk/netatalk/netatalk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Twe74RipUd10DT9RqHtcr7oklr0LIucEQ49CGqZnD5k=";
+    hash = "sha256-KXe0/RExgvDMGDM3uiPVcB+yvk4N/Ox+5XW01zpzjTo=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     acl
     avahi
+    bstring
     db
     libevent
     libgcrypt
@@ -53,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     pam
     cracklib
     cups
+    cmake
     libtirpc
     openldap
     glib
@@ -69,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dwith-bdb-include-path=${db.dev}/include"
     "-Dwith-install-hooks=false"
     "-Dwith-init-hooks=false"
-    "-Dwith-lockfile-path=/run/lock/"
+    "-Dwith-lockfile-path=/run/lock"
     "-Dwith-cracklib=true"
     "-Dwith-cracklib-path=${cracklib.out}"
     "-Dwith-statedir-creation=false"
