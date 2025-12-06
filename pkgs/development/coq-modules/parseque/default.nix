@@ -22,7 +22,7 @@ let
         (case (range "8.16" "8.20") "0.2.2")
       ] null;
 
-    release."0.2.2".sha256 = "sha256-O50Rs7Yf1H4wgwb7ltRxW+7IF0b04zpfs+mR83rxT+E=";
+    release."0.2.2".hash = "sha256-O50Rs7Yf1H4wgwb7ltRxW+7IF0b04zpfs+mR83rxT+E=";
 
     releaseRev = v: "v${v}";
 

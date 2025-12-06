@@ -36,8 +36,8 @@ mkCoqDerivation {
       ]
       null;
 
-  release."0.1.0".sha256 = "EWjubBHsxAl2HuRAfJI3B9qzP2mj89eh0CUc8y7/7Ds=";
-  release."0.1.1".sha256 = "SDSyXqtOQlW9m9yH8OC909fsC/ePhKkSiY+BoQE76vk=";
+  release."0.1.0".hash = "sha256:EWjubBHsxAl2HuRAfJI3B9qzP2mj89eh0CUc8y7/7Ds=";
+  release."0.1.1".hash = "sha256:SDSyXqtOQlW9m9yH8OC909fsC/ePhKkSiY+BoQE76vk=";
 
   releaseRev = v: "v${v}";
 
