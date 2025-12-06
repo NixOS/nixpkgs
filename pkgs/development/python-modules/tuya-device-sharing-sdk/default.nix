@@ -9,7 +9,7 @@
 }:
 let
   pname = "tuya-device-sharing-sdk";
-  version = "0.2.5";
+  version = "0.2.6";
 in
 buildPythonPackage {
   inherit pname version;
@@ -20,8 +20,9 @@ buildPythonPackage {
     repo = "tuya-device-sharing-sdk";
     # no tags on GitHub: https://github.com/tuya/tuya-device-sharing-sdk/issues/2
     # no sdist on PyPI: https://github.com/tuya/tuya-device-sharing-sdk/issues/41
-    rev = "b2156585daefa39fcd2feff964e9be53124697f1";
-    hash = "sha256-ypAS8tzO4Wyc8pVjSiGaNNl+2fkFNcC3Ftql3l2B8k8=";
+    # check the dev branch for new changes
+    rev = "86c0510e7229b9cf41b2bae57f3557a4d83c1928";
+    hash = "sha256-nL7lr6HC+YpvmAdTnR6hzzn+9MEgzHkyzZuwjzsFHV0=";
   };
 
   build-system = [ setuptools ];
