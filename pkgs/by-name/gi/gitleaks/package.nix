@@ -36,6 +36,9 @@ buildGoModule rec {
   nativeCheckInputs = [ git ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    mkdir -p "$out/etc"
+    cp config/gitleaks.toml $out/etc/gitleaks.toml
+
     installShellCompletion --cmd ${pname} \
       --bash <($out/bin/${pname} completion bash) \
       --fish <($out/bin/${pname} completion fish) \
