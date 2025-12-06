@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "4.4.5";
+  version = "4.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyterlab";
     repo = "jupyterlab";
     tag = "v${version}";
-    hash = "sha256-Joc8gtUJS8J2SLJqBV3f4bzmOje1grdgIMUkcwl9K44=";
+    hash = "sha256-3vKz79/19F4kZeTjHSChgwAsM8quzIVBmjiRekA/8vo=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   offlineCache = yarn-berry_3.fetchYarnBerryDeps {
     inherit src;
     sourceRoot = "${src.name}/jupyterlab/staging";
-    hash = "sha256-EwR1gVrEy7QV8DnJBPx1AlbWY10FFngpLXdAIKn1HI0=";
+    hash = "sha256-3Gvbsi/oi8lTRrCYut126zsksjSSWmfJCoRxDmjne1E=";
   };
 
   preBuild = ''
