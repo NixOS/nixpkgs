@@ -5,7 +5,6 @@
   pkg-config,
   protobuf,
   rustPlatform,
-  stdenv,
 }:
 
 # Updating this package will force an update for prisma. The
@@ -13,16 +12,16 @@
 # function correctly.
 rustPlatform.buildRustPackage rec {
   pname = "prisma-engines";
-  version = "6.18.0";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
     rev = version;
-    hash = "sha256-p198o8ON5mGPCxK+gE0mW+JVyQlNsCsqwa8D4MNBkpA=";
+    hash = "sha256-+8k+M2+WySR2CeywYlhU/jd3av/4UeUoEOlO/qHUk5o=";
   };
 
-  cargoHash = "sha256-bNl04GoxLX+B8dPgqWL/VarreBVebjwNDwQjtQcJnsg=";
+  cargoHash = "sha256-n83hJfSlvuaoBb3w9Rk8+q2emjGCoPDHhFdoVzhf4sM=";
 
   # Use system openssl.
   OPENSSL_NO_VENDOR = 1;
@@ -46,18 +45,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [
     "-p"
-    "query-engine"
-    "-p"
-    "query-engine-node-api"
-    "-p"
     "schema-engine-cli"
     "-p"
     "prisma-fmt"
   ];
-
-  postInstall = ''
-    mv $out/lib/libquery_engine${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libquery_engine.node
-  '';
 
   # Tests are long to compile
   doCheck = false;
