@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cmocka";
-  version = "1.1.8";
+  version = "2.0.0";
 
   src = fetchurl {
     url = "https://cmocka.org/files/${lib.versions.majorMinor version}/cmocka-${version}.tar.xz";
-    hash = "sha256-WENbVYdm1/THKboWO9867Di+07x2batoTjUm7Qqnx4A=";
+    hash = "sha256-tWhsUeqS0UKVjWjl3Lky+b/DLNPdAcUk+dSqhj68PZw=";
   };
 
   patches = [
