@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "hstspreload";
   version = "2025.12.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "sethmlarson";
@@ -28,7 +25,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "hstspreload" ];
 
   meta = with lib; {
-    description = "Chromium HSTS Preload list as a Python package and updated daily";
+    description = "Chromium HSTS Preload list";
     homepage = "https://github.com/sethmlarson/hstspreload";
     license = licenses.bsd3;
     maintainers = [ ];
