@@ -8,7 +8,7 @@
   qtquickcontrols2,
   SDL,
   python3,
-  catch2_3,
+  catch2,
   callPackage,
   nixosTests,
 }:
@@ -44,7 +44,7 @@ mkDerivation rec {
   ];
 
   checkInputs = [
-    catch2_3
+    catch2
   ];
 
   cmakeFlags = [

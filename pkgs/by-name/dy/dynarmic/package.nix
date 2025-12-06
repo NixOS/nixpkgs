@@ -6,7 +6,7 @@
   ninja,
   boost,
   robin-map,
-  catch2_3,
+  catch2,
   fmt,
   xbyak,
   zydis,
@@ -53,7 +53,7 @@ let
     ];
 
     checkInputs = [
-      catch2_3
+      catch2
     ];
 
     doCheck = true;
@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   checkInputs = [
-    catch2_3
+    catch2
     oaknut
   ];
 

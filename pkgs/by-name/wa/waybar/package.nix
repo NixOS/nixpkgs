@@ -5,7 +5,7 @@
   fetchFromGitHub,
   SDL2,
   alsa-lib,
-  catch2_3,
+  catch2,
   fftw,
   glib,
   gobject-introspection,
@@ -144,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (cavaSupport || pipewireSupport) pipewire
   ++ lib.optional (!stdenv.hostPlatform.isLinux) libinotify-kqueue;
 
-  nativeCheckInputs = [ catch2_3 ];
+  nativeCheckInputs = [ catch2 ];
   doCheck = runTests;
 
   mesonFlags =

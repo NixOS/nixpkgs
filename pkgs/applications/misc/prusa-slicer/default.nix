@@ -33,7 +33,7 @@
   xorg,
   libbgcode,
   heatshrink,
-  catch2_3,
+  catch2,
   webkitgtk_4_1,
   ctestCheckHook,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libX11
     libbgcode
     heatshrink
-    catch2_3
+    catch2
     webkitgtk_4_1
     z3
     nlohmann_json

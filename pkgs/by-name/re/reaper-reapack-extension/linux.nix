@@ -1,6 +1,6 @@
 {
   boost,
-  catch2_3,
+  catch2,
   cmake,
   curl,
   fetchFromGitHub,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    catch2_3
+    catch2
     curl
     libxml2
     openssl

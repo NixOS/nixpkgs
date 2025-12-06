@@ -1,7 +1,7 @@
 {
   autoAddDriverRunpath,
   backendStdenv,
-  catch2_3,
+  catch2,
   cmake,
   cuda_cccl,
   cuda_cudart,
@@ -88,7 +88,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   checkInputs = [
     cudnn
     cuda_nvrtc
-    catch2_3
+    catch2
     libcublas
   ];
 

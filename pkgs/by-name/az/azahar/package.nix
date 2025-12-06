@@ -1,6 +1,6 @@
 {
   boost,
-  catch2_3,
+  catch2,
   cmake,
   cryptopp,
   cpp-jwt,
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    catch2_3
+    catch2
     cryptopp
     cpp-jwt
     dynarmic

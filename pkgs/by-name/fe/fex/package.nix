@@ -12,7 +12,7 @@
   libxml2,
   openssl,
   range-v3,
-  catch2_3,
+  catch2,
   nasm,
   buildEnv,
   writeText,
@@ -206,7 +206,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   nativeCheckInputs = [ nasm ];
-  checkInputs = [ catch2_3 ];
+  checkInputs = [ catch2 ];
 
   # List not exhaustive, e.g. because they depend on an x86 compiler or some
   # other difficult-to-build test binaries.

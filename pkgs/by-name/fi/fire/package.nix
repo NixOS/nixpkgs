@@ -5,7 +5,7 @@
   fetchFromGitHub,
   runCommand,
   gitUpdater,
-  catch2_3,
+  catch2,
   cmake,
   fontconfig,
   pkg-config,
@@ -127,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    catch2_3
+    catch2
     fontconfig
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux (
@@ -141,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeFeature "CPM_SOURCE_CACHE" "${cpmSourceCache}")
     (lib.cmakeBool "CPM_LOCAL_PACKAGES_ONLY" true)
-    (lib.cmakeFeature "Catch2_SOURCE_DIR" "${catch2_3.src}")
+    (lib.cmakeFeature "Catch2_SOURCE_DIR" "${catch2.src}")
   ];
 
   installPhase = ''
