@@ -22,6 +22,9 @@
   jackLibrary,
   pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   libpulseaudio,
+
+  libswell,
+  openssl,
 }:
 
 let
@@ -78,6 +81,7 @@ stdenv.mkDerivation rec {
   runtimeDependencies =
     lib.optionals stdenv.hostPlatform.isLinux [
       gtk3 # libSwell needs libgdk-3.so.0
+      xdg-utils # Required for desktop integration
     ]
     ++ lib.optional jackSupport jackLibrary
     ++ lib.optional pulseaudioSupport libpulseaudio;
@@ -121,6 +125,7 @@ stdenv.mkDerivation rec {
               vlc
               xdotool
               stdenv.cc.cc
+              openssl
             ]
           }"
 
@@ -130,6 +135,8 @@ stdenv.mkDerivation rec {
         # Avoid store path in Exec, since we already link to $out/bin
         substituteInPlace $out/share/applications/cockos-reaper.desktop \
           --replace-fail "Exec=\"$out/opt/REAPER/reaper\"" "Exec=reaper"
+
+        ln -sf "${libswell}/lib/libSwell.so" "$out/opt/REAPER/libSwell.so"
 
         runHook postInstall
       '';
