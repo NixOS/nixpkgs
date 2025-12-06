@@ -5799,6 +5799,8 @@ self: super: with self; {
 
   future-typing = callPackage ../development/python-modules/future-typing { };
 
+  futurist = callPackage ../development/python-modules/futurist { };
+
   fuzzyfinder = callPackage ../development/python-modules/fuzzyfinder { };
 
   fuzzytm = callPackage ../development/python-modules/fuzzytm { };
@@ -15142,6 +15144,8 @@ self: super: with self; {
   python-gitlab = callPackage ../development/python-modules/python-gitlab { };
 
   python-glanceclient = callPackage ../development/python-modules/python-glanceclient { };
+
+  python-gnocchiclient = callPackage ../development/python-modules/python-gnocchiclient { };
 
   python-gnupg = callPackage ../development/python-modules/python-gnupg { };
 
