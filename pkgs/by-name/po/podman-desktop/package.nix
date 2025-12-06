@@ -69,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # podman should be installed with nix; disable auto-installation
     ./extension-no-download-podman.patch
+    ./system-defaults-dir.patch
   ];
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
