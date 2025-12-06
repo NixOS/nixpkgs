@@ -246,6 +246,7 @@
   ./programs/joycond-cemuhook.nix
   ./programs/k3b.nix
   ./programs/k40-whisperer.nix
+  ./programs/katrain.nix
   ./programs/kbdlight.nix
   ./programs/kclock.nix
   ./programs/kde-pim.nix
