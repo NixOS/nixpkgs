@@ -16023,6 +16023,8 @@ self: super: with self; {
 
   rbtools = callPackage ../development/python-modules/rbtools { };
 
+  rcar_flash = callPackage ../applications/misc/rcar_flash { };
+
   rchitect = callPackage ../development/python-modules/rchitect { };
 
   rclone-python = callPackage ../development/python-modules/rclone-python { };
