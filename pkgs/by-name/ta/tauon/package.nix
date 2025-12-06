@@ -32,12 +32,12 @@ let
   # fork of pypresence, to be reverted if/when there's an upstream release
   lynxpresence = python3Packages.buildPythonPackage rec {
     pname = "lynxpresence";
-    version = "4.4.1";
+    version = "4.6.2";
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-y/KboyhEGs9RvyKayEIQu2+WaiQNOdsHDl1/pEoqEkQ=";
+      hash = "sha256-w4WShLTTSf4JGQVL4lTkbOLL8C7cjnf8WwHyfwKK2zA=";
     };
 
     build-system = with python3Packages; [ setuptools ];
