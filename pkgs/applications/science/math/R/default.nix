@@ -59,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
+    "man"
     "tex"
   ];
 
