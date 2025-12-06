@@ -18084,6 +18084,8 @@ self: super: with self; {
 
   streamlit = callPackage ../development/python-modules/streamlit { };
 
+  streamlit-searchbox = callPackage ../development/python-modules/streamlit-searchbox { };
+
   streamz = callPackage ../development/python-modules/streamz { };
 
   strenum = callPackage ../development/python-modules/strenum { };
