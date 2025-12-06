@@ -6931,6 +6931,8 @@ self: super: with self; {
 
   htmltools = callPackage ../development/python-modules/htmltools { };
 
+  htpy = callPackage ../development/python-modules/htpy { };
+
   htseq = callPackage ../development/python-modules/htseq { };
 
   httmock = callPackage ../development/python-modules/httmock { };
