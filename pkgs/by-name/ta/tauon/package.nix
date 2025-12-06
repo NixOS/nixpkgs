@@ -48,14 +48,14 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "tauon";
-  version = "8.1.4";
+  version = "8.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "Tauon";
     tag = "v${version}";
-    hash = "sha256-AV8B09H/25+2ZOoGux2/A4xP8sBBpRP197JYkS9/awk=";
+    hash = "sha256-d7bEC68ZJthJE/AlcUqBSNM4L4YAjwHXTiWDCtKf598=";
   };
 
   postUnpack = ''
