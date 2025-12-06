@@ -88,6 +88,9 @@ makeScopeWithSplicing' {
       xfce4-dict = callPackage ./applications/xfce4-dict { };
 
       xfce4-terminal = callPackage ./applications/xfce4-terminal { };
+      xfce4-terminal-sixel = callPackage ./applications/xfce4-terminal {
+        withSixel = true;
+      };
 
       xfce4-screensaver = callPackage ./applications/xfce4-screensaver { };
 
