@@ -3611,24 +3611,6 @@
   "lua": [
     "index.html#lua"
   ],
-  "lua-userguide": [
-    "index.html#lua-userguide"
-  ],
-  "lua-overview": [
-    "index.html#lua-overview"
-  ],
-  "installing-lua-and-packages": [
-    "index.html#installing-lua-and-packages"
-  ],
-  "lua-environment-defined-in-separate-.nix-file": [
-    "index.html#lua-environment-defined-in-separate-.nix-file"
-  ],
-  "lua-environment-defined-in-.confignixpkgsconfig.nix": [
-    "index.html#lua-environment-defined-in-.confignixpkgsconfig.nix"
-  ],
-  "lua-environment-defined-in-etcnixosconfiguration.nix": [
-    "index.html#lua-environment-defined-in-etcnixosconfiguration.nix"
-  ],
   "how-to-override-a-lua-package-using-overlays": [
     "index.html#how-to-override-a-lua-package-using-overlays"
   ],
@@ -3645,7 +3627,11 @@
     "index.html#packaging-a-library-manually"
   ],
   "lua-reference": [
-    "index.html#lua-reference"
+    "index.html#lua-reference",
+    "index.html#lua-overview",
+    "index.html#lua-userguide",
+    "index.html#installing-lua-and-packages",
+    "index.html#lua-environment-defined-in-etcnixosconfiguration.nix"
   ],
   "lua-interpreters": [
     "index.html#lua-interpreters"
@@ -3660,7 +3646,9 @@
     "index.html#buildluaapplication-function"
   ],
   "lua.withpackages-function": [
-    "index.html#lua.withpackages-function"
+    "index.html#lua.withpackages-function",
+    "index.html#lua-environment-defined-in-.confignixpkgsconfig.nix",
+    "index.html#lua-environment-defined-in-separate-.nix-file"
   ],
   "lua-contributing": [
     "index.html#lua-contributing"
