@@ -1,7 +1,7 @@
 { config, lib, ... }:
 let
   cfg = config.hardware.tuxedo-drivers;
-  tuxedo-drivers = config.boot.kernelPackages.tuxedo-drivers;
+  tuxedo-drivers = config.hardware.tuxedo-drivers.package;
 in
 {
   imports = [
@@ -26,6 +26,15 @@ in
 
       For more inforation it is best to check at the source code description: <https://gitlab.com/tuxedocomputers/development/packages/tuxedo-drivers>
     '';
+    package = lib.mkOption {
+      default = config.boot.kernelPackages.tuxedo-drivers;
+      defaultText = "config.boot.kernelPackages.tuxedo-drivers";
+      example = "pkgs.linuxPackages.tuxedo-drivers";
+      description = ''
+        Allows replacing the tuxedo-drivers with different version.
+        Please use a version that matches your kernel release version.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
