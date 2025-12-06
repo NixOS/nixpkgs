@@ -94,6 +94,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       perchun
       luftmensch-luftmensch
+      sarunint
     ];
   };
 }
