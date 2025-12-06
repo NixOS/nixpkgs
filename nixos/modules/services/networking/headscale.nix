@@ -35,6 +35,14 @@ in
 
       package = lib.mkPackageOption pkgs "headscale" { };
 
+      configFile = lib.mkOption {
+        type = lib.types.path;
+        readOnly = true;
+        description = ''
+          Path to the configuration file of headscale.
+        '';
+      };
+
       user = lib.mkOption {
         default = "headscale";
         type = lib.types.str;
@@ -609,14 +617,18 @@ in
       ] "The strip_email_domain option got removed upstream")
     ];
 
-    services.headscale.settings = lib.mkMerge [
-      cliConfig
-      {
-        listen_addr = lib.mkDefault "${cfg.address}:${toString cfg.port}";
+    services.headscale = {
+      configFile = configFile;
 
-        tls_letsencrypt_cache_dir = "${dataDir}/.cache";
-      }
-    ];
+      settings = lib.mkMerge [
+        cliConfig
+        {
+          listen_addr = lib.mkDefault "${cfg.address}:${toString cfg.port}";
+
+          tls_letsencrypt_cache_dir = "${dataDir}/.cache";
+        }
+      ];
+    };
 
     environment = {
       # Headscale CLI needs a minimal config to be able to locate the unix socket
@@ -646,7 +658,7 @@ in
           export HEADSCALE_DATABASE_POSTGRES_PASS="$(head -n1 ${lib.escapeShellArg cfg.settings.database.postgres.password_file})"
         ''}
 
-        exec ${lib.getExe cfg.package} serve --config ${configFile}
+        exec ${lib.getExe cfg.package} serve --config ${cfg.configFile}
       '';
 
       serviceConfig =
