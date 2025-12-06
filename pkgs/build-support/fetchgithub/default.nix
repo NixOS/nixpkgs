@@ -13,6 +13,8 @@ lib.makeOverridable (
     rev ? null,
     # TODO(@ShamrockLee): Add back after reconstruction with lib.extendMkDerivation
     # name ? repoRevToNameMaybe finalAttrs.repo (lib.revOrTag finalAttrs.revCustom finalAttrs.tag) "github",
+    # `fetchFromGitHub` defaults to use `fetchzip` for better hash stability.
+    # We default not to fetch submodules, which is contrary to `fetchgit`'s default.
     fetchSubmodules ? false,
     leaveDotGit ? null,
     deepClone ? false,
@@ -20,7 +22,7 @@ lib.makeOverridable (
     forceFetchGit ? false,
     fetchLFS ? false,
     rootDir ? "",
-    sparseCheckout ? lib.optional (rootDir != "") rootDir,
+    sparseCheckout ? null,
     githubBase ? "github.com",
     varPrefix ? null,
     passthru ? { },
@@ -68,12 +70,12 @@ lib.makeOverridable (
     varBase = "NIX${lib.optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
     useFetchGit =
       fetchSubmodules
-      || (leaveDotGit == true)
+      || lib.defaultTo false leaveDotGit == true
       || deepClone
       || forceFetchGit
       || fetchLFS
       || (rootDir != "")
-      || (sparseCheckout != [ ]);
+      || lib.defaultTo [ ] sparseCheckout != [ ];
     # We prefer fetchzip in cases we don't need submodules as the hash
     # is more stable in that case.
     fetcher =
@@ -122,6 +124,7 @@ lib.makeOverridable (
               rev
               deepClone
               fetchSubmodules
+              leaveDotGit
               sparseCheckout
               fetchLFS
               ;
@@ -135,7 +138,6 @@ lib.makeOverridable (
                 ;
             };
           }
-          // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
         else
           let
             revWithTag = finalAttrs.rev;

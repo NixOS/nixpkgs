@@ -4,6 +4,8 @@
 # - revision specified and remote without HEAD
 #
 
+source "$NIX_ATTRS_SH_FILE"
+
 echo "exporting $url (rev $rev) into $out"
 
 runHook preFetch
@@ -13,13 +15,24 @@ if [ -n "$gitConfigFile" ]; then
   export GIT_CONFIG_GLOBAL="$gitConfigFile"
 fi
 
+fetchTagFlags=()
+
+if [[ "$(declare -p fetchTags 2>/dev/null)" =~ ^"declare -a" ]]; then
+  for tagToFetch in "${fetchTags[@]}"; do
+    fetchTagFlags+=(--fetch-tag "$tagToFetch")
+  done
+elif [[ -n "$fetchTags" ]]; then
+  fetchTagFlags=(--fetch-tags)
+fi
+unset tagToFetch
+
 $SHELL $fetcher --builder --url "$url" --out "$out" --rev "$rev" --name "$name" \
   ${leaveDotGit:+--leave-dotGit} \
   ${fetchLFS:+--fetch-lfs} \
   ${deepClone:+--deepClone} \
   ${fetchSubmodules:+--fetch-submodules} \
-  ${fetchTags:+--fetch-tags} \
-  ${sparseCheckout:+--sparse-checkout "$sparseCheckout"} \
+  "${fetchTagFlags[@]}" \
+  ${sparseCheckoutText:+--sparse-checkout "$sparseCheckoutText"} \
   ${nonConeMode:+--non-cone-mode} \
   ${branchName:+--branch-name "$branchName"} \
   ${rootDir:+--root-dir "$rootDir"}
