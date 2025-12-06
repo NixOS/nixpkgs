@@ -3,11 +3,13 @@
   config,
   fetchFromGitHub,
   stdenv,
+  capiSupport ? false,
   cmake,
   cudaPackages ? { },
   cudaSupport ? config.cudaSupport,
   pythonSupport ? true,
   python3Packages,
+  sharedLibrarySupport ? false,
   llvmPackages,
   blas,
   swig,
@@ -73,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals cudaSupport cudaComponents;
 
   cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" sharedLibrarySupport)
+    (lib.cmakeBool "FAISS_ENABLE_C_API" capiSupport)
     (lib.cmakeBool "FAISS_ENABLE_GPU" cudaSupport)
     (lib.cmakeBool "FAISS_ENABLE_PYTHON" pythonSupport)
     (lib.cmakeFeature "FAISS_OPT_LEVEL" optLevel)
