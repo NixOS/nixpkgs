@@ -19,7 +19,7 @@
     systemd.services.expressvpn = {
       description = "ExpressVPN Daemon";
       serviceConfig = {
-        ExecStart = "${pkgs.expressvpn}/bin/expressvpnd";
+        ExecStart = "${pkgs.expressvpn}/bin/expressvpn-daemon";
         Restart = "on-failure";
         RestartSec = 5;
       };
@@ -30,6 +30,10 @@
         "network-online.target"
       ];
     };
+
+    # Required groups for ExpressVPN
+    users.groups.expressvpn = { };
+    users.groups.expressvpnhnsd = { };
   };
 
   meta.maintainers = with lib.maintainers; [ yureien ];
