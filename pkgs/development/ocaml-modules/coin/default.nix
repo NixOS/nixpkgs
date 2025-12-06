@@ -9,12 +9,12 @@
 
 buildDunePackage rec {
   pname = "coin";
-  version = "0.1.4";
+  version = "0.1.5";
   minimalOCamlVersion = "4.03";
 
   src = fetchurl {
     url = "https://github.com/mirage/coin/releases/download/v${version}/coin-${version}.tbz";
-    sha256 = "sha256:0069qqswd1ik5ay3d5q1v1pz0ql31kblfsnv0ax0z8jwvacp3ack";
+    sha256 = "sha256-z2WzQ7zUFmZJTUqygTHguud6+NAcp36WubHbILXGR9g=";
   };
 
   postPatch = ''
