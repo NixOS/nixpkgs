@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
     description = "C++ template library for linear algebra: vectors, matrices, and related algorithms";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [
-      sander
       raskin
       pbsds
     ];

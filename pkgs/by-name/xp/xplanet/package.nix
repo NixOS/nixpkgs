@@ -55,7 +55,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [
       lassulus
-      sander
     ];
     platforms = platforms.all;
   };

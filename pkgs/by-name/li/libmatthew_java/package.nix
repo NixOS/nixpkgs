@@ -21,7 +21,6 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     platforms = platforms.linux;
-    maintainers = [ maintainers.sander ];
     license = licenses.mit;
   };
 }

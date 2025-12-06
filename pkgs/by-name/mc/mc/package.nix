@@ -101,7 +101,6 @@ stdenv.mkDerivation rec {
     downloadPage = "https://ftp.osuosl.org/pub/midnightcommander/";
     homepage = "https://midnight-commander.org";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ sander ];
     platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "mc";
   };
