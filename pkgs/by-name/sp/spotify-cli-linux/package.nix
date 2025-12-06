@@ -6,14 +6,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "spotify-cli-linux";
-  version = "1.9.1";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pwittchen";
     repo = "spotify-cli-linux";
     tag = "v${version}";
-    hash = "sha256-Ko/as7wiBHawmyag9jFZqpPUZhb3p1+oYcl+26XyBZk=";
+    hash = "sha256-GEAEtS9YVZDeOn7+oxbAz6ICO7XL0sDOkbPdUD+gm04=";
   };
 
   preBuild = ''
