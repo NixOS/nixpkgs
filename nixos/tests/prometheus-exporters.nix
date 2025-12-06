@@ -1612,6 +1612,20 @@ let
       '';
     };
 
+    speedtest = {
+      exporterConfig = {
+        enable = true;
+        debug = true;
+        refreshInterval = "1h";
+      };
+
+      exporterTest = ''
+        wait_for_unit("prometheus-speedtest-exporter.service")
+        wait_for_open_port(9876)
+        succeed("curl -sSf http://localhost:9876")
+      '';
+    };
+
     storagebox = {
       exporterConfig = {
         enable = true;
