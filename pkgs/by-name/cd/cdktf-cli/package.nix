@@ -150,12 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
   # even with writableTmpDirAsHomeHook and CHECKPOINT_DISABLE=1
   doInstallCheck = stdenv.hostPlatform.isLinux;
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CDK for Terraform CLI";
