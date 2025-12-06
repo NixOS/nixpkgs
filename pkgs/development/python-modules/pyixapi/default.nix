@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyixapi";
-  version = "0.2.6";
+  version = "0.2.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "peering-manager";
     repo = "pyixapi";
     tag = version;
-    hash = "sha256-NS8rVzLpEtpuLal6sApXI3hjASiIeXZuZ4xyj9Zv1k0=";
+    hash = "sha256-pKIm9YCWf5HCwJ76NLm6AmcJWGVErZu9dwl23p8maXs=";
   };
 
   pythonRelaxDeps = [ "pyjwt" ];
