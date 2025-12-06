@@ -293,7 +293,7 @@ effectiveStdenv.mkDerivation {
   cudaPropagateToOutput = "cxxdev";
 
   postUnpack = optionalString buildContrib ''
-    cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/source/opencv_contrib"
+    cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/${src.name}/opencv_contrib"
   '';
 
   # Ensures that we use the system OpenEXR rather than the vendored copy of the source included with OpenCV.
@@ -325,7 +325,7 @@ effectiveStdenv.mkDerivation {
     installExtraFile ade
     + optionalString enableIpp (installExtraFiles ippicv)
     + (optionalString buildContrib ''
-      cmakeFlagsArray+=("-DOPENCV_EXTRA_MODULES_PATH=$NIX_BUILD_TOP/source/opencv_contrib")
+      cmakeFlagsArray+=("-DOPENCV_EXTRA_MODULES_PATH=$NIX_BUILD_TOP/${src.name}/opencv_contrib")
 
       ${installExtraFiles vgg}
       ${installExtraFiles boostdesc}
