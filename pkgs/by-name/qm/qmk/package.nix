@@ -30,6 +30,7 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs =
     with python3.pkgs;
     [
+      appdirs
       dotty-dict
       hid
       hjson
