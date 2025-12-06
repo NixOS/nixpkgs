@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libnice";
-  version = "0.1.22";
+  version = "0.1.23";
 
   outputs = [
     "bin"
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://libnice.freedesktop.org/releases/libnice-${finalAttrs.version}.tar.gz";
-    hash = "sha256-pfckzwnq5QxBp1FxQdidpKYeyerKMtpKAHP67VQXrX4=";
+    hash = "sha256-YY/E6N45O3GbFkHB2O7AGCbU050VrekmedIhx/Xk5w0=";
   };
 
   patches = [
