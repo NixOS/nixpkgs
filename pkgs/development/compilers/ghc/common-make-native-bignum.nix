@@ -378,6 +378,11 @@ stdenv.mkDerivation (
       })
     ]
 
+    # Backported support for ELFv2 powerpc64-linux
+    ++ [
+      ./ghc-9.4-PPC-Support-ELF-v2-on-powerpc64-big-endian.patch
+    ]
+
     ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
       # Prevent the paths module from emitting symbols that we don't use
       # when building with separate outputs.
