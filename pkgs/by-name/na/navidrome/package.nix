@@ -19,23 +19,23 @@
 
 buildGoModule (finalAttrs: {
   pname = "navidrome";
-  version = "0.58.5";
+  version = "0.59.0";
 
   src = fetchFromGitHub {
     owner = "navidrome";
     repo = "navidrome";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bb6Ak8coEhN4ny79WgZ4DqzjqLbCr1FW/a3w2gfls2M=";
+    hash = "sha256-YXyNnjaLgu4FXvgsbbzCOZRIuN96h+KDrXmJe1607JI=";
   };
 
-  vendorHash = "sha256-axtXNcduTCmi08kjmGCCgokvHR+uIdpZtnLCSFUIoM4=";
+  vendorHash = "sha256-FFtTQuXb5GYxZmUiNjZNO6K8QYF0TLH4JU2JmAzZhqQ=";
 
   npmRoot = "ui";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/ui";
-    hash = "sha256-X6H3laLaWsI0aqFKIE7IDdWqYuTScI7gcRbcB4wPsKA=";
+    hash = "sha256-RTye1ZbxLqfkZUvV0NLN7wcRnri3sC5Lfi8RXVG1bLM=";
   };
 
   nativeBuildInputs = [
