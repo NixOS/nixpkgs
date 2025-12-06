@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "bazel-watcher";
-  version = "0.27.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-watcher";
     rev = "v${version}";
-    hash = "sha256-b99Fx9OY9SKYp56hQd39kmVQI5NvYnxKyIsqIxkQ2tE=";
+    hash = "sha256-zbZhV1IjFW4USdj3MGdyfPabfCPUmAAaGBaguXqmcnY=";
   };
 
   vendorHash = "sha256-u1Zg/M9DSkwscy49qtPQygk1gyxKaPbhlFDYNtBQ9NY=";
