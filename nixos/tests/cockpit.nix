@@ -3,6 +3,63 @@
 let
   user = "alice"; # from ./common/user-account.nix
   password = "foobar"; # from ./common/user-account.nix
+
+  # A minimal Cockpit plugin that runs `hello` and displays the output
+  # This tests that the cockpitPath mechanism works correctly
+  helloPlugin =
+    pkgs.runCommand "cockpit-hello-test" { } ''
+      mkdir -p $out/share/cockpit/hello-test
+
+      cat > $out/share/cockpit/hello-test/manifest.json << 'EOF'
+      {
+        "name": "hello-test",
+        "menu": {
+          "index": {
+            "label": "Hello Test",
+            "order": 100
+          }
+        }
+      }
+      EOF
+
+      cat > $out/share/cockpit/hello-test/index.html << 'EOF'
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Hello Test</title>
+        <meta charset="utf-8">
+        <script src="../base1/cockpit.js"></script>
+      </head>
+      <body>
+        <h1>Hello Test Plugin</h1>
+        <div id="output">Loading...</div>
+        <script src="test.js"></script>
+      </body>
+      </html>
+      EOF
+
+      cat > $out/share/cockpit/hello-test/test.js << 'EOF'
+      (function() {
+        var output = document.getElementById("output");
+
+        if (typeof cockpit === "undefined") {
+          output.innerText = "FAILED: cockpit.js not loaded";
+          return;
+        }
+
+        cockpit.spawn(["hello"], { err: "message" })
+          .then(function(data) {
+            output.innerText = "SUCCESS: " + data;
+          })
+          .catch(function(error) {
+            output.innerText = "FAILED: " + (error ? error.message : "unknown error");
+          });
+      })();
+      EOF
+    ''
+    // {
+      passthru.cockpitPath = [ pkgs.hello ];
+    };
 in
 {
   name = "cockpit";
@@ -22,6 +79,7 @@ in
           enable = true;
           port = 7890;
           openFirewall = true;
+          plugins = [ helloPlugin ];
           allowed-origins = [
             "https://server:${toString config.services.cockpit.port}"
           ];
@@ -128,6 +186,17 @@ in
                   log("Checking that /nonexistent is not a thing")
                   assert '/nonexistent' not in driver.page_source
                   assert len(driver.find_elements(By.CSS_SELECTOR, '#machine-reconnect')) == 0
+
+                  log("Checking plugin path")
+                  driver.get("https://server:7890/hello-test")
+                  sleep(2)
+                  for iframe in driver.find_elements(By.TAG_NAME, "iframe"):
+                      if "hello-test" in (iframe.get_attribute("src") or ""):
+                          driver.switch_to.frame(iframe)
+                          break
+                  text = driver.find_element(By.ID, "output").text
+                  sleep(1)
+                  assert "SUCCESS: Hello, world!" in text, f"Plugin failed: {text}"
 
                   driver.close()
                 '';
