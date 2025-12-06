@@ -27,13 +27,13 @@ let
     };
   };
 
-  version = "2025.2.1";
+  version = "2025.2.2";
 
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx";
     tag = "v${version}";
-    hash = "sha256-zjRtAy9Tpu5dGbpEteg+TMLgrYKSzK0wrGLQImubx7I=";
+    hash = "sha256-2qru52/ZALBAdRh0I+3VimVsiRl71YZgbSUD/LdoA/0=";
   };
 
   meta = {
