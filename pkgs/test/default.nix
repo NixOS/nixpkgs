@@ -225,6 +225,8 @@ in
 
   auto-patchelf-hook = callPackage ./auto-patchelf-hook { };
 
+  check-binary-arch-hook = callPackage ./check-binary-arch-hook { };
+
   # Accumulate all passthru.tests from arrayUtilities into a single attribute set.
   arrayUtilities = recurseIntoAttrs (
     concatMapAttrs (
