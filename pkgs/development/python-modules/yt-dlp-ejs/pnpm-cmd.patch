@@ -1,0 +1,17 @@
+diff --git a/pnpm.py b/pnpm.py
+index ef897f2..71c1f13 100755
+--- a/pnpm.py
++++ b/pnpm.py
+@@ -43,7 +43,11 @@ def build_pnpm():
+     package_manager = data["packageManager"]
+     env = os.environ.copy()
+ 
+-    if deno := shutil.which("deno"):
++    if pnpm := shutil.which("pnpm"):
++        name = "pnpm"
++        cmd = [pnpm]
++
++    elif deno := shutil.which("deno"):
+         name = "deno"
+         env["DENO_NO_UPDATE_CHECK"] = "1"
+         cmd = [
