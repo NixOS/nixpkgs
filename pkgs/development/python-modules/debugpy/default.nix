@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "debugpy";
     tag = "v${version}";
-    hash = "sha256-U9WeWAX0qDusWcMsFaI1ct4YKlGQEHUYlKZfRiYhma0=";
+    hash = "sha256-eAiCtSJUqLASapxnYCyq1UCiGz6QmKQum7Vs3MoU1s8=";
   };
 
   patches = [
