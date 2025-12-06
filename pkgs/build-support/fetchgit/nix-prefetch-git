@@ -181,9 +181,11 @@ checkout_hash(){
         hash=$(hash_from_ref "$ref")
     fi
 
-    [[ -z "$deepClone" ]] && \
-    clean_git fetch ${builder:+--progress} --depth=1 origin "$hash" || \
-    clean_git fetch -t ${builder:+--progress} origin || return 1
+    if [[ -z "$deepClone" ]]; then
+        clean_git fetch ${builder:+--progress} --depth=1 origin "$hash" || return 1
+    else
+        clean_git fetch --no-tags ${builder:+--progress} origin || return 1
+    fi
 
     local object_type=$(git cat-file -t "$hash")
     if [[ "$object_type" == "commit" || "$object_type" == "tag" ]]; then
@@ -253,9 +255,21 @@ clone(){
     )
 
     # Fetch all tags if requested
-    if test -n "$fetchTags"; then
+    # The fetched tags are potentially non-reproducible, as tags are mutable parts of the Git tree.
+    #
+    # `deepClone` used to effectively imply `fetchTags`.
+    # We avoid such behaviour to enhance the `postCheckout` reproducibility,
+    # while keeping the old behaviour for `.git` for backward compatibility purposes.
+    if [[ -n "$fetchTags" ]] || [[ -n "$deepClone" ]] && [[ -z "$leaveDotGit" ]]; then
         echo "fetching all tags..." >&2
         clean_git fetch origin 'refs/tags/*:refs/tags/*' || echo "warning: failed to fetch some tags" >&2
+    fi
+
+    # Name "$ref" to make `git describe` work reproducibly in `NIX_PREFETCH_GIT_CHECKOUT_HOOK`.
+    # Name only when not leaving `.git` for compatibility purposes.
+    if [[ -n "$ref" ]] && [[ -z "$leaveDotGit" ]]; then
+        echo "refer to FETCH_HEAD as its original name $ref"
+        clean_git update-ref "$ref" FETCH_HEAD
     fi
 
     # Checkout linked sources.
