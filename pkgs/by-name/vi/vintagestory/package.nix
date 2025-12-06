@@ -5,28 +5,26 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
+  versionCheckHook,
   xorg,
-  gtk2,
-  sqlite,
-  openal,
   cairo,
   libGLU,
-  SDL2,
-  freealut,
   libglvnd,
   pipewire,
   libpulseaudio,
   dotnet-runtime_8,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vintagestory";
   version = "1.21.5";
 
   src = fetchurl {
-    url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${version}.tar.gz";
+    url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${finalAttrs.version}.tar.gz";
     hash = "sha256-dG1D2Buqht+bRyxx2ie34Z+U1bdKgi5R3w29BG/a5jg=";
   };
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     makeWrapper
@@ -35,13 +33,8 @@ stdenv.mkDerivation rec {
 
   runtimeLibs = lib.makeLibraryPath (
     [
-      gtk2
-      sqlite
-      openal
       cairo
       libGLU
-      SDL2
-      freealut
       libglvnd
       pipewire
       libpulseaudio
@@ -82,18 +75,25 @@ stdenv.mkDerivation rec {
     cp $out/share/vintagestory/assets/gameicon.xpm $out/share/pixmaps/vintagestory.xpm
     cp $out/share/vintagestory/assets/game/fonts/*.ttf $out/share/fonts/truetype
 
+    rm -rvf $out/share/vintagestory/{install,run,server}.sh
+
     runHook postInstall
   '';
 
+  makeWrapperArgs = [
+    "--set-default"
+    "mesa_glthread"
+    "true"
+  ];
+
   preFixup = ''
-    makeWrapper ${dotnet-runtime_8}/bin/dotnet $out/bin/vintagestory \
-      --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
-      --set-default mesa_glthread true \
+    makeWrapperArgs+=(--prefix LD_LIBRARY_PATH : ''${runtimeLibs[*]})
+    makeWrapper ${lib.getExe dotnet-runtime_8} $out/bin/vintagestory \
+      "''${makeWrapperArgs[@]}" \
       --add-flags $out/share/vintagestory/Vintagestory.dll
 
-    makeWrapper ${dotnet-runtime_8}/bin/dotnet $out/bin/vintagestory-server \
-      --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
-      --set-default mesa_glthread true \
+    makeWrapper ${lib.getExe dotnet-runtime_8} $out/bin/vintagestory-server \
+      "''${makeWrapperArgs[@]}" \
       --add-flags $out/share/vintagestory/VintagestoryServer.dll
 
     find "$out/share/vintagestory/assets/" -not -path "*/fonts/*" -regex ".*/.*[A-Z].*" | while read -r file; do
@@ -101,6 +101,9 @@ stdenv.mkDerivation rec {
       ln -sf "$filename" "''${file%/*}"/"''${filename,,}"
     done
   '';
+
+  doInstallCheck = true;
+  installCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "In-development indie sandbox game about innovation and exploration";
@@ -116,4 +119,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "vintagestory";
   };
-}
+})
