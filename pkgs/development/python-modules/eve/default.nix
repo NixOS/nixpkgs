@@ -6,7 +6,6 @@
   fetchFromGitHub,
   flask,
   pymongo,
-  pythonOlder,
   setuptools,
   simplejson,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "eve";
   version = "2.2.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pyeve";
@@ -29,7 +26,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cerberus
     events
     flask
@@ -45,7 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Open source Python REST API framework designed for human beings";
     homepage = "https://python-eve.org/";
-    changelog = "https://github.com/pyeve/eve/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/pyeve/eve/blob/${src.tag}/CHANGES.rst";
     license = licenses.bsd3;
     maintainers = [ ];
   };
