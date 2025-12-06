@@ -30,7 +30,7 @@ let
 
   hashes = {
     linux = "sha256-Nky3ws1UV0F4qjbBog53BjXkZ/ttTER/32NlB2ONJaE=";
-    darwin = "sha256-FgiUb2MNEqmbK4BphHQ7M2IeN7Vg1NQ9FR9UO4AfvNs=";
+    darwin = "sha256-N/v1842rheqrjG4pAwrSDYNWhQDgWinTiZPusD1dvaM=";
   };
 
   # Only x86_64-linux is supported with Darwin support being universal
