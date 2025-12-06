@@ -117,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
     "-Dtmpfilesdir=no"
+    "--libexecdir=${placeholder "out"}/bin"
   ]
   ++ lib.optionals (!udevSupport) [
     "-Dgudev=false"
@@ -158,6 +159,11 @@ stdenv.mkDerivation (finalAttrs: {
       versionPolicy = "odd-unstable";
     };
   };
+
+  # Retain backwards-compat with those relying on libexec
+  postInstall = ''
+    ln -s $out/bin $out/libexec
+  '';
 
   meta = with lib; {
     description =
