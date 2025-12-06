@@ -105,5 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
       thoughtpolice
       tmarkus
     ];
+    broken = hwloc.meta.broken;
   };
 })
