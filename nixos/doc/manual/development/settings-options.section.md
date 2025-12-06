@@ -405,6 +405,180 @@ have a predefined type and string generator already declared under
     and returning a set with [CDN](https://github.com/dzikoysk/cdn)-specific
     attributes `type` and `generate` as specified [below](#pkgs-formats-result).
 
+`pkgs.formats.kdl` { `version` }
+
+:   A function taking a KDL version (`version == 1 || version == 2`)
+    and returning a set with [KDL](https://kdl.dev/)-specific attributes `type`,
+    `lib` and `generate` as specified [below](#pkgs-formats-result).
+
+    The `version` argument is used by the generator to choose which syntax revision to use.
+    As the data model between both KDL specs are identical, the Nix library interface is identical for both.
+
+    KDL is different from most of the other formats, because it does not primarily compose with attrsets.
+    Nevertheless, it can be represented in Nix.
+
+    The main type of the KDL format is the [KDL document](https://kdl.dev/spec/#name-document),
+    which is fundamentally a list of [KDL nodes](https://kdl.dev/spec/#name-node).
+
+    The Nix representation of a KDL node is an attrset with the following elements:
+
+    - `name` is the name of the node. It is a string. (required)
+    - `type` is the [Type Annotation](https://kdl.dev/spec/#name-type-annotation) of the node. It is a string or `null`. (default: `null`)
+    - `arguments` is the [Arguments](https://kdl.dev/spec/#name-argument) of the node. It is a list of KDL values. (default: `[]`)
+    - `properties` is the [Properties](https://kdl.dev/spec/#name-property) of the node. It is an attrset of KDL values. (default: `{}`)
+    - `children` is the [Children block](https://kdl.dev/spec/#name-children-block) of the node. It is a KDL document. (default: `[]`)
+
+    A KDL value (the element of `arguments` and `properties`) comes in one of two forms. Either, it can be a scalar value on its own:
+
+    - `null`
+    - a boolean
+    - an integer
+    - a floating pointer number
+    - a string
+    - a path (coerced to a string in the KDL document)
+
+    Or, a KDL value can have a type. In this case, it is represented as an attrset with the names `type` and `value`,
+    where `type` is identical to the type of a node, and `value` is obligatory.
+
+    And lastly, a KDL document is just a list of KDL nodes. As such, you can specify a KDL document like so:
+
+    ```nix
+    [
+      {
+        name = "hello";
+        arguments = ["world"];
+        children = [
+          {
+            name = "foo";
+            properties = {
+              x = 5.0;
+              y = {
+                type = "i16";
+                value = 4;
+              };
+            };
+          }
+        ];
+      }
+    ]
+    ```
+
+    And this is equivalent to the following KDL file:
+
+    ```kdl
+    hello "world" {
+      foo x=5.0 y=(i16)4
+    }
+    ```
+
+    Additionally, the `lib` provided by this format has two helper functions, to make the above a bit more ergonomic:
+    ```nix
+    {
+      node = name: type: arguments: properties: children: { inherit name type arguments properties children; };
+      typed = type: value: { inherit type value; };
+    }
+    ```
+
+    Using these, you can write the same document like so:
+
+    ```nix
+    [
+      (node "hello" null ["world"] {} [
+        (node "foo" null [] { x=5.0; y=typed "i16" 4; } [])
+      ])
+    ]
+    ```
+
+    For use in modules, this format provides an option type `type`. It defines the type of a KDL document, as described above.
+    However, the KDL document provided by the `type` of this format has a unique restriction: it can only be defined in one location.
+    This is because the merging of KDL configurations is highly application-dependent, and it is fundamentally incorrect
+    to define it from several locations.
+
+    Modules with a KDL configuration should make sure that one of the following is true:
+
+    - They reserve the config *entirely to the user*, making sure any "default configuration" can be applied *independent* of this config file
+    - They define configuration themselves, and expose an `extraConfig` style option to insert additional nodes.
+
+    The document type also allows "splatting" a configuration, and conditional nodes with `lib.mkIf`. These features should be preferred, as they make the evaluation lazier and less prone to recursion errors. To "splat" a partial document, simply insert it in place of where a node is expected.
+
+    A full example of the `type` is like so:
+
+    ```nix
+    {
+      lib,
+      pkgs,
+      config,
+      ...
+    }:
+    let
+      cfg = config.services.foo;
+      kdl = pkgs.formats.kdl { version = 2; };
+    in {
+      options.services.foo = {
+        state-directory = lib.mkOption {
+          type = lib.types.str;
+          default = "/var/lib/foo";
+        };
+
+        # Let's say `foo` can listen in many ways:
+        #
+        # listen (port)7462
+        # listen (unix)"/run/foo/bar.sock"
+        #
+        listen = lib.mkOption {
+          type = lib.types.attrTag {
+            port = lib.mkOption { type = lib.types.port; };
+            unix = lib.mkOption { type = lib.types.str; };
+          };
+          default.unix = "/run/foo/bar.sock";
+        };
+
+        extraConfig = lib.mkOption {
+          type = kdl.type;
+          default = [];
+          description = ''
+            Additional configuration applied to `foo`.
+          '';
+        };
+
+        rendered = lib.mkOption {
+          type = kdl.type;
+          description = ''
+            The configuration of `foo`, as rendered from all the other options in this module.
+            You can `lib.mkForce` this to control the full configuration file.
+            Use {option}`services.foo.extraConfig` to append to it.
+          '';
+          defaultText = "a KDL document based on `services.foo.*`"
+        };
+      };
+
+      # recommended to define the value with the normal priority.
+      config.services.foo.rendered = let
+        inherit (kdl.lib) node typed;
+      in [
+        (node "state-directory" null [cfg.state-directory] {} [])
+
+        # somewhat contrived, to show off `lib.mkIf` in here
+        (lib.mkIf (cfg.listen?port) (
+          (node "listen" null [(typed "port" cfg.listen.port)] {} [])
+        ))
+        (lib.mkIf (cfg.listen?unix) (
+          (node "listen" null [(typed "unix" cfg.listen.unix)] {} [])
+        ))
+
+        # splatting: this inserts all the nodes from `extraConfig`.
+        cfg.extraConfig
+      ];
+    }
+    ```
+
+    The value of `cfg.rendered` in the above configuration will be a *normalized* KDL document: all "splats" will be flattened, and any `mkIf`s will be evaluated.
+
+    Lastly, the `generate` output of the KDL format (`kdl.generate`) will take a normalized KDL document, and produces a derivation with the configuration file.
+
+    Note that the "splatting" and `lib.mkIf` functionality is only available when the document is assigned to an option of type `kdl.type`.
+    These features do not work if you bypass the normalization, and directly pass nodes into `kdl.generate`.
+
 `pkgs.formats.elixirConf { elixir ? pkgs.elixir }`
 
 :   A function taking an attribute set with values
