@@ -28,11 +28,15 @@ let
     generators
     id
     mapAttrs
-    trace
     ;
 in
 
 rec {
+  inherit (builtins)
+    trace
+    addErrorContext
+    unsafeGetAttrPos
+    ;
 
   # -- TRACING --
 
