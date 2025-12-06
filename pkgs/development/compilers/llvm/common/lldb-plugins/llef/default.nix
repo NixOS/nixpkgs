@@ -21,6 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  patches = [ ./darwin-version.patch ];
+
   installPhase = ''
     runHook preInstall
 
