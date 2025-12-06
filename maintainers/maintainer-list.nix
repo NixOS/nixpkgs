@@ -20248,12 +20248,6 @@
     github = "peret";
     githubId = 617977;
   };
-  periklis = {
-    email = "theopompos@gmail.com";
-    github = "periklis";
-    githubId = 152312;
-    name = "Periklis Tsirakidis";
-  };
   perstark = {
     email = "perstark.se@gmail.com";
     github = "perstarkse";
