@@ -4,17 +4,18 @@
   perlPackages,
   fetchFromGitHub,
   shortenPerlShebang,
+  nix-update-script,
 }:
 
 perlPackages.buildPerlPackage rec {
   pname = "pgformatter";
-  version = "5.6";
+  version = "5.8";
 
   src = fetchFromGitHub {
     owner = "darold";
     repo = "pgFormatter";
     rev = "v${version}";
-    hash = "sha256-EJLAP1uBmWxWEsdLJYTuViMv4o0iEi2fqy79ixyRijU=";
+    hash = "sha256-m9xVzov0KtWLfC+24YBiE7UFaLqpwpzOyXpjMPHuito=";
   };
 
   outputs = [ "out" ];
@@ -39,6 +40,8 @@ perlPackages.buildPerlPackage rec {
   '';
 
   doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "PostgreSQL SQL syntax beautifier that can work as a console program or as a CGI";
