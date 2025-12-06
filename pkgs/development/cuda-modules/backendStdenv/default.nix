@@ -30,7 +30,6 @@ let
     ;
   inherit (lib)
     assertMsg
-    extendDerivation
     filter
     findFirst
     flip
@@ -265,7 +264,8 @@ let
       stdenvAdapters.useLibsFrom stdenv maybeHostStdenv;
 in
 # TODO: Consider testing whether we in fact use the newer libstdc++
-# NOTE: The assertion message we get from `extendDerivation` is not at all helpful. Instead, we use assertMsg.
 assert assertMsg (failedAssertionsString == "")
   "${mkVersionedName "cudaPackages" cudaMajorMinorVersion}.backendStdenv has failed assertions:${failedAssertionsString}";
-extendDerivation true passthruExtra backendStdenv
+backendStdenv.override (prevArgs: {
+  extraAttrs = prevArgs.extraAttrs or { } // passthruExtra;
+})
