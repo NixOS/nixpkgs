@@ -38,7 +38,7 @@
 
 let
   pname = "mindustry";
-  version = "152.2";
+  version = "153";
   buildVersion = makeBuildVersion version;
 
   jdk = jdk17;
@@ -48,14 +48,14 @@ let
     owner = "Anuken";
     repo = "Mindustry";
     tag = "v${version}";
-    hash = "sha256-DRH6Gd/NOXvTZAMu3qcpEk6Ii1l7NMPLd8+RLUyt7yE=";
+    hash = "sha256-yVrOHZOCZrI5SsmMdo7Eh+zS0PXv2X67zLCdLOWcPVc=";
   };
   Arc = fetchFromGitHub {
     name = "Arc-source";
     owner = "Anuken";
     repo = "Arc";
     tag = "v${version}";
-    hash = "sha256-TfDgzApR9LlnVVUOgIZu5pSLzbGlqrsXqzUN88lYN8s=";
+    hash = "sha256-JyiFxzdZtU0ILytTCfZrhBU2oZ3gF1kzMbSdjxqvTYs=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
@@ -155,16 +155,20 @@ stdenv.mkDerivation {
   ''
   + lib.optionalString enableClient ''
     pushd ../Arc
-    gradle jnigenBuild
+    # unsupported platforms need to be excluded because their native build tools aren't available
+    gradle jnigenBuild -x jnigenBuildAndroid -x jnigenBuildWindows -x jnigenBuildWindows64
     gradle jnigenJarNativesDesktop
     glewlib=${lib.getLib glew}/lib/libGLEW.so
     sdllib=${lib.getLib SDL2}/lib/libSDL2.so
-    patchelf backends/backend-sdl/libs/linux64/libsdl-arc*.so \
-      --add-needed $glewlib \
-      --add-needed $sdllib
+    patchelf backends/backend-sdl/build/Arc/backends/backend-sdl/libs/linux64/libsdl-arc*.so \
+      --add-needed "$glewlib" \
+      --add-needed "$sdllib"
     # Put the freshly-built libraries where the pre-built libraries used to be:
-    cp arc-core/libs/*/* natives/natives-desktop/libs/
-    cp extensions/freetype/libs/*/* natives/natives-freetype-desktop/libs/
+    cp arc-core/build/Arc/arc-core/libs/*/* natives/natives-desktop/libs/
+    cp backends/backend-sdl/build/Arc/backends/backend-sdl/libs/*/* natives/natives-desktop/libs/
+    # below target dirs are based on Arc upstream: Arc/extensions/../build.gradle
+    cp extensions/freetype/build/Arc/extensions/freetype/libs/*/* natives/natives-freetype-desktop/libs/
+    cp extensions/filedialogs/build/Arc/extensions/filedialogs/libs/*/* natives/natives-filedialogs/libs/
     popd
 
     gradle desktop:dist
