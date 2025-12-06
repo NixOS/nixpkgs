@@ -8,6 +8,8 @@
 
   python,
   pinocchio,
+
+  standalone ? true,
 }:
 toPythonModule (
   example-robot-data.overrideAttrs (super: {
@@ -15,17 +17,18 @@ toPythonModule (
 
     cmakeFlags = super.cmakeFlags ++ [
       (lib.cmakeBool "BUILD_PYTHON_INTERFACE" true)
-      (lib.cmakeBool "BUILD_STANDALONE_PYTHON_INTERFACE" true)
+      (lib.cmakeBool "BUILD_STANDALONE_PYTHON_INTERFACE" standalone)
     ];
 
     nativeBuildInputs = super.nativeBuildInputs ++ [
       python
     ];
 
-    propagatedBuildInputs = super.propagatedBuildInputs ++ [
-      example-robot-data
+    propagatedBuildInputs = [
       pinocchio
-    ];
+    ]
+    ++ super.propagatedBuildInputs
+    ++ lib.optional standalone example-robot-data;
 
     nativeCheckInputs = [
       pythonImportsCheckHook

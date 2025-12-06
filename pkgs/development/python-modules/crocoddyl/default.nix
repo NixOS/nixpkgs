@@ -14,6 +14,8 @@
   ipykernel,
   python,
   scipy,
+
+  standalone ? true,
 }:
 toPythonModule (
   crocoddyl.overrideAttrs (super: {
@@ -21,7 +23,7 @@ toPythonModule (
 
     cmakeFlags = super.cmakeFlags ++ [
       (lib.cmakeBool "BUILD_PYTHON_INTERFACE" true)
-      (lib.cmakeBool "BUILD_STANDALONE_PYTHON_INTERFACE" true)
+      (lib.cmakeBool "BUILD_STANDALONE_PYTHON_INTERFACE" standalone)
     ];
 
     # those are used by CMake at configure/build time
@@ -29,10 +31,11 @@ toPythonModule (
       python
     ];
 
-    propagatedBuildInputs = super.propagatedBuildInputs ++ [
-      crocoddyl
+    propagatedBuildInputs = [
       example-robot-data
-    ];
+    ]
+    ++ super.propagatedBuildInputs
+    ++ lib.optional standalone crocoddyl;
 
     nativeCheckInputs = [
       ffmpeg
