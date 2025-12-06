@@ -6,6 +6,51 @@ with pkgs;
 # https://github.com/NixOS/nixpkgs/pull/16208
 
 rec {
+  boost =
+    (pkgs.boost.override {
+      toolset = "emscripten";
+      enableStatic = true;
+      enableShared = false;
+      enableSingleThreaded = true;
+      enableMultiThreaded = false;
+      useMpi = false;
+      extraB2Args = [
+        ''cxxflags="-fdeclspec -Os"''
+        "address-model=32"
+        "--without-graph_parallel"
+        "--without-type_erasure"
+        "--prefix=${placeholder "out"}"
+        # The following boost libraries cause errors when building with emscripten
+        "--without-process"
+        "--without-contract"
+        "--without-container"
+        "--without-log"
+        "--without-json"
+        "--without-python"
+      ];
+    }).overrideAttrs
+      (old: {
+        pname = "emscripten-${lib.getName old}";
+        outputs = [
+          "out"
+          "dev"
+        ];
+        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
+          writableTmpDirAsHomeHook
+          emscripten
+        ];
+        configureScript = "emconfigure ${old.configureScript}";
+        doCheck = true;
+        checkPhase = ''
+          mkdir -p .emscriptencache
+          export EM_CACHE=$PWD/.emscriptencache
+          ${lib.getExe' emscripten "emcc"} -O2 -o example.js -I. libs/uuid/test/test_hash.cpp
+          ${lib.getExe nodejs} ./example.js
+          ${lib.getExe' emscripten "emcc"} -O2 -o example.js -I. libs/date_time/example/gregorian/localization.cpp
+          ${lib.getExe nodejs} ./example.js
+        '';
+      });
+
   json_c =
     (pkgs.json_c.override {
       stdenv = pkgs.emscriptenStdenv;
@@ -89,7 +134,6 @@ rec {
           echo "================= /testing libxml2 using node ================="
         '';
       });
-
   xmlmirror = pkgs.buildEmscriptenPackage rec {
     pname = "xmlmirror";
     version = "unstable-2016-06-05";
