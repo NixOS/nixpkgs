@@ -898,6 +898,7 @@ stdenv.mkDerivation (finalAttrs: {
       withLocaled
       withMachined
       withNetworkd
+      withNspawn
       withPortabled
       withSysupdate
       withTimedated
