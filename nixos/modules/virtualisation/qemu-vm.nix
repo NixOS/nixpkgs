@@ -360,6 +360,53 @@ let
     copyChannel = false;
     OVMF = cfg.efi.OVMF;
   };
+
+  interfaceType = types.submodule (
+    { name, ... }:
+    {
+      options = {
+        name = mkOption {
+          type = types.str;
+          default = name;
+          description = ''
+            Interface name
+          '';
+        };
+
+        vlan = mkOption {
+          type = types.ints.unsigned;
+          description = ''
+            VLAN to which the network interface is connected.
+          '';
+        };
+
+        assignIP = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Automatically assign an IP address to the network interface using the same scheme as
+            virtualisation.vlans.
+          '';
+        };
+      };
+    }
+  );
+
+  # Convert legacy VLANs to named interfaces.
+  vlansNumbered = lib.listToAttrs (
+    lib.forEach (lib.zipLists cfg.vlans (lib.range 1 255)) (
+      v:
+      let
+        name = "eth${toString v.snd}";
+      in
+      lib.nameValuePair name {
+        inherit name;
+        vlan = v.fst;
+        assignIP = true;
+      }
+    )
+  );
+
 in
 {
   imports = [
@@ -705,29 +752,20 @@ in
         enp1s0.vlan = 1;
       };
       description = ''
-        Network interfaces to add to the VM.
+        Extra network interfaces to add to the VM in addition to the ones
+        created by {option}`virtualisation.vlans`.
       '';
-      type =
-        with types;
-        attrsOf (submodule {
-          options = {
-            vlan = mkOption {
-              type = types.ints.unsigned;
-              description = ''
-                VLAN to which the network interface is connected.
-              '';
-            };
+      type = types.attrsOf interfaceType;
+    };
 
-            assignIP = mkOption {
-              type = types.bool;
-              default = false;
-              description = ''
-                Automatically assign an IP address to the network interface using the same scheme as
-                virtualisation.vlans.
-              '';
-            };
-          };
-        });
+    virtualisation.allInterfaces = mkOption {
+      type = types.attrsOf interfaceType;
+      readOnly = true;
+      description = ''
+        All network interfaces for the VM. Combines
+        {option}`virtualisation.vlans` and {option}`virtualisation.interfaces`.
+      '';
+      default = vlansNumbered // cfg.interfaces;
     };
 
     virtualisation.writableStore = mkOption {
@@ -1248,6 +1286,30 @@ in
         )
       )
       ++ [
+        (
+          let
+            conflictingKeys = lib.intersectAttrs vlansNumbered cfg.interfaces;
+          in
+          {
+            assertion = conflictingKeys == { };
+            message = ''
+              `virtualisation.vlans` and `virtualisation.interfaces` have conflicting keys: ${lib.concatStringsSep "," (lib.attrNames conflictingKeys)}
+            '';
+          }
+        )
+        (
+          let
+            allInterfaceNames =
+              (lib.mapAttrsToList (k: i: i.name) vlansNumbered)
+              ++ (lib.mapAttrsToList (k: i: i.name) cfg.interfaces);
+          in
+          {
+            assertion = lib.allUnique allInterfaceNames;
+            message = ''
+              `virtualisation.vlans` and `virtualisation.interfaces` have conflicting interface names: ${lib.concatStringsSep "," allInterfaceNames}
+            '';
+          }
+        )
         {
           assertion = pkgs.stdenv.hostPlatform.is32bit -> cfg.memorySize < 2047;
           message = ''
