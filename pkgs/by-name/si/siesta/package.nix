@@ -13,11 +13,12 @@
   readline,
   ninja,
   elpa,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "siesta";
-  version = "5.2.2";
+  version = "5.4.1";
 
   src = fetchFromGitLab {
     owner = "siesta-project";
@@ -29,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit mpi;
+    updateScript = nix-update-script { };
   };
 
   nativeBuildInputs = [
@@ -59,14 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = false; # Started making trouble with gcc-11
 
-  preBuild = ''
-    # See https://gitlab.com/siesta-project/siesta/-/commit/a10bf1628e7141ba263841889c3503c263de1582
-    # This may be fixed in the next release.
-    makeFlagsArray=(
-        FFLAGS="-fallow-argument-mismatch"
-    )
-  ''
-  + (
+  preBuild =
     if useMpi then
       ''
         makeFlagsArray+=(
@@ -80,8 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
         makeFlagsArray+=(
           COMP_LIBS="" LIBS="-lblas -llapack"
         );
-      ''
-  );
+      '';
 
   meta = {
     description = "First-principles materials simulation code using DFT";
