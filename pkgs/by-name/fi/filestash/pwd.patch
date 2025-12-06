@@ -1,0 +1,15 @@
+diff --git a/server/common/files.go b/server/common/files.go
+index 3e580118..a71bf2c2 100644
+--- a/server/common/files.go
++++ b/server/common/files.go
+@@ -15,8 +15,8 @@ func GetCurrentDir() string {
+ 	if MOCK_CURRENT_DIR != "" {
+ 		return MOCK_CURRENT_DIR
+ 	}
+-	ex, _ := os.Executable()
+-	return filepath.Dir(ex)
++	pwd, _ := os.Getwd()
++	return pwd
+ }
+ 
+ func GetAbsolutePath(base string, opts ...string) string {
