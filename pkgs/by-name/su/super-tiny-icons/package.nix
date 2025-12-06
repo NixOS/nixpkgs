@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "super-tiny-icons";
-  version = "unstable-2023-11-06";
+  version = "0-unstable-2025-10-30";
 
   src = fetchFromGitHub {
     owner = "edent";
     repo = "SuperTinyIcons";
-    rev = "888f449af8fb8df93241204e99fece85b9d225a5";
-    hash = "sha256-L/7CEvG0NPbF8+ysiEHPiPnCMAW3cUu/e3XwtatRdbg=";
+    rev = "621ddf6c231d142cccaa411c3c29001404550624";
+    hash = "sha256-qx3Z64id5kv/OrfEqI77ovGf2X4uHt6wlZrlUo8Nnb0=";
   };
 
   installPhase = ''
