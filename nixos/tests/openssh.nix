@@ -224,6 +224,23 @@ in
         ];
       };
 
+    server-null-pam =
+      { pkgs, ... }:
+      {
+        services.openssh = {
+          enable = true;
+          package = pkgs.opensshPackages.openssh.override {
+            withPAM = false;
+          };
+          settings = {
+            UsePAM = null;
+          };
+        };
+        users.users.root.openssh.authorizedKeys.keys = [
+          snakeOilPublicKey
+        ];
+      };
+
     server-sftp =
       { pkgs, ... }:
       {
@@ -279,6 +296,8 @@ in
     server_match_rule.wait_for_unit("sshd", timeout=30)
     server_no_openssl.wait_for_unit("sshd", timeout=30)
     server_no_pam.wait_for_unit("sshd", timeout=30)
+    server_null_pam.wait_for_unit("sshd", timeout=30)
+    server_null_pam.fail("journalctl -u sshd.service | grep 'Unsupported option UsePAM'")
     server_sftp.wait_for_unit("sshd", timeout=30)
 
     server_lazy.wait_for_unit("sshd.socket", timeout=30)
@@ -388,6 +407,16 @@ in
         client.succeed("chmod 600 privkey.snakeoil")
         client.succeed(
             "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-no-pam true",
+            timeout=30
+        )
+
+    with subtest("null-pam"):
+        client.succeed(
+            "cat ${snakeOilPrivateKey} > privkey.snakeoil"
+        )
+        client.succeed("chmod 600 privkey.snakeoil")
+        client.succeed(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-null-pam true",
             timeout=30
         )
 
