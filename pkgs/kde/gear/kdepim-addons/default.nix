@@ -1,4 +1,5 @@
 {
+  fetchpatch,
   mkKdeDerivation,
   sources,
   pkg-config,
@@ -13,6 +14,14 @@ mkKdeDerivation rec {
   pname = "kdepim-addons";
 
   inherit (sources.${pname}) version;
+
+  patches = [
+    (fetchpatch {
+      url = "https://invent.kde.org/pim/kdepim-addons/-/commit/9daab0a6a19cca4285c442cc88aab540b6e49d2b.diff";
+      revert = true;
+      hash = "sha256-tUw9qvanRzqld7uQBCWA8pLcwVxtJ9XIZe62u9bKbAk=";
+    })
+  ];
 
   cargoRoot = "plugins/webengineurlinterceptor/adblock";
 
