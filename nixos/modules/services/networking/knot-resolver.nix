@@ -112,8 +112,15 @@ in
     };
     users.groups.knot-resolver = { };
     networking.resolvconf.useLocalResolver = lib.mkDefault true;
-    assertions = lib.optionals (lib.versions.major cfg.package.version == 5) [
-      "services.knot-resolver only works with knot-resolver 6 or later. Please use services.kresd for knot-resolver 5."
+
+    assertions = [
+      {
+        assertion = lib.versionAtLeast cfg.package.version "6.0.0";
+        message = ''
+          services.knot-resolver only works with knot-resolver 6 or later.
+          Please use services.kresd for knot-resolver 5.
+        '';
+      }
     ];
 
     environment = {
