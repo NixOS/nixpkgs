@@ -4,6 +4,7 @@
   desktop-file-utils,
   gettext,
   glib,
+  glib-networking,
   gobject-introspection,
   blueprint-compiler,
   gtk4,
@@ -48,6 +49,7 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     glib
+    glib-networking
     gtk4
     libadwaita
     libglycin
