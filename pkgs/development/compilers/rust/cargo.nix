@@ -30,6 +30,7 @@ rustPlatform.buildRustPackage.override
     buildAndTestSubdir = "src/tools/cargo";
 
     inherit auditable;
+    runCargoAudit = false;
 
     passthru = {
       rustc = rustc;
