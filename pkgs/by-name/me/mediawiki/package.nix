@@ -2,7 +2,6 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  imagemagick,
   nixosTests,
 }:
 
@@ -16,11 +15,8 @@ stdenvNoCC.mkDerivation rec {
   };
 
   postPatch = ''
-    sed -i 's|$vars = Installer::getExistingLocalSettings();|$vars = null;|' includes/installer/CliInstaller.php
-
-    # fix generating previews for SVGs
-    substituteInPlace includes/config-schema.php \
-      --replace-fail "\$path/convert" "${imagemagick}/bin/convert"
+    substituteInPlace includes/installer/CliInstaller.php \
+      --replace-fail '$vars = Installer::getExistingLocalSettings();' '$vars = null;'
   '';
 
   installPhase = ''
