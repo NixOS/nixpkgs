@@ -2,7 +2,7 @@
   lib,
   pkgs,
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromGitHub,
   replaceVars,
   colord,
   setuptools,
@@ -25,11 +25,12 @@ buildPythonPackage rec {
   version = "0.6.1";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "gitlab.mister-muffin.de";
+  # gitlab.mister-muffin.de produces a 500 error on 0.6.1
+  # when upgrading, switch src attribute back to gitlab if fixed.
+  src = fetchFromGitHub {
     owner = "josch";
     repo = "img2pdf";
-    tag = version;
+    rev = version;
     hash = "sha256-71u6ex+UAEFPDtR9QI8Ezah5zCorn4gMdAnzFz4blsI=";
   };
 
@@ -95,7 +96,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "img2pdf" ];
 
   meta = {
-    changelog = "https://gitlab.mister-muffin.de/josch/img2pdf/src/tag/${src.tag}/CHANGES.rst";
+    changelog = "https://gitlab.mister-muffin.de/josch/img2pdf/src/tag/${version}/CHANGES.rst";
     description = "Convert images to PDF via direct JPEG inclusion";
     homepage = "https://gitlab.mister-muffin.de/josch/img2pdf";
     license = lib.licenses.lgpl3Plus;
