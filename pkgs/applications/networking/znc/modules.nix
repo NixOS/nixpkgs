@@ -139,6 +139,8 @@ in
       description = "ZNC FiSH module";
       homepage = "https://github.com/oilslump/znc-fish";
       maintainers = [ lib.maintainers.offline ];
+      # has no license
+      licenses = lib.licenses.unfree;
     };
   };
 
@@ -217,6 +219,8 @@ in
     meta = {
       description = "ZNC privmsg module";
       homepage = "https://github.com/kylef/znc-contrib";
+      # has no license
+      license = lib.licenses.unfree;
     };
   };
 
