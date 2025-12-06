@@ -191,6 +191,10 @@ python.pkgs.buildPythonApplication rec {
   # Playwright tests not supported on RiscV yet
   doCheck = lib.meta.availableOn stdenv.hostPlatform playwright-driver.browsers;
 
+  passthru = {
+    inherit python;
+  };
+
   meta = {
     description = "Freedom of Information Portal";
     homepage = "https://github.com/okfde/froide";
