@@ -10286,8 +10286,6 @@ with pkgs;
 
   androguard = with python3.pkgs; toPythonApplication androguard;
 
-  andromeda-gtk-theme = libsForQt5.callPackage ../data/themes/andromeda-gtk-theme { };
-
   dejavu_fonts = lowPrio (callPackage ../data/fonts/dejavu-fonts { });
 
   # solve collision for nix-env before https://github.com/NixOS/nix/pull/815
