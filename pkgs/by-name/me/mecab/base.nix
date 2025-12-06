@@ -1,12 +1,14 @@
-{ fetchurl, libiconv }:
+{ fetchFromGitHub, libiconv }:
 
 finalAttrs: {
   version = "0.996";
 
-  src = fetchurl {
-    url = "https://drive.google.com/uc?export=download&id=0B4y35FiV1wh7cENtOXlicTFaRUE";
-    name = "mecab-${finalAttrs.version}.tar.gz";
-    hash = "sha256-4HMyV4MTW3LmZhRceBu0j62lg9UiT7JJD7bBQDumnFk=";
+  src = fetchFromGitHub {
+    owner = "taku910";
+    repo = "mecab";
+    rev = "5a7db65493a0b57d5fc31734e65300320aaf94c8";
+    hash = "sha256-elB0Zr8DDkw3IZvvqVG+OBspZxFLPnvUSM9SRSILYWs=";
+    rootDir = "mecab";
   };
 
   buildInputs = [ libiconv ];
