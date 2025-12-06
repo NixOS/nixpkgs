@@ -4,7 +4,6 @@
   pkgs,
   ...
 }:
-
 let
   inherit (lib)
     any
@@ -71,7 +70,6 @@ let
   extensionNames = map getName cfg.finalPackage.installedExtensions;
   extensionInstalled = extension: elem extension extensionNames;
 in
-
 {
   imports = [
     (mkRemovedOptionModule [
@@ -103,9 +101,7 @@ in
   ###### interface
 
   options = {
-
     services.postgresql = {
-
       enable = mkEnableOption "PostgreSQL Server";
 
       enableJIT = mkEnableOption "JIT support";
@@ -381,6 +377,14 @@ in
                   The default, `null`, means that the user created will have the default permissions assigned by PostgreSQL. Subsequent server starts will not set or unset the clause, so imperative changes are preserved.
                 '';
                 type = types.submodule {
+                  freeformType = types.attrsOf (
+                    types.oneOf [
+                      types.str
+                      types.int
+                      types.bool
+                    ]
+                  );
+
                   options =
                     let
                       defaultText = lib.literalMD ''
@@ -508,6 +512,46 @@ in
                         default = null;
                         inherit defaultText;
                       };
+
+                      connection_limit = mkOption {
+                        type = types.nullOr types.int;
+                        description = ''
+                          Specifies how many concurrent connections the role can make.
+                          -1 (the default) means unlimited.
+                          From the postgres docs:
+
+                          CONNECTION LIMIT connlimit specifies the maximum
+                          number of concurrent connections a role can establish.
+
+                          More information on postgres roles can be found [here](https://www.postgresql.org/docs/current/sql-alterrole.html)
+                        '';
+                        default = null;
+                        inherit defaultText;
+                      };
+
+                      password = mkOption {
+                        type = types.nullOr types.str;
+                        description = ''
+                          Sets the role's password. The password is always stored encrypted in the system catalogs.
+
+                          If the presented password string is already in MD5-encrypted or SCRAM-encrypted format,
+                          then it is stored as-is. The implied authentication mechanism is used automatically.
+
+                          The availability of the different password-based authentication methods depends on how a user's password on the server is encrypted (or hashed, more accurately).
+                          This is controlled by the configuration parameter password_encryption at the time the password is set.
+
+                          The password can be provided as:
+                          - Plaintext (discouraged as it will be readable in the Nix store)
+                          - An MD5-encrypted password (starts with `md5`)
+                          - A SCRAM-SHA-256 encrypted password (starts with `SCRAM-SHA-256$`)
+
+                          Caution must be exercised when specifying an unencrypted password with this command. The password will be transmitted to the server in cleartext, and it might also be logged in the client's command history or the server log.
+
+                          More information on postgres roles can be found [here](https://www.postgresql.org/docs/current/sql-alterrole.html)
+                        '';
+                        default = null;
+                        inherit defaultText;
+                      };
                     };
                 };
               };
@@ -628,13 +672,11 @@ in
         '';
       };
     };
-
   };
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
     warnings = (
       let
         unstableState =
@@ -650,7 +692,11 @@ in
     );
 
     assertions = map (
-      { name, ensureDBOwnership, ... }:
+      {
+        name,
+        ensureDBOwnership,
+        ...
+      }:
       {
         assertion = ensureDBOwnership -> elem name cfg.ensureDatabases;
         message = ''
@@ -944,7 +990,20 @@ in
 
             filteredClauses = filterAttrs (name: value: value != null) user.ensureClauses;
 
-            clauseSqlStatements = attrValues (mapAttrs (n: v: if v then n else "no${n}") filteredClauses);
+            clauseSqlStatements = attrValues (
+              mapAttrs (
+                n: v:
+                let
+                  directive = lib.toUpper (lib.replaceStrings [ "_" ] [ " " ] n);
+                in
+                if builtins.isBool then
+                  (if v then directive else "NO${directive}")
+                else if builtins.isString then
+                  "${directive} '${v}'"
+                else
+                  "${directive} ${v}"
+              ) filteredClauses
+            );
 
             userClauses = ''psql -tAc 'ALTER ROLE "${user.name}" ${concatStringsSep " " clauseSqlStatements}' '';
           in
