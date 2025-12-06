@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "termirs";
-  version = "0.2.0";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "caelansar";
     repo = "termirs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yQ9WmvnIJJHhhXNTHZeHGz2uYVAxuFPf2U1WzybjJqU=";
+    hash = "sha256-KLymgSmbagNX7opxbK3L91n5opwYk8cdRggf15u0GyA=";
   };
 
-  cargoHash = "sha256-J/TgFi0iyhaj9/aF3Gd46PNq/QE+hQfF2YawbJf/5AA=";
+  cargoHash = "sha256-FBczM0xSlZzdDNuJFL7NlJeEtu8njxUKdB9ZNH9WHPk=";
 
   passthru.updateScript = nix-update-script { };
 
