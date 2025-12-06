@@ -11437,8 +11437,6 @@ with pkgs;
     callPackage ../applications/networking/cluster/helm/plugins { }
   );
 
-  kup = libsForQt5.callPackage ../applications/misc/kup { };
-
   kvirc = libsForQt5.callPackage ../applications/networking/irc/kvirc { };
 
   ladspaPlugins = callPackage ../applications/audio/ladspa-plugins {
