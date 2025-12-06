@@ -67,7 +67,7 @@ let
     systemd
   ];
 
-  version = "2025.13";
+  version = "2025.10";
 
   selectSystem =
     attrs:
@@ -79,8 +79,8 @@ let
   };
 
   hash = selectSystem {
-    x86_64-linux = "sha256-zgU6pBujCXBhDO9XAqpUSDNuQt5daQ1gVwopXwc0nGo=";
-    aarch64-linux = "sha256-BDrH99li0GWJ+/9QUrHfKxC1JExG3jvd0ujXPKhGM1c=";
+    x86_64-linux = "sha256-Ov2TW45MN/t+dGuH+ITbym7hnv26Uk2uvw0lI44XvxE=";
+    aarch64-linux = "sha256-7Tq7AuV1WQ+eyg1Xctt0mV66aea9shS2Pvjzir5lTlY=";
   };
 in
 
