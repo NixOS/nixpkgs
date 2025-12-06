@@ -68,7 +68,6 @@ let
         maintainers = with lib.maintainers; [
           offline
           vdemeester
-          periklis
           teutat3s
         ];
       };
