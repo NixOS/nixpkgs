@@ -2,15 +2,8 @@
   lib,
   fetchFromGitHub,
   buildNimPackage,
-  nim-2_0,
 }:
-let
-  buildNimPackage' = buildNimPackage.override {
-    # Do not build with Nim-2.2.x.
-    nim2 = nim-2_0;
-  };
-in
-buildNimPackage' (finalAttrs: {
+buildNimPackage (finalAttrs: {
   pname = "nph";
   version = "0.6.1";
 
@@ -43,5 +36,6 @@ buildNimPackage' (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "nph";
+    broken = true; # FIX: https://github.com/NixOS/nixpkgs/pull/461756#issuecomment-3592724847
   };
 })
