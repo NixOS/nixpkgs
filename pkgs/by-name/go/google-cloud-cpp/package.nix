@@ -16,30 +16,30 @@
   pkg-config,
   protobuf,
   pkgsBuildHost,
-  # default list of APIs: https://github.com/googleapis/google-cloud-cpp/blob/v2.43.0/cmake/GoogleCloudCppFeatures.cmake#L24
+  # default list of APIs: https://github.com/googleapis/google-cloud-cpp/blob/v2.44.0/cmake/GoogleCloudCppFeatures.cmake#L24
   apis ? [ "*" ],
   staticOnly ? stdenv.hostPlatform.isStatic,
 }:
 let
   # defined in cmake/GoogleapisConfig.cmake
-  googleapisRev = "2193a2bfcecb92b92aad7a4d81baa428cafd7dfd";
+  googleapisRev = "8cd3749f4b98f2eeeef511c16431979aeb3a6502";
   googleapis = fetchFromGitHub {
     name = "googleapis-src";
     owner = "googleapis";
     repo = "googleapis";
     rev = googleapisRev;
-    hash = "sha256-M+3ywDd1kyo6U/9o7fpsqYIPuulf8fDe3a4mjJKEN2U=";
+    hash = "sha256-w7jq21qLEiMhuI20C6iUeSskAfZCkZgDCPu5Flr8D48=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "google-cloud-cpp";
-  version = "2.43.0";
+  version = "2.44.0";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-cpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2OnzObCTmB6E4Ut0blmL7CRAJJ9EKl6eSVdfuPS4B2Y=";
+    hash = "sha256-vE3oGGT33cITdAd4e5Xnlx9tX5Sz+wIFQXzj5hdcGDI=";
   };
 
   patches = [
@@ -47,6 +47,13 @@ stdenv.mkDerivation (finalAttrs: {
       url = googleapis;
     })
   ];
+
+  postPatch = ''
+    substituteInPlace cmake/GoogleCloudCppFeatures.cmake \
+      --replace-fail \
+        "bigtable;bigquery;iam;logging;pubsub;spanner;storage" \
+        "bigtable;bigquery;iam;logging;pubsub;spanner;storage;universe_domain" \
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -125,6 +132,15 @@ stdenv.mkDerivation (finalAttrs: {
     # this adds a good chunk of time to the build
     (lib.cmakeBool "BUILD_TESTING" true)
     (lib.cmakeBool "GOOGLE_CLOUD_CPP_ENABLE_EXAMPLES" false)
+
+    # After 30acc3c, the configPhase fails with:
+    # Target "spanner_database_admin_client_samples" links to:
+    #   google-cloud-cpp::universe_domain
+    # but the target was not found.
+    #
+    # Adding both `universe_domain` to the list `GOOGLE_CLOUD_CPP_ENABLE_UNIVERSE_DOMAIN`
+    # https://github.com/googleapis/google-cloud-cpp/commit/30acc3c57ab19aed3f94f2fa673ff255c32c6b70
+    (lib.cmakeBool "GOOGLE_CLOUD_CPP_ENABLE_UNIVERSE_DOMAIN" true)
   ]
   ++ lib.optionals (apis != [ "*" ]) [
     (lib.cmakeFeature "GOOGLE_CLOUD_CPP_ENABLE" (lib.concatStringsSep ";" apis))
