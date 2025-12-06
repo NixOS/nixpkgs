@@ -4997,8 +4997,8 @@ let
         mktplcRef = {
           name = "vstuc";
           publisher = "VisualStudioToolsForUnity";
-          version = "1.1.3";
-          hash = "sha256-MQ7XW45NFhpx0kH3+O3nWXGKUzE9z+axYYQs7rER9ns=";
+          version = "1.2.0";
+          hash = "sha256-D2a8xj9wyL/v5Qjhd0Rp4/jVCZKeNYXnbW+6+F0VnsY=";
         };
         meta = {
           description = "Integrates Visual Studio Code for Unity";
