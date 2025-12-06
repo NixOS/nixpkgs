@@ -53,6 +53,33 @@ in
           # https://github.com/YaLTeR/niri/wiki/Important-Software#portals
           extraPortals = [ pkgs.xdg-desktop-portal-gnome ];
         };
+
+        # Recommended for Nvidia GPU's
+        # https://github.com/YaLTeR/niri/wiki/Nvidia#high-vram-usage-fix
+        environment.etc."nvidia/nvidia-application-profiles-rc.d/50-limit-free-buffer-pool-in-wayland-compositors.json".text =
+          ''
+            {
+              "rules": [
+                  {
+                      "pattern": {
+                          "feature": "procname",
+                          "matches": "niri"
+                      },
+                      "profile": "Limit Free Buffer Pool On Wayland Compositors"
+                  }
+              ],
+              "profiles": [
+                  {
+                      "name": "Limit Free Buffer Pool On Wayland Compositors",
+                      "settings": [
+                          {
+                              "key": "GLVidHeapReuseRatio",
+                              "value": 0
+                          }
+                      ]
+                  }
+              ]
+            }'';
       }
 
       (import ./wayland-session.nix {
