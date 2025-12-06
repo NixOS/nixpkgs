@@ -26,7 +26,7 @@
   sphinx,
   autoreconfHook,
   nixosTests,
-  knot-resolver,
+  knot-resolver_5,
   knot-dns,
   runCommandLocal,
 }:
@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    inherit knot-resolver;
+    inherit knot-resolver_5;
   }
   // lib.optionalAttrs stdenv.hostPlatform.isLinux {
     inherit (nixosTests) knot kea;

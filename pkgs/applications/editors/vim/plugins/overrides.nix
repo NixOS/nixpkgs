@@ -122,6 +122,8 @@
   # search-and-replace.nvim dependencies
   fd,
   sad,
+  # tv.nvim dependency
+  television,
 }:
 self: super:
 let
@@ -3620,6 +3622,10 @@ assertNoAdditions {
 
   tssorter-nvim = super.tssorter-nvim.overrideAttrs {
     dependencies = [ self.nvim-treesitter ];
+  };
+
+  tv-nvim = super.tv-nvim.overrideAttrs {
+    runtimeDeps = [ television ];
   };
 
   typescript-nvim = super.typescript-nvim.overrideAttrs {
