@@ -3,11 +3,7 @@
   fetchFromGitHub,
   fetchpatch2,
   cmake,
-  extra-cmake-modules,
-  wrapQtAppsHook,
-  qtbase,
-  kwin,
-  kcmutils,
+  kdePackages,
   libepoxy,
   libxcb,
   lib,
@@ -33,15 +29,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
-    wrapQtAppsHook
+    kdePackages.extra-cmake-modules
+    kdePackages.wrapQtAppsHook
   ];
   buildInputs = [
-    kcmutils
-    kwin
+    kdePackages.kcmutils
+    kdePackages.kwin
     libepoxy
     libxcb
-    qtbase
+    kdePackages.qtbase
   ];
 
   meta = with lib; {

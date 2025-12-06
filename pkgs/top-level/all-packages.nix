@@ -10365,10 +10365,6 @@ with pkgs;
   */
   inherit (callPackage ../data/json-schema/default.nix { }) jsonSchemaCatalogs;
 
-  kde-rounded-corners =
-    kdePackages.callPackage ../data/themes/kwin-decorations/kde-rounded-corners
-      { };
-
   inherit (callPackages ../data/fonts/liberation-fonts { })
     liberation_ttf_v1
     liberation_ttf_v2
