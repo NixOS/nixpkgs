@@ -7,20 +7,20 @@
   gitUpdater,
 }:
 
-melpaBuild {
+melpaBuild (finalAttrs: {
   pname = "codeium";
   version = "1.6.13";
 
   src = fetchFromGitHub {
     owner = "Exafunction";
     repo = "codeium.el";
-    rev = "1.6.13";
+    tag = finalAttrs.version;
     hash = "sha256-CjT21GhryO8/iM0Uzm/s/I32WqVo4M3tSlHC06iEDXA=";
   };
 
   patches = [
     (replaceVars ./0000-set-codeium-command-executable.patch {
-      codeium = lib.getExe' codeium "codeium_language_server";
+      codeium = lib.getExe codeium;
     })
   ];
 
@@ -34,5 +34,4 @@ melpaBuild {
     inherit (codeium.meta) platforms;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
-
-}
+})
