@@ -462,8 +462,8 @@ in
       "sha256-syjw4M02YXRXsJpM3e7OikE3sSTl/hIIJ3857PP2BII=";
 
   mypy-boto3-ecs =
-    buildMypyBoto3Package "ecs" "1.42.3"
-      "sha256-CHxCd1TX8hN81f47gYH3+PJDxObnZKB+/vhq5JsF5Sg=";
+    buildMypyBoto3Package "ecs" "1.42.4"
+      "sha256-mgZRe8cdya8y8XGILxlYplLfi41OmWiRYUo1Xj3ARpk=";
 
   mypy-boto3-efs =
     buildMypyBoto3Package "efs" "1.42.3"
@@ -605,8 +605,8 @@ in
       "sha256-dHLvIxMXNFxa5ImKkifyeMfFciLc3kzWD9776mmD5Vs=";
 
   mypy-boto3-iam =
-    buildMypyBoto3Package "iam" "1.42.3"
-      "sha256-Ha75FFv3QmeZetRqX4CtjVTvtuQxiIe5ohao2qFYJ74=";
+    buildMypyBoto3Package "iam" "1.42.4"
+      "sha256-QbF9VfRNMcpe8DiVeVBeZfbnn64EI7mP8lgeg/YoS8U=";
 
   mypy-boto3-identitystore =
     buildMypyBoto3Package "identitystore" "1.42.3"
@@ -625,8 +625,8 @@ in
       "sha256-9I+RMsF8b8PK2OsmtgX8v6C6gvZ3h8zB9fQQF5CWh2o=";
 
   mypy-boto3-inspector2 =
-    buildMypyBoto3Package "inspector2" "1.42.3"
-      "sha256-IKwZ61X8n8l9uwMEDicCK25g/Va77+xrpd6qLMal0z0=";
+    buildMypyBoto3Package "inspector2" "1.42.4"
+      "sha256-PFz6OXCgWjHOwStPVozdx8cwLnBbViOr39DPR388CMk=";
 
   mypy-boto3-internetmonitor =
     buildMypyBoto3Package "internetmonitor" "1.42.3"
@@ -1253,8 +1253,8 @@ in
       "sha256-gGSjHXCQf4jHTYaJQWRRQfdpr82gGklxWeWBrLx5/Is=";
 
   mypy-boto3-sesv2 =
-    buildMypyBoto3Package "sesv2" "1.42.3"
-      "sha256-wthoJwRcmdsLT84jMNrgjJVB8Q6FgEqoBKRjfhkAedk=";
+    buildMypyBoto3Package "sesv2" "1.42.4"
+      "sha256-x2y01UFsc/kYLhSGpfkIqRMyQBiZEhSrmHiXMkYl3o4=";
 
   mypy-boto3-shield =
     buildMypyBoto3Package "shield" "1.42.3"
