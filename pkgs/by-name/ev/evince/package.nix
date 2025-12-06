@@ -120,6 +120,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dmultimedia=disabled"
   ];
 
+  # Fix build with gcc15
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-DHAVE_STRING_H"
+    "-DHAVE_STDLIB_H"
+  ];
+
   preFixup = ''
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
   '';
