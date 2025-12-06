@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  python311Packages,
+  python3Packages,
   fetchFromGitHub,
   fetchurl,
   cargo,
@@ -33,7 +33,7 @@ let
   # compilation, which doesn't work on macOS anyway so we can just stub it
   # on macOS.
   #
-  # See https://github.com/NixOS/nixpkgs/pull/198311#issuecomment-1326894295
+  # See https://github.com/NixOS/nixpkgs/pull/1983#issuecomment-1326894295
   myCargoSetupHook = rustPlatform.cargoSetupHook.overrideAttrs (old: {
     cargoConfig = lib.optionalString (!stdenv.hostPlatform.isDarwin) old.cargoConfig;
   });
@@ -78,7 +78,7 @@ let
       substituteInPlace build-tar.py \
         --replace-fail 'run(yarn + ["--cwd", src_join(), "install", "--prefer-offline"])' 'pass'
 
-      ${python311Packages.python}/bin/python3 build-tar.py \
+      ${python3Packages.python}/bin/python3 build-tar.py \
         --output isl-dist.tar.xz \
         --yarn 'yarn --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress'
 
@@ -96,7 +96,7 @@ let
   };
 in
 # Builds the main `sl` binary and its Python extensions
-python311Packages.buildPythonApplication {
+python3Packages.buildPythonApplication {
   format = "setuptools";
   pname = "sapling";
   inherit src version;
@@ -159,6 +159,11 @@ python311Packages.buildPythonApplication {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     curl
     libiconv
+  ];
+
+  dependencies = with python3Packages; [
+    standard-pipes
+    standard-uu
   ];
 
   HGNAME = "sl";
