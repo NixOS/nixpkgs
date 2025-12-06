@@ -668,7 +668,7 @@ with haskellLib;
       # the path to the (host) tools at build time from PATH,
       # so we instruct it to check at runtime.
       enableCabalFlag "allow-relative-paths" (
-        super.nix-paths {
+        super.nix-paths.override {
           nix-build = null;
           nix-env = null;
           nix-hash = null;
