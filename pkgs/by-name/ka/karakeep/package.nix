@@ -17,13 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "karakeep";
-  version = "0.27.0";
+  version = "0.29.1";
 
   src = fetchFromGitHub {
     owner = "karakeep-app";
     repo = "karakeep";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KkRCMS/g+xCQyVh1qB/kf5Seqrn2McYBaUHqKOeigCA=";
+    hash = "sha256-mOIX9pNVESRPD2Jjdr014NyYO/3rSvYpr4RP34RKE8c=";
   };
 
   patches = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
     fetcherVersion = 1;
-    hash = "sha256-74jLff9v2+qc09b8ArooUX6qpFt2tDNW3ZayHPcDVj0=";
+    hash = "sha256-rFMLmqPEvP6Vn7VNmE2tGsnv9YPMaL1aktwTsnjv5+M=";
   };
   buildPhase = ''
     runHook preBuild
