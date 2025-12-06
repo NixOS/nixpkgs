@@ -31,21 +31,19 @@ makeSetupHook {
   # ensure deps for linking below are available
   depsTargetTargetPropagated =
     assert (lib.assertMsg (!targetPackages ? raw) "libcosmicAppHook must be in nativeBuildInputs");
-    [
+    lib.optionals (!stdenv.hostPlatform.isDarwin) [
       libGL
       libxkbcommon
       xorg.libX11
       xorg.libXcursor
       xorg.libXi
       xorg.libxcb
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       wayland
       vulkan-loader
     ];
 
   substitutions = {
-    fallbackXdgDirs =
+    fallbackXdgDirs = lib.optionalString (!stdenv.hostPlatform.isDarwin) (
       let
         fallbackThemes = runCommand "cosmic-fallback-themes" { } ''
           mkdir -p $out/share
@@ -54,14 +52,15 @@ makeSetupHook {
       in
       lib.makeSearchPath "share" (
         lib.optionals includeSettings [ fallbackThemes ] ++ [ targetPackages.cosmic-icons ]
-      );
+      )
+    );
     # Temporarily using RUSTFLAGS: https://github.com/NixOS/nixpkgs/issues/464392
     # See ./libcosmic-app-hook.sh
     # cargoLinkerVar = targetPackages.stdenv.hostPlatform.rust.cargoEnvVarTarget;
 
     # force linking for all libraries that may be dlopen'd by libcosmic/iced apps
     cargoLinkLibs = lib.escapeShellArgs (
-      [
+      lib.optionals (!stdenv.hostPlatform.isDarwin) [
         # for wgpu-hal
         "EGL"
         # for xkbcommon-dl
@@ -75,8 +74,6 @@ makeSetupHook {
         "Xi"
         # for x11rb
         "xcb"
-      ]
-      ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
         # for wgpu-hal, wayland-sys
         "wayland-client"
         # for wgpu-hal
