@@ -32,7 +32,7 @@
   emacs,
   ffmpeg,
   haskellPackages,
-  knot-resolver,
+  knot-resolver_5,
   ngtcp2-gnutls,
   ocamlPackages,
   pkgsStatic,
@@ -203,7 +203,7 @@ stdenv.mkDerivation rec {
       ffmpeg
       emacs
       qemu
-      knot-resolver
+      knot-resolver_5
       samba
       openconnect
       ;
