@@ -9,7 +9,7 @@ let
 
   makeColor = i: lib.concatMapStringsSep "," (x: "0x" + lib.substring (2 * i) 2 x);
 
-  isUnicode = lib.hasSuffix "UTF-8" (lib.toUpper config.i18n.defaultLocale);
+  isUnicode = config.i18n.defaultCharset == "UTF-8" || cfg.useXkbConfig;
 
   optimizedKeymap =
     pkgs.runCommand "keymap"
