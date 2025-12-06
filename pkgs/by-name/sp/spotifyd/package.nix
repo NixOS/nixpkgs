@@ -23,16 +23,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spotifyd";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "Spotifyd";
     repo = "spotifyd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IqJlqcau0AZAqQjlaEKzinqTdVUA48/m2Y3ioFP/4Zw=";
+    hash = "sha256-+t6z2cenw0fU5onl5F5vtk7Hr24IzTCAee+Lcnd7aT4=";
   };
 
-  cargoHash = "sha256-wZ/JJZDo+Iz5vg4XawcZFvjOEqpD5I0jTfg1JyH3+MA=";
+  cargoHash = "sha256-rv4FWyciv6vDKtD7moJppY3tOJb0B3ezE9HgCLNhIo8=";
 
   nativeBuildInputs = [
     cmake
