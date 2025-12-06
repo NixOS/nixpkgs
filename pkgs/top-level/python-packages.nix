@@ -6679,6 +6679,8 @@ self: super: with self; {
 
   hatch-babel = callPackage ../development/python-modules/hatch-babel { };
 
+  hatch-deps-selector = callPackage ../development/python-modules/hatch-deps-selector { };
+
   hatch-docstring-description =
     callPackage ../development/python-modules/hatch-docstring-description
       { };
