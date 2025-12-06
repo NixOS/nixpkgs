@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  ffmpeg_7,
+  ffmpeg,
   libaom,
   nasm,
   nix-update-script,
@@ -15,26 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "av1an-unwrapped";
-  version = "0.4.4";
+  version = "0.5";
 
   src = fetchFromGitHub {
-    owner = "master-of-zen";
-    repo = "av1an";
+    owner = "rust-av";
+    repo = "Av1an";
     tag = version;
-    hash = "sha256-YF+j349777pE+evvXWTo42DQn1CE0jlfKBEXUFTfcb8=";
+    hash = "sha256-jlRB/9oropbh4mGg0kFDFWKFvSe13wCcrWr3O1TKTHo=";
   };
 
-  cargoPatches = [
-    # TODO: Remove in next version
-    # Avoids https://github.com/shssoichiro/ffmpeg-the-third/issues/63
-    # https://github.com/master-of-zen/Av1an/pull/912
-    (fetchpatch {
-      url = "https://github.com/master-of-zen/Av1an/commit/e6b29a5a624434eb0dc95b7e8aa31ccf624ccb9d.patch";
-      hash = "sha256-nFE04hlTzApYafSzgl/XOUdchxEjKvxXy+SKr/d6+0Q=";
-    })
-  ];
-
-  cargoHash = "sha256-PcxnWkruFH4d2FqS+y3PmyA70kSe9BKtmTdCnfKnfpU=";
+  cargoHash = "sha256-ya0mY8E6ww7jGNwnCdOZD4obNhZojXlx5SR7drVsiBA=";
 
   nativeBuildInputs = [
     nasm
@@ -43,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
-    ffmpeg_7
+    ffmpeg
     vapoursynth
   ];
 
@@ -67,8 +57,8 @@ rustPlatform.buildRustPackage rec {
       Cross-platform command-line AV1 / VP9 / HEVC / H264 encoding framework with per scene quality encoding.
       It can increase your encoding speed and improve cpu utilization by running multiple encoder processes in parallel.
     '';
-    homepage = "https://github.com/master-of-zen/Av1an";
-    changelog = "https://github.com/master-of-zen/Av1an/releases/tag/${version}";
+    homepage = "https://github.com/rust-av/Av1an";
+    changelog = "https://github.com/rust-av/Av1an/releases/tag/${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "av1an";
