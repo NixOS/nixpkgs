@@ -26615,6 +26615,12 @@
     githubId = 6740669;
     name = "Tom Smeets";
   };
+  tonybanters = {
+    email = "tony@tonybtw.com";
+    github = "tonybanters";
+    githubId = 27378358;
+    name = "tony";
+  };
   toonn = {
     email = "nixpkgs@toonn.io";
     matrix = "@toonn:matrix.org";
