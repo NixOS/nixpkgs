@@ -7,7 +7,6 @@
   tmux,
   fcft,
   arrow-cpp,
-  # build config
   enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 
