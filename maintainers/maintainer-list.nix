@@ -5736,6 +5736,13 @@
     matrix = "@Dan:matrix.org";
     name = "Daniel Theriault";
   };
+  danberdev = {
+    email = "me@danber.dev";
+    github = "danberdev";
+    githubId = 13893528;
+    name = "Daniil Berendeev";
+    keys = [ { fingerprint = "60D7 0EE0 3BD4 A415 B255  1938 6556 0668 006B 4906"; } ];
+  };
   danbst = {
     email = "abcz2.uprola@gmail.com";
     github = "danbst";
