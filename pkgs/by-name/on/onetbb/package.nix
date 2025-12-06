@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     hwloc
   ];
 
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isStatic;
 
   dontUseNinjaCheck = true;
 
@@ -71,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "TBB_DISABLE_HWLOC_AUTOMATIC_SEARCH" false)
+    (lib.cmakeBool "TBB_TEST" finalAttrs.finalPackage.doCheck)
   ];
 
   env = {
