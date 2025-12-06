@@ -53,11 +53,11 @@ dont-distribute-packages:
  - age
  - agentx
  - aip
- - airgql
  - alg
  - algebra-checkers
  - algebra-driven-design
  - algebra-sql
+ - algebraic-graph-duoids
  - algolia
  - AlgoRhythm
  - algorithmic-composition-additional
@@ -74,7 +74,6 @@ dont-distribute-packages:
  - alto
  - amazon-emailer-client-snap
  - amby
- - ampersand
  - analyze-client
  - anansi-hscolour
  - anatomy
@@ -130,6 +129,7 @@ dont-distribute-packages:
  - array-forth
  - arraylist
  - arx
+ - arxiv-client-cli
  - ascii
  - ascii-cows
  - ascii-numbers
@@ -187,6 +187,7 @@ dont-distribute-packages:
  - aws-sign4
  - aws-sns
  - axiom
+ - axiomatic-classes
  - azimuth-hs
  - aztecs-sdl-image
  - aztecs-sdl-text
@@ -551,6 +552,7 @@ dont-distribute-packages:
  - concrete-haskell
  - concrete-haskell-autogen
  - concurrency-benchmarks
+ - ConcurrentUtils
  - Condor
  - condor
  - conductive-hsc3
@@ -583,6 +585,7 @@ dont-distribute-packages:
  - containers-accelerate
  - content-store
  - control
+ - control-invariants
  - control-monad-attempt
  - control-monad-exception
  - control-monad-exception-monadsfd
@@ -625,7 +628,6 @@ dont-distribute-packages:
  - crf-chain2-tiers
  - criu-rpc
  - cron-compat
- - crucible-llvm
  - crux
  - crux-llvm
  - crypto-classical
@@ -679,6 +681,8 @@ dont-distribute-packages:
  - datadog-tracing
  - datafix
  - dataflow
+ - dataframe-hasktorch
+ - dataframe-persistent
  - datasets
  - date-conversions
  - dbjava
@@ -811,6 +815,8 @@ dont-distribute-packages:
  - DSTM
  - dtd
  - duckdb-simple
+ - duoidal-transformers
+ - duoids-hedgehog
  - Dust
  - Dust-crypto
  - Dust-tools
@@ -869,6 +875,7 @@ dont-distribute-packages:
  - error-message
  - errors-ext
  - ersatz-toysat
+ - ersatz-viz
  - esotericbot
  - EsounD
  - esqueleto-postgis
@@ -910,6 +917,7 @@ dont-distribute-packages:
  - exference
  - exist
  - exist-instances
+ - existential
  - expand
  - expat-enumerator
  - expiring-containers
@@ -1112,6 +1120,7 @@ dont-distribute-packages:
  - GenussFold
  - geodetic
  - geolite-csv
+ - geomancy-layout
  - getemx
  - ghc-debugger
  - ghc-dump-util
@@ -1196,13 +1205,6 @@ dont-distribute-packages:
  - GPipe-TextureLoad
  - gps
  - gps2htmlReport
- - gpu-vulkan
- - gpu-vulkan-khr-surface
- - gpu-vulkan-khr-surface-glfw
- - gpu-vulkan-khr-swapchain
- - gpu-vulkan-middle-khr-surface
- - gpu-vulkan-middle-khr-surface-glfw
- - gpu-vulkan-middle-khr-swapchain
  - GPX
  - grab-form
  - graflog
@@ -1794,6 +1796,7 @@ dont-distribute-packages:
  - ifscs
  - ige-mac-integration
  - igrf
+ - ihaskell-dataframe
  - ihaskell-rlangqq
  - ihaskell-symtegration
  - ihttp
@@ -1989,7 +1992,6 @@ dont-distribute-packages:
  - kubernetes-client
  - kure-your-boilerplate
  - kurita
- - kvitable
  - laborantin-hs
  - labsat
  - labyrinth
@@ -2400,7 +2402,6 @@ dont-distribute-packages:
  - nakadi-client
  - named-servant-client
  - named-servant-server
- - named-text
  - nanq
  - NaperianNetCDF
  - national-australia-bank
@@ -2412,8 +2413,6 @@ dont-distribute-packages:
  - nero-wai
  - nero-warp
  - nested-routes
- - net-mqtt-lens
- - net-mqtt-rpc
  - net-spider-cli
  - net-spider-pangraph
  - net-spider-rpl
@@ -2795,7 +2794,6 @@ dont-distribute-packages:
  - puzzle-draw-cmdline
  - pvd
  - qd-vec
- - qhs
  - qhull
  - qnap-decrypt
  - qr-repa
@@ -3284,8 +3282,6 @@ dont-distribute-packages:
  - snowflake-server
  - snumber
  - Snusmumrik
- - soap-openssl
- - soap-tls
  - SoccerFun
  - SoccerFunGL
  - sock2stream
@@ -3458,7 +3454,6 @@ dont-distribute-packages:
  - tasty-jenkins-xml
  - tasty-laws
  - tasty-lens
- - tasty-sugar
  - TastyTLT
  - tateti-tateti
  - Taxonomy

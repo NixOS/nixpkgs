@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     libxcrypt
   ]
   ++ lib.optional enableLdap openldap
-  ++ lib.optional stdenv.hostPlatform.isLinux pam;
+  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform pam) pam;
 
   configureFlags = [
     "--with-openssl=${openssl.dev}"
