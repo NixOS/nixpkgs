@@ -1,0 +1,114 @@
+From 654e3c7435180d4aec8a2fcb16a16585cea7ab70 Mon Sep 17 00:00:00 2001
+From: "Miss Islington (bot)"
+ <31488909+miss-islington@users.noreply.github.com>
+Date: Fri, 5 Dec 2025 09:08:15 +0100
+Subject: [PATCH] [3.14] gh-142214: Fix two regressions in dataclasses
+ (GH-142223) (#142277)
+
+gh-142214: Fix two regressions in dataclasses (GH-142223)
+(cherry picked from commit 53ec7c8fc07eb6958869638a0cad70c52ad6fcf5)
+
+Co-authored-by: Jelle Zijlstra <jelle.zijlstra@gmail.com>
+---
+ Lib/dataclasses.py                            | 14 +++++++---
+ Lib/test/test_dataclasses/__init__.py         | 28 +++++++++++++++++++
+ ...-12-03-06-12-39.gh-issue-142214.appYNZ.rst | 12 ++++++++
+ 3 files changed, 50 insertions(+), 4 deletions(-)
+ create mode 100644 Misc/NEWS.d/next/Library/2025-12-03-06-12-39.gh-issue-142214.appYNZ.rst
+
+diff --git a/Lib/dataclasses.py b/Lib/dataclasses.py
+index fb7e1701cce0a4..c8dbb247745ab7 100644
+--- a/Lib/dataclasses.py
++++ b/Lib/dataclasses.py
+@@ -550,7 +550,12 @@ def __annotate__(format, /):
+ 
+                 new_annotations = {}
+                 for k in annotation_fields:
+-                    new_annotations[k] = cls_annotations[k]
++                    # gh-142214: The annotation may be missing in unusual dynamic cases.
++                    # If so, just skip it.
++                    try:
++                        new_annotations[k] = cls_annotations[k]
++                    except KeyError:
++                        pass
+ 
+                 if return_type is not MISSING:
+                     if format == Format.STRING:
+@@ -1398,9 +1403,10 @@ def _add_slots(cls, is_frozen, weakref_slot, defined_fields):
+             f.type = ann
+ 
+     # Fix the class reference in the __annotate__ method
+-    init_annotate = newcls.__init__.__annotate__
+-    if getattr(init_annotate, "__generated_by_dataclasses__", False):
+-        _update_func_cell_for__class__(init_annotate, cls, newcls)
++    init = newcls.__init__
++    if init_annotate := getattr(init, "__annotate__", None):
++        if getattr(init_annotate, "__generated_by_dataclasses__", False):
++            _update_func_cell_for__class__(init_annotate, cls, newcls)
+ 
+     return newcls
+ 
+diff --git a/Lib/test/test_dataclasses/__init__.py b/Lib/test/test_dataclasses/__init__.py
+index 513dd78c4381b4..3b335429b98500 100644
+--- a/Lib/test/test_dataclasses/__init__.py
++++ b/Lib/test/test_dataclasses/__init__.py
+@@ -927,6 +927,20 @@ class C:
+ 
+         validate_class(C)
+ 
++    def test_incomplete_annotations(self):
++        # gh-142214
++        @dataclass
++        class C:
++            "doc"  # needed because otherwise we fetch the annotations at the wrong time
++            x: int
++
++        C.__annotate__ = lambda _: {}
++
++        self.assertEqual(
++            annotationlib.get_annotations(C.__init__),
++            {"return": None}
++        )
++
+     def test_missing_default(self):
+         # Test that MISSING works the same as a default not being
+         #  specified.
+@@ -2578,6 +2592,20 @@ def __init__(self, x: int) -> None:
+ 
+         self.assertFalse(hasattr(E.__init__.__annotate__, "__generated_by_dataclasses__"))
+ 
++    def test_slots_true_init_false(self):
++        # Test that slots=True and init=False work together and
++        #  that __annotate__ is not added to __init__.
++
++        @dataclass(slots=True, init=False)
++        class F:
++            x: int
++
++        f = F()
++        f.x = 10
++        self.assertEqual(f.x, 10)
++
++        self.assertFalse(hasattr(F.__init__, "__annotate__"))
++
+     def test_init_false_forwardref(self):
+         # Test forward references in fields not required for __init__ annotations.
+ 
+diff --git a/Misc/NEWS.d/next/Library/2025-12-03-06-12-39.gh-issue-142214.appYNZ.rst b/Misc/NEWS.d/next/Library/2025-12-03-06-12-39.gh-issue-142214.appYNZ.rst
+new file mode 100644
+index 00000000000000..b87430ec1a3d65
+--- /dev/null
++++ b/Misc/NEWS.d/next/Library/2025-12-03-06-12-39.gh-issue-142214.appYNZ.rst
+@@ -0,0 +1,12 @@
++Fix two regressions in :mod:`dataclasses` in Python 3.14.1 related to
++annotations.
++
++* An exception is no longer raised if ``slots=True`` is used and the
++  ``__init__`` method does not have an ``__annotate__`` attribute
++  (likely because ``init=False`` was used).
++
++* An exception is no longer raised if annotations are requested on the
++  ``__init__`` method and one of the fields is not present in the class
++  annotations. This can occur in certain dynamic scenarios.
++
++Patch by Jelle Zijlstra.
