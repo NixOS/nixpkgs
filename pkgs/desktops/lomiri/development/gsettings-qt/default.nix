@@ -72,6 +72,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/ubports/core/gsettings-qt";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [ ];
   };
 }
