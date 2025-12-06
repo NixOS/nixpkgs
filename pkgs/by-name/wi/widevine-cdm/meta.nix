@@ -8,8 +8,10 @@ lib: {
     bearfm
   ];
   platforms = lib.map (lib.removeSuffix ".nix") (
-    lib.filter (name: name != "meta.nix" && name != "package.nix") (
-      builtins.attrNames (builtins.readDir ./.)
-    )
+    lib.filter (
+      name:
+      (lib.strings.hasPrefix "x86_64" name || lib.strings.hasPrefix "aarch64" name)
+      && lib.strings.hasSuffix ".nix" name
+    ) (builtins.attrNames (builtins.readDir ./.))
   );
 }
