@@ -58,6 +58,7 @@ postgresqlBuildExtension (finalAttrs: {
 
   cmakeFlags = [
     "-DOPENSSL_CONFIGURED=1"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
     "-DPG_CONFIG=${pgWithExtensions.pg_config}/bin/pg_config"
     "-DPostgreSQL_TARGET_EXTENSION_DIR=${placeholder "out"}/share/postgresql/extension/"
     "-DPostgreSQL_TARGET_PACKAGE_LIBRARY_DIR=${placeholder "out"}/lib/"
