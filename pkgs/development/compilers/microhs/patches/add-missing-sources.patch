@@ -1,0 +1,26 @@
+Fix runtime sources missing from Cabal package
+
+diff --git a/MicroHs.cabal b/MicroHs.cabal
+index 0ae490f4..fb54375f 100644
+--- a/MicroHs.cabal
++++ b/MicroHs.cabal
+@@ -33,14 +33,19 @@ extra-source-files:
+       paths/Paths_MicroHs.hs
+       src/runtime/*.c
+       src/runtime/*.h
++      src/runtime/**/*.c
++      src/runtime/**/*.h
+       tests/Makefile
+       tests/*.hs
+       tests/*.hs-boot
+       tests/*.ref
+ 
+ data-files:
++      targets.conf
+       src/runtime/*.c
+       src/runtime/*.h
++      src/runtime/**/*.c
++      src/runtime/**/*.h
+ -- I would like to have these two only for ghc, but I can't figure out how.
+ -- But mcabal has a hack that recognizes lines that start with --MCABAL as valid lines.
+ --MCABALif impl(ghc)
