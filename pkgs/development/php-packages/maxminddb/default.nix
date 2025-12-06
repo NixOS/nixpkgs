@@ -6,7 +6,7 @@
 }:
 let
   pname = "maxminddb";
-  version = "1.12.1";
+  version = "1.13.1";
 in
 buildPecl {
   inherit pname version;
@@ -15,7 +15,7 @@ buildPecl {
     owner = "maxmind";
     repo = "MaxMind-DB-Reader-php";
     rev = "v${version}";
-    sha256 = "sha256-VsQOztF4TN3XgJjf3mZa1/Y5+6ounbkLRAzawLSX+BI=";
+    sha256 = "sha256-rOS6XAap94AtFSZnQO8kEXDRUfr1Y5IhWKRxP6fxSio=";
   };
 
   prePatch = ''
