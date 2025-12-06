@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mnamer";
-  version = "2.5.5";
+  version = "2.6.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jkwill87";
     repo = "mnamer";
     tag = version;
-    sha256 = "sha256-qQu5V1GOsbrR00HOrot6TTAkc3KRasBPDEU7ZojUBio=";
+    sha256 = "sha256-lu1DWbR7LkaRddeAAHBWM61cnEZG4KVZdQWWRsbghb8=";
   };
 
   build-system = with python3Packages; [
