@@ -17393,6 +17393,11 @@
     github = "mlvzk";
     githubId = 44906333;
   };
+  mlyxshi = {
+    name = "mlyxshi";
+    github = "mlyxshi";
+    githubId = 16594754;
+  };
   mmahut = {
     email = "marek.mahut@gmail.com";
     github = "mmahut";
