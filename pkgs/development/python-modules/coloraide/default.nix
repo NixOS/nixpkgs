@@ -36,6 +36,7 @@ buildPythonPackage {
     license = lib.licenses.mit;
     maintainers = [
       lib.maintainers._9999years
+      lib.maintainers.djacu
     ];
   };
 }
