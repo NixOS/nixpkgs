@@ -277,6 +277,22 @@
         ./ghc-define-undefined-elf-st-visibility.patch
       ]
 
+      # Allow using RTLD_GLOBAL via environment variable for packages that need
+      # it during Template Haskell compilation on Darwin.
+      # See https://github.com/NixOS/nixpkgs/issues/461651
+      # Patch maintainer: roberth
+      ++
+        lib.optionals
+          (
+            stdenv.targetPlatform.isDarwin
+            && lib.versionAtLeast version "9.10"
+            # patch does not apply on 9.12
+            && lib.versionOlder version "9.11"
+          )
+          [
+            ./rtld-global.patch
+          ]
+
       ++ (import ./common-llvm-patches.nix { inherit lib version fetchpatch; });
 
     stdenv = stdenvNoCC;
