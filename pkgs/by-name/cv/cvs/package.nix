@@ -6,6 +6,7 @@
   texinfo,
   nano,
   autoreconfHook,
+  openssh,
 }:
 
 let
@@ -48,6 +49,7 @@ stdenv.mkDerivation {
 
   configureFlags = [
     "--with-editor=${nano}/bin/nano"
+    "--with-rsh=${openssh}/bin/ssh"
 
     # Required for cross-compilation.
     "cvs_cv_func_printf_ptr=yes"
