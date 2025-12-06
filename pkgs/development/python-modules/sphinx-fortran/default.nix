@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  future,
+  pythonOlder,
   numpy,
   sphinx,
   six,
@@ -11,27 +11,24 @@
 
 buildPythonPackage {
   pname = "sphinx-fortran";
-  version = "unstable-2022-03-02";
+  version = "unstable-2025-10-03";
   format = "setuptools";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "VACUMM";
     repo = "sphinx-fortran";
-    rev = "394ae990b43ed43fcff8beb048632f5e99794264";
-    hash = "sha256-IVKu5u9gqs7/9EZrf4ZYd12K6J31u+/B8kk4+8yfohM=";
+    rev = "b14f438c1cc74d1dbcd5acd9a330c3b509caab56";
+    hash = "sha256-baWzxtu285z9BIH5HzMTASo2nZpOk3Q0rKcdkoul588=";
   };
 
   propagatedBuildInputs = [
-    future
     numpy
     sphinx
     six
   ];
 
   pythonImportsCheck = [ "sphinxfortran" ];
-
-  # Tests are failing because reference files are not updated
-  doCheck = false;
 
   nativeCheckInputs = [ pytestCheckHook ];
 
