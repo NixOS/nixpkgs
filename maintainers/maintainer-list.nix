@@ -20553,6 +20553,12 @@
     githubId = 20472367;
     name = "Peter Hebden";
   };
+  pivok = {
+    email = "pivoc@protonmail.com";
+    github = "Pivok7";
+    githubId = 153895536;
+    name = "Bartłomiej Witaszczyk";
+  };
   pixelsergey = {
     email = "sergey.ichtchenko@gmail.com";
     github = "PixelSergey";
