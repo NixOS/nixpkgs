@@ -3,7 +3,7 @@
   formats,
   stdenvNoCC,
   fetchFromGitHub,
-  qtgraphicaleffects,
+  libsForQt5,
   /*
     An example of how you can override the background with a NixOS wallpaper
     *
@@ -33,11 +33,10 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-yn0fTYsdZZSOcaYlPCn8BUIWeFIKcTI1oioTWqjYunQ=";
   };
 
-  propagatedBuildInputs = [
-    qtgraphicaleffects
-  ];
-
   dontWrapQtApps = true;
+  propagatedBuildInputs = [
+    libsForQt5.qtgraphicaleffects
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -55,13 +54,13 @@ stdenvNoCC.mkDerivation {
   postFixup = ''
     mkdir -p $out/nix-support
 
-    echo ${qtgraphicaleffects} >> $out/nix-support/propagated-user-env-packages
+    echo ${libsForQt5.qtgraphicaleffects} >> $out/nix-support/propagated-user-env-packages
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Sleek and stylish SDDM theme crafted in QML";
     homepage = "https://github.com/surajmandalcell/Elegant-sddm";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  qtgraphicaleffects,
+  libsForQt5,
   themeConfig ? { },
 }:
 let
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   };
 
   propagatedBuildInputs = [
-    qtgraphicaleffects
+    libsForQt5.qtgraphicaleffects
   ];
 
   dontWrapQtApps = true;
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
   postFixup = ''
     mkdir -p $out/nix-support
 
-    echo ${qtgraphicaleffects} >> $out/nix-support/propagated-user-env-packages
+    echo ${libsForQt5.qtgraphicaleffects} >> $out/nix-support/propagated-user-env-packages
   '';
   meta = with lib; {
     license = licenses.gpl3;

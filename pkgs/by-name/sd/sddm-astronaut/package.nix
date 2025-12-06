@@ -1,7 +1,9 @@
 {
-  pkgs,
   lib,
   stdenvNoCC,
+  fetchFromGitHub,
+  kdePackages,
+  formats,
   themeConfig ? null,
   embeddedTheme ? "astronaut",
 }:
@@ -9,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   pname = "sddm-astronaut";
   version = "1.0-unstable-2025-01-05";
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "Keyitdev";
     repo = "sddm-astronaut-theme";
     rev = "11c0bf6147bbea466ce2e2b0559e9a9abdbcc7c3";
@@ -18,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  propagatedBuildInputs = with pkgs.kdePackages; [
+  propagatedBuildInputs = with kdePackages; [
     qtsvg
     qtmultimedia
     qtvirtualkeyboard
@@ -26,7 +28,7 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase =
     let
-      iniFormat = pkgs.formats.ini { };
+      iniFormat = formats.ini { };
       configFile = iniFormat.generate "" { General = themeConfig; };
 
       basePath = "$out/share/sddm/themes/sddm-astronaut-theme";
