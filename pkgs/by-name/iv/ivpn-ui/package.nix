@@ -10,7 +10,7 @@
   ivpn-service,
 }:
 let
-  version = "3.14.34";
+  version = "3.15.0";
 in
 buildNpmPackage {
   pname = "ivpn-ui";
@@ -20,12 +20,12 @@ buildNpmPackage {
     owner = "ivpn";
     repo = "desktop-app";
     tag = "v${version}";
-    hash = "sha256-Q96G5mJahJnXxpqJ8IF0oFie7l0Nd1p8drHH9NSpwEw=";
+    hash = "sha256-Y+oW/2WDkH/YydR+xSzEHPdCNKTmmsV4yEsju+OmDYE=";
   };
 
   sourceRoot = "source/ui";
 
-  npmDepsHash = "sha256-y/VxvSZUvcIuckJF87639i5pcVJLg8SDAbWmg5bO3/s=";
+  npmDepsHash = "sha256-OOBBUDJwTP2T/KqzJPRV+A9ncRmb14KBoAXqa0T6c58=";
 
   nativeBuildInputs = [
     copyDesktopItems
