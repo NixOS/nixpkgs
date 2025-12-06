@@ -79,5 +79,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "biglybt";
     maintainers = with lib.maintainers; [ raspher ];
+    # installPhase needs to be accomodated for Darwin.
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
