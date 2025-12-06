@@ -719,6 +719,8 @@ let
           inherit (pkgs) gnuplot;
         };
 
+        goblint-cil = callPackage ../development/ocaml-modules/goblint-cil { };
+
         graphics =
           if lib.versionOlder "4.09" ocaml.version then
             callPackage ../development/ocaml-modules/graphics { }
