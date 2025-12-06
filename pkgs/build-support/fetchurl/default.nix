@@ -51,11 +51,6 @@ let
     ]
     ++ (map (site: "NIX_MIRRORS_${site}") sites);
 
-in
-
-lib.extendMkDerivation {
-  constructDrv = stdenvNoCC.mkDerivation;
-
   excludeDrvArgNames = [
     # Passed via passthru
     "url"
@@ -329,6 +324,26 @@ lib.extendMkDerivation {
       // passthru;
     };
 
+in
+
+lib.extendMkDerivation {
+  constructDrv = stdenvNoCC.mkDerivation;
+
+  inherit
+    excludeDrvArgNames
+    extendDrvArgs
+    ;
+
   # No ellipsis
   inheritFunctionArgs = false;
+}
+// {
+  expectDrvArgs =
+    let
+      faRaw = lib.functionArgs (extendDrvArgs { });
+    in
+    lib.zipAttrsWith (n: lib.any lib.id) [
+      (lib.mapAttrs (n: v: !v) (removeAttrs faRaw excludeDrvArgNames))
+      (lib.mapAttrs (n: v: true) (extendDrvArgs { } (faRaw // { derivationArgs = { }; })))
+    ];
 }

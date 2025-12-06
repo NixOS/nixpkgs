@@ -35,11 +35,6 @@ let
     else
       # FIXME fetching HEAD if no rev or tag is provided is problematic at best
       "HEAD";
-in
-
-lib.makeOverridable (
-  lib.extendMkDerivation {
-    constructDrv = stdenvNoCC.mkDerivation;
 
     excludeDrvArgNames = [
       # Additional stdenv.mkDerivation arguments from derived fetchers.
@@ -66,14 +61,17 @@ lib.makeOverridable (
             # when rootDir is specified, avoid invalidating the result when rev changes
             append = if rootDir != "" then "-${lib.strings.sanitizeDerivationName rootDir}" else "";
           },
-          leaveDotGit ? deepClone || fetchTags,
+          # When null, will default to: `deepClone || fetchTags`
+          leaveDotGit ? null,
           outputHash ? lib.fakeHash,
           outputHashAlgo ? null,
           fetchSubmodules ? true,
           deepClone ? false,
           branchName ? null,
-          sparseCheckout ? lib.optional (rootDir != "") rootDir,
-          nonConeMode ? rootDir != "",
+          # When null, will default to: `lib.optional (rootdir != "") rootdir`
+          sparseCheckout ? null,
+          # When null, will default to: `rootDir != ""`
+          nonConeMode ? null,
           nativeBuildInputs ? [ ],
           # Shell code executed before the file has been fetched.  This, in
           # particular, can do things like set NIX_PREFETCH_GIT_CHECKOUT_HOOK to
@@ -128,105 +126,155 @@ lib.makeOverridable (
           server admins start using the new version?
         */
 
-        assert nonConeMode -> (sparseCheckout != [ ]);
-        assert fetchTags -> leaveDotGit;
-        assert rootDir != "" -> !leaveDotGit;
+        derivationArgs
+        // {
+          inherit name;
 
-        if builtins.isString sparseCheckout then
-          # Changed to throw on 2023-06-04
-          throw
-            "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
-        else
-          derivationArgs
-          // {
-            inherit name;
+          builder = ./builder.sh;
+          fetcher = ./nix-prefetch-git;
 
-            builder = ./builder.sh;
-            fetcher = ./nix-prefetch-git;
+          nativeBuildInputs = [
+            git
+            cacert
+          ]
+          ++ lib.optionals fetchLFS [ git-lfs ]
+          ++ nativeBuildInputs;
 
-            nativeBuildInputs = [
-              git
-              cacert
-            ]
-            ++ lib.optionals fetchLFS [ git-lfs ]
-            ++ nativeBuildInputs;
+          inherit outputHash outputHashAlgo;
+          outputHashMode = "recursive";
 
-            inherit outputHash outputHashAlgo;
-            outputHashMode = "recursive";
-
+          sparseCheckout = lib.defaultTo (lib.optional (finalAttrs.rootDir != "") finalAttrs.rootDir) sparseCheckout;
+          sparseCheckoutText =
+            # Changed to throw on 2023-06-04
+            assert (
+              lib.assertMsg (lib.isList finalAttrs.sparseCheckout) "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
+            );
+            assert finalAttrs.nonConeMode -> (finalAttrs.sparseCheckout != [ ]);
             # git-sparse-checkout(1) says:
             # > When the --stdin option is provided, the directories or patterns are read
             # > from standard in as a newline-delimited list instead of from the arguments.
-            sparseCheckout = builtins.concatStringsSep "\n" sparseCheckout;
+            builtins.concatStringsSep "\n" finalAttrs.sparseCheckout;
 
-            inherit
-              url
+          inherit
+            url
+            fetchLFS
+            fetchSubmodules
+            deepClone
+            branchName
+            preFetch
+            postFetch
+            fetchTags
+            rootDir
+            gitConfigFile
+            ;
+          leaveDotGit =
+            if leaveDotGit != null then
+              assert fetchTags -> leaveDotGit;
+              assert rootDir != "" -> !leaveDotGit;
               leaveDotGit
-              fetchLFS
-              fetchSubmodules
-              deepClone
-              branchName
-              nonConeMode
-              preFetch
-              postFetch
-              fetchTags
-              rootDir
-              gitConfigFile
-              ;
-            inherit tag;
-            revCustom = rev;
-            rev = getRevWithTag {
-              inherit (finalAttrs) tag;
-              rev = finalAttrs.revCustom;
-            };
+            else
+              deepClone || fetchTags;
+          nonConeMode = lib.defaultTo (finalAttrs.rootDir != "") nonConeMode;
+          inherit tag;
+          revCustom = rev;
+          rev = getRevWithTag {
+            inherit (finalAttrs) tag;
+            rev = finalAttrs.revCustom;
+          };
 
-            postHook =
-              if netrcPhase == null then
-                null
-              else
-                ''
-                  ${netrcPhase}
-                  # required that git uses the netrc file
-                  mv {,.}netrc
-                  export NETRC=$PWD/.netrc
-                  export HOME=$PWD
-                '';
+          postHook =
+            if netrcPhase == null then
+              null
+            else
+              ''
+                ${netrcPhase}
+                # required that git uses the netrc file
+                mv {,.}netrc
+                export NETRC=$PWD/.netrc
+                export HOME=$PWD
+              '';
 
-            impureEnvVars =
-              lib.fetchers.proxyImpureEnvVars
-              ++ netrcImpureEnvVars
-              ++ [
-                "GIT_PROXY_COMMAND"
-                "NIX_GIT_SSL_CAINFO"
-                "SOCKS_SERVER"
+          impureEnvVars =
+            lib.fetchers.proxyImpureEnvVars
+            ++ netrcImpureEnvVars
+            ++ [
+              "GIT_PROXY_COMMAND"
+              "NIX_GIT_SSL_CAINFO"
+              "SOCKS_SERVER"
 
-                # This is a parameter intended to be set by setup hooks or preFetch
-                # scripts that want per-URL control over HTTP proxies used by Git
-                # (if per-URL control isn't needed, `http_proxy` etc. will
-                # suffice). It must be a whitespace-separated (with backslash as an
-                # escape character) list of pairs like this:
-                #
-                #   http://domain1/path1 proxy1 https://domain2/path2 proxy2
-                #
-                # where the URLs are as documented in the `git-config` manual page
-                # under `http.<url>.*`, and the proxies are as documented on the
-                # same page under `http.proxy`.
-                "FETCHGIT_HTTP_PROXIES"
-              ];
+              # This is a parameter intended to be set by setup hooks or preFetch
+              # scripts that want per-URL control over HTTP proxies used by Git
+              # (if per-URL control isn't needed, `http_proxy` etc. will
+              # suffice). It must be a whitespace-separated (with backslash as an
+              # escape character) list of pairs like this:
+              #
+              #   http://domain1/path1 proxy1 https://domain2/path2 proxy2
+              #
+              # where the URLs are as documented in the `git-config` manual page
+              # under `http.<url>.*`, and the proxies are as documented on the
+              # same page under `http.proxy`.
+              "FETCHGIT_HTTP_PROXIES"
+            ];
 
-            inherit preferLocalBuild meta allowedRequisites;
+          inherit preferLocalBuild meta allowedRequisites;
 
-            passthru = {
-              gitRepoUrl = url;
-            }
-            // passthru;
+          passthru = {
+            gitRepoUrl = url;
           }
+          // passthru;
+        }
       );
+
+  resolveSpecialArgs =
+    finalAttrs:
+    {
+      deepClone ? false,
+      fetchTags ? false,
+      leaveDotGit ? null,
+      nonConeMode ? null,
+      rootDir ? "",
+      sparseCheckout ? null,
+      ...
+    }:
+    {
+      inherit
+        deepClone
+        fetchTags
+        rootDir
+        ;
+      leaveDotGit =
+        if leaveDotGit != null then
+          assert fetchTags -> leaveDotGit;
+          assert rootDir != "" -> !leaveDotGit;
+          leaveDotGit
+        else
+          deepClone || fetchTags;
+      nonConeMode = lib.defaultTo (finalAttrs.rootDir != "") nonConeMode;
+      sparseCheckout = lib.defaultTo (lib.optional (finalAttrs.rootDir != "") finalAttrs.rootDir) sparseCheckout;
+    };
+in
+
+lib.makeOverridable (
+  lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
+
+    inherit excludeDrvArgNames extendDrvArgs;
 
     # No ellipsis.
     inheritFunctionArgs = false;
   }
 )
 // {
-  inherit getRevWithTag;
+  inherit
+    getRevWithTag
+    resolveSpecialArgs
+    ;
+  expectDrvArgs =
+    let
+      faRaw = lib.functionArgs (extendDrvArgs { });
+    in
+    lib.zipAttrsWith (_: lib.any lib.id) [
+      (lib.mapAttrs (_: v: !v) (removeAttrs faRaw excludeDrvArgNames))
+      (lib.mapAttrs (_: _: true) (extendDrvArgs { } (faRaw // { derivationArgs = { }; })))
+    ];
 }
