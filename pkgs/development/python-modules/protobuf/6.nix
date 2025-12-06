@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "protobuf";
-  version = "6.33.1";
+  version = "6.33.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-l/ZXV+jQmHDeb9lzrt25L4VDVgcjXSCy3+2TQF0AyFs=";
+    hash = "sha256-Vtw3DJH7uKyFvBNYLJ43NWlmiikKouZqWQwqDTXdueQ=";
   };
 
   build-system = [ setuptools ];
