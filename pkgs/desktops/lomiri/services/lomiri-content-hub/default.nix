@@ -23,14 +23,17 @@
   properties-cpp,
   qtbase,
   qtdeclarative,
-  qtfeedback,
-  qtgraphicaleffects,
+  qtfeedback ? null,
+  qtgraphicaleffects ? null,
   qttools,
   validatePkgConfig,
   wrapGAppsHook3,
   xvfb-run,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-content-hub";
   version = "2.1.0";
@@ -112,10 +115,12 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
     (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
-    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "ENABLE_DOC" true)
-    (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" true) # in case something still depends on it
+    # in case something still depends on it
+    # no longer available in the Qt6 build
+    (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" (!withQt6))
   ];
 
   preBuild =
@@ -127,12 +132,16 @@ stdenv.mkDerivation (finalAttrs: {
       # Executes qmlplugindump
       export QT_PLUGIN_PATH=${listToQtVar [ qtbase ] qtbase.qtPluginPrefix}
       export QML2_IMPORT_PATH=${
-        listToQtVar [
-          qtdeclarative
-          lomiri-ui-toolkit
-          qtfeedback
-          qtgraphicaleffects
-        ] qtbase.qtQmlPrefix
+        listToQtVar (
+          [
+            qtdeclarative
+            lomiri-ui-toolkit
+          ]
+          ++ lib.optionals (!withQt6) [
+            qtfeedback
+            qtgraphicaleffects
+          ]
+        ) qtbase.qtQmlPrefix
       }
     '';
 

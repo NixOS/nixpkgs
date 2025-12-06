@@ -3,10 +3,13 @@
   lib,
   pkgs,
   ayatana-indicator-datetime,
+  useQt6 ? false,
   libsForQt5,
+  qt6Packages,
 }:
 
 let
+  qtPackages = if useQt6 then qt6Packages else libsForQt5;
   packages =
     self:
     let
@@ -50,7 +53,9 @@ let
       u1db-qt = callPackage ./development/u1db-qt { };
 
       #### QML / QML-related
-      lomiri-action-api = callPackage ./qml/lomiri-action-api { };
+      lomiri-action-api = callPackage ./qml/lomiri-action-api {
+        withDocumentation = !useQt6;
+      };
       lomiri-notifications = callPackage ./qml/lomiri-notifications { };
       lomiri-push-qml = callPackage ./qml/lomiri-push-qml { };
       lomiri-settings-components = callPackage ./qml/lomiri-settings-components { };
@@ -62,7 +67,9 @@ let
       biometryd = callPackage ./services/biometryd { };
       lomiri-content-hub = callPackage ./services/lomiri-content-hub { };
       hfd-service = callPackage ./services/hfd-service { };
-      lomiri-download-manager = callPackage ./services/lomiri-download-manager { };
+      lomiri-download-manager = callPackage ./services/lomiri-download-manager {
+        withDocumentation = !useQt6;
+      };
       lomiri-history-service = callPackage ./services/lomiri-history-service { };
       lomiri-indicator-datetime = ayatana-indicator-datetime.override { enableLomiriFeatures = true; };
       lomiri-indicator-network = callPackage ./services/lomiri-indicator-network { };
@@ -73,7 +80,7 @@ let
       mediascanner2 = callPackage ./services/mediascanner2 { };
     };
 in
-lib.makeScope libsForQt5.newScope packages
+lib.makeScope qtPackages.newScope packages
 // lib.optionalAttrs config.allowAliases {
   content-hub = lib.warnOnInstantiate "`content-hub` was renamed to `lomiri-content-hub`." pkgs.lomiri.lomiri-content-hub; # Added on 2024-09-11
   history-service = lib.warnOnInstantiate "`history-service` was renamed to `lomiri-history-service`." pkgs.lomiri.lomiri-history-service; # Added on 2024-11-11
