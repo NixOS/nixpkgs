@@ -5,10 +5,10 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladspa.h";
-  version = "1.15";
+  version = "1.17";
   src = fetchurl {
     url = "https://www.ladspa.org/download/ladspa_sdk_${finalAttrs.version}.tgz";
-    sha256 = "1vgx54cgsnc3ncl9qbgjbmq12c444xjafjkgr348h36j16draaa2";
+    hash = "sha256-J9JPJ55Lgb0X7L3MOOTEKZG7OIgmwLIABnzg61nT2ls=";
   };
 
   installPhase = ''
