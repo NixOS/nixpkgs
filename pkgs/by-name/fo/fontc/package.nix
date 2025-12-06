@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fontc";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "fontc";
-    tag = "fontc-v${version}";
-    hash = "sha256-Zr2nJRNY1vLGhVOGC3KSWbd4cQReO/F8Wgzx3y/qPFc=";
+    tag = "fontc-v${finalAttrs.version}";
+    hash = "sha256-g+Hu4ucj0bT8f3UPiuFTyySwku10CCMt/sjJHMaLVwc=";
   };
   buildAndTestSubdir = "fontc";
 
@@ -29,9 +29,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Wherein we pursue oxidizing fontmake";
     homepage = "https://github.com/googlefonts/fontc";
-    changelog = "https://github.com/googlefonts/fontc/releases/tag/${src.tag}";
+    changelog = "https://github.com/googlefonts/fontc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ shiphan ];
     mainProgram = "fontc";
   };
-}
+})
