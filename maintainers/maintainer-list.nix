@@ -29257,6 +29257,12 @@
     email = "rasmus@liaskar.net";
     githubId = 152716976;
   };
+  zivarah = {
+    name = "Brian Lyles";
+    github = "zivarah";
+    email = "brianmlyles@gmail.com";
+    githubId = 1123282;
+  };
   zlepper = {
     name = "Rasmus Hansen";
     github = "zlepper";
