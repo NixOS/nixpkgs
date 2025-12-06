@@ -64,10 +64,8 @@ in
             Restart = "on-failure";
             RestartSec = 15;
             ExecStart = "${cfg.package}/bin/${executableFile} --strict_config -c ${configFile}";
-            StateDirectoryMode = lib.optionalString isServer "0700";
             DynamicUser = true;
             # Hardening
-            UMask = lib.optionalString isServer "0007";
             CapabilityBoundingSet = serviceCapability;
             AmbientCapabilities = serviceCapability;
             PrivateDevices = true;
@@ -89,6 +87,11 @@ in
             PrivateMounts = true;
             SystemCallArchitectures = "native";
             SystemCallFilter = [ "@system-service" ];
+          }
+          // lib.optionalAttrs isServer {
+            StateDirectory = "frp";
+            StateDirectoryMode = "0700";
+            UMask = "0007";
           };
         };
       };
