@@ -13,6 +13,7 @@
   librsvg,
   meson,
   ninja,
+  nautilus,
   pkg-config,
   wayland,
   wayland-scanner,
@@ -66,6 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
       }
     }"
   '';
+
+  propagatedUserEnvPkgs = [
+    nautilus
+  ];
 
   passthru = {
     updateScript = gnome.updateScript {
