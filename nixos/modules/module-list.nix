@@ -402,6 +402,7 @@
   ./security/please.nix
   ./security/polkit.nix
   ./security/rtkit.nix
+  ./security/selinux.nix
   ./security/soteria.nix
   ./security/sudo-rs.nix
   ./security/sudo.nix
