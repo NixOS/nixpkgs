@@ -127,7 +127,7 @@ let
     '';
 
     postFixup = ''
-      patchelf --add-needed libGL.so.1 --add-needed libEGL.so.1 \
+      ${lib.getExe patchelf} --add-needed libGL.so.1 --add-needed libEGL.so.1 \
         "$out/opt/Nextcloud Talk-linux-x64/Nextcloud Talk"
     '';
 
