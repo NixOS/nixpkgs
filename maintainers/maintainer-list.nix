@@ -25921,6 +25921,11 @@
     githubId = 34945377;
     name = "John Smith";
   };
+  TheButlah = {
+    name = "Ryan Butler";
+    github = "TheButlah";
+    githubId = 6969415;
+  };
   theCapypara = {
     name = "Marco Köpcke";
     email = "hello@capypara.de";
