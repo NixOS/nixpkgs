@@ -23422,6 +23422,12 @@
     githubId = 526260;
     name = "Scott Stephens";
   };
+  scout3r = {
+    email = "iam@theguy.io";
+    github = "scout3r";
+    githubId = 18079;
+    name = "Mate Gabri";
+  };
   scraptux = {
     email = "git@thomasjasny.de";
     github = "scraptux";
