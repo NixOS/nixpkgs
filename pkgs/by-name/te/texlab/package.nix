@@ -12,14 +12,14 @@
 let
   isCross = stdenv.hostPlatform != stdenv.buildPlatform;
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "texlab";
   version = "5.25.0";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
     repo = "texlab";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UI88DQjLRJRPgKX3A+PoLNzgm/9uJeNERTrzh5mnAEk=";
   };
 
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Implementation of the Language Server Protocol for LaTeX";
     homepage = "https://github.com/latex-lsp/texlab";
-    changelog = "https://github.com/latex-lsp/texlab/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/latex-lsp/texlab/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       doronbehar
@@ -56,4 +56,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.all;
     mainProgram = "texlab";
   };
-}
+})
