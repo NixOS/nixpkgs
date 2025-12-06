@@ -674,7 +674,6 @@ package-maintainers:
 unsupported-platforms:
   Allure:                                       [ platforms.darwin ]
   bdcs-api:                                     [ platforms.darwin ]
-  bindings-directfb:                            [ platforms.darwin ]
   bindings-sane:                                [ platforms.darwin ]
   bustle:                                       [ platforms.darwin ] # uses glibc-specific ptsname_r
   bytelog:                                      [ platforms.darwin ] # due to posix-api

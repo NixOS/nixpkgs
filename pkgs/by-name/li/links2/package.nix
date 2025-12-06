@@ -15,8 +15,6 @@
   zlib,
   xz, # Transfer encodings
   enableFB ? (!stdenv.hostPlatform.isDarwin),
-  enableDirectFB ? false,
-  directfb,
   enableX11 ? (!stdenv.hostPlatform.isDarwin),
   libX11,
   libXt,
@@ -49,8 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libX11
     libXau
     libXt
-  ]
-  ++ lib.optionals enableDirectFB [ directfb ];
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -60,10 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--with-ssl"
   ]
-  ++ lib.optional (enableX11 || enableFB || enableDirectFB) "--enable-graphics"
+  ++ lib.optional (enableX11 || enableFB) "--enable-graphics"
   ++ lib.optional enableX11 "--with-x"
-  ++ lib.optional enableFB "--with-fb"
-  ++ lib.optional enableDirectFB "--with-directfb";
+  ++ lib.optional enableFB "--with-fb";
 
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
