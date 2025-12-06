@@ -13,13 +13,12 @@ index 964b44b..4415084 100644
 +++ b/meson.build
 @@ -39,7 +39,7 @@ mandir = get_option('mandir')
  moduledir = get_option('libdir') / meson.project_name()
- 
+
  systemd_deps = dependency('systemd', required: false)
--systemdsystemunitdir = systemd_deps.get_variable('systemdsystemunitdir', default_value: get_option('libdir') / 'systemd/system')
+-systemdsystemunitdir = systemd_deps.get_variable('systemdsystemunitdir', default_value: 'lib/systemd/system')
 +systemdsystemunitdir = get_option('libdir') / 'systemd'
- 
+
  #
  # Required dependencies
--- 
+--
 2.47.2
-
