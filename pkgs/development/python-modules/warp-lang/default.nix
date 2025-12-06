@@ -228,8 +228,8 @@ buildPythonPackage {
         # Use the references from args
         python' = python.withPackages (_: [
           warp-lang
-          jax
-          torch
+          (jax.override { inherit cudaSupport; })
+          (torch.override { inherit cudaSupport; })
         ]);
         # Disable paddlepaddle interop tests: malloc(): unaligned tcache chunk detected
         #  (paddlepaddle.override { inherit cudaSupport; })
