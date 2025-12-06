@@ -8,16 +8,16 @@
 
 buildGoModule {
   pname = "zoekt";
-  version = "3.7.2-2-unstable-2025-11-20";
+  version = "0-unstable-2025-12-02";
 
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "zoekt";
-    rev = "2e375df04f81c31c2ea62c23fcff48d98240e131";
-    hash = "sha256-tKuLJ/n9qI20FMmCtyuVeRfnB08ZY2KbRKdcjpe66u4=";
+    rev = "886b229dcd5e7bec0c9918002b77345d27c84e3c";
+    hash = "sha256-8Dc/jIXpA7PnQeU719RcK8s/nM1QAGw3MVhxw3Wb0yc=";
   };
 
-  vendorHash = "sha256-uHCZNbP1zY8V+rtIB8xATWEci99sQkf8M01p3m789ZA=";
+  vendorHash = "sha256-1QM6OVFXS88IryKuNJKcbgYZcRZ+E6Na5NqItAlicXw=";
 
   nativeCheckInputs = [
     gitMinimal
