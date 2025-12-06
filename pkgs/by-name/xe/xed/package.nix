@@ -34,13 +34,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "xed";
-  version = "2025.06.08";
+  version = "2025.11.23";
 
   src = fetchFromGitHub {
     owner = "intelxed";
     repo = "xed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FXVWCq7ykuSsVx8iB7WkFD7DDq6o/4bgsS0YJQWE+XM=";
+    hash = "sha256-WDRBq6Ktowqas0a34Dw5g8dXyl+CL3BHh3z7Jm8TBS0=";
   };
 
   postPatch = ''
