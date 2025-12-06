@@ -10,7 +10,6 @@
   cjs,
   evolution-data-server,
   fetchFromGitHub,
-  fetchpatch,
   gcr,
   gdk-pixbuf,
   gettext,
@@ -19,7 +18,7 @@
   gobject-introspection,
   gsound,
   gtk3,
-  intltool,
+  ibus,
   json-glib,
   libsecret,
   libstartup_notification,
@@ -35,7 +34,6 @@
   wrapGAppsHook3,
   libxml2,
   gtk-doc,
-  caribou,
   python3,
   keybinder3,
   cairo,
@@ -46,6 +44,7 @@
   accountsservice,
   gnome-online-accounts,
   glib-networking,
+  graphene,
   pciutils,
   timezonemap,
   libnma,
@@ -58,7 +57,6 @@
 let
   pythonEnv = python3.withPackages (
     pp: with pp; [
-      dbus-python
       setproctitle
       pygobject3
       pycairo
@@ -76,29 +74,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cinnamon";
-  version = "6.4.13";
+  version = "6.6.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     tag = version;
-    hash = "sha256-XGG5Qf6Kx1gvZITuuZWn1ggY4FNW/aEuBLbpWyxE2V8=";
+    hash = "sha256-DiAc1Ng03xzNYYpf79g9p338syPScKftmviNw6Y5i5o=";
   };
 
   patches = [
     ./use-sane-install-dir.patch
     ./libdir.patch
-
-    # js: Use DesktopAppInfo form GioUnix, not Gio
-    # https://github.com/linuxmint/cinnamon/pull/13091
-    (fetchpatch {
-      url = "https://github.com/linuxmint/cinnamon/commit/fa3aef20533af4499fb1161011e62e048bbdc396.patch";
-      hash = "sha256-qhgBniaUE/8q9BQ+EXcY7BF6eMJg+wC7EYgktwAMbwM=";
-    })
-    (fetchpatch {
-      url = "https://github.com/linuxmint/cinnamon/commit/330b9ff19f33ec1e94e36048ca46011404f796b4.patch";
-      hash = "sha256-YEQG6C4tx2T3wMfCLZXPFynAzEeIE1eVoadWVENZDFc=";
-    })
   ];
 
   buildInputs = [
@@ -113,8 +100,10 @@ stdenv.mkDerivation rec {
     gcr
     gdk-pixbuf
     glib
+    graphene
     gsound
     gtk3
+    ibus
     json-glib
     libsecret
     libstartup_notification
@@ -131,7 +120,6 @@ stdenv.mkDerivation rec {
 
     # bindings
     cairo
-    caribou
     keybinder3
     upower
     xapp
@@ -151,7 +139,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     wrapGAppsHook3
-    intltool
     gtk-doc
     perl
     python3.pkgs.libsass # for pysassc
@@ -177,7 +164,6 @@ stdenv.mkDerivation rec {
                                                           --replace-fail 'subprocess.run(["/usr/bin/' 'subprocess.run(["' \
                                                           --replace-fail "msgfmt" "${gettext}/bin/msgfmt"
       substituteInPlace ./modules/cs_info.py              --replace-fail "lspci" "${pciutils}/bin/lspci"
-      substituteInPlace ./modules/cs_keyboard.py          --replace-fail "/usr/bin/cinnamon-dbus-command" "$out/bin/cinnamon-dbus-command"
       substituteInPlace ./modules/cs_themes.py            --replace-fail "$out/share/cinnamon/styles.d" "/run/current-system/sw/share/cinnamon/styles.d"
       substituteInPlace ./modules/cs_user.py              --replace-fail "/usr/bin/passwd" "/run/wrappers/bin/passwd"
     popd
@@ -189,7 +175,7 @@ stdenv.mkDerivation rec {
     substituteInPlace ./files/usr/bin/cinnamon-session-{cinnamon,cinnamon2d} \
       --replace-fail "exec cinnamon-session" "exec ${cinnamon-session}/bin/cinnamon-session"
 
-    patchShebangs src/data-to-c.pl data/theme/parse-sass.sh
+    patchShebangs src/data-to-c.pl
   '';
 
   postInstall = ''
@@ -198,11 +184,6 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    # https://github.com/NixOS/nixpkgs/issues/101881
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${caribou}/share"
-    )
-
     buildPythonPath "$out ${python3.pkgs.python-xapp}"
 
     # https://github.com/NixOS/nixpkgs/issues/200397
