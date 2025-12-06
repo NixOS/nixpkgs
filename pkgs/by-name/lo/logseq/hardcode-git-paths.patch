@@ -1,9 +1,9 @@
 diff --git a/bb.edn b/bb.edn
-index 76e1ba1..43d2c73 100644
+index 8caec6962..507999aac 100644
 --- a/bb.edn
 +++ b/bb.edn
-@@ -4,8 +4,7 @@
-   {:mvn/version "0.10.0"}
+@@ -5,8 +5,7 @@
+   borkdude/rewrite-edn {:mvn/version "0.4.9"}
    logseq/bb-tasks
    #_{:local/root "../bb-tasks"}
 -  {:git/url "https://github.com/logseq/bb-tasks"
@@ -13,21 +13,21 @@ index 76e1ba1..43d2c73 100644
    {:local/root "deps/graph-parser"}
    org.clj-commons/digest
 diff --git a/deps.edn b/deps.edn
-index 9fb41e5..2b45436 100644
+index 18e1c4c33..40f541bc2 100644
 --- a/deps.edn
 +++ b/deps.edn
-@@ -11,8 +11,7 @@
+@@ -16,8 +16,7 @@
    cljs-bean/cljs-bean                   {:mvn/version "1.5.0"}
    prismatic/dommy                       {:mvn/version "1.1.0"}
    org.clojure/core.match                {:mvn/version "1.0.0"}
 -  com.andrewmcveigh/cljs-time           {:git/url "https://github.com/logseq/cljs-time" ;; fork
 -                                         :sha     "5704fbf48d3478eedcf24d458c8964b3c2fd59a9"}
 +  com.andrewmcveigh/cljs-time           {:local/root "@cljs_time_src@"}
+   ;; TODO: delete cljs-drag-n-drop and use dnd-kit
    cljs-drag-n-drop/cljs-drag-n-drop     {:mvn/version "0.1.0"}
-   cljs-http/cljs-http                   {:mvn/version "0.1.46"}
-   org.babashka/sci                      {:mvn/version "0.3.2"}
+   cljs-http/cljs-http                   {:mvn/version "0.1.48"}
 diff --git a/deps/common/bb.edn b/deps/common/bb.edn
-index 3188222..1dba8a9 100644
+index b0e65deb5..b58ba8ab5 100644
 --- a/deps/common/bb.edn
 +++ b/deps/common/bb.edn
 @@ -2,8 +2,7 @@
@@ -39,9 +39,9 @@ index 3188222..1dba8a9 100644
 +  {:local/root "@bb_tasks_src@"}}
  
   :pods
-  {clj-kondo/clj-kondo {:version "2023.05.26"}}
+  {clj-kondo/clj-kondo {:version "2024.09.27"}}
 diff --git a/deps/db/bb.edn b/deps/db/bb.edn
-index 2bf0931..e3d5ea8 100644
+index 1a01b0893..fd4049aef 100644
 --- a/deps/db/bb.edn
 +++ b/deps/db/bb.edn
 @@ -3,8 +3,7 @@
@@ -49,41 +49,43 @@ index 2bf0931..e3d5ea8 100644
   {logseq/bb-tasks
    #_{:local/root "../../../bb-tasks"}
 -  {:git/url "https://github.com/logseq/bb-tasks"
--   :git/sha "70d3edeb287f5cec7192e642549a401f7d6d4263"}}
+-   :git/sha "1d429e223baeade426d30a4ed1c8a110173a2402"}}
 +  {:local/root "@bb_tasks_src@"}}
  
   :pods
-  {clj-kondo/clj-kondo {:version "2023.05.26"}}
+  {clj-kondo/clj-kondo {:version "2024.09.27"}}
 diff --git a/deps/graph-parser/bb.edn b/deps/graph-parser/bb.edn
-index 5093ff5..9cb7c54 100644
+index 9f089d863..911e7618c 100644
 --- a/deps/graph-parser/bb.edn
 +++ b/deps/graph-parser/bb.edn
-@@ -2,8 +2,7 @@
+@@ -2,9 +2,8 @@
   :deps
   {logseq/bb-tasks
    #_{:local/root "../../../bb-tasks"}
 -  {:git/url "https://github.com/logseq/bb-tasks"
 -   :git/sha "70d3edeb287f5cec7192e642549a401f7d6d4263"}}
+- 
 +  {:local/root "@bb_tasks_src@"}}
-  
++
   :pods
-  {clj-kondo/clj-kondo {:version "2023.05.26"}}
+  {clj-kondo/clj-kondo {:version "2024.09.27"}}
+ 
 diff --git a/deps/graph-parser/deps.edn b/deps/graph-parser/deps.edn
-index 4675c30..57abe35 100644
+index 267e71566..eb520bf68 100644
 --- a/deps/graph-parser/deps.edn
 +++ b/deps/graph-parser/deps.edn
 @@ -1,8 +1,7 @@
  {:paths ["src"]
   :deps
-  ;; External deps should be kept in sync with https://github.com/logseq/nbb-logseq/blob/main/bb.edn
+  ;; These nbb-logseq deps are kept in sync with https://github.com/logseq/nbb-logseq/blob/main/bb.edn
 - {com.andrewmcveigh/cljs-time {:git/url "https://github.com/logseq/cljs-time" ;; fork
 -                               :sha     "5704fbf48d3478eedcf24d458c8964b3c2fd59a9"}
 + {com.andrewmcveigh/cljs-time {:local/root "@cljs_time_src@"}
-   ;; local deps
-   logseq/db                   {:local/root "../db"}
-   logseq/common               {:local/root "../common"}
+   funcool/promesa             {:mvn/version "11.0.678"}
+   cljs-bean/cljs-bean         {:mvn/version "1.5.0"}
+ 
 diff --git a/deps/publishing/bb.edn b/deps/publishing/bb.edn
-index 878757b..2fce25a 100644
+index 5d322c87f..4bac9f968 100644
 --- a/deps/publishing/bb.edn
 +++ b/deps/publishing/bb.edn
 @@ -2,8 +2,7 @@
@@ -95,4 +97,4 @@ index 878757b..2fce25a 100644
 +  {:local/root "@bb_tasks_src@"}}
  
   :pods
-  {clj-kondo/clj-kondo {:version "2023.05.26"}}
+  {clj-kondo/clj-kondo {:version "2024.09.27"}}

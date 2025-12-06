@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "logseq";
-  version = "0.10.14";
+  version = "0.10.15";
 
   src = fetchFromGitHub {
     owner = "logseq";
     repo = "logseq";
     tag = finalAttrs.version;
-    hash = "sha256-jIkAiSCYIO5w/jM/Bv/odTuluRi3W/w4tTaUTmaYvEA=";
+    hash = "sha256-1tbN/mTFnaHohiW4iKoSiqV+YfQ8gO8SR4X2rh4pTYc=";
   };
 
   patches = [
