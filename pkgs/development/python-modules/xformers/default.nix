@@ -34,7 +34,7 @@ let
 
   # version 0.0.32.post2 was confirmed to break CUDA.
   # Remove this note once the latest published revision "just works".
-  version = "0.0.30";
+  version = "0.0.33.post2";
 in
 buildPythonPackage {
   pname = "xformers";
@@ -46,7 +46,7 @@ buildPythonPackage {
     repo = "xformers";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-ozaw9z8qnGpZ28LQNtwmKeVnrn7KDWNeJKtT6g6Q/W0=";
+    hash = "sha256-5fScsdpO4nAISGWl8GOWyY/OpzeRKkTPi3hv9grOK9U=";
   };
 
   patches = [ ./0001-fix-allow-building-without-git.patch ];
