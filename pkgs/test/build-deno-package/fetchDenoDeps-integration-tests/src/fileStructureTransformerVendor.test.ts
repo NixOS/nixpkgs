@@ -1,0 +1,273 @@
+import {
+  assertEq,
+  globalPathPrefix,
+  runTests,
+} from "./utils.ts";
+import type {
+  Fixture,
+  Test,
+  Vars,
+  VirtualFS,
+} from "./types.d.ts";
+
+type FileStructureTransformerFixture = {
+  inJsrJsonContent: string;
+  inHttpsJsonContent: string;
+  inFetchedFilesFS: VirtualFS;
+  outTransformedFilesFS: VirtualFS;
+  outStdout?: string;
+  outStderr?: string;
+};
+
+function checkFilesFs(f: FileStructureTransformerFixture) {
+  function getOutPaths(jsonContent: string): Array<string> {
+    return (JSON.parse(jsonContent) as Array<any>).map((e: any) =>
+      e.outPath as string
+    );
+  }
+  const inFilesExpected = [
+    ...getOutPaths(f.inJsrJsonContent),
+    ...getOutPaths(f.inHttpsJsonContent),
+  ].sort();
+
+  const inFilesActual = [
+    ...Object.keys(f.inFetchedFilesFS),
+  ].sort();
+
+  assertEq(
+    inFilesExpected,
+    inFilesActual,
+    "outPaths in jsr.json or https.json don't match files in inFetchedFilesFS",
+  );
+
+  const inFilesExtractedActual = [
+    ...Object.values(f.inFetchedFilesFS).map((v) => Object.keys(v)).flat(),
+    "manifest.json",
+  ].sort();
+
+  const transformedFilesFromFixture = Object.keys(f.outTransformedFilesFS)
+    .sort();
+
+  if (
+    inFilesExtractedActual.length !==
+      transformedFilesFromFixture.length
+  ) {
+    console.log("inFilesActual:", inFilesActual);
+    console.log("transformedFiles:", transformedFilesFromFixture);
+    console.log(
+      "files in inFetchedFilesFS and inRegistryJsonFilesFS do not match outTransformedFilesFS",
+    );
+  }
+}
+
+function fixtureFrom(
+  f: FileStructureTransformerFixture,
+): Fixture {
+  const bin = Deno.args[0];
+  if (!bin) {
+    throw new Error("test expects cli args[0]: binary to execute");
+  }
+
+  function pathToAbs(path: string) {
+    return `${Deno.cwd()}/${globalPathPrefix}/${path}`;
+  }
+
+  type VarNames = {
+    commonLockJsrPath: null;
+    commonLockHttpsPath: null;
+    denoDirPath: null;
+    vendorDirPath: null;
+  }
+  const vars: Vars<VarNames> = {
+    commonLockJsrPath: {value:pathToAbs("./jsr.json"),flag:"--common-lock-jsr-path"},
+    commonLockHttpsPath: {value:pathToAbs("./https.json"),flag:"--common-lock-https-path"},
+    denoDirPath: {value:pathToAbs("./deno-cache"),flag:"--deno-dir-path"},
+    vendorDirPath: {value:pathToAbs("./vendor"),flag:"--vendor-dir-path"},
+  };
+  // checkFilesFs(f);
+
+  return {
+    inputs: {
+      args: [
+        bin,
+        vars.commonLockJsrPath.flag,
+        vars.commonLockJsrPath.value,
+        vars.commonLockHttpsPath.flag,
+        vars.commonLockHttpsPath.value,
+        vars.denoDirPath.flag,
+        vars.denoDirPath.value,
+        vars.vendorDirPath.flag,
+        vars.vendorDirPath.value,
+      ],
+      files: [
+        {
+          path: vars.commonLockJsrPath.value,
+          isReal: false,
+          content: f.inJsrJsonContent,
+        },
+        {
+          path: vars.commonLockHttpsPath.value,
+          isReal: false,
+          content: f.inHttpsJsonContent,
+        },
+        ...Object.entries(f.inFetchedFilesFS).map(([path, content]) => ({
+          path,
+          isReal: false,
+          content,
+        })),
+      ],
+    },
+    outputs: {
+      files: {
+        expected: [
+          ...Object.entries(f.outTransformedFilesFS).map(([path, content]) => ({
+            path: `${vars.vendorDirPath.value}/${path}`,
+            isReal: false,
+            content,
+          })),
+        ],
+      },
+      console: {
+        expected: {
+          stderr: f.outStderr || "",
+          stdout: f.outStdout || "",
+        },
+      },
+    },
+  };
+}
+
+const fileStructureTransformerVendorTests: Array<Test> = [
+  {
+    name: "jsr_2_files_1_package",
+    fixture: fixtureFrom(
+      {
+        inJsrJsonContent: `[
+  {
+    "url": "https://jsr.io/@scope1/package1/version1/src/file1",
+    "hash": {
+      "string": "hash1",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
+    "meta": {
+      "registry": "jsr",
+      "packageSpecifier": {
+        "fullString": "@scope1/package1@version1",
+        "registry": "jsr",
+        "scope": "scope1",
+        "name": "package1",
+        "version": "version1",
+        "suffix": null
+      }
+    },
+    "outPath": "src/file1"
+  },
+  {
+    "url": "https://jsr.io/@scope1/package1/version1/file2",
+    "hash": {
+      "string": "hash2",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
+    "meta": {
+      "registry": "jsr",
+      "packageSpecifier": {
+        "fullString": "@scope1/package1@version1",
+        "registry": "jsr",
+        "scope": "scope1",
+        "name": "package1",
+        "version": "version1",
+        "suffix": null
+      }
+    },
+    "outPath": "file2"
+  }
+]`,
+        inHttpsJsonContent: `[]`,
+        inFetchedFilesFS: {
+          "src/file1": "file1_content",
+          "file2": "file2_content",
+        },
+        outTransformedFilesFS: {
+          "manifest.json": `{
+  "modules": {
+    "https://jsr.io/@scope1/package1/version1/file2": {},
+    "https://jsr.io/@scope1/package1/version1/src/file1": {}
+  }
+}`,
+          "jsr.io/@scope1/package1/version1/src/#file1_c147e.js":
+            "file1_content",
+          "jsr.io/@scope1/package1/version1/#file2_33778.js": "file2_content",
+        },
+      },
+    ),
+  },
+  {
+    name: "jsr_2_files_2_packages",
+    fixture: fixtureFrom(
+      {
+        inJsrJsonContent: `[
+  {
+    "url": "https://jsr.io/@scope1/package1/version1/file1",
+    "outPath": "file1"
+  },
+  {
+    "url": "https://jsr.io/@scope2/package2/version1/file2",
+    "outPath": "file2"
+  }
+]`,
+        inHttpsJsonContent: `[]`,
+        inFetchedFilesFS: {
+          "file1": "file1_content",
+          "file2": "file2_content",
+        },
+        outTransformedFilesFS: {
+          "manifest.json": `{
+  "modules": {
+    "https://jsr.io/@scope1/package1/version1/file1": {},
+    "https://jsr.io/@scope2/package2/version1/file2": {}
+  }
+}`,
+          "jsr.io/@scope1/package1/version1/#file1_c147e.js": "file1_content",
+          "jsr.io/@scope2/package2/version1/#file2_33778.js": "file2_content",
+        },
+      },
+    ),
+  },
+  {
+    name: "jsr_and_https",
+    fixture: fixtureFrom(
+      {
+        inJsrJsonContent: `[
+  {
+    "url": "https://jsr.io/@scope2/package2/version1/file2",
+    "outPath": "file2"
+  }
+]`,
+        inHttpsJsonContent: `[
+  {
+    "url": "https://esm.sh/@scope1/package1/version1/file1",
+    "outPath": "file1"
+  }
+]`,
+        inFetchedFilesFS: {
+          "file1": "file1_content",
+          "file2": "file2_content",
+        },
+        outTransformedFilesFS: {
+          "manifest.json": `{
+  "modules": {
+    "https://esm.sh/@scope1/package1/version1/file1": {},
+    "https://jsr.io/@scope2/package2/version1/file2": {}
+  }
+}`,
+          "esm.sh/@scope1/package1/version1/#file1_c147e.js": "file1_content",
+          "jsr.io/@scope2/package2/version1/#file2_33778.js": "file2_content",
+        },
+      },
+    ),
+  },
+];
+
+runTests(fileStructureTransformerVendorTests);
