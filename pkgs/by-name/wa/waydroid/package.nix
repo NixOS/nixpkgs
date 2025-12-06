@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   python3Packages,
   dnsmasq,
   gawk,
@@ -23,23 +22,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "waydroid";
-  version = "1.5.4";
+  version = "1.6.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "waydroid";
     repo = "waydroid";
     tag = version;
-    hash = "sha256-K4uJ9MVmr5+7O1em1yUJXZj6H8bpfm2ZAE2uqgiyDBQ=";
+    hash = "sha256-w0cnFTpPNxAQDCGkbyVg9k5ccw7Ym3cLhSEw2Uv+RxU=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/waydroid/waydroid/commit/af296c90a788dde0b33813b12607cfab2fa65b98.patch";
-      hash = "sha256-1vkEKk00dbBLbbBxZIhcoOYUP976SJlaWyzYSWBy0nU=";
-      revert = true;
-    })
-  ];
 
   nativeBuildInputs = [
     gobject-introspection
@@ -63,14 +54,11 @@ python3Packages.buildPythonApplication rec {
   dontWrapGApps = true;
 
   installFlags = [
-    "PREFIX=$(out)"
+    "PREFIX=${placeholder "out"}"
     "USE_SYSTEMD=0"
-    "SYSCONFDIR=$(out)/etc"
-  ];
-  postInstall = lib.optionalString withNftables ''
-    substituteInPlace $out/lib/waydroid/data/scripts/waydroid-net.sh \
-      --replace-fail 'LXC_USE_NFT="false"' 'LXC_USE_NFT="true"'
-  '';
+    "SYSCONFDIR=${placeholder "out"}/etc"
+  ]
+  ++ (lib.optional withNftables "USE_NFTABLES=1");
 
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
@@ -102,8 +90,8 @@ python3Packages.buildPythonApplication rec {
       )
     }"
 
-    substituteInPlace $out/lib/waydroid/tools/helpers/*.py \
-      --replace '"sh"' '"${runtimeShell}"'
+    substituteInPlace $out/lib/waydroid/tools/helpers/run.py $out/lib/waydroid/tools/helpers/lxc.py \
+      --replace-fail '"sh"' '"${runtimeShell}"'
   '';
 
   passthru.updateScript = nix-update-script { };
