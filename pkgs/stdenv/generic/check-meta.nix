@@ -35,6 +35,8 @@ let
     isList
     elem
     unique
+    flatten
+    filter
     ;
 
   inherit (lib.meta)
@@ -67,6 +69,8 @@ let
 
   allowlist = config.allowlistedLicenses or config.whitelistedLicenses or [ ];
   blocklist = config.blocklistedLicenses or config.blacklistedLicenses or [ ];
+
+  allowSrcEvalForDrvMeta = config.allowSrcEvalForDrvMeta;
 
   areLicenseListsValid =
     if mutuallyExclusive allowlist blocklist then
@@ -300,7 +304,7 @@ let
     let
       expectedOutputs = attrs.meta.outputsToInstall or [ ];
       actualOutputs = attrs.outputs or [ "out" ];
-      missingOutputs = builtins.filter (output: !builtins.elem output actualOutputs) expectedOutputs;
+      missingOutputs = filter (output: !builtins.elem output actualOutputs) expectedOutputs;
     in
     ''
       The package ${getNameWithVersion attrs} has set meta.outputsToInstall to: ${builtins.concatStringsSep ", " expectedOutputs}
@@ -476,7 +480,7 @@ let
     let
       expectedOutputs = attrs.meta.outputsToInstall or [ ];
       actualOutputs = attrs.outputs or [ "out" ];
-      missingOutputs = builtins.filter (output: !builtins.elem output actualOutputs) expectedOutputs;
+      missingOutputs = filter (output: !builtins.elem output actualOutputs) expectedOutputs;
     in
     if config.checkMeta then builtins.length missingOutputs > 0 else false;
 
@@ -712,14 +716,59 @@ let
                   cpe = makeCPE guessedParts;
                 }
               ) possibleCPEPartsFuns;
+
+          evaluateSrc = allowSrcEvalForDrvMeta && !isMarkedBroken attrs && !hasUnsupportedPlatform attrs;
+          purlParts = attrs.meta.identifiers.purlParts or { };
+          purlPartsFormatted =
+            if purlParts ? type && purlParts ? spec then "pkg:${purlParts.type}/${purlParts.spec}" else null;
+
+          # search for a PURL in the following order:
+          purl =
+            # 1) locally set through API
+            if purlPartsFormatted != null then
+              purlPartsFormatted
+            else if !evaluateSrc then
+              null
+            else
+              # 2) locally overwritten through meta.identifiers.purl
+              (attrs.src.meta.identifiers.purl or null);
+
+          # search for a PURL in the following order:
+          purls =
+            # 1) locally overwritten through meta.identifiers.purls (e.g. extension of list)
+            attrs.meta.identifiers.purls or (
+              # 2) locally set through API
+              if purlPartsFormatted != null then
+                [ purlPartsFormatted ]
+              else if !evaluateSrc then
+                [ ]
+              else
+                # 3) src.meta.PURL
+                (attrs.src.meta.identifiers.purls or (
+                  # 4) srcs.meta.PURL
+                  if !attrs ? srcs then
+                    [ ]
+                  else if isList attrs.srcs then
+                    concatMap (drv: drv.meta.identifiers.purls or [ ]) attrs.srcs
+                  else
+                    attrs.srcs.meta.identifiers.purls or [ ]
+                )
+                )
+            );
+
           v1 = {
-            inherit cpeParts possibleCPEs;
+            inherit
+              cpeParts
+              possibleCPEs
+              purls
+              ;
             ${if cpe != null then "cpe" else null} = cpe;
+            ${if purl != null then "purl" else null} = purl;
           };
         in
         v1
         // {
-          inherit v1;
+          inherit v1 purlParts;
         };
 
       # Expose the result of the checks for everyone to see.
