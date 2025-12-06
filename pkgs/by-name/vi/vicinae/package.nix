@@ -14,19 +14,19 @@
   pkg-config,
   protobuf,
   qt6,
-  rapidfuzz-cpp,
-  stdenv,
+  gcc15Stdenv,
   wayland,
+  libxml2,
 }:
-stdenv.mkDerivation (finalAttrs: {
+gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "vicinae";
-  version = "0.16.11";
+  version = "0.16.12";
 
   src = fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gX7bUoIP4PU0wUOW3ciyjYAInX/6VLVcEBKdQIQyzDk=";
+    hash = "sha256-GolXMuAvhWqljCdMo/9hlY0Vo52Bxx+dnLfYQWr9tk8=";
   };
 
   apiDeps = fetchNpmDeps {
@@ -72,8 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     qt6.qtsvg
     qt6.qtwayland
-    rapidfuzz-cpp
     wayland
+    libxml2
   ];
 
   postPatch = ''
