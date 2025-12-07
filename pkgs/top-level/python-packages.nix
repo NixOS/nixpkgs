@@ -7093,6 +7093,8 @@ self: super: with self; {
 
   icalendar-compatibility = callPackage ../development/python-modules/icalendar-compatibility { };
 
+  icalendar-searcher = callPackage ../development/python-modules/icalendar-searcher { };
+
   icalevents = callPackage ../development/python-modules/icalevents { };
 
   icdiff = callPackage ../development/python-modules/icdiff { };
