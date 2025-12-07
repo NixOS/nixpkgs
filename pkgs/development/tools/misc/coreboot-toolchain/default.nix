@@ -28,8 +28,6 @@ let
         pname = "coreboot-toolchain-${arch}";
         version = "25.09";
 
-        archives = ./stable.nix;
-
         src = fetchgit {
           url = "https://review.coreboot.org/coreboot";
           rev = finalAttrs.version;
@@ -65,7 +63,7 @@ let
           mkdir -p util/crossgcc/tarballs
 
           ${lib.concatMapStringsSep "\n" (file: "ln -s ${file.archive} util/crossgcc/tarballs/${file.name}") (
-            callPackage finalAttrs.archives { }
+            callPackage ./stable.nix { }
           )}
 
           patchShebangs util/genbuild_h/genbuild_h.sh
