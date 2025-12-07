@@ -6,13 +6,13 @@
 }:
 anki-utils.buildAnkiAddon (finalAttrs: {
   pname = "recolor";
-  version = "3.1";
+  version = "3.3";
   src = fetchFromGitHub {
     owner = "AnKing-VIP";
     repo = "AnkiRecolor";
     tag = finalAttrs.version;
     sparseCheckout = [ "src/addon" ];
-    hash = "sha256-28DJq2l9DP8O6OsbNQCZ0pm4S6CQ3Yz0Vfvlj+iQw8Y=";
+    hash = "sha256-Rfie1m4wfwZvmxxFngt1tky1j5dIZKX7c64A1pSbE3c=";
   };
   sourceRoot = "${finalAttrs.src.name}/src/addon";
   passthru.updateScript = nix-update-script { };
