@@ -396,7 +396,6 @@ with lib.maintainers;
 
   gitlab = {
     members = [
-      globin
       krav
       leona
       talyz

@@ -234,7 +234,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [
       lovek323
-      globin
     ];
 
     longDescription = ''

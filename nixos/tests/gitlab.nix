@@ -30,7 +30,6 @@ in
 {
   name = "gitlab";
   meta.maintainers = with lib.maintainers; [
-    globin
     yayayayaka
   ];
 
