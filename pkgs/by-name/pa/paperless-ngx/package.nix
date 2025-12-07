@@ -169,6 +169,7 @@ python.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = [
     "django-allauth"
     "python-dotenv"
+    "gotenberg-client"
     "redis"
     # requested by maintainer
     "ocrmypdf"
