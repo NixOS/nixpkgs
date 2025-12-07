@@ -136,6 +136,10 @@ let
       meson test --print-errorlogs --no-suite snowflake
     '';
 
+    passthru = {
+      unwrapped = finalAttrs.finalPackage;
+    };
+
     meta = with lib; {
       description = "Caching validating DNS resolver, from .cz domain registry";
       homepage = "https://knot-resolver.cz";
@@ -162,7 +166,10 @@ let
         ];
         preferLocalBuild = true;
         allowSubstitutes = false;
-        inherit (unwrapped) meta;
+        inherit (unwrapped) version meta;
+        passthru = {
+          inherit unwrapped;
+        };
       }
       (
         ''
