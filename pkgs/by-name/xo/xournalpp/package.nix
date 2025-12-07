@@ -26,6 +26,7 @@
   # plugins
   withLua ? true,
   lua5_3,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -78,6 +79,8 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${adwaita-icon-theme}/share"
     )
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Xournal++ is a handwriting Notetaking software with PDF annotation support";
