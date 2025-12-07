@@ -1,6 +1,7 @@
 {
   fetchFromGitHub,
   lib,
+  nixosTests,
   rustPlatform,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -20,6 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--features"
     "clap"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) udp-over-tcp;
+  };
 
   meta = {
     homepage = "https://github.com/mullvad/udp-over-tcp";
