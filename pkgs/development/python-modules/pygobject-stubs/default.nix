@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pygobject-stubs";
-  version = "2.13.0";
+  version = "2.14.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "pygobject";
     repo = "pygobject-stubs";
     tag = "v${version}";
-    hash = "sha256-d7caFIjRRFEZYyCDUcilJ7iquUdltZ0ZQupxQ6ITUEc=";
+    hash = "sha256-pConIc8FBq2a7yrfRHa07p2e/Axgrv4p+W0nq1WzERw=";
   };
 
   build-system = [ setuptools ];

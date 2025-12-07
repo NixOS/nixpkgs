@@ -7,17 +7,17 @@
   iconnamingutils,
   imagemagick,
   librsvg,
-  gtk, # any version
+  gtk3, # any version
   gnome-icon-theme,
   hicolor-icon-theme,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tango-icon-theme";
   version = "0.8.90";
 
   src = fetchurl {
-    url = "http://tango.freedesktop.org/releases/tango-icon-theme-${version}.tar.gz";
+    url = "http://tango.freedesktop.org/releases/tango-icon-theme-${finalAttrs.version}.tar.gz";
     sha256 = "13n8cpml71w6zfm2jz5fa7r1z18qlzk4gv07r6n1in2p5l1xi63f";
   };
 
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     intltool
+    gtk3
   ];
   buildInputs = [
     iconnamingutils
@@ -42,12 +43,14 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-png-creation" ];
 
-  postInstall = '''${gtk.out}/bin/gtk-update-icon-cache' "$out/share/icons/Tango" '';
+  postInstall = ''
+    gtk-update-icon-cache $out/share/icons/Tango
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "Basic set of icons";
     homepage = "https://tango.freedesktop.org/Tango_Icon_Library";
-    platforms = platforms.linux;
-    license = licenses.publicDomain;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.publicDomain;
   };
-}
+})
