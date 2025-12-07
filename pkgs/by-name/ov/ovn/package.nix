@@ -19,6 +19,7 @@
   coreutils,
   gnugrep,
   gnused,
+  which,
   makeWrapper,
 }:
 let
@@ -65,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     makeWrapper
+    which # used in test suite to detect presence of commands
   ];
 
   buildInputs = [
