@@ -20221,6 +20221,11 @@
     name = "pentane";
     keys = [ { fingerprint = "4231 75F6 8360 68C8 2ACB AEDA 63F4 EC2F FE55 0874"; } ];
   };
+  penzboti = {
+    github = "penzboti";
+    githubId = 50163206;
+    name = "penzboti";
+  };
   perchun = {
     name = "Perchun Pak";
     email = "nixpkgs@perchun.it";
