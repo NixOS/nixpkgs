@@ -1,11 +1,17 @@
 {
   lib,
+  stdenv,
   makeWrapper,
   python3,
   nixosTests,
   maven,
   fetchFromGitHub,
   jdk,
+  graalvmPackages,
+
+  nix-update-script,
+
+  buildNativeImage ? stdenv.hostPlatform.isLinux,
 }:
 
 # Skip some plugins not required for NixOS packaging to reduce required dependencies.
@@ -42,11 +48,17 @@ maven.buildMavenPackage rec {
 
   buildOffline = true;
 
-  mvnJdk = jdk;
+  mvnJdk = if buildNativeImage then graalvmPackages.graalvm-ce else jdk;
 
-  mvnHash = "sha256-SXanl43Fpd7IdhuD1H2LpB5BwvzbbjRNyZYzBvV1XXY=";
+  mvnHash = "sha256-tlzKHPpd8P5IK1DLrwA6n2noXb6auq6xdUqG/Ri7BQQ=";
+
+  HYDRA_NATIVE_BUILD = "true";
 
   manualMvnArtifacts = [
+    "org.graalvm.buildtools:native-maven-plugin:0.9.27"
+
+    "org.graalvm.buildtools:graalvm-reachability-metadata:0.9.27"
+
     "org.springframework.boot:spring-boot-maven-plugin:4.0.0"
 
     "org.apache.maven.plugins:maven-antrun-plugin:3.1.0"
@@ -66,7 +78,8 @@ maven.buildMavenPackage rec {
     "org.junit.platform:junit-platform-surefire-provider:1.3.2"
   ];
 
-  doCheck = true;
+  # Broken on JDK 25
+  doCheck = !buildNativeImage;
 
   mvnDepsParameters = projectFilter;
   mvnParameters = projectFilter;
@@ -75,17 +88,34 @@ maven.buildMavenPackage rec {
     makeWrapper
   ];
 
+  postBuild = ''
+    mvn ${mvnParameters} -o -nsu "-Dmaven.repo.local=$mvnDeps/.m2" install -DskipTests
+
+    mvn -pl org.nzbhydra:core -o -nsu -Pnative "-Dmaven.repo.local=$mvnDeps/.m2" native:compile -DskipTests
+  '';
+
   installPhase = ''
     runHook preInstall
 
-    install -d -m 755 "$out/lib/${pname}/lib"
-    cp -rt "$out/lib/${pname}/lib" core/target/*-exec.jar
+    ${
+      if buildNativeImage then
+        ''
+          install -d -m 755 "$out/lib/${pname}"
+          cp -rt "$out/lib/${pname}" core/target/core core/target/lib*.so
+        ''
+      else
+        ''
+          install -d -m 755 "$out/lib/${pname}/lib"
+          cp -rt "$out/lib/${pname}/lib" core/target/*-exec.jar
+        ''
+    }
+
     touch "$out/lib/${pname}/readme.md"
     install -D -m 755 "other/wrapper/nzbhydra2wrapperPy3.py" "$out/lib/nzbhydra2/nzbhydra2wrapperPy3.py"
 
     makeWrapper ${lib.getExe python3} "$out/bin/nzbhydra2" \
       --add-flags "$out/lib/nzbhydra2/nzbhydra2wrapperPy3.py" \
-      --prefix PATH ":" ${lib.getBin jdk}/bin
+      ${lib.optionalString (!buildNativeImage) "--prefix PATH \":\" ${lib.getBin jdk}/bin"}
 
     runHook postInstall
   '';
@@ -93,6 +123,8 @@ maven.buildMavenPackage rec {
   passthru.tests = {
     inherit (nixosTests) nzbhydra2;
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Usenet meta search";
