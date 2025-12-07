@@ -41,6 +41,8 @@ let
           allowedRequisites = [ ];
         };
 
+        archives = ./stable.nix;
+
         nativeBuildInputs = [
           bison
           curl
@@ -63,7 +65,7 @@ let
           mkdir -p util/crossgcc/tarballs
 
           ${lib.concatMapStringsSep "\n" (file: "ln -s ${file.archive} util/crossgcc/tarballs/${file.name}") (
-            callPackage ./stable.nix { }
+            callPackage finalAttrs.archives { }
           )}
 
           patchShebangs util/genbuild_h/genbuild_h.sh
