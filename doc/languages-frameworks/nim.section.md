@@ -20,7 +20,7 @@ buildNimPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "inv2004";
     repo = "ttop";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = lib.fakeHash;
   };
 
@@ -74,7 +74,7 @@ buildNimSbom (finalAttrs: {
   src = fetchFromSourcehut {
     owner = "~ehmry";
     repo = "nim_lk";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = lib.fakeHash;
   };
   buildInputs = [ openssl ];

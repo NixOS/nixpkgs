@@ -3232,6 +3232,8 @@ self: super: with self; {
 
   crytic-compile = callPackage ../development/python-modules/crytic-compile { };
 
+  cs50 = callPackage ../development/python-modules/cs50 { };
+
   csaf-tool = callPackage ../development/python-modules/csaf-tool { };
 
   csaps = callPackage ../development/python-modules/csaps { };
@@ -6680,6 +6682,8 @@ self: super: with self; {
   hatch-autorun = callPackage ../development/python-modules/hatch-autorun { };
 
   hatch-babel = callPackage ../development/python-modules/hatch-babel { };
+
+  hatch-deps-selector = callPackage ../development/python-modules/hatch-deps-selector { };
 
   hatch-docstring-description =
     callPackage ../development/python-modules/hatch-docstring-description

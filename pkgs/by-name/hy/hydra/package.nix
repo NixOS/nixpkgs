@@ -122,7 +122,7 @@ let
         UUID4Tiny
         XMLSimple
         YAML
-        (nix.libs.nix-perl-bindings or nix.perl-bindings)
+        (nix.libs.nix-perl-bindings or nix.perl-bindings or null)
         git
       ];
   };

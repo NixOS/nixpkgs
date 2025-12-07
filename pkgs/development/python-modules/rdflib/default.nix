@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "rdflib";
-  version = "7.4.0";
+  version = "7.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RDFLib";
     repo = "rdflib";
     tag = version;
-    hash = "sha256-/FEwNeNydhdW4xCKmLhh9tkXGcUAhO+D5N/b9pY6jh4=";
+    hash = "sha256-jZ5mbTz/ra/ZHAFyMmtqaM4RZw851gfTCBCRuPcGeYA=";
   };
 
   build-system = [ poetry-core ];
@@ -83,10 +83,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rdflib" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/RDFLib/rdflib/blob/${src.tag}/CHANGELOG.md";
     description = "Python library for working with RDF";
     homepage = "https://rdflib.readthedocs.io";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }
