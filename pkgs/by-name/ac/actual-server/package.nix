@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-MjJEicYwpXqgaH4c7KAAMek2lwAxT6796plFzt5E6dE=";
+    hash = "sha256-Hlc/UMPfZCBbBcmCzmNgDSX+uH8WDEIp/KE9H5jYr2Y=";
   };
 
   pname = "actual-server";
