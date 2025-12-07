@@ -21,7 +21,6 @@
 , "node2nix"
 , "postcss"
 , "prebuild-install"
-, "pscid"
 , "pulp"
 , "purescript-language-server"
 , "purescript-psa"

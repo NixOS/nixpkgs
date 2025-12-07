@@ -4834,8 +4834,6 @@ with pkgs;
 
   pulp = nodePackages.pulp;
 
-  pscid = nodePackages.pscid;
-
   coreboot-toolchain = recurseIntoAttrs (
     callPackage ../development/tools/misc/coreboot-toolchain { }
   );

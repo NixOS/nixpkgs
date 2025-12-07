@@ -287,6 +287,7 @@ mapAliases {
   prettier_d_slim = pkgs.prettier-d-slim; # added 2023-09-14
   prettier-plugin-toml = throw "prettier-plugin-toml was removed because it provides no executable"; # added 2025-03-23
   inherit (pkgs) prisma; # added 2024-08-31
+  pscid = throw "'pscid' has been removed because it was unmaintained upstream"; # Added 2025-12-07
   purty = throw "'purty' has been remved because it was unmaintained upstream"; # Added 2025-11-14
   inherit (pkgs) pxder; # added 2023-09-26
   inherit (pkgs) quicktype; # added 2023-09-09

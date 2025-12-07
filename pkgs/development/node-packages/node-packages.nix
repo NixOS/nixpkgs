@@ -9903,15 +9903,6 @@ let
         sha512 = "KDncfTmOZoOMTFG4mBlG0qUIOlc03fmzH+ru6RgYVZhPkyiy/92Owlt/8UEN+a4TXR1FQetfIpJE8ApdvdVxTg==";
       };
     };
-    "keypress-0.2.1" = {
-      name = "keypress";
-      packageName = "keypress";
-      version = "0.2.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/keypress/-/keypress-0.2.1.tgz";
-        sha512 = "HjorDJFNhnM4SicvaUXac0X77NiskggxJdesG72+O5zBKpSqKFCrqmndKVqpu3pFqkla0St6uGk8Ju0sCurrmg==";
-      };
-    };
     "keyv-3.1.0" = {
       name = "keyv";
       packageName = "keyv";
@@ -17850,15 +17841,6 @@ let
         sha512 = "BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==";
       };
     };
-    "which-4.0.0" = {
-      name = "which";
-      packageName = "which";
-      version = "4.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/which/-/which-4.0.0.tgz";
-        sha512 = "GlaYyEb07DPxYCKhKzplCWBJtvxZcZMrL+4UkrTSJHHPyZU4mYYTv3qaOe77H7EODLSSopAUFAc6W8U4yqvscg==";
-      };
-    };
     "which-5.0.0" = {
       name = "which";
       packageName = "which";
@@ -22031,122 +22013,6 @@ in
       description = "A command line tool to easily install prebuilt binaries for multiple version of node/iojs on a specific platform";
       homepage = "https://github.com/prebuild/prebuild-install";
       license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  pscid = nodeEnv.buildNodePackage {
-    name = "pscid";
-    packageName = "pscid";
-    version = "2.11.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/pscid/-/pscid-2.11.0.tgz";
-      sha512 = "gD1XxTSZXiGiFFHDNZhc7E2n/BTdRM8nix2mpHhzxZcH/iZMTMKwXnT37anH6nbCzLWqF6RTmF/jgHsdHOwVeg==";
-    };
-    dependencies = [
-      sources."@isaacs/cliui-8.0.2"
-      sources."ansi-regex-5.0.1"
-      sources."ansi-styles-6.2.1"
-      sources."balanced-match-1.0.2"
-      sources."brace-expansion-1.1.11"
-      sources."color-convert-2.0.1"
-      sources."color-name-1.1.4"
-      sources."concat-map-0.0.1"
-      (
-        sources."cross-spawn-7.0.6"
-        // {
-          dependencies = [
-            sources."which-2.0.2"
-          ];
-        }
-      )
-      sources."eastasianwidth-0.2.0"
-      sources."emoji-regex-9.2.2"
-      sources."foreground-child-3.3.1"
-      sources."fs.realpath-1.0.0"
-      sources."gaze-1.1.3"
-      (
-        sources."glob-10.4.5"
-        // {
-          dependencies = [
-            sources."brace-expansion-2.0.1"
-            sources."minimatch-9.0.5"
-          ];
-        }
-      )
-      (
-        sources."globule-1.3.4"
-        // {
-          dependencies = [
-            sources."glob-7.1.7"
-          ];
-        }
-      )
-      sources."inflight-1.0.6"
-      sources."inherits-2.0.4"
-      sources."is-fullwidth-code-point-3.0.0"
-      sources."isexe-2.0.0"
-      sources."jackspeak-3.4.3"
-      sources."keypress-0.2.1"
-      sources."lodash-4.17.21"
-      sources."lru-cache-10.4.3"
-      sources."minimatch-3.0.8"
-      sources."minipass-7.1.2"
-      sources."once-1.4.0"
-      sources."package-json-from-dist-1.0.1"
-      sources."path-is-absolute-1.0.1"
-      sources."path-key-3.1.1"
-      sources."path-scurry-1.11.1"
-      sources."shebang-command-2.0.0"
-      sources."shebang-regex-3.0.0"
-      sources."signal-exit-4.1.0"
-      sources."string-width-5.1.2"
-      (
-        sources."string-width-cjs-4.2.3"
-        // {
-          dependencies = [
-            sources."emoji-regex-8.0.0"
-            sources."strip-ansi-6.0.1"
-          ];
-        }
-      )
-      (
-        sources."strip-ansi-7.1.0"
-        // {
-          dependencies = [
-            sources."ansi-regex-6.1.0"
-          ];
-        }
-      )
-      sources."strip-ansi-cjs-6.0.1"
-      (
-        sources."which-4.0.0"
-        // {
-          dependencies = [
-            sources."isexe-3.1.1"
-          ];
-        }
-      )
-      sources."wrap-ansi-8.1.0"
-      (
-        sources."wrap-ansi-cjs-7.0.0"
-        // {
-          dependencies = [
-            sources."ansi-styles-4.3.0"
-            sources."emoji-regex-8.0.0"
-            sources."string-width-4.2.3"
-            sources."strip-ansi-6.0.1"
-          ];
-        }
-      )
-      sources."wrappy-1.0.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "A lightweight editor experience for PureScript development";
-      homepage = "https://github.com/kritzcreek/pscid#readme";
-      license = "LGPL-3.0";
     };
     production = true;
     bypassCache = true;
