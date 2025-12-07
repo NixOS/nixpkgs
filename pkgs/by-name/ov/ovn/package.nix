@@ -12,6 +12,7 @@
   pkg-config,
   procps,
   python3,
+  python313Packages,
   unbound,
   xdp-tools,
   openvswitch,
@@ -105,6 +106,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     openssl # used to generate certificates used for test services
     procps
+    # enable more tests that use scapy to produce test packet payloads
+    (python3.withPackages (ps: [ ps.scapy ]))
+    python313Packages.scapy
   ];
 
   postInstall = ''
