@@ -129,6 +129,7 @@ in
           ];
 
           # Security options:
+          CapabilityBoundingSet = [ "" ];
           NoNewPrivileges = true;
           SystemCallArchitectures = "native";
           # AF_NETLINK needed because Jellyfin monitors the network connection
@@ -141,11 +142,15 @@ in
           RestrictNamespaces = !config.boot.isContainer;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
+          ProcSubset = "pid";
           ProtectControlGroups = !config.boot.isContainer;
+          ProtectClock = true;
           ProtectHostname = true;
           ProtectKernelLogs = !config.boot.isContainer;
           ProtectKernelModules = !config.boot.isContainer;
           ProtectKernelTunables = !config.boot.isContainer;
+          ProtectProc = "invisible";
+          ProtectSystem = true;
           LockPersonality = true;
           PrivateTmp = !config.boot.isContainer;
           # needed for hardware acceleration
@@ -154,21 +159,8 @@ in
           RemoveIPC = true;
 
           SystemCallFilter = [
-            "~@clock"
-            "~@aio"
-            "~@chown"
-            "~@cpu-emulation"
-            "~@debug"
-            "~@keyring"
-            "~@memlock"
-            "~@module"
-            "~@mount"
-            "~@obsolete"
+            "@system-service"
             "~@privileged"
-            "~@raw-io"
-            "~@reboot"
-            "~@setuid"
-            "~@swap"
           ];
           SystemCallErrorNumber = "EPERM";
         };
