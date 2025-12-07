@@ -63,6 +63,18 @@ buildPythonPackage rec {
     hash = "sha256-f6ILZMLxfckEpy7wSgCqUx89JWSnn0DbQiqRSHcQHms=";
   };
 
+  # Fix vllm 0.12.0 compatibility
+  # Patch submitted upstream: https://github.com/kserve/kserve/pull/4882
+  postPatch = ''
+    substituteInPlace kserve/protocol/rest/openai/types/__init__.py \
+      --replace-fail \
+        "from vllm.entrypoints.openai.protocol import EmbeddingRequest, EmbeddingResponse as Embedding, EmbeddingResponseData, EmbeddingCompletionRequest" \
+        "from vllm.entrypoints.pooling.embed.protocol import EmbeddingRequest, EmbeddingResponse as Embedding, EmbeddingResponseData, EmbeddingCompletionRequest" \
+      --replace-fail \
+        "from vllm.entrypoints.openai.protocol import RerankRequest, RerankResponse as Rerank" \
+        "from vllm.entrypoints.pooling.score.protocol import RerankRequest, RerankResponse as Rerank"
+  '';
+
   sourceRoot = "${src.name}/python/kserve";
 
   pythonRelaxDeps = [
