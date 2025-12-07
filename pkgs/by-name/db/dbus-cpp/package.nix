@@ -4,7 +4,7 @@
   fetchFromGitLab,
   gitUpdater,
   testers,
-  boost186,
+  boost,
   cmake,
   ctestCheckHook,
   dbus,
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost186 # uses boost/asio/io_service.hpp
+    boost
     lomiri.cmake-extras
     dbus
     libxml2
