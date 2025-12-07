@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-testmon";
-  version = "2.1.4";
+  version = "2.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "tarpas";
     repo = "pytest-testmon";
     tag = "v${version}";
-    hash = "sha256-T/dvNUg1O6bIGgix8YS52zgt1wT8Fol6CscqcS8MjcA=";
+    hash = "sha256-BVQ7rEusbW0G1C6cUeHH7fZWndSErcBQfGNdw0/4eTg=";
   };
 
   nativeBuildInputs = [ setuptools ];
