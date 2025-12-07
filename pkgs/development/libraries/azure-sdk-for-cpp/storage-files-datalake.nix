@@ -50,7 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    moveToOutput "share" $dev
+    moveToOutput "share" "$dev"
+    moveToOutput "share/$(basename "$sourceRoot")-cpp/copyright" "$out"
   '';
 
   doCheck = false;
