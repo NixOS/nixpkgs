@@ -19,7 +19,7 @@ php.buildComposerWithPlugin {
   };
 
   composerLock = ./composer.lock;
-  vendorHash = "sha256-QPlHWXXksetNSsv3olmCtPA/VsFVPV09rYQEsPezZoE=";
+  vendorHash = "sha256-Uk7bT5NmobiUnOI4mSTQsRRiH8E9dLlU+en7IsIbI8M=";
 
   meta = {
     changelog = "https://github.com/CycloneDX/cyclonedx-php-composer/releases/tag/v${version}";

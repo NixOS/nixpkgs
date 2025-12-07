@@ -14,14 +14,12 @@ php.buildComposerProject2 (finalAttrs: {
   };
   # It doesn't provide a composer.lock file, we have to generate manually.
   composerLock = ./composer.lock;
-  vendorHash = "sha256-dYg7cULL4gquR5EenA0lD9ZC9Ge4qNwFFDNhELKgSso=";
+  vendorHash = "sha256-HLt4oaKXkbuBg/GL+GU6MKY+4ITctjplFxpu9ewgsaE=";
 
   meta = {
     description = "Lightweight CalDAV+CardDAV server that offers an extensive web interface with easy management of users, address books and calendars";
     homepage = "https://sabre.io/baikal/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ wrvsrx ];
-    # vendorHash non-reproducible
-    broken = true;
   };
 })
