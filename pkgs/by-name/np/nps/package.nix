@@ -1,6 +1,7 @@
 {
   lib,
   nix,
+  nix-update-script,
   fetchFromGitHub,
   rustPlatform,
 }:
@@ -19,6 +20,8 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-MThyvhzZXRM4l0K8csLDldMVKiDxKZ5EIFATGVpGpVc=";
 
   nativeCheckInputs = [ nix ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Cache the nix package list, query and sort results by relevance";
