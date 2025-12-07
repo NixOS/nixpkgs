@@ -16,17 +16,16 @@
 
 buildPythonPackage rec {
   pname = "pymssql";
-  version = "2.3.7";
+  version = "2.3.10";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Xm15x7HOxArr7EsJnG5EXMqsJFGeXnZ7SaTm9IwIflA=";
+    hash = "sha256-TobCj6caZto6iVhLFrad7An+2X/q236vSHxwSTZT/GM=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=54.0,<70.3" "setuptools>=54.0"
+    sed -i '/standard-distutils/d' pyproject.toml
   '';
 
   build-system = [
