@@ -55,10 +55,10 @@ let
       for f in sys/conf/*.mk; do
         substituteInPlace "$f" --replace-quiet 'KERN_DEBUGDIR}''${' 'KERN_DEBUGDIR_'
       done
-      ''
-      + lib.optionalString (baseConfigFile != null) ''
-        cat ${baseConfigFile} >>sys/${hostArchBsd}/conf/${baseConfig}
-      '';
+    ''
+    + lib.optionalString (baseConfigFile != null) ''
+      cat ${baseConfigFile} >>sys/${hostArchBsd}/conf/${baseConfig}
+    '';
   };
 
   # Kernel modules need this for kern.opts.mk

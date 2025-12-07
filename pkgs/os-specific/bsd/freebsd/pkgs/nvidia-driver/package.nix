@@ -41,7 +41,7 @@ mkDerivation rec {
     "pic" # generates relocations the linker can't handle
   ];
 
-  env.NIX_CFLAGS_COMPILE_AFTER = "-O0";   # XXX REMOVE
+  env.NIX_CFLAGS_COMPILE_AFTER = "-O0"; # XXX REMOVE
 
   meta.platforms = [ "x86_64-freebsd" ];
   meta.license = lib.licenses.unfree;

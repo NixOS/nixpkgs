@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 let
   types_h = fetchurl {
     url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/3da53417998c611f340d75e45962da2fa912add5/multimedia/libv4l/files/types.h";

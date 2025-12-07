@@ -29,9 +29,13 @@ mkDerivation {
   ];
 
   # XXX mass rebuild moment
-  postPatch = if withPwdMkdb == null then null else ''
-    substituteInPlace lib/libutil/pw_util.c --replace-fail _PATH_PWD_MKDB '"${lib.getExe withPwdMkdb}"'
-  '';
+  postPatch =
+    if withPwdMkdb == null then
+      null
+    else
+      ''
+        substituteInPlace lib/libutil/pw_util.c --replace-fail _PATH_PWD_MKDB '"${lib.getExe withPwdMkdb}"'
+      '';
 
   preBuild = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -B${csu}/lib"

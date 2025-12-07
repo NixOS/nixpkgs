@@ -1,4 +1,9 @@
-{ stdenv, fetchFromGitHub, xorg, pkg-config }:
+{
+  stdenv,
+  fetchFromGitHub,
+  xorg,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "xf86-video-scfb";
   version = "0.0.7";

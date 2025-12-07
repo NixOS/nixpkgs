@@ -12,7 +12,7 @@ mkDerivation rec {
   pname =
     "drm-kmod-firmware" + lib.optionalString withAmd "-amd" + lib.optionalString withIntel "-intel";
 
-  version = "20230625_4";  # there is a _8 but freebsd-ports is pinned to _4
+  version = "20230625_4"; # there is a _8 but freebsd-ports is pinned to _4
 
   src = fetchFromGitHub {
     owner = "freebsd";
