@@ -52,7 +52,7 @@ in
       description = "Domain on which nginx will serve Spliit";
     };
 
-    secretFile = mkOption {
+    environmentFile = mkOption {
       type = types.nullOr types.path;
       default = null;
       description = ''
@@ -71,7 +71,7 @@ in
         ]));
       default = { };
       description = ''
-        Environment variables settings for spliit.
+        Environment variables settings for spliit. See <https://github.com/spliit-app/spliit?tab=readme-ov-file#opt-in-features> for the possible options.
         Secrets should use `secretFile` option instead.
       '';
       example = {
