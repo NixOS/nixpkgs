@@ -16,20 +16,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "yt-dlp";
     repo = "ejs";
-    rev = "4f1d91dbb11a49c1b666609ff2119753191fd875";
-    hash = "sha256-p1jWAALPNfhjiJV6NOWvV8VZ5w8p7eZsTc9JApiq0DM=";
+    rev = "3e76dde15323725c7bb0e31ef78a8964156142ce";
+    hash = "sha256-lyQyZo9Hbb03Hp8A7e5emR7Yz5hic3UaOyYOXRCFcio=";
   };
-
-  patches = [
-    ./pnpm-cmd.patch
-  ];
 
   pnpmDeps = pnpm.fetchDeps {
     inherit
       pname
       version
       src
-      patches
       ;
     fetcherVersion = 2;
     hash = "sha256-3hhwKUzfdlKmth4uRlfBSdxEOIfhAVaq2PZIOHWGWiM=";
