@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "MacOS Rust bits in mitmproxy";
     homepage = "https://github.com/mitmproxy/mitmproxy_rs/tree/main/mitmproxy-macos";
     platforms = lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }
