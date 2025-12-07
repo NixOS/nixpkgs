@@ -25,7 +25,7 @@
   zlib,
   # plugins
   withLua ? true,
-  lua,
+  lua5_3,
 }:
 
 stdenv.mkDerivation rec {
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
       portaudio
       zlib
     ]
-    ++ lib.optional withLua lua;
+    ++ lib.optional withLua lua5_3;
 
   buildFlags = [ "translations" ];
 
