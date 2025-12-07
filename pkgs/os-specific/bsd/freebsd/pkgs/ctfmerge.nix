@@ -2,14 +2,13 @@
   lib,
   mkDerivation,
   compatIfNeeded,
-  libdwarf,
   libelf,
   zlib,
   libspl,
 }:
 
 mkDerivation {
-  path = "cddl/usr.bin/ctfconvert";
+  path = "cddl/usr.bin/ctfmerge";
   extraPaths = [
     "cddl/compat/opensolaris"
     "cddl/contrib/opensolaris"
@@ -27,7 +26,6 @@ mkDerivation {
   ];
 
   buildInputs = compatIfNeeded ++ [
-    libdwarf
     zlib
     libspl
     libelf
