@@ -96,8 +96,8 @@
   },
   {
     "pname": "Microsoft.Win32.SystemEvents",
-    "version": "9.0.10",
-    "hash": "sha256-hqtadbUx58gBwBFfVk2vyRmgWgdRpbmT84pcuhKTXl0="
+    "version": "10.0.0",
+    "hash": "sha256-p0rfcBwM6pkVY+G49ujVcHwwFgrEq46FGPpGFOg0H5w="
   },
   {
     "pname": "Newtonsoft.Json",
@@ -111,8 +111,8 @@
   },
   {
     "pname": "NLog",
-    "version": "6.0.5",
-    "hash": "sha256-aP7PsAkzjlZF6m1Tr87dX+5X0YIGov7DrTrIdsqhLUY="
+    "version": "6.0.6",
+    "hash": "sha256-vLtwZ32e1GWB93SGwmDAdUogQOf/5GuIcovO9Pn6qj8="
   },
   {
     "pname": "runtime.any.System.Runtime",
@@ -171,8 +171,8 @@
   },
   {
     "pname": "SourceGear.sqlite3",
-    "version": "3.50.4.2",
-    "hash": "sha256-NsahZ3lW1JYXMq4NOH5nM/EhdjV05sbrhjsGNIinb+M="
+    "version": "3.50.4.5",
+    "hash": "sha256-yPOyLiK4QoTfE3IED0hFl1JJYjmt8RBB3fp1a1CwvqE="
   },
   {
     "pname": "Stub.System.Data.SQLite.Core.NetStandard",
@@ -181,13 +181,13 @@
   },
   {
     "pname": "System.CodeDom",
-    "version": "4.7.0",
-    "hash": "sha256-4lO4CQyyqvwSG/EtNsRTQsbwyiY5pr225kAQXvlDkNE="
+    "version": "10.0.0",
+    "hash": "sha256-ffMXe35XVE49Gd6bbz2QRmTkCDeTuSnGYfKTZ6/MtS8="
   },
   {
     "pname": "System.CodeDom",
-    "version": "9.0.10",
-    "hash": "sha256-AMmYDZGMI8HVtvpGBhXkCDoBaJa11FPf/t2VYl31Nk8="
+    "version": "4.7.0",
+    "hash": "sha256-4lO4CQyyqvwSG/EtNsRTQsbwyiY5pr225kAQXvlDkNE="
   },
   {
     "pname": "System.Collections.Immutable",
@@ -231,18 +231,23 @@
   },
   {
     "pname": "System.Drawing.Common",
+    "version": "10.0.0",
+    "hash": "sha256-ZFneSifHbDj3O+IbwHSSs5YpDEunTeu9Hnz9APZKOA8="
+  },
+  {
+    "pname": "System.Drawing.Common",
     "version": "4.7.0",
     "hash": "sha256-D3qG+xAe78lZHvlco9gHK2TEAM370k09c6+SQi873Hk="
   },
   {
-    "pname": "System.Drawing.Common",
-    "version": "9.0.10",
-    "hash": "sha256-D4E99H3HVNatH+MDKuCGxaJOP7pXTxibBLThNZBXwLc="
+    "pname": "System.IO.Pipelines",
+    "version": "10.0.0",
+    "hash": "sha256-0aeIxLFEBn9BoCa93UVNikdlqgPl3B1nmYCLQ9Yu9Ak="
   },
   {
     "pname": "System.Management",
-    "version": "9.0.10",
-    "hash": "sha256-C6mzt+JhNagK6G1mQF+iVwPZtrRpyzdAspbIAKndpqo="
+    "version": "10.0.0",
+    "hash": "sha256-Nh3KOlsv6AxGkrWiHhuuTbRuIi2tp13NrbBwgQgKuSg="
   },
   {
     "pname": "System.Memory",
@@ -320,9 +325,14 @@
     "hash": "sha256-PIhkv59IXjyiuefdhKxS9hQfEwO9YWRuNudpo53HQfw="
   },
   {
+    "pname": "System.Text.Encodings.Web",
+    "version": "10.0.0",
+    "hash": "sha256-OrsgqAPfEjjo+CzzrAzkKTXNv3VXw2dm3Wpn+uRHCM8="
+  },
+  {
     "pname": "System.Text.Json",
-    "version": "9.0.10",
-    "hash": "sha256-wqeobpRw3PqOw21q8oGvauj5BkX1pS02Cm78E6c742w="
+    "version": "10.0.0",
+    "hash": "sha256-ZyAMIT3yQDJazYAObAlXmScGshGD9MVZgYmLqHyICq0="
   },
   {
     "pname": "System.Text.RegularExpressions",
