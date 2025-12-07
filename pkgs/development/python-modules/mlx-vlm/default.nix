@@ -15,7 +15,6 @@
   opencv-python,
   pillow,
   requests,
-  scipy,
   soundfile,
   tqdm,
   transformers,
@@ -29,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "mlx-vlm";
-  version = "0.3.3";
+  version = "0.3.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Blaizzy";
     repo = "mlx-vlm";
     tag = "v${version}";
-    hash = "sha256-KhppKqIJPmtjgSXSC3n5HTMm3fDUJaoYJEiGfQ5vGNQ=";
+    hash = "sha256-L+llrfFo4C++JZ3GjpZi16wMZNXtKrYh3pxhZ5N1n/4=";
   };
 
   build-system = [
@@ -55,7 +54,6 @@ buildPythonPackage rec {
     opencv-python
     pillow
     requests
-    scipy
     soundfile
     tqdm
     transformers
