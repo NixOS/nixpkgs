@@ -174,6 +174,7 @@ in
             cinnamon-translations
 
             # utils needed by some scripts
+            inxi
             killall
 
             # session requirements
