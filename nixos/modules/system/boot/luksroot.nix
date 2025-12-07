@@ -647,6 +647,7 @@ in
         "sha512"
         "af_alg"
         "algif_skcipher"
+        "cryptd"
       ];
       description = ''
         A list of cryptographic kernel modules needed to decrypt the root device(s).
@@ -1135,7 +1136,6 @@ in
     boot.initrd.availableKernelModules = [
       "dm_mod"
       "dm_crypt"
-      "cryptd"
       "input_leds"
     ]
     ++ luks.cryptoModules
