@@ -42,8 +42,6 @@
       # infrastructure.
       jq
       lswt
-
-      cosmic-reader
     ];
 
     # So far, all COSMIC tests launch a few GUI applications. In doing
