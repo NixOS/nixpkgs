@@ -37,7 +37,9 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  pythonImportsCheck = [ "magika" ];
+  # Imports in the build sandbox on aarch64-linux, but the program still works at
+  # runtime. See https://github.com/microsoft/onnxruntime/issues/10038.
+  pythonImportsCheck = lib.optionals (stdenv.system != "aarch64-linux") [ "magika" ];
 
   passthru.tests.version = testers.testVersion { package = magika; };
 
@@ -48,7 +50,5 @@ buildPythonPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ mihaimaruseac ];
     mainProgram = "magika-python-client";
-    # Currently, disabling on AArch64 as it onnx runtime crashes on ofborg
-    broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux;
   };
 }
