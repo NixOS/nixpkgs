@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "vwsfriend";
-  version = "0.24.7";
+  version = "0.24.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tillsteinbach";
     repo = "VWsFriend";
     tag = "v${version}";
-    hash = "sha256-ZGH7rcGSAYDBSjv1jZjT/uGJIrFL71RYK6vX71RHz8E=";
+    hash = "sha256-k2LHPjV6ndYpPemLlDBp8oi5ner9LG123FwKTRgqNsM=";
   };
 
   sourceRoot = "${src.name}/vwsfriend";

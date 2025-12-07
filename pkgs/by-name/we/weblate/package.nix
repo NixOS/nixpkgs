@@ -65,6 +65,7 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "certifi"
+    "cyrtranslit"
     "django-appconf"
   ];
 

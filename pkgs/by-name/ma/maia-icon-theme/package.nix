@@ -5,9 +5,8 @@
   cmake,
   extra-cmake-modules,
   gtk3,
-  plasma-framework,
-  kwindowsystem,
   hicolor-icon-theme,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation {
@@ -27,8 +26,8 @@ stdenv.mkDerivation {
     cmake
     extra-cmake-modules
     gtk3
-    plasma-framework
-    kwindowsystem
+    libsForQt5.plasma-framework
+    libsForQt5.kwindowsystem
   ];
 
   propagatedBuildInputs = [
@@ -52,10 +51,10 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Icons based on Breeze and Super Flat Remix";
     homepage = "https://gitlab.manjaro.org/artwork/themes/maia";
-    license = licenses.lgpl3;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.all;
   };
 }

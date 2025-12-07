@@ -374,6 +374,11 @@
     githubId = 22131756;
     name = "Aaqa Ishtyaq";
   };
+  aaravrav = {
+    name = "aaravrav";
+    github = "aaravrav";
+    githubId = 3279912;
+  };
   aarnphm = {
     email = "contact@aarnphm.xyz";
     github = "aarnphm";
