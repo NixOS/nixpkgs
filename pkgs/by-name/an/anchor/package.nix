@@ -6,17 +6,9 @@
   pkg-config,
   stdenv,
   udev,
-  llvmPackages_18,
 }:
 
-let
-  # Use older clang for x86_64-darwin to support macOS < 14.0
-  stdenv' =
-    if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
-    then llvmPackages_18.stdenv
-    else stdenv;
-in
-(rustPlatform.override { stdenv = stdenv'; }).buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "anchor";
   version = "0.32.1";
 
@@ -33,7 +25,7 @@ in
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv'.hostPlatform.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     udev
   ];
 
@@ -53,5 +45,6 @@ in
     license = licenses.asl20;
     maintainers = with maintainers; [ Denommus ];
     mainProgram = "anchor";
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }
