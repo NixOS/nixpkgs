@@ -13,15 +13,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-0lgpTOxf8y32GgYtcVbLDUDzyKvbsSZx3LKaDcdID6A=";
   };
 
+  sourceRoot = "${finalAttrs.src.name}/source";
+
   makeFlags = [
     "PREFIX=$(out)"
     "SUFFIX="
   ];
 
-  postPatch = ''
-    cd source
-  ''
-  + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
     substituteInPlace Makefile \
       --replace-fail '-DENABLE_SSE2' ""
   '';
