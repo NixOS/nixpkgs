@@ -12,13 +12,13 @@
 }:
 let
   yarn-berry = yarn-berry_4;
-  version = "25.11.0";
+  version = "25.12.0";
   src = fetchFromGitHub {
     name = "actualbudget-actual-source";
     owner = "actualbudget";
     repo = "actual";
     tag = "v${version}";
-    hash = "sha256-Skpfhhxd8MUoVpwPv4j8/bnFYYEAJkjKN2g1HVwWH/w=";
+    hash = "sha256-hu5Y67vomAJI1IJ1gLAdapRACDW/Q+cOAB+Bo4uQ9+w=";
   };
   translations = fetchFromGitHub {
     name = "actualbudget-translations-source";
@@ -26,8 +26,8 @@ let
     repo = "translations";
     # Note to updaters: this repo is not tagged, so just update this to the Git
     # tip at the time the update is performed.
-    rev = "8f6353763f28d1690c97c04f46a6479668130ec7";
-    hash = "sha256-E+RTa2OvT8fzwuscHhTY4Fd3LhWle9x5X+j9siHnUPM=";
+    rev = "570f8db9dd436810e014d587b4d27105bce7dfda";
+    hash = "sha256-fVyO4rMgbdI1Hm3J4ka9/72sNcwlfLS6Ef06YUvx4Gs=";
   };
 
 in
