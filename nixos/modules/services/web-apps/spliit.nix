@@ -10,17 +10,62 @@ in
 {
   meta = {
     maintainers = with lib.maintainers; [ qvalentin ];
-    doc = ./spliit.md;
   };
 
   options.services.spliit = with lib; {
     enable = mkEnableOption "Spliit bill-splitting web application";
     package = mkPackageOption pkgs "spliit" { };
-
-    port = mkOption {
-      type = types.port;
-      default = 3000;
-      description = "Port to listen on.";
+    settings = mkOption {
+      type = types.submodule {
+        freeformType = with types; attrsOf str;
+        options = {
+          PORT = mkOption {
+            type = types.port;
+            default = 3000;
+            example = 7000;
+            description = "The port to use.";
+          };
+          ADDRESS = mkOption {
+            type = types.str;
+            default = "127.0.0.1";
+            example = "0.0.0.0";
+            description = "The address to listen on.";
+          };
+          POSTGRES_PRISMA_URL = mkOption {
+            type = types.nullOr types.str;
+            default =
+              if cfg.database.createLocally then
+                "postgresql://${cfg.database.user}@${cfg.database.name}/${cfg.database.name}?host=/var/run/postgresql/"
+              else
+                "";
+            example = "postgresql://postgres:1234@localhost";
+            description = "Connection string for the postgres database";
+          };
+          POSTGRES_URL_NON_POOLING = mkOption {
+            type = types.nullOr types.str;
+            default =
+              if cfg.database.createLocally then
+                "postgresql://${cfg.database.user}@${cfg.database.name}/${cfg.database.name}?host=/var/run/postgresql/"
+              else
+                "";
+            example = "postgresql://postgres:1234@localhost";
+            description = "Non-pooling connection string for the postgres database";
+          };
+        };
+      };
+      example = literalExpression ''
+        {
+          PORT = 7000;
+          NEXT_PUBLIC_ENABLE_RECEIPT_EXTRACT = true;
+        }
+      '';
+      default = {
+        PORT = 3000;
+      };
+      description = ''
+        Environment variables settings for spliit. See <https://github.com/spliit-app/spliit?tab=readme-ov-file#opt-in-features> for the possible options.
+        Secrets should use `secretFile` option instead.
+      '';
     };
 
     user = mkOption {
@@ -61,24 +106,6 @@ in
       '';
     };
 
-    settings = mkOption {
-      type =
-        with types;
-        (attrsOf (oneOf [
-          bool
-          int
-          str
-        ]));
-      default = { };
-      description = ''
-        Environment variables settings for spliit. See <https://github.com/spliit-app/spliit?tab=readme-ov-file#opt-in-features> for the possible options.
-        Secrets should use `secretFile` option instead.
-      '';
-      example = {
-        NEXT_PUBLIC_ENABLE_RECEIPT_EXTRACT = true;
-      };
-    };
-
     database = {
       createLocally = mkOption {
         type = types.bool;
@@ -86,16 +113,6 @@ in
         description = ''
           Create the PostgreSQL database and database user locally.
         '';
-      };
-      hostname = mkOption {
-        type = types.str;
-        default = "/run/postgresql";
-        description = "Database hostname.";
-      };
-      port = mkOption {
-        type = types.port;
-        default = 5432;
-        description = "Database port.";
       };
       name = mkOption {
         type = types.str;
@@ -106,15 +123,6 @@ in
         type = types.str;
         default = "spliit";
         description = "Database user.";
-      };
-      passwordFile = mkOption {
-        type = types.nullOr types.path;
-        default = null;
-        example = "/run/keys/spliit-dbpassword";
-        description = ''
-          A file containing the password corresponding to
-          [](#opt-services.spliit.database.user).
-        '';
       };
     };
   };
@@ -127,43 +135,17 @@ in
       requires = lib.mkIf cfg.database.createLocally [ "postgresql.service" ];
 
       environment = lib.mkMerge [
-        (lib.mkIf cfg.database.createLocally {
-          POSTGRES_PRISMA_URL = "postgresql://${cfg.database.user}@${cfg.database.name}/${cfg.database.name}?host=/var/run/postgresql/";
-          POSTGRES_URL_NON_POOLING = "postgresql://${cfg.database.user}@${cfg.database.name}/${cfg.database.name}?host=/var/run/postgresql/";
-        })
-        {
-          PORT = toString cfg.port;
-        }
-        cfg.settings
+        (lib.mapAttrs (_: toString) cfg.settings)
       ];
 
       serviceConfig = {
         Type = "simple";
-
         StateDirectory = "spliit";
-        ExecStart =
-          if (cfg.database.passwordFile != null) then
-            lib.getExe (
-              pkgs.writeShellScriptBin "spliit-passwordFile" ''
-                set -eu
-                DATABASE_PASSWORD="$(cat $CREDENTIALS_DIRECTORY/dbpasswordfile)"
-
-                POSTGRES_PRISMA_URL="postgresql://${cfg.database.user}:$DATABASE_PASSWORD@${cfg.database.hostname}:${toString cfg.database.port}/${cfg.database.name}";
-
-                export POSTGRES_PRISMA_URL="$POSTGRES_PRISMA_URL"
-                export POSTGRES_URL_NON_POOLING="$POSTGRES_PRISMA_URL"
-
-                exec ${lib.getExe cfg.package}
-              ''
-            )
-          else
-            lib.getExe cfg.package;
+        ExecStart = lib.getExe cfg.package;
         Restart = "always";
+        LoadCredential = lib.optional (cfg.environmentFile != null) "${cfg.environmentFile}";
         User = cfg.user;
         Group = cfg.group;
-        LoadCredential =
-          lib.optional (cfg.secretFile != null) "env-secrets:${cfg.secretFile}"
-          ++ (lib.optional (cfg.database.passwordFile != null) "dbpasswordfile:${cfg.database.passwordFile}");
         DynamicUser = true;
 
         # Hardening
@@ -186,7 +168,6 @@ in
           "AF_INET6"
           "AF_NETLINK"
           # Required for connecting to database sockets,
-          # and listening to unix socket at `cfg.settings.path`
           "AF_UNIX"
         ];
         RestrictNamespaces = true;
@@ -205,13 +186,10 @@ in
     assertions = [
       {
         assertion =
-          cfg.database.createLocally -> cfg.database.user == cfg.user && cfg.database.name == cfg.user;
-        message = "<option>services.spliit.database.user</option> and <option>services.spliit.database.name</option> must be
-        the same as <option>services.spliit.user</option> if <option>services.spliit.database.createLocally</option> is set to true";
-      }
-      {
-        assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
-        message = "a password cannot be specified if <option>services.spliit.database.createLocally</option> is set to true";
+          cfg.database.createLocally
+          -> cfg.settings.POSTGRES_PRISMA_URL == null && cfg.settings.POSTGRES_URL_NON_POOLING == null;
+        message = "The options <option>services.spliit.settings.POSTGRES_PRISMA_URL</option> and <option>services.spliit.settings.POSTGRES_URL_NON_POOLING</option>
+        should not be set when <option>services.spliit.database.createLocally</option> is set to true";
       }
     ];
 
@@ -220,7 +198,7 @@ in
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
         {
-          name = cfg.database.user;
+          name = cfg.user;
           ensureDBOwnership = true;
         }
       ];
