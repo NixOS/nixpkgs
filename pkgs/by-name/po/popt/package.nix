@@ -49,5 +49,9 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ qyliss ];
     license = licenses.mit;
     platforms = platforms.unix;
+    identifiers.purlParts = {
+      type = "github";
+      spec = "rpm-software-management/popt@popt-${version}-release";
+    };
   };
 }
