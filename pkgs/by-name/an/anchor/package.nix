@@ -3,6 +3,9 @@
   perl,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  stdenv,
+  udev,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,6 +22,11 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     perl
+    pkg-config
+  ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    udev
   ];
 
   cargoHash = "sha256-XrVvhJ1lFLBA+DwWgTV34jufrcjszpbCgXpF+TUoEvo=";
