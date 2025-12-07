@@ -5,7 +5,7 @@
   fftwFloat,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zita-convolver";
   version = "4.0.3";
 
@@ -14,10 +14,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-f8a3sLcN6GMPV/8E/faqMYkJdUa7WqmQBrehH6kCJtc=";
   };
 
+  sourceRoot = "${finalAttrs.src.name}/source";
+
   buildInputs = [ fftwFloat ];
 
   patchPhase = ''
-    cd source
     sed -e "s@ldconfig@@" -i Makefile
   '';
 
@@ -28,7 +29,9 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # create lib link for building apps
-    ln -s $out/lib/libzita-convolver.so.${version} $out/lib/libzita-convolver.so.${lib.versions.major version}
+    ln -s \
+     $out/lib/libzita-convolver.so.${finalAttrs.version} \
+     $out/lib/libzita-convolver.so.${lib.versions.major finalAttrs.version}
   '';
 
   meta = {
@@ -38,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
   };
-}
+})
