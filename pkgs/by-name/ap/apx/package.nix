@@ -6,6 +6,10 @@
   distrobox,
   podman,
   writableTmpDirAsHomeHook,
+  curl,
+  jq,
+  common-updater-scripts,
+  writeShellScript,
 }:
 
 buildGoModule rec {
@@ -74,6 +78,26 @@ buildGoModule rec {
       --bash <($out/bin/apx completion bash) \
       --fish <($out/bin/apx completion fish) \
       --zsh <($out/bin/apx completion zsh)
+  '';
+
+  passthru.updateScript = writeShellScript "update-apx" ''
+    set -euo pipefail
+        PATH=${
+          lib.makeBinPath [
+            curl
+            jq
+            common-updater-scripts
+          ]
+        }:$PATH
+
+    echo "Fetching latest version for vanilla-apx-configs..."
+    LATEST_CONFIG=$(curl -s https://api.github.com/repos/Vanilla-OS/vanilla-apx-configs/releases/latest | jq -r .tag_name | sed 's/^v//')
+
+    echo "Updating versionConfig to $LATEST_CONFIG..."
+    update-source-version apx "$LATEST_CONFIG" --version-key=versionConfig --source-key=configsSrc
+
+    echo "Updating main apx package..."
+    nix-update apx
   '';
 
   meta = {
