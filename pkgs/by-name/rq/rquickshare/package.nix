@@ -92,7 +92,7 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Plus;
     mainProgram = "rquickshare";
     maintainers = with lib.maintainers; [
-      perchun
+      PerchunPak
       luftmensch-luftmensch
       sarunint
     ];
