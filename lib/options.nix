@@ -672,11 +672,30 @@ rec {
     is necessary for complex values, e.g. functions, or values that depend on
     other values or packages.
 
+    # Examples
+    :::{.example}
+    ## `literalExpression` usage example
+
+    ```nix
+    llvmPackages = mkOption {
+      type = types.str;
+      description = ''
+        Version of llvm packages to use for
+        this module
+      '';
+      example = literalExpression ''
+        llvmPackages = pkgs.llvmPackages_20;
+      '';
+    };
+    ```
+
+    :::
+
     # Inputs
 
     `text`
 
-    : 1\. Function argument
+    : The text to render as a Nix expression
   */
   literalExpression =
     text:
