@@ -10952,6 +10952,8 @@ with pkgs;
     pname = "floorp-bin";
   };
 
+  helium-browser = callPackage ../applications/networking/browsers/helium-browser { };
+
   formiko =
     with python3Packages;
     callPackage ../applications/editors/formiko {
