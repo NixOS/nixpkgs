@@ -1,16 +1,16 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchzip,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zita-resampler";
   version = "1.11.2";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/zita-resampler-${finalAttrs.version}.tar.xz";
-    hash = "sha256-qlxU5pYGmvJvPx/tSpYxE8wSN83f1XrlhCq8sazVSSw=";
+    hash = "sha256-0lgpTOxf8y32GgYtcVbLDUDzyKvbsSZx3LKaDcdID6A=";
   };
 
   makeFlags = [
