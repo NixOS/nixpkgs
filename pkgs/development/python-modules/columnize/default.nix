@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "columnize";
-  version = "0.3.11";
+  version = "3.11";
   pyproject = true;
 
   src = fetchFromGitHub {
