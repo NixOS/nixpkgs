@@ -9,7 +9,6 @@
   hatchling,
   python-dotenv,
   pythonOlder,
-  stdenv,
   tabulate,
   testers,
   tqdm,
@@ -48,7 +47,5 @@ buildPythonPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ mihaimaruseac ];
     mainProgram = "magika-python-client";
-    # Currently, disabling on AArch64 as it onnx runtime crashes on ofborg
-    broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux;
   };
 }
