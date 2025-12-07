@@ -1,0 +1,10 @@
+diff --git a/libexec/rtld-elf/Makefile b/libexec/rtld-elf/Makefile
+index b6ff7681e658..9a65abcab442 100644
+--- a/libexec/rtld-elf/Makefile
++++ b/libexec/rtld-elf/Makefile
+@@ -131,4 +131,4 @@ CFLAGS+=	-Wno-redundant-decls
+ 
+ # Add dependencies on libc and libsys archives after bsd.prog.mk
+ # includes bsd.libnames.mk so they are defined.
+-rtld_libc.a: ${LIBC_NOSSP_PIC} ${LIBSYS_PIC}
++rtld_libc.a: ${LIBC_NOSSP_PIC}
