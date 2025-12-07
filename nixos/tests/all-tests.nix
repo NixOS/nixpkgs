@@ -1349,7 +1349,7 @@ in
   rmfakecloud = runTest ./rmfakecloud.nix;
   robustirc-bridge = runTest ./robustirc-bridge.nix;
   rosenpass = runTest ./rosenpass.nix;
-  roundcube = runTest ./roundcube.nix;
+  roundcube = import ./roundcube.nix { inherit pkgs; };
   routinator = handleTest ./routinator.nix { };
   rshim = handleTest ./rshim.nix { };
   rspamd = handleTest ./rspamd.nix { };
