@@ -62,6 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
+  # Testing this is moderately involved, see:
+  # https://github.com/Azure/azure-sdk-for-cpp/blob/main/CONTRIBUTING.md#testing-the-project
+  # Unless issues arise, it does not seem worth the effort.
   doCheck = false;
 
   meta = (

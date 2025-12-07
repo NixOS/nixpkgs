@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput "share/$(basename "$sourceRoot")-cpp/copyright" "$out"
   '';
 
+  # See note in ./core.nix.
   doCheck = false;
 
   passthru.updateScript = nix-update-script {

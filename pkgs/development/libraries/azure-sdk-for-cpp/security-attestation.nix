@@ -61,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
+  # See note in ./core.nix.
   doCheck = false;
 
   meta = (
