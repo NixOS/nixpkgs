@@ -22403,6 +22403,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  whatif-vim = buildVimPlugin {
+    pname = "whatif.vim";
+    version = "2022-06-19";
+    src = fetchFromGitHub {
+      owner = "AndrewRadev";
+      repo = "whatif.vim";
+      rev = "3c675fc637837a17a3243f851ce03442b20c2b42";
+      sha256 = "0gva0qhns68bafrvzszljvgz7808bmnvaa44bvllv3vb4iw6jjj8";
+    };
+    meta.homepage = "https://github.com/AndrewRadev/whatif.vim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   which-key-nvim = buildVimPlugin {
     pname = "which-key.nvim";
     version = "2025-10-28";

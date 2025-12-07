@@ -220,12 +220,12 @@ in
 
   dracula = mkTmuxPlugin rec {
     pluginName = "dracula";
-    version = "3.1.0";
+    version = "3.2.0";
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "tmux";
       tag = "v${version}";
-      hash = "sha256-WNgCa8F618JQiHDM1YxHj7oR7w+7U6SU89K90RYIUh8=";
+      hash = "sha256-emR4G1P80OqxDO4DUrAd495SGLI+avpjpOYUYuoSoNU=";
     };
     meta = {
       homepage = "https://draculatheme.com/tmux";

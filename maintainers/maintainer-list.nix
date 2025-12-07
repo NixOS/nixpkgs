@@ -805,6 +805,12 @@
     githubId = 1141462;
     name = "Vladyslav Pekker";
   };
+  agustinmista = {
+    email = "agustin@mista.me";
+    github = "agustinmista";
+    githubId = 5265348;
+    name = "Agustin Mista";
+  };
   agvantibo = {
     email = "apicalium@gmail.com";
     github = "agvantibo-again";
@@ -17156,6 +17162,12 @@
     github = "milogert";
     githubId = 5378535;
     name = "Milo Gertjejansen";
+  };
+  milomc123 = {
+    email = "contact@milo.zip";
+    github = "milomc123";
+    githubId = 33701036;
+    name = "Milo Mc";
   };
   mimame = {
     email = "miguel.madrid.mencia@gmail.com";
