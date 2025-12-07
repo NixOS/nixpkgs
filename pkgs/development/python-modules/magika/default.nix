@@ -3,31 +3,28 @@
   buildPythonPackage,
   click,
   fetchPypi,
-  magika,
   numpy,
   onnxruntime,
   hatchling,
   python-dotenv,
-  pythonOlder,
   tabulate,
-  testers,
   tqdm,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "magika";
   version = "1.0.1";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-MT+Mv83Jp+VcJChicyMKJzK4mCXlipPeK1dlMTk7g5g=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     numpy
     onnxruntime
@@ -36,16 +33,18 @@ buildPythonPackage rec {
     tqdm
   ];
 
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+
   pythonImportsCheck = [ "magika" ];
 
-  passthru.tests.version = testers.testVersion { package = magika; };
-
-  meta = with lib; {
+  meta = {
     description = "Detect file content types with deep learning";
     homepage = "https://github.com/google/magika";
     changelog = "https://github.com/google/magika/blob/python-v${version}/python/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mihaimaruseac ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mihaimaruseac ];
     mainProgram = "magika-python-client";
   };
 }
