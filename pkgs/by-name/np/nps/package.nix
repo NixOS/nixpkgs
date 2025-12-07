@@ -38,7 +38,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/OleMussmann/nps";
     license = lib.licenses.mit;
     mainProgram = "nps";
-    maintainers = with lib.maintainers; [ olemussmann ];
+    maintainers = with lib.maintainers; [
+      mdaniels5757
+      olemussmann
+    ];
     platforms = lib.platforms.all;
   };
 }
