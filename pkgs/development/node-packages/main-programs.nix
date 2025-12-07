@@ -8,7 +8,6 @@
   aws-cdk = "cdk";
   grunt-cli = "grunt";
   gulp-cli = "gulp";
-  pulp = "pulp";
   purescript-language-server = "purescript-language-server";
   purescript-psa = "psa";
   purs-tidy = "purs-tidy";
