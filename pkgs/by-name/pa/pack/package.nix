@@ -9,18 +9,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "pack";
-  version = "0.38.2";
+  version = "0.39.0";
 
   src = fetchFromGitHub {
     owner = "buildpacks";
     repo = "pack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JDvNG0HMwr/bbWbuSLwuC5y+ZePECW4u+dzMBcKrcNk=";
+    hash = "sha256-20IHV389nnlPDtQcFboi6Mw9IlC1riDruD+rzmpl9RY=";
   };
 
   subPackages = [ "." ];
 
-  vendorHash = "sha256-PvGoHJP+MsfidKz72qFx638x+uirhgckIKCBdTUrqB8=";
+  vendorHash = "sha256-DRpKX57kk8D2DaA6S/QNmh8sl27yJy+XrVUIX9vuMV4=";
 
   ldflags = [
     "-s"
