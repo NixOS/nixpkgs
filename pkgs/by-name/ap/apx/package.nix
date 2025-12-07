@@ -94,6 +94,7 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       dit7ya
       chewblacka
+      masrlinu
     ];
     mainProgram = "apx";
   };
