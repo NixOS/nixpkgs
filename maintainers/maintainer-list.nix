@@ -15071,6 +15071,12 @@
     name = "Jan Schmitt";
     keys = [ { fingerprint = "1763 9903 2D7C 5B82 5D5A  0EAD A2BC 3C6F 1435 1991"; } ];
   };
+  locnide = {
+    email = "locnide@alpaga.dev";
+    github = "locnide";
+    githubId = 49921473;
+    name = "locnide";
+  };
   locochoco = {
     email = "contact@locochoco.dev";
     github = "loco-choco";
