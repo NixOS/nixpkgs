@@ -8563,6 +8563,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  mini-cmdline = buildVimPlugin {
+    pname = "mini.cmdline";
+    version = "2025-12-07";
+    src = fetchFromGitHub {
+      owner = "nvim-mini";
+      repo = "mini.cmdline";
+      rev = "c96216461df3b02abca31a0e360847750357137a";
+      sha256 = "0mn5fj81i7393w639cfbm9hz01l6rvnc1as4nlyx2nikml1jkzqy";
+    };
+    meta.homepage = "https://github.com/nvim-mini/mini.cmdline/";
+    meta.hydraPlatforms = [ ];
+  };
+
   mini-colors = buildVimPlugin {
     pname = "mini.colors";
     version = "2025-11-03";
@@ -16003,6 +16016,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  tv-nvim = buildVimPlugin {
+    pname = "tv.nvim";
+    version = "2025-12-05";
+    src = fetchFromGitHub {
+      owner = "alexpasmantier";
+      repo = "tv.nvim";
+      rev = "5142057ae5d1207129e26d98651525ffb781bce4";
+      sha256 = "1zxyr7wnwrxlmk14k4yd384j1ycf3c5zjydf4pn602drrip4z235";
+    };
+    meta.homepage = "https://github.com/alexpasmantier/tv.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   twilight-nvim = buildVimPlugin {
     pname = "twilight.nvim";
     version = "2025-10-28";
@@ -22387,6 +22413,19 @@ final: prev: {
       sha256 = "0nhzynbcq1533h22dh4l93xm476ljpq1cpz1c26bj14v2m0jbsyv";
     };
     meta.homepage = "https://github.com/DingDean/wgsl.vim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  whatif-vim = buildVimPlugin {
+    pname = "whatif.vim";
+    version = "2022-06-19";
+    src = fetchFromGitHub {
+      owner = "AndrewRadev";
+      repo = "whatif.vim";
+      rev = "3c675fc637837a17a3243f851ce03442b20c2b42";
+      sha256 = "0gva0qhns68bafrvzszljvgz7808bmnvaa44bvllv3vb4iw6jjj8";
+    };
+    meta.homepage = "https://github.com/AndrewRadev/whatif.vim/";
     meta.hydraPlatforms = [ ];
   };
 

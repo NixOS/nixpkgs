@@ -24,7 +24,7 @@ originalDrv.overrideAttrs (
         `astal` namespace. This package is just a `fetchFromGitHub`, which is
         reused between all subpackages.
       '';
-      maintainers = with lib.maintainers; [ perchun ];
+      maintainers = with lib.maintainers; [ PerchunPak ];
       platforms = lib.platforms.linux;
     };
 

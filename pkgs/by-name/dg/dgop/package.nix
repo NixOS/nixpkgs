@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dgop";
   version = "0.1.11";
 
   src = fetchFromGitHub {
     owner = "AvengeMedia";
     repo = "dgop";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QhzRn7pYN35IFpKjjxJAj3GPJECuC+VLhoGem3ezycc=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -43,10 +43,10 @@ buildGoModule rec {
   meta = {
     description = "API & CLI for System & Process Monitoring";
     homepage = "https://github.com/AvengeMedia/dgop";
-    changelog = "https://github.com/AvengeMedia/dgop/releases/tag/v${version}";
+    changelog = "https://github.com/AvengeMedia/dgop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ luckshiba ];
     mainProgram = "dgop";
     platforms = lib.platforms.unix;
   };
-}
+})

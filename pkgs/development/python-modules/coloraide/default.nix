@@ -1,21 +1,24 @@
 {
-  lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   hatchling,
+  lib,
+  pytestCheckHook,
   typing-extensions,
 }:
 let
-  pname = "coloraide";
-  version = "5.1";
+  version = "6.1";
 in
 buildPythonPackage {
-  inherit pname version;
+  pname = "coloraide";
+  inherit version;
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-DfBmpjbb2EgZgfrEkCQNPtkGtANDx8AXErPfVC8rJ1A=";
+  src = fetchFromGitHub {
+    owner = "facelessuser";
+    repo = "coloraide";
+    tag = version;
+    hash = "sha256-hsuFouesw4B9rr17NCQVB6LyYUdNRm9Cj2Cqj+MdLkc=";
   };
 
   build-system = [
@@ -30,12 +33,17 @@ buildPythonPackage {
     "coloraide"
   ];
 
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
   meta = {
-    description = "Color library for Python";
-    homepage = "https://pypi.org/project/coloraide/";
+    description = "Library to aid in using colors";
+    homepage = "https://github.com/facelessuser/coloraide";
     license = lib.licenses.mit;
     maintainers = [
       lib.maintainers._9999years
+      lib.maintainers.djacu
     ];
   };
 }

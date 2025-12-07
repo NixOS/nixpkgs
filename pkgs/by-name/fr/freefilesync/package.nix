@@ -29,7 +29,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freefilesync";
-  version = "14.5";
+  version = "14.6";
 
   src = fetchurl {
     url = "https://freefilesync.org/download/FreeFileSync_${finalAttrs.version}_Source.zip";
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
       rm -f "$out"
       tryDownload "$url" "$out"
     '';
-    hash = "sha256-+qfj1zf3V5xxtvXgCa0QDDRhEPQ3Qzii5eKiMySuUUY=";
+    hash = "sha256-OST2QIhPhKl9Qh4nHIno5XAJmLPNki0bU5A1ZXcUVTw=";
   };
 
   sourceRoot = ".";
@@ -59,6 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-Fem7eDDKSqPFU/t12Jco8OmYC8FM9JgB4/QVy/ouvbI=";
     })
   ];
+
+  postPatch = ''
+    touch zen/warn_static.h
+  '';
 
   nativeBuildInputs = [
     copyDesktopItems

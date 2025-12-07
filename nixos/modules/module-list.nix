@@ -651,6 +651,7 @@
   ./services/hardware/buffyboard.nix
   ./services/hardware/ddccontrol.nix
   ./services/hardware/deepcool-digital-linux.nix
+  ./services/hardware/dell-bios-fan-control.nix
   ./services/hardware/display.nix
   ./services/hardware/fancontrol.nix
   ./services/hardware/freefall.nix
@@ -1231,6 +1232,7 @@
   ./services/networking/keepalived/default.nix
   ./services/networking/keybase.nix
   ./services/networking/kismet.nix
+  ./services/networking/knot-resolver.nix
   ./services/networking/knot.nix
   ./services/networking/kresd.nix
   ./services/networking/lambdabot.nix
@@ -1402,6 +1404,7 @@
   ./services/networking/trickster.nix
   ./services/networking/twingate.nix
   ./services/networking/ucarp.nix
+  ./services/networking/udp-over-tcp.nix
   ./services/networking/umurmur.nix
   ./services/networking/unbound.nix
   ./services/networking/unifi.nix
@@ -1634,6 +1637,7 @@
   ./services/web-apps/immich-kiosk.nix
   ./services/web-apps/immich-public-proxy.nix
   ./services/web-apps/immich.nix
+  ./services/web-apps/immichframe.nix
   ./services/web-apps/invidious.nix
   ./services/web-apps/isso.nix
   ./services/web-apps/jirafeau.nix

@@ -264,7 +264,7 @@ let
           $decoded = json_decode(nix_read_secret($credential_name), true);
 
           if (json_last_error() !== JSON_ERROR_NONE) {
-            error_log(sprintf("Cannot decode %s, because: %s", $file, json_last_error_msg()));
+            error_log(sprintf("Cannot decode %s, because: %s", $credential_name, json_last_error_msg()));
             exit(1);
           }
 

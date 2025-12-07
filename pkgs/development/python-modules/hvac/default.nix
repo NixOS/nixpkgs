@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "hvac";
-  version = "2.3.0";
+  version = "2.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-G4XjMg6GQt2C8jTbYyU82haagXWJ6CNxPcX8qDEZseI=";
+    hash = "sha256-4AVq2QZOeSPodOZ2kBWwMlgLY54pJG9asQRPeVnBx+A=";
   };
 
   nativeBuildInputs = [ poetry-core ];

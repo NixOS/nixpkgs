@@ -10,12 +10,12 @@
 
 let
   # early enough not to rebuild gcc but late enough to have patchelf
-  earlyPkgs = stdenv.__bootPackages.stdenv.__bootPackages;
+  earlyPkgs = stdenv.__bootPackages.stdenv.__bootPackages or pkgs;
   earlierPkgs =
-    stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages;
+    stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages
+      or earlyPkgs;
   # use a early stdenv so when hacking on stdenv this test can be run quickly
-  bootStdenv =
-    stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv;
+  bootStdenv = earlyPkgs.stdenv.__bootPackages.stdenv.__bootPackages.stdenv or earlyPkgs.stdenv;
   pkgsStructured = import pkgs.path {
     config = {
       structuredAttrsByDefault = true;
@@ -23,7 +23,8 @@ let
     inherit (stdenv.hostPlatform) system;
   };
   bootStdenvStructuredAttrsByDefault =
-    pkgsStructured.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv;
+    pkgsStructured.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv
+      or pkgsStructured.stdenv;
 
   runCommand = earlierPkgs.runCommand;
 

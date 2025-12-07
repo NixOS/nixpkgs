@@ -77,9 +77,7 @@ buildGoModule (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   passthru = {
-    tests = {
-      inherit (nixosTests) victoriametrics;
-    };
+    tests = lib.recurseIntoAttrs nixosTests.victoriametrics;
     updateScript = ./update.sh;
   };
 

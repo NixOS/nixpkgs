@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "rjsmin";
-  version = "1.2.4";
+  version = "1.2.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/8vgTg36w5zqj7vLQcOLLgcjXOIYi8oV6ZjaHTSKeGA=";
+    hash = "sha256-o/gECwJz3sdz4OgH6GpNCpU1UWwKCjWqG7bebhW7Hwk=";
   };
 
   # The package does not ship tests, and the setup machinery confuses

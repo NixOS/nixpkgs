@@ -374,6 +374,11 @@
     githubId = 22131756;
     name = "Aaqa Ishtyaq";
   };
+  aaravrav = {
+    name = "aaravrav";
+    github = "aaravrav";
+    githubId = 3279912;
+  };
   aarnphm = {
     email = "contact@aarnphm.xyz";
     github = "aarnphm";
@@ -799,6 +804,12 @@
     github = "agilesteel";
     githubId = 1141462;
     name = "Vladyslav Pekker";
+  };
+  agustinmista = {
+    email = "agustin@mista.me";
+    github = "agustinmista";
+    githubId = 5265348;
+    name = "Agustin Mista";
   };
   agvantibo = {
     email = "apicalium@gmail.com";
@@ -6440,6 +6451,12 @@
     githubId = 17111639;
     name = "Devin Singh";
   };
+  devoid = {
+    name = "Scott Devoid";
+    email = "nixpkgs-github@d3void.net";
+    github = "devoid";
+    githubId = 581597;
+  };
   devplayer0 = {
     email = "dev@nul.ie";
     github = "devplayer0";
@@ -9711,6 +9728,12 @@
     github = "GovanifY";
     githubId = 6375438;
     keys = [ { fingerprint = "5214 2D39 A7CE F8FA 872B  CA7F DE62 E1E2 A614 5556"; } ];
+  };
+  govindsi = {
+    email = "govind.sk85@gmail.com";
+    github = "govindsi";
+    githubId = 8924200;
+    name = "Govind Singh";
   };
   gp2112 = {
     email = "me@guip.dev";
@@ -13949,6 +13972,12 @@
     githubId = 36413794;
     name = "Arek Kalandyk";
   };
+  korken89 = {
+    email = "emil.fresk@gmail.com";
+    github = "korken89";
+    githubId = 913109;
+    name = "Emil Fresk";
+  };
   koschi13 = {
     email = "maximilian.konter@protonmail.com";
     github = "koschi13";
@@ -17147,6 +17176,12 @@
     githubId = 5378535;
     name = "Milo Gertjejansen";
   };
+  milomc123 = {
+    email = "contact@milo.zip";
+    github = "milomc123";
+    githubId = 33701036;
+    name = "Milo Mc";
+  };
   mimame = {
     email = "miguel.madrid.mencia@gmail.com";
     github = "mimame";
@@ -20199,11 +20234,12 @@
     name = "pentane";
     keys = [ { fingerprint = "4231 75F6 8360 68C8 2ACB AEDA 63F4 EC2F FE55 0874"; } ];
   };
-  perchun = {
+  PerchunPak = {
     name = "Perchun Pak";
     email = "nixpkgs@perchun.it";
     github = "PerchunPak";
     githubId = 68118654;
+    keys = [ { fingerprint = "BBB5 1142 959D 8549 A3D2  F6C5 313F 67D1 EAB7 70F9"; } ];
   };
   peret = {
     name = "Peter Retzlaff";
@@ -22166,6 +22202,11 @@
     github = "rickvanprim";
     githubId = 13792812;
     name = "James Leitch";
+  };
+  rickyelopez = {
+    github = "rickyelopez";
+    githubId = 31072564;
+    name = "Ricky";
   };
   rickynils = {
     email = "rickynils@gmail.com";
@@ -24906,7 +24947,7 @@
   stepbrobd = {
     name = "Yifei Sun";
     email = "ysun@hey.com";
-    matrix = "@stepbrobd:matrix.org";
+    matrix = "@ysun:beeper.com";
     github = "stepbrobd";
     githubId = 81826728;
   };

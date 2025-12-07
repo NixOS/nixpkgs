@@ -1,14 +1,13 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   python3Packages,
   nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pyprland";
-  version = "2.4.7";
+  version = "2.5.0";
   format = "pyproject";
 
   disabled = python3Packages.pythonOlder "3.10";
@@ -17,18 +16,8 @@ python3Packages.buildPythonApplication rec {
     owner = "hyprland-community";
     repo = "pyprland";
     tag = version;
-    hash = "sha256-rtAw6tdZY0BKb6Qjk/LHYYMB9nCPzkmw95wdjhJ191s=";
+    hash = "sha256-k/7Z5QGRIpGZjPeO1Em3wYcX27nxR0V2UeKZaPwAM40=";
   };
-
-  patches = [
-    # Remove this patch from versions higher than 2.4.7-17.
-    # Fixes integration with pyprland 0.52.0+.
-    (fetchpatch {
-      url = "https://github.com/hyprland-community/pyprland/commit/21c0479a52df41f15bb798e28f67daab8b1ad0e3.patch";
-      hash = "sha256-QwEGdraSZmz9goCBTKQLArqQse1TP8b188uiIISshWc=";
-      includes = [ "pyprland/plugins/pyprland.py" ];
-    })
-  ];
 
   nativeBuildInputs = with python3Packages; [ poetry-core ];
 

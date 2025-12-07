@@ -15,6 +15,7 @@
   wayland-scanner,
   wrapGAppsNoGuiHook,
   librsvg,
+  libjxl,
 }:
 
 stdenv.mkDerivation rec {
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
         extraLoaders = [
           librsvg
           webp-pixbuf-loader
+          libjxl
         ];
       }
     }"

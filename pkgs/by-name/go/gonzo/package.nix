@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gonzo";
-  version = "0.2.2";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "control-theory";
     repo = "gonzo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NoZDSKdFb805WjtXLwA8/bnbTdJgnCtFxk6FqbuEo/0=";
+    hash = "sha256-fLTZwxZcwh7y83GfuOvG0R6vm/TgKIJjBWbt39mV6H8=";
   };
 
-  vendorHash = "sha256-XKwtq8EF774lHLHtyFzveFa5agJa15CvhsuwwaQdJwU=";
+  vendorHash = "sha256-uYQlZvsLUOmy7P/goNpwTGQrGFMW6LSILC6VjGbNrjI=";
 
   ldflags = [
     "-s"

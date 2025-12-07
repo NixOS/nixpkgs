@@ -82,6 +82,7 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "beautifulsoup4"
+    "bleach"
     "celery"
     "css-inline"
     "django-bootstrap3"
