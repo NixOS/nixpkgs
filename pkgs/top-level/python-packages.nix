@@ -15929,6 +15929,8 @@ self: super: with self; {
 
   quart-schema = callPackage ../development/python-modules/quart-schema { };
 
+  quart-trio = callPackage ../development/python-modules/quart-trio { };
+
   quaternion = callPackage ../development/python-modules/quaternion { };
 
   qudida = callPackage ../development/python-modules/qudida { };
