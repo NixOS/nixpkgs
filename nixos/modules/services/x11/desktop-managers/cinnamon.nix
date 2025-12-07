@@ -109,6 +109,7 @@ in
 
       # Default services
       services.blueman.enable = mkDefault (notExcluded pkgs.blueman);
+      services.hardware.bolt.enable = mkDefault (notExcluded pkgs.bolt);
       hardware.bluetooth.enable = mkDefault true;
       security.polkit.enable = true;
       services.accounts-daemon.enable = true;
