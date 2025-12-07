@@ -709,6 +709,49 @@ rec {
 
   /**
     For use in the `defaultText` and `example` option attributes. Causes the
+    given string to be rendered verbatim in the documentation as a code
+    block with the language bassed on the provided input tag.
+
+    If you wish to render Nix code, please see `literalExpression`.
+
+    # Examples
+    :::{.example}
+    ## `literalCode` usage example
+
+    ```nix
+    myPythonScript = mkOption {
+      type = types.str;
+      description = ''
+        Example python script used by a module
+      '';
+      example = literalCode "python" ''
+        print("Hello world!")
+      '';
+    };
+    ```
+
+    :::
+
+    # Inputs
+
+    `languageTag`
+
+    : The language tag to use when producing the code block (i.e. `js`, `rs`, etc).
+
+    `text`
+
+    : The text to render as a Nix expression
+  */
+  literalCode =
+    languageTag: text:
+    lib.literalMD ''
+      ```${languageTag}
+      ${text}
+      ```
+    '';
+
+  /**
+    For use in the `defaultText` and `example` option attributes. Causes the
     given MD text to be inserted verbatim in the documentation, for when
     a `literalExpression` would be too hard to read.
 
