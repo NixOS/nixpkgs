@@ -1702,10 +1702,6 @@ with pkgs;
 
   bat-extras = recurseIntoAttrs (lib.makeScope newScope (import ../tools/misc/bat-extras));
 
-  beauty-line-icon-theme = callPackage ../data/icons/beauty-line-icon-theme {
-    inherit (plasma5Packages) breeze-icons;
-  };
-
   beautysh = with python3.pkgs; toPythonApplication beautysh;
 
   inherit (callPackages ../misc/logging/beats/7.x.nix { })
@@ -9808,8 +9804,6 @@ with pkgs;
 
   libuuid = if stdenv.hostPlatform.isLinux then util-linuxMinimal else null;
 
-  elegant-sddm = libsForQt5.callPackage ../data/themes/elegant-sddm { };
-
   error-inject = recurseIntoAttrs (callPackages ../os-specific/linux/error-inject { });
 
   ffado = callPackage ../os-specific/linux/ffado { };
@@ -10060,12 +10054,6 @@ with pkgs;
 
   rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
 
-  sddm-astronaut = qt6Packages.callPackage ../data/themes/sddm-astronaut { };
-
-  sddm-chili-theme = libsForQt5.callPackage ../data/themes/chili-sddm { };
-
-  sddm-sugar-dark = libsForQt5.callPackage ../data/themes/sddm-sugar-dark { };
-
   sgx-sdk = callPackage ../os-specific/linux/sgx/sdk { };
 
   sgx-psw = callPackage ../os-specific/linux/sgx/psw {
@@ -10285,10 +10273,6 @@ with pkgs;
 
   androguard = with python3.pkgs; toPythonApplication androguard;
 
-  andromeda-gtk-theme = libsForQt5.callPackage ../data/themes/andromeda-gtk-theme { };
-
-  bibata-cursors-translucent = callPackage ../data/icons/bibata-cursors/translucent.nix { };
-
   dejavu_fonts = lowPrio (callPackage ../data/fonts/dejavu-fonts { });
 
   # solve collision for nix-env before https://github.com/NixOS/nix/pull/815
@@ -10324,9 +10308,6 @@ with pkgs;
 
   moeli = eduli;
 
-  flat-remix-icon-theme = callPackage ../data/icons/flat-remix-icon-theme {
-    inherit (plasma5Packages) breeze-icons;
-  };
   font-awesome_4 = (callPackage ../data/fonts/font-awesome { }).v4;
   font-awesome_5 = (callPackage ../data/fonts/font-awesome { }).v5;
   font-awesome_6 = (callPackage ../data/fonts/font-awesome { }).v6;
@@ -10360,10 +10341,6 @@ with pkgs;
     gruppled-white-lite-cursors
     ;
 
-  gruvbox-dark-icons-gtk = callPackage ../data/icons/gruvbox-dark-icons-gtk {
-    inherit (plasma5Packages) breeze-icons;
-  };
-
   iosevka-comfy = recurseIntoAttrs (callPackages ../data/fonts/iosevka/comfy.nix { });
 
   /**
@@ -10372,15 +10349,6 @@ with pkgs;
     It enables offline use, e.g. in build processes, and it improves performance, robustness and safety.
   */
   inherit (callPackage ../data/json-schema/default.nix { }) jsonSchemaCatalogs;
-
-  kde-rounded-corners =
-    kdePackages.callPackage ../data/themes/kwin-decorations/kde-rounded-corners
-      { };
-
-  la-capitaine-icon-theme = callPackage ../data/icons/la-capitaine-icon-theme {
-    inherit (plasma5Packages) breeze-icons;
-    inherit (pantheon) elementary-icon-theme;
-  };
 
   inherit (callPackages ../data/fonts/liberation-fonts { })
     liberation_ttf_v1
@@ -10397,8 +10365,6 @@ with pkgs;
   # lohit-fonts.tamil-classical lohit-fonts.tamil lohit-fonts.telugu
   # lohit-fonts.kashmiri lohit-fonts.konkani lohit-fonts.maithili lohit-fonts.sindhi
   lohit-fonts = recurseIntoAttrs (callPackages ../data/fonts/lohit-fonts { });
-
-  maia-icon-theme = libsForQt5.callPackage ../data/icons/maia-icon-theme { };
 
   marwaita-icons = callPackage ../by-name/ma/marwaita-icons/package.nix {
     inherit (kdePackages) breeze-icons;
@@ -10435,23 +10401,13 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  numix-icon-theme = callPackage ../data/icons/numix-icon-theme {
-    inherit (plasma5Packages) breeze-icons;
-  };
-
   openmoji-color = callPackage ../data/fonts/openmoji { fontFormats = [ "glyf_colr_0" ]; };
 
   openmoji-black = callPackage ../data/fonts/openmoji { fontFormats = [ "glyf" ]; };
 
-  papirus-maia-icon-theme = callPackage ../data/icons/papirus-maia-icon-theme {
-    inherit (plasma5Packages) breeze-icons;
-  };
-
   papis = with python3Packages; toPythonApplication papis;
 
   polychromatic = qt6Packages.callPackage ../applications/misc/polychromatic { };
-
-  qogir-kde = libsForQt5.callPackage ../data/themes/qogir-kde { };
 
   ricochet-refresh = callPackage ../by-name/ri/ricochet-refresh/package.nix {
     protobuf = protobuf_21; # https://github.com/blueprint-freespeech/ricochet-refresh/issues/178
@@ -10492,10 +10448,6 @@ with pkgs;
   source-han-sans-vf-ttf = sourceHanPackages.sans-vf-ttf;
   source-han-serif-vf-otf = sourceHanPackages.serif-vf-otf;
   source-han-serif-vf-ttf = sourceHanPackages.serif-vf-ttf;
-
-  tango-icon-theme = callPackage ../data/icons/tango-icon-theme {
-    gtk = res.gtk2;
-  };
 
   themes = name: callPackage (../data/misc/themes + ("/" + name + ".nix")) { };
 

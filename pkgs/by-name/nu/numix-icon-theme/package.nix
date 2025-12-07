@@ -4,21 +4,21 @@
   fetchFromGitHub,
   gtk3,
   adwaita-icon-theme,
-  breeze-icons,
   gnome-icon-theme,
   hicolor-icon-theme,
   gitUpdater,
+  libsForQt5,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "numix-icon-theme";
   version = "25.10.26";
 
   src = fetchFromGitHub {
     owner = "numixproject";
     repo = "numix-icon-theme";
-    rev = version;
-    sha256 = "sha256-YKR4dncq2uuX8CMJj/Zr/0pdl7gLC8VZGvb/HI1+Uwc=";
+    tag = finalAttrs.version;
+    hash = "sha256-YKR4dncq2uuX8CMJj/Zr/0pdl7gLC8VZGvb/HI1+Uwc=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation rec {
 
   propagatedBuildInputs = [
     adwaita-icon-theme
-    breeze-icons
+    libsForQt5.breeze-icons
     gnome-icon-theme
     hicolor-icon-theme
   ];
@@ -51,12 +51,12 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Numix icon theme";
     homepage = "https://numixproject.github.io";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     # darwin cannot deal with file names differing only in case
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ romildo ];
   };
-}
+})

@@ -15,9 +15,13 @@
   emscripten,
 }:
 
+let
+  pythonWithPsutil = python3.withPackages (ps: [ ps.psutil ]);
+in
+
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "4.0.12";
+  version = "4.0.21";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -33,7 +37,7 @@ stdenv.mkDerivation rec {
     name = "emscripten-node-modules-${version}";
     inherit pname version src;
 
-    npmDepsHash = "sha256-Pos7pSboTIpGKtlBm56hJPYb1lDydmUwW1urHetFfeQ=";
+    npmDepsHash = "sha256-IwiH+GELJzd4rDq31arhiF5miIRLDe7nrVsM7Yg9rTg=";
 
     dontBuild = true;
 
@@ -46,7 +50,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    hash = "sha256-MwCUilfyum1yJb6nHEViYiYWufXlz2+krHZmXw2NAck=";
+    hash = "sha256-8lh7ZpzVnoQXOGE/xJgHSWkYXUDOOprbSGaEkyU+vKE=";
     rev = version;
   };
 
@@ -116,8 +120,16 @@ stdenv.mkDerivation rec {
     export EM_CACHE=$out/share/emscripten/cache
 
     mkdir -p $out/bin
-    for b in em++ em-config emar embuilder.py emcc emcmake emconfigure emmake emranlib emrun emscons emsize; do
+    for b in em++ emcc; do
       makeWrapper $appdir/$b $out/bin/$b \
+        --set NODE_PATH ${nodeModules} \
+        --set EM_EXCLUSIVE_CACHE_ACCESS 1 \
+        --set PYTHON ${python3}/bin/python \
+        --run "source $appdir/locate_cache.sh"
+    done
+    for b in em-config emar embuilder emcmake emconfigure emmake emranlib emrun emscons emsize; do
+      chmod +x $appdir/$b.py
+      makeWrapper $appdir/$b.py $out/bin/$b \
         --set NODE_PATH ${nodeModules} \
         --set EM_EXCLUSIVE_CACHE_ACCESS 1 \
         --set PYTHON ${python3}/bin/python \
@@ -129,18 +141,7 @@ stdenv.mkDerivation rec {
     echo 'int __main_argc_argv( int a, int b ) { return 42; }' >test.c
     for LTO in -flto ""; do
       for BIND in "" "--bind"; do
-        # starting with emscripten 3.1.32+,
-        # if pthreads and relocatable are both used,
-        # _emscripten_thread_exit_joinable must be exported
-        # (see https://github.com/emscripten-core/emscripten/pull/18376)
-        # TODO: get library cache to build with both enabled and function exported
         $out/bin/emcc $LTO $BIND test.c
-        $out/bin/emcc $LTO $BIND -s RELOCATABLE test.c
-        # starting with emscripten 3.1.48+,
-        # to use pthreads, _emscripten_check_mailbox must be exported
-        # (see https://github.com/emscripten-core/emscripten/pull/20604)
-        # TODO: get library cache to build with pthreads at all
-        # $out/bin/emcc $LTO $BIND -s USE_PTHREADS test.c
       done
     done
     popd
@@ -148,7 +149,7 @@ stdenv.mkDerivation rec {
     export PYTHON=${python3}/bin/python
     export NODE_PATH=${nodeModules}
     pushd $appdir
-    python test/runner.py test_hello_world
+    ${pythonWithPsutil}/bin/python test/runner.py test_hello_world
     popd
 
     runHook postInstall
