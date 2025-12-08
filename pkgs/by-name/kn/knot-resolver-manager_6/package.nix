@@ -38,9 +38,8 @@ python3Packages.buildPythonPackage {
     typing-extensions
   ];
 
-  doCheck = false; # FIXME
-  checkInputs = with python3Packages; [
-    python3Packages.augeas
+  nativeCheckInputs = with python3Packages; [
+    augeas
     dnspython
     lief
     pytestCheckHook
@@ -48,6 +47,24 @@ python3Packages.buildPythonPackage {
     pyroute2
     pyparsing
     toml
+  ];
+
+  preCheck = ''
+    mkdir -p /tmp
+  '';
+
+  disabledTestPaths = [
+    # FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-kresd-portdir/11076'
+    "tests/pytests/test_conn_mgmt.py"
+    "tests/pytests/test_edns.py"
+    "tests/pytests/test_prefix.py"
+    "tests/pytests/test_tls.py"
+  ];
+
+  disabledTests = [
+    # FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-kresd-portdir/11076'
+    "test_proxy_random_close"
+    "test_proxy_rehandshake_tls12"
   ];
 
   meta = knot-resolver_6.meta // {
