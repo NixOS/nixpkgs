@@ -61,6 +61,9 @@ jobs:
 
             Even as a non-committer, if you find that it is not acceptable, leave a comment.
 
+            > [!TIP]
+            > If you maintain all packages touched by this pull request, and they are all located under `pkgs/by-name/*`, you can comment **`@NixOS/nixpkgs-merge-bot merge`** to automatically merge this PR using the [`nixpkgs-merge-bot`](https://github.com/NixOS/nixpkgs/blob/master/ci/README.md#nixpkgs-merge-bot).
+
       - name: Log current API rate limits
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
