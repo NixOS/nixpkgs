@@ -14,26 +14,23 @@
   more-itertools,
   pytest-snapshot,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mdformat-mkdocs";
-  version = "4.4.1";
+  version = "4.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "KyleKing";
     repo = "mdformat-mkdocs";
     tag = "v${version}";
-    hash = "sha256-J1gLi85tEFJcWupV2FzunJhROFdU3G12hRHxbLSX0kc=";
+    hash = "sha256-u3IHqllknX6ilReXRVyZoDfqid8Ioe+zvC3wPh04HXo=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     mdformat
     mdformat-gfm
     mdit-py-plugins
