@@ -71,6 +71,8 @@
   pandoc,
   # nvim-tinygit
   gitMinimal,
+  # opencode-nvim,
+  opencode,
   # Preview-nvim dependencies
   md-tui,
   # sidekick-nvim dependencies
@@ -2868,6 +2870,13 @@ assertNoAdditions {
       broken = true;
     };
   });
+
+  opencode-nvim = super.opencode-nvim.overrideAttrs {
+    runtimeDeps = [
+      curl
+      opencode
+    ];
+  };
 
   # The plugin depends on either skim-vim or fzf-vim, but we don't want to force the user so we
   # avoid choosing one of them and leave it to the user
