@@ -27,7 +27,6 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     install -Dm755 box $out/bin/box
-    chmod +x $out/bin/box
 
     # Ensure a JRE is in PATH; CommandBox requires Java 8+,
     # and docs recommend Java 11 with preliminary support for 17+. :contentReference[oaicite:2]{index=2}
