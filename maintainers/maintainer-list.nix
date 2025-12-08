@@ -5922,6 +5922,11 @@
     githubId = 28738918;
     name = "Pratyush Das";
   };
+  dastarruer = {
+    name = "dastarruer";
+    github = "dastarruer";
+    githubId = 173855353;
+  };
   datafoo = {
     github = "datafoo";
     githubId = 34766150;
