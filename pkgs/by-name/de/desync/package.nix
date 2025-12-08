@@ -29,6 +29,9 @@ buildGoModule rec {
       --bash <($out/bin/desync completion bash) \
       --fish <($out/bin/desync completion fish) \
       --zsh <($out/bin/desync completion zsh)
+
+    mkdir -p $out/share/man/man1
+    $out/bin/desync manpage --section 1 $out/share/man/man1
   '';
 
   meta = {
