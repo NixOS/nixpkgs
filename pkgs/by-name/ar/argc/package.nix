@@ -8,6 +8,7 @@
   fetchFromGitHub,
   installShellFiles,
   versionCheckHook,
+  nix-update-script,
 }:
 
 let
@@ -51,6 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgramArg = "--argc-version";
 
   passthru = {
+    update-script = nix-update-script { };
     tests = {
       cross =
         (
