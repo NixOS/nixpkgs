@@ -212,98 +212,102 @@ in
       }
     ];
 
-    users.users.vaultwarden = {
-      inherit group;
-      isSystemUser = true;
-    };
-    users.groups.vaultwarden = { };
-
-    systemd.services.vaultwarden = {
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
-      path = with pkgs; [ openssl ];
-      serviceConfig = {
-        User = user;
-        Group = group;
-        EnvironmentFile = [ configFile ] ++ cfg.environmentFile;
-        ExecStart = lib.getExe vaultwarden;
-        LimitNOFILE = "1048576";
-        CapabilityBoundingSet = [ "" ];
-        DeviceAllow = [ "" ];
-        DevicePolicy = "closed";
-        LockPersonality = true;
-        MemoryDenyWriteExecute = true;
-        NoNewPrivileges = !useSendmail;
-        PrivateDevices = !useSendmail;
-        PrivateTmp = true;
-        PrivateUsers = !useSendmail;
-        ProcSubset = "pid";
-        ProtectClock = true;
-        ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectProc = "noaccess";
-        ProtectSystem = "strict";
-        RemoveIPC = true;
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-          "AF_UNIX"
-        ];
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        inherit StateDirectory;
-        StateDirectoryMode = "0700";
-        SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service"
-        ]
-        ++ lib.optionals (!useSendmail) [
-          "~@privileged"
-        ];
-        Restart = "always";
-        UMask = "0077";
+    systemd = {
+      services.vaultwarden = {
+        after = [ "network-online.target" ];
+        wants = [ "network-online.target" ];
+        path = with pkgs; [ openssl ];
+        serviceConfig = {
+          User = user;
+          Group = group;
+          EnvironmentFile = [ configFile ] ++ cfg.environmentFile;
+          ExecStart = lib.getExe vaultwarden;
+          LimitNOFILE = "1048576";
+          CapabilityBoundingSet = [ "" ];
+          DeviceAllow = [ "" ];
+          DevicePolicy = "closed";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = !useSendmail;
+          PrivateDevices = !useSendmail;
+          PrivateTmp = true;
+          PrivateUsers = !useSendmail;
+          ProcSubset = "pid";
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "noaccess";
+          ProtectSystem = "strict";
+          RemoveIPC = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          inherit StateDirectory;
+          StateDirectoryMode = "0700";
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "@system-service"
+          ]
+          ++ lib.optionals (!useSendmail) [
+            "~@privileged"
+          ];
+          Restart = "always";
+          UMask = "0077";
+        };
+        wantedBy = [ "multi-user.target" ];
       };
-      wantedBy = [ "multi-user.target" ];
+
+      services.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
+        description = "Backup vaultwarden";
+        environment = {
+          DATA_FOLDER = dataDir;
+          BACKUP_FOLDER = cfg.backupDir;
+        };
+        path = with pkgs; [ sqlite ];
+        # if both services are started at the same time, vaultwarden fails with "database is locked"
+        before = [ "vaultwarden.service" ];
+        serviceConfig = {
+          SyslogIdentifier = "backup-vaultwarden";
+          Type = "oneshot";
+          User = lib.mkDefault user;
+          Group = lib.mkDefault group;
+          ExecStart = "${pkgs.bash}/bin/bash ${./backup.sh}";
+        };
+        wantedBy = [ "multi-user.target" ];
+      };
+
+      timers.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
+        description = "Backup vaultwarden on time";
+        timerConfig = {
+          OnCalendar = lib.mkDefault "23:00";
+          Persistent = "true";
+          Unit = "backup-vaultwarden.service";
+        };
+        wantedBy = [ "multi-user.target" ];
+      };
+
+      tmpfiles.settings = lib.mkIf (cfg.backupDir != null) {
+        "10-vaultwarden".${cfg.backupDir}.d = {
+          inherit user group;
+          mode = "0770";
+        };
+      };
     };
 
-    systemd.services.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
-      description = "Backup vaultwarden";
-      environment = {
-        DATA_FOLDER = dataDir;
-        BACKUP_FOLDER = cfg.backupDir;
-      };
-      path = with pkgs; [ sqlite ];
-      # if both services are started at the same time, vaultwarden fails with "database is locked"
-      before = [ "vaultwarden.service" ];
-      serviceConfig = {
-        SyslogIdentifier = "backup-vaultwarden";
-        Type = "oneshot";
-        User = lib.mkDefault user;
-        Group = lib.mkDefault group;
-        ExecStart = "${pkgs.bash}/bin/bash ${./backup.sh}";
-      };
-      wantedBy = [ "multi-user.target" ];
-    };
-
-    systemd.timers.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
-      description = "Backup vaultwarden on time";
-      timerConfig = {
-        OnCalendar = lib.mkDefault "23:00";
-        Persistent = "true";
-        Unit = "backup-vaultwarden.service";
-      };
-      wantedBy = [ "multi-user.target" ];
-    };
-
-    systemd.tmpfiles.settings = lib.mkIf (cfg.backupDir != null) {
-      "10-vaultwarden".${cfg.backupDir}.d = {
-        inherit user group;
-        mode = "0770";
+    users = {
+      groups.vaultwarden = { };
+      users.vaultwarden = {
+        inherit group;
+        isSystemUser = true;
       };
     };
   };
