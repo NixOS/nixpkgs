@@ -11,6 +11,7 @@ let
   xdmcfg = xcfg.displayManager;
   cfg = config.services.displayManager.ly;
   xEnv = config.systemd.services.display-manager.environment;
+  sessionData = dmcfg.sessionData;
 
   ly = cfg.package.override { x11Support = cfg.x11Support; };
 
@@ -24,6 +25,7 @@ let
     mkOption
     mkEnableOption
     mkPackageOption
+    optionalAttrs
     ;
 
   xserverWrapper = pkgs.writeShellScript "xserver-wrapper" ''
@@ -47,7 +49,14 @@ let
     setup_cmd = dmcfg.sessionData.wrapper;
   };
 
-  finalConfig = defaultConfig // cfg.settings;
+  finalConfig =
+    defaultConfig
+    // optionalAttrs dmcfg.autoLogin.enable {
+      auto_login_service = "ly-autologin";
+      auto_login_session = sessionData.autologinSession;
+      auto_login_user = dmcfg.autoLogin.user;
+    }
+    // cfg.settings;
 
   cfgFile = iniFmt.generate "config.ini" { globalSection = finalConfig; };
 
@@ -82,9 +91,9 @@ in
 
     assertions = [
       {
-        assertion = !dmcfg.autoLogin.enable;
+        assertion = dmcfg.autoLogin.enable -> sessionData.autologinSession != null;
         message = ''
-          ly doesn't support auto login.
+          ly auto-login requires that services.displayManager.defaultSession is set.
         '';
       }
     ];
