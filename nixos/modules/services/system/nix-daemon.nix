@@ -16,10 +16,6 @@ let
 
   nixPackage = cfg.package.out;
 
-  # nixVersion is an attribute which defines the implementation version.
-  # This is useful for Nix implementations which don't follow Nix's versioning.
-  isNixAtLeast = lib.versionAtLeast (nixPackage.nixVersion or (lib.getVersion nixPackage));
-
   makeNixBuildUser = nr: {
     name = "nixbld${toString nr}";
     value = {
@@ -196,26 +192,15 @@ in
 
     systemd.packages = [ nixPackage ];
 
-    systemd.tmpfiles = lib.mkMerge [
-      (lib.mkIf (isNixAtLeast "2.8") {
-        packages = [ nixPackage ];
-      })
-      (lib.mkIf (!isNixAtLeast "2.8") {
-        rules = [
-          "d /nix/var/nix/daemon-socket 0755 root root - -"
-        ];
-      })
-    ];
+    systemd.tmpfiles.packages = [ nixPackage ];
 
     systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
 
     systemd.services.nix-daemon = {
       path = [
         nixPackage
-        pkgs.util-linux
         config.programs.ssh.package
-      ]
-      ++ lib.optionals cfg.distributedBuilds [ pkgs.gzip ];
+      ];
 
       environment =
         cfg.envVars
@@ -224,15 +209,10 @@ in
         }
         // config.networking.proxy.envVars;
 
-      unitConfig.RequiresMountsFor = "/nix/store";
-
       serviceConfig = {
         CPUSchedulingPolicy = cfg.daemonCPUSchedPolicy;
         IOSchedulingClass = cfg.daemonIOSchedClass;
         IOSchedulingPriority = cfg.daemonIOSchedPriority;
-        LimitNOFILE = 1048576;
-        Delegate = "yes";
-        DelegateSubgroup = "supervisor";
       };
 
       restartTriggers = [ config.environment.etc."nix/nix.conf".source ];
@@ -287,10 +267,7 @@ in
     services.displayManager.hiddenUsers = lib.attrNames nixbldUsers;
 
     # Legacy configuration conversion.
-    nix.settings = lib.mkMerge [
-      (lib.mkIf (isNixAtLeast "2.3pre") { sandbox-fallback = false; })
-    ];
-
+    nix.settings.sandbox-fallback = false;
   };
 
 }
