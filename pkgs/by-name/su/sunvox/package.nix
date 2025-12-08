@@ -68,21 +68,35 @@ stdenv.mkDerivation (finalAttrs: {
     libjack2
   ];
 
-  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
-    (makeDesktopItem {
-      name = "sunvox";
-      exec = "sunvox";
-      desktopName = "SunVox";
-      genericName = "Modular Synthesizer";
-      comment = "Modular synthesizer with pattern-based sequencer";
-      icon = "sunvox";
-      categories = [
-        "AudioVideo"
-        "Audio"
-        "Midi"
-      ];
-    })
-  ];
+  desktopItems =
+    let
+      sunvoxDesktop =
+        variant:
+        makeDesktopItem {
+          name = "sunvox" + lib.optionalString (variant != null) "-${lib.strings.toLower variant}";
+          exec = "sunvox" + lib.optionalString (variant != null) "_${lib.strings.toLower variant}";
+          desktopName = "SunVox" + lib.optionalString (variant != null) " (${variant})";
+          genericName = "Modular Synthesizer";
+          comment = "Modular synthesizer with pattern-based sequencer";
+          icon = "sunvox";
+          categories = [
+            "AudioVideo"
+            "Audio"
+            "Midi"
+          ];
+        };
+    in
+    lib.optionals stdenv.hostPlatform.isLinux (
+      [
+        (sunvoxDesktop null)
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch64) [
+        (sunvoxDesktop "OpenGL")
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isi686) [
+        (sunvoxDesktop "LoFi")
+      ]
+    );
 
   dontConfigure = true;
   dontBuild = true;
