@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
@@ -8,9 +9,9 @@
   rq,
   prometheus-client,
   sentry-sdk,
-  psycopg,
   pytest-django,
   pytestCheckHook,
+  pyyaml,
   redisTestHook,
 }:
 
@@ -41,7 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_rq" ];
 
-  doCheck = false; # require redis-server
+  # redis hook does not support darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  nativeCheckInputs = [
+    pytest-django
+    pytestCheckHook
+    pyyaml
+    redisTestHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  preCheck = ''
+    export DJANGO_SETTINGS_MODULE=tests.settings
+  '';
 
   meta = with lib; {
     description = "Simple app that provides django integration for RQ (Redis Queue)";
