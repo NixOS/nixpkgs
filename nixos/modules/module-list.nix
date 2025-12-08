@@ -1404,6 +1404,7 @@
   ./services/networking/trickster.nix
   ./services/networking/twingate.nix
   ./services/networking/ucarp.nix
+  ./services/networking/udp-over-tcp.nix
   ./services/networking/umurmur.nix
   ./services/networking/unbound.nix
   ./services/networking/unifi.nix
@@ -1636,6 +1637,7 @@
   ./services/web-apps/immich-kiosk.nix
   ./services/web-apps/immich-public-proxy.nix
   ./services/web-apps/immich.nix
+  ./services/web-apps/immichframe.nix
   ./services/web-apps/invidious.nix
   ./services/web-apps/isso.nix
   ./services/web-apps/jirafeau.nix

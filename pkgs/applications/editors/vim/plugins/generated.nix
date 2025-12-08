@@ -8563,6 +8563,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  mini-cmdline = buildVimPlugin {
+    pname = "mini.cmdline";
+    version = "2025-12-07";
+    src = fetchFromGitHub {
+      owner = "nvim-mini";
+      repo = "mini.cmdline";
+      rev = "c96216461df3b02abca31a0e360847750357137a";
+      sha256 = "0mn5fj81i7393w639cfbm9hz01l6rvnc1as4nlyx2nikml1jkzqy";
+    };
+    meta.homepage = "https://github.com/nvim-mini/mini.cmdline/";
+    meta.hydraPlatforms = [ ];
+  };
+
   mini-colors = buildVimPlugin {
     pname = "mini.colors";
     version = "2025-11-03";
