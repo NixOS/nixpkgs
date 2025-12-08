@@ -11,6 +11,7 @@
   fetchurl,
   writeText,
   pkg-config,
+  dune,
   customOCamlPackages ? null,
   ocamlPackages_4_14,
   ncurses,
@@ -56,7 +57,7 @@ let
   ocamlNativeBuildInputs = [
     ocamlPackages.ocaml
     ocamlPackages.findlib
-    ocamlPackages.dune_3
+    dune
   ];
   ocamlPropagatedBuildInputs = [ ocamlPackages.zarith ];
   self = stdenv.mkDerivation {

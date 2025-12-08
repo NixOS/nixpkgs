@@ -8,6 +8,7 @@
   ocamlPackages,
   ltl2ba,
   coq,
+  dune,
   why3,
   gdk-pixbuf,
   wrapGAppsHook3,
@@ -64,11 +65,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     wrapGAppsHook3
+    dune
   ]
   ++ (with ocamlPackages; [
     ocaml
     findlib
-    dune_3
     menhir
   ]);
 

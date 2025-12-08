@@ -4,7 +4,7 @@
   stdenv,
   fetchFromGitHub,
   python3,
-  dune_3,
+  dune,
   makeWrapper,
   pandoc,
   poppler-utils,
@@ -30,7 +30,7 @@ ocamlPackages.buildDunePackage rec {
 
   nativeBuildInputs = [
     python3
-    dune_3
+    dune
     makeWrapper
   ];
 
