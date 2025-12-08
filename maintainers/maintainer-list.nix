@@ -28869,6 +28869,15 @@
       { fingerprint = "D2A8 A906 ACA7 B6D6 575E 9A2F 3A49 5054 6EA6 9E5C"; }
     ];
   };
+  yongdohyun = {
+    name = "Yong Do-Hyun";
+    email = "froster12@naver.com";
+    github = "YongDo-Hyun";
+    githubId = 97219311;
+    keys = [
+      { fingerprint = "FB56 5272 D5AE 8B57 463D A965 E49B 53C9 18C3 39A6"; }
+    ];
+  };
   yorickvp = {
     email = "yorickvanpelt@gmail.com";
     matrix = "@yorickvp:matrix.org";
