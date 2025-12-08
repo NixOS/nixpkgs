@@ -97,12 +97,10 @@ let
     ++ [
       jemalloc
       nghttp2
-    ]
-    ++ [
+      # dnstap support
       fstrm
       protobufc
-    ] # dnstap support
-    ;
+    ];
 
     mesonFlags = [
       "-Dkeyfile_default=${dns-root-data}/root.ds"
