@@ -6,10 +6,10 @@
   cmark,
   extra-cmake-modules,
   fetchpatch2,
+  qt6Packages,
   gamemode,
   ghc_filesystem,
   jdk17,
-  kdePackages,
   ninja,
   nix-update-script,
   stripJavaArchivesHook,
@@ -24,29 +24,31 @@ assert lib.assertMsg (
 ) "gamemodeSupport is only available on Linux.";
 stdenv.mkDerivation (finalAttrs: {
   pname = "projtlauncher";
-  version = "0.0.3";
+  version = "0.0.3-3";
 
   src = fetchFromGitHub {
     owner = "Project-Tick";
     repo = "ProjT-Launcher";
     tag = finalAttrs.version;
-    hash = "sha256-+josMV3s6g63tLqGNbrBrbrl6Y36+uRmpiVMtbi57Ug=";
+    hash = "sha256-KNZkG4uy0dEOSisT5XmLV49th3Q1Uo2vcWJi2UHaYJI=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake
     ninja
-    extra-cmake-modules
     jdk17
     stripJavaArchivesHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    extra-cmake-modules
   ];
 
   buildInputs = [
     cmark
-    kdePackages.qtbase
-    kdePackages.qtnetworkauth
-    kdePackages.quazip
+    qt6Packages.qtbase
+    qt6Packages.qtnetworkauth
+    qt6Packages.quazip
     tomlplusplus
     zlib
   ]
@@ -71,8 +73,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
-    description = "ProjT Launcher an free, open-source Minecraft launcher.";
+    description = "A free and open-source Minecraft launcher";
     longDescription = ''
       This application lets you create and manage multiple
       independent Minecraft instances, each with its own
