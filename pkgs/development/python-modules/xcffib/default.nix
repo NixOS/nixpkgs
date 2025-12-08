@@ -1,17 +1,19 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   cffi,
   fetchPypi,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
   xorg,
 }:
 
 buildPythonPackage rec {
   pname = "xcffib";
   version = "1.9.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -20,14 +22,15 @@ buildPythonPackage rec {
     hash = "sha256-K6xgY2lnVOiHHC9AcwR7Uz792Cx33fhnYgEWcJfMUlM=";
   };
 
+  build-system = [ setuptools ];
+
   postPatch = ''
     # Hardcode cairo library path
-    sed -e 's,ffi\.dlopen(,&"${xorg.libxcb.out}/lib/" + ,' -i xcffib/__init__.py
+    substituteInPlace xcffib/__init__.py \
+      --replace-fail "dlopen(soname)" 'dlopen("${xorg.libxcb}/lib/" + soname)'
   '';
 
-  propagatedNativeBuildInputs = [ cffi ];
-
-  propagatedBuildInputs = [ cffi ];
+  dependencies = [ cffi ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -40,17 +43,23 @@ buildPythonPackage rec {
     rm -r xcffib
   '';
 
+  disabledTests = lib.optionals stdenv.buildPlatform.isDarwin [
+    # AssertionError: assert 'base' == 'evdev'
+    # test/test_xkb.py:18: AssertionError
+    "test_query_rules_names"
+  ];
+
   pythonImportsCheck = [ "xcffib" ];
 
   # Tests use xvfb
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Drop in replacement for xpyb, an XCB python binding";
     homepage = "https://github.com/tych0/xcffib";
     changelog = "https://github.com/tych0/xcffib/releases/tag/v${version}";
-    license = licenses.asl20;
-    platforms = platforms.linux ++ platforms.darwin ++ platforms.windows;
-    maintainers = with maintainers; [ kamilchm ];
+    license = lib.licenses.asl20;
+    platforms = with lib.platforms; linux ++ darwin ++ windows;
+    maintainers = with lib.maintainers; [ kamilchm ];
   };
 }
