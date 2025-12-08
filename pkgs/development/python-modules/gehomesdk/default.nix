@@ -1,45 +1,46 @@
 {
   lib,
   aiohttp,
+  beautifulsoup4,
   bidict,
   buildPythonPackage,
+  cryptography,
   fetchPypi,
   humanize,
-  lxml,
+  pytestCheckHook,
   pythonOlder,
   requests,
   setuptools,
-  slixmpp,
   websockets,
 }:
 
 buildPythonPackage rec {
   pname = "gehomesdk";
-  version = "2025.5.0";
+  version = "2025.11.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YMw0W9EWz3KY1+aZMdtE4TRvFd9yqTHkfw0X3+ZDCfQ=";
+    hash = "sha256-HS33yTE+3n0DKRD4+cr8zAE+xcW1ca7q8inQ7qwKJMA=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
+    beautifulsoup4
     bidict
     humanize
-    lxml
     requests
-    slixmpp
     websockets
   ];
 
-  # Tests are not shipped and source is not tagged
-  # https://github.com/simbaja/gehome/issues/32
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    cryptography
+  ];
 
   pythonImportsCheck = [ "gehomesdk" ];
 
