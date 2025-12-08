@@ -9,6 +9,7 @@
   maude,
   graphviz,
   glibcLocales,
+  fetchpatch,
 }:
 
 let
@@ -32,9 +33,6 @@ let
     description = "Security protocol verification in the symbolic model";
     maintainers = [ lib.maintainers.thoughtpolice ];
     hydraPlatforms = lib.platforms.linux; # maude is broken on darwin
-    # Has been broken for a while now:
-    # https://hydra.nixos.org/job/nixpkgs/trunk/tamarin-prover.x86_64-linux
-    broken = true;
   };
 
   # tamarin use symlinks to the LICENSE and Setup.hs files, so for these sublibraries
@@ -149,6 +147,16 @@ mkDerivation (
   // {
     isLibrary = false;
     isExecutable = true;
+
+    patches = [
+      # Allows tamarin-prover to run with Maude 3.5.1
+      # This should be removed on the next release
+      (fetchpatch {
+        url = "https://github.com/tamarin-prover/tamarin-prover/commit/1a41b507e7f60d081d8c91cd465386d57f814f11.patch";
+        includes = [ "src/Main/Console.hs" ];
+        hash = "sha256-X8qhscwy+efATrl3rLtn0Xi9M5a2CsFrjBbiqvVRtSE=";
+      })
+    ];
 
     # strip out unneeded deps manually
     doHaddock = false;
