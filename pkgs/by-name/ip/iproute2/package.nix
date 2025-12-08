@@ -111,7 +111,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [
       fpletz
-      globin
     ];
   };
 }

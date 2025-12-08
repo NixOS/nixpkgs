@@ -193,7 +193,6 @@ stdenv.mkDerivation rec {
     mainProgram = "dovecot";
     maintainers = with maintainers; [
       fpletz
-      globin
     ];
     teams = [ lib.teams.helsinki-systems ];
     platforms = platforms.unix;

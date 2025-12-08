@@ -161,7 +161,6 @@ python.pkgs.buildPythonApplication rec {
     mainProgram = "borg";
     maintainers = with maintainers; [
       dotlambda
-      globin
     ];
   };
 }

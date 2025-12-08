@@ -351,7 +351,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [
       fpletz
-      globin
       oxzi
       ajs124
     ];

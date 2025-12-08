@@ -246,9 +246,9 @@
   },
   "cosmosdb-preview": {
     "pname": "cosmosdb-preview",
-    "version": "1.6.1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/cosmosdb_preview-1.6.1-py2.py3-none-any.whl",
-    "hash": "sha256-kfhttzgrlnyAoD6pe7PKjGHdKE0U6G1GYNe1a4ZA3f0=",
+    "version": "1.6.2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/cosmosdb_preview-1.6.2-py2.py3-none-any.whl",
+    "hash": "sha256-le+/kTHWOoDqV/DDgl2yjTboQhx+X/S92PHt8Yqqpf4=",
     "description": "Microsoft Azure Command-Line Tools Cosmosdb-preview Extension"
   },
   "costmanagement": {
@@ -316,9 +316,9 @@
   },
   "dataprotection": {
     "pname": "dataprotection",
-    "version": "1.7.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/dataprotection-1.7.0-py3-none-any.whl",
-    "hash": "sha256-4JG0UHInWxi49cXPUoLlfP8FIg9VTjmzFiWfn0to3LQ=",
+    "version": "1.7.1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/dataprotection-1.7.1-py3-none-any.whl",
+    "hash": "sha256-zwyUqKbMpIxrRiN54GKigcok/spfBle2lPojqWpSVs0=",
     "description": "Microsoft Azure Command-Line Tools DataProtectionClient Extension"
   },
   "datashare": {
@@ -404,6 +404,13 @@
     "url": "https://azcliprod.blob.core.windows.net/cli-extensions/dynatrace-2.0.0-py3-none-any.whl",
     "hash": "sha256-gS+82UbXH2fh7TrIsAxDqyaeM0iMwebt4v0ImJIs07Y=",
     "description": "Microsoft Azure Command-Line Tools Dynatrace Extension"
+  },
+  "edge-action": {
+    "pname": "edge-action",
+    "version": "1.0.0b2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/edge_action-1.0.0b2-py3-none-any.whl",
+    "hash": "sha256-wtIkeQPRlEAEL/PXTVuPaUoQbabFKDKLc/RML+qaBGM=",
+    "description": "Microsoft Azure Command-Line Tools Extension for Azure Front Door Edge Actions"
   },
   "edgeorder": {
     "pname": "edgeorder",
@@ -687,9 +694,9 @@
   },
   "migrate": {
     "pname": "migrate",
-    "version": "2.0.1b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/migrate-2.0.1b1-py3-none-any.whl",
-    "hash": "sha256-vRMg/oeqSFXwZaB6J6RO51U6kjWdE4O7EWc/i4LxOmU=",
+    "version": "3.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/migrate-3.0.0b1-py3-none-any.whl",
+    "hash": "sha256-/u8DKXNf95To56AMM3dm4eXueSW7JylQgzW/fBiqB0U=",
     "description": "Support for Azure Migrate preview"
   },
   "mixed-reality": {
@@ -974,9 +981,9 @@
   },
   "stack-hci-vm": {
     "pname": "stack-hci-vm",
-    "version": "1.11.1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/stack_hci_vm-1.11.1-py3-none-any.whl",
-    "hash": "sha256-VMxvHxjPVpnUcLZRMUv8PR95lT490FPulbAXutW9pDo=",
+    "version": "1.11.3",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/stack_hci_vm-1.11.3-py3-none-any.whl",
+    "hash": "sha256-InE7FOgJKt68+9lpaskYhpINxLAR2VrIKdAbKt7hBOw=",
     "description": "Microsoft Azure Command-Line Tools Stack-HCi-VM Extension"
   },
   "standbypool": {
@@ -1121,9 +1128,9 @@
   },
   "workload-orchestration": {
     "pname": "workload-orchestration",
-    "version": "4.1.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/workload_orchestration-4.1.0-py3-none-any.whl",
-    "hash": "sha256-9+pQFtpZzIEk4971hNJuB6gxu7WtRtDO69zt6jgq60A=",
+    "version": "4.2.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/workload_orchestration-4.2.0-py3-none-any.whl",
+    "hash": "sha256-gl+8YfetxLgAKUzvehihHGGWTLpi0T57LKRzmuwvWww=",
     "description": "Microsoft Azure Command-Line Tools WorkloadOperations Extension"
   },
   "workloads": {
