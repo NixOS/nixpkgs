@@ -1,3 +1,5 @@
 source 'https://rubygems.org'
 
 gem 'ledger_web'
+
+gem "csv", "~> 3.3"
