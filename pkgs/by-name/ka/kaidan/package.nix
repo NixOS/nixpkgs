@@ -1,16 +1,21 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitLab,
+  nix-update-script,
+
+  # build
   cmake,
   extra-cmake-modules,
-  pkg-config,
   kdePackages,
-  kdsingleapplication,
-  zxing-cpp,
-  qxmpp,
+  pkg-config,
+  writableTmpDirAsHomeHook,
+
+  # runtime
   gst_all_1,
-  nix-update-script,
+  kdsingleapplication,
+  qxmpp,
+  zxing-cpp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,32 +37,38 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
-    pkg-config
     kdePackages.wrapQtAppsHook
+    pkg-config
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
+    (gst_all_1.gst-plugins-good.override { qt6Support = true; })
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
     kdePackages.kio
     kdePackages.kirigami
     kdePackages.kirigami-addons
     kdePackages.knotifications
-    kdePackages.kquickimageedit
+    kdePackages.kquickimageeditor
     kdePackages.prison
+    kdePackages.qqc2-desktop-style
     kdePackages.qtbase
     kdePackages.qtkeychain
-    kdePackages.qttools
-    kdePackages.qtmultimedia
     kdePackages.qtlocation
-    kdePackages.qqc2-desktop-style
+    kdePackages.qtmultimedia
+    kdePackages.qttools
     kdePackages.sonnet
     kdsingleapplication
-    zxing-cpp
     qxmpp
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-base
-    (gst_all_1.gst-plugins-good.override { qt6Support = true; })
+    zxing-cpp
   ];
+
+  cmakeFlags = [
+    "-DBUILD_TESTING=ON"
+  ];
+
   postInstall = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
