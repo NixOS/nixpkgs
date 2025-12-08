@@ -39,7 +39,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/opsdroid/image_size";
     changelog = "https://github.com/opsdroid/image_size/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ globin ];
+    maintainers = [ ];
     mainProgram = "get-image-size";
   };
 }

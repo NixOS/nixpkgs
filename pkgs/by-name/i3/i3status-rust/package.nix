@@ -93,7 +93,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "i3status-rs";
     maintainers = with maintainers; [
       backuitist
-      globin
     ];
     platforms = platforms.linux;
   };
