@@ -1154,6 +1154,7 @@ in
   onlyoffice = runTest ./onlyoffice.nix;
   open-web-calendar = runTest ./web-apps/open-web-calendar.nix;
   open-webui = runTest ./open-webui.nix;
+  openafs = runTest ./openafs.nix;
   openarena = runTest ./openarena.nix;
   openbao = runTest ./openbao.nix;
   opencloud = runTest ./opencloud.nix;
