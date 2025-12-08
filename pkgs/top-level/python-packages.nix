@@ -7956,6 +7956,8 @@ self: super: with self; {
 
   kbcstorage = callPackage ../development/python-modules/kbcstorage { };
 
+  kbnf = callPackage ../development/python-modules/kbnf { };
+
   kconfiglib = callPackage ../development/python-modules/kconfiglib { };
 
   kde-material-you-colors = callPackage ../development/python-modules/kde-material-you-colors { };
