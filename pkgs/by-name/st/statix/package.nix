@@ -34,6 +34,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "statix";
     maintainers = with maintainers; [
       nerdypepper
+      progrm_jarvis
     ];
   };
 }
