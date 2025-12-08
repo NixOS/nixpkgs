@@ -15,6 +15,7 @@ import threading
 import time
 from collections.abc import Callable, Generator
 from contextlib import _GeneratorContextManager, contextmanager, nullcontext
+from functools import cached_property
 from pathlib import Path
 from queue import Queue
 from typing import Any
@@ -124,6 +125,7 @@ class StartCommand:
         qmp_socket_path: Path,
         shell_socket_path: Path,
         allow_reboot: bool = False,
+        vsock_guest: Path | None = None,
     ) -> str:
         display_opts = ""
 
@@ -146,6 +148,12 @@ class StartCommand:
         )
         if not allow_reboot:
             qemu_opts += " -no-reboot"
+
+        if vsock_guest is not None:
+            qemu_opts += (
+                f" -chardev socket,id=vsock_ssh,reconnect=0,path={vsock_guest} "
+                f"-device vhost-user-vsock-pci,chardev=vsock_ssh "
+            )
 
         return (
             f"{self._cmd}"
@@ -180,10 +188,15 @@ class StartCommand:
         qmp_socket_path: Path,
         shell_socket_path: Path,
         allow_reboot: bool,
+        vsock_guest: Path | None = None,
     ) -> subprocess.Popen:
         return subprocess.Popen(
             self.cmd(
-                monitor_socket_path, qmp_socket_path, shell_socket_path, allow_reboot
+                monitor_socket_path,
+                qmp_socket_path,
+                shell_socket_path,
+                allow_reboot,
+                vsock_guest,
             ),
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
@@ -203,7 +216,7 @@ class NixStartScript(StartCommand):
     def __init__(self, script: str):
         self._cmd = script
 
-    @property
+    @cached_property
     def machine_name(self) -> str:
         match = re.search("run-(.+)-vm$", self._cmd)
         name = "machine"
@@ -224,6 +237,7 @@ class Machine:
     monitor_path: Path
     qmp_path: Path
     shell_path: Path
+    vsock_guest: Path | None
 
     start_command: StartCommand
     keep_vm_state: bool
@@ -256,6 +270,7 @@ class Machine:
         name: str = "machine",
         keep_vm_state: bool = False,
         callbacks: list[Callable] | None = None,
+        vsock_guest: Path | None = None,
     ) -> None:
         self.out_dir = out_dir
         self.tmp_dir = tmp_dir
@@ -265,6 +280,7 @@ class Machine:
         self.callbacks = callbacks if callbacks is not None else []
         self.logger = logger
         self.full_console_log = []
+        self.vsock_guest = vsock_guest
 
         # set up directories
         self.shared_dir = self.tmp_dir / "shared-xchg"
@@ -1088,6 +1104,7 @@ class Machine:
             self.qmp_path,
             self.shell_path,
             allow_reboot,
+            self.vsock_guest,
         )
         self.monitor, _ = monitor_socket.accept()
         self.shell, _ = shell_socket.accept()
