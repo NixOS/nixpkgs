@@ -1,7 +1,3 @@
-// TODO: use the hashes from the lockfile to verify integrity of downloads,
-// the problem is that the hashes use different encoding schemes, while `fetch`
-// expects a specific one, so some translation needs to happen, without any from the network.
-
 import { fetchAllJsr } from "./fetch-jsr.ts";
 import { fetchAllNpm } from "./fetch-npm.ts";
 import { addPrefix, getFileName, parseArgs } from "../utils.ts";
