@@ -5913,6 +5913,8 @@ self: super: with self; {
 
   genanki = callPackage ../development/python-modules/genanki { };
 
+  general-sam = callPackage ../development/python-modules/general-sam { };
+
   generic = callPackage ../development/python-modules/generic { };
 
   genie-partner-sdk = callPackage ../development/python-modules/genie-partner-sdk { };
