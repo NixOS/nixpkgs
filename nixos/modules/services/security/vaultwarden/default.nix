@@ -115,21 +115,7 @@ in
           DOMAIN = "https://bitwarden.example.com";
           SIGNUPS_ALLOWED = false;
 
-          # Vaultwarden currently recommends running behind a reverse proxy
-          # (nginx or similar) for TLS termination, see
-          # https://github.com/dani-garcia/vaultwarden/wiki/Hardening-Guide#reverse-proxying
-          # > you should avoid enabling HTTPS via vaultwarden's built-in Rocket TLS support,
-          # > especially if your instance is publicly accessible.
-          #
-          # A suitable NixOS nginx reverse proxy example config might be:
-          #
-          #     services.nginx.virtualHosts."bitwarden.example.com" = {
-          #       enableACME = true;
-          #       forceSSL = true;
-          #       locations."/" = {
-          #         proxyPass = "http://127.0.0.1:''${toString config.services.vaultwarden.config.ROCKET_PORT}";
-          #       };
-          #     };
+          # Vaultwarden recommends running behind a reverse proxy, the configureNginx option can be used for that.
           ROCKET_ADDRESS = "127.0.0.1";
           ROCKET_PORT = 8222;
 
@@ -171,6 +157,18 @@ in
       '';
     };
 
+    configureNginx = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Whether to configure nginx to serve VaultWarden.";
+    };
+
+    domain = lib.mkOption {
+      type = with lib.types; nullOr str;
+      default = null;
+      description = "The domain under which VaultWarden will be reachable.";
+    };
+
     environmentFile = lib.mkOption {
       type = with lib.types; coercedTo path lib.singleton (listOf path);
       default = [ ];
@@ -210,7 +208,43 @@ in
         assertion = cfg.backupDir != null -> !(lib.hasPrefix dataDir cfg.backupDir);
         message = "Backup directory can not be in ${dataDir}";
       }
+      {
+        assertion = cfg.configureNginx -> cfg.domain != null;
+        message = "Setting services.vaultwarden.configureNginx to true requires configuring services.vaultwarden.domain!";
+      }
     ];
+
+    services = {
+      nginx = lib.mkIf cfg.configureNginx {
+        enable = true;
+        upstreams.vaultwarden.servers."127.0.0.1:${toString cfg.config.ROCKET_PORT}" = { };
+        virtualHosts.${cfg.domain} = {
+          forceSSL = true;
+          locations = {
+            "/".proxyPass = "http://vaultwarden";
+            "= /notifications/anonymous-hub" = {
+              proxyPass = "http://vaultwarden";
+              proxyWebsockets = true;
+            };
+            "= /notifications/hub" = {
+              proxyPass = "http://vaultwarden";
+              proxyWebsockets = true;
+            };
+          };
+        };
+      };
+
+      vaultwarden.config = lib.mkMerge [
+        {
+          DOMAIN = lib.mkIf (cfg.domain != null) "https://${cfg.domain}";
+        }
+        (lib.mkIf cfg.configureNginx {
+          ENABLE_WEBSOCKET = true;
+          ROCKET_ADDRESS = "127.0.0.1";
+          ROCKET_PORT = lib.mkDefault 8222;
+        })
+      ];
+    };
 
     systemd = {
       services.vaultwarden = {
