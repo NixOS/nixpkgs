@@ -35,6 +35,10 @@ let
       };
     };
 
+# TODO: use lib.extendMkDerivation
+# TODO: use make sure to still hash the relevant args, but not the rest
+# TODO: fix usage guide (according to
+
   singleFodFetcher =
     {
       transformedDenoLock,
