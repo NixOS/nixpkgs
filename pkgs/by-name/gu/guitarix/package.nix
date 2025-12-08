@@ -14,8 +14,6 @@
   glib-networking,
   glibmm,
   gperf,
-  adwaita-icon-theme,
-  gsettings-desktop-schemas,
   gtk3,
   gtkmm3,
   hicolor-icon-theme,
@@ -30,9 +28,6 @@
   pkg-config,
   python3,
   sassc,
-  serd,
-  sord,
-  sratom,
   wafHook,
   which,
   wrapGAppsHook3,
@@ -83,8 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     glib-networking.out
     glibmm
-    adwaita-icon-theme
-    gsettings-desktop-schemas
     gtk3
     gtkmm3
     ladspaH
@@ -95,9 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     lrdf
     lv2
     sassc
-    serd
-    sord
-    sratom
     zita-convolver
     zita-resampler
   ];
