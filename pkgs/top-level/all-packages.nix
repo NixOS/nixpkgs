@@ -5979,38 +5979,7 @@ with pkgs;
 
   anybadge = with python3Packages; toPythonApplication anybadge;
 
-  ansible = ansible_2_19;
-  ansible_2_19 = python3Packages.toPythonApplication python3Packages.ansible-core;
-  ansible_2_18 = python3Packages.toPythonApplication (
-    python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-      version = "2.18.8";
-      src = fetchPypi {
-        pname = "ansible_core";
-        inherit version;
-        hash = "sha256-sHZiFalqR845kz0n4emWyivrVM8bOQfHQtNckTsfeM0=";
-      };
-    })
-  );
-  ansible_2_17 = python3Packages.toPythonApplication (
-    python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-      version = "2.17.8";
-      src = fetchPypi {
-        pname = "ansible_core";
-        inherit version;
-        hash = "sha256-Ob6KeYaix9NgabDZciC8L2eDxl/qfG1+Di0A0ayK+Hc=";
-      };
-    })
-  );
-  ansible_2_16 = python3Packages.toPythonApplication (
-    python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-      version = "2.16.14";
-      src = fetchPypi {
-        pname = "ansible_core";
-        inherit version;
-        hash = "sha256-gCef/9mGhrrfqjLh7HhdmKbfGy/B5Al97AWXZA10ZBU=";
-      };
-    })
-  );
+  ansible = python3Packages.toPythonApplication python3Packages.ansible-core;
 
   ansible-builder = with python3Packages; toPythonApplication ansible-builder;
 
@@ -12599,10 +12568,6 @@ with pkgs;
           wrapQtAppsHook
           ;
       };
-
-  xournalpp = callPackage ../applications/graphics/xournalpp {
-    lua = lua5_3;
-  };
 
   xpdf = libsForQt5.callPackage ../applications/misc/xpdf { };
 

@@ -5,15 +5,15 @@
 }:
 buildGoModule rec {
   pname = "betula";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromSourcehut {
     owner = "~bouncepaw";
     repo = "betula";
     rev = "v${version}";
-    hash = "sha256-f2F0YRhDnKdMqcUvpcRFNAI62gbusfzIUKQSZ65onMU=";
+    hash = "sha256-zrJkQNQmkp0JiXZL3YSPEkeavEJhu5KnONfOze9pttY=";
   };
-  vendorHash = "sha256-3PS4fIyHbGGjnbMOy2VIQBXsnIyYDKR/ecl/i5jwSVM=";
+  vendorHash = "sha256-8YDilb03J7fd6dj9CohvDDe9ylwXrrREvCP83yGpTyg=";
 
   env.CGO_ENABLED = 1;
   # These tests use internet, so are failing in Nix build.
