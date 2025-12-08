@@ -7,6 +7,7 @@
 
 let
   cfg = config.services.vaultwarden;
+
   user = config.users.users.vaultwarden.name;
   group = config.users.groups.vaultwarden.name;
 
@@ -163,6 +164,12 @@ in
       description = "Whether to configure nginx to serve VaultWarden.";
     };
 
+    configurePostgres = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Whether to configure a local PostgreSQL server.";
+    };
+
     domain = lib.mkOption {
       type = with lib.types; nullOr str;
       default = null;
@@ -234,8 +241,20 @@ in
         };
       };
 
+      postgresql = lib.mkIf cfg.configurePostgres {
+        enable = true;
+        ensureDatabases = [ "vaultwarden" ];
+        ensureUsers = [
+          {
+            name = "vaultwarden";
+            ensureDBOwnership = true;
+          }
+        ];
+      };
+
       vaultwarden.config = lib.mkMerge [
         {
+          DATABASE_URL = lib.mkIf cfg.configurePostgres "postgresql:///vaultwarden?host=/run/postgresql";
           DOMAIN = lib.mkIf (cfg.domain != null) "https://${cfg.domain}";
         }
         (lib.mkIf cfg.configureNginx {
@@ -248,7 +267,8 @@ in
 
     systemd = {
       services.vaultwarden = {
-        after = [ "network-online.target" ];
+        after = [ "network-online.target" ] ++ lib.optional cfg.configurePostgres "postgresql.target";
+        requires = lib.mkIf cfg.configurePostgres [ "postgresql.target" ];
         wants = [ "network-online.target" ];
         path = with pkgs; [ openssl ];
         serviceConfig = {
