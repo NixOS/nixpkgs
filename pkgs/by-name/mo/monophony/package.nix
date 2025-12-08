@@ -73,7 +73,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://gitlab.com/zehkira/monophony";
     license = lib.licenses.bsd0;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ quadradical ];
+    maintainers = with lib.maintainers; [
+      quadradical
+      aleksana
+    ];
     mainProgram = "monophony";
   };
 }
