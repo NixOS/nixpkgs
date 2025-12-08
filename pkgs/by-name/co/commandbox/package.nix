@@ -26,8 +26,7 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    cp box $out/bin/box
+    install -Dm755 box $out/bin/box
     chmod +x $out/bin/box
 
     # Ensure a JRE is in PATH; CommandBox requires Java 8+,
