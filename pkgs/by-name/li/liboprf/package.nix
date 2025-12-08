@@ -20,6 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
+  patches = [
+    ./no-static.patch
+  ];
+
   strictDeps = true;
 
   nativeBuildInputs = [ pkgconf ];

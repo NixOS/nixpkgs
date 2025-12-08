@@ -1,0 +1,37 @@
+diff --git a/makefile b/makefile
+index 444feae..0b2d482 100644
+--- a/makefile
++++ b/makefile
+@@ -134,8 +134,12 @@ clean:
+ 
+ install: install-oprf install-noiseXK
+ 
+-install-oprf: $(DESTDIR)$(PREFIX)/lib/liboprf.$(SOEXT) \
+-	$(DESTDIR)$(PREFIX)/lib/liboprf.$(STATICEXT) \
++INSTALL_EXT=$(STATICEXT)
++ifeq ($(findstring -shared,$(LDFLAGS)),)
++	INSTALL_EXT=$(SOEXT)
++endif
++
++install-oprf: $(DESTDIR)$(PREFIX)/lib/liboprf.$(INSTALL_EXT) \
+ 	$(DESTDIR)$(PREFIX)/lib/pkgconfig/liboprf.pc \
+ 	$(DESTDIR)$(PREFIX)/include/oprf/oprf.h \
+ 	$(DESTDIR)$(PREFIX)/include/oprf/toprf.h \
+diff --git a/noise_xk/makefile b/noise_xk/makefile
+index 0f18a04..b6261a5 100644
+--- a/noise_xk/makefile
++++ b/noise_xk/makefile
+@@ -56,7 +56,12 @@ clean:
+ liboprf-noiseXK.$(SOEXT).$(SOVER): liboprf-noiseXK.$(SOEXT)
+ 	ln -sf $^ $@
+ 
+-install: $(DESTDIR)$(PREFIX)/lib/liboprf-noiseXK.$(SOEXT) $(DESTDIR)$(PREFIX)/lib/liboprf-noiseXK.$(STATICEXT) $(DESTDIR)$(PREFIX)/include/oprf/noiseXK
++INSTALL_EXT=$(STATICEXT)
++ifeq ($(findstring -shared,$(LDFLAGS)),)
++        INSTALL_EXT=$(SOEXT)
++endif
++
++install: $(DESTDIR)$(PREFIX)/lib/liboprf-noiseXK.$(INSTALL_EXT) $(DESTDIR)$(PREFIX)/include/oprf/noiseXK
+ 
+ uninstall: $(DESTDIR)$(PREFIX)/lib/liboprf-noiseXK.$(SOEXT) $(DESTDIR)$(PREFIX)/lib/liboprf-noiseXK.$(STATICEXT) $(DESTDIR)$(PREFIX)/include/oprf/noiseXK
+ 	rm -rf $^
