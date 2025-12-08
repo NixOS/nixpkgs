@@ -7,13 +7,13 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "kanagawa-icon-theme";
-  version = "0-unstable-2023-07-03";
+  version = "0-unstable-2025-04-24";
 
   src = fetchFromGitHub {
     owner = "Fausto-Korpsvart";
     repo = "Kanagawa-GKT-Theme";
-    rev = "35936a1e3bbd329339991b29725fc1f67f192c1e";
-    hash = "sha256-BZRmjVas8q6zsYbXFk4bCk5Ec/3liy9PQ8fqFGHAXe0=";
+    rev = "825ac8d90e16ce612b487f29ee6db60b5dc63012";
+    hash = "sha256-YOA3qBtMcz0to2yOStd33rF4NGhZWiLAJMo7MHx9nqM=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +43,6 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/Fausto-Korpsvart/Kanagawa-GKT-Theme";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ iynaix ];
-    platforms = gtk3.meta.platforms;
+    platforms = platforms.linux;
   };
 }
