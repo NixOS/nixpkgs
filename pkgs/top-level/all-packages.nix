@@ -1508,6 +1508,8 @@ with pkgs;
 
   azure-cli-extensions = recurseIntoAttrs azure-cli.extensions;
 
+  azure-sdk-for-cpp = recurseIntoAttrs (callPackage ../development/libraries/azure-sdk-for-cpp { });
+
   # Derivation's result is not used by nixpkgs. Useful for validation for
   # regressions of bootstrapTools on hydra and on ofborg. Example:
   #     pkgsCross.aarch64-multiplatform.freshBootstrapTools.build
@@ -10656,9 +10658,10 @@ with pkgs;
   inherit (callPackage ../applications/virtualization/docker { })
     docker_25
     docker_28
+    docker_29
     ;
 
-  docker = docker_28;
+  docker = docker_29;
   docker-client = docker.override { clientOnly = true; };
 
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
@@ -14162,8 +14165,6 @@ with pkgs;
   buildDartApplication = callPackage ../build-support/dart/build-dart-application { };
 
   dartHooks = recurseIntoAttrs (callPackage ../build-support/dart/build-dart-application/hooks { });
-
-  httraqt = libsForQt5.callPackage ../tools/backup/httrack/qt.nix { };
 
   inherit (callPackage ../applications/networking/instant-messengers/discord { })
     discord

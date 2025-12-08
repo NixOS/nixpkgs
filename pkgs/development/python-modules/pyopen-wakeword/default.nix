@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pyopen-wakeword";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "pyopen-wakeword";
     tag = "v${version}";
-    hash = "sha256-LJ0pHP4nsTx3GPuWUwOwNuXR9tUKABqSHnLSvMlfm1Y=";
+    hash = "sha256-czFDuIZ10aetr6frkKSozPjS7zMeNJ5/WVLA7Ib1CaI=";
   };
 
   postPatch = ''
