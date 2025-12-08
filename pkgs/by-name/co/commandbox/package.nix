@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchzip
-, makeWrapper
-, jdk11_headless
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  makeWrapper,
+  jdk11_headless,
 }:
 
 let
@@ -39,9 +40,9 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     description = "CommandBox CFML CLI, package manager, and embedded CFML server";
-    homepage    = "https://www.ortussolutions.com/products/commandbox";
-    license     = licenses.asl20;
-    platforms   = platforms.linux;
+    homepage = "https://www.ortussolutions.com/products/commandbox";
+    license = licenses.asl20;
+    platforms = platforms.linux;
     mainProgram = "box";
     maintainers = with lib.maintainers; [
       tombert
