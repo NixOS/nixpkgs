@@ -1,3 +1,6 @@
+// TODO: jsdoc one top level doc comment per file, document what the file is, refer to the readme
+// TODO: rename fetcher-default to fetcher-common
+// TODO: document functions, what do they do in a few sentences
 import type {
   Hash,
   HashAlgorithm,
@@ -9,6 +12,7 @@ import type {
 } from "../types.d.ts";
 import { addPrefix } from "../utils.ts";
 
+// TODO: document better
 // https://github.com/denoland/deno_cache_dir/blob/0.23.0/rs_lib/src/local.rs#L802
 const keepHeaders = [
   "content-type",
@@ -46,12 +50,12 @@ export function normalizeHashPrefix(
   return hash.string.replace(`${hash.algorithm}-`, "");
 }
 
-export function toCryptoSubtleAlgo(hashAlgo: HashAlgorithm): "SHA-256" | "SHA-512" {
+export function toCryptoSubtleAlgo(hashAlgo: HashAlgorithm) {
   switch (hashAlgo) {
     case "sha256":
-      return "SHA-256";
+      return "SHA-256" as const;
     case "sha512":
-      return "SHA-512";
+      return "SHA-512" as const;
     default:
       throw `unexpected hashAlgo ${hashAlgo}`;
   }
@@ -71,7 +75,7 @@ export async function checkHash(
   }
 }
 
-export async function fetchDefault(
+export async function fetchCommon(
   outPathPrefix: PathString,
   p: PackageFileIn,
   outPath_?: PathString,

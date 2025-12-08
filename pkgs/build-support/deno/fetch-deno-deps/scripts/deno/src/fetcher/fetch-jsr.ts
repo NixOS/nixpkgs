@@ -1,4 +1,4 @@
-import { fetchDefault, makeOutPath } from "./fetch-default.ts";
+import { fetchCommon, makeOutPath } from "./fetch-common.ts";
 import {
   addPrefix,
   getBasePath,
@@ -38,7 +38,7 @@ async function fetchVersionMetaJson(
   outPathPrefix: PathString,
   versionMetaJson: PackageFileIn,
 ): Promise<PackageFileOut> {
-  return await fetchDefault(outPathPrefix, versionMetaJson);
+  return await fetchCommon(outPathPrefix, versionMetaJson);
 }
 
 function makeMetaJsonContent(packageSpecifier: PackageSpecifier): MetaJson {
@@ -163,7 +163,7 @@ async function fetchJsrPackageFiles(
       },
       meta: { packageSpecifier },
     };
-    resultUnresolved.push(fetchDefault(outPathPrefix, packageFile));
+    resultUnresolved.push(fetchCommon(outPathPrefix, packageFile));
   }
   result = await Promise.all(resultUnresolved);
   return result;
@@ -297,7 +297,7 @@ export async function fetchAllJsr(
 
   for (const metaJson of Object.values(metaJsons)) {
     resultUnresolved.push(Promise.resolve([metaJson.packageFile]));
-    // the other files are written in fetchDefault, but we need to write the registryJsons, too
+    // the other files are written in fetchCommon, but we need to write the registryJsons, too
     await writeMetaJson(outPathPrefix, metaJson);
   }
 

@@ -1,4 +1,4 @@
-import { fetchDefault, makeOutPath } from "./fetch-default.ts";
+import { fetchCommon, makeOutPath } from "./fetch-common.ts";
 import { addPrefix, getScopedName } from "../utils.ts";
 import type {
   CommonLockFormatIn,
@@ -41,7 +41,7 @@ export async function fetchNpm(
   packageFile: PackageFileIn,
 ): Promise<Array<PackageFileOut>> {
   const result: Array<PackageFileOut> = [];
-  result[0] = await fetchDefault(outPathPrefix, packageFile);
+  result[0] = await fetchCommon(outPathPrefix, packageFile);
   return result;
 }
 
@@ -140,7 +140,7 @@ export async function fetchAllNpm(
 
   for (const registryJson of Object.values(registryJsons)) {
     resultUnresolved.push(Promise.resolve([registryJson.packageFile]));
-    // the other files are written in fetchDefault, but we need to write the registryJsons, too
+    // the other files are written in fetchCommon, but we need to write the registryJsons, too
     await writeRegistryJson(outPathPrefix, registryJson);
   }
 
