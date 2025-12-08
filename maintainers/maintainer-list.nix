@@ -790,6 +790,12 @@
     githubId = 1141462;
     name = "Vladyslav Pekker";
   };
+  agustinmista = {
+    email = "agustin@mista.me";
+    github = "agustinmista";
+    githubId = 5265348;
+    name = "Agustin Mista";
+  };
   agvantibo = {
     email = "apicalium@gmail.com";
     github = "agvantibo-again";
