@@ -1,9 +1,13 @@
 {
   lib,
-  aiohttp,
   buildPythonPackage,
-  dill,
   fetchFromGitHub,
+  # build-system
+  setuptools,
+
+  # dependencies
+  aiohttp,
+  dill,
   fsspec,
   huggingface-hub,
   multiprocess,
@@ -13,7 +17,6 @@
   pyarrow,
   requests,
   responses,
-  setuptools,
   tqdm,
   xxhash,
 }:
