@@ -2,16 +2,18 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-play";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "fanzeyi";
     repo = "cargo-play";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-Z5zcLQYfQeGybsnt2U+4Z+peRHxNPbDriPMKWhJ+PeA=";
   };
 
@@ -23,11 +25,18 @@ rustPlatform.buildRustPackage rec {
     "--skip=infer_override"
   ];
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Run your rust code without setting up cargo";
     mainProgram = "cargo-play";
     homepage = "https://github.com/fanzeyi/cargo-play";
-    license = licenses.mit;
-    maintainers = [ ];
+    changelog = "https://github.com/fanzeyi/cargo-play/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.progrm_jarvis ];
   };
-}
+})

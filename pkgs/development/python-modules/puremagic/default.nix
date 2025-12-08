@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cdgriffith/puremagic";
     changelog = "https://github.com/cdgriffith/puremagic/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ globin ];
+    maintainers = [ ];
   };
 }

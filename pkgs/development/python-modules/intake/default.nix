@@ -63,7 +63,7 @@ buildPythonPackage rec {
     intake-parquet
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   optional-dependencies = {
     server = [

@@ -52,7 +52,7 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "foolscap" ];
 

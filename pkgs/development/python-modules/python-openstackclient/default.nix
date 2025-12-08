@@ -18,6 +18,7 @@
   python-manilaclient,
   python-mistralclient,
   python-neutronclient,
+  python-octaviaclient,
   python-openstackclient,
   python-watcherclient,
   python-zaqarclient,
@@ -89,6 +90,7 @@ buildPythonPackage rec {
       python-manilaclient
       python-mistralclient
       python-neutronclient
+      python-octaviaclient
       python-watcherclient
       python-zaqarclient
       python-zunclient

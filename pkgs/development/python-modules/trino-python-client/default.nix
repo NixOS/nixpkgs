@@ -56,7 +56,7 @@ buildPythonPackage rec {
     pytestCheckHook
     testcontainers
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "trino" ];
 

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "Punch clock to track time spent on projects";
     mainProgram = "kapow";
     homepage = "https://gottcode.org/kapow/";
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
   };

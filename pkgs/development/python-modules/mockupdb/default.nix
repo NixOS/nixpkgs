@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Simulate a MongoDB server";
     license = licenses.asl20;
     homepage = "https://github.com/ajdavis/mongo-mockup-db";
-    maintainers = with maintainers; [ globin ];
+    maintainers = [ ];
   };
 }

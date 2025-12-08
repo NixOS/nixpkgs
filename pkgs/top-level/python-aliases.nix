@@ -115,7 +115,8 @@ mapAliases {
   django-crispy-bootstrap3 = crispy-bootstrap3; # added 2025-06-11
   django-crispy-bootstrap4 = crispy-bootstrap4; # added 2025-06-11
   django-crispy-bootstrap5 = crispy-bootstrap5; # added 2025-06-11
-  django_3 = throw "Django 3 has reached it#s EOL in 2024-04 and has therefore been removed."; # added 2025-01-25
+  django_3 = throw "Django 3 has reached it's EOL in 2024-04 and has therefore been removed."; # added 2025-01-25
+  django_5_1 = throw "Django 5.1 has reached it's EOL in 2025-12 and has therefore been removed."; # added 2025-11-30"
   django_appconf = throw "'django_appconf' has been renamed to/replaced by 'django-appconf'"; # Converted to throw 2025-10-29
   django_classytags = throw "'django_classytags' has been renamed to/replaced by 'django-classy-tags'"; # Converted to throw 2025-10-29
   django_colorful = throw "'django_colorful' has been renamed to/replaced by 'django-colorful'"; # Converted to throw 2025-10-29
@@ -300,6 +301,7 @@ mapAliases {
   pep257 = throw "'pep257' has been renamed to/replaced by 'pydocstyle'"; # Converted to throw 2025-10-29
   percol = throw "percol has been removed because it hasn't been updated since 2019"; # added 2025-05-25
   pillow-avif-plugin = throw "'pillow-avif-plugin' has been removed because 'pillow' has native avif support since 11.3"; # added 2025-11-26
+  pizzapi = throw "pizzapi was removed because it no longer works"; # added 2025-12-03
   plumlightpad = throw "plumlightpad has been removed because the API was shut down"; # added 2025-11-04
   Polygon3 = throw "'Polygon3' has been renamed to/replaced by 'polygon3'"; # Converted to throw 2025-10-29
   posix_ipc = throw "'posix_ipc' has been renamed to/replaced by 'posix-ipc'"; # Converted to throw 2025-10-29
@@ -326,6 +328,7 @@ mapAliases {
   pyechonest = throw "pyechonest was removed because it was broken and unmaintained"; # added 2025-08-26
   pyezviz = throw "pyeziz has been removed in favor of pyevizapi, where development continues"; # added 2025-06-11
   pyfantom = throw "pyfantom has been removed because it does not work with python3 and has not been updated for 12 years"; # added 2025-03-25
+  pyflick = throw "pyflick was removed because Flick Electric no longer exists"; # added 2025-12-03
   pyflunearyou = throw "'pyflunearyou' has been renamed to/replaced by 'pyoutbreaksnearme'"; # Converted to throw 2025-10-29
   pygame_sdl2 = throw "'pygame_sdl2' has been renamed to/replaced by 'pygame-sdl2'"; # Converted to throw 2025-10-29
   PyGithub = throw "'PyGithub' has been renamed to/replaced by 'pygithub'"; # Converted to throw 2025-10-29
@@ -503,6 +506,7 @@ mapAliases {
   wxPython_4_2 = throw "'wxPython_4_2' has been renamed to/replaced by 'wxpython'"; # Converted to throw 2025-10-29
   x11_hash = throw "'x11_hash' has been renamed to/replaced by 'x11-hash'"; # Converted to throw 2025-10-29
   xapp = throw "'xapp' has been renamed to/replaced by 'python-xapp'"; # Converted to throw 2025-10-29
+  xbox-webapi = throw "xbox-webapi was removed because Home Assistant switched to python-xbox"; # added 2025-12-03
   XlsxWriter = throw "'XlsxWriter' has been renamed to/replaced by 'xlsxwriter'"; # Converted to throw 2025-10-29
   Yapsy = throw "'Yapsy' has been renamed to/replaced by 'yapsy'"; # Converted to throw 2025-10-29
   z3 = throw "'z3' has been renamed to/replaced by 'z3-solver'"; # Converted to throw 2025-10-29

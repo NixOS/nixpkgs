@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "niapy";
-  version = "2.6.0";
+  version = "2.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NiaOrg";
     repo = "NiaPy";
     tag = "v${version}";
-    hash = "sha256-o/JHFPsYMHxSkUMfRbR3SJawbzTsoh6ae0pyxLd1bAs=";
+    hash = "sha256-5Cxxug/FyucU+MkWXMtH43AembfZ/kj5r8nId5664z8=";
   };
 
   build-system = [ poetry-core ];

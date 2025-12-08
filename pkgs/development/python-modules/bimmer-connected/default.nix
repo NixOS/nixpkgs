@@ -58,7 +58,7 @@ buildPythonPackage rec {
     respx
     time-machine
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # presumably regressed in pytest-asyncio 0.23.0

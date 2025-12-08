@@ -77,6 +77,6 @@ buildGoModule rec {
     description = "Command-line wrapper for git that makes you better at GitHub";
     homepage = "https://hub.github.com/";
     license = licenses.mit;
-    maintainers = with maintainers; [ globin ];
+    maintainers = [ ];
   };
 }

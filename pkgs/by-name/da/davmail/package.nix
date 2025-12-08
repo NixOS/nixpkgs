@@ -2,6 +2,7 @@
   stdenv,
   fetchFromGitHub,
   lib,
+  nix-update-script,
   makeWrapper,
   glib,
   gtk2,
@@ -75,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Java application which presents a Microsoft Exchange server as local CALDAV, IMAP and SMTP servers";

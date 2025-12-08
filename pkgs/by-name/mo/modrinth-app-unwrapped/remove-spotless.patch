@@ -1,15 +1,15 @@
 diff --git a/packages/app-lib/java/build.gradle.kts b/packages/app-lib/java/build.gradle.kts
-index b7f9ede0..8a336897 100644
+index a671dd6f..d18c28de 100644
 --- a/packages/app-lib/java/build.gradle.kts
 +++ b/packages/app-lib/java/build.gradle.kts
 @@ -1,6 +1,5 @@
  plugins {
      java
 -    id("com.diffplug.spotless") version "7.0.4"
+     id("com.gradleup.shadow") version "9.0.0-rc2"
  }
  
- repositories {
-@@ -23,13 +22,6 @@ tasks.withType<JavaCompile>().configureEach {
+@@ -27,13 +26,6 @@ tasks.withType<JavaCompile>().configureEach {
      options.compilerArgs.addAll(listOf("-Xlint:all", "-Werror"))
  }
  
@@ -21,5 +21,5 @@ index b7f9ede0..8a336897 100644
 -}
 -
  tasks.jar {
-     archiveFileName = "theseus.jar"
+     enabled = false
  }

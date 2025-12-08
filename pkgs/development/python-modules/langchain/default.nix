@@ -129,6 +129,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Their configuration tests don't place nicely with nixpkgs
     "tests/unit_tests/test_pytest_config.py"
+    # comparison to magic time values, fails under load such as on Hydra
+    "tests/unit_tests/agents/middleware/test_tool_retry.py"
   ];
 
   pythonImportsCheck = [ "langchain" ];

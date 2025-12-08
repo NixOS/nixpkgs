@@ -28,7 +28,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \
       --bash <($out/bin/${finalAttrs.meta.mainProgram} completions bash) \
       --fish <($out/bin/${finalAttrs.meta.mainProgram} completions fish) \
-      --zsh <($out/bin/${finalAttrs.meta.mainProgram} completions zsh)
+      --zsh <($out/bin/${finalAttrs.meta.mainProgram} completions zsh) \
+      --nushell <($out/bin/${finalAttrs.meta.mainProgram} completions nushell)
   '';
 
   meta = {

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "yte";
-  version = "1.9.3";
+  version = "1.9.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "koesterlab";
     repo = "yte";
     tag = "v${version}";
-    hash = "sha256-NaBzcy0HJ7IVR8Gto9NM0T+72qTl1ZS4i+2tq431O/M=";
+    hash = "sha256-TpY13HYBZ4qL2W6sPdoM+bpHcEOi0rwubCbFa4zm2I0=";
   };
 
   build-system = [ uv-build ];

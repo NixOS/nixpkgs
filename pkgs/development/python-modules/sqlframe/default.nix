@@ -83,7 +83,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Requires google-cloud credentials

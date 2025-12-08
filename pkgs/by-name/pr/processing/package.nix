@@ -17,7 +17,7 @@
 }:
 let
   jdk = jdk17;
-  buildNumber = "1295";
+  buildNumber = "1310";
   vaqua = fetchurl {
     name = "VAqua9.jar";
     url = "https://violetlib.org/release/vaqua/9/VAqua9.jar";
@@ -62,18 +62,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "processing";
-  version = "4.3.2";
+  version = "4.4.10";
 
   src = fetchFromGitHub {
     owner = "processing";
     repo = "processing4";
     rev = "processing-${buildNumber}-${version}";
-    sha256 = "sha256-jUkWnkP8up5vpaXfgFJ/jQjN1KfeX5EuYXSb+W6NEms=";
+    sha256 = "sha256-u2wQl/VGCNJPd+k3DX2eW7gkA/RARMTSNGcoQuS/Oh8=";
   };
 
-  # Processing did not update the todo.txt file before tagging this release, so
-  # the "revision-check" Ant target fails.
-  patches = [ ./disable-revision-check.patch ];
+  patches = [ ./fix-ant-build.patch ];
 
   nativeBuildInputs = [
     ant
@@ -98,8 +96,8 @@ stdenv.mkDerivation rec {
 
     echo "tarring jdk"
     tar --checkpoint=10000 -czf build/linux/jdk-17.0.8-${arch}.tgz ${jdk}
+    mkdir -p app/lib core/library
     cp ${ant.home}/lib/{ant.jar,ant-launcher.jar} app/lib/
-    mkdir -p core/library
     ln -s ${jogl}/share/java/* core/library/
     ln -s ${vaqua} app/lib/VAqua9.jar
     ln -s ${flatlaf} app/lib/flatlaf.jar
@@ -129,16 +127,18 @@ stdenv.mkDerivation rec {
     cp -dpr build/linux/work $out/share/${pname}
     rmdir $out/share/${pname}/java
     ln -s ${jdk} $out/share/${pname}/java
+    runHook postInstall
+  '';
+
+  preFixup = ''
     makeWrapper $out/share/${pname}/processing $out/bin/processing \
-      ''${gappsWrapperArgs[@]} \
+      "''${gappsWrapperArgs[@]}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
       --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
     makeWrapper $out/share/${pname}/processing-java $out/bin/processing-java \
-      ''${gappsWrapperArgs[@]} \
+      "''${gappsWrapperArgs[@]}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
       --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
-
-    runHook postInstall
   '';
 
   meta = with lib; {

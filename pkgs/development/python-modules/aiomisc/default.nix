@@ -42,7 +42,7 @@ buildPythonPackage rec {
     pytestCheckHook
     setproctitle
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   optional-dependencies = {
     aiohttp = [ aiohttp ];

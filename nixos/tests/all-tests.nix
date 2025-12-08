@@ -522,7 +522,7 @@ in
   };
   ergo = runTest ./ergo.nix;
   ergochat = runTest ./ergochat.nix;
-  ersatztv = handleTest ./ersatztv.nix { };
+  ersatztv = runTest ./ersatztv.nix;
   espanso = import ./espanso.nix {
     inherit (pkgs) lib;
     inherit runTest;
@@ -752,9 +752,11 @@ in
   iftop = runTest ./iftop.nix;
   image-contents = handleTest ./image-contents.nix { };
   immich = runTest ./web-apps/immich.nix;
+  immich-kiosk = runTest ./web-apps/immich-kiosk.nix;
   immich-public-proxy = runTest ./web-apps/immich-public-proxy.nix;
   immich-vectorchord-migration = runTest ./web-apps/immich-vectorchord-migration.nix;
   immich-vectorchord-reindex = runTest ./web-apps/immich-vectorchord-reindex.nix;
+  immichframe = runTest ./web-apps/immichframe.nix;
   incron = runTest ./incron.nix;
   incus = import ./incus {
     inherit runTestOn;
@@ -983,7 +985,6 @@ in
   mpd = runTest ./mpd.nix;
   mpv = runTest ./mpv.nix;
   mtp = runTest ./mtp.nix;
-  multipass = runTest ./multipass.nix;
   mumble = runTest ./mumble.nix;
   munge = runTest ./munge.nix;
   munin = runTest ./munin.nix;
@@ -1458,9 +1459,7 @@ in
   syncthing-guiPassword = runTest ./syncthing/guiPassword.nix;
   syncthing-guiPasswordFile = runTest ./syncthing/guiPasswordFile.nix;
   syncthing-init = runTest ./syncthing/init.nix;
-  # FIXME: Test has been failing since 2025-07-06:
-  # https://github.com/NixOS/nixpkgs/issues/447674
-  # syncthing-many-devices = runTest ./syncthing/many-devices.nix;
+  syncthing-many-devices = runTest ./syncthing/many-devices.nix;
   syncthing-no-settings = runTest ./syncthing/no-settings.nix;
   syncthing-relay = runTest ./syncthing/relay.nix;
   sysfs = runTest ./sysfs.nix;
@@ -1596,6 +1595,7 @@ in
   tzupdate = runTest ./tzupdate.nix;
   ucarp = runTest ./ucarp.nix;
   udisks2 = runTest ./udisks2.nix;
+  udp-over-tcp = runTest ./udp-over-tcp.nix;
   ulogd = runTest ./ulogd/ulogd.nix;
   umami = runTest ./web-apps/umami.nix;
   umurmur = runTest ./umurmur.nix;

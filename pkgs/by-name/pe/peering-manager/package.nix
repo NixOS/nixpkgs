@@ -7,21 +7,28 @@
   plugins ? ps: [ ],
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = final: prev: {
+      django = prev.django_5_2;
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "peering-manager";
-  version = "1.9.7";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "peering-manager";
     repo = "peering-manager";
     tag = "v${version}";
-    sha256 = "sha256-lxelWtiMO6w8Tt7zK/NDdmc3PaKlGibKjSfhD+tGrCU=";
+    sha256 = "sha256-ByECaQ6NW1Su+k/j/bcKJqFf7bStdWZxOZn95GJEqBg=";
   };
 
   format = "other";
 
   propagatedBuildInputs =
-    with python3.pkgs;
+    with python.pkgs;
     [
       django
       django-debug-toolbar
@@ -46,9 +53,10 @@ python3.pkgs.buildPythonApplication rec {
       pyyaml
       requests
       social-auth-app-django
+      pytz
       tzdata
     ]
-    ++ plugins python3.pkgs;
+    ++ plugins python.pkgs;
 
   buildPhase = ''
     runHook preBuild
@@ -70,8 +78,8 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru = {
     # PYTHONPATH of all dependencies used by the package
-    python = python3;
-    pythonPath = python3.pkgs.makePythonPath propagatedBuildInputs;
+    inherit python;
+    pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
 
     tests = {
       inherit (nixosTests) peering-manager;

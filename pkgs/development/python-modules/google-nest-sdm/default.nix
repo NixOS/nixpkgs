@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "google-nest-sdm";
-  version = "9.1.0";
+  version = "9.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "python-google-nest-sdm";
     tag = version;
-    hash = "sha256-BvyflbmtgLSRaAc465bN+5AcPwum0UBsSAWzwvelwIk=";
+    hash = "sha256-yElmh+ajNVbjhsnNsUtQ3mJw9fvJtXqgS58iow+Nwi8=";
   };
 
   build-system = [ setuptools ];

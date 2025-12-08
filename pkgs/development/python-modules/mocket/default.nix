@@ -73,7 +73,7 @@ buildPythonPackage rec {
     requests
     sure
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # Skip http tests, they require network access
   env.SKIP_TRUE_HTTP = true;

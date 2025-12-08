@@ -1,27 +1,30 @@
 {
   stdenv,
   lib,
-  rustPlatform,
+  cmake,
   fetchFromGitHub,
-  rust-jemalloc-sys,
-  versionCheckHook,
   nix-update-script,
+  rust-jemalloc-sys,
+  rustPlatform,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zerofs";
-  version = "0.18.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "Barre";
     repo = "ZeroFS";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G+kXAlPfo3YhAGy9nkKCL7384dWUvPr4cZ+WIX99OSc=";
+    hash = "sha256-8iPHIUESModoNFk8XEWjHZOGBOPxhOGM9gHaljWyqZg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/zerofs";
 
-  cargoHash = "sha256-XbjtlWQkXanOo7SbbgsZNXj5SKy0PQAd2eRM/9f9gLs=";
+  cargoHash = "sha256-JZerQne+jW6xjH13dQe3g1dD07BP3j+1DSF+a/SgGXc=";
+
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [ rust-jemalloc-sys ];
 

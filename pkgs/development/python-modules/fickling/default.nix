@@ -1,40 +1,36 @@
 {
   lib,
-  astunparse,
   buildPythonPackage,
-  distutils,
   fetchFromGitHub,
-  flit-core,
+  hatchling,
   numpy,
   pytestCheckHook,
+  stdlib-list,
   torch,
   torchvision,
-  stdlib-list,
 }:
 
 buildPythonPackage rec {
   pname = "fickling";
-  version = "0.1.4";
+  version = "0.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "fickling";
     tag = "v${version}";
-    hash = "sha256-EgVtMYPwSVBlw1bmX3qEeUKvEY7Awv6DOB5tgSLG+xQ=";
+    hash = "sha256-ExyjOTpIkDM2PmHxYUbe8xNhhQChqfUqTtsNR8Z7ZEk=";
   };
 
   build-system = [
-    distutils
-    flit-core
+    hatchling
   ];
 
   dependencies = [
-    astunparse
     stdlib-list
   ];
 
-  pythonRelaxDeps = [ "stdlib_list" ];
+  pythonRelaxDeps = [ "stdlib-list" ];
 
   optional-dependencies = {
     torch = [
@@ -44,7 +40,7 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     # https://github.com/trailofbits/fickling/issues/162
@@ -59,6 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/trailofbits/fickling";
     changelog = "https://github.com/trailofbits/fickling/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sarahec ];
   };
 }

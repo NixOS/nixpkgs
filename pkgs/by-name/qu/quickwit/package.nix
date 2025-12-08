@@ -140,6 +140,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
+    # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
+    broken = true;
     description = "Sub-second search & analytics engine on cloud storage";
     homepage = "https://quickwit.io/";
     license = licenses.agpl3Only;

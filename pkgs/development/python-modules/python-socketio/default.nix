@@ -63,7 +63,7 @@ buildPythonPackage rec {
     valkey
     pytest-asyncio
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "socketio" ];
 

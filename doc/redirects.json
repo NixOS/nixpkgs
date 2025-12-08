@@ -3425,15 +3425,6 @@
   "javascript-using-node_modules": [
     "index.html#javascript-using-node_modules"
   ],
-  "javascript-packages-nixpkgs": [
-    "index.html#javascript-packages-nixpkgs"
-  ],
-  "javascript-adding-or-updating-packages": [
-    "index.html#javascript-adding-or-updating-packages"
-  ],
-  "javascript-git-error": [
-    "index.html#javascript-git-error"
-  ],
   "javascript-tool-specific": [
     "index.html#javascript-tool-specific"
   ],

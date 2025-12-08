@@ -119,5 +119,10 @@ buildPythonPackage rec {
     changelog = "https://github.com/meta-pytorch/torchtune/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+    badPlatforms = [
+      # sentencepiece 0.21.0 segfaults when initialized on Darwin
+      # See https://github.com/NixOS/nixpkgs/issues/466092
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

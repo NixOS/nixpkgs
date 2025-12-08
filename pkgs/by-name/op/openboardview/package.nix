@@ -15,22 +15,21 @@
 
 stdenv.mkDerivation rec {
   pname = "openboardview";
-  version = "9.95.0";
+  version = "9.95.2";
 
   src = fetchFromGitHub {
     owner = "OpenBoardView";
     repo = "OpenBoardView";
     tag = version;
-    hash = "sha256-sKDDOPpCagk7rBRlMlZhx+RYYbtoLzJsrnL8qKZMKW8=";
+    hash = "sha256-B5VnuycRt8h7Cz3FTIbhcGcXuA60zPCz0FMvFENTwws=";
     fetchSubmodules = true;
   };
 
   patches = [
-    # Fix gcc-13 build failure
     (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/OpenBoardView/OpenBoardView/commit/b03d0f69ec1611f5eb93f81291b4ba8c58cd29eb.patch";
-      hash = "sha256-Hp7KgzulPC2bPtRsd6HJrTLu0oVoQEoBHl0p2DcOLQw=";
+      name = "fix-darwin-build.patch";
+      url = "https://github.com/OpenBoardView/OpenBoardView/commit/a1de2e5de908afd83eceed757260f6425314af2e.patch?full_index=1";
+      hash = "sha256-DK+K4F0+QGqaoWCyc8AvuIsaiTCqhAG6AsTNg2hegh0=";
     })
   ];
 

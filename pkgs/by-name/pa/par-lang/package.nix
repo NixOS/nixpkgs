@@ -16,13 +16,13 @@
 
 rustPlatform.buildRustPackage {
   pname = "par-lang";
-  version = "0-unstable-2025-11-20";
+  version = "0-unstable-2025-12-02";
 
   src = fetchFromGitHub {
     owner = "faiface";
     repo = "par-lang";
-    rev = "1f6671068d93defdd14a7ff86b9fc167b6949906";
-    hash = "sha256-skBH5m/cJ7CZJqfDtKxk8AqaP/dwGCmEb9CDtmMUzlU=";
+    rev = "aa01ca58034b91f64b3ad5c849bb0e97762221af";
+    hash = "sha256-W68fareSkbnHnFy0IFIShOebC0cCcWqRWoaez3drsYI=";
   };
 
   cargoHash = "sha256-sW+gAIp/DjlTo44QDXpP6COrCK/CcDlx3no284MEQJo=";

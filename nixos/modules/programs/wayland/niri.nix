@@ -23,9 +23,10 @@ in
       {
         environment.systemPackages = [
           cfg.package
-        ]
+        ];
+
         # Required for xdg-desktop-portal-gnome's FileChooser to work properly
-        ++ lib.optionals cfg.useNautilus [
+        services.dbus.packages = lib.mkIf cfg.useNautilus [
           pkgs.nautilus
         ];
 

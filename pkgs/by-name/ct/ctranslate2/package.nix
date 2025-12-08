@@ -28,14 +28,14 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "ctranslate2";
-  version = "4.6.1";
+  version = "4.6.2";
 
   src = fetchFromGitHub {
     owner = "OpenNMT";
     repo = "CTranslate2";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-nnbBK1dIHwhq8n1mJe2wOLcDkIuScFbQwZvJ8x+knCk=";
+    hash = "sha256-AUi/MODxCSVuJhFjlhbMUyrGnK0X28B2+uTIHIg7oMg=";
   };
 
   # Fix CMake 4 compatibility
@@ -72,6 +72,9 @@ stdenv'.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeBool "WITH_ACCELERATE" true)
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.gcc.arch or null != null) [
+    (lib.cmakeBool "ENABLE_CPU_DISPATCH" false)
   ];
 
   buildInputs =

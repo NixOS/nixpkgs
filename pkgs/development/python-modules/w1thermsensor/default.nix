@@ -45,7 +45,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ]
   ++ lib.optionals (pythonOlder "3.11") [ tomli ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "w1thermsensor" ];
 

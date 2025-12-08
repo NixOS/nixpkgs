@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
     gfortran
     cmake
     pkg-config
-    autoPatchelfHook
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
     libzip
@@ -41,9 +41,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preFixup = ''
-    patchelf --add-rpath $out/lib/SHERPA-MC $out/bin/Sherpa
-  '';
+  preFixup =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      install_name_tool -add_rpath "$out"/lib/SHERPA-MC "$out"/bin/Sherpa
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf --add-rpath "$out"/lib/SHERPA-MC "$out"/bin/Sherpa
+    '';
 
   meta = {
     description = "Monte Carlo event generator for the Simulation of High-Energy Reactions of PArticles";

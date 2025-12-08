@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
-  version = "11.5.0";
+  version = "11.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-python-lib";
     tag = "v${version}";
-    hash = "sha256-AN3PjJ1HAERDXlmE9K8k2OGLAh5vs1286EhJShH0xE4=";
+    hash = "sha256-LnXunfYUz76XIHEXhaFJymBMFln8sIH0yxCodRmKdY0=";
   };
 
   pythonRelaxDeps = [ "py-serializable" ];
@@ -67,7 +67,7 @@ buildPythonPackage rec {
     pytestCheckHook
     xmldiff
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "cyclonedx" ];
 

@@ -347,7 +347,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "mpv";
     maintainers = with lib.maintainers; [
       fpletz
-      globin
       SchweGELBin
     ];
     platforms = lib.platforms.unix;

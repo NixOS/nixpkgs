@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "splitcode";
-  version = "0.31.4";
+  version = "0.31.5";
 
   src = fetchFromGitHub {
     owner = "pachterlab";
     repo = "splitcode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jaZptrF5HSQSe2KQdBNPprhsVZ2FSudZFgWPn9zQq3A=";
+    hash = "sha256-x2N+IQHB6gbEKTEofsWy7SwVf1lvRxh5f93avtAs8fM=";
   };
 
   nativeBuildInputs = [ cmake ];

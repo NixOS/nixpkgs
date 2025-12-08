@@ -39,11 +39,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "haproxy";
-  version = "3.2.9";
+  version = "3.3.0";
 
   src = fetchurl {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor finalAttrs.version}/src/haproxy-${finalAttrs.version}.tar.gz";
-    hash = "sha256-5mDRQbKQGfTRmHhbCDTMPpyW787rgHwv/y/JNb0zVMI=";
+    hash = "sha256-vy2mtp+C17hVvpd6ueHUcE7vVim2V6xyr7WVioackC4=";
   };
 
   buildInputs = [
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (sslLibrary == "aws-lc") [
     "USE_OPENSSL_AWSLC=true"
   ]
-  ++ lib.optionals (sslLibrary == "openssl") [
+  ++ lib.optionals (sslLibrary == "openssl" && lib.versionOlder openssl.version "3.5.2") [
     "USE_QUIC_OPENSSL_COMPAT=yes"
   ]
   ++ lib.optionals (sslLibrary == "wolfssl") [

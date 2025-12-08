@@ -19,6 +19,7 @@ let
       "java.base"
       "java.logging"
       "java.xml"
+      "jdk.crypto.ec"
     ];
     jdk = jdk_headless;
   };

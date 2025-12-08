@@ -35,13 +35,13 @@
   _experimental-update-script-combinators,
 }:
 let
-  version = "10";
+  version = "12";
   src = fetchFromGitLab {
     domain = "gitlab.futo.org";
     owner = "videostreaming";
     repo = "Grayjay.Desktop";
     tag = version;
-    hash = "sha256-ap0NnjyBjvyFjHPu9vACQMoOXqwz90/8QqSfPFqfh5U=";
+    hash = "sha256-KVmik/YaJAr76QwXYRajXj7EVTJBs2NdbkDvIpLxlFc=";
     fetchSubmodules = true;
     fetchLFS = true;
   };
@@ -52,7 +52,7 @@ let
     sourceRoot = "source/Grayjay.Desktop.Web";
 
     npmBuildScript = "build";
-    npmDepsHash = "sha256-3RMUV6o6422PEuqYg7B+y6JjlaiHDhnwsgsaKEbu5BM=";
+    npmDepsHash = "sha256-3nPzQcDWhPCdLrPvwGY+K0t1OSxWrVwQ3hH7i0eynRU=";
 
     installPhase = ''
       runHook preInstall
@@ -198,7 +198,10 @@ buildDotnetModule (finalAttrs: {
     '';
     homepage = "https://grayjay.app/desktop/";
     license = lib.licenses.sfl;
-    maintainers = with lib.maintainers; [ samfundev ];
+    maintainers = with lib.maintainers; [
+      kruziikrel13
+      samfundev
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "Grayjay";
   };

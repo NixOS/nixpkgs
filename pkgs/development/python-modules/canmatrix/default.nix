@@ -57,7 +57,7 @@ buildPythonPackage rec {
     pytest-timeout
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pytestFlags = [
     # long_envvar_name_imports requires stable key value pair ordering

@@ -48,7 +48,7 @@ buildPythonPackage rec {
     pytestCheckHook
     respx
   ]
-  ++ lib.concatLists (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # tests fail without this
   pytestFlags = [ "-v" ];

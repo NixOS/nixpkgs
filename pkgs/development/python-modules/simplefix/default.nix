@@ -34,6 +34,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/da4089/simplefix";
     changelog = "https://github.com/da4089/simplefix/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ catern ];
   };
 }

@@ -5,7 +5,6 @@
   pyjwt,
   pytestCheckHook,
   python-dateutil,
-  pythonAtLeast,
   pythonOlder,
   requests,
   responses,
@@ -68,6 +67,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/IBM/python-sdk-core";
     changelog = "https://github.com/IBM/python-sdk-core/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ globin ];
+    maintainers = [ ];
   };
 }

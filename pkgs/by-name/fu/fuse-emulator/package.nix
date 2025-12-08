@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
     mainProgram = "fuse";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
   };
 }

@@ -4,22 +4,19 @@
   fetchFromGitHub,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "lcgit";
-  version = "2.1.0";
+  version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cisagov";
     repo = "lcgit";
     tag = "v${version}";
-    hash = "sha256-s77Pq5VjXFyycVYwaomhdNWXKU4vGRJT6+t89UvGdn4=";
+    hash = "sha256-nCsTA0BKE/0afcqqqEx0mUrLOFbta14TPtNXHD67mas=";
   };
 
   build-system = [ setuptools ];

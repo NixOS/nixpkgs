@@ -76,7 +76,7 @@ buildGoModule (finalAttrs: {
     }
     diff -u plugin.cfg.orig plugin.cfg || true
     for src in ${toString (attrsToSources externalPlugins)}; do go get $src; done
-    GOOS= GOARCH= go generate
+    CC= GOOS= GOARCH= go generate
     go mod tidy
     go mod vendor
   '';
@@ -90,7 +90,7 @@ buildGoModule (finalAttrs: {
     chmod -R u+w vendor
     mv -t . vendor/go.{mod,sum} vendor/plugin.cfg
 
-    GOOS= GOARCH= go generate
+    CC= GOOS= GOARCH= go generate
   '';
 
   postPatch = ''

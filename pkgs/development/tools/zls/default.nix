@@ -46,14 +46,14 @@ lib.mapAttrs (_: extension: stdenv.mkDerivation (lib.extends common extension)) 
   };
 
   zls_0_15 = finalAttrs: {
-    version = "0.15.0";
+    version = "0.15.1";
 
     src = fetchFromGitHub {
       owner = "zigtools";
       repo = "zls";
       tag = finalAttrs.version;
       fetchSubmodules = true;
-      hash = "sha256-GFzSHUljcxy7sM1PaabbkQUdUnLwpherekPWJFxXtnk=";
+      hash = "sha256-6IkRtQkn+qUHDz00QvCV/rb2yuF6xWEXug41CD8LLw8=";
     };
 
     nativeBuildInputs = [ zig_0_15.hook ];

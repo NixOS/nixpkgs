@@ -77,6 +77,11 @@ let
         ])
         ++ additionalPkgs pkgs;
 
+      extraBwrapArgs = [
+        "--bind-try /etc/nixos/ /etc/nixos/"
+        "--ro-bind-try /etc/xdg/ /etc/xdg/"
+      ];
+
       # symlink shared assets, including icons and desktop entries
       extraInstallCommands = ''
         ln -s "${zed-editor}/share" "$out/"
@@ -101,7 +106,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.214.6";
+  version = "0.215.3";
 
   outputs = [
     "out"
@@ -114,7 +119,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QEhvp0/ywD6bZff0VZ1mrs2oB3UGHaZl707kWBaZJOk=";
+    hash = "sha256-/Euok+pyp81iR900M99Jw026lgB4rbgrQKT5Vn7Kufk=";
   };
 
   postPatch = ''
@@ -134,7 +139,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm -r $out/git/*/candle-book/
   '';
 
-  cargoHash = "sha256-y5hFHYoG1tM+O/64cDhjLbbQxiL0pTgSPRxVVuo0Bs4=";
+  cargoHash = "sha256-b4tH6oc/qVSwn4JWe6ukywPTyIW2QeQo8ime6rPpFpM=";
 
   nativeBuildInputs = [
     cmake

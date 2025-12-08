@@ -3,7 +3,6 @@
   lib,
   callPackage,
   fetchFromGitHub,
-  fetchpatch,
   fetchurl,
   makeWrapper,
   writeText,
@@ -23,7 +22,7 @@
   libGL,
   libxcrypt,
   libxml2,
-  llvm_18,
+  llvm_20,
   lsof,
   lz4,
   xorg,
@@ -52,7 +51,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "root";
-  version = "6.36.04";
+  version = "6.38.00";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -60,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${finalAttrs.version}.source.tar.gz";
-    hash = "sha256-zGNn2PVjxtSco0wJ0LU8sPQaUo22+GrxEf12dEzaRZY=";
+    hash = "sha256-pEKUIsRg+DLN5RSlgN0gKx08luiRnCQ2PD1C+M9azNw=";
   };
 
   clad_src = fetchFromGitHub {
@@ -68,8 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "clad";
     # Make sure that this is the same tag as in the ROOT build files!
     # https://github.com/root-project/root/blob/master/interpreter/cling/tools/plugins/clad/CMakeLists.txt#L76
-    rev = "refs/tags/v1.9";
-    hash = "sha256-TKCRAfwdTp/uDH7rk9EE4z2hwqBybklHhhYH6hQFYpg=";
+    rev = "refs/tags/v2.0";
+    hash = "sha256-Oj7gGSvnGuYdggonPWjrwPn/06cD+ig3eefRh7xaiPs=";
   };
 
   # ROOT requires a patched version of clang
@@ -98,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
     libxcrypt
     libxml2
-    llvm_18
+    llvm_20
     lz4
     openssl
     patchRcPathCsh
@@ -121,22 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXpm
     xorg.libXft
     xorg.libXext
-  ];
-
-  patches = [
-    # Backport that can be removed once ROOT is updated to 6.38.00
-    (fetchpatch {
-      url = "https://github.com/root-project/root/commit/8f21acb893977bc651a4c4fe5c4fa020a48d31de.patch";
-      hash = "sha256-xo3BbaJRyW4Wy2eVuX1bY3FFH7Jm3vN2ZojMsVNIK2I=";
-    })
-    # Revert because it introduces usage of the xcrun executable from xcode:
-    (fetchpatch {
-      url = "https://github.com/root-project/root/commit/6bd0dbad38bb524491c5109bc408942246db8b50.patch";
-      hash = "sha256-D7LZWJnGF9DtKcM8EF3KILU81cqTcZolW+HMe3fmXTw=";
-      revert = true;
-    })
-    # Will also be integrated to ROOT 6.38.00
-    ./Build-rootcint-and-genreflex-as-separate-targets.patch
   ];
 
   preConfigure = ''
@@ -172,7 +155,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dfitsio=OFF"
     "-Dmathmore=ON"
     "-Dsqlite=OFF"
-    "-Dtmva-pymva=OFF"
     "-Dvdt=OFF"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -232,12 +214,6 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     }"
   '';
-
-  # workaround for
-  # https://github.com/root-project/root/issues/14778
-  env.NIX_LDFLAGS = lib.optionalString (
-    !stdenv.hostPlatform.isDarwin
-  ) "--version-script,${writeText "version.map" "ROOT { global: *; };"}";
 
   # To use the debug information on the fly (without installation)
   # add the outPath of root.debug into NIX_DEBUG_INFO_DIRS (in PATH-like format)

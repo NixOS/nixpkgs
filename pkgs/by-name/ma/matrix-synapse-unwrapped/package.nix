@@ -14,25 +14,25 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.142.1";
+  version = "1.143.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-U/o7Ld9MjVO/QIIy+UyltfieR4CAdfN6dR6WWINoW40=";
+    hash = "sha256-Ik80yX2dYG1gyka/zlrQ4vTCzqt1nhBoX/OcLYSNN1w=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-lGj66FmHSldaYRGx7QQE/cdrmy+43AL3MZP+DPOXMmQ=";
+    hash = "sha256-6jsOGcUAamyQyIcuDZiZGxEGPSwDpYcQkfvPjaHEKjA=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "setuptools_rust>=1.3,<=1.11.1" "setuptools_rust<=1.12,>=1.3" \
-      --replace-fail "poetry-core>=1.1.0,<=2.1.3" "poetry-core>=1.1.0,<=2.3.0"
+      --replace-fail "poetry-core>=2.0.0,<=2.1.3" "poetry-core>=2.0.0,<=2.3.0"
   '';
 
   build-system = with python3Packages; [
@@ -135,7 +135,7 @@ python3Packages.buildPythonApplication rec {
     mock
     parameterized
   ])
-  ++ lib.filter (pkg: !pkg.meta.broken) (lib.flatten (lib.attrValues optional-dependencies));
+  ++ lib.filter (pkg: !pkg.meta.broken) (lib.concatAttrValues optional-dependencies);
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

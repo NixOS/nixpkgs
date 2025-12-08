@@ -10,18 +10,18 @@
   vimUtils,
 }:
 let
-  version = "65aeacf-unstable-2025-11-03";
+  version = "d88922e-unstable-2025-12-07";
   src = fetchFromGitHub {
     owner = "dmtrKovalenko";
     repo = "fff.nvim";
-    rev = "65aeacf9e2c663c9af2b1003727aa25acac96db4";
-    hash = "sha256-rGfV/BxSwvcNZXmVUk54gni8fKFyoTsQl+gBtYci4jE=";
+    rev = "d88922e6c74b357cfd029128ce5ecd813b6eb747";
+    hash = "sha256-XdDSyRHAZxRjziFwnEjjIrKSf8S+CHZw74P/O9O7C88=";
   };
   fff-nvim-lib = rustPlatform.buildRustPackage {
     pname = "fff-nvim-lib";
     inherit version src;
 
-    cargoHash = "sha256-ZZt4BlMgRik4LH92F5cgS84WI1Jeuw68jP+y1+QXfDE=";
+    cargoHash = "sha256-+se3u1ib3Ghy1tHIPpCY8sPgaQRaYCYGdJ8up+bubpM=";
 
     nativeBuildInputs = [
       pkg-config

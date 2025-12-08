@@ -89,6 +89,6 @@ stdenv.mkDerivation rec {
     description = "Interactive fiction interpreter GUI";
     mainProgram = "gargoyle";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
   };
 }

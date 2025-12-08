@@ -55,6 +55,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/aws/s2n-tls";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
   };
 }

@@ -10,6 +10,7 @@
   click-repl,
   click,
   cryptography,
+  exceptiongroup,
   fetchFromGitHub,
   gevent,
   google-cloud-firestore,
@@ -29,6 +30,7 @@
   python-dateutil,
   pyyaml,
   setuptools,
+  tzlocal,
   vine,
   # The AMQP REPL depends on click-repl, which is incompatible with our version
   # of click.
@@ -37,14 +39,14 @@
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "5.5.3";
+  version = "5.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "celery";
     repo = "celery";
     tag = "v${version}";
-    hash = "sha256-+sickqRfSkBxhcO0W9na6Uov4kZ7S5oqpXXKX0iRQ0w=";
+    hash = "sha256-BKF+p35Z5r/WRjuOaSFtESkbo+N+tbd0R40EWl0iU9I=";
   };
 
   patches = lib.optionals (!withAmqpRepl) [
@@ -58,8 +60,10 @@ buildPythonPackage rec {
     click
     click-didyoumean
     click-plugins
+    exceptiongroup
     kombu
     python-dateutil
+    tzlocal
     vine
   ]
   ++ lib.optionals withAmqpRepl [
@@ -93,7 +97,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     # test_eventlet touches network
@@ -108,6 +112,7 @@ buildPythonPackage rec {
   disabledTests = [
     "msgpack"
     "test_check_privileges_no_fchown"
+    "test_uses_utc_timezone"
     # seems to only fail on higher core counts
     # AssertionError: assert 3 == 0
     "test_setup_security_disabled_serializers"
@@ -133,7 +138,7 @@ buildPythonPackage rec {
   meta = {
     description = "Distributed task queue";
     homepage = "https://github.com/celery/celery/";
-    changelog = "https://github.com/celery/celery/releases/tag/v${version}";
+    changelog = "https://github.com/celery/celery/blob/${src.tag}/Changelog.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "celery";

@@ -80,7 +80,7 @@ buildPythonPackage rec {
     mock
     zipp
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [ "TestHardware" ];
 

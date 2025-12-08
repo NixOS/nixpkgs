@@ -64,7 +64,6 @@ stdenv.mkDerivation rec {
     homepage = "https://serf.apache.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [
-      orivej
       raskin
     ];
     platforms = platforms.linux ++ platforms.darwin;

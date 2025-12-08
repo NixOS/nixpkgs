@@ -62,7 +62,6 @@ buildPythonPackage rec {
     description = "Causal depthwise conv1d in CUDA with a PyTorch interface";
     homepage = "https://github.com/Dao-AILab/causal-conv1d";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ cfhammill ];
     # The package requires CUDA or ROCm, the ROCm build hasn't
     # been completed or tested, so broken if not using cuda.
     broken = !cudaSupport;

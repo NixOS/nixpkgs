@@ -55,7 +55,6 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.mit;
     mainProgram = "mas";
     maintainers = with maintainers; [
-      steinybot
       zachcoyle
     ];
     platforms = [

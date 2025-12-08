@@ -57,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/watson-developer-cloud/python-sdk";
     changelog = "https://github.com/watson-developer-cloud/python-sdk/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ globin ];
+    maintainers = [ ];
   };
 }

@@ -53,9 +53,13 @@ let
       done
     '';
   };
+  libnet' = libnet.overrideAttrs { dontDisableStatic = true; };
   net = symlinkJoin {
-    inherit (libnet) name;
-    paths = [ (libnet.overrideAttrs { dontDisableStatic = true; }) ];
+    inherit (libnet') name;
+    paths = [
+      (lib.getLib libnet')
+      (lib.getDev libnet')
+    ];
     postBuild = ''
       # prevent dynamic linking, now that we have a static library
       rm $out/lib/*.so*

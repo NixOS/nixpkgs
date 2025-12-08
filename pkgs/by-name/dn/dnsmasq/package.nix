@@ -117,7 +117,6 @@ stdenv.mkDerivation rec {
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [
       fpletz
-      globin
     ];
   };
 }

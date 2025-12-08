@@ -127,6 +127,6 @@ stdenv.mkDerivation rec {
     description = "Music playing application for GNOME";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.rasendubi ];
+    maintainers = [ ];
   };
 }

@@ -304,7 +304,6 @@ buildFHSEnv {
     license = licenses.unfree;
     maintainers = with maintainers; [
       amarshall
-      orivej
       XBagon
     ];
     platforms = [ "x86_64-linux" ];

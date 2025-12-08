@@ -8,7 +8,7 @@
   qt6,
   libusb1,
   protobuf,
-  asio,
+  asio_1_32_0,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace {hidviz,libhidx{,/libhidx{,_server{,_daemon}}}}/CMakeLists.txt \
       --replace-fail 'cmake_minimum_required(VERSION 3.2)' 'cmake_minimum_required(VERSION 3.10)'
-    substituteInPlace libhidx/cmake_modules/Findasio.cmake --replace-fail '/usr/include/asio' '${lib.getDev asio}/include/asio'
+    substituteInPlace libhidx/cmake_modules/Findasio.cmake --replace-fail '/usr/include/asio' '${lib.getDev asio_1_32_0}/include/asio'
     substituteInPlace libhidx/libhidx/src/Connector.cc --replace-fail '/usr/local/libexec' "$out/libexec"
   '';
 
@@ -39,7 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtwebengine
     libusb1
     protobuf
-    asio
+    # depends on io_service
+    asio_1_32_0
   ];
 
   meta = with lib; {

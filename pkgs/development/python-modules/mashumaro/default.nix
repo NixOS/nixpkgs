@@ -45,7 +45,7 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "mashumaro" ];
 

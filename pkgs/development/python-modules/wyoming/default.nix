@@ -47,7 +47,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   passthru.tests = {
     inherit wyoming-faster-whisper wyoming-openwakeword wyoming-piper;

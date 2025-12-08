@@ -49,7 +49,7 @@ buildPythonPackage rec {
     psycopg2
     pytz
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   checkPhase = ''
     runHook preCheck

@@ -264,7 +264,7 @@ let
           $decoded = json_decode(nix_read_secret($credential_name), true);
 
           if (json_last_error() !== JSON_ERROR_NONE) {
-            error_log(sprintf("Cannot decode %s, because: %s", $file, json_last_error_msg()));
+            error_log(sprintf("Cannot decode %s, because: %s", $credential_name, json_last_error_msg()));
             exit(1);
           }
 
@@ -1100,8 +1100,8 @@ in
             '';
           };
           mail_smtpstreamoptions = lib.mkOption {
-            type = lib.types.listOf lib.types.str;
-            default = [ ];
+            type = lib.types.attrsOf (lib.types.attrsOf lib.types.anything);
+            default = { };
             description = ''
               This depends on `mail_smtpmode`. Array of additional streams options that will be passed to underlying Swift mailer implementation.
             '';

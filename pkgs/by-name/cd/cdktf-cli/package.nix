@@ -142,15 +142,15 @@ stdenv.mkDerivation (finalAttrs: {
       "$out/lib/node_modules/cdktf-cli/node_modules/@cdktf/hcl2json/main.wasm"
   '';
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
-    updateScript = nix-update-script { };
-  };
+  # Tries to write to /var/empty/.terraform.d on darwin
+  # even with writableTmpDirAsHomeHook and CHECKPOINT_DISABLE=1
+  doInstallCheck = stdenv.hostPlatform.isLinux;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CDK for Terraform CLI";

@@ -16,8 +16,8 @@ let
       inherit tiling_wm;
     };
   stableVersion = {
-    version = "2025.2.1.8"; # "Android Studio Otter | 2025.2.1 Patch 1"
-    sha256Hash = "sha256-eqai5G60OH3vH06iK4tKK2gCHvqFBlNHxBGHQ5/SUJY=";
+    version = "2025.2.2.7"; # "Android Studio Otter 2 Feature Drop | 2025.2.2"
+    sha256Hash = "sha256-pvnUDYeFbxOnw2dP9BeKFushnTHmpDrBwmnNWDx8pbQ=";
   };
   betaVersion = {
     version = "2025.2.2.6"; # "Android Studio Otter 2 Feature Drop | 2025.2.2 RC 2"

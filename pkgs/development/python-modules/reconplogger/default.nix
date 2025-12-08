@@ -5,7 +5,6 @@
   flask,
   logmatic-python,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools,
@@ -14,16 +13,14 @@
 
 buildPythonPackage rec {
   pname = "reconplogger";
-  version = "4.18.0";
+  version = "4.18.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "omni-us";
     repo = "reconplogger";
     tag = "v${version}";
-    hash = "sha256-awUGDE9yuPhWMZ4osCJKw8v5V1leoFF3DeCbluHeN70=";
+    hash = "sha256-kYNidF1sTC6WulX3HXMUm+TFJWvHgZj86Asmi6uIKRs=";
   };
 
   build-system = [ setuptools ];

@@ -66,7 +66,7 @@ buildPythonPackage rec {
     sybil
   ]
   ++ (lib.optional (pythonOlder "3.11") typing-extensions)
-  ++ (lib.flatten (lib.attrValues optional-dependencies));
+  ++ (lib.concatAttrValues optional-dependencies);
 
   enabledTestPaths = [ "tests" ];
 

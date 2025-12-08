@@ -39,6 +39,7 @@ let
       docker-sbom,
       docker-init,
       iptables,
+      nftables,
       e2fsprogs,
       xz,
       util-linuxMinimal,
@@ -164,6 +165,7 @@ let
           buildInputs = [
             sqlite
           ]
+          ++ lib.optionals (lib.versionAtLeast version "29.0.0") [ nftables ]
           ++ lib.optionals withLvm [ lvm2 ]
           ++ lib.optionals withBtrfs [ btrfs-progs ]
           ++ lib.optionals withSystemd [ systemd ]
@@ -191,7 +193,10 @@ let
           );
 
           postPatch = ''
-            patchShebangs hack/make.sh hack/make/ hack/with-go-mod.sh
+            patchShebangs hack/make.sh hack/make/
+          ''
+          + lib.optionalString (lib.versionOlder version "29.0.0") ''
+            patchShebangs hack/with-go-mod.sh
           '';
 
           buildPhase = ''
@@ -217,7 +222,7 @@ let
               --prefix PATH : "$out/libexec/docker:$extraPath"
 
             ln -s ${docker-containerd}/bin/containerd $out/libexec/docker/containerd
-            ln -s ${docker-containerd}/bin/containerd-shim $out/libexec/docker/containerd-shim
+            ln -s ${docker-containerd}/bin/containerd-shim${lib.optionalString (lib.versionAtLeast version "29.0.0") ''-runc-v2''} $out/libexec/docker/containerd-shim${lib.optionalString (lib.versionAtLeast version "29.0.0") ''-runc-v2''}
             ln -s ${docker-runc}/bin/runc $out/libexec/docker/runc
             ln -s ${docker-tini}/bin/tini-static $out/libexec/docker/docker-init
 
@@ -409,18 +414,36 @@ in
 
   docker_28 =
     let
-      version = "28.5.1";
+      version = "28.5.2";
     in
     callPackage dockerGen {
       inherit version;
       cliRev = "v${version}";
-      cliHash = "sha256-iT5FLzX8Pg07V0Uo+07gy3ChP/WgLTPs/vtxnFVmCG8=";
+      cliHash = "sha256-11wbqvenTJooAzqOEp0UivPxhvWwSl1thCAzDMx0i/o=";
       mobyRev = "v${version}";
-      mobyHash = "sha256-IlkEK4UeQjZsojbahzLy/rP3WqJUWXG9nthmBSEj10M=";
-      runcRev = "v1.3.0";
-      runcHash = "sha256-oXoDio3l23Z6UyAhb9oDMo1O4TLBbFyLh9sRWXnfLVY=";
+      mobyHash = "sha256-T5zz1lSLVdMR646CfhWAiVU4/VPAY1CRU+jIdjEWycs=";
+      runcRev = "v1.3.3";
+      runcHash = "sha256-Ci/2otySB7FaFoutmzWeVaTU+tO/lnluQfneFSQM1RE=";
       containerdRev = "v1.7.28";
       containerdHash = "sha256-vz7RFJkFkMk2gp7bIMx1kbkDFUMS9s0iH0VoyD9A21s=";
+      tiniRev = "369448a167e8b3da4ca5bca0b3307500c3371828";
+      tiniHash = "sha256-jCBNfoJAjmcTJBx08kHs+FmbaU82CbQcf0IVjd56Nuw=";
+    };
+
+  docker_29 =
+    let
+      version = "29.1.2";
+    in
+    callPackage dockerGen {
+      inherit version;
+      cliRev = "v${version}";
+      cliHash = "sha256-dmoCHxXOYalJCaqq32MdsAEJ+xq0aH/8fOpJHVnBxxU=";
+      mobyRev = "docker-v${version}";
+      mobyHash = "sha256-SRMaPAdg2nlWuKKQILZEGHZO6TGLh2Ci1UIWqcyo6IM=";
+      runcRev = "v1.3.4";
+      runcHash = "sha256-1IfY08sBoDpbLrwz1AKBRSTuCZyOgQzYPHTDUI6fOZ8=";
+      containerdRev = "v2.2.0";
+      containerdHash = "sha256-LXBGA03FTrrbxlH+DxPBFtp3/AYQf096YE2rpe6A+WM=";
       tiniRev = "369448a167e8b3da4ca5bca0b3307500c3371828";
       tiniHash = "sha256-jCBNfoJAjmcTJBx08kHs+FmbaU82CbQcf0IVjd56Nuw=";
     };

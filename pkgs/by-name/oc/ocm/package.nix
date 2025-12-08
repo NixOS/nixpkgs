@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "ocm";
-  version = "1.0.9";
+  version = "1.0.10";
 
   src = fetchFromGitHub {
     owner = "openshift-online";
     repo = "ocm-cli";
     rev = "v${version}";
-    sha256 = "sha256-hj91qHj88YW0vKhwhuDZB91u63sJ3VrxfcJwbxgIzWg=";
+    sha256 = "sha256-tY7THl1mv9XTL6KVO1/lvZpcNimk3M8pmCbXoH0oet0=";
   };
 
   vendorHash = "sha256-GOdRYVnFPS1ovFmU+9MEnwTNg1sa9/25AjzbcbBJrQ0=";

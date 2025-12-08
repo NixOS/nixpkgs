@@ -52,7 +52,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   meta = {
     description = "WSGI HTTP Server for UNIX, fast clients and sleepy applications";

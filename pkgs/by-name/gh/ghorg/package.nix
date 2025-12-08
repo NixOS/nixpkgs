@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "ghorg";
-  version = "1.11.6";
+  version = "1.11.7";
 
   src = fetchFromGitHub {
     owner = "gabrie30";
     repo = "ghorg";
     rev = "v${version}";
-    sha256 = "sha256-M1Kd0cpV/GRbxGdGs6nMn9DEnUdrSh9J5U52j7Hm6S8=";
+    sha256 = "sha256-3aFEpSyKICJ6jWZAMprE4nV6OxMFVvM82bmKSV87Sng=";
   };
 
   doCheck = false;
@@ -49,7 +49,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/gabrie30/ghorg";
     license = licenses.asl20;
-    maintainers = with maintainers; [ vidbina ];
     mainProgram = "ghorg";
   };
 }

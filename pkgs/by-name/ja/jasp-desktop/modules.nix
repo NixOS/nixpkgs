@@ -627,6 +627,7 @@ in
         pwr
         jaspBase
         jaspGraphs
+        viridis
       ];
     };
     jaspPredictiveAnalytics = buildJaspModule {

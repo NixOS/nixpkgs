@@ -49,8 +49,8 @@ let
       depsHash
     else
       {
-        x86_64-linux = "sha256-AqXGk6IZ85TFNO7v8KFJOe8Caf1x4xQh/VuhaUq9rB4=";
-        aarch64-linux = "sha256-l70j1UcVNHGrzzvcqdeLDJUuaLkoLNM2yWCHKY4EShs=";
+        x86_64-linux = "sha256-cUpCkmJmFyd2mTImMKt5Cgi+A4bAWAXLYjJjMnV6haQ=";
+        aarch64-linux = "sha256-f1FbdFDunlF7uhCpkb5AqmKN5uimuKnFYBzXjIcRabk=";
       }
       .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
@@ -172,6 +172,44 @@ buildBazelPackage rec {
 
       rm -r $bazelOut/external/local_jdk
       rm -r $bazelOut/external/bazel_gazelle_go_repository_tools/bin
+
+      # Drop prebuilt JDK toolchains and non-Linux java tool bundles; we force @local_jdk anyway.
+      shopt -s nullglob
+      rm -rf $bazelOut/external/remotejdk*
+      for dir in $bazelOut/external/remote_java_tools*; do
+        base=$(basename "$dir")
+        if [[ "$base" != remote_java_tools_linux ]]; then
+          rm -rf "$dir"
+        fi
+      done
+      rm -rf $bazelOut/external/android_tools $bazelOut/external/android_gmaven_r8
+      find $bazelOut/external/repository_cache -maxdepth 1 -type f \
+        \( -iname '*remotejdk*' -o -iname '*remote_java_tools*' -o -iname '*android*' \) -delete
+
+      # Prune repository_cache entries for unused remote JDK/tool bundles.
+      keep_patterns=()
+      case ${stdenv.hostPlatform.system} in
+        x86_64-linux)
+          keep_patterns+=("remotejdk8_linux" "remotejdk11_linux" "remotejdk17_linux" "remotejdk21_linux" "remote_java_tools_linux")
+          ;;
+        aarch64-linux)
+          keep_patterns+=("remotejdk8_linux_aarch64" "remotejdk11_linux_aarch64" "remotejdk17_linux_aarch64" "remotejdk21_linux_aarch64" "remote_java_tools_linux")
+          ;;
+      esac
+
+      find $bazelOut/external/repository_cache -type f \( -iname '*remotejdk*' -o -iname '*remote_java_tools*' -o -iname '*android*' \) | while read f; do
+        keep=false
+        for pat in $keep_patterns; do
+          if [[ $(basename "$f") == *"$pat"* ]]; then
+            keep=true
+            break
+          fi
+        done
+        if ! $keep; then
+          rm -f "$f"
+        fi
+      done
+      shopt -u nullglob
 
       # CMake 4.1 drops compatibility with <3.5; bump libevent's floor to avoid configure failure.
       sed -i 's/cmake_minimum_required(VERSION 3\\.1.2 FATAL_ERROR)/cmake_minimum_required(VERSION 3.5 FATAL_ERROR)/' \

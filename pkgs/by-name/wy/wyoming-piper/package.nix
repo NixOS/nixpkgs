@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "wyoming-piper";
-  version = "2.0.0";
+  version = "2.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "wyoming-piper";
-    rev = "a9bedf7947b6813807caa9eba22c745cad68e5c1";
-    hash = "sha256-Ld+UZguvtVig+g4hepLnC0PEYU/yST4cpI5bLfeTVkw=";
+    tag = "v${version}";
+    hash = "sha256-j6QvGChAkASKdD+4XqIwC6UWdhi5oMDfYmSk6kvRrNE=";
   };
 
   build-system = with python3Packages; [

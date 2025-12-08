@@ -20,12 +20,14 @@ let
     bool
     float
     int
+    package
     ;
   cfg = config.services.ersatztv;
   defaultEnv = {
     ETV_UI_PORT = 8409;
     ETV_BASE_URL = "/";
   };
+
 in
 {
   options = {
@@ -54,6 +56,8 @@ in
             int
             float
             bool
+            path
+            package
           ]);
         default = defaultEnv;
         example = {
@@ -108,7 +112,7 @@ in
           ETV_CONFIG_FOLDER = "/var/lib/ersatztv/config";
           ETV_TRANSCODE_FOLDER = "/var/lib/ersatztv/transcode";
         }
-        // cfg.environment;
+        // (lib.mapAttrs (_: s: if lib.isBool s then lib.boolToString s else toString s) cfg.environment);
       };
     };
 

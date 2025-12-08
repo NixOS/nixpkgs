@@ -64,8 +64,13 @@ in
               example = "127.0.0.1:8080, 127.0.0.1:8081";
             };
             DATABASE_URL = mkOption {
-              type = types.str;
-              defaultText = "user=miniflux host=/run/postgresql dbname=miniflux";
+              type = types.nullOr types.str;
+              defaultText = literalExpression ''
+                if createDatabaseLocally then "user=miniflux host=/run/postgresql dbname=miniflux" else null
+              '';
+              default =
+                if cfg.createDatabaseLocally then "user=miniflux host=/run/postgresql dbname=miniflux" else null;
+
               description = ''
                 Postgresql connection parameters.
                 See [lib/pq](https://pkg.go.dev/github.com/lib/pq#hdr-Connection_String_Parameters) for more details.
@@ -116,9 +121,6 @@ in
         message = "services.miniflux.adminCredentialsFile must be set if services.miniflux.config.CREATE_ADMIN is 1";
       }
     ];
-    services.miniflux.config = {
-      DATABASE_URL = lib.mkIf cfg.createDatabaseLocally "user=miniflux host=/run/postgresql dbname=miniflux";
-    };
 
     services.postgresql = lib.mkIf cfg.createDatabaseLocally {
       enable = true;
@@ -202,7 +204,7 @@ in
         UMask = "0077";
       };
 
-      environment = lib.mapAttrs (_: toString) cfg.config;
+      environment = lib.mapAttrs (_: toString) (lib.filterAttrs (_: v: v != null) cfg.config);
     };
     environment.systemPackages = [ cfg.package ];
 

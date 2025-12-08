@@ -44,9 +44,12 @@ let
     # original mozilla signature (like 1Password) won't work with signatures
     # stripped, at least the wrapped browser will launch.
     if isDarwin then
-      browser_.overrideAttrs (oldAttrs: {
-        dontFixup = false;
-      })
+      browser_.overrideAttrs (
+        oldAttrs:
+        lib.optionalAttrs (oldAttrs.dontFixup or false) {
+          dontFixup = false;
+        }
+      )
     else
       browser_;
   wrapper =

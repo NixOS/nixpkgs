@@ -66,7 +66,7 @@ stdenv.mkDerivation {
     homepage = "http://www.arkkra.com/";
     description = "Music typesetting program (ASCII to PostScript and MIDI)";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

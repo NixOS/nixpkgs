@@ -56,7 +56,7 @@ buildPythonPackage rec {
     pytestCheckHook
     docker-compose
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   enabledTestPaths = [ "tests/unit_tests" ];
 

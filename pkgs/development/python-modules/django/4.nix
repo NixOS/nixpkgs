@@ -137,7 +137,7 @@ buildPythonPackage rec {
     tblib
     tzdata
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   doCheck =
     !stdenv.hostPlatform.isDarwin

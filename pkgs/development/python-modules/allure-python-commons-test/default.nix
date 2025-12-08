@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "allure-python-commons-test";
-  version = "2.15.0";
+  version = "2.15.2";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "allure_python_commons_test";
     inherit version;
-    hash = "sha256-5l/9K6ToYEGaYXOmVxB188wu9gQ+2cMHxfVNlX8Rz9g=";
+    hash = "sha256-SAjo9rM1zXAVBMD1c+rkMcR8zCeW1L3CErR/SxwjnXg=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

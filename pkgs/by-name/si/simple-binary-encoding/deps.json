@@ -323,10 +323,10 @@
    "jar": "sha256-jzqSFqU3NnEyKT6su6nfBi6s6PixahhK9Z4uSDnUzUE=",
    "pom": "sha256-+IDp0dQAyZwYkvWWTl/JIN0d7wViI1m5sFjzK1tCaXU="
   },
-  "org/agrona#agrona/2.3.1": {
-   "jar": "sha256-1c6VoTOazhPd0tAxVUMsalMonoN4E/aTIVpsq/AeZvg=",
-   "module": "sha256-d72z4nnWH8K9nGf46cf0HB6+sAeQNZL7wZlizuQmDro=",
-   "pom": "sha256-4kiqvmvUW54FQjK8jRMrV94UTxGFw65oFv84HYzF7bk="
+  "org/agrona#agrona/2.3.2": {
+   "jar": "sha256-Bfdqmcs6Q8xzVd76x4YWIdRqLhAzTlfAsl3+3xY3xis=",
+   "module": "sha256-nIL43vXt39VpH7+dK9OhrUQwkHrxGP8WM/F7a7CuA94=",
+   "pom": "sha256-Y+/XRNcac8io1ZRWB1ddQOT7uXZ4339vJQdQwOYB11o="
   },
   "org/antlr#antlr4-master/4.13.2": {
    "pom": "sha256-Ct2gJmhYc/ZRNgF4v/xEbO7kgzCBc5466dbo8H6NkCo="

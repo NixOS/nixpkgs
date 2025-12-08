@@ -61,7 +61,7 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: <class 'urllib3.poolmanager.ProxyManager'> != <class 'urllib3.poolmanager.Poolmanager'>

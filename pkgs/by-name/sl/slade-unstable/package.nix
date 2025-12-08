@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation {
   pname = "slade";
-  version = "3.2.9-unstable-2025-11-24";
+  version = "3.2.9-unstable-2025-12-01";
 
   src = fetchFromGitHub {
     owner = "sirjuddington";
     repo = "SLADE";
-    rev = "7ce989622852c76b10eeb621df17a345e90d92d5";
-    hash = "sha256-/B4kN+XyCbujZDosnDFO5+c6fmAOIHHZPPil2lUm0QQ=";
+    rev = "e76a6921b3295d34066f5ceedad9d3604b0354c3";
+    hash = "sha256-BwxooUtblNa9fdZ62hgxh6RU0g1reCJrEMV77A8Y9dQ=";
   };
 
   nativeBuildInputs = [

@@ -342,6 +342,10 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  feel-co = {
+    github = "feel-co";
+  };
+
   flutter = {
     enableFeatureFreezePing = false;
     github = "flutter";
@@ -396,7 +400,6 @@ with lib.maintainers;
 
   gitlab = {
     members = [
-      globin
       krav
       leona
       talyz
@@ -640,7 +643,6 @@ with lib.maintainers;
   matrix = {
     members = [
       ma27
-      fadenb
       mguentner
       dandellion
       nickcao

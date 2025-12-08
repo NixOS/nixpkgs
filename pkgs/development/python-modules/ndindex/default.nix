@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "ndindex";
-  version = "1.10.0";
+  version = "1.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
     repo = "ndindex";
     tag = version;
-    hash = "sha256-gPhRln7cUoRmypuTDTwoz4LyCBX3EwuKes/SEoz9NYM=";
+    hash = "sha256-rjhCysdhLCAofob7yUL7s65hMju13uotrzJ+aY0stzI=";
   };
 
   build-system = [

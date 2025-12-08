@@ -82,6 +82,7 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "beautifulsoup4"
+    "bleach"
     "celery"
     "css-inline"
     "django-bootstrap3"
@@ -256,7 +257,7 @@ python.pkgs.buildPythonApplication rec {
       fakeredis
       responses
     ]
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+    ++ lib.concatAttrValues optional-dependencies;
 
   pytestFlags = [
     "--reruns=3"

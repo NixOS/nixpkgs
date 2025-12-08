@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "trustymail";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cisagov";
     repo = "trustymail";
     tag = "v${version}";
-    hash = "sha256-EA8RomXREDAHZIuq8x+t6w7V1ErUOuuo0TUyaxIgdR8=";
+    hash = "sha256-NF89Am/sG3Ruaws2SUofrbLoEiKdYpgPuXIAKjst9hk=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

@@ -99,7 +99,6 @@ postgresqlBuildExtension (finalAttrs: {
       isCross = stdenv.hostPlatform.config != stdenv.buildPlatform.config;
     in
     [
-      (lib.enableFeature false "extension-upgrades-install")
       (lib.withFeatureAs true "pgconfig" "${postgresql.pg_config}/bin/pg_config")
       (lib.withFeatureAs true "gdalconfig" "${gdal}/bin/gdal-config")
       (lib.withFeatureAs true "jsondir" (lib.getDev json_c))

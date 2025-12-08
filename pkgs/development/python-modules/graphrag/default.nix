@@ -1,38 +1,44 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
-  poetry-dynamic-versioning,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   aiofiles,
-  aiolimiter,
+  azure-cosmos,
   azure-identity,
   azure-search-documents,
   azure-storage-blob,
-  datashaper,
   devtools,
   environs,
   fnllm,
+  future,
   graspologic,
   json-repair,
   lancedb,
-  matplotlib,
+  litellm,
   networkx,
   nltk,
   numpy,
   openai,
   pandas,
-  pyaml-env,
   pyarrow,
   pydantic,
   python-dotenv,
   pyyaml,
-  rich,
-  tenacity,
+  spacy,
+  textblob,
   tiktoken,
+  tqdm,
   typer,
   typing-extensions,
   umap-learn,
+
+  # tests
   nbformat,
   pytest-asyncio,
   pytestCheckHook,
@@ -40,54 +46,55 @@
 
 buildPythonPackage rec {
   pname = "graphrag";
-  version = "2.4.0";
+  version = "2.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "graphrag";
-    tag = "v.${version}";
-    hash = "sha256-a8t6Nl9W/Cr7eueAvJ3dbz5G0oIhddqFMIm7HeZ8N9A=";
+    tag = "v${version}";
+    hash = "sha256-F0MiC+14KOjCVwlcZpNo15SqDOfSYsVwH8qNQTHBKPQ=";
   };
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    setuptools
   ];
 
   pythonRelaxDeps = true;
 
   dependencies = [
     aiofiles
-    aiolimiter
+    azure-cosmos
     azure-identity
     azure-search-documents
     azure-storage-blob
-    datashaper
     devtools
     environs
     fnllm
+    future
     graspologic
     json-repair
     lancedb
-    matplotlib
+    litellm
     networkx
     nltk
     numpy
     openai
     pandas
-    pyaml-env
     pyarrow
     pydantic
     python-dotenv
     pyyaml
-    rich
-    tenacity
+    spacy
+    textblob
     tiktoken
+    tqdm
     typer
     typing-extensions
     umap-learn
-  ];
+  ]
+  ++ fnllm.optional-dependencies.azure
+  ++ fnllm.optional-dependencies.openai;
 
   env.NUMBA_CACHE_DIR = "$TMPDIR";
 
@@ -101,11 +108,20 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/unit" ];
 
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Flaky
+    "tests/unit/litellm_services/test_rate_limiter.py"
+  ];
+
   disabledTests = [
     # touch the network
+    "test_basic_functionality"
     "test_child"
     "test_dotprefix"
     "test_find"
+    "test_load_strategy_sentence"
+    "test_mixed_whitespace_handling"
+    "test_multiple_documents"
     "test_run_extract_entities_multiple_documents"
     "test_run_extract_entities_single_document"
     "test_sort_context"
