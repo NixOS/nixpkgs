@@ -1,0 +1,5 @@
+{
+  nodes.machine = { pkgs, ... }: {
+
+  };
+}

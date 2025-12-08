@@ -7,6 +7,9 @@
   writeShellScriptBin,
   fetchFromGitHub,
   gitUpdater,
+  libosinfo,
+  osinfo-db,
+  python3Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,7 +49,14 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs build.js
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru = {
+    updateScript = gitUpdater { };
+    cockpitPath = [
+      libosinfo
+      osinfo-db
+      python3Packages.pygobject3
+    ];
+  };
 
   meta = {
     description = "Cockpit UI for virtual machines";

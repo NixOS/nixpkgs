@@ -1,3 +1,7 @@
+:root {
+    --ct-color-host-accent: #4d6fb7 !important;
+}
+
 #badge {
     inline-size: 225px;
     block-size: 80px;
