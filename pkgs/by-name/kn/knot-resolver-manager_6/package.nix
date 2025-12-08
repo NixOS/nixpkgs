@@ -71,6 +71,10 @@ python3Packages.buildPythonPackage {
     "test_proxy_rehandshake_tls12"
   ];
 
+  passthru = {
+    inherit knot-resolver;
+  };
+
   meta = knot-resolver.meta // {
     mainProgram = "knot-resolver";
   };
