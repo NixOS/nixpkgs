@@ -14,6 +14,7 @@
 
   homepage = "http://mlton.org/";
   license = lib.licenses.smlnj;
+  maintainers = [ lib.maintainers.poz ];
   platforms = [
     "i686-linux"
     "x86_64-linux"
