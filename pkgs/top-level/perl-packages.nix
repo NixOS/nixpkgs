@@ -39082,6 +39082,8 @@ with self;
       url = "mirror://cpan/authors/id/T/TO/TODDR/YAML-Syck-1.34.tar.gz";
       hash = "sha256-zJFWzK69p5jr/i8xthnoBld/hg7RcEJi8X/608bjQVk=";
     };
+    # Fix build with gcc15
+    env.NIX_CFLAGS_COMPILE = "-std=gnu17";
     meta = {
       description = "Fast, lightweight YAML loader and dumper";
       homepage = "https://github.com/toddr/YAML-Syck";
