@@ -55,6 +55,7 @@ in
 
       settings = lib.mkOption {
         inherit (settingsFormat) type;
+        default = { };
         example.mpd = {
           enabled = true;
           hostname = "::";
