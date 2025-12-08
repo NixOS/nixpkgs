@@ -33,12 +33,24 @@
   wrapGAppsHook3,
   zita-convolver,
   zita-resampler,
-  optimizationSupport ? false, # Enable support for native CPU extensions
+
+  enableFaust ? !stdenv.hostPlatform.isLinux, # Transpiles Faust DSP code to C++
+  enableGperf ? false, # Regenerates gperf files
+  enableOptimization ? # Enables support for native CPU extensions
+    if optimizationSupport != null then
+      lib.warn ''`optimizationSupport` is deprecated in guitarix; use `enableOptimization` instead.'' optimizationSupport
+    else
+      false,
+  enableNSM ? true, # Enables NSM support
+  optimizationSupport ? null,
+  withAvahi ? true,
+  withBluez ? stdenv.hostPlatform.isLinux,
+  withLiblo ? enableNSM,
+  withZitaConvolver ? true,
+  withZitaResampler ? true,
 }:
 
-let
-  inherit (lib) optional;
-in
+assert enableNSM -> withLiblo;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "guitarix";
@@ -56,24 +68,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     gettext
-    gperf
     hicolor-icon-theme
     intltool
     pkg-config
     python3
     wafHook
-    which
     wrapGAppsHook3
-  ];
+  ]
+  ++ lib.optionals enableFaust [
+    faust
+    which
+  ]
+  ++ lib.optional enableGperf gperf;
 
-  # TODO: Identify optional dependencies and add corresponding parameters.
   buildInputs = [
-    avahi
-    bluez
     boost
     curl
     eigen
-    faust
     fftwSinglePrec
     glib
     glib-networking.out
@@ -82,15 +93,17 @@ stdenv.mkDerivation (finalAttrs: {
     gtkmm3
     ladspaH
     libjack2
-    liblo
     libsndfile
     lilv
     lrdf
     lv2
     sassc
-    zita-convolver
-    zita-resampler
-  ];
+  ]
+  ++ lib.optional withAvahi avahi
+  ++ lib.optional withBluez bluez
+  ++ lib.optional withLiblo liblo
+  ++ lib.optional withZitaConvolver zita-convolver
+  ++ lib.optional withZitaResampler zita-resampler;
 
   # There are many bad shebangs which can fail builds.
   # See `https://github.com/brummer10/guitarix/issues/246`.
@@ -104,9 +117,16 @@ stdenv.mkDerivation (finalAttrs: {
     "--no-desktop-update"
     "--enable-nls"
     "--install-roboto-font"
-    "--faust"
   ]
-  ++ optional optimizationSupport "--optimization";
+  # Use explicit flags to guarantee correct configuration
+  ++ lib.optional enableFaust "--faust" # Force waf to use the provided faust
+  ++ lib.optional (!enableFaust) "--no-faust"
+  ++ lib.optional (!enableNSM) "--no-nsm"
+  ++ lib.optional (!withAvahi) "--no-avahi"
+  ++ lib.optional (!withBluez) "--no-bluez"
+  ++ lib.optional (!withZitaConvolver) "--includeconvolver"
+  ++ lib.optional (!withZitaResampler) "--includeresampler"
+  ++ lib.optional enableOptimization "--optimization";
 
   meta = {
     description = "Virtual guitar amplifier for Linux running with JACK";
@@ -131,6 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       lord-valen
     ];
+    # TODO: This potentially also works on darwin and BSD.
     platforms = lib.platforms.linux;
   };
 })
