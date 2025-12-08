@@ -234,8 +234,10 @@ stdenv.mkDerivation (
     + (lib.optionalString (lib.versionOlder release_version "15") ''
       mv $out/share/scan-view/*.py $python/share/scan-view
     '')
-    + ''
+    + lib.optionalString (lib.versionOlder release_version "22") ''
       rm $out/bin/c-index-test
+    ''
+    + ''
       patchShebangs $python/bin
 
       mkdir -p $dev/bin
