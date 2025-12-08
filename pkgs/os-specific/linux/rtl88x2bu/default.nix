@@ -45,5 +45,6 @@ stdenv.mkDerivation {
       otavio
       claymorwan
     ];
+    broken = kernel.kernelOlder "5.11";
   };
 }
