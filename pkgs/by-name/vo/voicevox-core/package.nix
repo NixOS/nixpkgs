@@ -21,17 +21,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "voicevox-core";
-  version = "0.16.2";
+  version = "0.16.3";
   modelVersion = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "voicevox_core";
     tag = finalAttrs.version;
-    hash = "sha256-aRy9x6IzFDwL4HjhCW705LpkZ13/SJ25h45XbbXciy0=";
+    hash = "sha256-QB9dfAWRzxKXg6qODURGeChWKwUO87a0jmsttN+Rjfo=";
   };
 
-  cargoHash = "sha256-8udiXUZGn3ZT7RvmZd/F5tLsCKi5QLPG3pzv7LFyLvQ=";
+  cargoHash = "sha256-Gqskvfvw0KqvHVVEMRFcKb5ZnqzbtvxZnmW5RcI1BWY=";
 
   postPatch = ''
     cp -r --no-preserve=all ${openjtalk-src} ./openjtalk
