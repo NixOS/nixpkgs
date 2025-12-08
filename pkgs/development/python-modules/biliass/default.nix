@@ -8,6 +8,8 @@
   libiconv,
 }:
 
+# r-ryantm wants to downgrade
+# nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "biliass";
   version = "2.3.1";
