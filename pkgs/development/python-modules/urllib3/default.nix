@@ -16,9 +16,15 @@
   pysocks,
 
   # tests
+  httpx,
+  pyopenssl,
   pytestCheckHook,
+  pytest-socket,
   pytest-timeout,
+  quart,
+  quart-trio,
   tornado,
+  trio,
   trustme,
 }:
 
@@ -51,12 +57,22 @@ let
     };
 
     nativeCheckInputs = [
+      httpx
+      pyopenssl
+      pytest-socket
       pytest-timeout
       pytestCheckHook
+      quart
+      quart-trio
       tornado
+      trio
       trustme
     ]
     ++ lib.concatAttrValues optional-dependencies;
+
+    disabledTestMarks = [
+      "requires_network"
+    ];
 
     # Tests in urllib3 are mostly timeout-based instead of event-based and
     # are therefore inherently flaky. On your own machine, the tests will
