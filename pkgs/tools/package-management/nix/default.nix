@@ -178,13 +178,18 @@ lib.makeExtensible (
             hash = "sha256-NLGXPLjENLeKVOg3OZgHXZ+1x6sPIKq9FHH8pxbCrDI=";
           };
         }).appendPatches
-          [
-            (fetchpatch2 {
-              name = "nix-2.31-14240-sri-error-message.patch";
-              url = "https://github.com/NixOS/nix/commit/56751b1cd2c4700c71c545f2246adf602c97fdf5.patch";
-              hash = "sha256-CerSBAI+H2RqPp9jsCP0QIM2rZYx3yBZHVVUAztgc18=";
-            })
-          ];
+          (
+            [
+              (fetchpatch2 {
+                name = "nix-2.31-14240-sri-error-message.patch";
+                url = "https://github.com/NixOS/nix/commit/56751b1cd2c4700c71c545f2246adf602c97fdf5.patch";
+                hash = "sha256-CerSBAI+H2RqPp9jsCP0QIM2rZYx3yBZHVVUAztgc18=";
+              })
+            ]
+            # Condition on !isLinux to avoid rebuilding NixOS tests
+            # https://github.com/NixOS/nix/pull/14734
+            ++ lib.optional (!stdenv.hostPlatform.isLinux) ./patches/nix-2.31-tarball-decode-url.patch
+          );
 
       nix_2_31 = addTests "nix_2_31" self.nixComponents_2_31.nix-everything;
 

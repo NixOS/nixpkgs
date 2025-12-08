@@ -1,0 +1,41 @@
+From 25abfbd465de48679a01397b4bafb0402f0d22a9 Mon Sep 17 00:00:00 2001
+From: dramforever <dramforever@live.com>
+Date: Tue, 9 Dec 2025 00:28:30 +0800
+Subject: [PATCH] libfetchers/tarball: Decode URL before checking existence
+
+If the URL has special characters, it would need to be decoded to get a
+file path.
+
+Fixes test failure with appendPatches and sandbox = false, where the
+version number and hence build directory name has a plus sign in the
+name.
+---
+ src/libfetchers/tarball.cc | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/src/libfetchers/tarball.cc b/src/libfetchers/tarball.cc
+index 309bbaf5a..99f6688d0 100644
+--- a/src/libfetchers/tarball.cc
++++ b/src/libfetchers/tarball.cc
+@@ -6,6 +6,7 @@
+ #include "nix/util/archive.hh"
+ #include "nix/util/tarfile.hh"
+ #include "nix/util/types.hh"
++#include "nix/util/url.hh"
+ #include "nix/fetchers/store-path-accessor.hh"
+ #include "nix/store/store-api.hh"
+ #include "nix/fetchers/git-utils.hh"
+@@ -114,8 +115,8 @@ static DownloadTarballResult downloadTarball_(
+     // Namely lets catch when the url is a local file path, but
+     // it is not in fact a tarball.
+     if (url.rfind("file://", 0) == 0) {
+-        // Remove "file://" prefix to get the local file path
+-        std::string localPath = url.substr(7);
++        // Remove "file://" prefix and decode to get the local file path
++        std::string localPath = percentDecode(url.substr(7));
+         if (!std::filesystem::exists(localPath)) {
+             throw Error("tarball '%s' does not exist.", localPath);
+         }
+-- 
+2.51.2
+
