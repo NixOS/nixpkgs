@@ -10948,7 +10948,7 @@ with pkgs;
 
   hpack = haskell.lib.compose.justStaticExecutables haskellPackages.hpack;
 
-  hugin = callPackage ../applications/graphics/hugin {
+  hugin = callPackage ../by-name/hu/hugin/package.nix {
     wxGTK = wxGTK32;
   };
 
