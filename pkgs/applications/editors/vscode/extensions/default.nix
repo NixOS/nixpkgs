@@ -1242,8 +1242,8 @@ let
         mktplcRef = {
           name = "languagetool-linter";
           publisher = "davidlday";
-          version = "0.25.3";
-          hash = "sha256-ZxIBjvDUThxmJwvaP3N/nM4b2dGkM0jiklcwiAzPXiY=";
+          version = "0.25.5";
+          hash = "sha256-/ZSxaxiv76aJ+KmDlR5h8PrkEo0pPMvb9C3KGdKCNK8=";
         };
         meta = {
           description = "LanguageTool integration for VS Code";
