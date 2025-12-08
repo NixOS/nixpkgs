@@ -105,6 +105,7 @@ buildGoModule rec {
       emilylange
       christoph-heiss
       tebriel
+      nrabulinski
     ];
     mainProgram = "forgejo-runner";
   };
