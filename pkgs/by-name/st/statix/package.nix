@@ -5,6 +5,7 @@
   withJson ? true,
   stdenv,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -31,6 +32,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
+
+  passthru.update-script = nix-update-script { };
 
   meta = {
     description = "Lints and suggestions for the nix programming language";
