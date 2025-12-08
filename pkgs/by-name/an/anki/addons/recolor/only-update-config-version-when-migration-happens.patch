@@ -1,0 +1,30 @@
+From b291ccbc93fec594346ed9590618c4b740f447fe Mon Sep 17 00:00:00 2001
+From: June Stepp <git@junestepp.me>
+Date: Thu, 9 Oct 2025 16:43:16 -0500
+Subject: [PATCH] Only update config version when migration happens
+
+---
+ migrate.py | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/migrate.py b/migrate.py
+index c84e0c1..7138748 100644
+--- a/migrate.py
++++ b/migrate.py
+@@ -18,11 +18,12 @@ def maybe_migrate_config(conf: ConfigManager) -> None:
+         v2_to_v3(conf)
+     elif version < "3.0":
+         v2_to_v3(conf)
++    else:
++        return
+ 
+-    if version != version_string:
+-        conf["version.major"] = int(version_string.split(".")[0])
+-        conf["version.minor"] = int(version_string.split(".")[1])
+-        conf.save()
++    conf["version.major"] = int(version_string.split(".")[0])
++    conf["version.minor"] = int(version_string.split(".")[1])
++    conf.save()
+ 
+ # some versions of v2 may be incorrectly in -1.-1
+ def detect_v2(conf: ConfigManager) -> bool:
