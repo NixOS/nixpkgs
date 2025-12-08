@@ -5,44 +5,25 @@
   bun,
   makeBinaryWrapper,
 }:
-let
-  pin = lib.importJSON ./pin.json;
+stdenv.mkDerivation rec {
+  pname = "helix-gpt";
+  version = "0.34";
   src = fetchFromGitHub {
     owner = "leona";
     repo = "helix-gpt";
-    rev = pin.version;
-    hash = pin.srcHash;
+    rev = version;
+    hash = "sha256-F2E+B4kKLpX4g/iCv0i71hSx4xdV6fdkwksslELdZUQ=";
   };
-  node_modules = stdenv.mkDerivation {
-    pname = "helix-gpt-node_modules";
-    inherit src;
-    version = pin.version;
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND"
-      "SOCKS_SERVER"
-    ];
-    nativeBuildInputs = [ bun ];
-    dontConfigure = true;
-    buildPhase = ''
-      bun install --no-progress --frozen-lockfile
-    '';
-    installPhase = ''
-      mkdir -p $out/node_modules
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    bun.configHook
+  ];
 
-      cp -R ./node_modules $out
-    '';
-    outputHash = pin."${stdenv.system}";
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
+  bunDeps = bun.fetchDeps {
+    inherit src version pname;
+    hash = "sha256-h/fEGJNdh3HlFOIg6wVekBFJY+JSv+lMAKA1oB7HV54=";
   };
-in
-stdenv.mkDerivation {
-  pname = "helix-gpt";
-  version = pin.version;
-  inherit src;
-  nativeBuildInputs = [ makeBinaryWrapper ];
 
-  dontConfigure = true;
   dontBuild = true;
 
   installPhase = ''
@@ -50,7 +31,6 @@ stdenv.mkDerivation {
 
     mkdir -p $out/bin
 
-    ln -s ${node_modules}/node_modules $out
     cp -R ./* $out
 
     # bun is referenced naked in the package.json generated script
