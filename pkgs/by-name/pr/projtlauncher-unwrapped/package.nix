@@ -6,10 +6,10 @@
   cmark,
   extra-cmake-modules,
   fetchpatch2,
+  qt6Packages,
   gamemode,
   ghc_filesystem,
   jdk17,
-  kdePackages,
   ninja,
   nix-update-script,
   stripJavaArchivesHook,
@@ -24,29 +24,31 @@ assert lib.assertMsg (
 ) "gamemodeSupport is only available on Linux.";
 stdenv.mkDerivation (finalAttrs: {
   pname = "projtlauncher";
-  version = "0.0.3";
+  version = "0.0.3-4";
 
   src = fetchFromGitHub {
     owner = "Project-Tick";
     repo = "ProjT-Launcher";
     tag = finalAttrs.version;
-    hash = "sha256-+josMV3s6g63tLqGNbrBrbrl6Y36+uRmpiVMtbi57Ug=";
+    hash = "sha256-U7bcQOySof86EtZHa63/PNuWDDJ7kEL0NuzvJ1dGU8c=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake
     ninja
-    extra-cmake-modules
     jdk17
     stripJavaArchivesHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    extra-cmake-modules
   ];
 
   buildInputs = [
     cmark
-    kdePackages.qtbase
-    kdePackages.qtnetworkauth
-    kdePackages.quazip
+    qt6Packages.qtbase
+    qt6Packages.qtnetworkauth
+    qt6Packages.quazip
     tomlplusplus
     zlib
   ]
@@ -71,8 +73,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
-    description = "ProjT Launcher an free, open-source Minecraft launcher.";
+    description = "Free, open-source Minecraft launcher";
     longDescription = ''
       This application lets you create and manage multiple
       independent Minecraft instances, each with its own
@@ -87,7 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://projtlauncher.yongdohyun.org.tr/";
     changelog = "https://github.com/Project-Tick/ProjT-Launcher/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [
-      gpl3Plus
       gpl3Only
       asl20
       cc-by-sa-40
@@ -96,6 +101,10 @@ stdenv.mkDerivation (finalAttrs: {
       yongdohyun
     ];
     mainProgram = "projtlauncher";
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
   };
 })
