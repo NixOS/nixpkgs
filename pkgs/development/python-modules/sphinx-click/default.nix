@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx-click";
-  version = "6.1.0";
+  version = "6.2.0";
   pyproject = true;
 
   build-system = [
@@ -55,7 +55,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "sphinx_click";
-    hash = "sha256-xwLgdRwaC2rWSeT3+uvQ3AmjzHyjtQ+Vlpg4N3L1Du8=";
+    hash = "sha256-/Hi0FUpOUVlGLjbeVbhkN0fabNqGs7Uqi7YiieYDd2w=";
   };
 
   meta = {

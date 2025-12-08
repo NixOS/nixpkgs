@@ -107,6 +107,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Core component for zathura PDF viewer";
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ globin ];
+    maintainers = [ ];
   };
 })
