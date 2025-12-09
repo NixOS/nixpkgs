@@ -7,7 +7,6 @@
   pytest-asyncio,
   pytest-httpserver,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   voluptuous,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "solax";
   version = "3.2.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -46,11 +43,11 @@ buildPythonPackage rec {
     "test_smoke"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the Solax Inverter API";
     homepage = "https://github.com/squishykid/solax";
     changelog = "https://github.com/squishykid/solax/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }
