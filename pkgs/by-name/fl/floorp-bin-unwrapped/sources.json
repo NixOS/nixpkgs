@@ -7,7 +7,7 @@
     },
     "x86_64-linux": {
       "url": "https://github.com/Floorp-Projects/Floorp/releases/download/v12.7.0/floorp-linux-x86_64.tar.xz",
-      "sha256": "8e97cbac7090cc3734eb63ce23e69495a0080dc881c6123b1b3b18bc7b6def62"
+      "sha256": "jpfLrHCQzDc062POI+aUlaAIDciBxhI7GzsYvHtt72I="
     },
     "aarch64-darwin": {
       "url": "https://github.com/Floorp-Projects/Floorp/releases/download/v12.7.0/floorp-macOS-universal.dmg",
