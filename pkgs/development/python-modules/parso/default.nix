@@ -25,7 +25,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python Parser";
     homepage = "https://parso.readthedocs.io/en/latest/";
-    changelog = "https://github.com/davidhalter/parso/blob/master/CHANGELOG.rst";
+    changelog = "https://github.com/davidhalter/parso/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
   };
 }
