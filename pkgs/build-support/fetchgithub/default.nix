@@ -55,9 +55,9 @@ decorate (
   }@args:
 
   assert (
-    lib.assertMsg (lib.xor (tag == null) (
-      rev == null
-    )) "fetchFromGitHub requires one of either `rev` or `tag` to be provided (not both)."
+    lib.assertMsg (
+      tag != null || rev != null
+    ) "fetchFromGitHub requires at least one of `rev` or `tag` to be provided."
   );
 
   let
