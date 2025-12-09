@@ -62,7 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
     (lib.cmakeBool "feather_tk_UI_LIB" true)
     (lib.cmakeFeature "feather_tk_API" "GL_4_1")

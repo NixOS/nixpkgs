@@ -48,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "XLINK_BUILD_EXAMPLES" true)
     (lib.cmakeBool "XLINK_BUILD_TESTS" true)
     (lib.cmakeBool "XLINK_LIBUSB_SYSTEM" true)
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
   ];
 
   postInstall = ''

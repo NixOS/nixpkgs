@@ -66,7 +66,6 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     (lib.cmakeBool "CROSS_COMPILE32" false)
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeBool "BUILD_SERVER" true)
     (lib.cmakeBool "BUILD_CLIENT" true)
     (lib.cmakeBool "BUNDLED_ZLIB" false)

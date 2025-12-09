@@ -66,10 +66,7 @@ let
       jdk17
     ];
 
-    cmakeFlags = [
-      "-G Ninja"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isAarch64) [
+    cmakeFlags = lib.optionals (stdenv.hostPlatform.isAarch64) [
       (lib.cmakeFeature "PROJECT_ARCH" "arm64")
     ];
 
@@ -157,6 +154,6 @@ buildFHSEnv {
       jaspersurmont
     ];
     platforms = lib.platforms.linux;
-    mainProgram = "${bolt.name}";
+    mainProgram = "bolt-launcher";
   };
 }

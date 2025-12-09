@@ -86,7 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DSTATIC_BUILD=OFF"
     "-DORTHANC_FRAMEWORK_SOURCE=system"
     "-DORTHANC_FRAMEWORK_ROOT=${orthanc.framework}/include/orthanc-framework"
