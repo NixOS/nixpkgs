@@ -18,8 +18,8 @@ buildDotnetModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "artempyanykh";
     repo = "marksman";
-    rev = finalAttrs.version;
-    sha256 = "sha256-rEGMh4QsxTe35psbflYGgjjDDf0TzvItkx/ARE8ZC1E=";
+    tag = finalAttrs.version;
+    hash = "sha256-rEGMh4QsxTe35psbflYGgjjDDf0TzvItkx/ARE8ZC1E=";
   };
 
   projectFile = "Marksman/Marksman.fsproj";
@@ -45,7 +45,7 @@ buildDotnetModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Language Server for Markdown";
     longDescription = ''
       Marksman is a program that integrates with your editor
@@ -56,8 +56,8 @@ buildDotnetModule (finalAttrs: {
       references that enable Zettelkasten-like note taking.
     '';
     homepage = "https://github.com/artempyanykh/marksman";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       stasjok
       plusgut
     ];
