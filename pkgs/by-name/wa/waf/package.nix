@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waf";
-  version = "2.1.7";
+  version = "2.1.9";
 
   src = fetchFromGitLab {
     owner = "ita1024";
     repo = "waf";
     rev = "waf-${finalAttrs.version}";
-    hash = "sha256-qJDnox7+MUtAK8NaaDgEdRVU4YVA8f5Ky9Suv/qLI3g=";
+    hash = "sha256-myPGbJW/RkOtEas+qZ/vTL66bekwDBPhC6AmfXECkcw=";
   };
 
   nativeBuildInputs = [
