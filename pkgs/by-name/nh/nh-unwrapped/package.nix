@@ -64,6 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "nh";
     maintainers = with lib.maintainers; [
       NotAShelf
+      mdaniels5757
       viperML
     ];
   };
