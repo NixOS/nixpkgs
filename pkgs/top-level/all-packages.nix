@@ -1490,8 +1490,6 @@ with pkgs;
 
   arpack-mpi = arpack.override { useMpi = true; };
 
-  asymptote = libsForQt5.callPackage ../tools/graphics/asymptote { };
-
   authelia = callPackage ../servers/authelia {
     buildGoModule = buildGo124Module;
     pnpm = pnpm_10;

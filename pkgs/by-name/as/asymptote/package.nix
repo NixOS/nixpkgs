@@ -6,7 +6,6 @@
   bison,
   glm,
   flex,
-  wrapQtAppsHook,
   cmake,
   pkg-config,
   libglut,
@@ -14,6 +13,7 @@
   imagemagick,
   fftw,
   eigen,
+  libsForQt5,
   libtirpc,
   boehmgc,
   libGLU,
@@ -24,8 +24,6 @@
   gsl,
   libsigsegv,
   python3,
-  qtbase,
-  qtsvg,
   boost186,
   zlib,
   perl,
@@ -61,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     flex
     bison
     texinfo
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
     cmake
     ghostscriptX
     perl
@@ -101,8 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     perl
     curl
-    qtbase
-    qtsvg
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
     # relies on removed asio::io_service
     # https://github.com/kuafuwang/LspCpp/issues/52
     boost186
