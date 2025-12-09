@@ -6,15 +6,15 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cmst";
   version = "2023.03.14";
 
   src = fetchFromGitHub {
     repo = "cmst";
     owner = "andrew-bibb";
-    rev = "${pname}-${version}";
-    sha256 = "sha256-yTqPxywPbtxTy1PPG+Mq64u8MrB27fEdmt1B0pn0BVk=";
+    tag = "${finalAttrs.pname}-${finalAttrs.version}";
+    hash = "sha256-yTqPxywPbtxTy1PPG+Mq64u8MrB27fEdmt1B0pn0BVk=";
   };
 
   nativeBuildInputs = [
@@ -32,18 +32,18 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = gitUpdater {
-    rev-prefix = "${pname}-";
+    rev-prefix = "${finalAttrs.pname}-";
   };
 
-  meta = with lib; {
+  meta = {
     description = "QT GUI for Connman with system tray icon";
     mainProgram = "cmst";
     homepage = "https://github.com/andrew-bibb/cmst";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       matejc
       romildo
     ];
-    platforms = platforms.linux;
-    license = licenses.mit;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
   };
-}
+})
