@@ -8,7 +8,6 @@
   fetchPypi,
   humanize,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   websockets,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "gehomesdk";
   version = "2025.11.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -47,7 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python SDK for GE smart appliances";
     homepage = "https://github.com/simbaja/gehome";
-    changelog = "https://github.com/simbaja/gehome/blob/master/CHANGELOG.md";
+    changelog = "https://github.com/simbaja/gehome/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "gehome-appliance-data";
