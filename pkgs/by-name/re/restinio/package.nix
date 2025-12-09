@@ -11,7 +11,7 @@
   openssl,
   pcre2,
   zlib,
-  catch2_3,
+  catch2,
   # Build with the asio library bundled in boost instead of the standalone asio package.
   with_boost_asio ? false,
 }:
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   buildInputs = [
-    catch2_3
+    catch2
     llhttp
   ];
 

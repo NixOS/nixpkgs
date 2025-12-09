@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoAddDriverRunpath,
-  catch2_3,
+  catch2,
   cmake,
   ctestCheckHook,
   coreutils,
@@ -115,7 +115,7 @@ stdenv.mkDerivation {
   buildInputs = [
     # Header-only
     boost186
-    catch2_3
+    catch2
     plog.dev
     tclap_1_4
 

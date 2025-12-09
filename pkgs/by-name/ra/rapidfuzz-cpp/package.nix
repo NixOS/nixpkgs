@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  catch2_3,
+  catch2,
   python3Packages,
 }:
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    catch2_3
+    catch2
   ];
 
   passthru = {

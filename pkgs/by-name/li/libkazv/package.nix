@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitLab,
   boost,
-  catch2_3,
+  catch2,
   cmake,
   cryptopp,
   immer,
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  checkInputs = [ catch2_3 ];
+  checkInputs = [ catch2 ];
 
   meta = {
     description = "Matrix client sdk built upon lager and the value-oriented design it enables";

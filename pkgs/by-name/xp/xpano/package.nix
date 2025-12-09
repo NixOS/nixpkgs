@@ -8,7 +8,7 @@
   opencv,
   SDL2,
   gtk3,
-  catch2_3,
+  catch2,
   spdlog,
   exiv2,
   wrapGAppsHook3,
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   ];
 
   checkInputs = [
-    catch2_3
+    catch2
   ];
 
   doCheck = true;

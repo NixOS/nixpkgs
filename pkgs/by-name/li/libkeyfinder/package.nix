@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   fftw,
-  catch2_3,
+  catch2,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ fftw ];
 
-  nativeCheckInputs = [ catch2_3 ];
+  nativeCheckInputs = [ catch2 ];
 
   doCheck = true;
 

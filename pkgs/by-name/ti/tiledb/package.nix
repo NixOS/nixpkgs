@@ -14,7 +14,7 @@
   boost,
   libpqxx,
   clang-tools,
-  catch2_3,
+  catch2,
   python3,
   doxygen,
   fixDarwinDylibNames,
@@ -34,7 +34,6 @@ let
     chmod -R +w $out
     cp -r ${rapidcheck.dev}/* $out
   '';
-  catch2 = catch2_3;
 in
 stdenv.mkDerivation rec {
   pname = "tiledb";

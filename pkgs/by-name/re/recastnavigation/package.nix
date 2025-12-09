@@ -6,7 +6,7 @@
   libGL,
   SDL2,
   libGLU,
-  catch2_3,
+  catch2,
 }:
 
 stdenv.mkDerivation {
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   doCheck = true;
 
   nativeBuildInputs = [ cmake ];
-  checkInputs = [ catch2_3 ];
+  checkInputs = [ catch2 ];
 
   buildInputs = [
     libGL
