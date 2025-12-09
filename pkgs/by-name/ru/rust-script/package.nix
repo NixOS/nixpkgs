@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkgs,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,6 +17,13 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-kxnylNZ8FsaR2S1o/p7qtlaXsBLDNv2PsFye0rcf/+A=";
+
+  nativeBuildInputs = [ pkgs.makeBinaryWrapper ];
+
+  postInstall = ''
+    wrapProgramBinary $out/bin/rust-script \
+      --prefix PATH : ${lib.makeBinPath [ pkgs.cargo ]}
+  '';
 
   # tests require network access
   doCheck = false;
