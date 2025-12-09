@@ -17836,6 +17836,12 @@
     githubId = 15896005;
     name = "Vladyslav Burzakovskyy";
   };
+  mrsmoer = {
+    email = "mrsmoer@protonmail.com";
+    github = "MrSmoer";
+    githubId = 66489839;
+    name = "MrSmör";
+  };
   MrSom3body = {
     email = "nix@sndh.dev";
     matrix = "@mrsom3body:matrix.org";
