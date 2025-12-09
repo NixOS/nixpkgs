@@ -45,6 +45,7 @@ in
   pkgs,
   stdenv,
   patchelf,
+  fetchpatch,
 
   # build time
   autoconf,
@@ -325,6 +326,15 @@ buildStdenv.mkDerivation {
         [
           ./142-relax-apple-sdk.patch
         ]
+    ++
+      # Revert apple sdk bump to 26.1
+      lib.optionals (lib.versionAtLeast version "146" && lib.versionOlder apple-sdk_26.version "26.1") [
+        (fetchpatch {
+          url = "https://github.com/mozilla-firefox/firefox/commit/c1cd0d56e047a40afb2a59a56e1fd8043e448e05.patch";
+          hash = "sha256-bFHLy3b0jOcROqltIwHwSAqWYve8OZHbiPMOdhLUCLc=";
+          revert = true;
+        })
+      ]
     ++ extraPatches;
 
   postPatch = ''
