@@ -59,7 +59,7 @@
     !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isRiscV64,
   enableS3 ? true,
   # google-cloud-cpp fails to build on RiscV
-  enableGcs ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isRiscV64,
+  enableGcs ? !stdenv.hostPlatform.isRiscV64,
   enableAzure ? true,
 }:
 
