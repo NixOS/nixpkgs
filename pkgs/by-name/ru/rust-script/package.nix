@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkgs,
   nix-update-script,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,6 +28,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru.updateScript = nix-update-script { };
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   # tests require network access
   doCheck = false;
