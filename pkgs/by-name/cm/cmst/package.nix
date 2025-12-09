@@ -1,14 +1,12 @@
 {
-  mkDerivation,
+  stdenv,
   lib,
   fetchFromGitHub,
-  qmake,
-  qtbase,
-  qttools,
+  libsForQt5,
   gitUpdater,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "cmst";
   version = "2023.03.14";
 
@@ -20,11 +18,12 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    qmake
-    qttools
+    libsForQt5.qmake
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
-  buildInputs = [ qtbase ];
+  buildInputs = [ libsForQt5.qtbase ];
 
   postPatch = ''
     for f in $(find . -name \*.cpp -o -name \*.pri -o -name \*.pro); do

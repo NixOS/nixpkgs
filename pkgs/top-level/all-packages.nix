@@ -2302,8 +2302,6 @@ with pkgs;
     ;
   citrix_workspace = citrix_workspace_25_05_0;
 
-  cmst = libsForQt5.callPackage ../tools/networking/cmst { };
-
   colord-gtk4 = colord-gtk.override { withGtk4 = true; };
 
   connmanFull = connman.override {
