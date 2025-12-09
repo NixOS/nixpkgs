@@ -384,14 +384,14 @@ let
 
     lua = rec {
       name = "lua";
-      version = "0.10.28";
+      version = "0.10.29";
 
       src = fetchFromGitHub {
         name = "lua";
         owner = "openresty";
         repo = "lua-nginx-module";
         rev = "v${version}";
-        hash = "sha256-GT1PpJWpEu5EciK4n9ZDz1gIU/ZdC/SAsIdu0niQy8o=";
+        hash = "sha256-z62Vwrthl1FJiTdrdhifZZe6crdi8c6sTkUim6KmVlU=";
       };
 
       inputs = [ luajit_openresty ];
