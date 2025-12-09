@@ -1,26 +1,25 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  typing-extensions,
   pytestCheckHook,
   pytest-cov-stub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "injector";
-  version = "0.22.0";
-  format = "setuptools";
+  version = "0.23.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-injector";
     repo = "injector";
     tag = version;
-    hash = "sha256-FRO/stQDTa4W1f6mLPDCJslYFfIvgS0EgoEhuh0rxwA=";
+    hash = "sha256-wF5gn6JdRatZkkxCLExVNRMPxQuaAZiWcEAfECKto2U=";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [ typing-extensions ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -30,9 +29,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "injector" ];
 
   meta = with lib; {
-    description = "Python dependency injection framework, inspired by Guice";
+    description = "Python dependency injection framework";
     homepage = "https://github.com/alecthomas/injector";
-    maintainers = [ ];
+    changelog = "https://github.com/python-injector/injector/blob/${src.tag}/CHANGES";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }
