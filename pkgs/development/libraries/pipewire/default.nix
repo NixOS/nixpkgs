@@ -66,6 +66,7 @@
   ffado,
   libselinux,
   libebur128,
+  bashNonInteractive,
 }:
 
 let
@@ -133,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     lilv
     ncurses
     readline
+    bashNonInteractive
   ]
   ++ (
     if enableSystemd then
