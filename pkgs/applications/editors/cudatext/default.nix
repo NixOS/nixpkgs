@@ -126,7 +126,6 @@ stdenv.mkDerivation rec {
     fi
   '') additionalLexers;
 
-
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
