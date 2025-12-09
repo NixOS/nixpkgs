@@ -64,7 +64,6 @@ lib.extendMkDerivation {
     "derivationArgs"
 
     # Hash attributes will be map to the corresponding outputHash*
-    "hash"
     "sha1"
     "sha256"
     "sha512"
@@ -214,11 +213,14 @@ lib.extendMkDerivation {
           }
         else if cacert != null then
           {
-            outputHashAlgo = "sha256";
-            outputHash = "";
+            outputHashAlgo = null;
+            outputHash = lib.fakeHash;
           }
         else
           throw "fetchurl requires a hash for fixed-output derivation: ${lib.generators.toPretty { } urls_}";
+
+      finalHashHasColon = lib.hasInfix ":" finalAttrs.hash;
+      finalHashColonMatch = lib.match "([^:]+)[:](.*)" finalAttrs.hash;
 
       resolvedUrl =
         let
@@ -259,7 +261,23 @@ lib.extendMkDerivation {
       preferHashedMirrors = false;
 
       # New-style output content requirements.
-      inherit (hash_) outputHashAlgo outputHash;
+      hash =
+        if
+          hash_.outputHashAlgo == null
+          || hash_.outputHash == ""
+          || lib.hasPrefix hash_.outputHashAlgo hash_.outputHash
+        then
+          hash_.outputHash
+        else
+          "${hash_.outputHashAlgo}:${hash_.outputHash}";
+      outputHashAlgo = if finalHashHasColon then lib.head finalHashColonMatch else null;
+      outputHash =
+        if finalAttrs.hash == "" then
+          lib.fakeHash
+        else if finalHashHasColon then
+          lib.elemAt finalHashColonMatch 1
+        else
+          finalAttrs.hash;
 
       # Disable TLS verification only when we know the hash and no credentials are
       # needed to access the resource
