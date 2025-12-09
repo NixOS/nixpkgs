@@ -5396,6 +5396,8 @@ self: super: with self; {
 
   fitfile = callPackage ../development/python-modules/fitfile { };
 
+  fitparse = callPackage ../development/python-modules/fitparse { };
+
   fivem-api = callPackage ../development/python-modules/fivem-api { };
 
   fixerio = callPackage ../development/python-modules/fixerio { };
@@ -13944,11 +13946,19 @@ self: super: with self; {
 
   pyobjc-framework-Cocoa = callPackage ../development/python-modules/pyobjc-framework-Cocoa { };
 
+  pyobjc-framework-CoreBluetooth =
+    callPackage ../development/python-modules/pyobjc-framework-CoreBluetooth
+      { };
+
   pyobjc-framework-Quartz = callPackage ../development/python-modules/pyobjc-framework-Quartz { };
 
   pyobjc-framework-Security = callPackage ../development/python-modules/pyobjc-framework-Security { };
 
   pyobjc-framework-WebKit = callPackage ../development/python-modules/pyobjc-framework-WebKit { };
+
+  pyobjc-framework-libdispatch =
+    callPackage ../development/python-modules/pyobjc-framework-libdispatch
+      { };
 
   pyocd = callPackage ../development/python-modules/pyocd { };
 
