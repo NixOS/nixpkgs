@@ -1414,8 +1414,6 @@ with pkgs;
 
   ### APPLICATIONS/TERMINAL-EMULATORS
 
-  cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
-
   kitty = callPackage ../by-name/ki/kitty/package.nix {
     inherit (darwin) autoSignDarwinBinariesHook;
   };
