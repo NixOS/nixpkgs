@@ -5,6 +5,8 @@
   cargo-tauri,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pkg-config,
   glib-networking,
   openssl,
@@ -36,8 +38,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   patches = [ ./0001-disable-telemetry.patch ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_9;
     fetcherVersion = 1;
     hash = "sha256-ncoxliXnLxWEXL1Z7ixOULI/uYkxmfLiDWu1tDSRsrM=";
   };
@@ -49,7 +52,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     wrapGAppsHook3
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
 
   buildInputs = [

@@ -10,6 +10,8 @@
   makeWrapper,
   nodejs_20,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   electron,
   atk,
   atkmm,
@@ -60,8 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-K4GFLUeq/IbJC3FZBgvKnZq7JrXkqe6eVGsUxxlpWF0=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_10;
     fetcherVersion = 2;
     prePnpmInstall = ''
       export PATH=$PATH:${gitMinimal}/bin
@@ -72,7 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoPatchelfHook
     gobject-introspection
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10
     makeWrapper
     nodejs_20
   ];

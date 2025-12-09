@@ -6,9 +6,10 @@
   gitMinimal,
   gitSetupHook,
   pnpm_8,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nix-update-script,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "vtsls";
   version = "0.2.9";
@@ -26,20 +27,22 @@ stdenv.mkDerivation (finalAttrs: {
     # patches are applied with git during build
     gitMinimal
     gitSetupHook
-    pnpm_8.configHook
+    pnpmConfigHook
+    pnpm_8
   ];
 
   buildInputs = [ nodejs_22 ];
 
   pnpmWorkspaces = [ "@vtsls/language-server" ];
 
-  pnpmDeps = pnpm_8.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pnpmWorkspaces
       pname
       src
       version
       ;
+    pnpm = pnpm_8;
     fetcherVersion = 1;
     hash = "sha256-SdqeTYRH60CyU522+nBo0uCDnzxDP48eWBAtGTL/pqg=";
   };
