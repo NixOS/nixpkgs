@@ -72,7 +72,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/ansible-community/molecule";
     changelog = "https://github.com/ansible/molecule/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ dawidd6 ];
+    maintainers = [ ];
     mainProgram = "molecule";
   };
 }
