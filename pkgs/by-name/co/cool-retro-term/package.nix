@@ -2,16 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  mkDerivation,
-  qtbase,
-  qmltermwidget,
-  qtquickcontrols2,
-  qtgraphicaleffects,
-  qmake,
+  libsForQt5,
   nixosTests,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   version = "1.2.0";
   pname = "cool-retro-term";
 
@@ -27,13 +22,16 @@ mkDerivation rec {
   '';
 
   buildInputs = [
-    qtbase
-    qmltermwidget
-    qtquickcontrols2
-    qtgraphicaleffects
+    libsForQt5.qtbase
+    libsForQt5.qmltermwidget
+    libsForQt5.qtquickcontrols2
+    libsForQt5.qtgraphicaleffects
   ];
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
+  ];
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 
