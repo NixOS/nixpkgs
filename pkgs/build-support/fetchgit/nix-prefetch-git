@@ -12,6 +12,7 @@ fetchSubmodules=
 fetchLFS=
 builder=
 fetchTags=
+fetchTagsCompat=
 branchName=$NIX_PREFETCH_GIT_BRANCH_NAME
 
 # ENV params
@@ -116,10 +117,16 @@ for arg; do
     fi
 done
 
+# `deepClone` used to effectively imply `fetchTags`.
+# We avoid such behaviour to enhance the `postCheckout` reproducibility,
+# while keeping the old behaviour for `.git` for backward compatibility purposes.
+if [[ -n "$deepClone" ]] && [[ -z "$leaveDotGit" ]]; then
+    fetchTagsCompat=true
+fi
+
 if test -z "$url"; then
     usage
 fi
-
 
 init_remote(){
     local url=$1
@@ -181,9 +188,30 @@ checkout_hash(){
         hash=$(hash_from_ref "$ref")
     fi
 
-    [[ -z "$deepClone" ]] && \
-    clean_git fetch ${builder:+--progress} --depth=1 origin "$hash" || \
-    clean_git fetch -t ${builder:+--progress} origin || return 1
+    local -a fetchTagsArgs
+    if [[ -n "$fetchTags" ]]; then
+        fetchTagsArgs=(--tags)
+    else
+        fetchTagsArgs=(--no-tags)
+    fi
+    local -a fetchTargetArgs
+    if [[ -n "$deepClone" ]]; then
+        fetchTargetArgs=(origin)
+    else
+        fetchTargetArgs=(--depth=1 origin "$hash")
+    fi
+    if ! clean_git fetch "${fetchTagsArgs[@]}" ${builder:+--progress} "${fetchTargetArgs[@]}"; then
+        echo "ERROR: \`git fetch' failed." >&2
+        # Git remotes using the "dumb" protocol does not support shallow fetch;
+        # fall back to deep fetch if shallow fetch failed.
+        # TODO(@ShamrockLee): Determine whether the transfer protocol is smart reliably.
+        if [[ -z "$deepClone" ]] || [[ -z "$fetchTags" ]]; then
+            echo "This might be due to the dumb transfer protocol not supporting shallow fetch or no-tag cloning. Trying with \`--tags' and without \`--depth=1'..." >&2
+            clean_git fetch --tags ${builder:+--progress} origin || return 1
+        else
+            return 1
+        fi
+    fi
 
     local object_type=$(git cat-file -t "$hash")
     if [[ "$object_type" == "commit" || "$object_type" == "tag" ]]; then
@@ -253,7 +281,8 @@ clone(){
     )
 
     # Fetch all tags if requested
-    if test -n "$fetchTags"; then
+    # The fetched tags are potentially non-reproducible, as tags are mutable parts of the Git tree.
+    if [[ -n "$fetchTags" ]] || [[ -n "$fetchTagsCompat" ]]; then
         echo "fetching all tags..." >&2
         clean_git fetch origin 'refs/tags/*:refs/tags/*' || echo "warning: failed to fetch some tags" >&2
     fi
