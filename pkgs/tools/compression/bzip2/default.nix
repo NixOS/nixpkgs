@@ -79,6 +79,15 @@ stdenv.mkDerivation (
       pkgConfigModules = [ "bzip2" ];
       platforms = platforms.all;
       maintainers = with maintainers; [ mic92 ];
+      outputs = {
+        bin = {
+          type = packageTypes.application;
+          mainProgram = "bzip2";
+        };
+        out = {
+          type = packageTypes.library;
+        };
+      };
     };
   }
 )

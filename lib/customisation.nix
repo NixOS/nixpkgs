@@ -412,6 +412,9 @@ rec {
               assert condition;
               drv.${outputName}.outPath;
           }
+          // optionalAttrs (passthru ? meta) {
+            meta = commonAttrs.meta // passthru.meta.outputs.${outputName} or { };
+          }
           //
             # TODO: give the derivation control over the outputs.
             #       `overrideAttrs` may not be the only attribute that needs
@@ -432,6 +435,9 @@ rec {
       outPath =
         assert condition;
         drv.outPath;
+    }
+    // optionalAttrs (passthru ? meta) {
+      meta = commonAttrs.meta // passthru.meta.outputs.${drv.outputName or "out"} or { };
     };
 
   /**
