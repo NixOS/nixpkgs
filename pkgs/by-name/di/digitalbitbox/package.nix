@@ -1,5 +1,5 @@
 {
-  mkDerivation,
+  stdenv,
   lib,
   autoreconfHook,
   curl,
@@ -7,15 +7,12 @@
   git,
   libevent,
   libtool,
+  libsForQt5,
   qrencode,
   udev,
   libusb1,
   makeWrapper,
   pkg-config,
-  qtbase,
-  qttools,
-  qtwebsockets,
-  qtmultimedia,
   udevRule51 ? ''
     SUBSYSTEM=="usb", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="dbb%n", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2402"
   '',
@@ -49,7 +46,7 @@
 let
   copyUdevRuleToOutput = name: rule: "cp ${writeText name rule} $out/etc/udev/rules.d/${name}";
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "digitalbitbox";
   version = "3.0.0";
 
@@ -71,8 +68,9 @@ mkDerivation rec {
     git
     makeWrapper
     pkg-config
-    qttools
+    libsForQt5.qttools
     udevCheckHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -81,18 +79,17 @@ mkDerivation rec {
     udev
     libusb1
     qrencode
-
-    qtbase
-    qtwebsockets
-    qtmultimedia
+    libsForQt5.qtbase
+    libsForQt5.qtwebsockets
+    libsForQt5.qtmultimedia
   ];
 
-  LUPDATE = "${qttools.dev}/bin/lupdate";
-  LRELEASE = "${qttools.dev}/bin/lrelease";
-  MOC = "${qtbase.dev}/bin/moc";
-  QTDIR = qtbase.dev;
-  RCC = "${qtbase.dev}/bin/rcc";
-  UIC = "${qtbase.dev}/bin/uic";
+  LUPDATE = "${libsForQt5.qttools.dev}/bin/lupdate";
+  LRELEASE = "${libsForQt5.qttools.dev}/bin/lrelease";
+  MOC = "${libsForQt5.qtbase.dev}/bin/moc";
+  QTDIR = libsForQt5.qtbase.dev;
+  RCC = "${libsForQt5.qtbase.dev}/bin/rcc";
+  UIC = "${libsForQt5.qtbase.dev}/bin/uic";
 
   configureFlags = [
     "--enable-libusb"

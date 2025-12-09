@@ -403,8 +403,6 @@ with pkgs;
     name = "die-hook";
   } ../build-support/setup-hooks/die.sh;
 
-  digitalbitbox = libsForQt5.callPackage ../applications/misc/digitalbitbox { };
-
   devShellTools = callPackage ../build-support/dev-shell-tools { };
 
   dockerTools = callPackage ../build-support/docker {
