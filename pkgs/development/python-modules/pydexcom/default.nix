@@ -4,7 +4,6 @@
   fetchFromGitHub,
   hatch-vcs,
   hatchling,
-  pythonOlder,
   requests,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pydexcom";
   version = "0.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "gagebenne";
@@ -37,7 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API to interact with Dexcom Share service";
     homepage = "https://github.com/gagebenne/pydexcom";
-    changelog = "https://github.com/gagebenne/pydexcom/releases/tag/${version}";
+    changelog = "https://github.com/gagebenne/pydexcom/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
