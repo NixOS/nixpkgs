@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "3D widget set based on the Athena Widget set";
+    homepage = "https://gitlab.freedesktop.org/xorg/lib/libxaw3d";
     platforms = lib.platforms.unix;
     license = licenses.mit;
   };

@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Set of network-related (mostly VPN-related) tools";
+    homepage = "https://github.com/ambrop72/badvpn";
     license = licenses.bsd3;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

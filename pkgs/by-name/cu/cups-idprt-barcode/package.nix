@@ -44,6 +44,7 @@ stdenvNoCC.mkDerivation {
 
   meta = {
     description = "CUPS drivers for iDPRT barcode printers (iD2P, iD2X, iD4P, iD4S, iE2P, iE2X, iE4P, iE4S, iT4B, iT4E, iT4P, iT4S, iT4X, iX4E, iX4L, iX4P, iX4E, iX6P)";
+    homepage = "https://www.idprt.com/";
     platforms = [
       "x86_64-linux"
       "x86-linux"

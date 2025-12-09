@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Block layer IO tracing mechanism";
+    homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/axboe/blktrace.git/about/";
     maintainers = with maintainers; [ nickcao ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

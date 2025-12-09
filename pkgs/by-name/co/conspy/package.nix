@@ -35,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Linux text console viewer";
+    homepage = "https://conspy.sourceforge.net/";
     mainProgram = "conspy";
     license = lib.licenses.epl10;
     maintainers = with lib.maintainers; [ raskin ];

@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Various fonts from the DOSEmu project";
+    homepage = "https://dosemu.sourceforge.net/";
     license = lib.licenses.gpl2Only;
   };
 }

@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
       x11
       mit
     ];
-    downloadPage = "http://tangramgames.dk/games/90secondportraits";
+    homepage = "http://tangramgames.dk/games/90secondportraits";
   };
 
 }

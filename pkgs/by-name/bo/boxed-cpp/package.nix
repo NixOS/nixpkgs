@@ -23,6 +23,7 @@ stdenv.mkDerivation (final: {
 
   meta = with lib; {
     description = "Boxing primitive types in C++";
+    homepage = "https://github.com/contour-terminal/boxed-cpp";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = [ maintainers.moni ];

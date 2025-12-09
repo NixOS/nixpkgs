@@ -127,6 +127,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Small open source library for using 3D graphics hardware for rendering";
+    homepage = "https://gitlab.gnome.org/Archive/cogl";
     maintainers = with maintainers; [ lovek323 ];
 
     longDescription = ''

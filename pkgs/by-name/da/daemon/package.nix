@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
       writing daemons in languages other than C, C++ or Perl (e.g. /bin/sh,
       Java).
     '';
+    homepage = "https://libslack.org/daemon/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.sander ];
     platforms = platforms.unix;

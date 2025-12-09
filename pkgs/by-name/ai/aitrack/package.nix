@@ -44,6 +44,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "6DoF Head tracking software";
+    homepage = "https://github.com/mdk97/aitrack-linux";
     mainProgram = "aitrack";
     maintainers = with maintainers; [ ck3d ];
     platforms = platforms.linux;

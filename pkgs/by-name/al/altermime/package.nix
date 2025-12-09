@@ -33,7 +33,7 @@ gccStdenv.mkDerivation rec {
     maintainers = [ maintainers.raskin ];
     platforms = platforms.all;
     license.fullName = "alterMIME LICENSE";
-    downloadPage = "https://pldaniels.com/altermime/";
+    homepage = "https://pldaniels.com/altermime/";
     mainProgram = "altermime";
   };
 }

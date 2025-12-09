@@ -28,6 +28,7 @@ buildGoModule rec {
 
   meta = with lib; {
     mainProgram = "drone";
+    homepage = "https://drone.io";
     maintainers = with maintainers; [ techknowlogick ];
     license = licenses.asl20;
     description = "Command line client for the Drone continuous integration server";

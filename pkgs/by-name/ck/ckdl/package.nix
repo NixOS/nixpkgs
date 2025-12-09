@@ -59,6 +59,7 @@ pkgs.stdenv.mkDerivation {
 
   meta = {
     description = "C library that implements reading and writing the KDL Document Language";
+    homepage = "https://github.com/tjol/ckdl";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };
