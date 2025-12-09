@@ -2,46 +2,37 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  unstableGitUpdater,
+
+  pkg-config,
 
   SDL2,
-
   libX11,
   libXext,
-
-  guiBackend ? "sdl",
-
-  enableSDL ? guiBackend == "sdl",
-  enableX11 ? guiBackend == "x11",
+  libxkbcommon,
+  wayland,
 }:
 
-assert lib.assertMsg (builtins.elem guiBackend [
-  "sdl"
-  "x11"
-  "none"
-]) "Unsupported GUI backend";
-assert lib.assertMsg (!(enableSDL && enableX11)) "RVVM can have only one GUI backend at a time";
-assert lib.assertMsg (
-  stdenv.hostPlatform.isDarwin -> !enableX11
-) "macOS supports only SDL GUI backend";
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rvvm";
-  version = "0.6";
+  version = "0.6-unstable-2025-10-02";
 
   src = fetchFromGitHub {
     owner = "LekKit";
     repo = "RVVM";
-    rev = "v${version}";
-    sha256 = "sha256-5nSlKyWDAx0EeKFzzwP5+99XuJz9BHXEF1WNkRMLa9U=";
+    rev = "2247f2dca3955f22d651118d5a50e853cc77b780";
+    sha256 = "sha256-gwyG/rV5Fv2dhFhD4P2+SPHSmmhH7mvTk6i///UClyg=";
   };
 
-  buildInputs =
-    [ ]
-    ++ lib.optionals enableSDL [ SDL2 ]
-    ++ lib.optionals enableX11 [
-      libX11
-      libXext
-    ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    SDL2
+    libX11
+    libXext
+    libxkbcommon
+    wayland
+  ];
 
   enableParallelBuilding = true;
 
@@ -51,10 +42,15 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
+    "USE_SDL=2"
     "PREFIX=$(out)"
-  ]
-  ++ lib.optional enableSDL "USE_SDL=2" # Use SDL2 instead of SDL1
-  ++ lib.optional (!enableSDL && !enableX11) "USE_FB=0";
+  ];
+
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+    # Match tags ending in digit to avoid tags like v0.7-git which are not releases
+    tagFormat = "v*.*[0-9]";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/LekKit/RVVM";
@@ -64,7 +60,10 @@ stdenv.mkDerivation rec {
       mpl20
     ];
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ kamillaova ];
+    maintainers = with maintainers; [
+      dramforever
+      kamillaova
+    ];
     mainProgram = "rvvm";
   };
 }
