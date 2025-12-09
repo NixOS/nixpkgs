@@ -20,36 +20,37 @@ let
   web = stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "${pname}-web";
     inherit version src;
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND"
-      "SOCKS_SERVER"
-    ];
+    bunDeps = bun.fetchDeps {
+      inherit (finalAttrs)
+        pname
+        version
+        src
+        sourceRoot
+        ;
+      hash = "sha256-CzQXdx2nLHHd9Fjiu4P5V5uFuhBkpzGyTBqhlLehtIw=";
+    };
+
     sourceRoot = "${finalAttrs.src.name}/web";
     nativeBuildInputs = [
-      bun
+      bun.configHook
       nodejs-slim_latest
     ];
-    configurePhase = ''
-      runHook preConfigure
-      bun install --no-progress --frozen-lockfile
-      substituteInPlace node_modules/.bin/{vite,tsc} \
-        --replace-fail "/usr/bin/env node" "${nodejs-slim_latest}/bin/node"
-      runHook postConfigure
-    '';
+
     buildPhase = ''
       runHook preBuild
+
       bun run build
+
       runHook postBuild
     '';
     installPhase = ''
       runHook preInstall
+
       mkdir -p $out/dist
       cp -R ./dist $out
+
       runHook postInstall
     '';
-    outputHash = "sha256-Ac1PJYmTQv9XrmhmF1p77vdXh8252hz0CUKxJA+VQR4=";
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
   });
 in
 rustPlatform.buildRustPackage {
