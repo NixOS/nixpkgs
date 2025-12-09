@@ -29,6 +29,8 @@ rustPlatform.buildRustPackage rec {
       mit # or
       asl20
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      acuteaangle
+    ];
   };
 }
