@@ -22,6 +22,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  pythonImportsCheck = [ "parso" ];
+
   meta = {
     description = "Python Parser";
     homepage = "https://parso.readthedocs.io/en/latest/";
