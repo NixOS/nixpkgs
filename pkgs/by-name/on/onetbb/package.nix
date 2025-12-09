@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
       template-based runtime library can help you harness the latent
       performance of multi-core processors.
     '';
-    platforms = lib.platforms.all;
+    platforms = lib.subtractLists lib.platforms.cygwin lib.platforms.all;
     maintainers = with lib.maintainers; [
       silvanshade
       thoughtpolice
