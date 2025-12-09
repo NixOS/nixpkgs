@@ -107,8 +107,8 @@ in
         description = ''
           Set option for pool directives.
 
-          Default is the same as server option. Use `iburst` to rapidly poll on
-          startup. Use `offline` to prevent polling on startup.
+          Default is the same as server option. Use "iburst" to rapidly poll on
+          startup. Use "offline" to prevent polling on startup.
         '';
       };
 
