@@ -18,40 +18,47 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-l7TQwCzQNwrsM+xRcRcQaxIsnd8SVzrqEMwIoZGVBR0=";
   };
-
   web = stdenvNoCC.mkDerivation (finalAttrsWeb: {
     pname = "${finalAttrs.pname}-web";
     inherit (finalAttrs) version src;
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND"
-      "SOCKS_SERVER"
-    ];
-    sourceRoot = "${finalAttrsWeb.src.name}/web";
+    bunDeps = bun.fetchDeps {
+      inherit (finalAttrsWeb)
+        pname
+        version
+        src
+        sourceRoot
+        ;
+      hash = "sha256-ueQXZnPn97lUkxGtSdliDIgDiXd/Uwa5I/tWZvG/yZQ=";
+    };
+
+    sourceRoot = "${finalAttrs.src.name}/web";
     nativeBuildInputs = [
-      bun
+      bun.configHook
       nodejs-slim_latest
     ];
-    configurePhase = ''
+
+    patchPhase = ''
       runHook preConfigure
-      bun install --no-progress --frozen-lockfile
       substituteInPlace node_modules/.bin/{vite,tsc} \
         --replace-fail "/usr/bin/env node" "${nodejs-slim_latest}/bin/node"
       runHook postConfigure
     '';
+
     buildPhase = ''
       runHook preBuild
+
       bun run build
+
       runHook postBuild
     '';
     installPhase = ''
       runHook preInstall
+
       mkdir -p $out/dist
       cp -R ./dist $out
+
       runHook postInstall
     '';
-    outputHash = "sha256-uLsWppRabaI7JSHYf3YsEvf0Y36kU/iuNXnDXd+6AXY=";
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
   });
 
   cargoHash = "sha256-1VSbv6lDRRLZIu7hYrAqzQmvxcuhnPU0rcWfg7Upcm4=";
