@@ -15,15 +15,15 @@
   portaudio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guglielmo";
   version = "0.5";
 
   src = fetchFromGitHub {
     owner = "marcogrecopriolo";
     repo = "guglielmo";
-    rev = "v${version}";
-    sha256 = "sha256-W+KTwtxbTDrtONmkw95gXT28n3k9KS364WOzLLJdGLM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-W+KTwtxbTDrtONmkw95gXT28n3k9KS364WOzLLJdGLM=";
   };
 
   postInstall = ''
@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
     patchelf --add-rpath "${airspy}/lib:${rtl-sdr}/lib" $out/bin/.guglielmo-wrapped
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Qt based FM / Dab tuner";
     mainProgram = "guglielmo";
     homepage = "https://github.com/marcogrecopriolo/guglielmo";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.markuskowa ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
   };
-}
+})
