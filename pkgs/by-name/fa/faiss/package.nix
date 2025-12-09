@@ -3,7 +3,7 @@
   config,
   fetchFromGitHub,
   stdenv,
-  capiSupport ? false,
+  capiSupport ? true,
   cmake,
   cudaPackages ? { },
   cudaSupport ? config.cudaSupport,
