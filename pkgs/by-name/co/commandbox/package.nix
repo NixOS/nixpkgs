@@ -27,11 +27,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta =  {
     description = "CommandBox CFML CLI, package manager, and embedded CFML server";
     homepage    = "https://www.ortussolutions.com/products/commandbox";
-    license     = licenses.asl20;
-    platforms   = platforms.linux;
+    license     = lib.licenses.asl20;
+    platforms   = lib.platforms.linux;
     mainProgram = "box";
     maintainers = [ ];
   };
