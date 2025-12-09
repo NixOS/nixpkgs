@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
+  uv-build,
 
   # dependencies
   asgiref,
@@ -20,17 +20,22 @@
 
 buildPythonPackage rec {
   pname = "django-countries";
-  version = "7.6.1";
+  version = "8.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SmileyChris";
     repo = "django-countries";
     tag = "v${version}";
-    hash = "sha256-IR9cJbDVkZrcF3Ti70mV8VeXINQDK8OpwUTWVjD4Zn0=";
+    hash = "sha256-S7jiKepHDm2k4RaQ35mWnUtDsWNoKpscE8r7G8nIekI=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.6,<0.10.0" "uv_build"
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [
     asgiref
@@ -52,7 +57,7 @@ buildPythonPackage rec {
       forms, flag icons static files, and a country field for models.
     '';
     homepage = "https://github.com/SmileyChris/django-countries";
-    changelog = "https://github.com/SmileyChris/django-countries/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/SmileyChris/django-countries/blob/${src.tag}/CHANGES.md";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };
