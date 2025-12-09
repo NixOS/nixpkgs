@@ -11,14 +11,14 @@
 
 let
 
-  pkg = buildGoModule rec {
+  pkg = buildGoModule (finalAttrs: {
     pname = "arduino-cli";
     version = "1.4.0";
 
     src = fetchFromGitHub {
       owner = "arduino";
       repo = "arduino-cli";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-H7vccxDzJt0e/91PIV6Qg8nRD0beb/3g7AZ4uk2ebXU=";
     };
 
@@ -62,7 +62,7 @@ let
     ldflags = [
       "-s"
       "-w"
-      "-X github.com/arduino/arduino-cli/internal/version.versionString=${version}"
+      "-X github.com/arduino/arduino-cli/internal/version.versionString=${finalAttrs.version}"
       "-X github.com/arduino/arduino-cli/internal/version.commit=unknown"
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags '-static'" ];
@@ -75,10 +75,10 @@ let
     '';
 
     meta = {
-      inherit (src.meta) homepage;
+      inherit (finalAttrs.src.meta) homepage;
       description = "Arduino from the command line";
       mainProgram = "arduino-cli";
-      changelog = "https://github.com/arduino/arduino-cli/releases/tag/${version}";
+      changelog = "https://github.com/arduino/arduino-cli/releases/tag/${finalAttrs.version}";
       license = with lib.licenses; [
         gpl3Only
         asl20
@@ -89,7 +89,7 @@ let
       ];
     };
 
-  };
+  });
 
 in
 if stdenv.hostPlatform.isLinux then
