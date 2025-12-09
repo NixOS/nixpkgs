@@ -171,7 +171,7 @@ lib.makeScope
 
       heirloom = callPackage ./heirloom {
         bash = bash_2_05;
-        tinycc = tinycc-bootstrappable;
+        tinycc = tinycc-mes;
       };
 
       heirloom-devtools = callPackage ./heirloom-devtools { tinycc = tinycc-mes; };
