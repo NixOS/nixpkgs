@@ -18883,6 +18883,12 @@
     githubId = 41154684;
     name = "nokazn";
   };
+  nolith = {
+    github = "nolith";
+    githubId = 78752;
+    name = "Alessio Caiazza";
+    matrix = "@alessio:caiazza.info";
+  };
   nomaterials = {
     email = "nomaterials@gmail.com";
     github = "no-materials";
