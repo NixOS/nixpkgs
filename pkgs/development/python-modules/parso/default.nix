@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
 }:
 
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   version = "0.8.5";
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-A01zVKmgGL3ONS9IsqikUPBenW7oXbhHZOm2vZba/lo=";
+  src = fetchFromGitHub {
+    owner = "davidhalter";
+    repo = "parso";
+    tag = "v${version}";
+    hash = "sha256-faSXCrOkybLr0bboF/8rPV/Humq8s158A3UOpdlYi0I=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
