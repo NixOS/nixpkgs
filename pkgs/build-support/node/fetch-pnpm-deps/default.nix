@@ -10,9 +10,8 @@
   yq,
   zstd,
 }:
-
 let
-  pnpm' = pnpm;
+  pnpmLatest = pnpm;
 
   supportedFetcherVersions = [
     1 # First version. Here to preserve backwards compatibility
@@ -21,11 +20,11 @@ let
   ];
 in
 {
-  fetchDeps = lib.makeOverridable (
+  fetchPnpmDeps = lib.makeOverridable (
     {
       hash ? "",
       pname,
-      pnpm ? pnpm',
+      pnpm ? pnpmLatest,
       pnpmWorkspaces ? [ ],
       prePnpmInstall ? "",
       pnpmInstallFlags ? [ ],
@@ -50,15 +49,15 @@ in
     in
     # pnpmWorkspace was deprecated, so throw if it's used.
     assert (lib.throwIf (args ? pnpmWorkspace)
-      "pnpm.fetchDeps: `pnpmWorkspace` is no longer supported, please migrate to `pnpmWorkspaces`."
+      "fetchPnpmDeps: `pnpmWorkspace` is no longer supported, please migrate to `pnpmWorkspaces`."
     ) true;
 
     assert (lib.throwIf (fetcherVersion == null)
-      "pnpm.fetchDeps: `fetcherVersion` is not set, see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."
+      "fetchPnpmDeps: `fetcherVersion` is not set, see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."
     ) true;
 
     assert (lib.throwIf (!(builtins.elem fetcherVersion supportedFetcherVersions))
-      "pnpm.fetchDeps `fetcherVersion` is not set to a supported value (${lib.concatStringsSep ", " (map toString supportedFetcherVersions)}), see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."
+      "fetchPnpmDeps `fetcherVersion` is not set to a supported value (${lib.concatStringsSep ", " (map toString supportedFetcherVersions)}), see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."
     ) true;
 
     stdenvNoCC.mkDerivation (
@@ -72,7 +71,7 @@ in
             cacert
             jq
             moreutils
-            args.pnpm or pnpm'
+            pnpm # from args
             yq
             zstd
           ];
@@ -176,7 +175,7 @@ in
           passthru = {
             inherit fetcherVersion;
             serve = callPackage ./serve.nix {
-              pnpm = args.pnpm or pnpm';
+              inherit pnpm; # from args
               pnpmDeps = finalAttrs.finalPackage;
             };
           };
@@ -190,10 +189,9 @@ in
     )
   );
 
-  configHook = makeSetupHook {
+  pnpmConfigHook = makeSetupHook {
     name = "pnpm-config-hook";
     propagatedBuildInputs = [
-      pnpm
       zstd
     ];
     substitutions = {
