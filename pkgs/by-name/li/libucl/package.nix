@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libucl";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "vstakhov";
     repo = "libucl";
     rev = version;
-    sha256 = "sha256-esNEVBa660rl3Oo2SLaLrFThFkjbqtZ1r0tjMq3h6cM=";
+    sha256 = "sha256-dub829xZ10sJ5qwegYUiGoyAVLiwg44GKSzz+BMLJis=";
   };
 
   nativeBuildInputs = [
