@@ -11,7 +11,6 @@
   pytest-asyncio,
   pytest-vcr,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "pubnub";
   version = "10.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pubnub";
