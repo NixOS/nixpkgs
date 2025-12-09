@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta =  {
-    description = "CommandBox CFML CLI, package manager, and embedded CFML server";
+    description = "CFML CLI, package manager, and embedded CFML server";
     homepage    = "https://www.ortussolutions.com/products/commandbox";
     license     = lib.licenses.asl20;
     platforms   = lib.platforms.linux;
