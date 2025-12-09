@@ -6,7 +6,6 @@
   bison,
   glm,
   flex,
-  wrapQtAppsHook,
   cmake,
   pkg-config,
   libglut,
@@ -14,6 +13,7 @@
   imagemagick,
   fftw,
   eigen,
+  libsForQt5,
   libtirpc,
   boehmgc,
   libGLU,
@@ -24,8 +24,6 @@
   gsl,
   libsigsegv,
   python3,
-  qtbase,
-  qtsvg,
   boost186,
   zlib,
   perl,
@@ -61,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     flex
     bison
     texinfo
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
     cmake
     ghostscriptX
     perl
@@ -101,8 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     perl
     curl
-    qtbase
-    qtsvg
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
     # relies on removed asio::io_service
     # https://github.com/kuafuwang/LspCpp/issues/52
     boost186
@@ -199,11 +197,11 @@ stdenv.mkDerivation (finalAttrs: {
   #   make: *** [Makefile:272: install-asy] Error 1
   enableParallelInstalling = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for programming graphics intended to replace Metapost";
     homepage = "https://asymptote.sourceforge.io/";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

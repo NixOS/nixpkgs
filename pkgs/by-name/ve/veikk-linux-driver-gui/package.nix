@@ -1,22 +1,25 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
-  qmake,
+  libsForQt5,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "veikk-linux-driver-gui";
   version = "2.0";
 
   src = fetchFromGitHub {
     owner = "jlam55555";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "02g1q79kwjlzg95w38a1d7nxvcry8xcsvhax2js4c7xqvzhkki5j";
+    repo = "veikk-linux-driver-gui";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ssQ54d+4H0a0FF3BrVlHPrPd7WlBocFLep9KPtPB4Qk=";
   };
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
+  ];
 
   postBuild = ''
     make all clean
@@ -27,12 +30,12 @@ mkDerivation rec {
     cp veikk-linux-driver-gui $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Configuration tool for the VEIKK Linux driver";
     homepage = "https://github.com/jlam55555/veikk-linux-driver-gui/";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ nicbk ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.nicbk ];
     mainProgram = "veikk-linux-driver-gui";
   };
-}
+})

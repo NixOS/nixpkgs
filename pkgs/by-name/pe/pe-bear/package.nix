@@ -3,48 +3,47 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  qtbase,
-  wrapQtAppsHook,
+  libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pe-bear";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "hasherezade";
     repo = "pe-bear";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jWRO0vO601IijFo7nu0SMF8inEXWLzv+Ni1nlJfGqhQ=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Portable Executable reversing tool with a friendly GUI";
     mainProgram = "PE-bear";
     homepage = "https://hshrzd.wordpress.com/pe-bear/";
 
-    license = [
+    license = with lib.licenses; [
       # PE-Bear
-      licenses.gpl2Only
+      gpl2Only
 
       # Vendored capstone
-      licenses.bsd3
+      bsd3
 
       # Vendored bearparser
-      licenses.bsd2
+      bsd2
     ];
 
-    maintainers = with maintainers; [ blitz ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.blitz ];
+    platforms = lib.platforms.linux;
   };
-}
+})
