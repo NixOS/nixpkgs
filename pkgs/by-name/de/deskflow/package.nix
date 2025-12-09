@@ -5,8 +5,6 @@
   cmake,
   ninja,
   pkg-config,
-  tomlplusplus,
-  cli11,
   gtest,
   libei,
   libportal,
@@ -34,13 +32,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deskflow";
-  version = "1.24.0";
+  version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "deskflow";
     repo = "deskflow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eXQXHi8TMMwyIkZ7gQ9GHIzSOM2rtzV+w1R7hxS+WSA=";
+    hash = "sha256-IclKXYCvYHMK4e1z1efmOHUaJqnmZgofK5r6Ml+i5OI=";
   };
 
   postPatch = ''
@@ -65,8 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   buildInputs = [
-    tomlplusplus
-    cli11
     gtest
     libei
     libportal
@@ -84,6 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     wayland-protocols
     qt6.qtwayland
+    qt6.qtdeclarative
+    qt6.qttools
     wayland
     libsysprof-capture
     lerc
