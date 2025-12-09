@@ -20,8 +20,8 @@ buildPythonPackage rec {
   pyproject = true;
 
   outputs = [
-    "doc"
     "out"
+    "doc"
   ];
 
   src = fetchFromGitHub {
