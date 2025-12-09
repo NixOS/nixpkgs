@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkgs,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,6 +25,8 @@ rustPlatform.buildRustPackage rec {
     wrapProgramBinary $out/bin/rust-script \
       --prefix PATH : ${lib.makeBinPath [ pkgs.cargo ]}
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   # tests require network access
   doCheck = false;
