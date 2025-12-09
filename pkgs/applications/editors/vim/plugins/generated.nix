@@ -21040,6 +21040,7 @@ final: prev: {
     pname = "vim-snipmate";
     version = "2025-05-14";
     src = fetchFromGitHub {
+      owner = "garbas";
       repo = "vim-snipmate";
       rev = "1331cfe8cbf9b9d79f4b60c1afc211b77c181ad4";
       sha256 = "0dmypsgn6lxq2irxcigxh79l923ph4qk4m2hg27mjd8m079x4j2r";
