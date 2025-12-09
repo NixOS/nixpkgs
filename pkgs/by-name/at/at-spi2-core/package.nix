@@ -91,6 +91,13 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (!systemdSupport) [
     "-Duse_systemd=false"
+  ]
+  ++ lib.optionals (!withIntrospection) [
+    (lib.mesonEnable "introspection" false)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
+    # The adaptor is only available as a shared object, as gtk2 loads it dynamically
+    (lib.mesonBool "gtk2_atk_adaptor" false)
   ];
 
   passthru = {
