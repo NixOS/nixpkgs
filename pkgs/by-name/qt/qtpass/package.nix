@@ -11,15 +11,15 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qtpass";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "IJHack";
     repo = "QtPass";
-    rev = "v${version}";
-    sha256 = "sha256-oKLLmsuXD2Hb2LQ4tcJP2gpR6eLaM/JzDhRcRSpUPYI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oKLLmsuXD2Hb2LQ4tcJP2gpR6eLaM/JzDhRcRSpUPYI=";
   };
 
   postPatch = ''
@@ -72,12 +72,12 @@ stdenv.mkDerivation rec {
     install -D qtpass.1 -t $out/share/man/man1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Multi-platform GUI for pass, the standard unix password manager";
     mainProgram = "qtpass";
     homepage = "https://qtpass.org";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.hrdinka ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.hrdinka ];
+    platforms = lib.platforms.all;
   };
-}
+})
