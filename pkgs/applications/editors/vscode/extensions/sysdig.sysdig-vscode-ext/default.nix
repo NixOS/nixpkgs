@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "sysdig-vscode-ext";
     publisher = "sysdig";
-    version = "0.2.12";
-    hash = "sha256-3sn1YQHOZW/SigV6eyubPJoQbTwqNNwlsXIEmevs2zc=";
+    version = "0.2.14";
+    hash = "sha256-b4e5Qgk8YfI1nAB8yrM5k0svgebgZSucXRktkK0EItk=";
   };
 
   meta = {
