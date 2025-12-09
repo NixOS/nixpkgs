@@ -797,7 +797,7 @@ rec {
     ## `pkgs.writers.writeNim` usage example
 
     ```nix
-      writeNim "hello-nim" { nim = pkgs.nim2; } ''
+      writeNim "hello-nim" { nim = pkgs.nim; } ''
         echo "hello nim"
       '';
     ```
@@ -807,7 +807,7 @@ rec {
     name:
     {
       makeWrapperArgs ? [ ],
-      nim ? pkgs.nim2,
+      nim ? pkgs.nim,
       nimCompileOptions ? { },
       strip ? true,
     }:

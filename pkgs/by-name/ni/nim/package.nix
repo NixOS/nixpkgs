@@ -8,7 +8,7 @@
   makeWrapper,
   openssl,
   pcre,
-  nim-unwrapped-2_2 ? buildPackages.nim-unwrapped-2_2,
+  nim-unwrapped ? buildPackages.nim-unwrapped,
 }:
 
 let
@@ -18,7 +18,7 @@ let
       targetPlatformConfig = stdenv.targetPlatform.config;
     in
     stdenv.mkDerivation (finalAttrs: {
-      name = "${targetPlatformConfig}-nim-wrapper-${nimUnwrapped.version}";
+      name = "${targetPlatformConfig}-nim-wrapper";
       inherit (nimUnwrapped) version;
       preferLocalBuild = true;
       strictDeps = true;
@@ -148,6 +148,6 @@ let
     });
 in
 wrapNim {
-  nimUnwrapped = nim-unwrapped-2_2;
+  nimUnwrapped = nim-unwrapped;
   patches = [ ./nim2.cfg.patch ];
 }
