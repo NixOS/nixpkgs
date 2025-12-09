@@ -1,6 +1,6 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -9,14 +9,13 @@
   fdk_aac,
   faad2,
   fftwFloat,
+  libsForQt5,
   libsndfile,
   libsamplerate,
   portaudio,
-  qtmultimedia,
-  qwt,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "guglielmo";
   version = "0.5";
 
@@ -34,6 +33,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    libsForQt5.wrapQtAppsHook
   ];
   buildInputs = [
     airspy
@@ -44,8 +44,8 @@ mkDerivation rec {
     libsndfile
     libsamplerate
     portaudio
-    qtmultimedia
-    qwt
+    libsForQt5.qtmultimedia
+    libsForQt5.qwt
   ];
 
   postFixup = ''

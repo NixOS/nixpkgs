@@ -1622,8 +1622,6 @@ with pkgs;
 
   go2tv-lite = go2tv.override { withGui = false; };
 
-  guglielmo = libsForQt5.callPackage ../applications/radio/guglielmo { };
-
   hinit = haskell.lib.compose.justStaticExecutables haskellPackages.hinit;
 
   hwi = with python3Packages; toPythonApplication hwi;
