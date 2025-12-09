@@ -58,6 +58,7 @@
   withUnfree ? false,
   withWaylandSupport ? false,
   withSDL2 ? false,
+  makeWrapper,
 
   # tries to compile and run generate_argument_docbook.c
   withManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
@@ -104,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wayland-scanner
     writableTmpDirAsHomeHook
+    makeWrapper
   ];
 
   buildInputs = [
@@ -205,6 +207,11 @@ stdenv.mkDerivation (finalAttrs: {
       "-Wno-error=incompatible-function-pointer-types"
     ]
   );
+
+  postFixup = lib.optionalString (withWaylandSupport && withSDL2) ''
+    wrapProgram $out/bin/sdl2-freerdp \
+      --set SDL_VIDEODRIVER wayland
+  '';
 
   passthru.tests = {
     inherit remmina;
