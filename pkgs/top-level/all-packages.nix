@@ -1074,8 +1074,6 @@ with pkgs;
 
   mkosi-full = mkosi.override { withQemu = true; };
 
-  ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
-
   openbugs = pkgsi686Linux.callPackage ../applications/science/machine-learning/openbugs { };
 
   openusd = python3Packages.openusd.override {
