@@ -230,5 +230,8 @@ buildDotnetModule (finalAttrs: {
           ''
       }
     '';
+    knownVulnerabilities = [
+      "CVE-2025-65955"
+    ];
   };
 })
