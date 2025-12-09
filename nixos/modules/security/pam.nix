@@ -135,6 +135,11 @@ let
 
       imports = [
         (lib.mkRenamedOptionModule [ "enableKwallet" ] [ "kwallet" "enable" ])
+        (lib.mkRemovedOptionModule [ "yubicoAuth" ] ''
+          security.pam.services.<name>.yubicoAuth has been removed as
+          yubico-pam module has been deprecated by Yubico. Consider
+          switching to security.pam.services.<name>.u2fAuth instead.
+        '')
       ];
 
       options = {
@@ -225,17 +230,6 @@ let
 
             Note that the  {option}`security.pam.ussh.enable` must also be
             set for this option to take effect.
-          '';
-        };
-
-        yubicoAuth = lib.mkOption {
-          default = config.security.pam.yubico.enable;
-          defaultText = lib.literalExpression "config.security.pam.yubico.enable";
-          type = lib.types.bool;
-          description = ''
-            If set, users listed in
-            {file}`~/.yubico/authorized_yubikeys`
-            are able to log in with the associated Yubikey tokens.
           '';
         };
 
@@ -905,22 +899,6 @@ let
                     settings = {
                       inherit (oath) window digits;
                       usersfile = oath.usersFile;
-                    };
-                  }
-                )
-                (
-                  let
-                    yubi = config.security.pam.yubico;
-                  in
-                  {
-                    name = "yubico";
-                    enable = cfg.yubicoAuth;
-                    control = yubi.control;
-                    modulePath = "${pkgs.yubico-pam}/lib/security/pam_yubico.so";
-                    settings = {
-                      inherit (yubi) mode debug;
-                      chalresp_path = yubi.challengeResponsePath;
-                      id = lib.mkIf (yubi.mode == "client") yubi.id;
                     };
                   }
                 )
@@ -1631,6 +1609,11 @@ in
       [ "security" "pam" "u2f" "cue" ]
       [ "security" "pam" "u2f" "settings" "cue" ]
     )
+    (lib.mkRemovedOptionModule [ "security" "pam" "yubico" ] ''
+      security.pam.yubico options have been removed as
+      yubico-pam module has been deprecated by Yubico.
+      Consider switching to security.pam.u2f instead.
+    '')
   ];
 
   ###### interface
@@ -2091,83 +2074,6 @@ in
           Read
           {manpage}`pam.conf(5)`
           for better understanding of this option.
-        '';
-      };
-    };
-
-    security.pam.yubico = {
-      enable = lib.mkOption {
-        default = false;
-        type = lib.types.bool;
-        description = ''
-          Enables Yubico PAM (`yubico-pam`) module.
-
-          If set, users listed in
-          {file}`~/.yubico/authorized_yubikeys`
-          are able to log in with the associated Yubikey tokens.
-
-          The file must have only one line:
-          `username:yubikey_token_id1:yubikey_token_id2`
-          More information can be found [here](https://developers.yubico.com/yubico-pam/).
-        '';
-      };
-      control = lib.mkOption {
-        default = "sufficient";
-        type = lib.types.enum [
-          "required"
-          "requisite"
-          "sufficient"
-          "optional"
-        ];
-        description = ''
-          This option sets pam "control".
-          If you want to have multi factor authentication, use "required".
-          If you want to use Yubikey instead of regular password, use "sufficient".
-
-          Read
-          {manpage}`pam.conf(5)`
-          for better understanding of this option.
-        '';
-      };
-      id = lib.mkOption {
-        example = "42";
-        type = lib.types.str;
-        description = "client id";
-      };
-
-      debug = lib.mkOption {
-        default = false;
-        type = lib.types.bool;
-        description = ''
-          Debug output to stderr.
-        '';
-      };
-      mode = lib.mkOption {
-        default = "client";
-        type = lib.types.enum [
-          "client"
-          "challenge-response"
-        ];
-        description = ''
-          Mode of operation.
-
-          Use "client" for online validation with a YubiKey validation service such as
-          the YubiCloud.
-
-          Use "challenge-response" for offline validation using YubiKeys with HMAC-SHA-1
-          Challenge-Response configurations. See the man-page {manpage}`ykpamcfg(1)` for further
-          details on how to configure offline Challenge-Response validation.
-
-          More information can be found [here](https://developers.yubico.com/yubico-pam/Authentication_Using_Challenge-Response.html).
-        '';
-      };
-      challengeResponsePath = lib.mkOption {
-        default = null;
-        type = lib.types.nullOr lib.types.path;
-        description = ''
-          If not null, set the path used by yubico pam module where the challenge expected response is stored.
-
-          More information can be found [here](https://developers.yubico.com/yubico-pam/Authentication_Using_Challenge-Response.html).
         '';
       };
     };
