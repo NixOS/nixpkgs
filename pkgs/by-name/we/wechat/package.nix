@@ -15,7 +15,10 @@ let
     downloadPage = "https://linux.weixin.qq.com/en";
     license = lib.licenses.unfree;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = with lib.maintainers; [ prince213 ];
+    maintainers = with lib.maintainers; [
+      prince213
+      pokon548
+    ];
     mainProgram = "wechat";
     platforms = [
       "aarch64-darwin"
@@ -47,8 +50,8 @@ let
       aarch64-linux = {
         version = "4.1.0.13";
         src = fetchurl {
-          url = "https://web.archive.org/web/20251106024910/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.AppImage";
-          hash = "sha256-/d5crM6IGd0k0fSlBSQx4TpIVX/8iib+an0VMkWMNdw=";
+          url = "https://web.archive.org/web/20251209092116/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.AppImage";
+          hash = "sha256-GDoafM7WlMw5Ln04Di88EUkpolot46wagVGSr3ihaA8=";
         };
       };
       x86_64-linux = {
