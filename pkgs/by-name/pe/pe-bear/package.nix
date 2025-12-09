@@ -3,8 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  qtbase,
-  wrapQtAppsHook,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,11 +20,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
   ];
 
   meta = with lib; {

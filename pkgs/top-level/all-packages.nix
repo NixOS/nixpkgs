@@ -504,8 +504,6 @@ with pkgs;
 
   prefer-remote-fetch = import ../build-support/prefer-remote-fetch;
 
-  pe-bear = libsForQt5.callPackage ../applications/misc/pe-bear { };
-
   magika = with python3Packages; toPythonApplication magika;
 
   mysql-shell = mysql-shell_8;
