@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildDotnetModule,
   dotnetCorePackages,
+  nix-update-script,
   versionCheckHook,
 }:
 
@@ -38,7 +39,7 @@ buildDotnetModule (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   nativeInstallCheckInputs = [ versionCheckHook ];
