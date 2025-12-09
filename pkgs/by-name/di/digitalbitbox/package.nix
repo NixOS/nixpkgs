@@ -46,15 +46,15 @@
 let
   copyUdevRuleToOutput = name: rule: "cp ${writeText name rule} $out/etc/udev/rules.d/${name}";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "digitalbitbox";
   version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "digitalbitbox";
     repo = "dbb-app";
-    rev = "v${version}";
-    sha256 = "ig3+TdYv277D9GVnkRSX6nc6D6qruUOw/IQdQCK6FoA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ig3+TdYv277D9GVnkRSX6nc6D6qruUOw/IQdQCK6FoA=";
   };
 
   # configure.ac:23: error: AC_CONFIG_MACRO_DIR can only be used once
@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "QT based application for the Digital Bitbox hardware wallet";
     longDescription = ''
       Digital Bitbox provides dbb-app, a GUI tool, and dbb-cli, a CLI tool, to manage Digital Bitbox devices.
@@ -146,7 +146,7 @@ stdenv.mkDerivation rec {
       to the configuration which installs the package and enables the hardware module.
     '';
     homepage = "https://digitalbitbox.com/";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
-}
+})
