@@ -5404,6 +5404,12 @@
     githubId = 1957293;
     name = "Casey Ransom";
   };
+  crazychaoz = {
+    email = "kempinger@ins.jku.at";
+    github = "crazychaoz";
+    githubId = 19308955;
+    name = "Stefan Kempinger";
+  };
   creator54 = {
     email = "hi.creator54@gmail.com";
     github = "Creator54";
