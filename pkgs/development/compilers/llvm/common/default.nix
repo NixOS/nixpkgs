@@ -254,7 +254,7 @@ makeScopeWithSplicing' {
           {
             otherSplices = lib.mapAttrs (_: selfSplice: selfSplice.lldbPlugins or { }) otherSplices;
             f = selfLldbPlugins: {
-              llef = selfLldbPlugins.callPackage ./lldb-plugins/llef.nix { };
+              llef = selfLldbPlugins.callPackage ./lldb-plugins/llef { };
             };
           }
       );
