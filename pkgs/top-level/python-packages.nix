@@ -14018,6 +14018,8 @@ self: super: with self; {
 
   pyosmium = callPackage ../development/python-modules/pyosmium { inherit (pkgs) lz4; };
 
+  pyosmocom = callPackage ../development/python-modules/pyosmocom { };
+
   pyosoenergyapi = callPackage ../development/python-modules/pyosoenergyapi { };
 
   pyosohotwaterapi = callPackage ../development/python-modules/pyosohotwaterapi { };
@@ -17342,6 +17344,8 @@ self: super: with self; {
   smpclient = callPackage ../development/python-modules/smpclient { };
 
   smpp-pdu = callPackage ../development/python-modules/smpp-pdu { };
+
+  smpp-twisted3 = callPackage ../development/python-modules/smpp-twisted3 { };
 
   smpplib = callPackage ../development/python-modules/smpplib { };
 
