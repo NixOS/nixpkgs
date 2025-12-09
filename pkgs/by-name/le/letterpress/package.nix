@@ -73,7 +73,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://apps.gnome.org/Letterpress/";
     changelog = "https://gitlab.gnome.org/World/Letterpress/-/releases/${version}";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.dawidd6 ];
+    maintainers = [ ];
     teams = [ teams.gnome-circle ];
     platforms = platforms.linux;
     mainProgram = "letterpress";

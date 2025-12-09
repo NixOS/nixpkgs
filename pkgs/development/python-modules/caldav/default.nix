@@ -1,8 +1,10 @@
 {
   lib,
   buildPythonPackage,
+  dnspython,
   fetchFromGitHub,
   icalendar,
+  icalendar-searcher,
   lxml,
   manuel,
   pytestCheckHook,
@@ -23,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "2.1.0";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = "caldav";
     tag = "v${version}";
-    hash = "sha256-iVM3dBG2CNaMOUlEM0nGVKYUZHfX0LKjars7HJ1QWC0=";
+    hash = "sha256-FsIF4BcwAUyYw8J7o4j4CnSd8eIc1Yd5WtxErC6RZ7Y=";
   };
 
   build-system = [
@@ -39,9 +41,11 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    dnspython
     lxml
     requests
     icalendar
+    icalendar-searcher
     recurring-ical-events
   ];
 
@@ -55,6 +59,11 @@ buildPythonPackage rec {
     vobject
     writableTmpDirAsHomeHook
     (toPythonModule (xandikos.override { python3Packages = python.pkgs; }))
+  ];
+
+  disabledTests = [
+    # test contacts CalDAV servers on the internet
+    "test_rfc8764_test_conf"
   ];
 
   pythonImportsCheck = [ "caldav" ];
