@@ -34,7 +34,6 @@ bundlerApp {
     license = licenses.mit;
     mainProgram = "overcommit";
     maintainers = with maintainers; [
-      Br1ght0ne
       anthonyroussel
     ];
     platforms = platforms.unix;

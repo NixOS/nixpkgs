@@ -77,7 +77,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
-      Br1ght0ne
       koral
       timhae
     ];

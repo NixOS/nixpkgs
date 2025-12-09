@@ -42,6 +42,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Y2Z/monolith";
     license = licenses.cc0;
     platforms = lib.platforms.unix;
-    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

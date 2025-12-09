@@ -103,7 +103,6 @@ buildPythonPackage {
     changelog = "https://beancount.github.io/fava/changelog.html";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      bhipple
       prince213
       sigmanificient
     ];

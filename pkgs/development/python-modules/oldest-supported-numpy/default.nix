@@ -35,6 +35,5 @@ buildPythonPackage rec {
     description = "Meta-package providing the oldest supported Numpy for a given Python version and platform";
     homepage = "https://github.com/scipy/oldest-supported-numpy";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ tjni ];
   };
 }

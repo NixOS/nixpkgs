@@ -53,7 +53,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kornelski/cargo-deb";
     license = licenses.mit;
     maintainers = with maintainers; [
-      Br1ght0ne
       matthiasbeyer
     ];
   };

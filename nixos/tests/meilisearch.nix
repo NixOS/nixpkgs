@@ -12,7 +12,6 @@ let
 in
 {
   name = "meilisearch";
-  meta.maintainers = with lib.maintainers; [ Br1ght0ne ];
 
   nodes.machine =
     { ... }:

@@ -198,7 +198,6 @@ jdk.overrideAttrs (oldAttrs: rec {
     homepage = "https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime";
     inherit (jdk.meta) license platforms mainProgram;
     maintainers = with maintainers; [
-      edwtjo
       aoli-al
     ];
 

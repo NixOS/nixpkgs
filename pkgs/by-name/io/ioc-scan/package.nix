@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ioc-scan";
-  version = "3.1.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cisagov";
     repo = "ioc-scanner";
     tag = "v${version}";
-    hash = "sha256-Mo3J744WwWPoTdWeAKFLVD3rh/ZKOHbnfinMeC2Qqfo=";
+    hash = "sha256-oqXK98Im6OVItjSF8NCrGroE3w3k7QFzqpC2EEpa7N0=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

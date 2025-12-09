@@ -93,7 +93,6 @@ let
         homepage = "http://www.sweethome3d.com/index.jsp";
         inherit description;
         inherit license;
-        maintainers = [ lib.maintainers.edwtjo ];
         platforms = lib.platforms.linux;
         mainProgram = exec;
       };

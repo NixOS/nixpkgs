@@ -180,7 +180,6 @@ in
   # > that I made in
   # > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=815006
   # >
-  # > @garbas shared with me the list of patches applied for the Nix package.
   # > As they are just for portability and tiny modifications, they don't
   # > alter the experience of the product. In parallel, Rok also shared the
   # > build options. They seem good (even if I cannot judge the quality of the

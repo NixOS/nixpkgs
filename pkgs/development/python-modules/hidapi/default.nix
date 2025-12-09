@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "hidapi";
-  version = "0.14.0.post4";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SPziU+Um0XtmP7+ZicccfvdlPO1fS+ZfFDfDE/s9vfY=";
+    hash = "sha256-7LwmXL6Le4h1X0IeC6JfCECR7FUMK5D/no3dT81UAxE=";
   };
 
   build-system = [

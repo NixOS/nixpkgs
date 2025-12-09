@@ -116,7 +116,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [
-      Br1ght0ne
       th0rgal
       Rishik-Y
     ];

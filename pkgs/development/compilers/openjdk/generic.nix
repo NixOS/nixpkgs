@@ -606,7 +606,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://openjdk.java.net/";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
-      edwtjo
       infinidoge
     ];
     teams = [ lib.teams.java ];

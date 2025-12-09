@@ -94,7 +94,6 @@ buildGo125Module (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "caddy";
     maintainers = with lib.maintainers; [
-      Br1ght0ne
       stepbrobd
       techknowlogick
       ryan4yin

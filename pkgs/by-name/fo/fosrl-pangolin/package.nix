@@ -168,5 +168,9 @@ buildNpmPackage (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
     mainProgram = "pangolin";
+    insecure = true;
+    knownVulnerabilities = [
+      "CVE-2025-55182"
+    ];
   };
 })

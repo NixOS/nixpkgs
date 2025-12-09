@@ -164,7 +164,6 @@ mkDerivation rec {
       "aarch64-linux"
     ];
     maintainers = with maintainers; [
-      jagajaga
       jraygauthier
       gador
       c4patino

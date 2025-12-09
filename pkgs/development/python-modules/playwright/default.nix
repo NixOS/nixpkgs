@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  auditwheel,
   buildPythonPackage,
   gitMinimal,
   greenlet,
@@ -67,8 +66,7 @@ buildPythonPackage rec {
     gitMinimal
     setuptools-scm
     setuptools
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ auditwheel ];
+  ];
 
   pythonRelaxDeps = [
     "greenlet"

@@ -23,6 +23,5 @@ stdenv.mkDerivation rec {
     description = "Recursively find newest file in a hierarchy and print its timestamp";
     mainProgram = "fn";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ bhipple ];
   };
 }

@@ -80,7 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     maintainers = with maintainers; [
-      edwtjo
       vizanto
     ];
     platforms = with platforms; unix;

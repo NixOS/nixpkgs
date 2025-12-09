@@ -27,6 +27,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/pbrady/fastcache";
     changelog = "https://github.com/pbrady/fastcache/blob/v${version}/CHANGELOG";
     license = licenses.mit;
-    maintainers = with maintainers; [ bhipple ];
   };
 }

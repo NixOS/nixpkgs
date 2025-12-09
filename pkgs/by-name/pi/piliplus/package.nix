@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter335,
+  flutter338,
   makeDesktopItem,
   copyDesktopItems,
   alsa-lib,
@@ -14,7 +14,7 @@ let
   srcInfo = lib.importJSON ./src-info.json;
   description = "Third-party Bilibili client developed in Flutter";
 in
-flutter335.buildFlutterApplication {
+flutter338.buildFlutterApplication {
   pname = "piliplus";
   inherit (srcInfo) version;
 

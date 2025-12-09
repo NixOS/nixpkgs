@@ -142,7 +142,6 @@ stdenv.mkDerivation rec {
       rvolosatovs
       puffnfresh
       np
-      Br1ght0ne
       shofius
       ryand56
     ];

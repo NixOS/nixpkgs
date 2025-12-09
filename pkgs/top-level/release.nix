@@ -221,7 +221,7 @@ let
         jobs.metrics
         jobs.manual
         jobs.lib-tests
-        jobs.pkgs-lib-tests
+        jobs.tests.pkgs-lib.formats-tests.x86_64-linux
         jobs.stdenv.x86_64-linux
         jobs.cargo.x86_64-linux
         jobs.go.x86_64-linux

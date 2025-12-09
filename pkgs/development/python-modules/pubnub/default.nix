@@ -11,23 +11,20 @@
   pytest-asyncio,
   pytest-vcr,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pubnub";
-  version = "10.4.1";
+  version = "10.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pubnub";
     repo = "python";
     tag = version;
-    hash = "sha256-NI7rEudQ5sSj6cpPpFxEcqaeiQL6dJKK7C53BTJeMAg=";
+    hash = "sha256-4EqP3HZuSXYB5P6xvPuwTou/2zHS0ClaAy42knbCMhc=";
   };
 
   pythonRelaxDeps = [ "httpx" ];

@@ -100,7 +100,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://www.nushell.sh/";
     license = licenses.mit;
     maintainers = with maintainers; [
-      Br1ght0ne
       johntitor
       joaquintrinanes
       ryan4yin

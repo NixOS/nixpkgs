@@ -276,7 +276,7 @@ stdenv.mkDerivation rec {
     '';
 
   passthru.tests = {
-    inherit (nixosTests) pulseaudio;
+    inherit (nixosTests) pulseaudio pulseaudio-tcp;
   };
 
   meta = {

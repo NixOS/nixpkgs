@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "django-simple-captcha";
-  version = "0.6.2";
+  version = "0.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mbi";
     repo = "django-simple-captcha";
     tag = "v${version}";
-    hash = "sha256-hOvZQCAAlMYaNpAN+junhfgWej92shto7ejhKUPqbX0=";
+    hash = "sha256-Fee7YfIWGyKMsN7XQz10bjIhbjUYRuY7Oe4Q8n8ILz0=";
   };
 
   build-system = [ setuptools ];

@@ -9,12 +9,12 @@
 }:
 let
   pname = "models-dev";
-  version = "0-unstable-2025-12-05";
+  version = "0-unstable-2025-12-09";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "models.dev";
-    rev = "a9963d76a85c6949cc6e653da7c8b78c88afd47e";
-    hash = "sha256-62HKGnJHprrVMFuZ4qpmAkfWNZI6ZqGx9VDPnSnugZQ=";
+    rev = "597350692c84a6c32f86fde05e310566a417099e";
+    hash = "sha256-m3tegpyPT5yX6IqgJG9+YpmyQ7rBd9H+USS3YDLizsM=";
     postFetch = lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
       # NOTE: Normalize case-sensitive directory names that cause issues on case-insensitive filesystems
       cp -r "$out/providers/poe/models/openai"/* "$out/providers/poe/models/openAi/"

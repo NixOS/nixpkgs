@@ -60,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     description = "Build tool for Scala, Java and more";
     maintainers = with maintainers; [
-      nequissimus
       kashw2
     ];
     platforms = platforms.unix;

@@ -49,8 +49,8 @@ let
   clapJuceExtensions = fetchFromGitHub {
     owner = "free-audio";
     repo = "clap-juce-extensions";
-    rev = "4f33b4930b6af806018c009f0f24b3a50808af99";
-    hash = "sha256-M+T7ll3Ap6VIP5ub+kfEKwT2RW2IxxY4wUPRQKFIotk=";
+    rev = "645ed2fd0949d36639e3d63333f26136df6df769";
+    hash = "sha256-Lx88nyEFjPLA5yh8rrqBdyZIxe/j0FgIHoyKcbjuuI4=";
     fetchSubmodules = true;
   };
 

@@ -5,6 +5,7 @@
   fetchpatch,
   installShellFiles,
   python3Packages,
+  python3,
   asciidoc,
   wrapGAppsNoGuiHook,
   iw,
@@ -46,10 +47,14 @@ stdenv.mkDerivation rec {
     asciidoc # for a2x
     installShellFiles
     wrapGAppsNoGuiHook
-    python3Packages.wrapPython
   ];
 
-  dontWrapGApps = true;
+  buildInputs = [
+    (python3.withPackages (ps: [
+      ps.dbus-python
+      ps.pygobject3
+    ]))
+  ];
 
   checkInputs = with python3Packages; [
     dbus-python
@@ -59,14 +64,10 @@ stdenv.mkDerivation rec {
     pytestCheckHook
   ];
 
-  pythonPath = with python3Packages; [
-    dbus-python
-    pygobject3
-  ];
-
   installPhase = ''
     runHook preInstall
     install -D -m755 -t $out/bin networkd-dispatcher
+    patchShebangs --host $out/bin/networkd-dispatcher
     install -Dm644 networkd-dispatcher.service $out/lib/systemd/system/networkd-dispatcher.service
     install -Dm644 networkd-dispatcher.conf $out/etc/conf.d/networkd-dispatcher.conf
     installManPage networkd-dispatcher.8
@@ -76,13 +77,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   preFixup = ''
-    makeWrapperArgs+=( \
-      "''${gappsWrapperArgs[@]}" \
-      --prefix PATH : "${lib.makeBinPath [ iw ]}" \
-    )
-  '';
-  postFixup = ''
-    wrapPythonPrograms
+    gappsWrapperArgs+=("--prefix" "PATH" ":" "${lib.makeBinPath [ iw ]}")
   '';
 
   meta = with lib; {

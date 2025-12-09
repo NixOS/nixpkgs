@@ -28,6 +28,5 @@ python3Packages.buildPythonApplication rec {
     description = "Command-line podcast aggregator";
     mainProgram = "greg";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ edwtjo ];
   };
 }

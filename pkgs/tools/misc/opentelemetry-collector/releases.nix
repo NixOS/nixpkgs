@@ -136,7 +136,6 @@ let
           '';
           license = licenses.asl20;
           maintainers = with maintainers; [
-            uri-canva
             jk
             zimbatm
           ];

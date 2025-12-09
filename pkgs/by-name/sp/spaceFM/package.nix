@@ -97,7 +97,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
-      jagajaga
       obadz
     ];
   };

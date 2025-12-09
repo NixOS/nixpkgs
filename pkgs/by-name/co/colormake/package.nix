@@ -28,6 +28,5 @@ stdenv.mkDerivation {
     homepage = "https://bre.klaki.net/programs/colormake/";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bhipple ];
   };
 }

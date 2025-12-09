@@ -13,7 +13,7 @@ let
 in
 symlinkJoin {
   pname = "nh";
-  inherit (unwrapped) version meta;
+  inherit (unwrapped) version;
 
   paths = [
     unwrapped
@@ -27,4 +27,20 @@ symlinkJoin {
     wrapProgram $out/bin/nh \
       --prefix PATH : ${lib.makeBinPath runtimeDeps}
   '';
+
+  meta = {
+    inherit (unwrapped.meta)
+      changelog
+      description
+      homepage
+      license
+      mainProgram
+      maintainers
+      ;
+
+    # To prevent builds on hydra
+    hydraPlatforms = [ ];
+    # prefer wrapper over the package
+    priority = (unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
+  };
 }

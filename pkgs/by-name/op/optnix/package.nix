@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromSourcehut,
   buildGoModule,
   installShellFiles,
   nix-update-script,
@@ -10,8 +10,8 @@
 buildGoModule (finalAttrs: {
   pname = "optnix";
   version = "0.3.0";
-  src = fetchFromGitHub {
-    owner = "water-sucks";
+  src = fetchFromSourcehut {
+    owner = "~watersucks";
     repo = "optnix";
     tag = "v${finalAttrs.version}";
     hash = "sha256-kPCRCnjuKZd6RE5pkQJMYWpexnMyhUy9jrBFSztkiLM=";

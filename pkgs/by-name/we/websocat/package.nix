@@ -70,7 +70,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       thoughtpolice
-      Br1ght0ne
     ];
     mainProgram = "websocat";
   };

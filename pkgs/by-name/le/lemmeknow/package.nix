@@ -20,9 +20,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/swanandx/lemmeknow";
     changelog = "https://github.com/swanandx/lemmeknow/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      Br1ght0ne
-    ];
+    maintainers = [ ];
     mainProgram = "lemmeknow";
   };
 }

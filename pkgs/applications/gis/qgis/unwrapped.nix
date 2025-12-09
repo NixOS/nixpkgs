@@ -199,7 +199,6 @@ mkDerivation rec {
     description = "Free and Open Source Geographic Information System";
     homepage = "https://www.qgis.org";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lsix ];
     teams = [ teams.geospatial ];
     platforms = with platforms; linux;
   };

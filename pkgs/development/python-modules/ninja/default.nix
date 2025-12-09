@@ -45,7 +45,6 @@ buildPythonPackage {
     license = licenses.asl20;
     maintainers = with maintainers; [
       _999eagle
-      tjni
     ];
   };
 }

@@ -5687,6 +5687,8 @@ self: super: with self; {
 
   forecast-solar = callPackage ../development/python-modules/forecast-solar { };
 
+  formatron = callPackage ../development/python-modules/formatron { };
+
   formbox = callPackage ../development/python-modules/formbox { };
 
   formencode = callPackage ../development/python-modules/formencode { };
@@ -5744,8 +5746,6 @@ self: super: with self; {
   frilouz = callPackage ../development/python-modules/frilouz { };
 
   fritzconnection = callPackage ../development/python-modules/fritzconnection { };
-
-  froide = toPythonModule (pkgs.froide.override { python3Packages = self; });
 
   frozendict = callPackage ../development/python-modules/frozendict { };
 
@@ -5914,6 +5914,8 @@ self: super: with self; {
   );
 
   genanki = callPackage ../development/python-modules/genanki { };
+
+  general-sam = callPackage ../development/python-modules/general-sam { };
 
   generic = callPackage ../development/python-modules/generic { };
 
@@ -7101,6 +7103,8 @@ self: super: with self; {
 
   icalendar-compatibility = callPackage ../development/python-modules/icalendar-compatibility { };
 
+  icalendar-searcher = callPackage ../development/python-modules/icalendar-searcher { };
+
   icalevents = callPackage ../development/python-modules/icalevents { };
 
   icdiff = callPackage ../development/python-modules/icdiff { };
@@ -7957,6 +7961,8 @@ self: super: with self; {
   kazoo = callPackage ../development/python-modules/kazoo { };
 
   kbcstorage = callPackage ../development/python-modules/kbcstorage { };
+
+  kbnf = callPackage ../development/python-modules/kbnf { };
 
   kconfiglib = callPackage ../development/python-modules/kconfiglib { };
 
@@ -8981,6 +8987,8 @@ self: super: with self; {
   log-symbols = callPackage ../development/python-modules/log-symbols { };
 
   logbook = callPackage ../development/python-modules/logbook { };
+
+  logboth = callPackage ../development/python-modules/logboth { };
 
   logfury = callPackage ../development/python-modules/logfury { };
 
@@ -15166,6 +15174,8 @@ self: super: with self; {
   python-google-drive-api = callPackage ../development/python-modules/python-google-drive-api { };
 
   python-google-nest = callPackage ../development/python-modules/python-google-nest { };
+
+  python-google-weather-api = callPackage ../development/python-modules/python-google-weather-api { };
 
   python-gvm = callPackage ../development/python-modules/python-gvm { };
 

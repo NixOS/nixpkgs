@@ -65,6 +65,5 @@ buildPythonPackage rec {
     mainProgram = "milc-color";
     homepage = "https://milc.clueboard.co";
     license = licenses.mit;
-    maintainers = with maintainers; [ bhipple ];
   };
 }

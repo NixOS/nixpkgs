@@ -9,14 +9,14 @@
 }:
 buildPythonPackage rec {
   pname = "gotenberg-client";
-  version = "0.13.0";
+  version = "0.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stumpylog";
     repo = "gotenberg-client";
     tag = version;
-    hash = "sha256-OmLwApirJOIISsEl4S7FevJqQxFyeTsX3Bi1UBmWwUk=";
+    hash = "sha256-JYb0+Dj4QowcN+I6MMoWlv+Q5YoK4nfzYB/UNwhnRu8=";
   };
 
   build-system = [ hatchling ];

@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://eradman.com/ephemeralpg/";
     platforms = platforms.all;
     maintainers = with maintainers; [
-      hrdinka
       medv
     ];
   };

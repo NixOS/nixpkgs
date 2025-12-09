@@ -152,7 +152,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
-      jagajaga
       markuskowa
     ];
   };

@@ -47,7 +47,6 @@ buildGoModule rec {
       avaq
       np
       rvolosatovs
-      Br1ght0ne
       shofius
       ryand56
     ];

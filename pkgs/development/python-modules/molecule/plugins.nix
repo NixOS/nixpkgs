@@ -37,7 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Collection on molecule plugins";
     homepage = "https://github.com/ansible-community/molecule-plugins";
-    maintainers = with maintainers; [ dawidd6 ];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

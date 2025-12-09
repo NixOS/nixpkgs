@@ -4207,7 +4207,6 @@ assertNoAdditions {
       license = lib.licenses.gpl3;
       maintainers = with lib.maintainers; [
         marcweber
-        jagajaga
         mel
       ];
       platforms = lib.platforms.unix;
