@@ -5,7 +5,7 @@
 }:
 
 stdenvNoCC.mkDerivation rec {
-  pname = "libguestfs-appliance";
+  pname = "libguestfs-appliance-fedora";
   version = "1.56.0";
 
   src = fetchurl {
