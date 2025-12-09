@@ -37,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Fix paths in glycin library
     libglycin.passthru.glycin3PathsPatch
+    # Make /usr optional in glycin library
+    libglycin.passthru.glycin3OptionalUsrPatch
   ];
 
   cargoVendorDir = "vendor";
