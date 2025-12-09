@@ -23,9 +23,11 @@ let
       pool: "pool " + pool + " " + cfg.poolOption + lib.optionalString (cfg.enableNTS) " nts"
     ) cfg.pools}
 
-    ${lib.optionalString (
-      cfg.initstepslew.enabled && ((cfg.servers != [ ]) || (cfg.pools != [ ]))
-    ) "initstepslew ${toString cfg.initstepslew.threshold} ${lib.concatStringsSep " " (cfg.servers ++ cfg.pools)}"}
+    ${lib.optionalString (cfg.initstepslew.enabled && ((cfg.servers != [ ]) || (cfg.pools != [ ])))
+      "initstepslew ${toString cfg.initstepslew.threshold} ${
+        lib.concatStringsSep " " (cfg.servers ++ cfg.pools)
+      }"
+    }
 
     driftfile ${driftFile}
     keyfile ${keyFile}
