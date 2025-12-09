@@ -1,19 +1,22 @@
 {
-  lib,
-  python3,
   fetchFromGitHub,
+  lib,
+  localstack,
+  nix-update-script,
+  python3,
+  testers,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "localstack";
-  version = "4.9.2";
+  version = "4.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "localstack";
     repo = "localstack";
     tag = "v${version}";
-    hash = "sha256-vyk86iuYI6dGUCtijauwT7p4hSWNXluz5cHHRm8zdOE=";
+    hash = "sha256-zMLpx0MUeIq+vg6umHz3dgtegp6LsBnbJCOw8fFU5CQ=";
   };
 
   build-system = with python3.pkgs; [
@@ -47,13 +50,22 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "localstack" ];
 
+  # Localstack uses a framework called Plux to do all kinds of dynamic code loading.
+  # Due to this, we'll encounter build errors when it attempts to set up cache directories
+  # in the sandboxed build environment unless we tell it to create it's cache in a safe
+  # directory.
+  makeWrapperArgs = [
+    "--set-default"
+    "XDG_CACHE_HOME"
+    "/tmp/cache"
+  ];
+
   # Test suite requires boto, which has been removed from nixpkgs
   # Just do minimal test, buildPythonPackage maps checkPhase
   # to installCheckPhase, so we can test that entrypoint point works.
   checkPhase = ''
     runHook preCheck
 
-    export HOME=$(mktemp -d)
     $out/bin/localstack --version
 
     runHook postCheck
@@ -64,6 +76,16 @@ python3.pkgs.buildPythonApplication rec {
   postFixup = ''
     rm $out/nix-support/propagated-build-inputs
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+
+    tests.version = testers.testVersion {
+      package = localstack;
+      command = "localstack --version";
+      inherit version;
+    };
+  };
 
   meta = with lib; {
     description = "Fully functional local Cloud stack";
