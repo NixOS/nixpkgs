@@ -5687,6 +5687,8 @@ self: super: with self; {
 
   forecast-solar = callPackage ../development/python-modules/forecast-solar { };
 
+  formatron = callPackage ../development/python-modules/formatron { };
+
   formbox = callPackage ../development/python-modules/formbox { };
 
   formencode = callPackage ../development/python-modules/formencode { };
@@ -5914,6 +5916,8 @@ self: super: with self; {
   );
 
   genanki = callPackage ../development/python-modules/genanki { };
+
+  general-sam = callPackage ../development/python-modules/general-sam { };
 
   generic = callPackage ../development/python-modules/generic { };
 
@@ -7957,6 +7961,8 @@ self: super: with self; {
   kazoo = callPackage ../development/python-modules/kazoo { };
 
   kbcstorage = callPackage ../development/python-modules/kbcstorage { };
+
+  kbnf = callPackage ../development/python-modules/kbnf { };
 
   kconfiglib = callPackage ../development/python-modules/kconfiglib { };
 
