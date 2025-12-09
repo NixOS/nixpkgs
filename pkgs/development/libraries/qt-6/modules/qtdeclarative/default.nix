@@ -10,6 +10,7 @@
   lib,
   pkgsBuildBuild,
   replaceVars,
+  fetchpatch,
 }:
 
 qtModule {
@@ -35,6 +36,13 @@ qtModule {
     })
     # add version specific QML import path
     ./use-versioned-import-path.patch
+
+    # fix common Plasma crasher
+    # FIXME: remove in 6.10.2
+    (fetchpatch {
+      url = "https://github.com/qt/qtdeclarative/commit/9c6b2b78e9076f1c2676aa0c41573db9ca480654.diff";
+      hash = "sha256-KMFurA9Q84qwuyBraU3ZdoFWs8uO3uoUcinfcfh/ps8=";
+    })
   ];
 
   cmakeFlags = [
