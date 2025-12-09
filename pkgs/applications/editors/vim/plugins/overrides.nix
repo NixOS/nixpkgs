@@ -1066,7 +1066,7 @@ assertNoAdditions {
     ];
   };
 
-  deoplete-go = super.deoplete-go.overrideAttrs {
+  deoplete-go = super.deoplete-go.overrideAttrs (old: {
     nativeBuildInputs = [ (python3.withPackages (ps: with ps; [ setuptools ])) ];
     buildPhase = ''
       pushd ./rplugin/python3/deoplete/ujson
@@ -1074,7 +1074,14 @@ assertNoAdditions {
       popd
       find ./rplugin/ -name "ujson*.so" -exec mv -v {} ./rplugin/python3/ \;
     '';
-  };
+
+    meta = old.meta // {
+      # we did not touch this plugin in years, no idea why it suddenly broke
+      # and only on darwin
+      # ModuleNotFoundError: No module named 'setuptools'
+      broken = stdenv.hostPlatform.isDarwin;
+    };
+  });
 
   deoplete-khard = super.deoplete-khard.overrideAttrs (old: {
     dependencies = [ self.deoplete-nvim ];
