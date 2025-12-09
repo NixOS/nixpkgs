@@ -229,6 +229,13 @@ stdenv.mkDerivation (
 
     setupHook = ./setup-hook.sh;
 
+    env = {
+      # https://github.com/llvm/llvm-project/issues/152241
+      NIX_CFLAGS_COMPILE = lib.optionalString (
+        stdenv.hasCC && stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "21"
+      ) "-fno-strict-aliasing";
+    };
+
     # copied from python
     passthru =
       let
