@@ -5,6 +5,8 @@
   gtk3,
   glib,
   gsettings-desktop-schemas,
+  copyDesktopItems,
+  makeDesktopItem,
   pkg-config,
   curl,
   openssl,
@@ -25,10 +27,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl
-    glib
-    gtk3
     openssl
     jansson
+    gtk3
+    glib
   ];
 
   strictDeps = true;
@@ -37,13 +39,40 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     pkg-config
     wrapGAppsHook3
+    copyDesktopItems
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  postPatch = ''
-    substitute ./src/ibmsl.c ./src/ibmsl.c --subst-var out
+  preInstall = ''
+    mkdir -p $out/share/icons
+    cp -rv share/* $out/share
+    cp -v share/ui/icon.png $out/share/icons
   '';
+
+  postPatch = ''
+    substituteInPlace src/ibmsl.c --replace-fail "share/ui" "$out/share/ui"
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = lib.toLower pname;
+      desktopName = "iBroadcast Mediasynclite";
+      comment = meta.description;
+      exec = "mediasynclite";
+      keywords = [
+        "iBroadcast"
+        "mediasynclite"
+      ];
+      categories = [
+        "GTK"
+        "Music"
+      ];
+      terminal = false;
+      type = "Application";
+      icon = "mediasynclite";
+    })
+  ];
 
   meta = with lib; {
     description = "Linux-native graphical uploader for iBroadcast";
