@@ -939,7 +939,8 @@ stdenv.mkDerivation (finalAttrs: {
         src = ./path/to/project/src;
         buildPhase = ''
           # copy the deps to the required location
-          cp -r --no-preserve=mode ${my-deps.denoDeps}/* ./
+          cp -r --no-preserve=mode ${my-deps.denoDeps}/.deno ./
+          cp -r --no-preserve=mode ${my-deps.denoDeps}/vendor ./
 
           # Now you can run the project using deps
           # you need to activate [deno's vendor feature](https://docs.deno.com/runtime/fundamentals/modules/#vendoring-remote-modules)
@@ -957,7 +958,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     ```sh
     nix-build ./default.nix -A my-deps.denoDeps
-    cp -r --no-preserve=mode ./result/* ./
+    cp -r --no-preserve=mode ./result/.deno ./
+    cp -r --no-preserve=mode ./result/vendor ./
     DENO_DIR=./.deno deno run --cached-only --frozen --vendor ./main.ts
     ```
 
