@@ -3,7 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
   pg8000,
+  psycopg,
   pytest-asyncio,
+  pytest-postgresql,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -38,10 +40,11 @@ buildPythonPackage rec {
     sphinxHook
   ];
 
-  propagatedBuildInputs = [ pg8000 ];
-
   nativeCheckInputs = [
+    pg8000
+    psycopg
     pytest-asyncio
+    pytest-postgresql
     pytestCheckHook
   ];
 
