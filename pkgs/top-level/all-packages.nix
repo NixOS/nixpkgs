@@ -11866,8 +11866,6 @@ with pkgs;
 
   qtemu = libsForQt5.callPackage ../applications/virtualization/qtemu { };
 
-  qtpass = libsForQt5.callPackage ../applications/misc/qtpass { };
-
   quassel = libsForQt5.callPackage ../applications/networking/irc/quassel { };
 
   quasselClient = quassel.override {

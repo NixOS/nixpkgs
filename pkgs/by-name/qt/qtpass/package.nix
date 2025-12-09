@@ -1,17 +1,13 @@
 {
+  stdenv,
   fetchFromGitHub,
   lib,
-  stdenv,
+  libsForQt5,
   git,
   gnupg,
   pass,
   pwgen,
   qrencode,
-  qtbase,
-  qtsvg,
-  qttools,
-  qmake,
-  wrapQtAppsHook,
   makeWrapper,
 }:
 
@@ -35,20 +31,20 @@ stdenv.mkDerivation rec {
     git
     gnupg
     pass
-    qtbase
-    qtsvg
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
   ];
 
   nativeBuildInputs = [
-    qmake
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qmake
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
     makeWrapper
   ];
 
   qmakeFlags = [
     # setup hook only sets QMAKE_LRELEASE, set QMAKE_LUPDATE too:
-    "QMAKE_LUPDATE=${qttools.dev}/bin/lupdate"
+    "QMAKE_LUPDATE=${libsForQt5.qttools.dev}/bin/lupdate"
   ];
 
   qtWrapperArgs = [
