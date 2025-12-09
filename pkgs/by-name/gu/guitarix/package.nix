@@ -118,8 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optional optimizationSupport "--optimization";
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];
-
   meta = {
     description = "Virtual guitar amplifier for Linux running with JACK";
     mainProgram = "guitarix";
