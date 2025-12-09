@@ -7,19 +7,21 @@
   glibcLocales,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 let
   canExecuteHost = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "argc";
   version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "argc";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-in2ymxiSZbs3wZwo/aKfu11x8SLx4OHOoa/tVxr3FyM=";
   };
 
@@ -45,7 +47,12 @@ rustPlatform.buildRustPackage rec {
     LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
   };
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--argc-version";
+
   passthru = {
+    update-script = nix-update-script { };
     tests = {
       cross =
         (
@@ -63,12 +70,12 @@ rustPlatform.buildRustPackage rec {
     description = "Command-line options, arguments and sub-commands parser for bash";
     mainProgram = "argc";
     homepage = "https://github.com/sigoden/argc";
-    changelog = "https://github.com/sigoden/argc/releases/tag/v${version}";
+    changelog = "https://github.com/sigoden/argc/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       mit
       # or
       asl20
     ];
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
   };
-}
+})
