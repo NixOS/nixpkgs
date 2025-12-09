@@ -398,8 +398,6 @@ with pkgs;
     name = "die-hook";
   } ../build-support/setup-hooks/die.sh;
 
-  digitalbitbox = libsForQt5.callPackage ../applications/misc/digitalbitbox { };
-
   devShellTools = callPackage ../build-support/dev-shell-tools { };
 
   dockerTools = callPackage ../build-support/docker {
@@ -500,8 +498,6 @@ with pkgs;
     ;
 
   prefer-remote-fetch = import ../build-support/prefer-remote-fetch;
-
-  pe-bear = libsForQt5.callPackage ../applications/misc/pe-bear { };
 
   magika = with python3Packages; toPythonApplication magika;
 
@@ -1073,8 +1069,6 @@ with pkgs;
 
   mkosi-full = mkosi.override { withQemu = true; };
 
-  ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
-
   openbugs = pkgsi686Linux.callPackage ../applications/science/machine-learning/openbugs { };
 
   openusd = python3Packages.openusd.override {
@@ -1097,8 +1091,6 @@ with pkgs;
   };
 
   ufolint = with python3Packages; toPythonApplication ufolint;
-
-  veikk-linux-driver-gui = libsForQt5.callPackage ../tools/misc/veikk-linux-driver-gui { };
 
   ventoy-full = ventoy.override {
     withCryptsetup = true;
@@ -1417,8 +1409,6 @@ with pkgs;
 
   ### APPLICATIONS/TERMINAL-EMULATORS
 
-  cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
-
   kitty = callPackage ../by-name/ki/kitty/package.nix {
     inherit (darwin) autoSignDarwinBinariesHook;
   };
@@ -1494,8 +1484,6 @@ with pkgs;
   arduino-core-unwrapped = callPackage ../development/embedded/arduino/arduino-core { };
 
   arpack-mpi = arpack.override { useMpi = true; };
-
-  asymptote = libsForQt5.callPackage ../tools/graphics/asymptote { };
 
   authelia = callPackage ../servers/authelia {
     buildGoModule = buildGo124Module;
@@ -1628,8 +1616,6 @@ with pkgs;
   glm_1_0_1 = callPackage ../by-name/gl/glm/1_0_1.nix { };
 
   go2tv-lite = go2tv.override { withGui = false; };
-
-  guglielmo = libsForQt5.callPackage ../applications/radio/guglielmo { };
 
   hinit = haskell.lib.compose.justStaticExecutables haskellPackages.hinit;
 
@@ -2310,8 +2296,6 @@ with pkgs;
     citrix_workspace_25_05_0
     ;
   citrix_workspace = citrix_workspace_25_05_0;
-
-  cmst = libsForQt5.callPackage ../tools/networking/cmst { };
 
   colord-gtk4 = colord-gtk.override { withGtk4 = true; };
 
@@ -11856,8 +11840,6 @@ with pkgs;
   qtbitcointrader = libsForQt5.callPackage ../applications/misc/qtbitcointrader { };
 
   qtemu = libsForQt5.callPackage ../applications/virtualization/qtemu { };
-
-  qtpass = libsForQt5.callPackage ../applications/misc/qtpass { };
 
   quassel = libsForQt5.callPackage ../applications/networking/irc/quassel { };
 
