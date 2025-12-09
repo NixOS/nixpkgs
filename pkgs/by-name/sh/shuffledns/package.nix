@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "shuffledns";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "shuffledns";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wfHGIWdksfe0sNss4pLQ0ODh28u2kMuxAJh5C9Uiap4=";
+    hash = "sha256-hdlFmUfAKvBaFBIraOyLTuPbwykwIpqX5VzIPRP1lz8=";
   };
 
-  vendorHash = "sha256-A4Ssvc6UOvwezzdMa+nPkwyVT8j15+mTAAL+loeBcCo=";
+  vendorHash = "sha256-dWO/Dut4zwEkJfuBeXvE4Yx85hn0ufCPS9mV09gUrnc=";
 
   subPackages = [ "cmd/shuffledns" ];
 
