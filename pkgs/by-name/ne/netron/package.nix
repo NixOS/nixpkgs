@@ -97,9 +97,5 @@ buildNpmPackage (finalAttrs: {
     maintainers = with lib.maintainers; [ flokli ];
     mainProgram = "netron";
     platforms = electron.meta.platforms;
-    badPlatforms = [
-      # Fails on darwin
-      lib.systems.inspect.patterns.isDarwin
-    ];
   };
 })
