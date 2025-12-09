@@ -159,6 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       vandenoever
       doronbehar
+      sarunint
     ];
     mainProgram = "mscore";
     platforms = lib.platforms.unix;
