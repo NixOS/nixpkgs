@@ -29,6 +29,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/timofurrer/colorful";
     changelog = "https://github.com/timofurrer/colorful/releases/tag/${src.tag}";
     license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [
+      kalbasit
+      l33tname
+    ];
   };
 }
