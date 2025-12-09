@@ -1,11 +1,11 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
-  qmake,
+  libsForQt5,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "veikk-linux-driver-gui";
   version = "2.0";
 
@@ -16,7 +16,10 @@ mkDerivation rec {
     sha256 = "02g1q79kwjlzg95w38a1d7nxvcry8xcsvhax2js4c7xqvzhkki5j";
   };
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
+  ];
 
   postBuild = ''
     make all clean
