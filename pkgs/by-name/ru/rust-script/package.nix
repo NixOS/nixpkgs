@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "fornwall";
     repo = "rust-script";
     rev = finalAttrs.version;
-    sha256 = "sha256-Bb8ULD2MmZiSW/Tx5vAAHv95OMJ0EdWgR+NFhBkTlDU=";
+    hash = "sha256-Bb8ULD2MmZiSW/Tx5vAAHv95OMJ0EdWgR+NFhBkTlDU=";
   };
 
   cargoHash = "sha256-kxnylNZ8FsaR2S1o/p7qtlaXsBLDNv2PsFye0rcf/+A=";
@@ -34,13 +34,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   # tests require network access
+  # Upstream issue: https://github.com/fornwall/rust-script/issues/38
   doCheck = false;
 
   meta = {
-    description = "Run Rust files and expressions as scripts without any setup or compilation step";
+    description = "Tool to run Rust files and expressions as scripts without any setup or compilation step";
     mainProgram = "rust-script";
     homepage = "https://rust-script.org";
-    changelog = "https://github.com/fornwall/rust-script/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/fornwall/rust-script/blob/${finalAttrs.version}/CHANGELOG.md";
+    downloadPage = "https://github.com/fornwall/rust-script/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [
       mit # or
       asl20
