@@ -1,0 +1,70 @@
+diff --git a/icinga-app/CMakeLists.txt b/icinga-app/CMakeLists.txt
+index 1c92d8331..e77199959 100644
+--- a/icinga-app/CMakeLists.txt
++++ b/icinga-app/CMakeLists.txt
+@@ -94,9 +94,3 @@ install(
+   TARGETS icinga-app
+   RUNTIME DESTINATION ${InstallPath}
+ )
+-
+-if(NOT WIN32)
+-  install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${ICINGA2_FULL_LOGDIR}\")")
+-  install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${ICINGA2_FULL_DATADIR}\")")
+-  install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${ICINGA2_FULL_INITRUNDIR}\")")
+-endif()
+diff --git a/lib/base/CMakeLists.txt b/lib/base/CMakeLists.txt
+index 986050017..39711c79e 100644
+--- a/lib/base/CMakeLists.txt
++++ b/lib/base/CMakeLists.txt
+@@ -154,9 +154,4 @@ set_target_properties (
+   FOLDER Lib
+ )
+ 
+-if(NOT WIN32)
+-  install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${ICINGA2_FULL_CACHEDIR}\")")
+-  install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${ICINGA2_FULL_LOGDIR}/crash\")")
+-endif()
+-
+ set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}" PARENT_SCOPE)
+diff --git a/lib/perfdata/CMakeLists.txt b/lib/perfdata/CMakeLists.txt
+index ab963f7..3d9d506 100644
+--- a/lib/perfdata/CMakeLists.txt
++++ b/lib/perfdata/CMakeLists.txt
+@@ -74,7 +74,4 @@ install_if_not_exists(
+   ${ICINGA2_CONFIGDIR}/features-available
+ )
+ 
+-install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${ICINGA2_FULL_SPOOLDIR}/perfdata\")")
+-install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${ICINGA2_FULL_SPOOLDIR}/tmp\")")
+-
+ set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}" PARENT_SCOPE)
+diff --git a/lib/remote/CMakeLists.txt b/lib/remote/CMakeLists.txt
+index 2271abff6..fc03b5c6b 100644
+--- a/lib/remote/CMakeLists.txt
++++ b/lib/remote/CMakeLists.txt
+@@ -57,12 +57,3 @@ set_target_properties (
+   remote PROPERTIES
+   FOLDER Lib
+ )
+-
+-if(NOT WIN32)
+-  #install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${ICINGA2_FULL_DATADIR}/api\")")
+-  install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${ICINGA2_FULL_DATADIR}/api/log\")")
+-  install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${ICINGA2_FULL_DATADIR}/api/zones\")")
+-  install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${ICINGA2_FULL_DATADIR}/api/zones-stage\")")
+-  install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${ICINGA2_FULL_DATADIR}/certs\")")
+-  install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${ICINGA2_FULL_DATADIR}/certificate-requests\")")
+-endif()
+diff --git a/lib/compat/CMakeLists.txt b/lib/compat/CMakeLists.txt
+index 1438626..d882ae2 100644
+--- a/lib/compat/CMakeLists.txt
++++ b/lib/compat/CMakeLists.txt
+@@ -55,8 +55,4 @@ install_if_not_exists(
+   ${ICINGA2_CONFIGDIR}/features-available
+ )
+ 
+-install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${ICINGA2_FULL_LOGDIR}/compat/archives\")")
+-install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${ICINGA2_FULL_SPOOLDIR}\")")
+-install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${ICINGA2_FULL_INITRUNDIR}/cmd\")")
+-
+ set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}" PARENT_SCOPE)

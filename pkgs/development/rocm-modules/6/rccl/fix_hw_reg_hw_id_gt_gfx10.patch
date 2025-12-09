@@ -1,0 +1,33 @@
+fix: __trace_hwreg should use HW_REG_HW_ID1 for all gfx10/11/12
+diff --git a/src/device/common.h b/src/device/common.h
+index c6c61021..742885f4 100644
+--- a/src/device/common.h
++++ b/src/device/common.h
+@@ -26,8 +26,9 @@
+   { __atomic_store_n((DST), (SRC), __ATOMIC_SEQ_CST); }
+ #endif
+ 
+-#if defined(__gfx1100__) || defined(__gfx1101__) || defined(__gfx1102__) || defined(__gfx1200__) || defined(__gfx1201__)
+-#define __trace_hwreg()
++#if defined(__GFX10__) || defined(__GFX11__) || defined(__GFX12__)
++#define __trace_hwreg() \
++  asm volatile ("s_getreg_b32 %0, hwreg(HW_REG_HW_ID1)" : "=s" (collTrace->data_0));
+ #else
+ #define __trace_hwreg() \
+   asm volatile ("s_getreg_b32 %0, hwreg(HW_REG_HW_ID)" : "=s" (collTrace->data_0));
+diff --git a/tools/JitterBench/Common.hpp b/tools/JitterBench/Common.hpp
+index bad12a1b..b59856a8 100644
+--- a/tools/JitterBench/Common.hpp
++++ b/tools/JitterBench/Common.hpp
+@@ -43,9 +43,9 @@ THE SOFTWARE.
+ #endif
+ 
+ // Macro for collecting HW_REG_HW_ID
+-#if defined(__gfx1100__) || defined(__gfx1101__) || defined(__gfx1102__) || defined(__NVCC__)
++#if defined(__GFX10__) || defined(__GFX11__) || defined(__GFX12__)
+ #define GetHwId(val) \
+-  val = 0
++  asm volatile ("s_getreg_b32 %0, hwreg(HW_REG_HW_ID1)" : "=s" (val));
+ #else
+ #define GetHwId(val) \
+   asm volatile ("s_getreg_b32 %0, hwreg(HW_REG_HW_ID)" : "=s" (val));

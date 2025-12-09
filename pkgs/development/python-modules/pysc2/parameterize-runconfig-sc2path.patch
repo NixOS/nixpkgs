@@ -1,0 +1,18 @@
+diff --git a/pysc2/run_configs/platforms.py b/pysc2/run_configs/platforms.py
+index 5cd84f9..1923cb7 100644
+--- a/pysc2/run_configs/platforms.py
++++ b/pysc2/run_configs/platforms.py
+@@ -119,12 +119,9 @@ class Linux(LocalBase):
+   """Config to run on Linux."""
+ 
+   def __init__(self):
+-    base_dir = os.environ.get("SC2PATH", "~/StarCraftII")
++    base_dir = os.environ.get("SC2PATH", "@sc2path@")
+     base_dir = os.path.expanduser(base_dir)
+     env = copy.deepcopy(os.environ)
+-    env["LD_LIBRARY_PATH"] = ":".join(filter(None, [
+-        os.environ.get("LD_LIBRARY_PATH"),
+-        os.path.join(base_dir, "Libs/")]))
+     super(Linux, self).__init__(base_dir, "SC2_x64", env=env)
+ 
+   @classmethod

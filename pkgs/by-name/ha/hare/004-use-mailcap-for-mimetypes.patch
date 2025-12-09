@@ -1,0 +1,30 @@
+diff --git a/mime/+freebsd.ha b/mime/+freebsd.ha
+index e536d9bd..022f18c4 100644
+--- a/mime/+freebsd.ha
++++ b/mime/+freebsd.ha
+@@ -2,4 +2,4 @@
+ // (c) Hare authors <https://harelang.org>
+ 
+ // Path to the system MIME database.
+-export def SYSTEM_DB: str = "/etc/mime.types";
++export def SYSTEM_DB: str = "@mailcap@/etc/mime.types";
+diff --git a/mime/+linux.ha b/mime/+linux.ha
+index e536d9bd..022f18c4 100644
+--- a/mime/+linux.ha
++++ b/mime/+linux.ha
+@@ -2,4 +2,4 @@
+ // (c) Hare authors <https://harelang.org>
+ 
+ // Path to the system MIME database.
+-export def SYSTEM_DB: str = "/etc/mime.types";
++export def SYSTEM_DB: str = "@mailcap@/etc/mime.types";
+diff --git a/mime/+openbsd.ha b/mime/+openbsd.ha
+index 611b2dce..022f18c4 100644
+--- a/mime/+openbsd.ha
++++ b/mime/+openbsd.ha
+@@ -2,4 +2,4 @@
+ // (c) Hare authors <https://harelang.org>
+ 
+ // Path to the system MIME database.
+-export def SYSTEM_DB: str = "/usr/share/misc/mime.types";
++export def SYSTEM_DB: str = "@mailcap@/etc/mime.types";

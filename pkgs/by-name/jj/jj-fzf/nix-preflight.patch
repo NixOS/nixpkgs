@@ -1,0 +1,24 @@
+diff --git a/preflight.sh b/preflight.sh
+index f1ed02fe60..43b9c365c5 100755
+--- a/preflight.sh
++++ b/preflight.sh
+@@ -78,19 +78,6 @@
+   test $(awk 'BEGIN{print(123)}') == 123 ||
+     __preflightish_die "Failed to find usable 'awk' executable in \$PATH"
+
+-# == Jujutsu ==
+-__preflightish_require "0.34" jj --version --ignore-working-copy
+-
+-# == fzf ==
+-__preflightish_require "0.65.2" fzf --version
+-
+-# == python3 ==
+-__preflightish_require "3.9" python3 --version
+-
+-# == column ==
+-command -v "column" > /dev/null 2>&1 ||
+-  __preflightish_die "Failed to find the 'column' executable in \$PATH"
+-
+ # == Success ==
+ [[ "${BASH_SOURCE[0]}" == "$0" ]] &&
+   echo "  OK         All preflight.sh checks passed"

@@ -1,0 +1,40 @@
+diff --git a/package.json b/package.json
+index 1ff8701..e337979 100644
+--- a/package.json
++++ b/package.json
+@@ -44,22 +44,22 @@
+     "@commitlint/cli": "^17.7.1",
+     "@commitlint/config-conventional": "^17.7.0",
+     "@lingui/cli": "^5.2.0",
++    "@prisma/client": "^6.8.2",
+     "dotenv": "^16.5.0",
+     "dotenv-cli": "^8.0.0",
+     "eslint": "^8.40.0",
+     "eslint-config-custom": "*",
+     "husky": "^9.0.11",
+     "lint-staged": "^15.2.2",
++    "nodemailer": "^6.10.1",
+     "playwright": "1.52.0",
+     "prettier": "^3.3.3",
+-    "rimraf": "^5.0.1",
+-    "turbo": "^1.9.3",
+-    "vite": "^6.3.5",
+-    "@prisma/client": "^6.8.2",
+     "prisma": "^6.8.2",
+     "prisma-extension-kysely": "^3.0.0",
+     "prisma-kysely": "^1.8.0",
+-    "nodemailer": "^6.10.1"
++    "rimraf": "^5.0.1",
++    "turbo": "^2.5.8",
++    "vite": "^6.3.5"
+   },
+   "name": "@documenso/root",
+   "workspaces": [
+@@ -71,7 +71,6 @@
+     "@documenso/prisma": "^0.0.0",
+     "@lingui/conf": "^5.2.0",
+     "@lingui/core": "^5.2.0",
+-    "inngest-cli": "^0.29.1",
+     "luxon": "^3.5.0",
+     "mupdf": "^1.0.0",
+     "react": "^18",

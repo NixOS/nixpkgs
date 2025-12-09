@@ -1,0 +1,38 @@
+From a26e36d55cd2447488e01b2ff4ac65e2596862cd Mon Sep 17 00:00:00 2001
+From: Ellie Hermaszewska <git@monoid.al>
+Date: Mon, 3 Oct 2022 16:50:33 +0800
+Subject: [PATCH] Do not set CURL_CA_BUNDLE
+
+---
+ contrib/curl/premake5.lua | 13 -------------
+ 1 file changed, 13 deletions(-)
+
+diff --git a/contrib/curl/premake5.lua b/contrib/curl/premake5.lua
+index 474f5cfa..553bbd02 100644
+--- a/contrib/curl/premake5.lua
++++ b/contrib/curl/premake5.lua
+@@ -36,21 +36,6 @@ project "curl-lib"
+ 
+ 		-- find the location of the ca bundle
+ 		local ca = nil
+-		for _, f in ipairs {
+-			"/etc/ssl/certs/ca-certificates.crt",
+-			"/etc/openssl/certs/ca-certificates.crt",
+-			"/etc/pki/tls/certs/ca-bundle.crt",
+-			"/usr/share/ssl/certs/ca-bundle.crt",
+-			"/usr/local/share/certs/ca-root.crt",
+-			"/usr/local/share/certs/ca-root-nss.crt",
+-			"/etc/certs/ca-certificates.crt",
+-			"/etc/ssl/cert.pem",
+-			"/boot/system/data/ssl/CARootCertificates.pem" } do
+-			if os.isfile(f) then
+-				ca = f
+-				break
+-			end
+-		end
+ 		if ca then
+ 			defines { 'CURL_CA_BUNDLE="' .. ca .. '"', 'CURL_CA_PATH="' .. path.getdirectory(ca) .. '"' }
+ 		end
+-- 
+2.37.2
+

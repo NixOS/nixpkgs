@@ -1,0 +1,12 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+gem "puppet"
+
+# ruby used to provide these in stdlib but now they must be defined
+gem "base64"
+gem "syslog"
+gem "ostruct"
+gem "benchmark"
+gem "racc"

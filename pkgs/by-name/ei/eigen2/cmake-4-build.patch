@@ -1,0 +1,47 @@
+diff --git i/CMakeLists.txt w/CMakeLists.txt
+index bb12a7cf5..932187427 100644
+--- i/CMakeLists.txt
++++ w/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ project(Eigen)
+-cmake_minimum_required(VERSION 2.6.2)
++cmake_minimum_required(VERSION 3.10)
+ 
+ set(INCLUDE_INSTALL_DIR
+     "${CMAKE_INSTALL_PREFIX}/include/eigen2"
+diff --git i/doc/examples/CMakeLists.txt w/doc/examples/CMakeLists.txt
+index 9db5b1f58..b535ae80e 100644
+--- i/doc/examples/CMakeLists.txt
++++ w/doc/examples/CMakeLists.txt
+@@ -8,12 +8,10 @@ ADD_EXECUTABLE(${example} ${example_src})
+ if(EIGEN_STANDARD_LIBRARIES_TO_LINK_TO)
+   target_link_libraries(${example} ${EIGEN_STANDARD_LIBRARIES_TO_LINK_TO})
+ endif()
+-GET_TARGET_PROPERTY(example_executable
+-                    ${example} LOCATION)
+ ADD_CUSTOM_COMMAND(
+   TARGET ${example}
+   POST_BUILD
+-  COMMAND ${example_executable}
++  COMMAND ${example}
+   ARGS >${CMAKE_CURRENT_BINARY_DIR}/${example}.out
+ )
+ ADD_DEPENDENCIES(all_examples ${example})
+diff --git i/doc/snippets/CMakeLists.txt w/doc/snippets/CMakeLists.txt
+index 7458830b0..153dbfc68 100644
+--- i/doc/snippets/CMakeLists.txt
++++ w/doc/snippets/CMakeLists.txt
+@@ -14,12 +14,10 @@ ADD_EXECUTABLE(${compile_snippet_target}
+ if(EIGEN_STANDARD_LIBRARIES_TO_LINK_TO)
+   target_link_libraries(${compile_snippet_target} ${EIGEN_STANDARD_LIBRARIES_TO_LINK_TO})
+ endif()
+-GET_TARGET_PROPERTY(compile_snippet_executable
+-                    ${compile_snippet_target} LOCATION)
+ ADD_CUSTOM_COMMAND(
+   TARGET ${compile_snippet_target}
+   POST_BUILD
+-  COMMAND ${compile_snippet_executable}
++  COMMAND ${compile_snippet_target}
+   ARGS >${CMAKE_CURRENT_BINARY_DIR}/${snippet}.out
+ )
+ ADD_DEPENDENCIES(all_snippets ${compile_snippet_target})

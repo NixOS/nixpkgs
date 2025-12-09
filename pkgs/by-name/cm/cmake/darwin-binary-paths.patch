@@ -1,0 +1,61 @@
+diff --git a/Modules/Platform/Darwin-Initialize.cmake b/Modules/Platform/Darwin-Initialize.cmake
+index 196ab18b0b..31dd4346b1 100644
+--- a/Modules/Platform/Darwin-Initialize.cmake
++++ b/Modules/Platform/Darwin-Initialize.cmake
+@@ -16,7 +16,7 @@
+ endif()
+ 
+ if(NOT CMAKE_CROSSCOMPILING)
+-  execute_process(COMMAND sw_vers -productVersion
++  execute_process(COMMAND @sw_vers@ -productVersion
+     OUTPUT_VARIABLE _CMAKE_HOST_OSX_VERSION
+     OUTPUT_STRIP_TRAILING_WHITESPACE)
+ endif()
+diff --git a/Source/kwsys/SystemInformation.cxx b/Source/kwsys/SystemInformation.cxx
+index c65587edbe..0a7cc380c3 100644
+--- a/Source/kwsys/SystemInformation.cxx
++++ b/Source/kwsys/SystemInformation.cxx
+@@ -3833,7 +3833,7 @@
+   }
+   char const* names[3] = { "Pages wired down:", "Pages active:", nullptr };
+   long long values[2] = { 0 };
+-  int ierr = GetFieldsFromCommand("vm_stat", names, values);
++  int ierr = GetFieldsFromCommand("@vm_stat@", names, values);
+   if (ierr) {
+     return -1;
+   }
+@@ -5586,7 +5586,7 @@
+ {
+ #ifdef __APPLE__
+   std::vector<char const*> args;
+-  args.push_back("sw_vers");
++  args.push_back("@sw_vers@");
+   args.push_back(arg);
+   args.push_back(nullptr);
+   ver = this->RunProcess(args);
+diff --git a/Tests/CMakeLists.txt b/Tests/CMakeLists.txt
+index 15a1e2c0c3..33bb304cf7 100644
+--- a/Tests/CMakeLists.txt
++++ b/Tests/CMakeLists.txt
+@@ -1958,7 +1958,7 @@
+   if(CMake_TEST_XCODE_VERSION AND NOT CMake_TEST_XCODE_VERSION VERSION_LESS 5)
+     if(NOT CMake_TEST_XCTest_DEPLOYMENT_TARGET)
+       execute_process(
+-        COMMAND sw_vers -productVersion
++        COMMAND @sw_vers@ -productVersion
+         OUTPUT_VARIABLE OSX_VERSION
+         OUTPUT_STRIP_TRAILING_WHITESPACE
+         )
+diff --git a/Utilities/cmcurl/CMakeLists.txt b/Utilities/cmcurl/CMakeLists.txt
+index ddc975c202..8ff651fd90 100644
+--- a/Utilities/cmcurl/CMakeLists.txt
++++ b/Utilities/cmcurl/CMakeLists.txt
+@@ -127,7 +127,7 @@
+     set(OSX_VERSION ${CMAKE_OSX_DEPLOYMENT_TARGET})
+   else()
+     execute_process(
+-      COMMAND sw_vers -productVersion
++      COMMAND @sw_vers@ -productVersion
+       OUTPUT_VARIABLE OSX_VERSION
+       OUTPUT_STRIP_TRAILING_WHITESPACE
+       )

@@ -1,0 +1,27 @@
+diff --git a/scwx-qt/scwx-qt.cmake b/scwx-qt/scwx-qt.cmake
+index 648b6578..3f1d8070 100644
+--- a/scwx-qt/scwx-qt.cmake
++++ b/scwx-qt/scwx-qt.cmake
+@@ -18,7 +18,7 @@ find_package(Fontconfig)
+ find_package(geographiclib)
+ find_package(geos)
+ find_package(glm)
+-find_package(OpenGL)
++find_package(OpenGL REQUIRED)
+ find_package(Python COMPONENTS Interpreter)
+ find_package(SQLite3)
+ 
+@@ -759,12 +759,7 @@ if (LINUX)
+     target_link_libraries(scwx-qt PUBLIC Qt${QT_VERSION_MAJOR}::WaylandClient)
+ endif()
+ 
+-if (LINUX)
+-    find_package(mesa-glu REQUIRED)
+-    target_link_libraries(scwx-qt PUBLIC mesa-glu::mesa-glu)
+-else()
+-    target_link_libraries(scwx-qt PUBLIC OpenGL::GLU)
+-endif()
++target_link_libraries(scwx-qt PUBLIC OpenGL::GLU)
+ 
+ target_link_libraries(scwx-qt PUBLIC Qt${QT_VERSION_MAJOR}::Widgets
+                                      Qt${QT_VERSION_MAJOR}::OpenGLWidgets

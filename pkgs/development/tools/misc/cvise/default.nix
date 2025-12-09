@@ -1,0 +1,100 @@
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  clang-tools,
+  cmake,
+  colordiff,
+  flex,
+  libclang,
+  llvm,
+  unifdef,
+  chardet,
+  pebble,
+  psutil,
+  pytestCheckHook,
+  testers,
+  cvise,
+}:
+
+buildPythonApplication rec {
+  pname = "cvise";
+  version = "2.12.0";
+  format = "other";
+
+  src = fetchFromGitHub {
+    owner = "marxin";
+    repo = "cvise";
+    tag = "v${version}";
+    hash = "sha256-UaWOHjgTiSVvpKKw6VFAeRAYkYp4y0Dnamzr7yhH0vQ=";
+  };
+
+  patches = [
+    # Refer to unifdef by absolute path.
+    ./unifdef.patch
+  ];
+
+  postPatch = ''
+    # Avoid blanket -Werror to evade build failures on less
+    # tested compilers.
+    substituteInPlace CMakeLists.txt \
+      --replace-fail " -Werror " " "
+
+    substituteInPlace cvise/utils/testing.py \
+      --replace-fail "'colordiff --version'" "'${colordiff}/bin/colordiff --version'" \
+      --replace-fail "'colordiff'" "'${colordiff}/bin/colordiff'"
+  '';
+
+  nativeBuildInputs = [
+    cmake
+    flex
+    llvm.dev
+  ];
+
+  buildInputs = [
+    libclang
+    llvm
+    llvm.dev
+    unifdef
+  ];
+
+  propagatedBuildInputs = [
+    chardet
+    pebble
+    psutil
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    unifdef
+  ];
+
+  cmakeFlags = [
+    # By default `cvise` looks it up in `llvm` bin directory. But
+    # `nixpkgs` moves it into a separate derivation.
+    "-DCLANG_FORMAT_PATH=${clang-tools}/bin/clang-format"
+  ];
+
+  disabledTests = [
+    # Needs gcc, fails when run noninteractively (without tty).
+    "test_simple_reduction"
+  ];
+
+  passthru = {
+    tests = {
+      # basic syntax check
+      help-output = testers.testVersion {
+        package = cvise;
+        command = "cvise --version";
+      };
+    };
+  };
+
+  meta = with lib; {
+    homepage = "https://github.com/marxin/cvise";
+    description = "Super-parallel Python port of C-Reduce";
+    license = licenses.ncsa;
+    maintainers = [ ];
+    platforms = platforms.linux;
+  };
+}

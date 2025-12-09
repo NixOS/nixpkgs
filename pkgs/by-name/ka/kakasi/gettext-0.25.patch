@@ -1,0 +1,16 @@
+diff --git a/configure.in b/configure.in
+index e865b04..478b689 100644
+--- a/configure.in
++++ b/configure.in
+@@ -3,8 +3,11 @@ dnl $Id: configure.in,v 1.23 2014-03-18 06:33:20 knok Exp $
+ 
+ AC_INIT
+ AC_CONFIG_SRCDIR([src/kakasi.c])
++AC_CONFIG_MACRO_DIRS([m4])
+ AC_PREREQ([2.50])
+ AM_INIT_AUTOMAKE(kakasi, 2.3.6)
++AM_GNU_GETTEXT_VERSION([0.21])
++AM_GNU_GETTEXT([external])
+ 
+ AM_MAINTAINER_MODE
+ 

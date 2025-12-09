@@ -1,0 +1,26 @@
+diff --git a/src/util/lp/lp_core_solver_base.h b/src/util/lp/lp_core_solver_base.h
+index 4c17df2..4c3c311 100644
+--- a/src/util/lp/lp_core_solver_base.h
++++ b/src/util/lp/lp_core_solver_base.h
+@@ -600,8 +600,6 @@ public:
+            out << " \n";
+     }
+ 
+-    bool column_is_free(unsigned j) const { return this->m_column_type[j] == free; }
+-
+     bool column_has_upper_bound(unsigned j) const {
+         switch(m_column_types[j]) {
+         case column_type::free_column:
+diff --git a/src/util/lp/static_matrix_def.h b/src/util/lp/static_matrix_def.h
+index 7949573..2f1cb42 100644
+--- a/src/util/lp/static_matrix_def.h
++++ b/src/util/lp/static_matrix_def.h
+@@ -86,7 +86,7 @@ static_matrix<T, X>::static_matrix(static_matrix const &A, unsigned * /* basis *
+     init_row_columns(m, m);
+     while (m--) {
+         for (auto & col : A.m_columns[m]){
+-            set(col.var(), m, A.get_value_of_column_cell(col));
++            set(col.var(), m, A.get_column_cell(col));
+         }
+     }
+ }

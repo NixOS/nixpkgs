@@ -1,0 +1,29 @@
+From 7b24e2a593a0029c6f555c9001be87a34eceecc6 Mon Sep 17 00:00:00 2001
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 6 Aug 2024 17:04:55 +0200
+Subject: [PATCH] Export all symbols of mjpg_streamer binary
+
+Fixes runtime error with stripped binary
+
+    dlopen: /usr/lib/mjpg-streamer/input_uvc.so: undefined symbol: resolutions_help
+
+Source: http://lists.busybox.net/pipermail/buildroot/2024-August/759732.html
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ mjpg-streamer-experimental/CMakeLists.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/mjpg-streamer-experimental/CMakeLists.txt b/mjpg-streamer-experimental/CMakeLists.txt
+index cf26620e..3ff12cdf 100644
+--- a/mjpg-streamer-experimental/CMakeLists.txt
++++ b/mjpg-streamer-experimental/CMakeLists.txt
+@@ -92,6 +92,7 @@ set (CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+ add_executable(mjpg_streamer mjpg_streamer.c
+                              utils.c)
+ 
++set_property(TARGET mjpg_streamer PROPERTY ENABLE_EXPORTS ON)
+ target_link_libraries(mjpg_streamer pthread dl)
+ install(TARGETS mjpg_streamer DESTINATION bin)
+ 
+

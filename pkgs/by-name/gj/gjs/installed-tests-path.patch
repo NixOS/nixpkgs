@@ -1,0 +1,110 @@
+diff --git a/installed-tests/js/meson.build b/installed-tests/js/meson.build
+index 98475f7d..942d9eca 100644
+--- a/installed-tests/js/meson.build
++++ b/installed-tests/js/meson.build
+@@ -10,7 +10,7 @@ jsunit_resources_files = gnome.compile_resources('jsunit-resources',
+ minijasmine = executable('minijasmine', '../minijasmine.cpp',
+     jsunit_resources_files, dependencies: libgjs_dep,
+     cpp_args: [
+-        '-DINSTTESTDIR="@0@"'.format(prefix / installed_tests_execdir),
++        '-DINSTTESTDIR="@0@"'.format(installed_tests_execdir),
+     ],
+     include_directories: top_include,
+     install: get_option('installed_tests'), install_dir: installed_tests_execdir)
+@@ -90,7 +90,7 @@ foreach test : jasmine_tests
+ 
+     test_description_subst = {
+         'name': 'test@0@.js'.format(test),
+-        'installed_tests_execdir': prefix / installed_tests_execdir,
++        'installed_tests_execdir': installed_tests_execdir,
+     }
+     configure_file(configuration: test_description_subst,
+         input: '../minijasmine.test.in',
+@@ -122,7 +122,7 @@ foreach test : dbus_tests
+ 
+ dbus_test_description_subst = {
+     'name': 'testGDBus.js',
+-    'installed_tests_execdir': prefix / installed_tests_execdir,
++    'installed_tests_execdir': installed_tests_execdir,
+ }
+ configure_file(
+     configuration: dbus_test_description_subst,
+@@ -159,7 +159,7 @@ foreach test : modules_tests
+ 
+     esm_test_description_subst = {
+         'name': 'test@0@.js'.format(test),
+-        'installed_tests_execdir': prefix / installed_tests_execdir,
++        'installed_tests_execdir': installed_tests_execdir,
+     }
+     configure_file(configuration: esm_test_description_subst,
+         input: '../minijasmine-module.test.in',
+diff --git a/installed-tests/meson.build b/installed-tests/meson.build
+index 7a7c48ab..52508c2c 100644
+--- a/installed-tests/meson.build
++++ b/installed-tests/meson.build
+@@ -34,7 +34,7 @@ foreach test : simple_tests
+ 
+     test_description_subst = {
+         'name': 'test@0@.sh'.format(test),
+-        'installed_tests_execdir': prefix / installed_tests_execdir,
++        'installed_tests_execdir': installed_tests_execdir,
+     }
+     configure_file(configuration: test_description_subst,
+         input: 'script.test.in', output: 'test@0@.sh.test'.format(test),
+@@ -123,7 +123,7 @@ foreach test : debugger_tests
+ 
+     test_description_subst = {
+         'name': '@0@.debugger'.format(test),
+-        'installed_tests_execdir': prefix / installed_tests_execdir,
++        'installed_tests_execdir': installed_tests_execdir,
+     }
+     configure_file(configuration: test_description_subst,
+         input: 'debugger.test.in',
+diff --git a/installed-tests/script.test.in b/installed-tests/script.test.in
+index debefc4c..96a91b88 100644
+--- a/installed-tests/script.test.in
++++ b/installed-tests/script.test.in
+@@ -3,5 +3,5 @@
+ 
+ [Test]
+ Type=session
+-Exec=sh @prefix@/@installed_tests_execdir@/scripts/@name@
++Exec=sh @installed_tests_execdir@/scripts/@name@
+ Output=TAP
+diff --git a/meson.build b/meson.build
+index bbfe8bc8..e6f87dc3 100644
+--- a/meson.build
++++ b/meson.build
+@@ -25,8 +25,8 @@ datadir = get_option('datadir')
+ libexecdir = get_option('libexecdir')
+ gjsjsdir = datadir / api_name
+ pkglibdir = libdir / meson.project_name()
+-installed_tests_execdir = libexecdir / 'installed-tests' / meson.project_name()
+-installed_tests_metadir = datadir / 'installed-tests' / meson.project_name()
++installed_tests_execdir = get_option('installed_test_prefix') / libexecdir / 'installed-tests' / meson.project_name()
++installed_tests_metadir = get_option('installed_test_prefix') / datadir / 'installed-tests' / meson.project_name()
+ 
+ ### Check for conflicting build options ########################################
+ 
+@@ -577,9 +577,9 @@ install_data('installed-tests/extra/gjs.supp', install_dir: gjsjsdir / 'valgrind
+ install_data('installed-tests/extra/lsan.supp', install_dir: gjsjsdir / 'lsan')
+ 
+ if get_option('installed_tests')
+-    schemadir = datadir / 'glib-2.0' / 'schemas'
++    schemadir = get_option('installed_test_prefix') / datadir / 'glib-2.0' / 'schemas'
+     install_data('installed-tests/js/org.gnome.GjsTest.gschema.xml', install_dir: schemadir)
+-    meson.add_install_script(glib_compile_schemas, prefix / schemadir, skip_if_destdir: true)
++    meson.add_install_script(glib_compile_schemas, schemadir, skip_if_destdir: true)
+ endif
+ 
+ ### Generate pkg-config file ###################################################
+diff --git a/meson_options.txt b/meson_options.txt
+index fe425efd..29325756 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -24,3 +24,5 @@ option('skip_gtk_tests', type: 'boolean', value: false,
+     description: 'Skip tests that need a display connection')
+ option('verbose_logs', type: 'boolean', value: false,
+     description: 'Enable extra log messages that may decrease performance (not allowed in release builds)')
++option('installed_test_prefix', type: 'string', value: '',
++    description: 'Prefix for installed tests')

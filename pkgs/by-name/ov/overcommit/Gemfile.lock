@@ -1,0 +1,21 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    childprocess (5.1.0)
+      logger (~> 1.5)
+    iniparse (1.5.0)
+    logger (1.7.0)
+    overcommit (0.68.0)
+      childprocess (>= 0.6.3, < 6)
+      iniparse (~> 1.4)
+      rexml (>= 3.3.9)
+    rexml (3.4.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  overcommit
+
+BUNDLED WITH
+   2.6.9
