@@ -7,6 +7,8 @@
   slimevr-server,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   rustPlatform,
   cargo-tauri,
   wrapGAppsHook3,
@@ -18,7 +20,6 @@
   libayatana-appindicator,
   udevCheckHook,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "slimevr";
   version = "18.1.0";
@@ -36,16 +37,18 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-X5IgWZlkvsstMN3YS4r+NJl6RVfREfZqKUrfsrUPQuU=";
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     pname = "${pname}-pnpm-deps";
     inherit version src;
+    pnpm = pnpm_9;
     fetcherVersion = 1;
     hash = "sha256-ExjEAr38GX2iZThVj3C3N/9mPgf0Bs7J5OAwtDdmn6I=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
     cargo-tauri.hook
     pkg-config
     wrapGAppsHook3
@@ -89,7 +92,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   # solarxr needs to be installed after compiling its Typescript files. This isn't
-  # done the first time, because `pnpm_9.configHook` ignores `package.json` scripts.
+  # done the first time, because `pnpmConfigHook` ignores `package.json` scripts.
   preBuild = ''
     pnpm --filter solarxr-protocol build
   '';

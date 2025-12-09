@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pnpm,
   faketty,
   nodejs,
@@ -20,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wEddzW5/+qdtNTxdUs7YEA5vk6/KjrVOgWvIeo0o2ww=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
     hash = "sha256-JhyZpkrp78FECH6UKYYuhWF2w/mYW1BQG5FIsWh5GRE=";
@@ -29,7 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     faketty
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
     makeBinaryWrapper
   ];
 

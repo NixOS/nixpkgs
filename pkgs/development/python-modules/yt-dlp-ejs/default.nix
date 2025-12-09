@@ -5,6 +5,8 @@
   hatch-vcs,
   hatchling,
   nodejs,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pnpm,
 }:
 
@@ -20,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-o6qf4rfj42mCyvCBb+wyJmZKg3Q+ojsqbCcBfIJnTPg=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit
       pname
       version
@@ -37,7 +39,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
   ];
 
   pythonImportsCheck = [ "yt_dlp_ejs" ];

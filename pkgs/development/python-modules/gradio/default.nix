@@ -15,6 +15,8 @@
   zip,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
 
   # dependencies
   setuptools,
@@ -72,7 +74,6 @@
   vega-datasets,
   writableTmpDirAsHomeHook,
 }:
-
 buildPythonPackage rec {
   pname = "gradio";
   version = "5.49.1";
@@ -85,8 +86,13 @@ buildPythonPackage rec {
     hash = "sha256-tfjyu2yl+2ndPZWrsSrVf8qv2eqpU5ZJHVqM9saJVt4=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      ;
+    pnpm = pnpm_9;
     fetcherVersion = 1;
     hash = "sha256-XnCx34nbX+essVfXJlxvYB9/lnolAkF81Jp6dAOqr8E=";
   };
@@ -106,7 +112,8 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     zip
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
 
   build-system = [

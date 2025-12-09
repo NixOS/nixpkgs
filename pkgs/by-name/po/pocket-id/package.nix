@@ -5,10 +5,11 @@
   stdenvNoCC,
   nodejs,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nixosTests,
   nix-update-script,
 }:
-
 buildGo125Module (finalAttrs: {
   pname = "pocket-id";
   version = "1.16.0";
@@ -49,10 +50,12 @@ buildGo125Module (finalAttrs: {
 
     nativeBuildInputs = [
       nodejs
-      pnpm_10.configHook
+      pnpmConfigHook
+      pnpm_10
     ];
-    pnpmDeps = pnpm_10.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
+      pnpm = pnpm_10;
       fetcherVersion = 1;
       hash = "sha256-drXGcUHP7J7keGra7/x1tr9Pfh/wjzmtUE1yAybYXLQ=";
     };
