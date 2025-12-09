@@ -33,6 +33,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/ilanschnell/bitarray";
     changelog = "https://github.com/ilanschnell/bitarray/raw/${version}/CHANGE_LOG";
     license = licenses.psfl;
-    maintainers = with maintainers; [ bhipple ];
   };
 }

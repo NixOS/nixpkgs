@@ -35,8 +35,5 @@ buildGoModule rec {
     description = "Build Caddy with plugins";
     mainProgram = "xcaddy";
     license = licenses.asl20;
-    maintainers = with maintainers; [
-      tjni
-    ];
   };
 }

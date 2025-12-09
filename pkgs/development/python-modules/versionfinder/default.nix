@@ -55,6 +55,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/jantman/versionfinder";
     changelog = "https://github.com/jantman/versionfinder/blob/${version}/CHANGES.rst";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ zakame ];
   };
 }

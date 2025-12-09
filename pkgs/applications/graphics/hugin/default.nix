@@ -95,7 +95,6 @@ stdenv.mkDerivation rec {
     homepage = "https://hugin.sourceforge.io/";
     description = "Toolkit for stitching photographs and assembling panoramas, together with an easy to use graphical front end";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ hrdinka ];
     platforms = platforms.linux;
   };
 }

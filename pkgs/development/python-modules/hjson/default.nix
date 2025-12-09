@@ -48,7 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/hjson/hjson-py";
     changelog = "https://github.com/hjson/hjson-py/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ bhipple ];
     mainProgram = "hjson";
   };
 }

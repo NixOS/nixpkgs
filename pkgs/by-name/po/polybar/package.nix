@@ -116,7 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     maintainers = with maintainers; [
       afldcr
-      Br1ght0ne
       moni
     ];
     mainProgram = "polybar";
