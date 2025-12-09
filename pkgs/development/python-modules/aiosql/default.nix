@@ -14,10 +14,8 @@
 
 buildPythonPackage rec {
   pname = "aiosql";
-  version = "13.4";
+  version = "14.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   outputs = [
     "doc"
@@ -28,7 +26,7 @@ buildPythonPackage rec {
     owner = "nackjicholson";
     repo = "aiosql";
     tag = version;
-    hash = "sha256-a3pRzcDMXdaDs0ub6k5bPRwnk+RCbxZ7ceIt8/fMSPg=";
+    hash = "sha256-BNsjVVyYRfp3sNdzQwHy9nQveP2AHfXGK10DLybat9I=";
   };
 
   sphinxRoot = "docs/source";
