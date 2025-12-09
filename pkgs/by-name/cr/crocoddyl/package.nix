@@ -4,7 +4,7 @@
   doxygen,
   example-robot-data,
   fetchFromGitHub,
-  fetchpatch,
+  ffmpeg,
   ipopt,
   lapack,
   lib,
@@ -15,23 +15,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "crocoddyl";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "loco-3d";
     repo = "crocoddyl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m7UiCa8ydjsAIhsFiShTi3/JaKgq2TCQ1XYAMyTNg1U=";
+    hash = "sha256-EYvakM81Ot/AtXElJbcQNo7IydBtRgy+8a0cY06CzQ8=";
   };
-
-  patches = [
-    # ref. https://github.com/loco-3d/crocoddyl/pull/1440 merged upstream
-    (fetchpatch {
-      name = "add-missing-include.patch";
-      url = "https://github.com/loco-3d/crocoddyl/commit/6994bea7bb3ae6027f5b611ef1635768538150fd.patch";
-      hash = "sha256-XbQKRWpWm5Rk4figoA2swId4Pz2xKDpU4NFP46p8WO0=";
-    })
-  ];
 
   outputs = [
     "out"
@@ -54,6 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
     pinocchio
   ];
 
+  checkInputs = [
+    ffmpeg
+  ];
+
   cmakeFlags = [
     (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
     (lib.cmakeBool "BUILD_EXAMPLES" false)
@@ -72,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Crocoddyl optimal control library";
     homepage = "https://github.com/loco-3d/crocoddyl";
+    changelog = "https://github.com/loco-3d/crocoddyl/blob/devel/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       nim65s
