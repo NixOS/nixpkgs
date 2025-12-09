@@ -114,7 +114,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  updateScript = ./update.sh;
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "TeamSpeak voice communication tool (beta version)";
