@@ -7537,6 +7537,12 @@
     githubId = 7494394;
     name = "Karim Elatov";
   };
+  eldios = {
+    email = "emanuele.lele.calo@gmail.com";
+    github = "eldios";
+    githubId = 483767;
+    name = "Emanuele 'Lele' Calo";
+  };
   eleanor = {
     email = "dejan@proteansec.com";
     github = "proteansec";
