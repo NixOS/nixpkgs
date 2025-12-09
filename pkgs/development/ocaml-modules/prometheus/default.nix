@@ -6,7 +6,6 @@
   asetmap,
   re,
   lwt,
-  alcotest,
 }:
 
 buildDunePackage (finalAttrs: {
