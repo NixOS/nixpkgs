@@ -6,7 +6,6 @@
   ...
 }:
 let
-  inherit (lib) maintainers;
   inherit (lib.meta) getExe;
   inherit (lib.modules) mkIf mkMerge;
   inherit (lib.options)
