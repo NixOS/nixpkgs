@@ -190,13 +190,13 @@
     "vendorHash": "sha256-rVrCozbmMR3rHA6oLLha6gdYEaFXD5r04CqY+bSWoZM="
   },
   "cloudflare_cloudflare": {
-    "hash": "sha256-CSTMb1pXG8KajJx+i+lNkUTEkH2tdXpv/zTluuKlQ3I=",
+    "hash": "sha256-+sp9u9Xl5MvAWjy5efA4CgL94yprCcBP8yYEPcVifgQ=",
     "homepage": "https://registry.terraform.io/providers/cloudflare/cloudflare",
     "owner": "cloudflare",
     "repo": "terraform-provider-cloudflare",
-    "rev": "v5.13.0",
+    "rev": "v5.14.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-fWOC4Q9bqm8LqL2pSFeJhZrB6g/32xd4O1JIHXJ8vok="
+    "vendorHash": "sha256-4OHJyp3Tdf/RpXFMJb91a/ygsb54pNzMtMi5Ye2RqOA="
   },
   "cloudfoundry-community_cloudfoundry": {
     "hash": "sha256-1nYncJLVU/f9WD6Quh9IieIXgixPzbPk4zbtI1zmf9g=",
@@ -1075,11 +1075,11 @@
     "vendorHash": "sha256-F1AuO/dkldEDRvkwrbq2EjByxjg3K2rohZAM4DzKPUw="
   },
   "pagerduty_pagerduty": {
-    "hash": "sha256-3SqhkSed8aO7CP4ONj02ahm5V9xV3xyRBPn03A7xlMA=",
+    "hash": "sha256-K3Gr3ivLPMFqR10HSino/ZlsYWNpDzyJalx6orTVa4k=",
     "homepage": "https://registry.terraform.io/providers/PagerDuty/pagerduty",
     "owner": "PagerDuty",
     "repo": "terraform-provider-pagerduty",
-    "rev": "v3.30.7",
+    "rev": "v3.30.8",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1354,13 +1354,13 @@
     "vendorHash": "sha256-CcbNooB1AjLbyMkTNmAklqNm6o6FVCBEBiEnD/U5yGU="
   },
   "terraform-routeros_routeros": {
-    "hash": "sha256-e9PJPjNyb9K5CpOsySnxIm209mnnL6bwzANQPClZLaE=",
+    "hash": "sha256-KhxNuzVaZFCO6XTCaj9wBddgw7TXULh/6LnMjiqPRLg=",
     "homepage": "https://registry.terraform.io/providers/terraform-routeros/routeros",
     "owner": "terraform-routeros",
     "repo": "terraform-provider-routeros",
-    "rev": "v1.92.1",
+    "rev": "v1.98.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-3I8nOAJTrcP7nN36Emw1ztWHBOdHHfxgo2c63o45hQ8="
+    "vendorHash": "sha256-+u00PWotHxCQ/BveXY23ulrQszoyG59GCkUIYKwlulc="
   },
   "timohirt_hetznerdns": {
     "hash": "sha256-wmXZ6+5Ex3G2JUdw2is2VIo/X1X0V1Auw5KmYpGllug=",

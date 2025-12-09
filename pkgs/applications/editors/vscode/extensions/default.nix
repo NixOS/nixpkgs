@@ -1242,8 +1242,8 @@ let
         mktplcRef = {
           name = "languagetool-linter";
           publisher = "davidlday";
-          version = "0.25.3";
-          hash = "sha256-ZxIBjvDUThxmJwvaP3N/nM4b2dGkM0jiklcwiAzPXiY=";
+          version = "0.25.5";
+          hash = "sha256-/ZSxaxiv76aJ+KmDlR5h8PrkEo0pPMvb9C3KGdKCNK8=";
         };
         meta = {
           description = "LanguageTool integration for VS Code";
@@ -1900,8 +1900,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "codespaces";
-          version = "1.18.3";
-          hash = "sha256-NcCVpRbFdfRaV7nwQgMNOJWvhrFZ/FCJpcVoivS+jVI=";
+          version = "1.18.4";
+          hash = "sha256-/bCLmpUqtkV1yTLMWIwbX6jdtzwN25NatGRQHR8z5oA=";
         };
 
         meta = {
@@ -1965,8 +1965,8 @@ let
         mktplcRef = {
           name = "gitlab-workflow";
           publisher = "gitlab";
-          version = "6.58.3";
-          hash = "sha256-3m77Z3UpP1cIXdnyFZ7EikwsCZ5jVBw9K8PIZbBwFhM=";
+          version = "6.60.2";
+          hash = "sha256-X3ZOrEkcFDlB4pYqEvO3gACAOET1kjF56FkHLmNKRrI=";
         };
         meta = {
           description = "GitLab extension for Visual Studio Code";
@@ -3838,8 +3838,8 @@ let
         mktplcRef = {
           name = "ansible";
           publisher = "redhat";
-          version = "25.9.0";
-          hash = "sha256-Z0oUhqoHfVALG5k1dbSBpJiq0AEjaqeh8yLJ8FjvfcY=";
+          version = "25.12.1";
+          hash = "sha256-5icJ5nZSJNC2znqC8iA6IDjBMeRkoRKRMaRQ6G2vn4M=";
         };
         meta = {
           description = "Ansible language support";
