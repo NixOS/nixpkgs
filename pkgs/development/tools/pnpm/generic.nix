@@ -3,6 +3,7 @@
   stdenvNoCC,
   writeScript,
   fetchPnpmDeps,
+  pnpmConfigHook,
   fetchurl,
   installShellFiles,
   nodejs,
@@ -11,7 +12,6 @@
   version,
   hash,
   buildPackages,
-  pnpmConfigHook,
 }:
 let
   majorVersion = lib.versions.major version;

@@ -2,6 +2,8 @@
   lib,
   stdenv,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs_22,
   fetchFromGitHub,
   nix-update-script,
@@ -23,11 +25,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs_22
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10
   ];
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_10;
 
     buildInputs = [ nodejs_22 ];
 

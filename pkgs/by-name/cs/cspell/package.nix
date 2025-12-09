@@ -3,9 +3,10 @@
   stdenv,
   nodejs,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   fetchFromGitHub,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "cspell";
   version = "9.2.1";
@@ -27,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm config set --location=project inject-workplace-packages true
   '';
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
@@ -36,13 +37,15 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       prePnpmInstall
       ;
+    pnpm = pnpm_10;
     fetcherVersion = 2;
     hash = "sha256-aE7DHyXPLziVjW9bBL98fFRiPwOFIyU5edbj8rEws6U=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10
   ];
 
   buildInputs = [

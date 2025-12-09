@@ -17,6 +17,8 @@
   qpdf,
   tesseract5,
   unpaper,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pnpm,
   poppler-utils,
   liberation_ttf,
@@ -77,7 +79,7 @@ let
 
     src = src + "/src-ui";
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       fetcherVersion = 2;
       hash = "sha256-lxZOwt+/ReU7m7he0iJSt5HqaPkRksveCgvDG7uodjA=";
@@ -87,7 +89,8 @@ let
       node-gyp
       nodejs_20
       pkg-config
-      pnpm.configHook
+      pnpmConfigHook
+      pnpm
       python3
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [

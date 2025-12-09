@@ -5,6 +5,8 @@
   fetchFromGitHub,
   nodejs_20,
   pnpm_8,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   wails,
   wrapGAppsHook3,
   glib-networking,
@@ -42,7 +44,8 @@ buildGoModule rec {
   '';
 
   nativeBuildInputs = [
-    pnpm_8.configHook
+    pnpmConfigHook
+    pnpm_8
     wails'
     wrapGAppsHook3
     copyDesktopItems
@@ -55,8 +58,13 @@ buildGoModule rec {
   # we use env because buildGoModule doesn't forward all normal attrs
   # this is pretty hacky
   env = {
-    pnpmDeps = pnpm_8.fetchDeps {
-      inherit pname version src;
+    pnpmDeps = fetchPnpmDeps {
+      inherit
+        pname
+        version
+        src
+        ;
+      pnpm = pnpm_8;
       sourceRoot = "${src.name}/frontend";
       fetcherVersion = 1;
       hash = "sha256-OP+3zsNlvqLFwvm2cnBd2bj2Kc3EghQZE3hpotoqqrQ=";

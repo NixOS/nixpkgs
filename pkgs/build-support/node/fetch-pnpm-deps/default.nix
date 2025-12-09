@@ -122,7 +122,7 @@ in
                 --registry="$NIX_NPM_REGISTRY" \
                 --frozen-lockfile
 
-            # Store newer fetcherVersion in case pnpm.configHook also needs it
+            # Store newer fetcherVersion in case pnpmConfigHook also needs it
             if [[ ${toString fetcherVersion} -gt 1 ]]; then
               echo ${toString fetcherVersion} > $out/.fetcher-version
             fi

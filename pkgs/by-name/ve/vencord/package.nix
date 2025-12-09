@@ -7,6 +7,8 @@
   nix-update,
   nodejs,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   stdenv,
   writeShellScript,
   discord,
@@ -15,7 +17,6 @@
   discord-development,
   buildWebExtension ? false,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
   version = "1.13.9";
@@ -35,8 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   pnpmDeps =
-    (pnpm_10.fetchDeps {
+    (fetchPnpmDeps {
       inherit (finalAttrs) pname src;
+      pnpm = pnpm_10;
       fetcherVersion = 2;
       hash = "sha256-M9yZxBtuZg5KwG2Sli+f6Ionwccq7F7tI8/FnP1iObA=";
     }).overrideAttrs
@@ -45,7 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     git
     nodejs
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10
   ];
 
   env = {

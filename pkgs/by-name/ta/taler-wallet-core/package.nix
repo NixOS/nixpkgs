@@ -9,6 +9,8 @@
   removeReferencesTo,
   nodejs_20,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3,
   gitMinimal,
   jq,
@@ -48,14 +50,16 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     customPython
     nodejs_20
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
     gitMinimal
     jq
     zip
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_9;
     fetcherVersion = 1;
     hash = "sha256-pLe5smsXdzSBgz/OYNO5FVEI2L6y/p+jMxEkzqUaX34=";
   };
