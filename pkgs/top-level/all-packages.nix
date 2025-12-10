@@ -13934,17 +13934,6 @@ with pkgs;
 
   nix-prefetch-github = with python3Packages; toPythonApplication nix-prefetch-github;
 
-  inherit (callPackages ../tools/package-management/nix-prefetch-scripts { })
-    nix-prefetch-bzr
-    nix-prefetch-cvs
-    nix-prefetch-darcs
-    nix-prefetch-git
-    nix-prefetch-hg
-    nix-prefetch-pijul
-    nix-prefetch-svn
-    nix-prefetch-scripts
-    ;
-
   nix-tree = haskell.lib.compose.justStaticExecutables (haskellPackages.nix-tree);
 
   nix-serve-ng =
