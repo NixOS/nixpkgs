@@ -3,7 +3,10 @@ import ../make-test-python.nix (
   {
     pkgs,
     lib,
-    k3s,
+    rancherDistro,
+    rancherPackage,
+    serviceName,
+    disabledComponents,
     ...
   }:
   let
@@ -15,7 +18,7 @@ import ../make-test-python.nix (
     containerLogMaxSize = "5Mi";
   in
   {
-    name = "${k3s.name}-kubelet-config";
+    name = "${rancherPackage.name}-kubelet-config";
     nodes.machine =
       { pkgs, ... }:
       {
@@ -25,18 +28,11 @@ import ../make-test-python.nix (
         virtualisation.memorySize = 1536;
         virtualisation.diskSize = 4096;
 
-        services.k3s = {
+        services.${rancherDistro} = {
           enable = true;
-          package = k3s;
-          # Slightly reduce resource usage
-          extraFlags = [
-            "--disable coredns"
-            "--disable local-storage"
-            "--disable metrics-server"
-            "--disable servicelb"
-            "--disable traefik"
-            "--node-name ${nodeName}"
-          ];
+          package = rancherPackage;
+          disable = disabledComponents;
+          inherit nodeName;
           gracefulNodeShutdown = {
             enable = true;
             inherit shutdownGracePeriod shutdownGracePeriodCriticalPods;
@@ -52,11 +48,11 @@ import ../make-test-python.nix (
         import json
 
         start_all()
-        machine.wait_for_unit("k3s")
+        machine.wait_for_unit("${serviceName}")
         # wait until the node is ready
         machine.wait_until_succeeds(r"""kubectl get node ${nodeName} -ojson | jq -e '.status.conditions[] | select(.type == "Ready") | .status == "True"'""")
         # test whether the kubelet registered an inhibitor lock
-        machine.succeed("systemd-inhibit --list --no-legend | grep \"kubelet.*k3s-server.*shutdown\"")
+        machine.succeed("systemd-inhibit --list --no-legend | grep \"kubelet.*${rancherDistro}-server.*shutdown\"")
         # run kubectl proxy in the background, close stdout through redirection to not wait for the command to finish
         machine.execute("kubectl proxy --address 127.0.0.1 --port=8001 >&2 &")
         machine.wait_until_succeeds("nc -z 127.0.0.1 8001")

@@ -263,7 +263,7 @@
           - any-glob-to-any-file:
               - nixos/modules/services/cluster/rancher/default.nix
               - nixos/modules/services/cluster/rancher/k3s.nix
-              - nixos/tests/k3s/**/*
+              - nixos/tests/rancher/**/*
               - pkgs/applications/networking/cluster/k3s/**/*
 
 "6.topic: kernel":

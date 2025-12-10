@@ -3,14 +3,17 @@ import ../make-test-python.nix (
   {
     pkgs,
     lib,
-    k3s,
+    rancherDistro,
+    rancherPackage,
+    serviceName,
+    disabledComponents,
     ...
   }:
   let
     nodeName = "test";
   in
   {
-    name = "${k3s.name}-containerd-config";
+    name = "${rancherPackage.name}-containerd-config";
     nodes.machine =
       { ... }:
       {
@@ -19,20 +22,13 @@ import ../make-test-python.nix (
         virtualisation.memorySize = 1536;
         virtualisation.diskSize = 4096;
 
-        services.k3s = {
+        services.${rancherDistro} = {
           enable = true;
-          package = k3s;
-          # Slightly reduce resource usage
-          extraFlags = [
-            "--disable coredns"
-            "--disable local-storage"
-            "--disable metrics-server"
-            "--disable servicelb"
-            "--disable traefik"
-            "--node-name ${nodeName}"
-          ];
+          package = rancherPackage;
+          disable = disabledComponents;
+          inherit nodeName;
           containerdConfigTemplate = ''
-            # Base K3s config
+            # Base ${rancherDistro} config
             {{ template "base" . }}
 
             # MAGIC COMMENT
@@ -43,14 +39,14 @@ import ../make-test-python.nix (
     testScript = # python
       ''
         start_all()
-        machine.wait_for_unit("k3s")
+        machine.wait_for_unit("${serviceName}")
         # wait until the node is ready
         machine.wait_until_succeeds(r"""kubectl get node ${nodeName} -ojson | jq -e '.status.conditions[] | select(.type == "Ready") | .status == "True"'""")
         # test whether the config template file contains the magic comment
-        out=machine.succeed("cat /var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl")
+        out=machine.succeed("cat /var/lib/rancher/${rancherDistro}/agent/etc/containerd/config.toml.tmpl")
         t.assertIn("MAGIC COMMENT", out, "the containerd config template does not contain the magic comment")
         # test whether the config file contains the magic comment
-        out=machine.succeed("cat /var/lib/rancher/k3s/agent/etc/containerd/config.toml")
+        out=machine.succeed("cat /var/lib/rancher/${rancherDistro}/agent/etc/containerd/config.toml")
         t.assertIn("MAGIC COMMENT", out, "the containerd config does not contain the magic comment")
       '';
 

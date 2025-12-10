@@ -3,13 +3,16 @@ import ../make-test-python.nix (
   {
     pkgs,
     lib,
-    k3s,
+    rancherDistro,
+    rancherPackage,
+    serviceName,
+    disabledComponents,
     etcd,
     ...
   }:
 
   {
-    name = "${k3s.name}-etcd";
+    name = "${rancherPackage.name}-etcd";
 
     nodes = {
 
@@ -39,7 +42,7 @@ import ../make-test-python.nix (
           };
         };
 
-      k3s =
+      server =
         { pkgs, ... }:
         {
           environment.systemPackages = with pkgs; [ jq ];
@@ -47,18 +50,14 @@ import ../make-test-python.nix (
           virtualisation.memorySize = 1536;
           virtualisation.diskSize = 4096;
 
-          services.k3s = {
+          services.${rancherDistro} = {
             enable = true;
             role = "server";
-            package = k3s;
+            package = rancherPackage;
+            disable = disabledComponents;
+            nodeIP = "192.168.1.2";
             extraFlags = [
               "--datastore-endpoint=\"http://192.168.1.1:2379\""
-              "--disable coredns"
-              "--disable local-storage"
-              "--disable metrics-server"
-              "--disable servicelb"
-              "--disable traefik"
-              "--node-ip 192.168.1.2"
             ];
           };
 
@@ -95,27 +94,27 @@ import ../make-test-python.nix (
         with subtest("should wait for etcdctl endpoint health to succeed"):
             etcd.wait_until_succeeds("etcdctl endpoint health")
 
-        with subtest("should start k3s"):
-            k3s.start()
-            k3s.wait_for_unit("k3s")
+        with subtest("should start ${rancherDistro}"):
+            server.start()
+            server.wait_for_unit("${serviceName}")
 
         with subtest("should test if kubectl works"):
-            k3s.wait_until_succeeds("k3s kubectl get node")
+            server.wait_until_succeeds("kubectl get node")
 
         with subtest("should wait for service account to show up; takes a sec"):
-            k3s.wait_until_succeeds("k3s kubectl get serviceaccount default")
+            server.wait_until_succeeds("kubectl get serviceaccount default")
 
         with subtest("should create a sample secret object"):
-            k3s.succeed("k3s kubectl create secret generic nixossecret --from-literal thesecret=abacadabra")
+            server.succeed("kubectl create secret generic nixossecret --from-literal thesecret=abacadabra")
 
         with subtest("should check if secret is correct"):
-            k3s.wait_until_succeeds("[[ $(kubectl get secrets nixossecret -o json | jq -r .data.thesecret | base64 -d) == abacadabra ]]")
+            server.wait_until_succeeds("[[ $(kubectl get secrets nixossecret -o json | jq -r .data.thesecret | base64 -d) == abacadabra ]]")
 
         with subtest("should have a secret in database"):
             etcd.wait_until_succeeds("[[ $(etcdctl get /registry/secrets/default/nixossecret | head -c1 | wc -c) -ne 0 ]]")
 
         with subtest("should delete the secret"):
-            k3s.succeed("k3s kubectl delete secret nixossecret")
+            server.succeed("kubectl delete secret nixossecret")
 
         with subtest("should not have a secret in database"):
             etcd.wait_until_fails("[[ $(etcdctl get /registry/secrets/default/nixossecret | head -c1 | wc -c) -ne 0 ]]")

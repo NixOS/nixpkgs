@@ -1,14 +1,17 @@
-# A test that runs a single node k3s cluster and verify a pod can run
+# A test that runs a single node rancher cluster and verifies a pod can run
 import ../make-test-python.nix (
   {
     pkgs,
     lib,
-    k3s,
+    rancherDistro,
+    rancherPackage,
+    serviceName,
+    disabledComponents,
     ...
   }:
   let
     imageEnv = pkgs.buildEnv {
-      name = "k3s-pause-image-env";
+      name = "${rancherDistro}-pause-image-env";
       paths = with pkgs; [
         tini
         (lib.hiPrio coreutils)
@@ -40,13 +43,13 @@ import ../make-test-python.nix (
     '';
   in
   {
-    name = "${k3s.name}-single-node";
+    name = "${rancherPackage.name}-single-node";
 
     nodes.machine =
       { pkgs, ... }:
       {
         environment.systemPackages = with pkgs; [
-          k3s
+          rancherPackage
           gzip
         ];
 
@@ -54,23 +57,20 @@ import ../make-test-python.nix (
         virtualisation.memorySize = 1536;
         virtualisation.diskSize = 4096;
 
-        services.k3s.enable = true;
-        services.k3s.role = "server";
-        services.k3s.package = k3s;
-        # Slightly reduce resource usage
-        services.k3s.extraFlags = [
-          "--disable coredns"
-          "--disable local-storage"
-          "--disable metrics-server"
-          "--disable servicelb"
-          "--disable traefik"
-          "--pause-image test.local/pause:local"
-        ];
+        services.${rancherDistro} = {
+          enable = true;
+          role = "server";
+          package = rancherPackage;
+          disable = disabledComponents;
+          extraFlags = [
+            "--pause-image test.local/pause:local"
+          ];
+        };
 
         users.users = {
           noprivs = {
             isNormalUser = true;
-            description = "Can't access k3s by default";
+            description = "Can't access ${rancherDistro} by default";
             password = "*";
           };
         };
@@ -80,10 +80,12 @@ import ../make-test-python.nix (
       ''
         start_all()
 
-        machine.wait_for_unit("k3s")
+        machine.wait_for_unit("${serviceName}")
         machine.succeed("kubectl cluster-info")
         machine.fail("sudo -u noprivs kubectl cluster-info")
-        machine.succeed("k3s check-config")
+        ${lib.optionalString (rancherDistro == "k3s") ''
+          machine.succeed("k3s check-config")
+        ''}
         machine.succeed(
             "${pauseImage} | ctr image import -"
         )
@@ -95,16 +97,16 @@ import ../make-test-python.nix (
         machine.succeed("kubectl delete -f ${testPodYaml}")
 
         # regression test for #176445
-        machine.fail("journalctl -o cat -u k3s.service | grep 'ipset utility not found'")
+        machine.fail("journalctl -o cat -u ${serviceName}.service | grep 'ipset utility not found'")
 
-        with subtest("Run k3s-killall"):
+        with subtest("Run ${rancherDistro}-killall"):
             # Call the killall script with a clean path to assert that
             # all required commands are wrapped
-            output = machine.succeed("PATH= ${k3s}/bin/k3s-killall.sh 2>&1 | tee /dev/stderr")
+            output = machine.succeed("PATH= ${rancherPackage}/bin/${rancherDistro}-killall.sh 2>&1 | tee /dev/stderr")
             t.assertNotIn("command not found", output, "killall script contains unknown command")
 
             # Check that killall cleaned up properly
-            machine.fail("systemctl is-active k3s.service")
+            machine.fail("systemctl is-active ${serviceName}.service")
             machine.fail("systemctl list-units | grep containerd")
             machine.fail("ip link show | awk -F': ' '{print $2}' | grep -e flannel -e cni0")
             machine.fail("ip netns show | grep cni-")

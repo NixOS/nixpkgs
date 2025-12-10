@@ -1,15 +1,18 @@
 # Tests whether container images are imported and auto deploying Helm charts,
-# including the bundled traefik, work
+# including the bundled traefik or ingress-nginx, work
 import ../make-test-python.nix (
   {
-    k3s,
-    lib,
     pkgs,
+    lib,
+    rancherDistro,
+    rancherPackage,
+    serviceName,
+    disabledComponents,
     ...
   }:
   let
     testImageEnv = pkgs.buildEnv {
-      name = "k3s-pause-image-env";
+      name = "${rancherDistro}-pause-image-env";
       paths = with pkgs; [
         busybox
         hello
@@ -24,11 +27,11 @@ import ../make-test-python.nix (
     };
     # pack the test helm chart as a .tgz archive
     package =
-      pkgs.runCommand "k3s-test-chart.tgz"
+      pkgs.runCommand "${rancherDistro}-test-chart.tgz"
         {
           nativeBuildInputs = [ pkgs.kubernetes-helm ];
           chart = builtins.toJSON {
-            name = "k3s-test-chart";
+            name = "${rancherDistro}-test-chart";
             version = "0.1.0";
           };
           values = builtins.toJSON {
@@ -93,7 +96,7 @@ import ../make-test-python.nix (
     };
   in
   {
-    name = "${k3s.name}-auto-deploy-helm";
+    name = "${rancherPackage.name}-auto-deploy-helm";
     meta.maintainers = lib.teams.k3s.members;
     nodes.machine =
       { pkgs, ... }:
@@ -104,19 +107,23 @@ import ../make-test-python.nix (
           diskSize = 4096;
         };
         environment.systemPackages = [ pkgs.yq-go ];
-        services.k3s = {
+        services.${rancherDistro} = {
           enable = true;
-          package = k3s;
-          # Slightly reduce resource usage
-          extraFlags = [
-            "--disable coredns"
-            "--disable local-storage"
-            "--disable metrics-server"
-            "--disable servicelb"
-          ];
+          package = rancherPackage;
+          disable =
+            {
+              k3s = lib.remove "traefik" disabledComponents;
+              rke2 = lib.remove "rke2-ingress-nginx" disabledComponents;
+            }
+            .${rancherDistro};
           images = [
-            # Provides the k3s Helm controller
-            k3s.airgap-images
+            {
+              # Provides the k3s Helm controller
+              k3s = rancherPackage.airgap-images;
+              rke2 = rancherPackage.images-core-linux-amd64-tar-zst;
+            }
+            .${rancherDistro}
+
             testImage
           ];
           autoDeployCharts = {
@@ -133,7 +140,7 @@ import ../make-test-python.nix (
               values =
                 /.
                 + builtins.unsafeDiscardStringContext (
-                  builtins.toFile "k3s-test-chart-values.yaml" ''
+                  builtins.toFile "${rancherDistro}-test-chart-values.yaml" ''
                     runCommand: "echo 'Hello, file!'"
                     image:
                       repository: test.local/test
@@ -176,14 +183,14 @@ import ../make-test-python.nix (
       ''
         import json
 
-        machine.wait_for_unit("k3s")
+        machine.wait_for_unit("${serviceName}")
         # check existence/absence of chart manifest files
-        machine.succeed("test -e /var/lib/rancher/k3s/server/manifests/hello.yaml")
-        machine.succeed("test ! -e /var/lib/rancher/k3s/server/manifests/disabled.yaml")
-        machine.succeed("test -e /var/lib/rancher/k3s/server/manifests/values-file.yaml")
-        machine.succeed("test -e /var/lib/rancher/k3s/server/manifests/advanced.yaml")
+        machine.succeed("test -e /var/lib/rancher/${rancherDistro}/server/manifests/hello.yaml")
+        machine.succeed("test ! -e /var/lib/rancher/${rancherDistro}/server/manifests/disabled.yaml")
+        machine.succeed("test -e /var/lib/rancher/${rancherDistro}/server/manifests/values-file.yaml")
+        machine.succeed("test -e /var/lib/rancher/${rancherDistro}/server/manifests/advanced.yaml")
         # check that the timeout is set correctly, select only the first doc in advanced.yaml
-        advancedManifest = json.loads(machine.succeed("yq -o json '.items[0]' /var/lib/rancher/k3s/server/manifests/advanced.yaml"))
+        advancedManifest = json.loads(machine.succeed("yq -o json '.items[0]' /var/lib/rancher/${rancherDistro}/server/manifests/advanced.yaml"))
         t.assertEqual(advancedManifest["spec"]["timeout"], "69s", "unexpected value for spec.timeout")
         # wait for test jobs to complete
         machine.wait_until_succeeds("kubectl wait --for=condition=complete job/hello", timeout=180)
@@ -197,8 +204,15 @@ import ../make-test-python.nix (
         t.assertEqual(hello_output.rstrip(), "Hello, world!", "unexpected output of hello job")
         t.assertEqual(values_file_output.rstrip(), "Hello, file!", "unexpected output of values file job")
         t.assertEqual(advanced_output.rstrip(), "advanced hello", "unexpected output of advanced job")
-        # wait for bundled traefik deployment
-        machine.wait_until_succeeds("kubectl -n kube-system rollout status deployment traefik", timeout=180)
+        # wait for bundled ingress deployment
+        ${
+          {
+            k3s = ''
+              machine.wait_until_succeeds("kubectl -n kube-system rollout status deployment traefik", timeout=180)
+            '';
+          }
+          .${rancherDistro}
+        }
       '';
   }
 )

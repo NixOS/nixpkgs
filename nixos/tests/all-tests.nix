@@ -800,7 +800,7 @@ in
   jitsi-meet = runTest ./jitsi-meet.nix;
   jool = import ./jool.nix { inherit pkgs runTest; };
   jotta-cli = runTest ./jotta-cli.nix;
-  k3s = handleTest ./k3s { };
+  k3s = handleTest ./rancher { rancherDistro = "k3s"; };
   kafka = handleTest ./kafka { };
   kanboard = runTest ./web-apps/kanboard.nix;
   kanidm = runTest ./kanidm.nix;
