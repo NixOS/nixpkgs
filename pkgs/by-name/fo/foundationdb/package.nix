@@ -171,6 +171,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       thoughtpolice
       lostnet
+      kornholi
     ];
   };
 }
