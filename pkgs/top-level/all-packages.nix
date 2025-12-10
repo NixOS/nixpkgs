@@ -12231,6 +12231,7 @@ with pkgs;
     docker_26
     docker_27
     docker_28
+    docker_29
     ;
 
   docker = docker_27;
