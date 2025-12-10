@@ -7,7 +7,6 @@
   installShellFiles,
   makeBinaryWrapper,
   models-dev,
-  nodejs,
   nix-update-script,
   ripgrep,
   sysctl,
@@ -15,78 +14,6 @@
   wayland,
   writableTmpDirAsHomeHook,
 }:
-let
-  node_modules =
-    finalAttrs:
-    stdenv.mkDerivation {
-      pname = "${finalAttrs.pname}-node_modules";
-      inherit (finalAttrs) version src;
-
-      __structuredAttrs = true;
-      strictDeps = true;
-
-      impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-        "GIT_PROXY_COMMAND"
-        "SOCKS_SERVER"
-      ];
-
-      nativeBuildInputs = [
-        bun
-        writableTmpDirAsHomeHook
-      ];
-
-      dontConfigure = true;
-
-      buildPhase = ''
-        runHook preBuild
-
-        export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
-        bun install \
-          --cpu="*" \
-          --filter './' \
-          --filter './packages/cli' \
-          --filter './packages/desktop' \
-          --filter './packages/app' \
-          --frozen-lockfile \
-          --ignore-scripts \
-          --no-progress \
-          --os="*"
-
-        bun --bun ./nix/scripts/canonicalize-node-modules.ts
-        bun --bun ./nix/scripts/normalize-bun-binaries.ts
-
-        runHook postBuild
-      '';
-
-      installPhase = ''
-        runHook preInstall
-
-        mkdir -p $out
-        find . -type d -name node_modules -exec cp -R --parents {} $out \;
-
-        # opencode targets only Linux and Darwin (see meta.platforms), so the
-        # Windows executables that "bun install --os=*" fetches are never
-        # executed. Dropping them keeps the output reproducible on hosts whose
-        # security endpoint agents scan the store, and removes the vulnerable
-        # bundled 7za.exe that will be quarantined.
-        find $out -type f -name '*.exe' -delete
-
-        runHook postInstall
-      '';
-
-      # NOTE: Required else we get errors that our fixed-output derivation references store paths
-      dontFixup = true;
-
-      outputHash =
-        if stdenv.hostPlatform.isLinux then
-          "sha256-zaRjXditlZ8C741SeBv8n0ChlfYFrD/l0fKcuo2dxrI="
-        else if stdenv.hostPlatform.isDarwin then
-          "sha256-LVqM4EJpSYmAFOJpyXwj0YySJx/ip2aXR8SrufVOHtE="
-        else
-          throw "Unsupported platform";
-      outputHashMode = "recursive";
-    };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencode";
   version = "2.3.0";
@@ -99,6 +26,36 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "opencode";
     tag = "v${finalAttrs.version}";
     hash = "sha256-7vw0TcaFsMN+XbZoU1gwHE1r8ppPPK0CTQqPbVQozT8=";
+  };
+
+  bunWorkspaces = [ "./packages/opencode" ];
+  bunDeps = bun.fetchDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      bunWorkspaces
+      ;
+    hash = "";
+
+  };
+
+  nativeBuildInputs = [
+    bun.configHook
+    installShellFiles
+    makeBinaryWrapper
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.autoSignDarwinBinariesHook
+  ];
+
+  env = {
+    MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
+    OPENCODE_DISABLE_MODELS_FETCH = true;
+    OPENCODE_VERSION = finalAttrs.version;
+    OPENCODE_CHANNEL = "latest";
+    NODE_OPTIONS = "--max-old-space-size=4096";
   };
 
   postPatch =
@@ -114,37 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace packages/cli/script/schema.ts \
         --replace-fail 'import { format } from "prettier"' 'const format = (s: string) => JSON.stringify(JSON.parse(s), null, 2)'
     '';
-
-  node_modules = node_modules finalAttrs;
-
-  nativeBuildInputs = [
-    bun
-    installShellFiles
-    makeBinaryWrapper
-    nodejs
-    writableTmpDirAsHomeHook
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.autoSignDarwinBinariesHook
-  ];
-
-  env = {
-    MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
-    OPENCODE_DISABLE_MODELS_FETCH = true;
-    OPENCODE_VERSION = finalAttrs.version;
-    OPENCODE_CHANNEL = "latest";
-    NODE_OPTIONS = "--max-old-space-size=4096";
-  };
-
-  configurePhase = ''
-    runHook preConfigure
-
-    cp -R "$node_modules"/. .
-    patchShebangs node_modules
-    patchShebangs packages/*/node_modules
-
-    runHook postConfigure
-  '';
 
   buildPhase = ''
     runHook preBuild
@@ -213,12 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
       config = "${finalAttrs.finalPackage}/share/config.json";
       theme = "${finalAttrs.finalPackage}/share/theme.json";
     };
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--subpackage"
-        "node_modules"
-      ];
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
