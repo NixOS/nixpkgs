@@ -32,6 +32,5 @@ buildPythonPackage rec {
     homepage = "https://mwparserfromhell.readthedocs.io/";
     changelog = "https://github.com/earwig/mwparserfromhell/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ melling ];
   };
 }

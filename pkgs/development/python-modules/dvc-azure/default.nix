@@ -46,6 +46,5 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/dvc-azure/${version}";
     changelog = "https://github.com/iterative/dvc-azure/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ melling ];
   };
 }
