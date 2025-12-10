@@ -60,8 +60,8 @@ stdenv.mkDerivation {
       by user management tools on Owl due to our shadow suite patches.
     '';
     homepage = "https://www.openwall.com/tcb/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     platforms = systems.inspect.patterns.isGnu;
-    maintainers = with maintainers; [ izorkin ];
+    maintainers = with lib.maintainers; [ izorkin ];
   };
 }

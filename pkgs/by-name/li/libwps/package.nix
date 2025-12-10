@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-fallthrough";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libwps.sourceforge.net/";
     description = "Microsoft Works document format import filter library";
-    platforms = platforms.unix;
-    license = licenses.lgpl21;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl21;
   };
 }

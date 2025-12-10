@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     install -vDm 644 -t $out/share/doc/mlmmj/ $docfiles
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://mlmmj.org";
     description = "Mailing List Management Made Joyful";
-    maintainers = [ maintainers.edwtjo ];
-    platforms = platforms.linux;
-    license = licenses.mit;
+    maintainers = [ lib.maintainers.edwtjo ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
   };
 }

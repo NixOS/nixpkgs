@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "meater" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for the Apption Labs Meater cooking probe";
     homepage = "https://github.com/Sotolotl/meater-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

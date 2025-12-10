@@ -123,12 +123,12 @@ rustPlatform.buildRustPackage rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://eunomia.dev";
     description = "EBPF compile toolchain for eunomia-bpf";
     mainProgram = "ecc-rs";
-    maintainers = with maintainers; [ oluceps ];
-    platforms = platforms.linux;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ oluceps ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
   };
 }

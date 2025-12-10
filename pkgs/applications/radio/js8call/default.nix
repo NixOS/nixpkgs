@@ -47,16 +47,16 @@ stdenv.mkDerivation (finalAttrs: {
         --replace "/usr/bin/" "$out/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Weak-signal keyboard messaging for amateur radio";
     longDescription = ''
       JS8Call is software using the JS8 Digital Mode providing weak signal
       keyboard to keyboard messaging to Amateur Radio Operators.
     '';
     homepage = "http://js8call.com/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       melling
       sarcasticadmin
     ];

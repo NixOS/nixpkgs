@@ -46,11 +46,11 @@ buildPythonPackage rec {
     "test_no_console_errors"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "MkDocs plugin supports for add Swagger UI in page";
     homepage = "https://github.com/Blueswen/mkdocs-swagger-ui-tag";
     changelog = "https://github.com/blueswen/mkdocs-swagger-ui-tag/blob/${src.tag}/CHANGELOG";
-    license = licenses.mit;
-    maintainers = with maintainers; [ snpschaaf ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ snpschaaf ];
   };
 }

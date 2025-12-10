@@ -41,10 +41,10 @@ buildGoModule rec {
     install -m644 -Dt $out/helm-s3 plugin.yaml
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Helm plugin that allows to set up a chart repository using AWS S3";
     homepage = "https://github.com/hypnoglow/helm-s3";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yurrriq ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yurrriq ];
   };
 }

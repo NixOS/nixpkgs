@@ -65,12 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Qt-based C++ web framework";
     homepage = "https://github.com/jlaine/qdjango";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
     pkgConfigModules = [
       "qdjango-db"
       "qdjango-http"

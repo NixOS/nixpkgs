@@ -40,11 +40,11 @@ buildPythonPackage rec {
     "pglast.parser"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL Languages AST and statements prettifier";
     homepage = "https://github.com/lelit/pglast";
     changelog = "https://github.com/lelit/pglast/blob/v${version}/CHANGES.rst";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "pgpp";
   };

@@ -26,14 +26,14 @@ buildPythonApplication rec {
   # No tests in archive
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = src.meta.homepage;
     description = ''
       A pandoc filter that will turn code blocks tagged with certain classes
       into images or ASCII art
     '';
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ synthetica ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ synthetica ];
     mainProgram = "pandoc-imagine";
   };
 }

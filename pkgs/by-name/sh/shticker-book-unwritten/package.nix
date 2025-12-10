@@ -23,12 +23,12 @@ buildFHSEnv {
     ];
   runScript = "shticker_book_unwritten";
 
-  meta = with lib; {
+  meta = {
     description = "Minimal CLI launcher for the Toontown Rewritten MMORPG";
     mainProgram = "shticker_book_unwritten";
     homepage = "https://github.com/JonathanHelianthicusDoe/shticker_book_unwritten";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.reedrw ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.reedrw ];
+    platforms = lib.platforms.linux;
   };
 }

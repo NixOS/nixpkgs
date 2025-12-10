@@ -17,8 +17,8 @@ mkDerivation {
 
   alwaysKeepStatic = true;
 
-  meta = with lib; {
-    platforms = platforms.freebsd;
-    license = licenses.cddl;
+  meta = {
+    platforms = lib.platforms.freebsd;
+    license = lib.licenses.cddl;
   };
 }

@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "umodbus" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the Modbus protocol";
     homepage = "https://github.com/AdvancedClimateSystems/uModbus/";
-    license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mpl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

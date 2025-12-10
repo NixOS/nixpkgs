@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "esphome_dashboard_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "API to interact with ESPHome Dashboard";
     homepage = "https://github.com/esphome/dashboard-api";
     changelog = "https://github.com/esphome/dashboard-api/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

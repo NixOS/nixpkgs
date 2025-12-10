@@ -41,11 +41,11 @@ buildPythonPackage rec {
     "tests/flag/test_flag_invalid.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Classes and utilities for packing/unpacking bytes";
     homepage = "https://plum-py.readthedocs.io/";
     changelog = "https://gitlab.com/dangass/plum/-/blob/${version}/docs/release_notes.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dnr ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dnr ];
   };
 }

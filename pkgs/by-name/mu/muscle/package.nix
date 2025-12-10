@@ -29,12 +29,12 @@ gccStdenv.mkDerivation rec {
       install -m755 -D ${target}/muscle $out/bin/muscle
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Multiple sequence alignment with top benchmark scores scalable to thousands of sequences";
     mainProgram = "muscle";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://www.drive5.com/muscle/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       unode
     ];
   };

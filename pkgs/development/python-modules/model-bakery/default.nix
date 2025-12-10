@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "model_bakery" ];
 
-  meta = with lib; {
+  meta = {
     description = "Object factory for Django";
     homepage = "https://github.com/model-bakers/model_bakery";
     changelog = "https://github.com/model-bakers/model_bakery/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

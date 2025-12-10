@@ -90,11 +90,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_admin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Admin interface framework for Flask";
     homepage = "https://github.com/flask-admin/flask-admin/";
     changelog = "https://github.com/flask-admin/flask-admin/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

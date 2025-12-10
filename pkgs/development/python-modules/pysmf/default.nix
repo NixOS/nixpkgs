@@ -33,10 +33,10 @@ buildPythonPackage rec {
     glib
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://das.nasophon.de/pysmf/";
     description = "Python extension module for reading and writing Standard MIDI Files, based on libsmf";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

@@ -32,12 +32,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Automatically dim windows in Hyprland when switching between them";
     homepage = "https://github.com/donovanglover/hyprdim";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ donovanglover ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ donovanglover ];
     mainProgram = "hyprdim";
   };
 }

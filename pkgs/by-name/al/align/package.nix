@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Guitarbum722/align";
     description = "General purpose application and library for aligning text";
     mainProgram = "align";
-    maintainers = with maintainers; [ hrhino ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ hrhino ];
+    license = lib.licenses.mit;
   };
 }

@@ -15,11 +15,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-N18/pCOdwcYA3Uu6+/HAdeqf2xXQcZoaWhOEPMncDKM=";
 
-  meta = with lib; {
+  meta = {
     description = "Simple tool to do basic modification of ini files";
     homepage = "https://github.com/domgreen/clini";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Flakebi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Flakebi ];
     mainProgram = "clini";
   };
 }

@@ -66,8 +66,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Wave propagation modules for PyTorch";
     homepage = "https://github.com/ar4/deepwave";
-    license = licenses.mit;
-    platforms = intersectLists platforms.x86_64 platforms.linux;
-    maintainers = with maintainers; [ atila ];
+    license = lib.licenses.mit;
+    platforms = intersectLists lib.platforms.x86_64 lib.platforms.linux;
+    maintainers = with lib.maintainers; [ atila ];
   };
 }

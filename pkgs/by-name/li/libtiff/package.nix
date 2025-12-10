@@ -123,13 +123,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library and utilities for working with the TIFF image file format";
     homepage = "https://libtiff.gitlab.io/libtiff";
     changelog = "https://libtiff.gitlab.io/libtiff/releases/v${finalAttrs.version}.html";
-    license = licenses.libtiff;
-    platforms = platforms.unix ++ platforms.windows;
+    license = lib.licenses.libtiff;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "libtiff-4" ];
-    teams = [ teams.geospatial ];
+    teams = [ lib.teams.geospatial ];
   };
 })

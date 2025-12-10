@@ -94,11 +94,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simplified Satisfiability Solver";
-    maintainers = with maintainers; [ shnarazk ];
-    platforms = platforms.unix;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ shnarazk ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
     homepage = "https://fmv.jku.at/cadical/";
   };
 }

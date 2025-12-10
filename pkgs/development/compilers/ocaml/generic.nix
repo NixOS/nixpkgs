@@ -189,10 +189,10 @@ stdenv.mkDerivation (
       nativeCompilers = useNativeCompilers;
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://ocaml.org/";
       branch = versionNoPatch;
-      license = with licenses; [
+      license = with lib.licenses; [
         qpl # compiler
         lgpl2 # library
       ];
@@ -215,7 +215,7 @@ stdenv.mkDerivation (
         Learn more at: https://ocaml.org/learn/description.html
       '';
 
-      platforms = with platforms; linux ++ darwin;
+      platforms = with lib.platforms; linux ++ darwin;
       broken =
         stdenv.hostPlatform.isAarch64
         && lib.versionOlder version (if stdenv.hostPlatform.isDarwin then "4.10" else "4.02");

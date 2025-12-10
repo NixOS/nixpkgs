@@ -42,10 +42,10 @@ buildPythonPackage {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free, open-source package for using Python as a hardware description and verification language";
     homepage = "https://www.myhdl.org/";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

@@ -73,12 +73,12 @@ stdenv.mkDerivation (finalAttrs: {
   # run with: nix-shell maintainers/scripts/update.nix --argstr path metasploit
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Metasploit Framework - a collection of exploits";
     homepage = "https://docs.metasploit.com/";
-    platforms = platforms.unix;
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       fab
       makefu
     ];

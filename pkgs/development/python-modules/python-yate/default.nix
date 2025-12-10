@@ -28,12 +28,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yate" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for the yate telephony engine";
     mainProgram = "yate_callgen";
     homepage = "https://github.com/eventphone/python-yate";
     changelog = "https://github.com/eventphone/python-yate/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ clerie ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ clerie ];
   };
 }

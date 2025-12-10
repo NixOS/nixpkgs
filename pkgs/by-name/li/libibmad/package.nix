@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libibumad ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.openfabrics.org/";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

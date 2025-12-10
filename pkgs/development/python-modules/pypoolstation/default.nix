@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pypoolstation" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to interact the the Poolstation platform";
     homepage = "https://github.com/cibernox/PyPoolstation";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

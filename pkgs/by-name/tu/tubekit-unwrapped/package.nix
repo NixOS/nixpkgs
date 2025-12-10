@@ -17,12 +17,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-qAmkUV5l5g8/w8ZTYFGYvd9I8NUk8rMYjutenHvTRnw=";
 
-  meta = with lib; {
+  meta = {
     description = "Kubectl alternative with quick context switching";
     mainProgram = "tubectl";
     homepage = "https://github.com/reconquest/tubekit";
-    license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ farcaller ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ farcaller ];
   };
 }

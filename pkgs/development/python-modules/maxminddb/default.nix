@@ -30,11 +30,11 @@ buildPythonPackage rec {
   # resulting in an exception when it can’t pickle the `lookup` local function.
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [ "multiprocessing" ];
 
-  meta = with lib; {
+  meta = {
     description = "Reader for the MaxMind DB format";
     homepage = "https://github.com/maxmind/MaxMind-DB-Reader-python";
     changelog = "https://github.com/maxmind/MaxMind-DB-Reader-python/blob/v${version}/HISTORY.rst";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

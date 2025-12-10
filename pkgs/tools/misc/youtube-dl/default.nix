@@ -97,7 +97,7 @@ buildPythonPackage rec {
   # Requires network
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ytdl-org.github.io/youtube-dl/";
     description = "Command-line tool to download videos from YouTube.com and other sites";
     longDescription = ''
@@ -106,11 +106,11 @@ buildPythonPackage rec {
       the public domain, which means you can modify it, redistribute it or use
       it however you like.
     '';
-    license = licenses.unlicense;
-    maintainers = with maintainers; [
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [
       fpletz
     ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "youtube-dl";
     knownVulnerabilities = [
       "youtube-dl is unmaintained, migrate to yt-dlp, if possible"

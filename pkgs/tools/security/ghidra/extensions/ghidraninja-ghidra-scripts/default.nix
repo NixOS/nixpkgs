@@ -26,10 +26,10 @@ buildGhidraScripts {
     substituteInPlace YaraSearch.py --replace-fail '"yara "' '"${yara}/bin/yara "'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Scripts for the Ghidra software reverse engineering suite";
     homepage = "https://github.com/ghidraninja/ghidra_scripts";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Only
       gpl2Only
     ];
