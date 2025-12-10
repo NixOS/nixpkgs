@@ -19,25 +19,47 @@ let
     lib.mirrorFunctionArgs f (
       origArgs:
       let
-        args = lib.fix (
-          lib.extends (_: previousAttrs: {
-            passthru = (previousAttrs.passthru or { }) // {
-              overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
-            };
-          }) (_: origArgs)
-        );
-        result = f args;
-        overrideWith = newArgs: args // (if pkgs.lib.isFunction newArgs then newArgs args else newArgs);
+        result = f origArgs;
+        # If a stdenv is requested using the deprecated method of e.g., `buildPythonPackage { stdenv }`
+        # we need to override and reapply with that stdenv
+        result' =
+          lib.warnIf (result ? __stdenv && lib.oldestSupportedReleaseIsAtLeast 2511)
+            ''
+              Passing `stdenv` directly to `buildPythonPackage` or `buildPythonApplication` is deprecated. You should use their `.override` function instead, e.g:
+                buildPythonPackage.override { stdenv = customStdenv; } { }
+            ''
+            (
+              if result ? __stdenv && result.__stdenv != result.stdenv then
+                f.override { stdenv = result.__stdenv; } origArgs
+              else
+                result
+            );
+        extendArgs = newArgs: lib.extends (lib.toExtension newArgs) (lib.toFunction origArgs);
       in
-      if builtins.isAttrs result then
-        result
-      else if builtins.isFunction result then
-        {
-          overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
-          __functor = self: result;
-        }
-      else
-        result
+      result'
+      // {
+        overridePythonAttrs =
+          newArgs:
+          let
+            f' =
+              if !lib.isFunction newArgs && newArgs ? stdenv then
+                lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511) ''
+                  Passing `stdenv` to `overridePythonAttrs` is deprecated. You should override the package's `buildPythonPackage` or `buildPythonApplication` function instead, e.g:
+                    <package>.override (prev: {
+                      buildPythonPackage = prev.buildPythonPackage.override {
+                        stdenv = customStdenv;
+                      };
+                    })
+                '' (f.override { inherit (newArgs) stdenv; })
+              else
+                f;
+            newArgs' =
+              if !lib.isFunction newArgs && newArgs ? stdenv then removeAttrs newArgs [ "stdenv" ] else newArgs;
+          in
+          makeOverridablePythonPackage f' (extendArgs newArgs');
+        overrideAttrs =
+          newArgs: makeOverridablePythonPackage (args: (f args).overrideAttrs newArgs) origArgs;
+      }
     )
     // {
       # Support overriding `f` itself, e.g. `buildPythonPackage.override { }`.
@@ -47,16 +69,16 @@ let
 
   overrideStdenvCompat =
     f:
-    lib.setFunctionArgs (
+    lib.mirrorFunctionArgs f (
       args:
       if !(lib.isFunction args) && (args ? stdenv) then
         lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511) ''
           Passing `stdenv` directly to `buildPythonPackage` or `buildPythonApplication` is deprecated. You should use their `.override` function instead, e.g:
             buildPythonPackage.override { stdenv = customStdenv; } { }
-        '' (f.override { stdenv = args.stdenv; } args)
+        '' (f.override { stdenv = args.stdenv; } (removeAttrs args [ "stdenv" ]))
       else
         f args
-    ) (removeAttrs (lib.functionArgs f) [ "stdenv" ])
+    )
     // {
       # Intentionally drop the effect of overrideStdenvCompat when calling `buildPython*.override`.
       inherit (f) override;
