@@ -4,6 +4,7 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -36,6 +37,10 @@ buildGoModule rec {
     installManPage lf.1
     installShellCompletion etc/lf.{bash,zsh,fish}
   '';
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Terminal file manager written in Go and heavily inspired by ranger";
