@@ -9,7 +9,7 @@ REPO="duplicati"
 SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
 TARGET="$SCRIPT_DIR/package.nix"
 
-TAG=$(curl -s "https://api.github.com/repos/$OWNNER/$REPO/tags" |
+TAG=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} -s "https://api.github.com/repos/$OWNNER/$REPO/tags" |
   jq -r '.[].name' |
   grep -E '^v[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+_stable_' |
   sort -Vr |
