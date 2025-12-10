@@ -5,6 +5,7 @@
   nixosTests,
   fetchPypi,
   python3,
+  ffmpeg_4-full,
 }:
 
 let
@@ -66,6 +67,10 @@ python.pkgs.buildPythonApplication {
     pyyaml
     sqlalchemy
     yt-dlp
+  ];
+
+  makeWrapperArgs = [
+    "--prefix PATH : ${lib.makeBinPath [ ffmpeg_4-full ]}"
   ];
 
   postInstall = ''
