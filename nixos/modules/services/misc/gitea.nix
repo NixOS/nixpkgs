@@ -913,11 +913,10 @@ in
         ]
         ++ lib.optional (useSendmail && config.services.postfix.enable) "/var/lib/postfix/queue/maildrop";
         UMask = "0027";
-        # Capabilities
-        CapabilityBoundingSet = "";
-        # Security
-        NoNewPrivileges = !useSendmail;
+
         # Sandboxing
+        CapabilityBoundingSet = "";
+        NoNewPrivileges = !useSendmail;
         ProtectSystem = "strict";
         ProtectHome = true;
         PrivateTmp = true;
