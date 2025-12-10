@@ -45,11 +45,11 @@ buildPythonPackage rec {
     "google.cloud.webrisk_v1beta1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Client for Web Risk";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-webrisk";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-webrisk-v${version}/packages/google-cloud-webrisk/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

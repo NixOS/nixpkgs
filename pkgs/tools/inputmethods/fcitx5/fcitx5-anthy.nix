@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     anthy
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Anthy Wrapper for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-anthy";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ elnudev ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ elnudev ];
+    platforms = lib.platforms.linux;
   };
 }

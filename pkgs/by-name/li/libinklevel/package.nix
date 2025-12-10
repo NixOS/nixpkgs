@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     "doc"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for checking the ink level of your printer";
     longDescription = ''
       Libinklevel is a library for checking the ink level of your printer on a
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
       level of a printer connected to a Linux or FreeBSD box.
     '';
     homepage = "https://libinklevel.sourceforge.net/";
-    license = licenses.gpl2;
-    platforms = platforms.linux ++ platforms.freebsd;
-    maintainers = with maintainers; [ samb96 ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    maintainers = with lib.maintainers; [ samb96 ];
   };
 }

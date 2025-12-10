@@ -33,11 +33,11 @@ buildPythonPackage rec {
   # Module only has a dummy test
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Library to interact with the Android TV Remote protocol v2";
     homepage = "https://github.com/tronikos/androidtvremote2";
     changelog = "https://github.com/tronikos/androidtvremote2/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

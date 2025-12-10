@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage {
     version = version;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Generate tags using tree-sitter";
     mainProgram = "ttags";
     longDescription = ''
@@ -46,8 +46,8 @@ rustPlatform.buildRustPackage {
       - Swift
     '';
     homepage = "https://github.com/npezza93/ttags";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mrcjkb ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mrcjkb ];
+    platforms = lib.platforms.all;
   };
 }

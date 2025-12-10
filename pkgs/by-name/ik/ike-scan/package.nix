@@ -34,15 +34,15 @@ stdenv.mkDerivation {
 
   configureFlags = [ "--with-openssl=${openssl.dev}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to discover, fingerprint and test IPsec VPN servers";
     longDescription = ''
       ike-scan is a command-line tool that uses the IKE protocol to discover,
       fingerprint and test IPsec VPN servers.
     '';
     homepage = "https://github.com/royhills/ike-scan";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

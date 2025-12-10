@@ -46,11 +46,11 @@ buildPythonPackage rec {
     "test_rename_dir_to_existing_dir"
   ]);
 
-  meta = with lib; {
+  meta = {
     description = "Fake file system that mocks the Python file system modules";
     homepage = "https://pyfakefs.org/";
     changelog = "https://github.com/jmcgeheeiv/pyfakefs/blob/v${version}/CHANGES.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

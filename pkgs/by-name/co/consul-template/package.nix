@@ -26,12 +26,12 @@ buildGoModule rec {
     inherit (nixosTests) consul-template;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hashicorp/consul-template/";
     description = "Generic template rendering and notifications with Consul";
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       cpcloud
     ];
     mainProgram = "consul-template";

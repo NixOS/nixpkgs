@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
 
   checkTarget = "checks";
 
-  meta = with lib; {
+  meta = {
     description = "Programs for computing automorphism groups of graphs and digraphs";
-    license = licenses.asl20;
-    teams = [ teams.sage ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.sage ];
+    platforms = lib.platforms.unix;
     # The filename may change for future changelogs. Better than nothing in any case.
     changelog = "https://pallini.di.uniroma1.it/changes24-2${lib.versions.minor version}.txt";
     homepage = "https://pallini.di.uniroma1.it/";

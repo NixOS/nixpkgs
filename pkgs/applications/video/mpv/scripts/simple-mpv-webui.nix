@@ -27,10 +27,10 @@ buildLua rec {
   scriptPath = ".";
   passthru.scriptName = "webui";
 
-  meta = with lib; {
+  meta = {
     description = "Web based user interface with controls for the mpv mediaplayer";
     homepage = "https://github.com/open-dynaMIX/simple-mpv-webui";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       cript0nauta
       zopieux
     ];
@@ -39,6 +39,6 @@ buildLua rec {
       http://[::1]:8080 in your webbrowser. By default it listens on
       0.0.0.0:8080 and [::0]:8080
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--sysconfdir=/etc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Protects hosts from brute-force attacks";
     mainProgram = "sshguard";
     longDescription = ''
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
       If an attack, such as several login failures within a few seconds, is detected, the offending IP is blocked.
     '';
     homepage = "https://sshguard.net";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sargon ];
-    platforms = with platforms; linux ++ darwin ++ freebsd ++ netbsd ++ openbsd;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sargon ];
+    platforms = with lib.platforms; linux ++ darwin ++ freebsd ++ netbsd ++ openbsd;
   };
 }

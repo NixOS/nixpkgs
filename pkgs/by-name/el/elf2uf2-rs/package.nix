@@ -24,13 +24,13 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optional stdenv.hostPlatform.isLinux udev;
 
-  meta = with lib; {
+  meta = {
     description = "Convert ELF files to UF2 for USB Flashing Bootloaders";
     mainProgram = "elf2uf2-rs";
     homepage = "https://github.com/JoNil/elf2uf2-rs";
-    license = with licenses; [ bsd0 ];
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ bsd0 ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       polygon
       moni
     ];

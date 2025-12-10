@@ -92,12 +92,12 @@ let
       })
     ];
 
-    meta = with lib; {
+    meta = {
       description = "Yamagi Quake II client";
       homepage = "https://www.yamagi.org/quake2/";
-      license = licenses.gpl2Plus;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ tadfisher ];
+      license = lib.licenses.gpl2Plus;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ tadfisher ];
     };
   };
 

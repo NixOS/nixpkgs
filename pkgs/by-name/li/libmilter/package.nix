@@ -50,10 +50,10 @@ stdenv.mkDerivation rec {
     fixDarwinDylibNames $out/lib/libmilter.*.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Sendmail Milter mail filtering API library";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz ];
-    license = licenses.sendmail;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ fpletz ];
+    license = lib.licenses.sendmail;
   };
 }

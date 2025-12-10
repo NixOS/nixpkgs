@@ -43,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "niapy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Micro framework for building nature-inspired algorithms";
     homepage = "https://niapy.org/";
     changelog = "https://github.com/NiaOrg/NiaPy/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

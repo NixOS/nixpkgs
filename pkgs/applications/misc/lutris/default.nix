@@ -151,12 +151,12 @@ buildPythonApplication rec {
     "\${gappsWrapperArgs[@]}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://lutris.net";
     description = "Open Source gaming platform for GNU/Linux";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ rapiteanu ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ rapiteanu ];
+    platforms = lib.platforms.linux;
     mainProgram = "lutris";
   };
 }

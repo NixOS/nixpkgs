@@ -50,17 +50,17 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description =
       "Official reference implementation for the PNG file format" + whenPatched " with animation patch";
     homepage = "http://www.libpng.org/pub/png/libpng.html";
     changelog = "https://github.com/pnggroup/libpng/blob/v${finalAttrs.version}/CHANGES";
-    license = licenses.libpng2;
+    license = lib.licenses.libpng2;
     pkgConfigModules = [
       "libpng"
       "libpng16"
     ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [ vcunat ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ vcunat ];
   };
 })

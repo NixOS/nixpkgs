@@ -25,12 +25,12 @@ buildGoModule rec {
   # Tests require network access and cyclonedx executable
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to create CycloneDX Software Bill of Materials (SBOM) from Go modules";
     homepage = "https://github.com/CycloneDX/cyclonedx-gomod";
     changelog = "https://github.com/CycloneDX/cyclonedx-gomod/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cyclonedx-gomod";
   };
 }

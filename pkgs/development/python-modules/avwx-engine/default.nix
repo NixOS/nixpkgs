@@ -70,11 +70,11 @@ buildPythonPackage rec {
     "test_station_nearest_ip"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Aviation Weather parsing engine";
     homepage = "https://github.com/avwx-rest/avwx-engine";
     changelog = "https://github.com/avwx-rest/avwx-engine/blob/${src.tag}/changelog.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

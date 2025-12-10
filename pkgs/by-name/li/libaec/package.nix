@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.dkrz.de/k202009/libaec";
     description = "Adaptive Entropy Coding library";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ tbenst ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ tbenst ];
   };
 }

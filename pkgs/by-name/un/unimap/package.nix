@@ -46,11 +46,11 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${lib.makeBinPath [ nmap ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Scan only once by IP address and reduce scan times with Nmap for large amounts of data";
     homepage = "https://github.com/Edu4rdSHL/unimap";
     changelog = "https://github.com/Edu4rdSHL/unimap/releases/tag/${src.rev}";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "unimap";
   };

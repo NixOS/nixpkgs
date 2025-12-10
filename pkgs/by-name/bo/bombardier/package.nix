@@ -37,11 +37,11 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast cross-platform HTTP benchmarking tool written in Go";
     homepage = "https://github.com/codesenberg/bombardier";
     changelog = "https://github.com/codesenberg/bombardier/releases/tag/${src.rev}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "bombardier";
   };

@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ipadic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Contemporary Written Japanese dictionary";
     homepage = "https://github.com/polm/ipadic-py";
-    license = licenses.mit;
-    maintainers = with maintainers; [ laurent-f1z1 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ laurent-f1z1 ];
   };
 }

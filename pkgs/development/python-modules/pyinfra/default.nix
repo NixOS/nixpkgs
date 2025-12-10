@@ -58,7 +58,7 @@ buildPythonPackage rec {
     "test_load_ssh_config"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python-based infrastructure automation";
     longDescription = ''
       pyinfra automates/provisions/manages/deploys infrastructure. It can be used for
@@ -67,8 +67,8 @@ buildPythonPackage rec {
     homepage = "https://pyinfra.com";
     downloadPage = "https://pyinfra.com/Fizzadar/pyinfra/releases";
     changelog = "https://github.com/Fizzadar/pyinfra/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ totoroot ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ totoroot ];
     mainProgram = "pyinfra";
   };
 }

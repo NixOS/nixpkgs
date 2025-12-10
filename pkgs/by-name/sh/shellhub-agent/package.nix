@@ -48,7 +48,7 @@ buildGoModule rec {
     wrapProgram $out/bin/agent --prefix PATH : ${lib.makeBinPath [ openssh ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Enables easy access any Linux device behind firewall and NAT";
     longDescription = ''
       ShellHub is a modern SSH server for remotely accessing Linux devices via
@@ -57,9 +57,9 @@ buildGoModule rec {
       edge and cloud computing.
     '';
     homepage = "https://shellhub.io/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ otavio ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ otavio ];
+    platforms = lib.platforms.linux;
     mainProgram = "agent";
   };
 }

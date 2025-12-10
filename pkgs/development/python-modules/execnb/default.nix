@@ -34,12 +34,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "execnb" ];
 
-  meta = with lib; {
+  meta = {
     description = "Execute a jupyter notebook, fast, without needing jupyter";
     homepage = "https://github.com/fastai/execnb";
     changelog = "https://github.com/fastai/execnb/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ rxiao ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ rxiao ];
     mainProgram = "exec_nb";
   };
 }

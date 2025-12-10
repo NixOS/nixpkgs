@@ -74,16 +74,16 @@ let
           inherit updateScript;
         };
 
-        meta = with lib; {
+        meta = {
           inherit description license mainProgram;
           homepage =
             if versionAtLeast finalAttrs.version "11" then
               "https://www.saxonica.com/products/latest.xml"
             else
               "https://www.saxonica.com/products/archive.xml";
-          sourceProvenance = with sourceTypes; [ binaryBytecode ];
-          maintainers = with maintainers; [ rvl ];
-          platforms = platforms.all;
+          sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+          maintainers = with lib.maintainers; [ rvl ];
+          platforms = lib.platforms.all;
         };
       }
     );

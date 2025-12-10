@@ -260,11 +260,11 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Web content rendering engine, GTK port";
     mainProgram = "WebKitWebDriver";
     homepage = "https://webkitgtk.org/";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     pkgConfigModules =
       if lib.versionAtLeast abiVersion "6.0" then
         [
@@ -278,8 +278,8 @@ clangStdenv.mkDerivation (finalAttrs: {
           "webkit2gtk-${abiVersion}"
           "webkit2gtk-web-extension-${abiVersion}"
         ];
-    platforms = platforms.linux ++ platforms.darwin;
-    teams = [ teams.gnome ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    teams = [ lib.teams.gnome ];
     broken = clangStdenv.hostPlatform.isDarwin;
   };
 })

@@ -23,9 +23,9 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Watchman client for Python";
     homepage = "https://facebook.github.io/watchman/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

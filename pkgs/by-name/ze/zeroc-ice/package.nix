@@ -99,11 +99,11 @@ stdenv.mkDerivation rec {
     mv $out/share/ice $dev/share
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.zeroc.com/ice.html";
     description = "Internet communications engine";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
     broken = stdenv.hostPlatform.isDarwin;
   };

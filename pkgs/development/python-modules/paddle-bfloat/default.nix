@@ -36,10 +36,10 @@ buildPythonPackage {
   # upstream has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Paddle numpy bfloat16 package";
     homepage = "https://pypi.org/project/paddle-bfloat";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

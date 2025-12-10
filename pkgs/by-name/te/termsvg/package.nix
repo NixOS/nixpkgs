@@ -25,11 +25,11 @@ buildGoModule rec {
     "-X=main.date=1970-01-01T00:00:00Z"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Record, share and export your terminal as a animated SVG image";
     homepage = "https://github.com/MrMarble/termsvg";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "termsvg";
   };
 }

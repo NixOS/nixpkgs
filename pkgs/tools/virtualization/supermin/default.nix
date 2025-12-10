@@ -38,12 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs src/bin2c.pl
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libguestfs.org/supermin.1.html";
     description = "Tool for creating and building supermin appliances";
-    maintainers = with maintainers; [ qyliss ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ qyliss ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "supermin";
   };
 })

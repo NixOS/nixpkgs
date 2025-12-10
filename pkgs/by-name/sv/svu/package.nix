@@ -33,11 +33,11 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion { package = svu; };
 
-  meta = with lib; {
+  meta = {
     description = "Semantic Version Util";
     homepage = "https://github.com/caarlos0/svu";
-    maintainers = with maintainers; [ caarlos0 ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ caarlos0 ];
+    license = lib.licenses.mit;
     mainProgram = "svu";
   };
 }

@@ -28,12 +28,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "markdown" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/Python-Markdown/markdown/blob/${src.tag}/docs/changelog.md";
     description = "Python implementation of John Gruber's Markdown";
     mainProgram = "markdown_py";
     homepage = "https://github.com/Python-Markdown/markdown";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

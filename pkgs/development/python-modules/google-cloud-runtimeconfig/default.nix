@@ -41,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.cloud.runtimeconfig" ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud RuntimeConfig API client library";
     homepage = "https://github.com/googleapis/python-runtimeconfig";
     changelog = "https://github.com/googleapis/python-runtimeconfig/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

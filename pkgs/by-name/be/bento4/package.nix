@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     find $out/bin -maxdepth 1 -executable -type f -exec install_name_tool -change @rpath/libap4.dylib $out/lib/libap4.dylib {} \;
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Full-featured MP4 format and MPEG DASH library and tools";
     homepage = "http://bento4.com";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ makefu ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ makefu ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -91,7 +91,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mkdocs" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mkdocs/mkdocs/releases/tag/${version}";
     description = "Project documentation with Markdown / static website generator";
     mainProgram = "mkdocs";
@@ -104,8 +104,8 @@ buildPythonPackage rec {
       MkDocs can also be used to generate general-purpose websites.
     '';
     homepage = "http://mkdocs.org/";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ rkoe ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ rkoe ];
   };
 }

@@ -53,17 +53,17 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "LTTng Userspace Tracer libraries";
     mainProgram = "lttng-gen-tp";
     homepage = "https://lttng.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Only
       gpl2Only
       mit
     ];
-    platforms = lib.intersectLists platforms.linux liburcu.meta.platforms;
-    maintainers = [ maintainers.bjornfor ];
+    platforms = lib.intersectLists lib.platforms.linux liburcu.meta.platforms;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 
 }

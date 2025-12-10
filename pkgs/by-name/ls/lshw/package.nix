@@ -50,13 +50,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/lyonel/lshw/blob/master/docs/Changelog";
     description = "Provide detailed information on the hardware configuration of the machine";
     homepage = "https://ezix.org/project/wiki/HardwareLiSter";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     mainProgram = "lshw";
-    maintainers = with maintainers; [ thiagokokada ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ thiagokokada ];
+    platforms = lib.platforms.linux;
   };
 }

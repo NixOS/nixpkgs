@@ -26,11 +26,11 @@ buildGoModule rec {
 
   env.CGO_ENABLED = 0;
 
-  meta = with lib; {
+  meta = {
     description = "Minimal implementation of the Docker API that will orchestrate containers on a Kubernetes cluster";
     homepage = "https://github.com/joyrex2001/kubedock";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mausch ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mausch ];
     mainProgram = "kubedock";
   };
 }

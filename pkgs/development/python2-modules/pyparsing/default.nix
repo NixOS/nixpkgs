@@ -39,10 +39,10 @@ let
       });
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/pyparsing/pyparsing";
       description = "Alternative approach to creating and executing simple grammars, vs. the traditional lex/yacc approach, or the use of regular expressions";
-      license = licenses.mit;
+      license = lib.licenses.mit;
     };
   };
 in
