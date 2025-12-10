@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "clairvoyance";
-  version = "2.5.4";
+  version = "2.5.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nikitastupin";
     repo = "clairvoyance";
     tag = "v${version}";
-    hash = "sha256-5PbvR0HVvA2xFzD+Jtisxuk68pdM29NyweFbZKBbhzs=";
+    hash = "sha256-anUceLMTeHQ/Z0+MjKL0alDdKaWA5y3HpJC81MBTTq8=";
   };
 
   pythonRelaxDeps = [ "rich" ];
