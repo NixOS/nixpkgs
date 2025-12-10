@@ -13,6 +13,18 @@ Related files:
 - `./import-from-lock-feature.md`: information about the import-from-lock feature
 - `./missing-deno-features.md`: information about the
 
+## Run tests
+
+```sh
+nix-build . -A tests.build-deno-package.fetchDenoDeps-e2e-tests.just-jsr-linux
+nix-build . -A tests.build-deno-package.fetchDenoDeps-e2e-tests.with-https-linux
+nix-build . -A tests.build-deno-package.fetchDenoDeps-e2e-tests.with-https-and-npm-linux
+nix-build . -A tests.build-deno-package.fetchDenoDeps-integration-tests
+```
+
+Read more about the tests in
+`/pkgs/test/build-deno-package/integration-tests/readme.md`
+
 ## Intro
 
 Deno's dependency cache API is very complex and obscure. It requires a lot of
