@@ -28,6 +28,7 @@
   blockbuster,
   freezegun,
   httpx,
+  langchain-tests,
   lark,
   pandas,
   pytest-asyncio,
@@ -45,14 +46,14 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "1.0.2";
+  version = "1.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain==${version}";
-    hash = "sha256-NQra/L7OfnVyFTbGkSDcG30r8W733eAs9abII53wy4g=";
+    hash = "sha256-oW1Gn7ChRwUThrnkNBcGKn96sqRO84rSf75J2bNdBMY=";
   };
 
   sourceRoot = "${src.name}/libs/langchain_v1";
@@ -96,6 +97,7 @@ buildPythonPackage rec {
     freezegun
     httpx
     lark
+    langchain-tests
     pandas
     pytest-asyncio
     pytest-mock
@@ -129,8 +131,6 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Their configuration tests don't place nicely with nixpkgs
     "tests/unit_tests/test_pytest_config.py"
-    # comparison to magic time values, fails under load such as on Hydra
-    "tests/unit_tests/agents/middleware/test_tool_retry.py"
   ];
 
   pythonImportsCheck = [ "langchain" ];
