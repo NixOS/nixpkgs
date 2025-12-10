@@ -55,7 +55,6 @@ buildPythonApplication rec {
     homepage = "https://gitlab.com/Chocimier/tuir";
     license = licenses.mit;
     maintainers = with maintainers; [
-      Br1ght0ne
       matthiasbeyer
       brokenpip3
     ];

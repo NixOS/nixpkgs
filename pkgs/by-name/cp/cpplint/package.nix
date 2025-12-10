@@ -41,7 +41,6 @@ python3Packages.buildPythonApplication rec {
     description = "Static code checker for C++";
     changelog = "https://github.com/cpplint/cpplint/releases/tag/${version}";
     mainProgram = "cpplint";
-    maintainers = [ lib.maintainers.bhipple ];
     license = [ lib.licenses.bsd3 ];
   };
 }

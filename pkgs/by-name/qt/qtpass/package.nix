@@ -77,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "qtpass";
     homepage = "https://qtpass.org";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.hrdinka ];
     platforms = lib.platforms.all;
   };
 })

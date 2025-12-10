@@ -161,7 +161,6 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];
     maintainers = with lib.maintainers; [
-      Br1ght0ne
       ymarkus
     ];
   };

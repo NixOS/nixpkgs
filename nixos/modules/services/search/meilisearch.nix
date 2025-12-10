@@ -54,7 +54,6 @@ let
 in
 {
   meta.maintainers = with lib.maintainers; [
-    Br1ght0ne
     happysalada
   ];
   meta.doc = ./meilisearch.md;

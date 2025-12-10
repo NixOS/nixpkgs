@@ -31,7 +31,6 @@ buildGoModule rec {
     mainProgram = "antibody";
     homepage = "https://github.com/getantibody/antibody";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ];
 
     # golang.org/x/sys needs to be updated due to:
     #

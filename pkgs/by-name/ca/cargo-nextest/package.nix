@@ -45,7 +45,6 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     maintainers = with maintainers; [
-      ekleog
       matthiasbeyer
     ];
   };

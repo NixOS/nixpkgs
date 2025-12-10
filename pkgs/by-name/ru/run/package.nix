@@ -25,7 +25,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [
       rawkode
-      Br1ght0ne
     ];
   };
 }

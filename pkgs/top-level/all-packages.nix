@@ -1056,6 +1056,11 @@ with pkgs;
     }
   );
 
+  inherit (callPackages ../tools/networking/iroh/default.nix { })
+    iroh-relay
+    iroh-dns-server
+    ;
+
   inherit (callPackages ../tools/networking/ivpn/default.nix { })
     ivpn
     ivpn-service

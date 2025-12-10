@@ -1259,7 +1259,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
       mainProgram = "cpm";
     };
   };
@@ -5664,7 +5663,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -6628,7 +6626,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -14412,7 +14409,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -14435,7 +14431,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -17283,7 +17278,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -21205,7 +21199,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -21651,7 +21644,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -22752,7 +22744,6 @@ with self;
       description = "(DISCOURAGED) Promises/A+ and flow-control helpers";
       homepage = "https://github.com/jberger/Mojo-IOLoop-Delay";
       license = with lib.licenses; [ artistic2 ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -22780,7 +22771,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -25016,7 +25006,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -25097,7 +25086,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -26457,7 +26445,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -26936,7 +26923,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -32231,7 +32217,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -38989,7 +38974,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -39008,7 +38992,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
