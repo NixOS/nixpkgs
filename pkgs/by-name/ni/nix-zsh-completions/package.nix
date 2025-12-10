@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+  # TODO: https://github.com/nix-community/nix-zsh-completions/pull/58
+  postPatch = ''
+    rm _nixos-rebuild
+  '';
+
   dontConfigure = true;
   dontBuild = true;
 
