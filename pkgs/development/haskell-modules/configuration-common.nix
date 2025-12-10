@@ -1212,34 +1212,17 @@ with haskellLib;
       let
         mkSeldaPackage =
           name:
-          overrideCabal (drv: {
-            version = "2024-05-05-unstable";
+          overrideSrc {
+            version = "0.5.2.1-unstable-2025-12-04";
             src =
               pkgs.fetchFromGitHub {
                 owner = "valderman";
                 repo = "selda";
-                rev = "50c3ba5c5da72bb758a4112363ba2fe1c0e968ea";
-                hash = "sha256-LEAJsSsDL0mmVHntnI16fH8m5DmePfcU0hFw9ErqTgQ=";
+                rev = "e5015300f40ca8b5b0b6552ab9d8c1af5984175d";
+                hash = "sha256-Y5xU2EzFe0bwPoKgFpMI2DrWAUTiqpvnTnosh/yn2Pw=";
               }
               + "/${name}";
-            # 2025-04-09: jailbreak to allow bytestring >= 0.12, text >= 2.1
-            # Note: jailbreak ignores constraints under an if(flag)
-            postPatch = ''
-              check_sed() {
-                if ! test -s "$1"; then
-                  echo "sed: pattern '$2' doesn't match anything" >&2
-                  exit 1
-                fi
-              }
-              sed -i ${name}.cabal \
-                -e 's/\(bytestring\) .*/\1/w c1' \
-                -e 's/\(text\) .*/\1/w c2' \
-                -e 's/\(aeson\) .*/\1/w c3'
-              check_sed c1 'bytestring .*'
-              check_sed c2 'text .*'
-              ${lib.optionalString (name == "selda-json") "check_sed c3 'aeson .*'"}
-            '';
-          }) super.${name};
+          } super.${name};
       in
       lib.genAttrs [ "selda" "selda-sqlite" "selda-json" ] mkSeldaPackage
     )
