@@ -8,11 +8,11 @@
 
 appimageTools.wrapType2 rec {
   pname = "tutanota-desktop";
-  version = "315.251202.0";
+  version = "315.251204.0";
 
   src = fetchurl {
     url = "https://github.com/tutao/tutanota/releases/download/tutanota-desktop-release-${version}/tutanota-desktop-linux.AppImage";
-    hash = "sha256-DcuOA0fDmPu0vYjHqS/AEKsMkYrnK/ZjbwMds4WwhAk=";
+    hash = "sha256-abXveYT07uLrM5jJb9gd/u+CzhFnFQj2Zcg+AMp+UC4=";
   };
 
   extraPkgs = pkgs: [ pkgs.libsecret ];
