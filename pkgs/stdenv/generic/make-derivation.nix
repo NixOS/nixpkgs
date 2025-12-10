@@ -879,7 +879,7 @@ let
           deleteFixedOutputRelatedAttrs derivationArg
           // {
             # Add a name in case the original drv didn't have one
-            name = derivationArg.name or "inputDerivation";
+            name = "inputDerivation" + lib.optionalString (derivationArg ? name) "-${derivationArg.name}";
             # This always only has one output
             outputs = [ "out" ];
 
