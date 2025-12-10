@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "sshfs";
-  version = "2025.10.0";
+  version = "2025.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "sshfs";
     tag = version;
-    hash = "sha256-IG+/aXM6F+sNtxmhgiaD6OXhRpbiCm0zW2ki0y8nuLE=";
+    hash = "sha256-TrFrjORH6VebTBq+OHJUEr55DtjL58/b+qQLpbSU7MU=";
   };
 
   build-system = [
