@@ -52,10 +52,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "drawsvg" ];
 
-  meta = with lib; {
+  meta = {
     description = "Programmatically generate SVG (vector) images, animations, and interactive Jupyter widgets";
     homepage = "https://github.com/cduck/drawsvg";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

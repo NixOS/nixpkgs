@@ -35,10 +35,10 @@ buildPythonPackage {
 
   doCheck = false; # no tests
 
-  meta = with lib; {
+  meta = {
     description = "Tuya Device Sharing SDK";
     homepage = "https://github.com/tuya/tuya-device-sharing-sdk";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aciceri ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aciceri ];
   };
 }

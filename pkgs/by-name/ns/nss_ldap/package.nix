@@ -43,9 +43,9 @@ stdenv.mkDerivation rec {
     openldap
   ];
 
-  meta = with lib; {
+  meta = {
     description = "LDAP module for the Solaris Nameservice Switch (NSS)";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

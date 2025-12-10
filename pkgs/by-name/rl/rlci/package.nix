@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-ckHwg7jEXZV0hjZFeR5dbqrt9APcyRV95LikwCFw/fM=";
 
-  meta = with lib; {
+  meta = {
     description = "Lambda calculus interpreter";
     mainProgram = "rlci";
     homepage = "https://github.com/orsinium-labs/rlci";
     changelog = "https://github.com/orsinium-labs/rlci/releases/tag/${src.rev}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

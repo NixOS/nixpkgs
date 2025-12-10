@@ -30,10 +30,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "videoprops" ];
 
-  meta = with lib; {
+  meta = {
     description = "Get video properties";
     homepage = "https://github.com/mvasilkov/python-get-video-properties";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

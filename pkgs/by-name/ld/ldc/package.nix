@@ -156,12 +156,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   disallowedReferences = [ ldcBootstrap ];
 
-  meta = with lib; {
+  meta = {
     description = "LLVM-based D compiler";
     homepage = "https://github.com/ldc-developers/ldc";
     changelog = "https://github.com/ldc-developers/ldc/releases/tag/v${finalAttrs.version}";
     # from https://github.com/ldc-developers/ldc/blob/master/LICENSE
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       boost
       mit
@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
     ];
     mainProgram = "ldc2";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lionello
       jtbx
     ];

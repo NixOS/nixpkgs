@@ -48,11 +48,11 @@ buildPythonPackage rec {
     "test_1d_compare_with_numpy"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast 1D and 2D histogram functions in Python";
     homepage = "https://github.com/astrofrog/fast-histogram";
     changelog = "https://github.com/astrofrog/fast-histogram/blob/v${version}/CHANGES.md";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ifurther ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ ifurther ];
   };
 }

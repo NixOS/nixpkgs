@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sqids" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sqids.org/python";
     description = "Library that lets you generate short YouTube-looking IDs from numbers";
-    license = with licenses; mit;
-    maintainers = with maintainers; [ panicgh ];
+    license = with lib.licenses; mit;
+    maintainers = with lib.maintainers; [ panicgh ];
   };
 }

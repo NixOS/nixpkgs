@@ -79,10 +79,10 @@ stdenv.mkDerivation rec {
       --replace-fail "\''${_IMPORT_PREFIX}" "$out"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Specialized Parallel Linear Algebra, providing distributed GEMM functionality for specific matrix distributions with optional GPU acceleration";
     homepage = "https://github.com/eth-cscs/spla";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

@@ -23,10 +23,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "pyDes" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure python module which implements the DES and Triple-DES encryption algorithms";
     homepage = "https://github.com/twhiteman/pyDes";
-    license = licenses.mit;
-    maintainers = with maintainers; [ j0hax ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ j0hax ];
   };
 }

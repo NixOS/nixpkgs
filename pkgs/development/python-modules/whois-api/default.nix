@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "whoisapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Whois API client library for Python";
     homepage = "https://github.com/whois-api-llc/whois-api-py";
     changelog = "https://github.com/whois-api-llc/whois-api-py/blob/${src.rev}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

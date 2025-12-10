@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Check the health of your Nix setup";
     homepage = "https://github.com/juspay/nix-health";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ shivaraj-bh ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ shivaraj-bh ];
     mainProgram = "nix-health";
   };
 }

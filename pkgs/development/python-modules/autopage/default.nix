@@ -20,10 +20,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "autopage" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to provide automatic paging for console output";
     homepage = "https://github.com/zaneb/autopage";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

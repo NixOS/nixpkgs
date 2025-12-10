@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-CXIfE1EsNwm4vsybQSdfKewBYpzBh+uQu1jYAm8DDtI=";
 
-  meta = with lib; {
+  meta = {
     description = "High performance csv viewer with cjk/emoji support";
     mainProgram = "csview";
     homepage = "https://github.com/wfxr/csview";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];

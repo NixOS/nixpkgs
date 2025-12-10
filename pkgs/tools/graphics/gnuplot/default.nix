@@ -119,12 +119,12 @@ in
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.gnuplot.info/";
     description = "Portable command-line driven graphing utility for many platforms";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.gnuplot;
-    maintainers = with maintainers; [ lovek323 ];
+    maintainers = with lib.maintainers; [ lovek323 ];
     mainProgram = "gnuplot";
   };
 }

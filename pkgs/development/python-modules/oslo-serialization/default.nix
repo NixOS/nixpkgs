@@ -44,10 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oslo_serialization" ];
 
-  meta = with lib; {
+  meta = {
     description = "Oslo Serialization library";
     homepage = "https://github.com/openstack/oslo.serialization";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

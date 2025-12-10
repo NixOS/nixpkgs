@@ -111,11 +111,11 @@ buildDotnetModule rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Custom launcher for FFXIV";
     homepage = "https://github.com/goatcorp/XIVLauncher.Core";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       keysmashes
       witchof0x20
     ];

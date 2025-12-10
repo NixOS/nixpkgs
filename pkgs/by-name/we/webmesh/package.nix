@@ -44,11 +44,11 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple, distributed, zero-configuration WireGuard mesh provider";
     mainProgram = "webmesh-node";
     homepage = "https://webmeshproj.github.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bbigras ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bbigras ];
   };
 }

@@ -25,10 +25,10 @@ buildPythonPackage {
     python-lsp-server
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/emanspeaks/pyls-flake8";
     description = "Flake8 plugin for the Python LSP Server";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

@@ -18,11 +18,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-Um4BZ1QTHCilOslo/GR7cGvPCX1xNitf6WU8QaehAaE=";
 
-  meta = with lib; {
+  meta = {
     description = "Share one language server instance between multiple LSP clients to save resources";
     mainProgram = "lspmux";
     homepage = "https://codeberg.org/p2502/lspmux";
-    license = with licenses; [ eupl12 ];
-    maintainers = with maintainers; [ mrcjkb ];
+    license = with lib.licenses; [ eupl12 ];
+    maintainers = with lib.maintainers; [ mrcjkb ];
   };
 })

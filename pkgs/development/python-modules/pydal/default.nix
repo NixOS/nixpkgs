@@ -49,10 +49,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydal" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Database Abstraction Layer";
     homepage = "https://github.com/web2py/pydal";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ wamserma ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ wamserma ];
   };
 }

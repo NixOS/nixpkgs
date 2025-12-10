@@ -135,11 +135,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fastapi" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/fastapi/fastapi/releases/tag/${src.tag}";
     description = "Web framework for building APIs";
     homepage = "https://github.com/fastapi/fastapi";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wd15 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wd15 ];
   };
 }

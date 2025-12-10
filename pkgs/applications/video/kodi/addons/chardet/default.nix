@@ -22,10 +22,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Freso/script.module.chardet";
     description = "Universal encoding detector";
-    license = licenses.lgpl2Only;
-    teams = [ teams.kodi ];
+    license = lib.licenses.lgpl2Only;
+    teams = [ lib.teams.kodi ];
   };
 }

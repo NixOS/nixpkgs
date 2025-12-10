@@ -26,11 +26,11 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fastest shell plugin manager";
     mainProgram = "antibody";
     homepage = "https://github.com/getantibody/antibody";
-    license = licenses.mit;
+    license = lib.licenses.mit;
 
     # golang.org/x/sys needs to be updated due to:
     #

@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     libchewing
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Chewing wrapper for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-chewing";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ xrelkd ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ xrelkd ];
+    platforms = lib.platforms.linux;
   };
 }

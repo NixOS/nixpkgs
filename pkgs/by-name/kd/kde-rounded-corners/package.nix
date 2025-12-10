@@ -40,10 +40,10 @@ stdenv.mkDerivation rec {
     kdePackages.qtbase
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Rounds the corners of your windows";
     homepage = "https://github.com/matinlotfali/KDE-Rounded-Corners";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ devusb ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ devusb ];
   };
 }

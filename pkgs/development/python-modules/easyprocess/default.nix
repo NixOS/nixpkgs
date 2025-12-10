@@ -18,10 +18,10 @@ buildPythonPackage rec {
   # No tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Easy to use python subprocess interface";
     homepage = "https://github.com/ponty/EasyProcess";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ layus ];
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ layus ];
   };
 }

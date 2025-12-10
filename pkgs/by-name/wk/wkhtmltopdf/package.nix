@@ -102,7 +102,7 @@ stdenv.mkDerivation (
       $out/bin/wkhtmltopdf --version
     '';
 
-    meta = with lib; {
+    meta = {
       homepage = "https://wkhtmltopdf.org/";
       description = "Tools for rendering web pages to PDF or images (binary package)";
       longDescription = ''
@@ -113,8 +113,8 @@ stdenv.mkDerivation (
 
         There is also a C library, if you're into that kind of thing.
       '';
-      license = licenses.gpl3Plus;
-      maintainers = with maintainers; [
+      license = lib.licenses.gpl3Plus;
+      maintainers = with lib.maintainers; [
         nbr
         kalbasit
       ];

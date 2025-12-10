@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "datasette_template_sql" ];
 
-  meta = with lib; {
+  meta = {
     description = "Datasette plugin for executing SQL queries from templates";
     homepage = "https://datasette.io/plugins/datasette-template-sql";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ MostAwesomeDude ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ MostAwesomeDude ];
   };
 }

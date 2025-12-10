@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Foreign function interface for bash";
     mainProgram = "ctypes.sh";
     homepage = "https://github.com/taviso/ctypes.sh";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

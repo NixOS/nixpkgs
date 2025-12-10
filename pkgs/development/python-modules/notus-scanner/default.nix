@@ -46,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "notus.scanner" ];
 
-  meta = with lib; {
+  meta = {
     description = "Helper to create results from local security checks";
     homepage = "https://github.com/greenbone/notus-scanner";
     changelog = "https://github.com/greenbone/notus-scanner/releases/tag/${src.tag}";
-    license = with licenses; [ agpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ agpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -44,11 +44,11 @@ buildGoModule rec {
 
   CGO_CFLAGS = "-I${lib.getDev pcsclite}/include/PCSC/";
 
-  meta = with lib; {
+  meta = {
     description = "Step plugin to manage keys and certificates on cloud KMSs and HSMs";
     homepage = "https://smallstep.com/cli/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ qbit ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ qbit ];
     mainProgram = "step-kms-plugin";
   };
 }

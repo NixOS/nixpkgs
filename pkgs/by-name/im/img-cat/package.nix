@@ -17,10 +17,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-4kF+LwVNBY770wHLLcVlAqPoy4SNhbp2TxdNWRiJL6Q=";
 
-  meta = with lib; {
+  meta = {
     description = "Tool to output images as RGB ANSI graphics on the terminal";
     homepage = "https://github.com/trashhalo/imgcat";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "imgcat";
   };

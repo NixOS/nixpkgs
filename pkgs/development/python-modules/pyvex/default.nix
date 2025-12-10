@@ -57,14 +57,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyvex" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to libVEX and VEX IR";
     homepage = "https://github.com/angr/pyvex";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       gpl3Plus
       lgpl3Plus
     ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

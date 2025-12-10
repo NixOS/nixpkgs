@@ -270,12 +270,12 @@ stdenv.mkDerivation {
     fi
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Movie player that supports many video formats";
     homepage = "http://mplayerhq.hu";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     # Picking it up: no idea about the origin of some choices (but seems fine)
-    maintainers = [ maintainers.raskin ];
+    maintainers = [ lib.maintainers.raskin ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

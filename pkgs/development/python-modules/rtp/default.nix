@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rtp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for decoding/encoding rtp packets";
     homepage = "https://github.com/bbc/rd-apmm-python-lib-rtp";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fleaz ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fleaz ];
   };
 }

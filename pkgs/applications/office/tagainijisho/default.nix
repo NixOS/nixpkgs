@@ -37,17 +37,17 @@ stdenv.mkDerivation rec {
     "-DEMBED_SQLITE=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Free, open-source Japanese dictionary and kanji lookup tool";
     mainProgram = "tagainijisho";
     homepage = "https://www.tagaini.net/";
-    license = with licenses; [
+    license = with lib.licenses; [
       # program
       gpl3Plus
       # data
       cc-by-sa-30
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ vbgl ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

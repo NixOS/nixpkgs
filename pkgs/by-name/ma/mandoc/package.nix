@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     nixos = nixosTests.man;
   };
 
-  meta = with lib; {
+  meta = {
     # check if we can execute binaries for the host platform on the build platform
     # even though the platforms aren't the same. mandoc can't be cross compiled
     # (easily) because of its configurePhase which executes compiled programs
@@ -78,9 +78,9 @@ stdenv.mkDerivation rec {
     homepage = "https://mandoc.bsd.lv/";
     description = "Suite of tools compiling mdoc and man";
     downloadPage = "http://mandoc.bsd.lv/snapshots/";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       ramkromberg
       sternenseemann
     ];

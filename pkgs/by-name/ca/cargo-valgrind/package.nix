@@ -38,15 +38,15 @@ rustPlatform.buildRustPackage rec {
     "--skip empty_tests_not_leak_in_release_mode"
   ];
 
-  meta = with lib; {
+  meta = {
     description = ''Cargo subcommand "valgrind": runs valgrind and collects its output in a helpful manner'';
     mainProgram = "cargo-valgrind";
     homepage = "https://github.com/jfrimmel/cargo-valgrind";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       otavio
       matthiasbeyer
     ];

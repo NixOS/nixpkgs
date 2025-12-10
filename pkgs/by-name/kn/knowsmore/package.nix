@@ -52,12 +52,12 @@ python3.pkgs.buildPythonApplication rec {
     "test_create_db"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for pentesting Microsoft Active Directory";
     homepage = "https://github.com/helviojunior/knowsmore";
     changelog = "https://github.com/helviojunior/knowsmore/releases/tag/${src.tag}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "knowsmore";
   };
 }

@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     cp -r ./html $out/share/doc/csound
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Csound Canonical Reference Manual";
     homepage = "https://github.com/csound/manual";
-    license = licenses.fdl12Plus;
-    maintainers = with maintainers; [ hlolli ];
+    license = lib.licenses.fdl12Plus;
+    maintainers = with lib.maintainers; [ hlolli ];
     platforms = lib.platforms.all;
   };
 }

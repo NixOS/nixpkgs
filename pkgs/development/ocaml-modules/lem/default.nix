@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/lem --set LEMLIB $out/share/lem/library
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rems-project/lem";
     description = "Tool for lightweight executable mathematics";
     mainProgram = "lem";
-    maintainers = with maintainers; [ genericnerdyusername ];
-    license = with licenses; [
+    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    license = with lib.licenses; [
       bsd3
       gpl2
     ];

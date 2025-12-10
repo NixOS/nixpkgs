@@ -56,12 +56,12 @@ stdenv.mkDerivation (finalAttrs: {
     qtcharts
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://codeberg.org/LazyT/ubpm";
     description = "Universal Blood Pressure Manager";
     mainProgram = "ubpm";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ kurnevsky ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ kurnevsky ];
     broken = stdenv.hostPlatform.isDarwin;
   };
 })

@@ -23,12 +23,12 @@ stdenv.mkDerivation {
     install -Dm755 -t $out/bin althttpd
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Althttpd webserver";
     homepage = "https://sqlite.org/althttpd/";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ siraben ];
-    platforms = platforms.all;
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ siraben ];
+    platforms = lib.platforms.all;
     mainProgram = "althttpd";
   };
 }

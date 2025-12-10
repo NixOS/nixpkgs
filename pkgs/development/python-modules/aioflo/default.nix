@@ -55,11 +55,11 @@ buildPythonPackage rec {
     "test_system_modes"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Flo by Moen Smart Water Detectors";
     homepage = "https://github.com/bachya/aioflo";
     changelog = "https://github.com/bachya/aioflo/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

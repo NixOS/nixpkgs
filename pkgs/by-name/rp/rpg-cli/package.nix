@@ -20,11 +20,11 @@ rustPlatform.buildRustPackage rec {
   # tests assume the authors macbook, and thus fail
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Your filesystem as a dungeon";
     mainProgram = "rpg-cli";
     homepage = "https://github.com/facundoolano/rpg-cli";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

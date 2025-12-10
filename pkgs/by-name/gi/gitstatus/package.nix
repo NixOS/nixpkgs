@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
     wait $!
   '';
 
-  meta = with lib; {
+  meta = {
     description = "10x faster implementation of `git status` command";
     longDescription = ''
       To enable the included gitstatus prompt, add the appropriate line to your NixOS configuration:
@@ -125,12 +125,12 @@ stdenv.mkDerivation rec {
       See the project homepage for details on customization.
     '';
     homepage = "https://github.com/romkatv/gitstatus";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       mmlb
       SuperSandro2000
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "gitstatusd";
   };
 }

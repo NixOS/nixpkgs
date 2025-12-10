@@ -45,15 +45,15 @@ stdenv.mkDerivation rec {
   # ATM bin/tidy is statically linked, as upstream provides no other option yet.
   # https://github.com/htacg/tidy-html5/issues/326#issuecomment-160322107
 
-  meta = with lib; {
+  meta = {
     description = "HTML validator and `tidier'";
     longDescription = ''
       HTML Tidy is a command-line tool and C library that can be
       used to validate and fix HTML data.
     '';
-    license = licenses.libpng; # very close to it - the 3 clauses are identical
+    license = lib.licenses.libpng; # very close to it - the 3 clauses are identical
     homepage = "http://html-tidy.org";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "tidy";
   };
 }

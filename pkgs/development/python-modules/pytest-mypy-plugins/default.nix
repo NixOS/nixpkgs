@@ -58,11 +58,11 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "pytest_mypy_plugins/tests/test_explicit_configs.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin for testing mypy types, stubs, and plugins";
     homepage = "https://github.com/TypedDjango/pytest-mypy-plugins";
     changelog = "https://github.com/typeddjango/pytest-mypy-plugins/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

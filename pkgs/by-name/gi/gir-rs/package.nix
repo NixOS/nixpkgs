@@ -26,10 +26,10 @@ rustPlatform.buildRustPackage {
     echo "pub const VERSION: &str = \"$version\";" > src/gir_version.rs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to generate rust bindings and user API for glib-based libraries";
     homepage = "https://github.com/gtk-rs/gir/";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     mainProgram = "gir";
   };
 }

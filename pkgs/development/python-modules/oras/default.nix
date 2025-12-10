@@ -44,11 +44,11 @@ buildPythonPackage rec {
     "test_ssl"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "ORAS Python SDK";
     homepage = "https://github.com/oras-project/oras-py";
     changelog = "https://github.com/oras-project/oras-py/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

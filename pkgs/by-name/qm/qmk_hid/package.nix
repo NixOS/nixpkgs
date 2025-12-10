@@ -32,10 +32,10 @@ rustPlatform.buildRustPackage rec {
     "--skip=src/lib.rs"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Commandline tool for interactng with QMK devices over HID";
     homepage = "https://github.com/FrameworkComputer/qmk_hid";
-    license = with licenses; [ bsd3 ];
+    license = with lib.licenses; [ bsd3 ];
     maintainers = [ ];
     mainProgram = "qmk_hid";
   };
