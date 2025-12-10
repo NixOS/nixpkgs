@@ -45,7 +45,7 @@ lib.makeScope pkgs.newScope (
 
     teams = [ lib.teams.pantheon ];
 
-    mutter = pkgs.mutter46;
+    mutter = pkgs.mutter48;
 
     # Using 43 to match Mutter used in Pantheon
     gnome-settings-daemon = pkgs.gnome-settings-daemon46;
