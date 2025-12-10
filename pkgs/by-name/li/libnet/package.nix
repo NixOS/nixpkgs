@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   outputs = [
     "out"
-    "lib"
+    "dev"
   ];
 
   nativeBuildInputs = [
@@ -38,6 +38,10 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = "./autogen.sh";
+
+  preFixup = ''
+    moveToOutput bin/libnet-config "$dev"
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/sam-github/libnet";
