@@ -109,6 +109,24 @@ stdenv.mkDerivation {
       decode = "base64 -d";
       hash = "sha256-Y6xPjNM0J1DpJ62stnEaB+mJsa9kq89TGMxZkIk9334=";
     })
+    # Linux: mount_nodev removed, use new mount API
+    (fetchpatch {
+      url = "https://gerrit.openafs.org/changes/16646/revisions/93db75395149e1f0dbdc3a0572f58449dd9da98d/patch";
+      decode = "base64 -d";
+      hash = "sha256-5eYliZV3WPjbQ3WGvZuqzeu060MHRof2yozSWPn+Njg=";
+    })
+    # Linux: Rename LINUX_WRITEPAGES_USES_FOLIOS
+    (fetchpatch {
+      url = "https://gerrit.openafs.org/changes/16650/revisions/1e5801afe3069a9ca586c745ae1e26feb8f1048f/patch";
+      decode = "base64 -d";
+      hash = "sha256-qtqe64qhRwNBwfKkGhuEAKFDMFDirFxz9M0Wvtk+r1Q=";
+    })
+    # Linux: Don't use write_cache_pages for writepages
+    (fetchpatch {
+      url = "https://gerrit.openafs.org/changes/16648/revisions/652674cec6c6c7349709dc080b6a2db3253424e6/patch";
+      decode = "base64 -d";
+      hash = "sha256-5T4hOge3U5uk3NSFxocYEjgfXU1Se5FkQk2rCRZDlfU=";
+    })
   ];
 
   nativeBuildInputs = [
