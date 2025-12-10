@@ -1749,6 +1749,7 @@ mapAliases {
   xonsh-unwrapped = throw "'xonsh-unwrapped' has been renamed to/replaced by 'python3Packages.xonsh'"; # Converted to throw 2025-10-27
   xorg-autoconf = util-macros; # Added 2025-08-18
   xsw = throw "'xsw' has been removed due to lack of upstream maintenance"; # Added 2025-08-22
+  xsynth-dssi = throw "'xsynth-dssi' was removed due to lack of upstream maintenance and relying on gtk2"; # Added 2025-12-02
   xulrunner = throw "'xulrunner' has been renamed to/replaced by 'firefox-unwrapped'"; # Converted to throw 2025-10-27
   yabar = throw "'yabar' has been removed as the upstream project was archived"; # Added 2025-06-10
   yabar-unstable = throw "'yabar' has been removed as the upstream project was archived"; # Added 2025-06-10
