@@ -30,6 +30,7 @@
   python3Packages,
   enableDefaultConfig ? false,
   meshtastic-web, # Only used when `enableDefaultConfig` is set to `true`.
+  nixosTests,
 }:
 
 assert builtins.isBool enableDefaultConfig;
@@ -150,6 +151,10 @@ stdenv.mkDerivation (finalAttrs: {
   preVersionCheck = ''
     version="${lib.versions.major finalAttrs.version}.${lib.versions.minor finalAttrs.version}.${lib.versions.patch finalAttrs.version}"
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) meshtasticd;
+  };
 
   meta = {
     description = "Meshtastic daemon for communicating with Meshtastic devices";
