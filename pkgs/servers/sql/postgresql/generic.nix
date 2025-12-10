@@ -176,7 +176,7 @@ let
           overrideCC llvmPackages.stdenv (
             llvmPackages.stdenv.cc.override {
               # LLVM bintools are not used by default, but are needed to make -flto work below.
-              bintools = llvmPackages.bintools;
+              bintools = buildPackages."llvmPackages_${lib.versions.major llvmPackages.release_version}".bintools;
             }
           )
         else
