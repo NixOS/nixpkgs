@@ -15089,14 +15089,6 @@
     githubId = 88983487;
     name = "Loïc Reynier";
   };
-  lom = {
-    email = "legendofmiracles@protonmail.com";
-    matrix = "@legendofmiracles:matrix.org";
-    github = "legendofmiracles";
-    githubId = 30902201;
-    name = "legendofmiracles";
-    keys = [ { fingerprint = "CC50 F82C 985D 2679 0703  AF15 19B0 82B3 DEFE 5451"; } ];
-  };
   lomenzel = {
     name = "Leonard-Orlando Menzel";
     email = "leonard.menzel@tutanota.com";

@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     description = "Minimal screenshot annotation tool with lua config";
     homepage = "https://github.com/Nooo37/pinsel";
     license = licenses.mit;
-    maintainers = with maintainers; [ lom ];
+    maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "pinsel";
   };
