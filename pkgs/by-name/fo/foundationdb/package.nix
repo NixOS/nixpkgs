@@ -15,6 +15,7 @@
   toml11,
   jemalloc,
   doctest,
+  zlib,
 }:
 let
   boost = boost186;
@@ -29,13 +30,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "foundationdb";
-  version = "7.3.42";
+  version = "7.3.68";
 
   src = fetchFromGitHub {
     owner = "apple";
     repo = "foundationdb";
     tag = version;
-    hash = "sha256-jQcm+HLai5da2pZZ7iLdN6fpQZxf5+/kkfv9OSXQ57c=";
+    hash = "sha256-OaV7YyBggeX3vrnI2EYwlWdIGRHOAeP5OZN0Rmd/dnw=";
   };
 
   patches = [
@@ -80,6 +81,7 @@ stdenv.mkDerivation rec {
     msgpack-cxx
     openssl
     toml11
+    zlib
   ];
 
   checkInputs = [ doctest ];
