@@ -28,10 +28,10 @@ buildPythonPackage rec {
   # package is not readme-renderer
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Readme is a library for rendering readme descriptions for Warehouse";
     homepage = "https://github.com/pypa/readme";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

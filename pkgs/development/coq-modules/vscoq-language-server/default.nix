@@ -81,8 +81,8 @@ ocamlPackages.buildDunePackage {
     {
       description = "Language server for the vscoq vscode/codium extension";
       homepage = "https://github.com/coq-community/vscoq";
-      maintainers = with maintainers; [ cohencyril ];
-      license = licenses.mit;
+      maintainers = with lib.maintainers; [ cohencyril ];
+      license = lib.licenses.mit;
     }
     // optionalAttrs (fetched.broken or false) {
       coqFilter = true;

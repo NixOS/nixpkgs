@@ -99,12 +99,12 @@ buildPythonPackage rec {
     "tests/test_xsim.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Abstraction library for interfacing EDA tools";
     mainProgram = "el_docker";
     homepage = "https://github.com/olofk/edalize";
     changelog = "https://github.com/olofk/edalize/releases/tag/${src.tag}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ astro ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ astro ];
   };
 }

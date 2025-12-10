@@ -94,11 +94,11 @@ buildPythonPackage rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "High-performance, pure-Python HTTP";
     mainProgram = "cheroot";
     homepage = "https://github.com/cherrypy/cheroot";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

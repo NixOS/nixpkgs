@@ -28,11 +28,11 @@ stdenvNoCC.mkDerivation rec {
 
   passthru = { inherit pname version; };
 
-  meta = with lib; {
+  meta = {
     description = "Creative Commons symbol font";
     homepage = "https://www.ctrl.blog/entry/creative-commons-unicode-fallback-font.html";
-    maintainers = with maintainers; [ qyliss ];
-    license = licenses.publicDomain;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ qyliss ];
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.all;
   };
 }

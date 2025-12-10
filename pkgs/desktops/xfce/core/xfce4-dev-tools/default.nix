@@ -66,11 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
     odd-unstable = true;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.xfce.org/xfce/xfce4-dev-tools";
     description = "Autoconf macros and scripts to augment app build systems";
-    license = licenses.gpl2Plus;
-    teams = [ teams.xfce ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.xfce ];
+    platforms = lib.platforms.linux;
   };
 })

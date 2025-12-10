@@ -243,11 +243,11 @@ stdenv.mkDerivation {
       })
     ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://boost.org/";
     description = "Collection of C++ libraries";
-    license = licenses.boost;
-    platforms = platforms.unix ++ platforms.windows;
+    license = lib.licenses.boost;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     # boost-context lacks support for the N32 ABI on mips64.  The build
     # will succeed, but packages depending on boost-context will fail with
     # a very cryptic error message.

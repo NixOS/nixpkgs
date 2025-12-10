@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-vTqDoM/LK5SHkayLKYig+tCrXLelOoILmQGCxlTWHog=";
 
-  meta = with lib; {
+  meta = {
     description = "Generate method stubs for implementing an interface";
     mainProgram = "impl";
     homepage = "https://github.com/josharian/impl";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kalbasit ];
   };
 }

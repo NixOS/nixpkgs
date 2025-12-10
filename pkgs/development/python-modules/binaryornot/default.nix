@@ -26,9 +26,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ hypothesis ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/audreyr/binaryornot";
     description = "Ultra-lightweight pure Python package to check if a file is binary or text";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

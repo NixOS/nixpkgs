@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tools for manipulating UEFI secure boot platforms";
     homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/jejb/efitools.git";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.grahamc ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.grahamc ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -64,11 +64,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyramid" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python web framework";
     homepage = "https://trypyramid.com/";
     changelog = "https://github.com/Pylons/pyramid/blob/${version}/CHANGES.rst";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
     maintainers = [ ];
   };
 }

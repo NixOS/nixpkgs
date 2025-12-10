@@ -40,11 +40,11 @@ buildPythonPackage rec {
     "huawei_lte_api.Connection"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "API For huawei LAN/WAN LTE Modems";
     homepage = "https://github.com/Salamek/huawei-lte-api";
     changelog = "https://github.com/Salamek/huawei-lte-api/releases/tag/${src.tag}";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -67,15 +67,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
         null;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to improve keyboard comfort and usability with advanced customization";
     homepage = "https://github.com/jtroo/kanata";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
       linj
       auscyber
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "kanata";
   };
 })

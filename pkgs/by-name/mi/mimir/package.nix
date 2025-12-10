@@ -59,12 +59,12 @@ buildGoModule (finalAttrs: {
       "-X ${t}.Branch=unknown"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Grafana Mimir provides horizontally scalable, highly available, multi-tenant, long-term storage for Prometheus. ";
     homepage = "https://github.com/grafana/mimir";
     changelog = "https://github.com/grafana/mimir/releases/tag/mimir-${finalAttrs.version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       happysalada
       bryanhonof
       adamcstephens

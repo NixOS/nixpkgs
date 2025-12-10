@@ -65,11 +65,11 @@ buildPythonPackage rec {
     "tests/test_build.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "MkDocs plugin to generate a RSS feeds for created and updated pages, using git log and YAML frontmatter";
     homepage = "https://github.com/Guts/mkdocs-rss-plugin";
     changelog = "https://github.com/Guts/mkdocs-rss-plugin/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

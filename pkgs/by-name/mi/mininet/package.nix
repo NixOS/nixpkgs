@@ -94,12 +94,12 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Emulator for rapid prototyping of Software Defined Networks";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
     homepage = "https://github.com/mininet/mininet";
-    maintainers = with maintainers; [ teto ];
+    maintainers = with lib.maintainers; [ teto ];
     mainProgram = "mnexec";
   };
 }

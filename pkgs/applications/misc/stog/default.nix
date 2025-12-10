@@ -53,10 +53,10 @@ buildDunePackage rec {
     xtmpl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "XML documents and web site compiler";
     homepage = "https://www.good-eris.net/stog";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ regnat ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ regnat ];
   };
 }

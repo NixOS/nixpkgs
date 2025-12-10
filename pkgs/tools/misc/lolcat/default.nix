@@ -12,11 +12,11 @@
 
   passthru.updateScript = bundlerUpdateScript "lolcat";
 
-  meta = with lib; {
+  meta = {
     description = "Rainbow version of cat";
     homepage = "https://github.com/busyloop/lolcat";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       StillerHarpo
       manveru
       nicknovitski

@@ -34,11 +34,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Firmware binaries for the Intel Vision Sensing Controller";
     homepage = "https://github.com/intel/ivsc-firmware";
-    license = licenses.issl;
-    sourceProvenance = with sourceTypes; [
+    license = lib.licenses.issl;
+    sourceProvenance = with lib.sourceTypes; [
       binaryFirmware
     ];
     maintainers = [ ];

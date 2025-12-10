@@ -163,17 +163,17 @@ let
         runHook postInstall
       '';
 
-      meta = with lib; {
+      meta = {
         description = "Messaging app";
         homepage = "https://weixin.qq.com/";
-        license = licenses.unfree;
+        license = lib.licenses.unfree;
         platforms = [
           "x86_64-linux"
           "aarch64-linux"
           "loongarch64-linux"
         ];
-        sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-        maintainers = with maintainers; [
+        sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+        maintainers = with lib.maintainers; [
           pokon548
           xddxdd
         ];

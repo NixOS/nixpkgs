@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiomultiprocess" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to improve performance";
     longDescription = ''
       aiomultiprocess presents a simple interface, while running a full
@@ -48,7 +48,7 @@ buildPythonPackage rec {
       the workload and number of cores available.
     '';
     homepage = "https://github.com/omnilib/aiomultiprocess";
-    license = with licenses; [ mit ];
-    maintainers = [ maintainers.fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = [ lib.maintainers.fab ];
   };
 }

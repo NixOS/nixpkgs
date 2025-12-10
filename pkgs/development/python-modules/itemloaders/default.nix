@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "itemloaders" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to populate items using XPath and CSS with a convenient API";
     homepage = "https://github.com/scrapy/itemloaders";
     changelog = "https://github.com/scrapy/itemloaders/raw/v${version}/docs/release-notes.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -101,14 +101,14 @@ stdenv.mkDerivation rec {
     "doc"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://freeradius.org/";
     description = "Modular, high performance free RADIUS suite";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       sheenobu
     ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 }
 ## TODO: include windbind optionally (via samba?)

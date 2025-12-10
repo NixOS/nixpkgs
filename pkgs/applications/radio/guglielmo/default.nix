@@ -53,12 +53,12 @@ mkDerivation rec {
     patchelf --add-rpath "${airspy}/lib:${rtl-sdr}/lib" $out/bin/.guglielmo-wrapped
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Qt based FM / Dab tuner";
     mainProgram = "guglielmo";
     homepage = "https://github.com/marcogrecopriolo/guglielmo";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.markuskowa ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
   };
 }

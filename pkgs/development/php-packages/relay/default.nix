@@ -163,13 +163,13 @@ stdenv.mkDerivation (finalAttrs: {
         );
   };
 
-  meta = with lib; {
+  meta = {
     description = "Next-generation Redis extension for PHP";
     changelog = "https://github.com/cachewerk/relay/releases/tag/v${version}";
     homepage = "https://relay.so/";
-    sourceProvenance = [ sourceTypes.binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       tillkruss
       ostrolucky
     ];

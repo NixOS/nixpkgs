@@ -20,10 +20,10 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) json; };
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter which scrapes remote JSON by JSONPath";
     homepage = "https://github.com/prometheus-community/json_exporter";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "json_exporter";
   };

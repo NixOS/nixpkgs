@@ -46,15 +46,15 @@ stdenv.mkDerivation rec {
     installShellCompletion --bash --name xsos.bash xsos-bash-completion.bash
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Summarize system info from sosreports";
     mainProgram = "xsos";
     homepage = "https://github.com/ryran/xsos";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     platforms = [
       "i686-linux"
       "x86_64-linux"
     ];
-    maintainers = [ maintainers.nixinator ];
+    maintainers = [ lib.maintainers.nixinator ];
   };
 }

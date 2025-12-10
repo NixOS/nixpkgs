@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-wpfv6mebFPvL+9UkggRRH3fPOeGslORzxtN0q/KKOsw=";
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool for comparing benchmarks run by Criterion";
     mainProgram = "critcmp";
     homepage = "https://github.com/BurntSushi/critcmp";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       unlicense
     ];

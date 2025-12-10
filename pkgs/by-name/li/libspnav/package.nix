@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{lib,include}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://spacenav.sourceforge.net/";
     description = "Device driver and SDK for 3Dconnexion 3D input devices";
     longDescription = "A free, compatible alternative, to the proprietary 3Dconnexion device driver and SDK, for their 3D input devices (called 'space navigator', 'space pilot', 'space traveller', etc)";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ sohalt ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ sohalt ];
   };
 }

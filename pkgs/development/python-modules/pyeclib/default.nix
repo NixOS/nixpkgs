@@ -57,10 +57,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyeclib" ];
 
-  meta = with lib; {
+  meta = {
     description = "This library provides a simple Python interface for implementing erasure codes";
     homepage = "https://github.com/openstack/pyeclib";
-    license = licenses.bsd2;
-    teams = [ teams.openstack ];
+    license = lib.licenses.bsd2;
+    teams = [ lib.teams.openstack ];
   };
 }

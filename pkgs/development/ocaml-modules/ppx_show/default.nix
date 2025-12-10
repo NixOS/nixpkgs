@@ -22,10 +22,10 @@ buildDunePackage rec {
     ppxlib
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/thierry-martinez/${pname}";
     description = "OCaml PPX deriver for deriving show based on ppxlib";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ niols ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ niols ];
   };
 }

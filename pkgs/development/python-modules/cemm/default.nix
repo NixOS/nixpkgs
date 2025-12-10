@@ -62,11 +62,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cemm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with CEMM devices";
     homepage = "https://github.com/klaasnicolaas/python-cemm";
     changelog = "https://github.com/klaasnicolaas/python-cemm/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

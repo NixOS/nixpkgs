@@ -19,12 +19,12 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Automatically rename workspaces with icons of started applications";
     homepage = "https://github.com/hyprland-community/hyprland-autoname-workspaces";
-    license = licenses.isc;
-    maintainers = with maintainers; [ donovanglover ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ donovanglover ];
     mainProgram = "hyprland-autoname-workspaces";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

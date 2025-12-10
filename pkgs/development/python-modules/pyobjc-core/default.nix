@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "objc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python <-> Objective-C bridge";
     homepage = "https://github.com/ronaldoussoren/pyobjc";
-    license = licenses.mit;
-    platforms = platforms.darwin;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

@@ -113,15 +113,15 @@ let
         ];
 
         meta =
-          with lib;
+
           {
             homepage = "https://github.com/ARM-software/arm-trusted-firmware";
             description = "Reference implementation of secure world software for ARMv8-A";
             license = [
-              licenses.bsd3
+              lib.licenses.bsd3
             ]
-            ++ lib.optionals (!deleteHDCPBlobBeforeBuild) [ licenses.unfreeRedistributable ];
-            maintainers = with maintainers; [ lopsided98 ];
+            ++ lib.optionals (!deleteHDCPBlobBeforeBuild) [ lib.licenses.unfreeRedistributable ];
+            maintainers = with lib.maintainers; [ lopsided98 ];
           }
           // extraMeta;
       }

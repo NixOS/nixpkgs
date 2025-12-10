@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libopus ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for encoding .opus audio files and live streams";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://www.opus-codec.org/";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ pmiddend ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ pmiddend ];
   };
 }

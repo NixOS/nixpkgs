@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
       substituteInPlace $f --replace "${buildPackages.perl}" "${perlPackages.perl}"
     done
   '';
-  meta = with lib; {
+  meta = {
     description = "Translation helper tool";
     homepage = "https://launchpad.net/intltool/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
   };
 }

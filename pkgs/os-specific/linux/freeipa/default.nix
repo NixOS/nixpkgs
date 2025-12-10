@@ -174,7 +174,7 @@ stdenv.mkDerivation rec {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Identity, Policy and Audit system";
     longDescription = ''
       IPA is an integrated solution to provide centrally managed Identity (users,
@@ -184,12 +184,12 @@ stdenv.mkDerivation rec {
       and integration with Active Directory based infrastructures (Trusts).
     '';
     homepage = "https://www.freeipa.org/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       s1341
       benley
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "ipa";
   };
 }

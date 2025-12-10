@@ -60,14 +60,14 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/*.dll $out/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "MPEG-4 video codec for PC";
     homepage = "https://www.xvid.com/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [
       codyopel
       lovek323
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

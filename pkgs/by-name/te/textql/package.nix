@@ -36,11 +36,11 @@ buildGoModule rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Execute SQL against structured text like CSV or TSV";
     mainProgram = "textql";
     homepage = "https://github.com/dinedal/textql";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

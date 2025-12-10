@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
     "config=release"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple implementation of msgpack in C";
     homepage = "https://github.com/tarruda/libmpack/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lovek323 ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lovek323 ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

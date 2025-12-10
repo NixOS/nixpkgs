@@ -52,10 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate 3D structures by specifying a design grammar";
     homepage = "https://github.com/alemuntoni/StructureSynth";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ nim65s ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ nim65s ];
   };
 })

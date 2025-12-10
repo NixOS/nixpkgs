@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pytestFlags = [ "-s" ];
 
-  meta = with lib; {
+  meta = {
     description = "MkDocs plugin supports for add Redoc UI in page";
     homepage = "https://github.com/blueswen/mkdocs-redoc-tag";
     changelog = "https://github.com/blueswen/mkdocs-redoc-tag/blob/v${version}/CHANGELOG";
-    license = licenses.mit;
-    maintainers = with maintainers; [ benhiemer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ benhiemer ];
   };
 }

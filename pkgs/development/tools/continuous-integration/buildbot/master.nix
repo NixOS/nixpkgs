@@ -165,11 +165,11 @@ buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source continuous integration framework for automating software build, test, and release processes";
     homepage = "https://buildbot.net/";
     changelog = "https://github.com/buildbot/buildbot/releases/tag/v${version}";
-    teams = [ teams.buildbot ];
-    license = licenses.gpl2Only;
+    teams = [ lib.teams.buildbot ];
+    license = lib.licenses.gpl2Only;
   };
 }

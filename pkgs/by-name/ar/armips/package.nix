@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Kingcom/armips";
     description = "Assembler for various ARM and MIPS platforms";
     mainProgram = "armips";
-    license = licenses.mit;
-    maintainers = with maintainers; [ marius851000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

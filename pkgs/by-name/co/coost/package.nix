@@ -45,11 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     allowedVersions = "^[0-9]";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tiny boost library in C++11";
     homepage = "https://github.com/idealvin/coost";
-    license = licenses.mit;
-    maintainers = [ maintainers.sigmanificient ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sigmanificient ];
+    platforms = lib.platforms.unix;
   };
 })

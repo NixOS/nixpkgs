@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/minfrin/retry";
     description = "Command wrapper that retries until the command succeeds";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ gfrascadorio ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ gfrascadorio ];
+    platforms = lib.platforms.all;
     mainProgram = "retry";
   };
 }

@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
 
   doCheck = runTests;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://esa.github.io/pagmo2/";
     description = "Scientific library for massively parallel optimization";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.costrouc ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.costrouc ];
   };
 }
