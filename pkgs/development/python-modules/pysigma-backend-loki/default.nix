@@ -34,9 +34,9 @@ buildPythonPackage rec {
     "tests/test_backend_loki_field_modifiers.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to support the loki backend for pySigma";
     homepage = "https://github.com/grafana/pySigma-backend-loki";
-    license = with licenses; [ lgpl21Only ];
+    license = with lib.licenses; [ lgpl21Only ];
   };
 }

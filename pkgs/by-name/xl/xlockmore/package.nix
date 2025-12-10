@@ -52,12 +52,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ]; # no build output otherwise
 
-  meta = with lib; {
+  meta = {
     description = "Screen locker for the X Window System";
     homepage = "http://sillycycle.com/xlockmore.html";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.linux;
     mainProgram = "xlock";
   };
 }

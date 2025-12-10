@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   preFixup = lib.optionalString aria2Support ''gappsWrapperArgs+=(--suffix PATH : "${aria2}/bin")'';
 
-  meta = with lib; {
+  meta = {
     description = "Download manager using GTK and libcurl";
     longDescription = ''
       uGet is a VERY Powerful download manager application with a large
@@ -68,9 +68,9 @@ stdenv.mkDerivation rec {
       and lightweight power is uGet!
     '';
     homepage = "http://www.ugetdm.com";
-    license = licenses.lgpl21;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ romildo ];
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ romildo ];
     mainProgram = "uget-gtk";
   };
 }

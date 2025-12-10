@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio ];
 
-  meta = with lib; {
+  meta = {
     description = "OBS Plugin that can be used to create retro-inspired pixel art visuals";
     homepage = "https://github.com/dspstanky/pixel-art";
-    maintainers = with maintainers; [ flexiondotorg ];
-    license = licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ flexiondotorg ];
+    license = lib.licenses.gpl2Only;
     inherit (obs-studio.meta) platforms;
   };
 }

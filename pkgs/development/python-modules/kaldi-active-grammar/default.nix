@@ -71,12 +71,12 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests exist
 
-  meta = with lib; {
+  meta = {
     description = "Python Kaldi speech recognition";
     homepage = "https://github.com/daanzu/kaldi-active-grammar";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     maintainers = [ ];
     # Other platforms are supported upstream.
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

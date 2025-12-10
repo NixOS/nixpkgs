@@ -46,8 +46,8 @@ mkXfceDerivation {
     substituteInPlace src/xfpm-suspend.c --replace-fail "SBINDIR" "\"/run/current-system/sw/bin\""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Power manager for the Xfce Desktop Environment";
-    teams = [ teams.xfce ];
+    teams = [ lib.teams.xfce ];
   };
 }

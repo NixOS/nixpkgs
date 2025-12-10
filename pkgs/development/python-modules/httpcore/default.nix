@@ -70,11 +70,11 @@ buildPythonPackage rec {
     inherit httpx httpx-socks respx;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/encode/httpcore/blob/${version}/CHANGELOG.md";
     description = "Minimal low-level HTTP client";
     homepage = "https://github.com/encode/httpcore";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

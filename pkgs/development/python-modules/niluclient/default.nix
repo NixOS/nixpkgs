@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "niluclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for getting air pollution data from NILU sensor stations";
     homepage = "https://github.com/hfurubotten/niluclient";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

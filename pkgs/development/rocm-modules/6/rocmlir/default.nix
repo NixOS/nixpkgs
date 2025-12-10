@@ -141,11 +141,11 @@ stdenv.mkDerivation (finalAttrs: {
     page = "tags?per_page=4";
   };
 
-  meta = with lib; {
+  meta = {
     description = "MLIR-based convolution and GEMM kernel generator";
     homepage = "https://github.com/ROCm/rocMLIR";
-    license = with licenses; [ asl20 ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ asl20 ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

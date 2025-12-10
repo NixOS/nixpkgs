@@ -47,14 +47,14 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) mariadb-galera;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Galera 3 wsrep provider library";
     mainProgram = "garbd";
     homepage = "https://galeracluster.com/";
-    license = licenses.lgpl2Only;
-    maintainers = with maintainers; [ izorkin ];
-    teams = [ teams.helsinki-systems ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl2Only;
+    maintainers = with lib.maintainers; [ izorkin ];
+    teams = [ lib.teams.helsinki-systems ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

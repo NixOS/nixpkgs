@@ -326,19 +326,19 @@ stdenv.mkDerivation rec {
 
   setupHook = ../../hooks/qtbase-setup-hook.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.qt.io/";
     description = "Cross-platform application framework for C++";
-    license = with licenses; [
+    license = with lib.licenses; [
       fdl13Plus
       gpl2Plus
       lgpl21Plus
       lgpl3Plus
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       nickcao
       LunNova
     ];
-    platforms = platforms.unix ++ platforms.windows;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 }

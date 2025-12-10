@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
     cp ./README $out/share/doc/${pname}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.sonarnerd.net/src/";
     description = "GMPRIS GDBus bindings GDBus bindings generated from the GMPRIS XML spec files";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ lovesegfault ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ lovesegfault ];
   };
 }

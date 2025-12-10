@@ -54,14 +54,14 @@ stdenvNoCC.mkDerivation (
       version = verCode;
     };
 
-    meta = with lib; {
+    meta = {
       # Unfortunately there is no better page for this.
       # Filter for downloads, set 100 items per page. Sort by newest does not work.
       # Then search manually for the latest version.
       homepage = "https://www.broadcom.com/support/download-search?pg=&pf=Host+Bus+Adapters&pn=&pa=&po=&dk=storcli2&pl=&l=false";
       description = "Storage Command Line Tool";
-      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-      license = licenses.unfree;
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+      license = lib.licenses.unfree;
       mainProgram = "storcli2";
       platforms = [
         "x86_64-linux"

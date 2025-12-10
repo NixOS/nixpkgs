@@ -28,12 +28,12 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests" ];
 
-  meta = with lib; {
+  meta = {
     description = "Chinese Characters to Pinyin - 汉字转拼音";
     mainProgram = "pypinyin";
     homepage = "https://github.com/mozillazg/python-pinyin";
     changelog = "https://github.com/mozillazg/python-pinyin/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.mit;
-    teams = [ teams.tts ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.tts ];
   };
 }

@@ -114,12 +114,12 @@ buildPythonPackage rec {
     "datasette.plugins"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-tool for exploring and publishing data";
     mainProgram = "datasette";
     homepage = "https://datasette.io/";
     changelog = "https://github.com/simonw/datasette/releases/tag/${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

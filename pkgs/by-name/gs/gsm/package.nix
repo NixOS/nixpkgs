@@ -58,14 +58,14 @@ stdenv.mkDerivation rec {
 
   parallelBuild = false;
 
-  meta = with lib; {
+  meta = {
     description = "Lossy speech compression codec";
     homepage = "https://www.quut.com/gsm/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       codyopel
       raskin
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

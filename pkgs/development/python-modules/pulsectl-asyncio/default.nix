@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pulsectl_asyncio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings library for PulseAudio";
     homepage = "https://github.com/mhthies/pulsectl-asyncio";
     changelog = "https://github.com/mhthies/pulsectl-asyncio/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -64,11 +64,11 @@ stdenv.mkDerivation rec {
     cp ./META $out/lib/ocaml/${ocaml.version}/site-lib/lablgl
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OpenGL bindings for ocaml";
     homepage = "http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [
       pSub
       vbgl
     ];

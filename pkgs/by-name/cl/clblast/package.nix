@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tuned OpenCL BLAS library";
     homepage = "https://github.com/CNugteren/CLBlast";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Tungsten842 ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ Tungsten842 ];
+    platforms = lib.platforms.linux;
   };
 }

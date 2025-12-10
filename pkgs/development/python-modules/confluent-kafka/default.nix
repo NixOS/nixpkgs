@@ -115,11 +115,11 @@ buildPythonPackage rec {
     "tests/test_kafka_error.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Confluent's Apache Kafka client for Python";
     homepage = "https://github.com/confluentinc/confluent-kafka-python";
     changelog = "https://github.com/confluentinc/confluent-kafka-python/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mlieberman85 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mlieberman85 ];
   };
 }

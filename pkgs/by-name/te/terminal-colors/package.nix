@@ -55,11 +55,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Script displaying terminal colors in various formats";
     homepage = "https://github.com/eikenb/terminal-colors";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kaction ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ kaction ];
     mainProgram = "terminal-colors";
   };
 }

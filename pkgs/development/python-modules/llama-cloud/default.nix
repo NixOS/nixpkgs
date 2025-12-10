@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llama_cloud" ];
 
-  meta = with lib; {
+  meta = {
     description = "LlamaIndex Python Client";
     homepage = "https://pypi.org/project/llama-cloud/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

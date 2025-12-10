@@ -32,7 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "setuptools_scm plugin for git archives";
     homepage = "https://github.com/Changaco/setuptools_scm_git_archive";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     # https://github.com/Changaco/setuptools_scm_git_archive/pull/22
     broken = versionAtLeast setuptools-scm.version "8";

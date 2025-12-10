@@ -25,11 +25,11 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/candid82/joker";
     description = "Small Clojure interpreter and linter written in Go";
     mainProgram = "joker";
-    license = licenses.epl10;
-    maintainers = with maintainers; [ andrestylianos ];
+    license = lib.licenses.epl10;
+    maintainers = with lib.maintainers; [ andrestylianos ];
   };
 }

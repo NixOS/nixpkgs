@@ -55,11 +55,11 @@ stdenvNoCC.mkDerivation rec {
     cp -pr dist/light $out/share/icons/capitaine-cursors-white
   '';
 
-  meta = with lib; {
+  meta = {
     description = "X-cursor theme inspired by macOS and based on KDE Breeze";
     homepage = "https://github.com/keeferrourke/capitaine-cursors";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ eadwu ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ eadwu ];
   };
 }

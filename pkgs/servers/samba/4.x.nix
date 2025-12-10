@@ -330,14 +330,14 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.samba.org";
     changelog = "https://www.samba.org/samba/history/samba-${finalAttrs.version}.html";
     description = "Standard Windows interoperability suite of programs for Linux and Unix";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
     broken = enableGlusterFS;
-    maintainers = with maintainers; [ aneeshusa ];
+    maintainers = with lib.maintainers; [ aneeshusa ];
     pkgConfigModules = [
       "ndr_krb5pac"
       "ndr_nbt"

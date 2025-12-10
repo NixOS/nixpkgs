@@ -28,11 +28,11 @@ buildNpmPackage rec {
 
   passthru.entrypoint = "card-mod.js";
 
-  meta = with lib; {
+  meta = {
     description = "Add CSS styles to (almost) any lovelace card";
     homepage = "https://github.com/thomasloven/lovelace-card-mod";
-    license = licenses.mit;
-    maintainers = with maintainers; [ k900 ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ k900 ];
+    platforms = lib.platforms.all;
   };
 }

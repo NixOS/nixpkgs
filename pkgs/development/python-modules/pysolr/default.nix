@@ -25,9 +25,9 @@ buildPythonPackage rec {
 
   doCheck = false; # requires network access
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Python wrapper for Apache Solr";
     homepage = "https://github.com/toastdriven/pysolr/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

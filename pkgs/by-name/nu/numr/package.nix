@@ -38,11 +38,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Text calculator inspired by Numi - natural language expressions, variables, unit conversions";
     homepage = "https://github.com/nasedkinpv/numr";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
     mainProgram = "numr";

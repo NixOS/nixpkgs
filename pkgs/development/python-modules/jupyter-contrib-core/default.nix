@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jupyter_contrib_core" ];
 
-  meta = with lib; {
+  meta = {
     description = "Common utilities for jupyter-contrib projects";
     mainProgram = "jupyter-contrib";
     homepage = "https://github.com/jupyter-contrib/jupyter_contrib_core";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

@@ -77,11 +77,11 @@ buildPythonPackage rec {
   # impure tests because of connectivity attempts to jira servers
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Library to interact with the JIRA REST API";
     homepage = "https://github.com/pycontribs/jira";
     changelog = "https://github.com/pycontribs/jira/releases/tag/${src.tag}";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
     mainProgram = "jirashell";
   };

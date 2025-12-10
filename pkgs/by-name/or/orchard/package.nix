@@ -50,11 +50,11 @@ buildGoModule rec {
       --fish <($out/bin/orchard completion fish)
   '';
 
-  meta = with lib; {
+  meta = {
     mainProgram = "orchard";
     description = "Orchestrator for running Tart Virtual Machines on a cluster of Apple Silicon devices";
     homepage = "https://github.com/cirruslabs/orchard";
-    license = licenses.fairsource09;
-    maintainers = with maintainers; [ techknowlogick ];
+    license = lib.licenses.fairsource09;
+    maintainers = with lib.maintainers; [ techknowlogick ];
   };
 }

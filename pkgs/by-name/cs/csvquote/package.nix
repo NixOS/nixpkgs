@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
     patsh $out/bin/csvheader -fs ${builtins.storeDir} --path "$HOST_PATH"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Enables common unix utilities like cut, awk, wc, head to work correctly with csv data containing delimiters and newlines";
     homepage = "https://github.com/dbro/csvquote";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

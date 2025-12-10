@@ -31,10 +31,10 @@ stdenv.mkDerivation {
       }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mass renamer using $EDITOR";
-    license = licenses.mit;
-    maintainers = [ maintainers.tudbut ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.tudbut ];
     homepage = "https://git.tudbut.de/TudbuT/edname";
     mainProgram = "edname";
   };

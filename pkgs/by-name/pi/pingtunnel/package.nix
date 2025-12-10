@@ -26,11 +26,11 @@ buildGoModule rec {
     mv $out/bin/cmd $out/bin/pingtunnel
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool that send TCP/UDP traffic over ICMP";
     homepage = "https://github.com/esrrhs/pingtunnel";
-    license = licenses.mit;
-    maintainers = with maintainers; [ oluceps ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ oluceps ];
     mainProgram = "pingtunnel";
   };
 }

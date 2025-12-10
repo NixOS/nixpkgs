@@ -20,7 +20,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mynewt.apache.org/";
     description = "Build and package management tool for embedded development";
     longDescription = ''
@@ -28,7 +28,7 @@ buildGoModule rec {
       designed for C and C++ applications in embedded contexts. Newt
       was developed as a part of the Apache Mynewt Operating System.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ pjones ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pjones ];
   };
 }

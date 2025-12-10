@@ -68,13 +68,13 @@ appimageTools.wrapType2 {
       libxcrypt-legacy
     ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.saleae.com/";
     changelog = "https://ideas.saleae.com/f/changelog/";
     description = "Software for Saleae logic analyzers";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       j-hui
       newam
     ];

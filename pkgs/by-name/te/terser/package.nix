@@ -17,11 +17,11 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-jec/XyYDGhvl3fngG/HGJMI1G5JtYuZi/pJFrZuir+A=";
 
-  meta = with lib; {
+  meta = {
     description = "JavaScript parser, mangler and compressor toolkit for ES6+";
     mainProgram = "terser";
     homepage = "https://terser.org";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ talyz ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ talyz ];
   };
 }

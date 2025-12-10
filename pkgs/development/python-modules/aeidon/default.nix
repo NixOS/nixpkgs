@@ -41,12 +41,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aeidon" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/otsaloma/gaupol/releases/tag/${version}";
     description = "Reading, writing and manipulationg text-based subtitle files";
     homepage = "https://github.com/otsaloma/gaupol";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 
 }

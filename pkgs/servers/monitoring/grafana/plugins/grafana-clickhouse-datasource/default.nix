@@ -11,9 +11,9 @@ grafanaPlugin rec {
   };
   meta = with lib; {
     description = "Connects Grafana to ClickHouse";
-    license = licenses.asl20;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ moody ];
+    license = lib.licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ moody ];
     platforms = attrNames zipHash;
   };
 }

@@ -25,11 +25,11 @@ buildGoModule rec {
     "-X=github.com/pulumi/esc/cmd/esc/cli/version.Version=${src.rev}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pulumi ESC (Environments, Secrets, and Configuration) for cloud applications and infrastructure";
     homepage = "https://github.com/pulumi/esc/tree/main";
     changelog = "https://github.com/pulumi/esc/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "esc";
   };
 }

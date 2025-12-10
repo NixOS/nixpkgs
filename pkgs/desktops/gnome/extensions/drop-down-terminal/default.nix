@@ -37,10 +37,10 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Configurable drop down terminal shell";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ ericdallo ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ ericdallo ];
     homepage = "https://github.com/zzrough/gs-extensions-drop-down-terminal";
   };
 }
