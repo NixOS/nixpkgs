@@ -21,6 +21,7 @@
   extraPackages ? [ ],
   crun,
   runc,
+  krunkit,
   conmon,
   extraRuntimes ? lib.optionals stdenv.hostPlatform.isLinux [ runc ], # e.g.: runc, gvisor, youki
   fuse-overlayfs,
@@ -166,9 +167,8 @@ buildGoModule (finalAttrs: {
         iproute2
         nftables
       ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        vfkit
-      ]
+      ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform vfkit) vfkit
+      ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform krunkit) krunkit
       ++ extraPackages
     );
 
