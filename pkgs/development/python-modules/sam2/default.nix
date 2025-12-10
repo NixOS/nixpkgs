@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "SAM 2: Segment Anything in Images and Videos";
-    homepage = "http://pypi.org/project/sam2";
+    homepage = "https://github.com/facebookresearch/sam2";
     license = with lib.licenses; [
       bsd3
       asl20
