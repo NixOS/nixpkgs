@@ -8,15 +8,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "graphql-client";
-  version = "0.13.0";
+  version = "0.15.0";
 
   src = fetchCrate {
     inherit version;
     crateName = "graphql_client_cli";
-    hash = "sha256-eQ+7Ru3au/rDQZtwFDXYyybqC5uFtNBs6cEzX2QSFI4=";
+    hash = "sha256-kYznUgLe2hg8dOPJQVrl+zZQFAbiSkeHAgxiSiVsHoE=";
   };
 
-  cargoHash = "sha256-GPUOIDKlxk2P+cPmOPlpz/EM9TCXvHo41+1fQ0xAqto=";
+  cargoHash = "sha256-Knet/xIBZwbKWQHSVWCGxS+2W1qBRvQqEHhak6wWr94=";
 
   nativeBuildInputs = [
     pkg-config

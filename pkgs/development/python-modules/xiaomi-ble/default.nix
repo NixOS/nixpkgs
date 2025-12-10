@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "xiaomi-ble";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "xiaomi-ble";
     tag = "v${version}";
-    hash = "sha256-elPT+hwnFoy62CbpKsaTLP8D+Pui6BD2De7oJistM0w=";
+    hash = "sha256-Ix49ypsw8Ii7pkpznzNqP97vJ/x1QBEaAis8R/kOJe0=";
   };
 
   build-system = [ poetry-core ];

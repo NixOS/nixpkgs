@@ -39,6 +39,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/tadeck/onetimepass";
     changelog = "https://github.com/tadeck/onetimepass/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ zakame ];
   };
 }

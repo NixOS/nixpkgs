@@ -41,7 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/PySlurm/pyslurm";
     description = "Python bindings to Slurm";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ bhipple ];
     platforms = platforms.linux;
   };
 }

@@ -32,7 +32,6 @@ bundlerApp rec {
     license = licenses.mit;
     maintainers = with maintainers; [
       nicknovitski
-      Br1ght0ne
     ];
     platforms = platforms.linux;
   };

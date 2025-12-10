@@ -206,9 +206,9 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /pkgs/top-level/haskell-packages.nix          @sternenseemann @maralorn @wolfgangwalther
 
 # Perl
-/pkgs/development/interpreters/perl @stigtsp @zakame @marcusramberg
-/pkgs/top-level/perl-packages.nix   @stigtsp @zakame @marcusramberg
-/pkgs/development/perl-modules      @stigtsp @zakame @marcusramberg
+/pkgs/development/interpreters/perl @stigtsp @marcusramberg
+/pkgs/top-level/perl-packages.nix   @stigtsp @marcusramberg
+/pkgs/development/perl-modules      @stigtsp @marcusramberg
 
 # R
 /pkgs/applications/science/math/R   @jbedo
@@ -262,7 +262,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/top-level/java-packages.nix @NixOS/java
 
 # Jetbrains
-/pkgs/applications/editors/jetbrains @edwtjo @leona-ya @theCapypara
+/pkgs/applications/editors/jetbrains @leona-ya @theCapypara
 
 # Licenses
 /lib/licenses.nix @alyssais @emilazy @jopejoe1

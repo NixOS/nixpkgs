@@ -43,7 +43,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [
       fpletz
-      Br1ght0ne
       Misaka13514
     ];
     mainProgram = "subfinder";

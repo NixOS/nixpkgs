@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://mlmmj.org";
     description = "Mailing List Management Made Joyful";
-    maintainers = [ maintainers.edwtjo ];
     platforms = platforms.linux;
     license = licenses.mit;
   };

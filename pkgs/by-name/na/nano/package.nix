@@ -105,7 +105,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       joachifm
-      nequissimus
       sigmasquadron
     ];
     platforms = platforms.all;
