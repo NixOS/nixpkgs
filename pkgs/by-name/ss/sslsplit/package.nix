@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=$(out)"
-    "OPENSSL_BASE=${openssl.dev}"
-    "LIBEVENT_BASE=${libevent.dev}"
-    "LIBPCAP_BASE=${libpcap}"
-    "LIBNET_BASE=${libnet}"
+    "OPENSSL_BASE=${lib.getDev openssl}"
+    "LIBEVENT_BASE=${lib.getDev libevent}"
+    "LIBPCAP_BASE=${lib.getDev libpcap}"
+    "LIBNET_BASE=${lib.getDev libnet}"
   ];
 
   meta = with lib; {
