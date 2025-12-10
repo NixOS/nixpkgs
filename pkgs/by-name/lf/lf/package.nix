@@ -4,20 +4,21 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
   pname = "lf";
-  version = "39";
+  version = "40";
 
   src = fetchFromGitHub {
     owner = "gokcehan";
     repo = "lf";
     tag = "r${version}";
-    hash = "sha256-6M6xMVWHTLPlnG5i6/dC3KEV6RXezz8KK0V81P8RcE0=";
+    hash = "sha256-NPbv64ezcuGn6n6qQOCBLeofS08uX9ZWpSXTVpmQr+A=";
   };
 
-  vendorHash = "sha256-93VPbrNPRW6NyKHJBvmAadbJ+DLsH2jTAXjTKkPdYBA=";
+  vendorHash = "sha256-ybcwACun2GrANW47Nny60l8M+L9TZHzD95+qxVJKHpA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -36,6 +37,10 @@ buildGoModule rec {
     installManPage lf.1
     installShellCompletion etc/lf.{bash,zsh,fish}
   '';
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Terminal file manager written in Go and heavily inspired by ranger";
