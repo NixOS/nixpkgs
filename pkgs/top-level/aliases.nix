@@ -872,6 +872,7 @@ mapAliases {
   libuinputplus = throw "'libuinputplus' has been removed, as it was unmaintained upstream since 2021, no longer builds, and is no longer used by anything"; # Added 2025-11-02
   libviper = throw "'libviper' was removed as it is broken and not maintained upstream"; # Added 2025-05-17
   libwnck3 = throw "'libwnck3' has been renamed to/replaced by 'libwnck'"; # Converted to throw 2025-10-27
+  libykclient = throw "'libykclient' has been removed as it has been deprecated by Yubico."; # Added 2025-12-09
   lightdm_gtk_greeter = throw "'lightdm_gtk_greeter' has been renamed to/replaced by 'lightdm-gtk-greeter'"; # Converted to throw 2025-10-27
   lightly-boehs = throw "'lightly-boehs' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   lightly-qt = throw "'lightly-qt' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
@@ -1708,6 +1709,7 @@ mapAliases {
   yaml-cpp_0_3 = throw "yaml-cpp_0_3 has been removed, as it was unused"; # Added 2025-09-16
   yamlpath = throw "'yamlpath' has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-01
   yeahwm = throw "'yeahwm' has been removed, as it was broken and unmaintained upstream."; # Added 2025-06-12
+  yubico-pam = throw "'yubico-pam' has been removed as it has been deprecated by Yubico. Consider using 'pam_u2f' instead."; # Added 2025-12-09
   yubikey-manager-qt = throw "'yubikey-manager-qt' has been removed due to being archived upstream. Consider using 'yubioath-flutter' instead."; # Added 2025-06-07
   yubikey-personalization-gui = throw "'yubikey-personalization-gui' has been removed due to being archived upstream. Consider using 'yubioath-flutter' instead."; # Added 2025-06-07
   zandronum-alpha = throw "'zandronum-alpha' has been removed as it was broken and the stable version has caught up"; # Added 2025-10-19
