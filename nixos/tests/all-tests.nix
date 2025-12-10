@@ -802,6 +802,7 @@ in
   jotta-cli = runTest ./jotta-cli.nix;
   k3s = handleTest ./k3s { };
   kafka = handleTest ./kafka { };
+  kaidan = runTest ./kaidan;
   kanboard = runTest ./web-apps/kanboard.nix;
   kanidm = runTest ./kanidm.nix;
   kanidm-provisioning = runTest ./kanidm-provisioning.nix;
