@@ -26,6 +26,9 @@
   libglvnd,
   libkrb5,
   openssl,
+  curl,
+  webkitgtk_4_1,
+  libsoup_3,
 
   # Populate passthru.tests
   tests,
@@ -235,6 +238,10 @@ stdenv.mkDerivation (
       nspr
       systemdLibs
       xorg.libxkbfile
+      curl
+      openssl
+      webkitgtk_4_1
+      libsoup_3
     ];
 
     runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
