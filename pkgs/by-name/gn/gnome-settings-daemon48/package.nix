@@ -2,6 +2,7 @@
   stdenv,
   lib,
   replaceVars,
+  buildPackages,
   fetchurl,
   meson,
   ninja,
@@ -36,15 +37,17 @@
   tzdata,
   gcr_4,
   gnome-session-ctl,
+  udevCheckHook,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-settings-daemon";
-  version = "46.0";
+  version = "48.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.major finalAttrs.version}/gnome-settings-daemon-${finalAttrs.version}.tar.xz";
-    hash = "sha256-C5oPZPoYqOfgm0yVo/dU+gM8LNvS3DVwHwYYVywcs9c=";
+    hash = "sha256-OGCi6iFNy8tmAK56HjNYpTiSFQh7w+SkfO4/h7ruBi4=";
   };
 
   patches = [
@@ -56,17 +59,24 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     perl
     gettext
+    glib
     libxml2
     libxslt
     docbook_xsl
     wrapGAppsHook3
     python3
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -87,14 +97,19 @@ stdenv.mkDerivation (finalAttrs: {
     polkit
     geocode-glib_2
     geoclue2
-    systemd
     libgudev
     libwacom
     gcr_4
+  ]
+  ++ lib.optionals withSystemd [
+    systemd
   ];
 
   mesonFlags = [
     "-Dudev_dir=${placeholder "out"}/lib/udev"
+    (lib.mesonBool "systemd" withSystemd)
+  ]
+  ++ lib.optionals withSystemd [
     "-Dgnome_session_ctl_path=${gnome-session-ctl}/libexec/gnome-session-ctl"
   ];
 
@@ -103,11 +118,13 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-DG_DISABLE_CAST_CHECKS";
 
   postPatch = ''
-    for f in gnome-settings-daemon/codegen.py plugins/power/gsd-power-constants-update.pl; do
+    for f in plugins/power/gsd-power-constants-update.pl; do
       chmod +x $f
       patchShebangs $f
     done
   '';
+
+  doInstallCheck = true;
 
   meta = {
     description = "GNOME Settings Daemon";
