@@ -91,12 +91,12 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postCheck
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/google/glog";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     description = "Library for application-level logging";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       nh2
       r-burns
     ];

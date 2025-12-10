@@ -167,7 +167,7 @@ clangStdenv.mkDerivation rec {
 
   dontUseNinjaCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "3D parametric model compiler (unstable)";
     longDescription = ''
       OpenSCAD is a software for creating solid 3D CAD objects. It is free

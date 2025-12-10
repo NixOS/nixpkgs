@@ -20,11 +20,11 @@ python3.pkgs.buildPythonApplication rec {
     pillow
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://openttdcoop.org/";
     description = "Compiler for OpenTTD NML files";
     mainProgram = "nmlc";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ToxicFrog ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ToxicFrog ];
   };
 }

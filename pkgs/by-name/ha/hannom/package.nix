@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "UNICODE Han Nom Font Set";
     longDescription = ''
       The true type fonts HAN NOM A and HAN NOM B have been developed by Chan
@@ -35,8 +35,8 @@ stdenvNoCC.mkDerivation rec {
       available with high and low resolutions.
     '';
     homepage = "https://vietunicode.sourceforge.net/fonts/fonts_hannom.html";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.all;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.all;
   };
 }

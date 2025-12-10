@@ -74,12 +74,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyxnat" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pyxnat.github.io/pyxnat";
     description = "Python API to XNAT";
     mainProgram = "sessionmirror.py";
     changelog = "https://github.com/pyxnat/pyxnat/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

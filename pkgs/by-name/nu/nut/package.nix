@@ -145,7 +145,7 @@ stdenv.mkDerivation rec {
     rm $out/etc/udev/rules.d/52-nut-ipmipsu.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Network UPS Tools";
     longDescription = ''
       Network UPS Tools is a collection of programs which provide a common
@@ -153,9 +153,9 @@ stdenv.mkDerivation rec {
       It uses a layered approach to connect all of the parts.
     '';
     homepage = "https://networkupstools.org/";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.pierron ];
-    license = with licenses; [
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.pierron ];
+    license = with lib.licenses; [
       gpl1Plus
       gpl2Plus
       gpl3Plus

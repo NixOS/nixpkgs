@@ -44,17 +44,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/virtio-fs/virtiofsd";
     changelog = "https://gitlab.com/virtio-fs/virtiofsd/-/releases/v${finalAttrs.version}";
     description = "vhost-user virtio-fs device backend written in Rust";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       qyliss
       astro
     ];
     mainProgram = "virtiofsd";
-    platforms = platforms.linux;
-    license = with licenses; [
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [
       asl20 # and
       bsd3
     ];

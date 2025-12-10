@@ -128,12 +128,12 @@ stdenv.mkDerivation rec {
     patchShebangs src/backends/native/gen-default-modes.py
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/muffin";
     description = "Window management library for the Cinnamon desktop (libmuffin) and its sample WM binary (muffin)";
     mainProgram = "muffin";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

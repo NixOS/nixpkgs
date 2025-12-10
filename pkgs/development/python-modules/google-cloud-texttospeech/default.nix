@@ -49,11 +49,11 @@ buildPythonPackage rec {
     "google.cloud.texttospeech_v1beta1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud Text-to-Speech API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-texttospeech";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-texttospeech-v${version}/packages/google-cloud-texttospeech/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

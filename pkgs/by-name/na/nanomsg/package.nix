@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
       --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Socket library that provides several common communication patterns";
     homepage = "https://nanomsg.org/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "nanocat";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

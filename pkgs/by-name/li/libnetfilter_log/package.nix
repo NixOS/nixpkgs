@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libnfnetlink ];
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     description = "Userspace library providing interface to packets that have been logged by the kernel packet filter";
     longDescription = ''
       libnetfilter_log is a userspace library providing interface to packets
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
       library has been previously known as libnfnetlink_log.
     '';
     homepage = "https://netfilter.org/projects/libnetfilter_log/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

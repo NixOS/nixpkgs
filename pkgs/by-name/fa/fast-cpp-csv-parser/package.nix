@@ -21,9 +21,9 @@ stdenv.mkDerivation {
     substituteAll ${./fast-cpp-csv-parser.pc.in} $out/lib/pkgconfig/fast-cpp-csv-parser.pc
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small, easy-to-use and fast header-only library for reading comma separated value (CSV) files";
     homepage = "https://github.com/ben-strasser/fast-cpp-csv-parser";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

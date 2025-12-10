@@ -45,15 +45,15 @@ python3.pkgs.buildPythonApplication rec {
   # Tries to clone the kernel sources
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to check linux kernel source dump for known CVEs";
     homepage = "https://github.com/evdenis/cvehound";
     changelog = "https://github.com/evdenis/cvehound/blob/${src.rev}/ChangeLog";
     # See https://github.com/evdenis/cvehound/issues/22
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       gpl3Plus
     ];
-    maintainers = with maintainers; [ ambroisie ];
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
 }

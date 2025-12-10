@@ -23,11 +23,11 @@ buildGoModule rec {
     "-X github.com/gofireflyio/aiac/v4/libaiac.Version=v${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = ''Artificial Intelligence Infrastructure-as-Code Generator'';
     mainProgram = "aiac";
     homepage = "https://github.com/gofireflyio/aiac/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ qjoly ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ qjoly ];
   };
 }

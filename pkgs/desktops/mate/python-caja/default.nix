@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
-  meta = with lib; {
+  meta = {
     description = "Python binding for Caja components";
     homepage = "https://github.com/mate-desktop/python-caja";
-    license = [ licenses.gpl2Plus ];
-    platforms = platforms.unix;
-    teams = [ teams.mate ];
+    license = [ lib.licenses.gpl2Plus ];
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
 }

@@ -52,10 +52,10 @@ stdenv.mkDerivation rec {
       }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Clipboard management using dmenu";
     inherit (src.meta) homepage;
-    maintainers = with maintainers; [ jb55 ];
-    license = licenses.publicDomain;
+    maintainers = with lib.maintainers; [ jb55 ];
+    license = lib.licenses.publicDomain;
   };
 }

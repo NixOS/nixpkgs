@@ -50,14 +50,14 @@ stdenv.mkDerivation {
                      "_IMPORT_PREFIX \"$dev\""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C++ wrapper around libcurl";
     homepage = "https://docs.libcpr.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       phodina
       rycee
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

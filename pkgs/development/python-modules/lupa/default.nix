@@ -26,11 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lupa" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lua in Python";
     homepage = "https://github.com/scoder/lupa";
     changelog = "https://github.com/scoder/lupa/blob/lupa-${version}/CHANGES.rst";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

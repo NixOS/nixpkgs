@@ -58,11 +58,11 @@ buildGoModule rec {
 
   passthru.tests.rmfakecloud = nixosTests.rmfakecloud;
 
-  meta = with lib; {
+  meta = {
     description = "Host your own cloud for the Remarkable";
     homepage = "https://ddvk.github.io/rmfakecloud/";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       euxane
       martinetd
     ];

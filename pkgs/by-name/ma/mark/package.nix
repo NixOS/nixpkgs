@@ -37,12 +37,12 @@ buildGoModule rec {
       "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for syncing your markdown documentation with Atlassian Confluence pages";
     mainProgram = "mark";
     homepage = "https://github.com/kovetskiy/mark";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       rguevara84
       wrbbz
     ];

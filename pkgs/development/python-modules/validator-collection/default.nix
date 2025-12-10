@@ -47,11 +47,11 @@ buildPythonPackage rec {
     "test_is_readable"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library of 60+ commonly-used validator functions";
     homepage = "https://github.com/insightindustry/validator-collection/";
     changelog = "https://github.com/insightindustry/validator-collection/blob/${src.rev}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

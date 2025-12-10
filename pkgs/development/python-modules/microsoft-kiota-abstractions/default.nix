@@ -57,11 +57,11 @@ buildPythonPackage rec {
     rev-prefix = "microsoft-kiota-abstractions-v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Abstractions library for Kiota generated Python clients";
     homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/abstractions/";
     changelog = "https://github.com/microsoft/kiota-python/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

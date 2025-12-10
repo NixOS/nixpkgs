@@ -147,12 +147,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "shap" ];
 
-  meta = with lib; {
+  meta = {
     description = "Unified approach to explain the output of any machine learning model";
     homepage = "https://github.com/slundberg/shap";
     changelog = "https://github.com/slundberg/shap/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       evax
       natsukium
     ];

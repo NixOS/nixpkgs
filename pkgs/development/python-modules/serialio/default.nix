@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "serialio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for concurrency agnostic serial communication";
     homepage = "https://github.com/tiagocoutinho/serialio";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

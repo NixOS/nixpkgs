@@ -29,10 +29,10 @@ stdenv.mkDerivation {
       --add-flags $out/share/mu/lib/core.mu
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern low-level programming language";
     homepage = "https://github.com/nickmqb/muon";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
 }

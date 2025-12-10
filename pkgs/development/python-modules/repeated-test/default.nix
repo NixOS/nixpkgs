@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "repeated_test" ];
 
-  meta = with lib; {
+  meta = {
     description = "Unittest-compatible framework for repeating a test function over many fixtures";
     homepage = "https://github.com/epsy/repeated_test";
     changelog = "https://github.com/epsy/repeated_test/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

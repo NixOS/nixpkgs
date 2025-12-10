@@ -63,15 +63,15 @@ buildGoModule rec {
     ln -s $out/bin/gocryptfs $out/bin/mount.fuse.gocryptfs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Encrypted overlay filesystem written in Go";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://nuetzlich.net/gocryptfs/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       flokli
       offline
       prusnak
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -45,7 +45,7 @@ callPackage package {
     in
     fetchurl source;
 
-  meta = with lib; {
+  meta = {
     inherit platforms;
 
     description = "SDRplay API";
@@ -55,9 +55,9 @@ callPackage package {
     '';
 
     homepage = "https://www.sdrplay.com/downloads/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       pmenke
       zaninime
     ];

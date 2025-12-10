@@ -64,14 +64,14 @@ stdenv.mkDerivation rec {
     cp auth-ldap.conf $out/share/doc/openvpn/examples/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LDAP authentication plugin for OpenVPN";
     homepage = "https://github.com/threerings/openvpn-auth-ldap";
     license = [
-      licenses.asl20
-      licenses.bsd3
+      lib.licenses.asl20
+      lib.licenses.bsd3
     ];
-    maintainers = [ maintainers.benley ];
-    platforms = platforms.unix;
+    maintainers = [ lib.maintainers.benley ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -17,14 +17,14 @@ bundlerApp {
     updateScript = bundlerUpdateScript "asciidoctor";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Faster Asciidoc processor written in Ruby";
     homepage = "https://asciidoctor.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       gpyh
       nicknovitski
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

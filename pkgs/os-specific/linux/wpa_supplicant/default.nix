@@ -169,14 +169,14 @@ stdenv.mkDerivation rec {
     inherit wpa_supplicant_gui; # inherits the src+version updates
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://w1.fi/wpa_supplicant/";
     description = "Tool for connecting to WPA and WPA2-protected wireless networks";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       marcweber
       ma27
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

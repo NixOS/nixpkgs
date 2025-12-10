@@ -49,12 +49,12 @@ buildGoModule rec {
     installShellCompletion --zsh _istioctl
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Istio configuration command line utility for service operators to debug and diagnose their Istio mesh";
     mainProgram = "istioctl";
     homepage = "https://istio.io/latest/docs/reference/commands/istioctl";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       veehaitch
       ryan4yin
     ];

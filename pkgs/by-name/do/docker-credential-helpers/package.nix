@@ -62,11 +62,11 @@ buildGoModule rec {
   };
 
   meta =
-    with lib;
+
     {
       description = "Suite of programs to use native stores to keep Docker credentials safe";
       homepage = "https://github.com/docker/docker-credential-helpers";
-      license = licenses.mit;
+      license = lib.licenses.mit;
       maintainers = [ ];
     }
     // lib.optionalAttrs stdenv.hostPlatform.isDarwin {

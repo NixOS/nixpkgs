@@ -111,12 +111,12 @@ buildPythonPackage rec {
   # FileNotFoundError: [Errno 2] No such file or directory
   setupHook = ./setup-hook.sh;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/encode/httpx/blob/${src.rev}/CHANGELOG.md";
     description = "Next generation HTTP client";
     mainProgram = "httpx";
     homepage = "https://github.com/encode/httpx";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

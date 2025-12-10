@@ -25,8 +25,8 @@ mkXfceDerivation {
     xfconf
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Appfinder for the Xfce4 Desktop Environment";
-    teams = [ teams.xfce ];
+    teams = [ lib.teams.xfce ];
   };
 }

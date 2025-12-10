@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nengo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for creating and simulating large-scale brain models";
     homepage = "https://nengo.ai/";
-    license = licenses.unfreeRedistributable;
+    license = lib.licenses.unfreeRedistributable;
     maintainers = [ ];
   };
 }

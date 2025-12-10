@@ -40,13 +40,13 @@ buildPythonPackage rec {
   env.HOME = "/tmp";
   pythonImportsCheck = [ "crytic_compile" ];
 
-  meta = with lib; {
+  meta = {
     description = "Abstraction layer for smart contract build systems";
     mainProgram = "crytic-compile";
     homepage = "https://github.com/crytic/crytic-compile";
     changelog = "https://github.com/crytic/crytic-compile/releases/tag/${src.tag}";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       arturcygan
       hellwolf
     ];

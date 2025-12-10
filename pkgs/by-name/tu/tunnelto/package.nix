@@ -23,9 +23,9 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
-  meta = with lib; {
+  meta = {
     description = "Expose your local web server to the internet with a public URL";
     homepage = "https://tunnelto.dev";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

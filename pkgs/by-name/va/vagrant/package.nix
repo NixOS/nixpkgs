@@ -136,11 +136,11 @@ buildRubyGem rec {
     inherit ruby deps;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for building complete development environments";
     homepage = "https://www.vagrantup.com/";
-    license = licenses.bsl11;
-    maintainers = with maintainers; [ tylerjl ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [ tylerjl ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

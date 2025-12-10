@@ -42,12 +42,12 @@ rustPlatform.buildRustPackage {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tellerops/teller/";
     description = "Cloud native secrets management for developers";
     mainProgram = "teller";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       cameronraysmith
       wahtique
     ];

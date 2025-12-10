@@ -43,12 +43,12 @@ mkDerivation rec {
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "GUI for mapping keyboard and mouse controls to a gamepad";
     inherit (src.meta) homepage;
-    maintainers = with maintainers; [ sbruder ];
-    license = licenses.gpl3Plus;
-    platforms = with platforms; linux;
+    maintainers = with lib.maintainers; [ sbruder ];
+    license = lib.licenses.gpl3Plus;
+    platforms = with lib.platforms; linux;
     mainProgram = "antimicrox";
   };
 }

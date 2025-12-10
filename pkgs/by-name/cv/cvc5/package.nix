@@ -60,12 +60,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "High-performance theorem prover and SMT solver";
     mainProgram = "cvc5";
     homepage = "https://cvc5.github.io";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ shadaj ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ shadaj ];
   };
 }

@@ -18,12 +18,12 @@ stdenv.mkDerivation (finalAttrs: {
     "CFLAGS=-Wno-error=incompatible-pointer-types"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.pixelbeat.org/programs/dvd-vr/";
     downloadPage = "https://www.pixelbeat.org/programs/dvd-vr/";
     description = "Utility to identify and optionally copy recordings from a DVD-VR format disc";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "dvd-vr";
   };
 })

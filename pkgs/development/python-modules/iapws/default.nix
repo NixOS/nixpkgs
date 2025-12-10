@@ -17,10 +17,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ scipy ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of standard from IAPWS";
     homepage = "https://github.com/jjgomera/iapws";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ dawidsowa ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ dawidsowa ];
   };
 }

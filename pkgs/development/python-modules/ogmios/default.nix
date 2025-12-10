@@ -40,10 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ogmios" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for Ogmios";
     homepage = "https://gitlab.com/viperscience/ogmios-python";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ aciceri ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ aciceri ];
   };
 }

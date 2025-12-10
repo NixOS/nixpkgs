@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     curl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Creates CycloneDX Software Bill of Materials (SBOM) from Rust (Cargo) projects";
     mainProgram = "cargo-cyclonedx";
     longDescription = ''
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
       easily created, human and machine readable, and simple to parse.
     '';
     homepage = "https://github.com/CycloneDX/cyclonedx-rust-cargo";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nikstur ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nikstur ];
   };
 }

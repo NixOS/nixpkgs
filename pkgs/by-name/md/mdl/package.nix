@@ -11,16 +11,16 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "mdl";
 
-  meta = with lib; {
+  meta = {
     description = "Tool to check markdown files and flag style issues";
     homepage = "https://github.com/markdownlint/markdownlint";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       gerschtli
       manveru
       nicknovitski
       totoroot
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

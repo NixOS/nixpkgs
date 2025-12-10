@@ -31,14 +31,14 @@ let
       # Some tests require network access which is not available in nix build sandbox.
       doCheck = false;
 
-      meta = with lib; {
+      meta = {
         description = "Efficient IPFS for the whole world right now";
         homepage = "https://iroh.computer";
-        license = with licenses; [
+        license = with lib.licenses; [
           asl20
           mit
         ];
-        maintainers = with maintainers; [
+        maintainers = with lib.maintainers; [
           andreashgk
           cameronfyfe
         ];

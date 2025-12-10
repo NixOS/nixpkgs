@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
     chmod +x $out/lib/*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "NAT-PMP client";
     homepage = "http://miniupnp.free.fr/libnatpmp.html";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
     mainProgram = "natpmpc";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

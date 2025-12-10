@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     ./bootstrap.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tiny mp4 time code editor";
     longDescription = ''
       Tiny mp4 time code editor. You can use this for changing fps,
@@ -32,15 +32,15 @@ stdenv.mkDerivation rec {
       time codes of mp4.
     '';
     inherit (src.meta) homepage;
-    license = with licenses; [
+    license = with lib.licenses; [
       # All files are distributed as Public Domain, except for the followings:
       publicDomain
       mpl11 # mp4v2
       boost # Boost
       bsd2 # FreeBSD CVS
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ huggy ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ huggy ];
     mainProgram = "mp4fpsmod";
   };
 }

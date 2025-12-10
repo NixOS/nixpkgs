@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Create and manage windows containing OpenGL contexts";
     longDescription = ''
       FreeGLUT is an open source alternative to the OpenGL Utility Toolkit
@@ -73,9 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
       differences.
     '';
     homepage = "https://freeglut.sourceforge.net/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     pkgConfigModules = [ "glut" ];
-    platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 })
