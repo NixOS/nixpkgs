@@ -10,23 +10,26 @@ let
     file-structure-transformer-vendor
     ;
 
-  transformDenoLock =
-    {
-      denoLock,
-    }:
-    lib.extendMkDerivation {
-      constructDrv = stdenvNoCC.mkDerivation;
-      extendDrvArgs =
-        _: args:
-        let
-          pname = args.pname or "";
-          version = args.version or "";
-        in
-        {
-          name = "denoDeps-transformedDenoLock-${pname}-${version}";
-          src = null;
-          unpackPhase = "true";
-          buildPhase = ''
+  transformDenoLock = lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
+    # don't let these bleed into the derivation environment
+    excludeDrvArgNames = [
+      "denoLock"
+    ];
+    extendDrvArgs =
+      finalAttrs:
+      {
+        denoLock,
+        pname,
+        version,
+        ...
+      }@args:
+      {
+        name = args.name or "denoDeps-transformedDenoLock-${finalAttrs.pname}-${finalAttrs.version}";
+        src = args.src or null;
+        dontUnpack = args.dontUnpack or true;
+        buildPhase =
+          args.buildPhase or ''
             mkdir -p $out
             lockfile-transformer \
               --deno-lock-path ${denoLock} \
@@ -34,104 +37,114 @@ let
               --common-lock-npm-path $out/npm.json \
               --common-lock-https-path $out/https.json;
           '';
-          nativeBuildInputs = [
+        nativeBuildInputs =
+          args.nativeBuildInputs or [
             fetch-deno-deps-scripts
           ];
 
-          meta = {
+        meta =
+          args.meta or {
             maintainers = [ lib.maintainers.aMOPel ];
           };
-        }
-        // args;
-    };
+      };
+  };
 
-  singleFodFetcher =
-    {
-      transformedDenoLock,
-      denoLock,
-      hash,
-      fodNameGenerator,
-      enableAutoFodInvalidation,
-      argNamesForFodInvalidation,
-      ...
-    }:
-    lib.extendMkDerivation {
-      constructDrv = stdenvNoCC.mkDerivation;
-      extendDrvArgs =
-        _: args:
-        let
-          defaultArgs = {
-            src = null;
-            unpackPhase = "true";
-            buildPhase = ''
-              echo hi
-              single-fod-fetcher \
-                --common-lock-jsr-path ${transformedDenoLock}/jsr.json \
-                --common-lock-npm-path ${transformedDenoLock}/npm.json \
-                --common-lock-https-path ${transformedDenoLock}/https.json \
-                --out-path-prefix $out;
-              cp ${denoLock} $out/deno.lock
-            '';
-            nativeBuildInputs = [
-              fetch-deno-deps-scripts
-            ];
-            SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  singleFodFetcher = lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
+    # don't let these bleed into the derivation environment
+    excludeDrvArgNames = [
+      "transformedDenoLock"
+      "denoLock"
+      "hash"
+      "fodNameGenerator"
+      "enableAutoFodInvalidation"
+      "argNamesForFodInvalidation"
+    ];
+    extendDrvArgs =
+      finalAttrs:
+      {
+        transformedDenoLock,
+        denoLock,
+        hash,
+        fodNameGenerator,
+        enableAutoFodInvalidation,
+        argNamesForFodInvalidation,
+        pname,
+        version,
+        ...
+      }@args:
+      let
+        argsForFodInvalidation = lib.filterAttrs (
+          name: _: builtins.any (otherName: name == otherName) argNamesForFodInvalidation
+        ) finalAttrs;
+        defaultName = "denoDeps-fetched-${finalAttrs.pname}-${finalAttrs.version}";
+      in
+      {
+        name =
+          if enableAutoFodInvalidation then
+            fodNameGenerator argsForFodInvalidation finalAttrs.pname finalAttrs.version
+          else
+            args.name or defaultName;
+        src = args.src or null;
+        dontUnpack = args.dontUnpack or true;
+        buildPhase =
+          args.buildPhase or ''
+            single-fod-fetcher \
+              --common-lock-jsr-path ${transformedDenoLock}/jsr.json \
+              --common-lock-npm-path ${transformedDenoLock}/npm.json \
+              --common-lock-https-path ${transformedDenoLock}/https.json \
+              --out-path-prefix $out;
+            cp ${denoLock} $out/deno.lock
+          '';
+        nativeBuildInputs =
+          args.nativeBuildInputs or [
+            fetch-deno-deps-scripts
+          ];
+        SSL_CERT_FILE = args.SSL_CERT_FILE or "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-            outputHashMode = "recursive";
-            outputHash = hash;
-            outputHashAlgo = "sha256";
+        outputHashMode = args.outputHashMode or "recursive";
+        outputHash = args.outputHash or hash;
+        outputHashAlgo = args.outputHashAlgo or "sha256";
 
-            meta = {
-              maintainers = [ lib.maintainers.aMOPel ];
-            };
+        meta =
+          args.meta or {
+            maintainers = [ lib.maintainers.aMOPel ];
           };
-
-          argsForFodInvalidation = lib.filterAttrs (
-            name: _: builtins.any (otherName: name == otherName) argNamesForFodInvalidation
-          ) mergedArgs;
-
-          mergedArgs = defaultArgs // args;
-
-          pname = args.pname or "";
-          version = args.version or "";
-          name = args.name or "denoDeps-fetched-${pname}-${version}";
-        in
-        (
-          mergedArgs
-          // {
-            name =
-              if enableAutoFodInvalidation then fodNameGenerator argsForFodInvalidation pname version else name;
-          }
-        );
-    };
+      };
+  };
 
   # this derivation only meant to be used, if the dependency dir is needed outside of buildDenoPackage
   # when using buildDenoPackage, the steps of this derivation are performed inside buildDenoPackage,
   # to avoid an unnecessary derivation in the cache
-  transformFiles =
-    {
-      fetched,
-      denoDir,
-      vendorDir,
-      ...
-    }:
-    lib.extendMkDerivation {
-      constructDrv = stdenvNoCC.mkDerivation;
-      extendDrvArgs =
-        _: args:
-        let
-          pname = args.pname or "";
-          version = args.version or "";
-        in
-        {
-          name = "denoDeps-final-${pname}-${version}";
-          src = null;
-          unpackPhase = "true";
-          nativeBuildInputs = [
+  transformFiles = lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
+    # don't let these bleed into the derivation environment
+    excludeDrvArgNames = [
+      "fetched"
+      "denoDir"
+      "vendorDir"
+    ];
+    extendDrvArgs =
+      finalAttrs:
+      {
+        fetched,
+        denoDir,
+        vendorDir,
+        pname,
+        version,
+        ...
+      }@args:
+      {
+        name = args.name or "denoDeps-final-${finalAttrs.pname}-${finalAttrs.version}";
+        src = args.src or null;
+        dontUnpack = args.dontUnpack or true;
+        nativeBuildInputs =
+          args.nativeBuildInputs or [
             fetch-deno-deps-scripts
             file-structure-transformer-vendor
           ];
-          buildPhase = ''
+        buildPhase =
+          args.buildPhase or ''
             export vendorDir="$out/${vendorDir}";
             export DENO_DIR="$out/${denoDir}";
             mkdir -p $DENO_DIR;
@@ -146,12 +159,12 @@ let
               --common-lock-https-path "${fetched}/https.json";
           '';
 
-          meta = {
+        meta =
+          args.meta or {
             maintainers = [ lib.maintainers.aMOPel ];
           };
-        }
-        // args;
-    };
+      };
+  };
 
 in
 {
@@ -161,6 +174,8 @@ in
       hash ? lib.fakeHash,
       denoDir ? ".deno",
       vendorDir ? "vendor",
+      pname ? "",
+      version ? "",
 
       # whether to enable automatic invalidation of the fetcher fod (fixed output derivation)
       # use together with `fodNameGenerator` and `argNamesForFodInvalidation`
@@ -174,11 +189,11 @@ in
       # function to generate the name of fetcher fod, see `enableAutoFodInvalidation`
       fodNameGenerator ?
         argsForFodInvalidation: pname: version:
-        "${builtins.hashString "sha1" (builtins.toJSON  argsForFodInvalidation)}-${pname}-${version}",
+        "${builtins.hashString "sha1" (builtins.toJSON argsForFodInvalidation)}-${pname}-${version}",
       # invalidate fod, if any of these derivation args change, see `enableAutoFodInvalidation`
       argNamesForFodInvalidation ? [
         "src"
-        "unpackPhase"
+        "dontUnpack"
         "buildPhase"
         "nativeBuildInputs"
       ],
@@ -186,35 +201,51 @@ in
       transformDenoLockArgs ? { },
       # derivation args passed to step 2, the fetcher step
       fetcherArgs ? { },
-      # derivation args passed to step 3, the file structure transformer
+      # derivation args passed to step 3, the file structure transformer step
       transformFileStructureArgs ? { },
       # derivation args passed to all 3 steps
       globalArgs ? { },
     }:
     let
 
-      transformedDenoLock = transformDenoLock {
-        inherit denoLock;
-      } (globalArgs // transformDenoLockArgs);
+      transformedDenoLock = transformDenoLock (
+        {
+          inherit denoLock pname version;
+        }
+        // globalArgs
+        // transformDenoLockArgs
+      );
 
-      fetched = singleFodFetcher {
-        inherit
-          denoLock
-          transformedDenoLock
-          hash
-          fodNameGenerator
-          enableAutoFodInvalidation
-          argNamesForFodInvalidation
-          ;
-      } (globalArgs // fetcherArgs);
+      fetched = singleFodFetcher (
+        {
+          inherit
+            denoLock
+            transformedDenoLock
+            hash
+            fodNameGenerator
+            enableAutoFodInvalidation
+            argNamesForFodInvalidation
+            pname
+            version
+            ;
+        }
+        // globalArgs
+        // fetcherArgs
+      );
 
-      denoDeps = transformFiles {
-        inherit
-          fetched
-          denoDir
-          vendorDir
-          ;
-      } (globalArgs // transformFileStructureArgs);
+      denoDeps = transformFiles (
+        {
+          inherit
+            fetched
+            denoDir
+            vendorDir
+            pname
+            version
+            ;
+        }
+        // globalArgs
+        // transformFileStructureArgs
+      );
     in
     {
       inherit
