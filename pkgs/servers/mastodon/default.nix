@@ -66,6 +66,9 @@ stdenv.mkDerivation rec {
 
       bundle exec rails assets:precompile
 
+      # Install packages for streaming server while remove others
+      rm -rf node_modules/*
+      yarn workspaces focus --production @mastodon/streaming
       rm -rf node_modules/.cache
 
       # Remove workspace "package" as it contains broken symlinks
