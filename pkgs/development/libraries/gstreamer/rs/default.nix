@@ -250,17 +250,17 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GStreamer plugins written in Rust";
     mainProgram = "gst-webrtc-signalling-server";
     homepage = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs";
-    license = with licenses; [
+    license = with lib.licenses; [
       mpl20
       asl20
       mit
       lgpl21Plus
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 })

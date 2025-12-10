@@ -34,7 +34,7 @@ buildGoModule rec {
       --zsh <($out/bin/spicedb completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/authzed/spicedb/releases/tag/${src.tag}";
     description = "Open source permission database";
     longDescription = ''
@@ -42,8 +42,8 @@ buildGoModule rec {
       Google Zanzibar.
     '';
     homepage = "https://authzed.com/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       squat
       thoughtpolice
     ];

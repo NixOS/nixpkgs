@@ -35,13 +35,13 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for checking security bits on executables";
     mainProgram = "checksec";
     homepage = "https://slimm609.github.io/checksec/";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       globin
       sdht0

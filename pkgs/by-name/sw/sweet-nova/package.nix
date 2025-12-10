@@ -42,11 +42,11 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Dark and colorful, blurry theme for the KDE Plasma desktop";
     homepage = "https://github.com/EliverLara/Sweet";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.dr460nf1r3 ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.dr460nf1r3 ];
+    platforms = lib.platforms.all;
   };
 }

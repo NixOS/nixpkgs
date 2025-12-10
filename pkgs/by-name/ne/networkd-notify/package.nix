@@ -50,12 +50,12 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Desktop notification integration for systemd-networkd";
     mainProgram = "networkd-notify";
     homepage = "https://gitlab.com/wavexx/networkd-notify";
-    maintainers = with maintainers; [ danc86 ];
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ danc86 ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
 }

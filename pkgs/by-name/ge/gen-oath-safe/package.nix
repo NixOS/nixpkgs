@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/gen-oath-safe \
         --prefix PATH : ${path}
     '';
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mcepl/gen-oath-safe";
     description = "Script for generating HOTP/TOTP keys (and QR code)";
-    platforms = platforms.unix;
-    license = licenses.mit;
-    maintainers = [ maintainers.makefu ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.makefu ];
     mainProgram = "gen-oath-safe";
   };
 

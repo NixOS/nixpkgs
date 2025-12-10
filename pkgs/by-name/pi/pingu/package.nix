@@ -32,11 +32,11 @@ buildGoModule rec {
     ldflags+=" -X main.appRevision=$(cat ldflags_revision)"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Ping command implementation in Go but with colorful output and pingu ascii art";
     homepage = "https://github.com/CactiChameleon9/pingu/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ CactiChameleon9 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ CactiChameleon9 ];
     mainProgram = "pingu";
   };
 }

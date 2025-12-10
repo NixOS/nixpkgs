@@ -47,10 +47,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "icu" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.pyicu.org/main/pyicu";
     description = "Python extension wrapping the ICU C++ API";
     changelog = "https://gitlab.pyicu.org/main/pyicu/-/raw/v${version}/CHANGES";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     file
   ];
 
-  meta = with lib; {
+  meta = {
     description = "exFAT filesystem userspace utilities";
     homepage = "https://github.com/exfatprogs/exfatprogs";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ yuannan ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ yuannan ];
+    platforms = lib.platforms.linux;
   };
 }

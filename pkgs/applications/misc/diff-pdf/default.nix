@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./bootstrap";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://vslavik.github.io/diff-pdf/";
     description = "Simple tool for visually comparing two PDF files";
-    license = licenses.gpl2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ dtzWill ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ dtzWill ];
     mainProgram = "diff-pdf";
   };
 }

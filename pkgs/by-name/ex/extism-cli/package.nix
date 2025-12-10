@@ -32,11 +32,11 @@ buildGoModule rec {
       --zsh <($out/bin/extism completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Extism CLI is used to manage Extism installations";
     homepage = "https://github.com/extism/cli";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "extism";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

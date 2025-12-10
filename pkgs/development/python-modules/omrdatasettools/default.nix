@@ -64,11 +64,11 @@ buildPythonPackage rec {
     "test_render_node_masks_semantic_segmentation_of_nodes"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of datasets used for Optical Music Recognition";
     homepage = "https://github.com/apacha/OMR-Datasets";
     changelog = "https://github.com/apacha/OMR-Datasets/blob/${version}/CHANGES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ piegames ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ piegames ];
   };
 }

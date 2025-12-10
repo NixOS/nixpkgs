@@ -33,10 +33,10 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://code.rosaelefanten.org/yaydl";
     description = "Yet another youtube down loader";
-    license = licenses.cddl;
+    license = lib.licenses.cddl;
     maintainers = [ ];
     mainProgram = "yaydl";
   };

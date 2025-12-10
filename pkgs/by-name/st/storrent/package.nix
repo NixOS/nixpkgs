@@ -22,12 +22,12 @@ buildGoModule {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jech/storrent";
     description = "Implementation of the BitTorrent protocol that is optimised for streaming media";
     mainProgram = "storrent";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

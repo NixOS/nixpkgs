@@ -65,11 +65,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/xwordgrinder --set LUA_CPATH "${lua52Packages.luafilesystem}/lib/lua/5.2/lfs.so";
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Text-based word processor";
     homepage = "https://cowlark.com/wordgrinder";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
     platforms = with lib.platforms; linux ++ darwin;
   };
 }

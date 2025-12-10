@@ -30,8 +30,8 @@ let
 in
 
 {
-  meta = with lib; {
-    maintainers = with maintainers; [ hexa ] ++ teams.c3d2.members;
+  meta = {
+    maintainers = with lib.maintainers; [ hexa ] ++ lib.teams.c3d2.members;
   };
 
   options.services.pretalx = {

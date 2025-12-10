@@ -30,14 +30,14 @@ rustPlatform.buildRustPackage rec {
     $out/bin/fst --help > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Represent large sets and maps compactly with finite state transducers";
     mainProgram = "fst";
     homepage = "https://github.com/BurntSushi/fst";
-    license = with licenses; [
+    license = with lib.licenses; [
       unlicense # or
       mit
     ];
-    maintainers = with maintainers; [ rmcgibbo ];
+    maintainers = with lib.maintainers; [ rmcgibbo ];
   };
 }

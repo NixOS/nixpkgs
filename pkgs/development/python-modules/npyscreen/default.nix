@@ -17,10 +17,10 @@ buildPythonPackage rec {
   # Tests are outdated
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Framework for developing console applications using Python and curses";
     homepage = "https://www.npcole.com/npyscreen/";
-    maintainers = with maintainers; [ dump_stack ];
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ dump_stack ];
+    license = lib.licenses.bsd3;
   };
 }

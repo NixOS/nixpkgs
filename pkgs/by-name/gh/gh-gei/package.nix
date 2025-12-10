@@ -20,11 +20,11 @@ buildDotnetModule rec {
   projectFile = "src/gei/gei.csproj";
   nugetDeps = ./deps.json; # File generated with `nix-build -A gh-gei.passthru.fetch-deps`.
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/github/gh-gei";
     description = "Migration CLI for GitHub to GitHub migrations";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lafrenierejm ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lafrenierejm ];
     mainProgram = "gei";
   };
 }

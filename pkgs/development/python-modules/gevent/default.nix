@@ -74,11 +74,11 @@ buildPythonPackage rec {
 
   GEVENTSETUP_EMBED = "0";
 
-  meta = with lib; {
+  meta = {
     description = "Coroutine-based networking library";
     homepage = "http://www.gevent.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bjornfor ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bjornfor ];
+    platforms = lib.platforms.unix;
   };
 }

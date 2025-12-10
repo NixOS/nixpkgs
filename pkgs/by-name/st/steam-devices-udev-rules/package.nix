@@ -36,11 +36,11 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
-  meta = with lib; {
+  meta = {
     description = "Udev rules list for gaming devices";
     homepage = "https://github.com/ValveSoftware/steam-devices";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ azuwis ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ azuwis ];
   };
 }

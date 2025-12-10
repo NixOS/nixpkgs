@@ -58,11 +58,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "quandl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Quandl Python client library";
     homepage = "https://github.com/quandl/quandl-python";
     changelog = "https://github.com/quandl/quandl-python/blob/master/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ilya-kolpakov ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ilya-kolpakov ];
   };
 }

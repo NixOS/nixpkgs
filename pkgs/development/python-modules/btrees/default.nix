@@ -47,11 +47,11 @@ buildPythonPackage rec {
     "BTrees.IFBTree"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Scalable persistent components";
     homepage = "http://packages.python.org/BTrees";
     changelog = "https://github.com/zopefoundation/BTrees/blob/${version}/CHANGES.rst";
-    license = licenses.zpl21;
+    license = lib.licenses.zpl21;
     maintainers = [ ];
   };
 }

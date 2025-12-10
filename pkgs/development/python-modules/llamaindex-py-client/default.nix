@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llama_index_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client for LlamaIndex";
     homepage = "https://pypi.org/project/llamaindex-py-client/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

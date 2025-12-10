@@ -68,11 +68,11 @@ buildGoModule rec {
     command = "browserpass --version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Browserpass native client app";
     mainProgram = "browserpass";
     homepage = "https://github.com/browserpass/browserpass-native";
-    license = licenses.isc;
-    maintainers = with maintainers; [ rvolosatovs ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ rvolosatovs ];
   };
 }

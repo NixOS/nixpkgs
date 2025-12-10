@@ -71,10 +71,10 @@ buildPythonPackage rec {
     "test_process_annex_metadata_batch"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/alpernebbi/git-annex-adapter";
     description = "Call git-annex commands from Python";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -30,11 +30,11 @@ buildPythonPackage rec {
   # Circular dependency on ttp
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Template Text Parser Templates collections";
     homepage = "https://github.com/dmulyalin/ttp_templates";
     changelog = "https://github.com/dmulyalin/ttp_templates/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

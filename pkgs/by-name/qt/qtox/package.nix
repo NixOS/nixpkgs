@@ -67,16 +67,16 @@ stdenv.mkDerivation rec {
     "-DTIMESTAMP=1"
   ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Qt Tox client";
     mainProgram = "qtox";
     homepage = "https://tox.chat";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       akaWolf
       peterhoeg
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

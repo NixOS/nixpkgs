@@ -44,12 +44,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "liccheck" ];
 
-  meta = with lib; {
+  meta = {
     description = "Check python packages from requirement.txt and report issues";
     homepage = "https://github.com/dhatim/python-license-check";
     changelog = "https://github.com/dhatim/python-license-check/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "liccheck";
   };
 }

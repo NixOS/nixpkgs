@@ -28,11 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
   NIX_ENFORCE_NO_NATIVE = !enableAVX;
   __AVX2__ = if enableAVX then 1 else 0;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/yahoojapan/NGT";
     description = "Nearest Neighbor Search with Neighborhood Graph and Tree for High-dimensional Data";
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tomberek ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ tomberek ];
   };
 })

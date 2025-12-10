@@ -43,11 +43,11 @@ buildPythonPackage rec {
     "paste.util"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pluggable command-line frontend, including commands to setup package file layouts";
     mainProgram = "paster";
     homepage = "https://github.com/cdent/pastescript/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

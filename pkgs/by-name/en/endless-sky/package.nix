@@ -63,20 +63,20 @@ stdenv.mkDerivation rec {
     minizip
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Sandbox-style space exploration game similar to Elite, Escape Velocity, or Star Control";
     mainProgram = "endless-sky";
     homepage = "https://endless-sky.github.io/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       cc-by-sa-30
       cc-by-sa-40
       publicDomain
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       _360ied
       lilacious
     ];
-    platforms = platforms.linux; # Maybe other non-darwin Unix
+    platforms = lib.platforms.linux; # Maybe other non-darwin Unix
   };
 }

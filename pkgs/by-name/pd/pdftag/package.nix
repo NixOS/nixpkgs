@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
     poppler
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Edit metadata found in PDFs";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
     mainProgram = "pdftag";
   };
 }

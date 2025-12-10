@@ -31,11 +31,11 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/trip --generate zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Network diagnostic tool";
     homepage = "https://trippy.cli.rs";
     changelog = "https://github.com/fujiapple852/trippy/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "trip";
   };

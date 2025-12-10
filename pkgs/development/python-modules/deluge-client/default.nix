@@ -25,11 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "deluge_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight pure-python rpc client for deluge";
     homepage = "https://github.com/JohnDoee/deluge-client";
     changelog = "https://github.com/JohnDoee/deluge-client/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }

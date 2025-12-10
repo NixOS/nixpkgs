@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://dotcolon.net/font/seshat/";
     description = "Roman body font designed for main text by Sora Sagano";
     longDescription = ''
@@ -39,10 +39,10 @@ stdenvNoCC.mkDerivation {
 
       It incorporates symbols and ligatures used in the European region.
     '';
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       minijackson
     ];
-    license = licenses.cc0;
+    license = lib.licenses.cc0;
   };
 }

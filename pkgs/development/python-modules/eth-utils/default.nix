@@ -49,11 +49,11 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_install_local_wheel" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/ethereum/eth-utils/blob/${src.rev}/docs/release_notes.rst";
     description = "Common utility functions for codebases which interact with ethereum";
     homepage = "https://github.com/ethereum/eth-utils";
-    license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siraben ];
   };
 }

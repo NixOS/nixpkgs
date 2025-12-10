@@ -154,11 +154,11 @@ buildGoModule (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     homepage = "https://grafana.com";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       offline
       fpletz
       globin

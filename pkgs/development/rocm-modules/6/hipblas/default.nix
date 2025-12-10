@@ -132,11 +132,11 @@ stdenv.mkDerivation (finalAttrs: {
     buildSamples = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "ROCm BLAS marshalling library";
     homepage = "https://github.com/ROCm/hipBLAS";
-    license = with licenses; [ mit ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

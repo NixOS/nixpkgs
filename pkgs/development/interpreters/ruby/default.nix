@@ -363,12 +363,12 @@ let
 
           disallowedRequisites = op (!jitSupport) stdenv.cc ++ op useBaseRuby baseRuby;
 
-          meta = with lib; {
+          meta = {
             description = "Object-oriented language for quick and easy programming";
             homepage = "https://www.ruby-lang.org/";
-            license = licenses.ruby;
-            maintainers = with maintainers; [ manveru ];
-            platforms = platforms.all;
+            license = lib.licenses.ruby;
+            maintainers = with lib.maintainers; [ manveru ];
+            platforms = lib.platforms.all;
             mainProgram = "ruby";
             knownVulnerabilities = op (lib.versionOlder ver.majMin "3.0") "This Ruby release has reached its end of life. See https://www.ruby-lang.org/en/downloads/branches/.";
           };

@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-RQ9fQfYfpsFAA5CzR3ICLIEYb00qzUsWAQKSrK/488g=";
 
-  meta = with lib; {
+  meta = {
     description = "Simple system fetch written in rust";
     homepage = "https://github.com/IogaMaster/leaf";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "leaf";
   };

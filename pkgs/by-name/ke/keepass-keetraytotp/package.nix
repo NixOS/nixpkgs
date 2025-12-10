@@ -24,7 +24,7 @@ let
       cp $src $out/lib/dotnet/keepass/
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Augments KeePass with TOTP user interface";
       longDescription = ''
         This KeePass2 plugin adds advanced support for generating Time-based One-Time Passwords (TOTPs)
@@ -37,8 +37,8 @@ let
         "i686-linux"
         "x86_64-linux"
       ];
-      license = licenses.gpl3;
-      maintainers = with maintainers; [ nazarewk ];
+      license = lib.licenses.gpl3;
+      maintainers = with lib.maintainers; [ nazarewk ];
     };
   };
 in

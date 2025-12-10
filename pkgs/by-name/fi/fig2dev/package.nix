@@ -56,11 +56,11 @@ stdenv.mkDerivation rec {
         --set PATH ${lib.makeBinPath [ gnused ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to convert Xfig files to other formats";
     homepage = "https://mcj.sourceforge.net/";
-    license = licenses.xfig;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ lesuisse ];
+    license = lib.licenses.xfig;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ lesuisse ];
   };
 }

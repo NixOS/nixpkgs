@@ -33,12 +33,12 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) cadvisor; };
 
-  meta = with lib; {
+  meta = {
     description = "Analyzes resource usage and performance characteristics of running docker containers";
     mainProgram = "cadvisor";
     homepage = "https://github.com/google/cadvisor";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ offline ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ offline ];
+    platforms = lib.platforms.linux;
   };
 }

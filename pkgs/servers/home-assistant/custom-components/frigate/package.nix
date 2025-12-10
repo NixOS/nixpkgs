@@ -53,11 +53,11 @@ buildHomeAssistantComponent rec {
     "tests/test_media_source.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides Home Assistant integration to interface with a separately running Frigate service";
     homepage = "https://github.com/blakeblackshear/frigate-hass-integration";
     changelog = "https://github.com/blakeblackshear/frigate-hass-integration/releases/tag/v${version}";
-    maintainers = with maintainers; [ presto8 ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ presto8 ];
+    license = lib.licenses.mit;
   };
 }

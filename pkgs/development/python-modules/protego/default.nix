@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "protego" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to parse robots.txt files with support for modern conventions";
     homepage = "https://github.com/scrapy/protego";
     changelog = "https://github.com/scrapy/protego/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

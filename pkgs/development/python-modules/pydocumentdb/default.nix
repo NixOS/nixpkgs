@@ -29,10 +29,10 @@ buildPythonPackage rec {
   # requires an active Azure Cosmos service
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Azure Cosmos DB API";
     homepage = "https://github.com/Azure/azure-cosmos-python";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

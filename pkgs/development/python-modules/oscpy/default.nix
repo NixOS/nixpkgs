@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oscpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Modern implementation of OSC for python2/3";
     mainProgram = "oscli";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/kivy/oscpy";
-    maintainers = [ maintainers.yurkobb ];
+    maintainers = [ lib.maintainers.yurkobb ];
   };
 }

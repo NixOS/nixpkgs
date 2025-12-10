@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     rev-prefix = "libnftnl-";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Userspace library providing a low-level netlink API to the in-kernel nf_tables subsystem";
     homepage = "https://netfilter.org/projects/libnftnl/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ fpletz ];
   };
 }

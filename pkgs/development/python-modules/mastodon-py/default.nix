@@ -67,11 +67,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mastodon" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/halcy/Mastodon.py/blob/${src.tag}/CHANGELOG.rst";
     description = "Python wrapper for the Mastodon API";
     homepage = "https://github.com/halcy/Mastodon.py";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

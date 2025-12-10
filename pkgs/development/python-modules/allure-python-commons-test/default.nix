@@ -39,10 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "allure_commons_test" ];
 
-  meta = with lib; {
+  meta = {
     description = "Just pack of hamcrest matchers for validation result in allure2 json format";
     homepage = "https://github.com/allure-framework/allure-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ evanjs ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ evanjs ];
   };
 }

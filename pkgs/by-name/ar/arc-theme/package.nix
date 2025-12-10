@@ -61,12 +61,12 @@ stdenv.mkDerivation rec {
     "-Dgnome_shell_gresource=true"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Flat theme with transparent elements for GTK 3, GTK 2 and Gnome Shell";
     homepage = "https://github.com/jnsh/arc-theme";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       simonvandel
       romildo
     ];

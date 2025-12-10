@@ -58,11 +58,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rchitect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Interoperate R with Python";
     homepage = "https://github.com/randy3k/rchitect";
     changelog = "https://github.com/randy3k/rchitect/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ savyajha ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ savyajha ];
   };
 }

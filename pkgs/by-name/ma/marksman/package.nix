@@ -43,7 +43,7 @@ buildDotnetModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Language Server for Markdown";
     longDescription = ''
       Marksman is a program that integrates with your editor
@@ -54,8 +54,8 @@ buildDotnetModule rec {
       references that enable Zettelkasten-like note taking.
     '';
     homepage = "https://github.com/artempyanykh/marksman";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       stasjok
       plusgut
     ];

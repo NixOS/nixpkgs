@@ -31,11 +31,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Hardware description for XR devices";
     homepage = "https://gitlab.freedesktop.org/monado/utilities/xr-hardware";
-    license = licenses.boost;
-    maintainers = with maintainers; [ Scrumplex ];
-    platforms = platforms.linux;
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ Scrumplex ];
+    platforms = lib.platforms.linux;
   };
 })

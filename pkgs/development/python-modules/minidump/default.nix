@@ -25,12 +25,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "minidump" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to parse and read Microsoft minidump file format";
     homepage = "https://github.com/skelsec/minidump";
     changelog = "https://github.com/skelsec/minidump/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "minidump";
   };
 }

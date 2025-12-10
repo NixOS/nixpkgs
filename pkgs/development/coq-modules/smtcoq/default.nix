@@ -92,10 +92,10 @@ mkCoqDerivation {
   # This is meant to ease future troubleshooting of cvc5 build failures
   passthru = { inherit cvc5; };
 
-  meta = with lib; {
+  meta = {
     description = "Communication between Coq and SAT/SMT solvers";
-    maintainers = with maintainers; [ siraben ];
-    license = licenses.cecill-b;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ siraben ];
+    license = lib.licenses.cecill-b;
+    platforms = lib.platforms.unix;
   };
 }

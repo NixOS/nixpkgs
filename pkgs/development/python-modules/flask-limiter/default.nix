@@ -101,11 +101,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_limiter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Rate limiting for flask applications";
     homepage = "https://flask-limiter.readthedocs.org/";
     changelog = "https://github.com/alisaifee/flask-limiter/blob/${src.tag}/HISTORY.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -51,15 +51,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bvschaik/julius";
     description = "Open source re-implementation of Caesar III";
     mainProgram = "julius";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       Thra11
       matteopacini
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

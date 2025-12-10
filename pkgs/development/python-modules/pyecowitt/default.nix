@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyecowitt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for the EcoWitt Protocol";
     homepage = "https://github.com/garbled1/pyecowitt";
     changelog = "https://github.com/garbled1/pyecowitt/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }
