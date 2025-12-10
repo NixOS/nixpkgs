@@ -211,6 +211,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  # Necessary for builtin Backup plugin
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      chmod a+x $out/share/joplin-desktop/resources/build/7zip/7za
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      chmod a+x $out/Applications/Joplin.app/Contents/Resources/build/7zip/7za
+    '';
+
   desktopItems = [
     (makeDesktopItem {
       name = "joplin";
