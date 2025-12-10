@@ -37,10 +37,10 @@ buildGoModule rec {
     installManPage doc/man/*.[1-9]
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modifies Open Container images";
     homepage = "https://umo.ci";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "umoci";
   };
 }

@@ -42,11 +42,11 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Bouncer-style Matrix-IRC bridge";
     homepage = "https://github.com/hifi/heisenbridge";
-    license = licenses.mit;
-    maintainers = [ maintainers.sumnerevans ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sumnerevans ];
     mainProgram = "heisenbridge";
   };
 }

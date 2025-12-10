@@ -86,11 +86,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tools to enable audio input from the Microsoft Kinect sensor device";
     homepage = "https://git.ao2.it/kinect-audio-setup.git";
-    maintainers = with maintainers; [ berbiche ];
-    platforms = platforms.linux;
-    license = licenses.unfree;
+    maintainers = with lib.maintainers; [ berbiche ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.unfree;
   };
 }

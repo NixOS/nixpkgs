@@ -34,13 +34,13 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://libndp.org/";
     description = "Library for Neighbor Discovery Protocol";
     mainProgram = "ndptool";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
   };
 
 }

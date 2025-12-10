@@ -147,12 +147,12 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_CAMEL_1_2_CAMEL_PROVIDERDIR = "${placeholder "out"}/lib/evolution-data-server/camel-providers";
   PKG_CONFIG_LIBEDATASERVERUI_1_2_UIMODULEDIR = "${placeholder "out"}/lib/evolution-data-server/ui-modules";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/evolution";
     description = "Personal information management application that provides integrated mail, calendaring and address book functionality";
     mainProgram = "evolution";
-    teams = [ teams.gnome ];
-    license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

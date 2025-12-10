@@ -52,10 +52,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wtforms" ];
 
-  meta = with lib; {
+  meta = {
     description = "Flexible forms validation and rendering library for Python";
     homepage = "https://github.com/wtforms/wtforms";
     changelog = "https://github.com/wtforms/wtforms/blob/${version}/CHANGES.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

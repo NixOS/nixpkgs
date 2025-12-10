@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
-  meta = with lib; {
+  meta = {
     description = "Machine code generation for C++";
     longDescription = ''
       AsmJit is a lightweight library for machine code generation written in
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
       extensions.
     '';
     homepage = "https://asmjit.com/";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ thillux ];
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ thillux ];
   };
 }

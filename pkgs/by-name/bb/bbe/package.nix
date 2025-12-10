@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
     "doc"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Sed-like editor for binary files";
     homepage = "https://bbe-.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.hhm ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.hhm ];
     mainProgram = "bbe";
   };
 }

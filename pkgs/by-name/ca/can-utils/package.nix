@@ -17,12 +17,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "CAN userspace utilities and tools (for use with Linux SocketCAN)";
     homepage = "https://github.com/linux-can/can-utils";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       bjornfor
       Luflosi
     ];

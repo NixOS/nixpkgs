@@ -109,15 +109,15 @@ stdenv.mkDerivation rec {
 
   passthru.tests.rspamd = nixosTests.rspamd;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://rspamd.com";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Advanced spam filtering system";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       avnik
       fpletz
       lewo
     ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 }

@@ -20,10 +20,10 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ cpu ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/UnixJunkie/parany";
     description = "Generalized map/reduce for multicore computing";
-    maintainers = [ maintainers.bcdarwin ];
-    license = licenses.lgpl2;
+    maintainers = [ lib.maintainers.bcdarwin ];
+    license = lib.licenses.lgpl2;
   };
 }

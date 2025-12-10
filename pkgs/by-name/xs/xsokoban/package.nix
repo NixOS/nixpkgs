@@ -60,12 +60,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share $out/man/man1 $out/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "X sokoban";
     homepage = "https://www.cs.cornell.edu/andru/xsokoban.html";
     mainProgram = "xsokoban";
-    license = licenses.publicDomain;
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.unix;
+    license = lib.licenses.publicDomain;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.unix;
   };
 }

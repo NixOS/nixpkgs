@@ -56,15 +56,15 @@ stdenv.mkDerivation {
     mv -t $out/bin $out/lc3*
   '';
 
-  meta = with lib; {
+  meta = {
     longDescription = ''
       The LC-3 tools package contains the lc3as assembler, the lc3sim simulator,
       and lc3sim-tk, a Tcl/Tk-based GUI frontend to the simulator.
     '';
     description = "Toolchain and emulator for the LC-3 architecture";
     homepage = "https://highered.mheducation.com/sites/0072467509/student_view0/lc-3_simulator.html";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ anna328p ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ anna328p ];
     mainProgram = "lc3sim-tk";
     platforms = with lib.platforms; unix ++ windows;
   };

@@ -42,12 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-bincue"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "68k Macintosh emulator";
     homepage = "https://basilisk.cebix.net/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ quag ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ quag ];
+    platforms = lib.platforms.linux;
     mainProgram = "BasiliskII";
   };
 })

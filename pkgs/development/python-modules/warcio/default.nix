@@ -61,12 +61,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "warcio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Streaming WARC/ARC library for fast web archive IO";
     mainProgram = "warcio";
     homepage = "https://github.com/webrecorder/warcio";
     changelog = "https://github.com/webrecorder/warcio/blob/master/CHANGELIST.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

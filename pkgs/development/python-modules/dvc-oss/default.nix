@@ -33,11 +33,11 @@ buildPythonPackage rec {
   # Circular dependency
   # pythonImportsCheck = [ "dvc_ssh" ];
 
-  meta = with lib; {
+  meta = {
     description = "Alibaba OSS plugin for dvc";
     homepage = "https://pypi.org/project/dvc-oss/";
     changelog = "https://github.com/iterative/dvc-oss/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

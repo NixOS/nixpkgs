@@ -94,11 +94,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dissect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect meta module";
     homepage = "https://github.com/fox-it/dissect";
     changelog = "https://github.com/fox-it/dissect/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

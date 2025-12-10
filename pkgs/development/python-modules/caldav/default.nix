@@ -68,12 +68,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "caldav" ];
 
-  meta = with lib; {
+  meta = {
     description = "CalDAV (RFC4791) client library";
     homepage = "https://github.com/python-caldav/caldav";
     changelog = "https://github.com/python-caldav/caldav/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       marenz
       dotlambda
     ];

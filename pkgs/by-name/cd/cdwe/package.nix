@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-pZpG98lwvggBU1TBb2JuSNLev5Jx8n5QjY902dJVn0Y=";
 
-  meta = with lib; {
+  meta = {
     description = "Configurable cd wrapper that lets you define your environment per directory";
     homepage = "https://github.com/synoet/cdwe";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "cdwe";
   };

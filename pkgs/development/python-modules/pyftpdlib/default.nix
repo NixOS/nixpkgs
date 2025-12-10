@@ -47,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyftpdlib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous FTP server library";
     homepage = "https://github.com/giampaolo/pyftpdlib/";
     changelog = "https://github.com/giampaolo/pyftpdlib/blob/release-${version}/HISTORY.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "ftpbench";
   };

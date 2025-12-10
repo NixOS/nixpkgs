@@ -81,9 +81,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "binance" ];
 
-  meta = with lib; {
+  meta = {
     description = "Binance Exchange API python implementation for automated trading";
     homepage = "https://github.com/sammchardy/python-binance";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

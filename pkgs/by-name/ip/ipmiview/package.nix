@@ -95,13 +95,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    sourceProvenance = with sourceTypes; [
+  meta = {
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ vlaci ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ vlaci ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

@@ -25,11 +25,11 @@ buildGoModule rec {
     "-X main.buildDate=1970-01-01"
   ];
 
-  meta = with lib; {
-    license = licenses.mit;
+  meta = {
+    license = lib.licenses.mit;
     homepage = "https://github.com/mroth/bump";
     description = "CLI tool to draft a GitHub Release for the next semantic version";
     mainProgram = "bump";
-    maintainers = with maintainers; [ doronbehar ];
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

@@ -251,19 +251,21 @@ llvmStdenv.mkDerivation (finalAttrs: {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://clickhouse.com";
     description = "Column-oriented database management system";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     changelog = "https://github.com/ClickHouse/ClickHouse/blob/v${version}/CHANGELOG.md";
 
     mainProgram = "clickhouse";
 
     # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
-    platforms = lib.filter (x: (lib.systems.elaborate x).is64bit) (platforms.linux ++ platforms.darwin);
+    platforms = lib.filter (x: (lib.systems.elaborate x).is64bit) (
+      lib.platforms.linux ++ lib.platforms.darwin
+    );
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
 
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       thevar1able
     ];
   };

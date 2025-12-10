@@ -21,11 +21,11 @@ rustPlatform.buildRustPackage rec {
   LIBPCAP_LIBDIR = lib.makeLibraryPath [ libpcap ];
   LIBPCAP_VER = libpcap.version;
 
-  meta = with lib; {
+  meta = {
     description = "Spy on the DNS queries your computer is making";
     mainProgram = "dnspeep";
     homepage = "https://github.com/jvns/dnspeep";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

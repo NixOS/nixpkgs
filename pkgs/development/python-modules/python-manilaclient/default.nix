@@ -63,11 +63,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "manilaclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client library for OpenStack Manila API";
     mainProgram = "manila";
     homepage = "https://github.com/openstack/python-manilaclient";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

@@ -42,11 +42,11 @@ stdenvNoCC.mkDerivation rec {
   outputHashAlgo = "sha256";
   outputHash = "042frb2dmrqfj8q83h5p769q6hg2b3i8fgnyvs9r9a71z7pbsagq";
 
-  meta = with lib; {
+  meta = {
     description = "Firmware for Broadcom WIDCOMM® Bluetooth devices";
     homepage = "https://www.catalog.update.microsoft.com/Search.aspx?q=Broadcom+bluetooth";
-    license = licenses.unfree;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ zraexy ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ zraexy ];
   };
 }

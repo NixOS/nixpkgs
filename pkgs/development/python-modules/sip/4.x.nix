@@ -57,14 +57,14 @@ buildPythonPackage rec {
     "sipconfig"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Creates C++ bindings for Python modules";
     mainProgram = "sip";
     homepage = "https://riverbankcomputing.com/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       lovek323
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

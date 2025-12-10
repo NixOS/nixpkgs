@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "boolean" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implements boolean algebra in one module";
     homepage = "https://github.com/bastikr/boolean.py";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

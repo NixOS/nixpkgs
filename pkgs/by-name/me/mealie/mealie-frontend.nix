@@ -61,9 +61,9 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Frontend for Mealie";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ litchipi ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ litchipi ];
   };
 }

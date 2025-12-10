@@ -79,7 +79,7 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Video downloader for YouTube and other sites";
     longDescription = ''
       ClipGrab is a free downloader and converter for YouTube, Vimeo, Metacafe,
@@ -87,8 +87,8 @@ mkDerivation rec {
       videos to MPEG4, MP3 or other formats in just one easy step.
     '';
     homepage = "https://clipgrab.org/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "clipgrab";
   };
 }

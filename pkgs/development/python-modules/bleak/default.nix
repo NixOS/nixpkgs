@@ -62,12 +62,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bleak" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bluetooth Low Energy platform agnostic client";
     homepage = "https://github.com/hbldh/bleak";
     changelog = "https://github.com/hbldh/bleak/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ oxzi ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ oxzi ];
   };
 }

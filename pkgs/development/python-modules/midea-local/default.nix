@@ -40,11 +40,11 @@ buildPythonPackage rec {
     platformdirs
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Control your Midea M-Smart appliances via local area network";
     homepage = "https://github.com/midea-lan/midea-local";
     changelog = "https://github.com/midea-lan/midea-local/releases/tag/${src.tag}";
-    maintainers = with maintainers; [ k900 ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ k900 ];
+    license = lib.licenses.mit;
   };
 }

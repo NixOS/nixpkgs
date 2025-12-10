@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  meta = with lib; {
+  meta = {
     description = "I/O forwarding server that implements a variant of the 9P protocol";
-    maintainers = with maintainers; [ rnhmjoj ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 }

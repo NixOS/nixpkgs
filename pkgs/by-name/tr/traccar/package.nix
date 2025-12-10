@@ -32,12 +32,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source GPS tracking system";
     homepage = "https://www.traccar.org/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
     mainProgram = "traccar";
-    maintainers = with maintainers; [ frederictobiasc ];
+    maintainers = with lib.maintainers; [ frederictobiasc ];
   };
 }

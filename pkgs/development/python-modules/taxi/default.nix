@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "taxi" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sephii/taxi/";
     description = "Timesheeting made easy";
     mainProgram = "taxi";
-    license = licenses.wtfpl;
-    maintainers = with maintainers; [ jocelynthode ];
+    license = lib.licenses.wtfpl;
+    maintainers = with lib.maintainers; [ jocelynthode ];
   };
 }

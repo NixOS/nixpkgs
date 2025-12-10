@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
     sed -i '/AutodetectHostArchitecture()/d' print_target_architecture.cmake
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for multiprecision complex arithmetic with exact rounding";
     homepage = "https://github.com/VcDevel/Vc";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

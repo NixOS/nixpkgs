@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "ELF utils that can check files for security relevant properties";
     longDescription = ''
       A suite of ELF tools to aid auditing systems. Contains
@@ -59,9 +59,9 @@ stdenv.mkDerivation rec {
       binary files.
     '';
     homepage = "https://wiki.gentoo.org/wiki/Hardened/PaX_Utilities";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       joachifm
     ];
