@@ -6,7 +6,6 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   models-dev,
-  nodejs,
   nix-update-script,
   ripgrep,
   sysctl,
@@ -96,25 +95,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-rDVcv8j9KghTDwooPYriTloOMgTyVutud7xKLG2mTmk=";
   };
 
-  postPatch =
-    # Relax Bun version check to be a warning instead of an error
-    ''
-      substituteInPlace packages/script/src/index.ts \
-        --replace-fail \
-        'throw new Error(`This script requires bun@''${expectedBunVersionRange}' \
-        'console.warn(`Warning: This script requires bun@''${expectedBunVersionRange}'
-    ''
-    # Skip smoke test
-    + ''
-      substituteInPlace packages/opencode/script/build.ts \
-        --replace-fail \
-        'if (item.os === process.platform && item.arch === process.arch && !item.abi)' \
-        'if (false)'
-    '';
+  bunWorkspaces = [ "./packages/opencode" ];
+  bunDeps = bun.fetchDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      bunWorkspaces
+      ;
+    hash = "";
+  };
 
   nativeBuildInputs = [
-    bun
-    nodejs
+    bun.configHook
     installShellFiles
     makeBinaryWrapper
     writableTmpDirAsHomeHook
@@ -123,14 +116,11 @@ stdenv.mkDerivation (finalAttrs: {
     darwin.sigtool
   ];
 
-  configurePhase = ''
-    runHook preConfigure
-
-    cp -R ${finalAttrs.passthru.node_modules}/. .
-    patchShebangs node_modules
-    patchShebangs packages/*/node_modules
-
-    runHook postConfigure
+  postPatch = ''
+    # NOTE: Relax Bun version check to be a warning instead of an error
+    substituteInPlace packages/script/src/index.ts \
+      --replace-fail 'throw new Error(`This script requires bun@''${expectedBunVersionRange}' \
+                     'console.warn(`Warning: This script requires bun@''${expectedBunVersionRange}'
   '';
 
   env.MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
@@ -205,13 +195,7 @@ stdenv.mkDerivation (finalAttrs: {
       theme = "${finalAttrs.finalPackage}/share/theme.json";
       tui = "${finalAttrs.finalPackage}/share/tui.json";
     };
-    node_modules = node_modules finalAttrs;
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--subpackage"
-        "node_modules"
-      ];
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
