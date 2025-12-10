@@ -11499,37 +11499,7 @@ with pkgs;
 
   moolticute = libsForQt5.callPackage ../applications/misc/moolticute { };
 
-  mopidyPackages = recurseIntoAttrs (
-    callPackages ../applications/audio/mopidy {
-      python = python3;
-    }
-  );
-
-  inherit (mopidyPackages)
-    mopidy
-    mopidy-listenbrainz
-    mopidy-bandcamp
-    mopidy-iris
-    mopidy-jellyfin
-    mopidy-local
-    mopidy-moped
-    mopidy-mopify
-    mopidy-mpd
-    mopidy-mpris
-    mopidy-muse
-    mopidy-musicbox-webclient
-    mopidy-notify
-    mopidy-podcast
-    mopidy-scrobbler
-    mopidy-somafm
-    mopidy-soundcloud
-    mopidy-spotify
-    mopidy-subidy
-    mopidy-tidal
-    mopidy-tunein
-    mopidy-youtube
-    mopidy-ytmusic
-    ;
+  mopidy = with python3Packages; toPythonApplication mopidy;
 
   mpg123 = callPackage ../applications/audio/mpg123 {
     jack = libjack2;

@@ -17,11 +17,11 @@ let
     name = "mopidy-with-extensions-${pkgs.mopidy.version}";
     ignoreCollisions = true;
     paths = lib.closePropagation cfg.extensionPackages;
-    pathsToLink = [ "/${pkgs.mopidyPackages.python.sitePackages}" ];
+    pathsToLink = [ "/${pkgs.mopidy.python.sitePackages}" ];
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
       makeWrapper ${lib.getExe pkgs.mopidy} $out/bin/mopidy \
-        --prefix PYTHONPATH : $out/${pkgs.mopidyPackages.python.sitePackages}
+        --prefix PYTHONPATH : $out/${pkgs.mopidy.python.sitePackages}
     '';
   };
 in
@@ -47,7 +47,7 @@ in
       extensionPackages = lib.mkOption {
         default = [ ];
         type = lib.types.listOf lib.types.package;
-        example = lib.literalExpression "[ pkgs.mopidy-spotify ]";
+        example = lib.literalExpression "[ pkgs.mopidy.extensions.mopidy-spotify ]";
         description = ''
           Mopidy extensions that should be loaded by the service.
         '';
