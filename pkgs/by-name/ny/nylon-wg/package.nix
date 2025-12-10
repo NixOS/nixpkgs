@@ -9,13 +9,13 @@
 }:
 buildGoModule rec {
   pname = "nylon-wg";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "encodeous";
     repo = "nylon";
     tag = "v${version}";
-    hash = "sha256-IH3S96HL6FR9L7vbZLqwMlKCP+EpU5ZoDlO872R9pPM=";
+    hash = "sha256-l2tSBTdfCmfG8zf/J6b9i7oJyj4FPhABwEj6PNbwsik=";
   };
 
   vendorHash = "sha256-az1Qf01x7Mx7lFdp1zNNCELXQf+7/uWMTKGxSK+TRGE=";
