@@ -348,14 +348,20 @@ let
         expr = package-stub-libcxx.stdenv;
         expected = pkgs.libcxxStdenv;
       };
+      overridePythonAttrs-stdenv-deprecated = {
+        expr =
+          (package-stub.overridePythonAttrs (_: {
+            stdenv = pkgs.clangStdenv;
+          })).stdenv;
+        expected = pkgs.clangStdenv;
+      };
 
       overridePythonAttrs = {
         expr = (applyOverridePythonAttrs package-stub).overridePythonAttrsFlag;
         expected = 1;
       };
       overridePythonAttrs-nested = {
-        expr =
-          (applyOverridePythonAttrs (applyOverridePythonAttrs package-stub)).overridePythonAttrsFlag;
+        expr = (applyOverridePythonAttrs (applyOverridePythonAttrs package-stub)).overridePythonAttrsFlag;
         expected = 2;
       };
       overrideAttrs-overridePythonAttrs-test-overrideAttrs = {
@@ -371,8 +377,7 @@ let
         };
       };
       overrideAttrs-overridePythonAttrs-test-overridePythonAttrs = {
-        expr =
-          (applyOverridePythonAttrs (overrideAttrsFooBar package-stub)) ? overridePythonAttrsFlag;
+        expr = (applyOverridePythonAttrs (overrideAttrsFooBar package-stub)) ? overridePythonAttrsFlag;
         expected = true;
       };
       overrideAttrs-overridePythonAttrs-test-commutation = {
