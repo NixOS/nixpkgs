@@ -913,6 +913,8 @@ in
         ]
         ++ lib.optional (useSendmail && config.services.postfix.enable) "/var/lib/postfix/queue/maildrop";
         UMask = "0027";
+        # one mid size deployments, Gitea already gets killed when doing DB migrations
+        TimeoutStartSec = "3m";
 
         # Sandboxing
         CapabilityBoundingSet = "";
