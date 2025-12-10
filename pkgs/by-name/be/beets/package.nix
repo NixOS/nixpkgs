@@ -1,10 +1,5 @@
 {
-  ffmpeg,
-  python3Packages,
+  python3,
 }:
 
-python3Packages.toPythonApplication (
-  python3Packages.beets.override {
-    inherit ffmpeg;
-  }
-)
+python3.pkgs.toPythonApplication python3.pkgs.beets

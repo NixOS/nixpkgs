@@ -33,10 +33,10 @@ buildPythonPackage {
   meta = {
     description = "Library for updating plugin collections in Nixpkgs";
     license = lib.licenses.mit;
-    maintainers = [
-      lib.maintainers.teto
-      lib.maintainers.perchun
-      lib.maintainers.khaneliman
+    maintainers = with lib.maintainers; [
+      teto
+      PerchunPak
+      khaneliman
     ];
   };
 }

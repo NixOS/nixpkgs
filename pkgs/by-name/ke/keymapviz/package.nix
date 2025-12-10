@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Qmk keymap.c visualizer";
     homepage = "https://github.com/yskoht/keymapviz";
     license = licenses.mit;
-    maintainers = with maintainers; [ lom ];
+    maintainers = [ ];
     mainProgram = "keymapviz";
   };
 }

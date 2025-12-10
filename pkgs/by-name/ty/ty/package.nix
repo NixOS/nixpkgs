@@ -14,14 +14,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ty";
-  version = "0.0.1-alpha.29";
+  version = "0.0.1-alpha.32";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ty";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-64/SE+B5fIaPS2qWHBNza8w14ID9xUVH8GhXSSB8Fbw=";
+    hash = "sha256-Kc5jxDpQv7bm4J7EdejkrUv/lz7hRc01riUIEdv+wmY=";
   };
 
   # For Darwin platforms, remove the integration test for file notifications,
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--package=ty" ];
 
-  cargoHash = "sha256-ySR1pe9zwihjTzr3qhv71LuJbrhBWgZ+z+n9qEEern4=";
+  cargoHash = "sha256-GEf/gU2DXz+u7kPHAB1NRqkmn0f7NV3M5U9u17adtkI=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -54,6 +54,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package=ty" # CLI tests; file-watching tests only on Linux platforms
     "--package=ty_python_semantic" # core type checking tests
     "--package=ty_test" # test framework tests
+  ];
+
+  checkFlags = [
+    # Flaky:
+    # called `Result::unwrap()` on an `Err` value: Os { code: 26, kind: ExecutableFileBusy, message: "Text file busy" }
+    "--skip=python_environment::ty_environment_and_active_environment"
+    "--skip=python_environment::ty_environment_is_only_environment"
+    "--skip=python_environment::ty_environment_is_system_not_virtual"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];

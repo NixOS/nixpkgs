@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.fon.hum.uva.nl/praat/";
     changelog = "https://github.com/praat/praat.github.io/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus; # Has some 3rd-party code in it though
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pancaek ];
     platforms = lib.platforms.linux;
   };
 })

@@ -2156,6 +2156,9 @@ builtins.intersectAttrs super {
     iserv-proxy
     network
     ;
+
+  # Workaround for flaky test: https://github.com/basvandijk/threads/issues/10
+  threads = appendPatch ./patches/threads-flaky-test.patch super.threads;
 }
 
 // lib.optionalAttrs pkgs.config.allowAliases (

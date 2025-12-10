@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
       ps.pillow
       ps.setuptools
       ps.psycopg2
+      ps.webrtcvad
     ]))
   ]
   ++ runtimeProgDeps;

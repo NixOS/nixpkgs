@@ -3,6 +3,7 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  glib,
   libcosmicAppHook,
   pkg-config,
   util-linux,
@@ -16,7 +17,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xdg-desktop-portal-cosmic";
-  version = "1.0.0-beta.8";
+  version = "1.0.0-beta.9";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
@@ -29,6 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-0PsiB/xvePSi5o1eRUgCq02UAGzuBQEe8+LlFJi5814=";
 
   separateDebugInfo = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     libcosmicAppHook
@@ -38,6 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    glib
     libgbm
     pipewire
   ];

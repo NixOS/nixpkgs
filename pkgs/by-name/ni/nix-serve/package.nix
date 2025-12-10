@@ -12,7 +12,6 @@
 let
   rev = "a7e046db4b29d422fc9aac60ea6b82b31399951a";
   sha256 = "sha256-6ZQ0OLijq6UtOtUqRdFC19+helhU0Av6MvGCZf6XmcQ=";
-  inherit (nix.libs) nix-perl-bindings;
 in
 
 stdenv.mkDerivation {
@@ -37,7 +36,7 @@ stdenv.mkDerivation {
         p.DBDSQLite
         p.Plack
         p.Starman
-        nix-perl-bindings
+        nix.libs.nix-perl-bindings or null
       ])
     }/bin/starman $out/bin/nix-serve \
       --prefix PATH : "${

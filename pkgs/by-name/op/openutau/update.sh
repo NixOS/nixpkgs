@@ -40,4 +40,4 @@ if [ "$updated" -eq 0 ]; then
     exit 0
 fi
 
-(cd "$(dirname "$pkgpath")" && "$(nixbuildscript "$attr.fetch-deps")" "$(dirname "$pkgpath")/deps.nix")
+(cd "$(dirname "$pkgpath")" && "$(nixbuildscript "$attr.fetch-deps")" "$(dirname "$pkgpath")/deps.json")

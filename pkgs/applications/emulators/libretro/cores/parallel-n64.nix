@@ -9,13 +9,13 @@
 }:
 mkLibretroCore {
   core = "parallel-n64";
-  version = "0-unstable-2025-08-05";
+  version = "0-unstable-2025-12-04";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "parallel-n64";
-    rev = "50d3ddd55b5774da643d90d7ad1e3cbd2c618883";
-    hash = "sha256-l42EKrZH1JwTxpkjl8vTrMsd2NJCeKV9Owgj+EB81eM=";
+    rev = "1da824e13e725a7144f3245324f43d59623974f8";
+    hash = "sha256-Th8VqENewfTeRTH+lONN7ZTMLQ0G6901q6ZBNMgepL4=";
   };
 
   extraBuildInputs = [

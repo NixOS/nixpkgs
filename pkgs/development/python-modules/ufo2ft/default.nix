@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "ufo2ft";
-  version = "3.6.2";
+  version = "3.6.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "ufo2ft";
     tag = "v${version}";
-    hash = "sha256-TIeq4As5nThYck5jQLTdZySfOg51DtkiiYiiWEVSzxo=";
+    hash = "sha256-Qng6r+STE/Xz5T0kEwbj2eFDyWtIdH/I4wa6eO0epFc=";
   };
 
   build-system = [

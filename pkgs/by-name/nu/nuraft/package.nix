@@ -5,7 +5,7 @@
   fetchpatch,
   cmake,
   boost,
-  asio,
+  asio_1_32_0,
   openssl,
   zlib,
 }:
@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     boost
-    asio
+    # Depends on io_service
+    asio_1_32_0
     openssl
     zlib
   ];

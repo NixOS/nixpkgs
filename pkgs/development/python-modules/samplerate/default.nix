@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "samplerate";
-  version = "0.2.2";
+  version = "0.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tuxu";
     repo = "python-samplerate";
     tag = "v${version}";
-    hash = "sha256-aSlnPwFNZRffDsLqhYD1Pd5JOwvv9GcWyseZmeyrvt0=";
+    hash = "sha256-7FAdIqsYCapmEAYiAuoS5m/jFExXZX3hn3kwxn9NWEc=";
   };
 
   postPatch = ''

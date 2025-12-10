@@ -5,27 +5,21 @@
   git,
   uv,
   python312,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prek";
-  version = "0.2.18";
+  version = "0.2.20";
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = "prek";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-ddLtXIBf6WrjN+gxm0g3Wkmyps2resWsd1cH0F99Ii8=";
+    hash = "sha256-AZyYjgUd2dGnBUHwo/cPagFE8IJmzsgMLwebTypLAgE=";
   };
 
-  cargoHash = "sha256-E+t7bwKDnuZO/4WJEBaN+e5+P/Nbo14WWxgTLxDE7Jw=";
-
-  preBuild = ''
-    version312_str=$(${python312}/bin/python -c 'import sys; print(sys.version_info[:3])')
-
-    substituteInPlace ./tests/languages/python.rs \
-      --replace '(3, 12, 11)' "$version312_str"
-  '';
+  cargoHash = "sha256-a1yBu4MuyR0veBSQAUdaE/9rB04i6RVJ/NdWNmpRzmM=";
 
   nativeCheckInputs = [
     git
@@ -68,6 +62,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "run_worktree"
     "try_repo_relative_path"
     "languages::tests::test_native_tls"
+    "rust::additional_dependencies_cli"
+    "rust::rustup_installer"
+    "rust::remote_hooks"
+    "rust::remote_hooks_with_lib_deps"
+    "unsupported::unsupported_language"
     # "meta_hooks"
     "reuse_env"
     "docker::docker"
@@ -145,6 +144,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # error message differs
     "run_in_non_git_repo"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/j178/prek";

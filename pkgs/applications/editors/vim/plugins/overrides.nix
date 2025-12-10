@@ -21,7 +21,7 @@
   direnv,
   fzf,
   gawk,
-  gperf,
+  git,
   helm-ls,
   himalaya,
   htop,
@@ -31,7 +31,6 @@
   libgit2,
   llvmPackages,
   neovim-unwrapped,
-  nim1,
   nodejs,
   openscad,
   openssh,
@@ -71,6 +70,8 @@
   pandoc,
   # nvim-tinygit
   gitMinimal,
+  # opencode-nvim,
+  opencode,
   # Preview-nvim dependencies
   md-tui,
   # sidekick-nvim dependencies
@@ -122,6 +123,8 @@
   # search-and-replace.nvim dependencies
   fd,
   sad,
+  # tv.nvim dependency
+  television,
 }:
 self: super:
 let
@@ -1359,16 +1362,19 @@ assertNoAdditions {
       nvim-treesitter
     ];
     nvimSkipModules = [
+      "init"
       # _GO_NVIM_CFG
+      "go.comment"
+      "go.format"
+      "go.ginkgo"
+      "go.gotest"
+      "go.gotests"
       "go.inlay"
       "go.project"
-      "go.comment"
+      "go.snips"
       "go.tags"
-      "go.gotests"
-      "go.format"
       "go.ts.go"
       "go.ts.nodes"
-      "go.snips"
       "snips.go"
     ];
   };
@@ -2309,6 +2315,7 @@ assertNoAdditions {
   };
 
   neo-tree-nvim = super.neo-tree-nvim.overrideAttrs {
+    checkInputs = [ git ];
     dependencies = with self; [
       plenary-nvim
       nui-nvim
@@ -2323,6 +2330,7 @@ assertNoAdditions {
     checkInputs = with self; [
       neo-tree-nvim
       # FIXME: propagate `neo-tree` dependencies
+      git
       nui-nvim
       plenary-nvim
     ];
@@ -2774,6 +2782,7 @@ assertNoAdditions {
       nvim-tree-lua
       neo-tree-nvim
       # FIXME: should propagate from neo-tree-nvim
+      git
       nui-nvim
       plenary-nvim
     ];
@@ -2832,6 +2841,10 @@ assertNoAdditions {
     dependencies = [ self.oil-nvim ];
   };
 
+  oil-lsp-diagnostics-nvim = super.oil-lsp-diagnostics-nvim.overrideAttrs {
+    dependencies = [ self.oil-nvim ];
+  };
+
   ollama-nvim = super.ollama-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
@@ -2862,6 +2875,13 @@ assertNoAdditions {
       broken = true;
     };
   });
+
+  opencode-nvim = super.opencode-nvim.overrideAttrs {
+    runtimeDeps = [
+      curl
+      opencode
+    ];
+  };
 
   # The plugin depends on either skim-vim or fzf-vim, but we don't want to force the user so we
   # avoid choosing one of them and leave it to the user
@@ -3618,6 +3638,10 @@ assertNoAdditions {
     dependencies = [ self.nvim-treesitter ];
   };
 
+  tv-nvim = super.tv-nvim.overrideAttrs {
+    runtimeDeps = [ television ];
+  };
+
   typescript-nvim = super.typescript-nvim.overrideAttrs {
     checkInputs = [
       # Optional null-ls integration
@@ -4183,7 +4207,6 @@ assertNoAdditions {
       license = lib.licenses.gpl3;
       maintainers = with lib.maintainers; [
         marcweber
-        jagajaga
         mel
       ];
       platforms = lib.platforms.unix;
@@ -4205,6 +4228,7 @@ assertNoAdditions {
       # Optional shipwright
       "zenbones.shipwright.runners.alacritty"
       "zenbones.shipwright.runners.foot"
+      "zenbones.shipwright.runners.ghostty"
       "zenbones.shipwright.runners.iterm"
       "zenbones.shipwright.runners.kitty"
       "zenbones.shipwright.runners.lightline"

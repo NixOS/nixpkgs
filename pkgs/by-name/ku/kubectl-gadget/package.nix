@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "kubectl-gadget";
-  version = "0.46.0";
+  version = "0.47.0";
 
   src = fetchFromGitHub {
     owner = "inspektor-gadget";
     repo = "inspektor-gadget";
     rev = "v${version}";
-    hash = "sha256-y5eqkTt9CnEPOyFERWhBPqrgnMGaVuWN2FoDV0pDjdI=";
+    hash = "sha256-ZGi7zsIphiXNLfVc6u+ZSGsgWWcMaBpyt1BpwS2WRCU=";
   };
 
-  vendorHash = "sha256-TBaMbIwR/7MzPn8rYgjqeMLma3arwr5W9HiTztd8z9E=";
+  vendorHash = "sha256-0vpPBQ1ty4FZMj3bgB56Gu5pNdo7SyhxvGQOHos6m9s=";
 
   env.CGO_ENABLED = 0;
 

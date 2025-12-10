@@ -64,7 +64,6 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [
       dywedir
-      globin
       ma27
       zowoq
       matthiasbeyer

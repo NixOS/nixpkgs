@@ -23,6 +23,7 @@
   nix-serve-ng,
   colmena,
   nix-update,
+  nix-init,
 
   storeDir ? "/nix/store",
   stateDir ? "/nix/var",
@@ -135,6 +136,10 @@ let
           nix-update = nix-update.override {
             nix = self.lix;
             inherit (self) nixpkgs-review;
+          };
+
+          nix-init = nix-init.override {
+            nix = self.lix;
           };
         };
     };

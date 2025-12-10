@@ -3,6 +3,7 @@
   aiohttp,
   aioresponses,
   bleak,
+  bleak-retry-connector,
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
@@ -15,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pylamarzocco";
-  version = "2.1.3";
+  version = "2.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zweckj";
     repo = "pylamarzocco";
     tag = "v${version}";
-    hash = "sha256-+GNuo6i8Jc01vxiFuhTXrER1xstPVe8LucfGtyfnkQQ=";
+    hash = "sha256-ayu2Cx6lSgiYdg9XszdA3v3pWeKkgAiA7LHOB0KlS5I=";
   };
 
   build-system = [ setuptools ];
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     bleak
+    bleak-retry-connector
     cryptography
     mashumaro
   ];

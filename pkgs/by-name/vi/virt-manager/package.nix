@@ -108,7 +108,6 @@ stdenv.mkDerivation rec {
     mainProgram = "virt-manager";
     maintainers = with maintainers; [
       fpletz
-      globin
     ];
   };
 }

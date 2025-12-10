@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "zxcvbn-rs-py";
-  version = "0.2.0";
+  version = "0.3.0";
 
   pyproject = true;
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "zxcvbn_rs_py";
     inherit version;
-    hash = "sha256-DQzdOngHGZma2NyfrNuMppG6GzpGoKfwVQGUVmN7erA=";
+    hash = "sha256-0nQmgII6F0gj8HCnNAdLvowWBPExPAgXCxWAJuNsc6A=";
   };
 
   build-system = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-WkaTEoVQVOwxcTyOIG5oHEvcv65fBEpokl3/6SxqiUw=";
+    hash = "sha256-S6K6ZzW24V2yFV89B+gN+Odc4h3R45lF+emZs69dzYg=";
   };
 
   pythonImportsCheck = [ "zxcvbn_rs_py" ];
