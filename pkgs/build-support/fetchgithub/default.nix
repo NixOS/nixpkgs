@@ -60,16 +60,16 @@ decorate (
   );
 
   let
-    useFetchGit = useFetchGitArgsWDNonNull != useFetchGitargsDefaultNonNull;
+    useFetchGit =
+      lib.mapAttrs (
+        name: nonNullDefault:
+        if args ? ${name} && (useFetchGitArgsDefaultNullable ? ${name} -> args.${name} != null) then
+          args.${name}
+        else
+          nonNullDefault
+      ) useFetchGitargsDefaultNonNull != useFetchGitargsDefaultNonNull;
 
-    useFetchGitArgs = lib.intersectAttrs useFetchGitArgsDefault args;
-    useFetchGitArgsWD = useFetchGitArgsDefault // useFetchGitArgs;
-    useFetchGitArgsWDPassing = removeAttrs useFetchGitArgsWD excludeUseFetchGitArgNames;
-    useFetchGitArgsWDNonNull =
-      useFetchGitArgsWD
-      // lib.mapAttrs (
-        name: nonNullDefault: lib.defaultTo nonNullDefault useFetchGitArgsWD.${name}
-      ) useFetchGitArgsDefaultNullable;
+    useFetchGitArgsWDPassing = lib.overrideExisting (removeAttrs useFetchGitArgsDefault excludeUseFetchGitArgNames) args;
 
     position = (
       if args.meta.description or null != null then
