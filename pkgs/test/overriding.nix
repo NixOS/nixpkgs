@@ -292,7 +292,7 @@ let
 
   tests-python =
     let
-      python-package-stub = pkgs.python3Packages.callPackage (
+      package-stub = pkgs.python3Packages.callPackage (
         {
           buildPythonPackage,
           emptyDirectory,
@@ -320,17 +320,17 @@ let
     in
     {
       overridePythonAttrs = {
-        expr = (applyOverridePythonAttrs python-package-stub).overridePythonAttrsFlag;
+        expr = (applyOverridePythonAttrs package-stub).overridePythonAttrsFlag;
         expected = 1;
       };
       overridePythonAttrs-nested = {
         expr =
-          (applyOverridePythonAttrs (applyOverridePythonAttrs python-package-stub)).overridePythonAttrsFlag;
+          (applyOverridePythonAttrs (applyOverridePythonAttrs package-stub)).overridePythonAttrsFlag;
         expected = 2;
       };
       overrideAttrs-overridePythonAttrs-test-overrideAttrs = {
         expr = {
-          inherit (applyOverridePythonAttrs (overrideAttrsFooBar python-package-stub))
+          inherit (applyOverridePythonAttrs (overrideAttrsFooBar package-stub))
             FOO
             BAR
             ;
@@ -342,15 +342,15 @@ let
       };
       overrideAttrs-overridePythonAttrs-test-overridePythonAttrs = {
         expr =
-          (applyOverridePythonAttrs (overrideAttrsFooBar python-package-stub)) ? overridePythonAttrsFlag;
+          (applyOverridePythonAttrs (overrideAttrsFooBar package-stub)) ? overridePythonAttrsFlag;
         expected = true;
       };
       overrideAttrs-overridePythonAttrs-test-commutation = {
-        expr = overrideAttrsFooBar (applyOverridePythonAttrs python-package-stub);
-        expected = applyOverridePythonAttrs (overrideAttrsFooBar python-package-stub);
+        expr = overrideAttrsFooBar (applyOverridePythonAttrs package-stub);
+        expected = applyOverridePythonAttrs (overrideAttrsFooBar package-stub);
       };
       chain-of-overrides = rec {
-        expr = lib.pipe python-package-stub [
+        expr = lib.pipe package-stub [
           (p: p.overrideAttrs { inherit (expected) a; })
           (p: p.overridePythonAttrs { inherit (expected) b; })
           (p: p.overrideAttrs { inherit (expected) c; })
