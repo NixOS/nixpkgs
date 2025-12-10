@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "ClusterLabs";
     repo = "libqb";
     rev = "v${version}";
-    sha256 = "sha256-ZjxC7W4U8T68mZy/OvWj/e4W9pJIj2lVDoEjxXYr/G8=";
+    sha256 = "sha256-xCwENbo9ONsFNiutebsIRqjmvtUz+qnlytvvlCC4P78=";
   };
 
   patches = [
