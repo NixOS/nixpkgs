@@ -12,15 +12,19 @@ let
   extraArgs = removeAttrs args [ "callPackage" ];
 in
 {
-  k3s_1_31 = common (
-    (import ./1_31/versions.nix)
-    // {
-      updateScript = [
-        ./update-script.sh
-        "31"
-      ];
-    }
-  ) extraArgs;
+  k3s_1_31 =
+    (common (
+      (import ./1_31/versions.nix)
+      // {
+        updateScript = [
+          ./update-script.sh
+          "31"
+        ];
+      }
+    ) extraArgs).overrideAttrs
+      {
+        meta.knownVulnerabilities = [ "k3s_1_31 has reached end-of-life on 2025-11-11" ];
+      };
 
   k3s_1_32 = common (
     (import ./1_32/versions.nix)
