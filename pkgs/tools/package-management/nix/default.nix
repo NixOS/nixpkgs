@@ -136,33 +136,56 @@ lib.makeExtensible (
         version = "2.28.5";
         hash = "sha256-oIfAHxO+BCtHXJXLHBnsKkGl1Pw+Uuq1PwNxl+lZ+Oc=";
         self_attribute_name = "nix_2_28";
+        patches = [
+          (fetchpatch2 {
+            name = "nix-2.28-14764-mdbook-0.5-support.patch";
+            url = "https://github.com/NixOS/nix/commit/5a64138e862fe364e751c5c286e8db8c466aaee7.patch";
+            hash = "sha256-K5TNroqSRH9j7vSzWw/6/b19mu7q+J5XPTDvJ3xVWlE=";
+          })
+        ];
       };
 
-      nixComponents_2_29 = nixDependencies.callPackage ./modular/packages.nix rec {
-        version = "2.29.2";
-        inherit maintainers teams;
-        otherSplices = generateSplicesForNixComponents "nixComponents_2_29";
-        src = fetchFromGitHub {
-          owner = "NixOS";
-          repo = "nix";
-          tag = version;
-          hash = "sha256-50p2sG2RFuRnlS1/Vr5et0Rt+QDgfpNE2C2WWRztnbQ=";
-        };
-      };
+      nixComponents_2_29 =
+        (nixDependencies.callPackage ./modular/packages.nix rec {
+          version = "2.29.2";
+          inherit maintainers teams;
+          otherSplices = generateSplicesForNixComponents "nixComponents_2_29";
+          src = fetchFromGitHub {
+            owner = "NixOS";
+            repo = "nix";
+            tag = version;
+            hash = "sha256-50p2sG2RFuRnlS1/Vr5et0Rt+QDgfpNE2C2WWRztnbQ=";
+          };
+        }).appendPatches
+          [
+            (fetchpatch2 {
+              name = "nix-2.29-14763-mdbook-0.5-support.patch";
+              url = "https://github.com/NixOS/nix/commit/0501ae1e4965549cbf1314e471f92f4226e46ef1.patch";
+              hash = "sha256-w8WQfWxMtprDLoZUhrCm4zr6xZXKhoIirq3la0Y7/wU=";
+            })
+          ];
 
       nix_2_29 = addTests "nix_2_29" self.nixComponents_2_29.nix-everything;
 
-      nixComponents_2_30 = nixDependencies.callPackage ./modular/packages.nix rec {
-        version = "2.30.3";
-        inherit maintainers teams;
-        otherSplices = generateSplicesForNixComponents "nixComponents_2_30";
-        src = fetchFromGitHub {
-          owner = "NixOS";
-          repo = "nix";
-          tag = version;
-          hash = "sha256-kBuwzMgIE9Tmve0Rpp+q+YCsE2mw9d62M/950ViWeJ0=";
-        };
-      };
+      nixComponents_2_30 =
+        (nixDependencies.callPackage ./modular/packages.nix rec {
+          version = "2.30.3";
+          inherit maintainers teams;
+          otherSplices = generateSplicesForNixComponents "nixComponents_2_30";
+          src = fetchFromGitHub {
+            owner = "NixOS";
+            repo = "nix";
+            tag = version;
+            hash = "sha256-kBuwzMgIE9Tmve0Rpp+q+YCsE2mw9d62M/950ViWeJ0=";
+          };
+        }).appendPatches
+          [
+            (fetchpatch2 {
+              name = "nix-2.30-14695-mdbook-0.5-support.patch";
+              url = "https://github.com/NixOS/nix/commit/5cbd7856de0a9c13351f98e32a1e26d0854d87fd.patch";
+              hash = "sha256-w8WQfWxMtprDLoZUhrCm4zr6xZXKhoIirq3la0Y7/wU=";
+            })
+          ];
 
       nix_2_30 = addTests "nix_2_30" self.nixComponents_2_30.nix-everything;
 
@@ -179,27 +202,43 @@ lib.makeExtensible (
           };
         }).appendPatches
           (
-            # issues on darwin: https://github.com/NixOS/nixpkgs/pull/468208#issuecomment-3626314109
-            lib.optional stdenv.isLinux (fetchpatch2 {
-              name = "nix-2.31-14240-sri-error-message.patch";
-              url = "https://github.com/NixOS/nix/commit/56751b1cd2c4700c71c545f2246adf602c97fdf5.patch";
-              hash = "sha256-CerSBAI+H2RqPp9jsCP0QIM2rZYx3yBZHVVUAztgc18=";
-            })
+            [
+              (fetchpatch2 {
+                name = "nix-2.31-14692-mdbook-0.5-support.patch";
+                url = "https://github.com/NixOS/nix/commit/a4f5f365090980a6eeb2ef483e49c04bdefd71a8.patch";
+                hash = "sha256-GOWZtHSzHovnD8iUknr61bo7y85i0BKdw3kVBGDfBX0=";
+              })
+            ]
+            ++
+              # issues on darwin: https://github.com/NixOS/nixpkgs/pull/468208#issuecomment-3626314109
+              lib.optional stdenv.isLinux (fetchpatch2 {
+                name = "nix-2.31-14240-sri-error-message.patch";
+                url = "https://github.com/NixOS/nix/commit/56751b1cd2c4700c71c545f2246adf602c97fdf5.patch";
+                hash = "sha256-CerSBAI+H2RqPp9jsCP0QIM2rZYx3yBZHVVUAztgc18=";
+              })
           );
 
       nix_2_31 = addTests "nix_2_31" self.nixComponents_2_31.nix-everything;
 
-      nixComponents_2_32 = nixDependencies.callPackage ./modular/packages.nix rec {
-        version = "2.32.4";
-        inherit (self.nix_2_31.meta) maintainers teams;
-        otherSplices = generateSplicesForNixComponents "nixComponents_2_32";
-        src = fetchFromGitHub {
-          owner = "NixOS";
-          repo = "nix";
-          tag = version;
-          hash = "sha256-8QYnRyGOTm3h/Dp8I6HCmQzlO7C009Odqyp28pTWgcY=";
-        };
-      };
+      nixComponents_2_32 =
+        (nixDependencies.callPackage ./modular/packages.nix rec {
+          version = "2.32.4";
+          inherit (self.nix_2_31.meta) maintainers teams;
+          otherSplices = generateSplicesForNixComponents "nixComponents_2_32";
+          src = fetchFromGitHub {
+            owner = "NixOS";
+            repo = "nix";
+            tag = version;
+            hash = "sha256-8QYnRyGOTm3h/Dp8I6HCmQzlO7C009Odqyp28pTWgcY=";
+          };
+        }).appendPatches
+          [
+            (fetchpatch2 {
+              name = "nix-2.32-14693-mdbook-0.5-support.patch";
+              url = "https://github.com/NixOS/nix/commit/ba5bede9f51f126b29aaa01a3170da281cef0231.patch";
+              hash = "sha256-jY5fWnJSBfHRmB0RnBKeu3aYQ8wmDKYVqTj85cWVZRA=";
+            })
+          ];
 
       nix_2_32 = addTests "nix_2_32" self.nixComponents_2_32.nix-everything;
 
