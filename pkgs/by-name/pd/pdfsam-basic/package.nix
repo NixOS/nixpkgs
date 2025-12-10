@@ -92,6 +92,9 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     license = lib.licenses.agpl3Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ _1000101 ];
+    maintainers = with lib.maintainers; [
+      doronbehar
+      _1000101
+    ];
   };
 })
