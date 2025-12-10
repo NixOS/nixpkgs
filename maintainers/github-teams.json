@@ -726,13 +726,11 @@
     "id": 13362067,
     "maintainers": {
       "philiptaron": 43863,
-      "wolfgangwalther": 9132420
-    },
-    "members": {
       "MattSturgeon": 5046562,
       "Mic92": 96200,
       "zowoq": 59103226
     },
+    "members": {},
     "name": "Nixpkgs CI"
   },
   "nixpkgs-core": {
