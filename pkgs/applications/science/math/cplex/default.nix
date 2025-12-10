@@ -177,7 +177,7 @@ stdenv.mkDerivation rec {
     mainProgram = "cplex";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
+    platforms = if releasePath == null then [ ] else [ "x86_64-linux" ];
     maintainers = with maintainers; [ bfortz ];
   };
 }
