@@ -9,82 +9,36 @@
   nix-update-script,
   ripgrep,
   testers,
-  writableTmpDirAsHomeHook,
 }:
-let
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
   version = "1.0.133";
+
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aWzNnu7ZZovgIYQ59ErC/fKpenoFq/wcoizeQ5Ilnq8=";
   };
 
-  node_modules = stdenvNoCC.mkDerivation {
-    pname = "${pname}-node_modules";
-    inherit version src;
+  bunWorkspaces = [ "./packages/opencode" ];
+  bunDeps = bun.fetchDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      bunWorkspaces
+      ;
+    hash = "sha256-5LGd4Tn0wlIk5bFH0El/YTAdP4jqPvpQq0gWOBsSDZA=";
 
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND"
-      "SOCKS_SERVER"
-    ];
-
-    nativeBuildInputs = [
-      bun
-      writableTmpDirAsHomeHook
-    ];
-
-    dontConfigure = true;
-
-    buildPhase = ''
-      runHook preBuild
-
-      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
-
-      bun install \
-        --cpu="*" \
-        --filter=./packages/opencode \
-        --force \
-        --frozen-lockfile \
-        --ignore-scripts \
-        --no-progress \
-        --os="*" \
-        --production
-
+    postInstall = ''
       bun run ./nix/scripts/canonicalize-node-modules.ts
       bun run ./nix/scripts/normalize-bun-binaries.ts
-
-      runHook postBuild
     '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out
-      find . -type d -name node_modules -exec cp -R --parents {} $out \;
-
-      runHook postInstall
-    '';
-
-    # NOTE: Required else we get errors that our fixed-output derivation references store paths
-    dontFixup = true;
-
-    outputHash = "sha256-sZNJOkMDw2/rO95oVKrMKfV86Of8qFzb6elFLppSRsI=";
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
   };
-in
-stdenvNoCC.mkDerivation (finalAttrs: {
-  inherit
-    pname
-    version
-    src
-    node_modules
-    ;
 
   nativeBuildInputs = [
-    bun
+    bun.configHook
     makeBinaryWrapper
     models-dev
   ];
@@ -93,14 +47,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # NOTE: Relax Bun version check to be a warning instead of an error
     ./relax-bun-version-check.patch
   ];
-
-  configurePhase = ''
-    runHook preConfigure
-
-    cp -R ${node_modules}/. .
-
-    runHook postConfigure
-  '';
 
   env.MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
   env.OPENCODE_VERSION = finalAttrs.version;
@@ -194,12 +140,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       command = "HOME=$(mktemp -d) opencode --version";
       inherit (finalAttrs) version;
     };
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--subpackage"
-        "node_modules"
-      ];
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
