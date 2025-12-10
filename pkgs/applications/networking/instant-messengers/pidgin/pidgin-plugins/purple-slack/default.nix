@@ -4,17 +4,18 @@
   fetchFromGitHub,
   pidgin,
   pkg-config,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
-  pname = "purple-slack-unstable";
-  version = "2020-09-22";
+  pname = "purple-slack";
+  version = "0-unstable-2025-07-27";
 
   src = fetchFromGitHub {
     owner = "dylex";
     repo = "slack-libpurple";
-    rev = "2e9fa028224b02e29473b1b998fc1e5f487e79ec";
-    sha256 = "1sksqshiwldd32k8jmiflp2pcax31ym6rypr4qa4v5vdn907g80m";
+    rev = "1115ec117bcddb38ee0ec649f139d04ab3b53942";
+    hash = "sha256-4UzWcUpf99rvwLXHEVBagzdR0++GQQ/1mJ4V2TJPAHw=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -23,11 +24,15 @@ stdenv.mkDerivation {
   PKG_CONFIG_PURPLE_PLUGINDIR = "${placeholder "out"}/lib/purple-2";
   PKG_CONFIG_PURPLE_DATAROOTDIR = "${placeholder "out"}/share";
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
+  };
+
+  meta = {
     homepage = "https://github.com/dylex/slack-libpurple";
     description = "Slack plugin for Pidgin";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ eyjhb ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ eyjhb ];
   };
 }

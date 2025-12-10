@@ -6,17 +6,20 @@
   gettext,
   pidgin,
   json-glib,
+  qrencode,
+  nss,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
   pname = "purple-discord";
-  version = "unstable-2021-10-17";
+  version = "0-unstable-2025-08-18";
 
   src = fetchFromGitHub {
     owner = "EionRobb";
     repo = "purple-discord";
-    rev = "b7ac72399218d2ce011ac84bb171b572560aa2d2";
-    sha256 = "0xvj9rdvgsvcr55sk9m40y07rchg699l1yr98xqwx7sc2sba3814";
+    rev = "a04cdf4f7f74dea826110e3b8a83fa11fcd484f0";
+    hash = "sha256-vCJnSvKgqmj0a5+vcGAJE5lVm+oYIUe+Xoo4SlPzxd8=";
   };
 
   nativeBuildInputs = [
@@ -26,16 +29,22 @@ stdenv.mkDerivation {
   buildInputs = [
     pidgin
     json-glib
+    qrencode
+    nss
   ];
 
   PKG_CONFIG_PURPLE_PLUGINDIR = "${placeholder "out"}/lib/purple-2";
   PKG_CONFIG_PURPLE_DATADIR = "${placeholder "out"}/share";
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
+  };
+
+  meta = {
     homepage = "https://github.com/EionRobb/purple-discord";
     description = "Discord plugin for Pidgin";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ sna ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ sna ];
   };
 }
