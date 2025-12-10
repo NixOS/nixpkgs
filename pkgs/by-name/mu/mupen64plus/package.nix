@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
     description = "Nintendo 64 Emulator";
     license = licenses.gpl2Plus;
     homepage = "http://www.mupen64plus.org/";
-    maintainers = [ maintainers.sander ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "mupen64plus";
   };

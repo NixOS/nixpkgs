@@ -23197,12 +23197,6 @@
     github = "SandaruKasa";
     githubId = 50824690;
   };
-  sander = {
-    email = "s.vanderburg@tudelft.nl";
-    github = "svanderburg";
-    githubId = 1153271;
-    name = "Sander van der Burg";
-  };
   sandptel = {
     email = "sandppatel15@gmail.com";
     github = "sandptel";
