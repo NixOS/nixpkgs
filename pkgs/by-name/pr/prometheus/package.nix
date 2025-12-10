@@ -1,5 +1,6 @@
 {
   stdenv,
+  buildPackages,
   lib,
   go,
   buildGoModule,
@@ -47,6 +48,8 @@ buildGoModule (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-hRuZxwPPDLxQvy5MPKEyfmanNabcSjLRO+XbNKugPtk=";
   };
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   vendorHash = "sha256-5wDaG01vcTtGzrS/S33U5XWXoSWM+N9z3dzXZlILxD8=";
 
@@ -96,7 +99,9 @@ buildGoModule (finalAttrs: {
   '';
 
   preBuild = ''
-    if [[ -d vendor ]]; then GOARCH= make -o assets assets-compress plugins; fi
+    if [[ -d vendor ]]; then
+      GOARCH= CC="$CC_FOR_BUILD" LD="$LD_FOR_BUILD" make -o assets assets-compress plugins
+    fi
   '';
 
   tags = [ "builtinassets" ];

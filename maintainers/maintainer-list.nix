@@ -9684,6 +9684,12 @@
     githubId = 58785758;
     name = "Tim Lanzinger";
   };
+  gonsolo = {
+    email = "gonsolo@gmail.com";
+    github = "gonsolo";
+    githubId = 2041764;
+    name = "Andreas Wendleder";
+  };
   Gonzih = {
     email = "gonzih@gmail.com";
     github = "Gonzih";
