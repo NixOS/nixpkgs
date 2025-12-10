@@ -50,7 +50,7 @@
   wikipedia-api,
 }:
 
-buildPythonPackage rec {
+(buildPythonPackage rec {
   pname = "smolagents";
   version = "1.21.3";
   pyproject = true;
@@ -122,6 +122,11 @@ buildPythonPackage rec {
     # ];
   });
 
+  # Split install checks to `passthru.tests.pytest-check`
+  # as it depends on `optional-dependencies`,
+  # which contains huge stuff like the GUI library `python3Packages.gradio`.
+  doCheck = false;
+
   nativeCheckInputs = [
     ipython
     pytest-datadir
@@ -179,4 +184,16 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+}).overrideAttrs
+  (
+    finalAttrs: previousAttrs: {
+      passthru = previousAttrs.passthru // {
+        tests = previousAttrs.passthru.tests or { } // {
+          pytest-check = finalAttrs.overrideAttrs {
+            # buildPythonPackage maps doCheck to doInstallCheck.
+            doInstallCheck = true;
+          };
+        };
+      };
+    }
+  )
