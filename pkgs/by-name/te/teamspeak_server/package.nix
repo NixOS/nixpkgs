@@ -68,13 +68,13 @@ stdenv.mkDerivation rec {
     update-source-version teamspeak_server "$version" --system=x86_64-linux
   '';
 
-  meta = with lib; {
+  meta = {
     description = "TeamSpeak voice communication server";
     homepage = "https://teamspeak.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.teamspeak;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.teamspeak;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       arobyn
       gerschtli
     ];

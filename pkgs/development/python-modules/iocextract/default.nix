@@ -38,12 +38,12 @@ buildPythonPackage rec {
     "test_refang_data"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to extract Indicator of Compromises (IOC)";
     mainProgram = "iocextract";
     homepage = "https://github.com/InQuest/python-iocextract";
     changelog = "https://github.com/InQuest/python-iocextract/releases/tag/v${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

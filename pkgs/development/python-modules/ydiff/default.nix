@@ -44,7 +44,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "View colored, incremental diff in workspace or from stdin with side by side and auto pager support (Was \"cdiff\")";
     mainProgram = "ydiff";
     longDescription = ''
@@ -54,7 +54,7 @@ buildPythonPackage rec {
       and auto pager support.
     '';
     homepage = "https://github.com/ymattw/ydiff";
-    license = licenses.bsd3;
-    teams = [ teams.deshaw ];
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.deshaw ];
   };
 }

@@ -159,15 +159,15 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.isc.org/bind/";
     description = "Domain name server";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     changelog = "https://downloads.isc.org/isc/bind9/cur/${lib.versions.majorMinor finalAttrs.version}/doc/arm/html/notes.html#notes-for-bind-${
       lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
 
     outputsToInstall = [
       "out"

@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     mkfontdir "$fontDir"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nice bitmap font, readable even at small sizes";
     longDescription = ''
       Tewi is a bitmap font, readable even at very small font sizes. This is
@@ -62,6 +62,6 @@ stdenv.mkDerivation rec {
       fullName = "GNU General Public License with a font exception";
       url = "https://www.gnu.org/licenses/gpl-faq.html#FontException";
     };
-    maintainers = [ maintainers.fro_ozen ];
+    maintainers = [ lib.maintainers.fro_ozen ];
   };
 }

@@ -37,10 +37,10 @@ stdenv.mkDerivation rec {
 
   installPhase = "./install.py";
 
-  meta = with lib; {
+  meta = {
     description = "XML parser for Vala and C programs";
     homepage = "https://birdfont.org/xmlbird.php";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ dtzWill ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ dtzWill ];
   };
 }

@@ -47,10 +47,10 @@ buildPythonPackage {
     cp -r examples $out/share/doc/$name/examples
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LAMMPS wrapper for molecular dynamics simulations of trapped ions";
     homepage = "https://bitbucket.org/dtrypogeorgos/pylion";
-    license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

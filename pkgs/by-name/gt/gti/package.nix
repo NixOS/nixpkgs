@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
       --zsh completions/gti.zsh
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://r-wos.org/hacks/gti";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Humorous typo-based git runner; drives a car over the terminal";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "gti";
   };
 }

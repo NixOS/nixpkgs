@@ -82,11 +82,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requests" ];
 
-  meta = with lib; {
+  meta = {
     description = "HTTP library for Python";
     homepage = "http://docs.python-requests.org/";
     changelog = "https://github.com/psf/requests/blob/v${version}/HISTORY.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

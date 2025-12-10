@@ -24,10 +24,10 @@ buildLua {
       'youtube_dl_executable = "${lib.getExe yt-dlp}"',
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mpv lua script to create and manage playlists";
     homepage = "https://github.com/jonniek/mpv-playlistmanager";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ lunik1 ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ lunik1 ];
   };
 }

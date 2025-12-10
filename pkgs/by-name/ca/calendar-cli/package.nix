@@ -64,11 +64,11 @@ python3.pkgs.buildPythonApplication rec {
     inherit (nixosTests) radicale;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple command-line CalDav client";
     homepage = "https://github.com/tobixen/calendar-cli";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "calendar-cli";
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -25,9 +25,9 @@ buildPythonPackage rec {
   # Broken tests. Seem to be fixed upstream according to Travis.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Fast and thorough lazy object proxy";
     homepage = "https://github.com/ionelmc/python-lazy-object-proxy";
-    license = with licenses; [ bsd2 ];
+    license = with lib.licenses; [ bsd2 ];
   };
 }

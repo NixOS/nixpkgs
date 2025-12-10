@@ -17,10 +17,10 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.11";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/janestreet/${pname}";
     description = "Streaming client for OCaml's Memprof";
-    license = licenses.mit;
-    maintainers = with maintainers; [ niols ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ niols ];
   };
 }

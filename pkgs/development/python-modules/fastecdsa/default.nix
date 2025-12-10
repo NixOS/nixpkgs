@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fastecdsa" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast elliptic curve digital signatures";
     homepage = "https://github.com/AntonKueltz/fastecdsa";
     changelog = "https://github.com/AntonKueltz/fastecdsa/blob/v${version}/CHANGELOG.md";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

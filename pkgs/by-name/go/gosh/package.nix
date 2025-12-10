@@ -19,12 +19,12 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Reverse/bind shell generator";
     homepage = "https://github.com/redcode-labs/GoSH";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
-    teams = [ teams.redcodelabs ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    teams = [ lib.teams.redcodelabs ];
     mainProgram = "GoSH";
   };
 }

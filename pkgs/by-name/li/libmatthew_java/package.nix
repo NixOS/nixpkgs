@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   PREFIX = "\${out}";
   buildInputs = [ jdk ];
 
-  meta = with lib; {
-    platforms = platforms.linux;
-    license = licenses.mit;
+  meta = {
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
   };
 }

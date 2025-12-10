@@ -233,7 +233,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source note taking and to-do application with synchronisation capabilities";
     mainProgram = "joplin-desktop";
     longDescription = ''
@@ -244,8 +244,8 @@ stdenv.mkDerivation (finalAttrs: {
       Markdown format.
     '';
     homepage = "https://joplinapp.org";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       fugi
     ];
     platforms = electron.meta.platforms ++ lib.platforms.darwin;

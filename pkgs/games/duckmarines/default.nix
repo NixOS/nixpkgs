@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Duck-themed action puzzle video game";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
-    license = licenses.free;
+    license = lib.licenses.free;
     downloadPage = "http://tangramgames.dk/games/duckmarines";
   };
 

@@ -44,11 +44,11 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "yutto" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bilibili downloader";
     homepage = "https://github.com/yutto-dev/yutto";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ linsui ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ linsui ];
     mainProgram = "yutto";
   };
 }

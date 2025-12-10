@@ -101,12 +101,12 @@ buildPythonPackage rec {
   # internal import errors, missing dependencies
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/ansible/ansible/blob/v${version}/changelogs/CHANGELOG-v${lib.versions.majorMinor version}.rst";
     description = "Radically simple IT automation";
     homepage = "https://www.ansible.com";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       HarisDotParis
       robsliwi
     ];

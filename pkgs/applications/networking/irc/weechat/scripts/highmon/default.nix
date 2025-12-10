@@ -26,11 +26,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (weechat.meta) platforms;
     homepage = "https://github.com/KenjiE20/highmon/";
     description = "WeeChat script that adds 'Highlight Monitor'";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ govanify ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ govanify ];
   };
 }

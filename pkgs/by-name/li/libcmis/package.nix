@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "C++ client library for the CMIS interface";
     homepage = "https://github.com/tdf/libcmis";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     mainProgram = "cmis-client";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

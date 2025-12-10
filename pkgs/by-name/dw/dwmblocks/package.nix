@@ -32,12 +32,12 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Modular status bar for dwm written in c";
     homepage = "https://github.com/torrinfail/dwmblocks";
-    license = licenses.isc;
-    maintainers = with maintainers; [ sophrosyne ];
-    platforms = platforms.linux;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ sophrosyne ];
+    platforms = lib.platforms.linux;
     mainProgram = "dwmblocks";
   };
 }

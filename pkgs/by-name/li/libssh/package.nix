@@ -57,10 +57,10 @@ stdenv.mkDerivation rec {
     inherit ffmpeg sshping wireshark;
   };
 
-  meta = with lib; {
+  meta = {
     description = "SSH client library";
     homepage = "https://libssh.org";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.all;
   };
 }

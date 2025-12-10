@@ -59,12 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/javacc/javacc/blob/${finalAttrs.src.rev}/docs/release-notes.md";
     description = "Parser generator for building parsers from grammars";
     homepage = "https://javacc.github.io/javacc";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     mainProgram = "javacc";
-    teams = [ teams.deshaw ];
+    teams = [ lib.teams.deshaw ];
   };
 })

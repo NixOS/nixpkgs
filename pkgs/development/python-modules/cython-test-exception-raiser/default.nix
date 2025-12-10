@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cython_test_exception_raiser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Testing only. A cython simple extension which is used as helper for twisted/twisted Failure tests";
     homepage = "https://github.com/twisted/cython-test-exception-raiser";
     changelog = "https://github.com/twisted/cython-test-exception-raiser/blob/${src.rev}/CHANGELOG.rst";
-    license = with licenses; [
+    license = with lib.licenses; [
       publicDomain
       mit
     ];

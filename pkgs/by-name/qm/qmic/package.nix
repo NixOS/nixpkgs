@@ -17,11 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "prefix=$(out)" ];
 
-  meta = with lib; {
-    maintainers = with maintainers; [ matthewcroughan ];
+  meta = {
+    maintainers = with lib.maintainers; [ matthewcroughan ];
     description = "QMI IDL compiler";
     homepage = "https://github.com/andersson/qmic";
-    license = licenses.bsd3;
-    platforms = platforms.aarch64;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.aarch64;
   };
 })

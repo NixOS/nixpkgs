@@ -29,14 +29,14 @@ buildGoModule rec {
   # Tests are broken in a nix environment
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Flexible Kustomize Plugin for SOPS Encrypted Resource";
     longDescription = ''
       KSOPS can be used to decrypt any Kubernetes resource, but is most commonly
       used to decrypt encrypted Kubernetes Secrets and ConfigMaps.
     '';
     homepage = "https://github.com/viaduct-ai/kustomize-sops";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ starcraft66 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ starcraft66 ];
   };
 }

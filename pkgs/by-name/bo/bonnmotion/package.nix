@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mobility scenario generation and analysis tool";
     mainProgram = "bm";
     longDescription = ''
@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
       COOJA, MiXiM, and ONE.
     '';
     homepage = "https://sys.cs.uos.de/bonnmotion/";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependency jars
     ];
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ oxzi ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ oxzi ];
   };
 }

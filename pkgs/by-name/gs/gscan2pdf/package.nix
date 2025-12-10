@@ -128,11 +128,11 @@ perlPackages.buildPerlPackage rec {
       make test
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GUI to produce PDFs or DjVus from scanned documents";
     homepage = "https://gscan2pdf.sourceforge.net/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ euxane ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ euxane ];
     mainProgram = "gscan2pdf";
   };
 }

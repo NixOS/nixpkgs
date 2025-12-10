@@ -92,12 +92,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_ansible" ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for pytest to simplify calling ansible modules from tests or fixtures";
     homepage = "https://github.com/jlaska/pytest-ansible";
     changelog = "https://github.com/ansible-community/pytest-ansible/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       robsliwi
     ];
   };

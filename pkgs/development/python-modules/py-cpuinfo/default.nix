@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cpuinfo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Get CPU info with pure Python";
     mainProgram = "cpuinfo";
     longDescription = ''
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/workhorsy/py-cpuinfo";
     changelog = "https://github.com/workhorsy/py-cpuinfo/blob/v${version}/ChangeLog";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

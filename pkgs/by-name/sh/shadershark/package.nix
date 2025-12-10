@@ -61,12 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     mainProgram = "shader-shark";
     description = "OpenGL/X11 application for GNU/Linux consisting of a single window that shows simple 3D scene of a textured rectangle with applied vertex and fragment shaders (GLSL)";
     homepage = "https://graphics.globalcode.info/v_0/shader-shark.xhtml";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.lucasew ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.lucasew ];
+    platforms = lib.platforms.linux;
   };
 })

@@ -57,9 +57,9 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Filter for HDF5 that uses the Blosc compressor";
     homepage = "https://github.com/Blosc/hdf5-blosc";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

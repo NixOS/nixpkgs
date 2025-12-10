@@ -30,10 +30,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "solc_select" ];
 
-  meta = with lib; {
+  meta = {
     description = "Manage and switch between Solidity compiler versions";
     homepage = "https://github.com/crytic/solc-select";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ arturcygan ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ arturcygan ];
   };
 }

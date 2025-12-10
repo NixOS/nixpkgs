@@ -31,10 +31,10 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "HTTP load testing application inspired by Ansible syntax";
     homepage = "https://github.com/fcsonline/drill";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "drill";
   };
 }

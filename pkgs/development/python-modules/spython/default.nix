@@ -44,12 +44,12 @@ buildPythonPackage rec {
     "spython/tests/test_client.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Streamlined singularity python client (spython) for singularity";
     homepage = "https://github.com/singularityhub/singularity-cli";
     changelog = "https://github.com/singularityhub/singularity-cli/blob/${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "spython";
   };
 }

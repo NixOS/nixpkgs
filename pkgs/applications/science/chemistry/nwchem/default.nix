@@ -222,18 +222,18 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit mpi; };
 
-  meta = with lib; {
+  meta = {
     description = "Open Source High-Performance Computational Chemistry";
     mainProgram = "nwchem";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       sheepforce
       markuskowa
     ];
     homepage = "https://nwchemgit.github.io";
-    license = licenses.ecl20;
+    license = lib.licenses.ecl20;
   };
 }

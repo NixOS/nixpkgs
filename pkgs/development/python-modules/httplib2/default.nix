@@ -66,10 +66,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "httplib2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Comprehensive HTTP client library";
     homepage = "https://github.com/httplib2/httplib2";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

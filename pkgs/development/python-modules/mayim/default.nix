@@ -52,10 +52,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mayim" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous SQL hydrator";
     homepage = "https://github.com/ahopkins/mayim";
-    license = licenses.mit;
-    maintainers = with maintainers; [ huyngo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ huyngo ];
   };
 }

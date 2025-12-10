@@ -72,12 +72,12 @@ stdenv.mkDerivation rec {
     rm -rf $out/etc # remove upstream config file
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight and modular continuous integration service";
     homepage = "https://laminar.ohwg.net";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       kaction
       maralorn
     ];

@@ -22,11 +22,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lima" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Marshalling of Python Objects";
     homepage = "https://github.com/b6d/lima";
     changelog = "https://github.com/b6d/lima/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zhaofengli ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zhaofengli ];
   };
 }
