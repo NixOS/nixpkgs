@@ -11,12 +11,12 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "qui";
-  version = "1.9.0";
+  version = "1.9.1";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "qui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M2ufnazZ2/1RLDbsFWs5pikw5Os+flMS6swAjDmGoFE=";
+    hash = "sha256-PcJl9nxHPWv17AqtEok0qHhrTQ1WInUKAtxrxoSeMSw=";
   };
 
   qui-web = stdenvNoCC.mkDerivation (finalAttrs': {
