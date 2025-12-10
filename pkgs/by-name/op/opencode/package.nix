@@ -5,7 +5,6 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   models-dev,
-  nodejs,
   nix-update-script,
   ripgrep,
   sysctl,
@@ -25,61 +24,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-jlxR2BODV8wk0sP4Kkyza7Zr5I+Q003gldCfp2eYOt8=";
   };
 
-  node_modules = stdenvNoCC.mkDerivation {
-    pname = "${finalAttrs.pname}-node_modules";
-    inherit (finalAttrs) version src;
-
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND"
-      "SOCKS_SERVER"
-    ];
-
-    nativeBuildInputs = [
-      bun
-      writableTmpDirAsHomeHook
-    ];
-
-    dontConfigure = true;
-
-    buildPhase = ''
-      runHook preBuild
-
-      bun install \
-        --cpu="*" \
-        --frozen-lockfile \
-        --filter ./packages/app \
-        --filter ./packages/desktop \
-        --filter ./packages/opencode \
-        --ignore-scripts \
-        --no-progress \
-        --os="*"
-
-      bun --bun ./nix/scripts/canonicalize-node-modules.ts
-      bun --bun ./nix/scripts/normalize-bun-binaries.ts
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out
-      find . -type d -name node_modules -exec cp -R --parents {} $out \;
-
-      runHook postInstall
-    '';
-
-    # NOTE: Required else we get errors that our fixed-output derivation references store paths
-    dontFixup = true;
-
-    outputHash = "sha256-rF+l0Hho0QEvMS5jaImhMlhKjjf1R66X20R6lEZcZeg=";
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
+  bunWorkspaces = [ "./packages/opencode" ];
+  bunDeps = bun.fetchDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      bunWorkspaces
+      ;
+    hash = "";
   };
 
   nativeBuildInputs = [
-    bun
-    nodejs
+    bun.configHook
     installShellFiles
     makeBinaryWrapper
     models-dev
@@ -91,16 +48,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     substituteInPlace packages/script/src/index.ts \
       --replace-fail 'throw new Error(`This script requires bun@''${expectedBunVersionRange}' \
                      'console.warn(`Warning: This script requires bun@''${expectedBunVersionRange}'
-  '';
-
-  configurePhase = ''
-    runHook preConfigure
-
-    cp -R ${finalAttrs.node_modules}/. .
-    patchShebangs node_modules
-    patchShebangs packages/*/node_modules
-
-    runHook postConfigure
   '';
 
   env.MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
@@ -162,12 +109,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       config = "${placeholder "out"}/share/opencode/config.json";
       tui = "${placeholder "out"}/share/opencode/tui.json";
     };
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--subpackage"
-        "node_modules"
-      ];
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
