@@ -14,16 +14,17 @@
   ncurses,
   libuuid,
   pandoc,
+  pipewire,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ctune";
-  version = "1.3.4";
+  version = "1.3.9";
 
   src = fetchFromGitHub {
     owner = "An7ar35";
     repo = "ctune";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-36Y19CbUnv8NtvZjCMKod/Y/Ofjgr9BsxgMMdoMK+hU=";
+    hash = "sha256-HGCXtntsCQsWKoTbhRZ71NxfD4rFuYDE2IbGVh0Cj/E=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     json_c
     ncurses
     libuuid
+    pipewire
   ];
 
   strictDeps = true;
@@ -52,7 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_PREFIX=''"
   ];
 
-  patches = [ ./cmake_disable_git_clone.patch ];
+  patches = [
+    ./cmake_remove_git_check.patch
+    ./docs_cmake_fix_man_install_dir.patch
+  ];
 
   meta = {
     description = "Nice terminal nCurses (tui) internet radio player for Linux, browse and search from api.radio-browser.info";
