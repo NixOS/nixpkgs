@@ -99,7 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
       jayman2000
-      sander
     ];
     platforms = platforms.all;
   };
