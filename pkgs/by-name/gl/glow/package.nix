@@ -4,6 +4,7 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -35,6 +36,8 @@ buildGoModule rec {
       --fish <($out/bin/glow completion fish) \
       --zsh <($out/bin/glow completion zsh)
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Render markdown on the CLI, with pizzazz";
