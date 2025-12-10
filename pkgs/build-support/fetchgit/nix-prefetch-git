@@ -12,6 +12,7 @@ fetchSubmodules=
 fetchLFS=
 builder=
 fetchTags=
+declare -A fetchSubmoduleTags=()
 declare -A tagsToFetch=()
 branchName=$NIX_PREFETCH_GIT_BRANCH_NAME
 
@@ -60,8 +61,11 @@ Options:
       --fetch-submodules Fetch submodules.
       --fetch-submodule-tag subpath tag
           Fetch a tag for a submodule or the main repo, useful for reproducible \`git describe'.
+      --fetch-submodule-tags subpath
+          Fetch all tags for a submodule, useful for update scripts.
+          This is less reproducible than \`--fetch-submodule-tag' and is not recommended for typical fetcher calls.
       --fetch-tag     Fetch the specified tag for the main repo, equivalent to \`--fetch-submodule-tag "" tag'.
-      --fetch-tags    Fetch all tags. This option is less reproducible than \`--fetch-submodule-tag'.
+      --fetch-tags    Fetch all tags for the main repo, equivalent to \`--fetch-submodule-tags ""'.
       --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
       --no-add-path   Do not actually add the contents of the git repo to the store.
       --root-dir dir  Directory in the repository that will be copied to the output instead of the full repository.
@@ -96,8 +100,9 @@ for arg; do
             --fetch-lfs) fetchLFS=true;;
             --fetch-submodules) fetchSubmodules=true;;
             --fetch-submodule-tag) argfun=add_submodule_tag_key;;
+            --fetch-submodule-tags) argfun=add_submodule_tags;;
             --fetch-tag) argfun=add_main_tag;;
-            --fetch-tags) fetchTags=true;;
+            --fetch-tags) fetchSubmoduleTags[/]=true;;
             --builder) builder=true;;
             --no-add-path) noAddPath=true;;
             --root-dir) argfun=set_rootDir;;
@@ -127,6 +132,9 @@ for arg; do
                 key="/${key#/}"
                 tagsToFetch[$key]="${tagsToFetch[$key]-}${tagsToFetch[$key]:+ } $arg"
                 ;;
+            add_submodule_tags)
+                fetchSubmoduleTags[/${arg#/}]=true
+                ;;
             add_main_tag)
                 key="/"
                 tagsToFetch[$key]="${tagsToFetch[$key]-}${tagsToFetch[$key]:+ } $arg"
@@ -138,6 +146,9 @@ for arg; do
         preserve_argfun=""
     fi
 done
+
+fetchTags="${fetchSubmoduleTags[/]-}"
+unset fetchSubmoduleTags[/]
 
 if test -z "$url"; then
     usage
@@ -316,7 +327,16 @@ clone(){
         init_submodules
     fi
 
+    for key in "${!fetchSubmoduleTags[@]}"; do
+        subpath="${key#/}"
+        echo "fetching all tags for submodule $subpath..." >&2
+        clean_git -C "$subpath" fetch origin 'refs/tags/*:refs/tags/*' || echo "warning: failed to fetch some tags" >&2
+    done
+
     for key in "${!tagsToFetch[@]}"; do
+        if [[ -n "${fetchSubmoduleTags[$key]-}" ]]; then
+            continue
+        fi
         subpath="${key#/}"
         echo "fetching specified tags${subpath:+ at submodule $subpath}..." >&2
         for tagToFetch in ${tagsToFetch[$key]}; do
