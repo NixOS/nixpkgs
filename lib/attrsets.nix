@@ -1758,10 +1758,28 @@ rec {
   */
   recursiveUpdate =
     lhs: rhs:
-    recursiveUpdateUntil (
-      path: lhs: rhs:
-      !(isAttrs lhs && isAttrs rhs)
-    ) lhs rhs;
+    if (intersectAttrs lhs rhs) == { } then
+      lhs // rhs
+    else
+      zipAttrsWith
+        (
+          name: values:
+          let
+            lhs = elemAt values 1;
+            rhs = head values;
+          in
+          if length values == 1 || !(isAttrs lhs && isAttrs rhs) then
+            # Either there's no conflict and only head is valid (aka rhs),
+            # or we can't recurse anymore and should pick rhs. Laziness
+            # means even if lhs is invalid, we'll never evaluate it
+            rhs
+          else
+            recursiveUpdate lhs rhs
+        )
+        [
+          rhs
+          lhs
+        ];
 
   /**
     Recurse into every attribute set of the first argument and check that:
