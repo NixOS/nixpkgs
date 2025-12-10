@@ -43,10 +43,10 @@ buildPythonPackage rec {
 
   buildInputs = [
     taskwarrior2
-    distutils
   ];
 
   dependencies = [
+    distutils
     kitchen
     python-dateutil
     pytz
