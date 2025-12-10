@@ -1,3 +1,9 @@
+/**
+ * cli entrypoint for the npm file structure transformer
+ * see readme.md -> "NPM Packages"
+ * see readme.md -> "Architecture"
+ */
+
 import { addPrefix, getBasePath, getScopedName, parseArgs } from "../utils.ts";
 import type {
   CommonLockFormatOut,
@@ -21,7 +27,7 @@ function getConfig(): Config {
   interface ArgNames extends ParsedArgsNames {
     commonLockNpmPath: null;
     denoDirPath: null;
-  };
+  }
 
   const unparsedArgs: UnparsedArgs<ArgNames> = {
     commonLockNpmPath: {
@@ -47,6 +53,9 @@ function getConfig(): Config {
   };
 }
 
+/**
+ * see readme.md -> "Package `tarball`"
+ */
 function makePackagePath(
   root: PathString,
   packageSpecifier: PackageSpecifier,
@@ -56,6 +65,9 @@ function makePackagePath(
   }/${packageSpecifier.version}`;
 }
 
+/**
+ * see readme.md -> "`registry.json`"
+ */
 function makeRegistryJsonPath(
   root: PathString,
   packageSpecifier: PackageSpecifier,
@@ -63,19 +75,24 @@ function makeRegistryJsonPath(
   return `${root}/${getScopedName(packageSpecifier)}/registry.json`;
 }
 
-async function unpackPackage(
+async function extractTarball(
   config: Config,
   packageSpecifier: PackageSpecifier,
   fetcherOutPath: PathString,
 ) {
   const outPath = makePackagePath(config.rootPath, packageSpecifier);
   await Deno.mkdir(outPath, { recursive: true });
+  // we need to extract the tarball, but we can't use any js libraries,
+  // so we need to use the `tar` cli
   const command = new Deno.Command("tar", {
     args: ["-C", outPath, "-xzf", fetcherOutPath, "--strip-components=1"],
   });
   await command.output();
 }
 
+/**
+ * see readme.md -> "Package `tarball`"
+ */
 async function transformFilesNpm(config: Config) {
   for await (const packageFile of config.commonLockNpm) {
     const packageSpecifier = packageFile?.meta?.packageSpecifier;
@@ -90,7 +107,7 @@ async function transformFilesNpm(config: Config) {
       const outPath = makeRegistryJsonPath(config.rootPath, packageSpecifier);
       await Deno.copyFile(inPath, outPath);
     } else {
-      await unpackPackage(config, packageSpecifier, inPath);
+      await extractTarball(config, packageSpecifier, inPath);
     }
   }
 }

@@ -1,3 +1,8 @@
+/**
+ * cli entrypoint for the fetcher
+ * see readme.md -> "Architecture"
+ */
+
 import { fetchAllJsr } from "./fetch-jsr.ts";
 import { fetchAllNpm } from "./fetch-npm.ts";
 import { addPrefix, getFileName, parseArgs } from "../utils.ts";

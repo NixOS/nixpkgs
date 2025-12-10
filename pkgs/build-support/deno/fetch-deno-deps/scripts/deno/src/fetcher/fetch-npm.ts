@@ -1,3 +1,8 @@
+/**
+ * fetcher implementation for npm dependencies
+ * see readme.md -> "NPM Packages"
+ */
+
 import { fetchCommon, makeOutPath } from "./fetch-common.ts";
 import { addPrefix, getScopedName } from "../utils.ts";
 import type {
@@ -10,13 +15,19 @@ import type {
   RegistryJson,
 } from "../types.d.ts";
 
+/**
+ * see readme.md -> "`registry.json`"
+ */
 function makeRegistryJsonUrl(packageSpecifier: PackageSpecifier): string {
-  // not a real url, needs to be unique per scope+name, but not unique per version
+  // not a real url, needs to be unique per scope+name, but cannot be unique per version
   return `${getScopedName(packageSpecifier)}/registry.json`;
 }
 
-// deno uses a subset of the json file available at `https://registry.npmjs.org/<packageName>` and calls it registry.json
-// here we construct a registry.json file from the information we have. we only use the bare minimum of necessary keys and values.
+/**
+ * deno uses a subset of the json file available at `https://registry.npmjs.org/<packageName>` and calls it registry.json
+ * here we construct a registry.json file from the information we have. we only use the bare minimum of necessary keys and values.
+ * see readme.md -> "`registry.json`"
+ */
 function makeRegistryJsonContent(
   packageSpecifier: PackageSpecifier,
 ): RegistryJson {
@@ -36,6 +47,10 @@ function makeRegistryJsonContent(
   };
 }
 
+/**
+ * for an npm package, we just need to fetch a single tarball
+ * see readme.md -> "Package `tarball`"
+ */
 export async function fetchNpm(
   outPathPrefix: PathString,
   packageFile: PackageFileIn,
@@ -50,6 +65,11 @@ type RegistryJsonsData = Record<
   string,
   { content: RegistryJson; packageFile: PackageFileOut }
 >;
+
+/**
+ * we don't fetch the registry.json file, but construct it
+ * see readme.md -> "`registry.json`"
+ */
 async function makeRegistryJson(
   versionRegistryJson: PackageFileIn,
   packageSpecifier: PackageSpecifier,
@@ -119,6 +139,11 @@ async function writeRegistryJson(
   await Deno.writeFile(path, data, { create: true });
 }
 
+/**
+ * fetch all npm dependencies in the given commonlock object
+ * and construct their respective `registry.json` files
+ * see readme.md -> "NPM Packages"
+ */
 export async function fetchAllNpm(
   outPathPrefix: PathString,
   commonLockfileNpm: CommonLockFormatIn,

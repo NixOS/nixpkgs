@@ -1,6 +1,7 @@
-// TODO: jsdoc one top level doc comment per file, document what the file is, refer to the readme
-// TODO: rename fetcher-default to fetcher-common
-// TODO: document functions, what do they do in a few sentences
+/**
+ * the common fetcher implementation used by the jsr, npm and https fetchers
+ */
+
 import type {
   Hash,
   HashAlgorithm,
@@ -12,8 +13,11 @@ import type {
 } from "../types.d.ts";
 import { addPrefix } from "../utils.ts";
 
-// TODO: document better
-// https://github.com/denoland/deno_cache_dir/blob/0.23.0/rs_lib/src/local.rs#L802
+/**
+ * we need to keep these headers for the manifest.json later
+ * see readme.me -> `manifest.json`
+ * https://github.com/denoland/deno_cache_dir/blob/0.23.0/rs_lib/src/local.rs#L802
+ */
 const keepHeaders = [
   "content-type",
   "location",
@@ -61,26 +65,35 @@ export function toCryptoSubtleAlgo(hashAlgo: HashAlgorithm) {
   }
 }
 
-export async function checkHash(
+export async function verifyIntegrity(
   filePath: PathString,
   p: PackageFileIn,
 ) {
   const fileData = await Deno.readFile(filePath);
-  const hash = await bytesToHash(fileData, toCryptoSubtleAlgo(p.hash.algorithm), p.hash.encoding);
+  const hash = await bytesToHash(
+    fileData,
+    toCryptoSubtleAlgo(p.hash.algorithm),
+    p.hash.encoding,
+  );
   const actualIntegrity = hash;
   const expectedIntegrity = normalizeHashPrefix(p.hash);
 
   if (actualIntegrity !== expectedIntegrity) {
-    throw `integrity check failed during fetch to ${p.url}: ${actualIntegrity} !== ${expectedIntegrity}`
+    throw `integrity check failed during fetch to ${p.url}: ${actualIntegrity} !== ${expectedIntegrity}`;
   }
 }
 
+/**
+ * fetch the file at `p.url`,
+ * write it directly to disc,
+ * and validate the checksum against `p.hash`
+ */
 export async function fetchCommon(
   outPathPrefix: PathString,
   p: PackageFileIn,
-  outPath_?: PathString,
+  outPathOverride?: PathString,
 ): Promise<PackageFileOut> {
-  let outPath = outPath_;
+  let outPath = outPathOverride;
   if (outPath === undefined) {
     outPath = await makeOutPath(p);
   }
@@ -107,7 +120,7 @@ export async function fetchCommon(
 
   await response.body?.pipeTo(file.writable);
 
-  await checkHash(filePath, p);
+  await verifyIntegrity(filePath, p);
 
   return {
     ...p,

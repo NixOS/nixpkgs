@@ -1,3 +1,7 @@
+/// cli entrypoint for the vendor file structure transformer
+/// this just acts as a wrapper around the `deno_cache_di` rust crate from deno upstream
+/// see readme.md -> "Vendor Directory"
+/// see readme.md -> "Architecture"
 use std::{
     collections::HashMap,
     fs::{self, File},
@@ -56,9 +60,7 @@ fn add_common_lock_to_cache(
     Ok(())
 }
 
-fn read_common_lock(
-    common_lock_path: &PathBuf,
-) -> Result<Vec<CommonLockFormatOut>, anyhow::Error> {
+fn read_common_lock(common_lock_path: &PathBuf) -> Result<Vec<CommonLockFormatOut>, anyhow::Error> {
     let mut common_lock_jsr_file =
         File::open(common_lock_path).context("failed to open URL file map")?;
     let common_lock: Vec<CommonLockFormatOut> =
@@ -87,7 +89,8 @@ fn main() -> Result<()> {
         .unwrap();
     add_common_lock_to_cache(common_lock_jsr, base_path, &cache)?;
 
-    let common_lock_https: Vec<CommonLockFormatOut> = read_common_lock(&args.common_lock_https_path)?;
+    let common_lock_https: Vec<CommonLockFormatOut> =
+        read_common_lock(&args.common_lock_https_path)?;
     let base_path = args
         .common_lock_https_path
         .parent()

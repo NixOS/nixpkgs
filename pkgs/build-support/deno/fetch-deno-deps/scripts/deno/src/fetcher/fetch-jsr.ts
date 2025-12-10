@@ -1,3 +1,8 @@
+/**
+ * fetcher implementation for jsr dependencies
+ * see readme.md -> "JSR Packages"
+ */
+
 import { fetchCommon, makeOutPath } from "./fetch-common.ts";
 import {
   addPrefix,
@@ -17,6 +22,9 @@ import type {
   VersionMetaJson,
 } from "../types.d.ts";
 
+/**
+ * see readme.md -> "The actual package files"
+ */
 function makeJsrPackageFileUrl(
   inJsrRegistryUrl: string,
   packageSpecifier: PackageSpecifier,
@@ -27,6 +35,9 @@ function makeJsrPackageFileUrl(
   }/${packageSpecifier.version}${filePath}`;
 }
 
+/**
+ * see readme.md -> "`meta.json`"
+ */
 function makeMetaJsonUrl(
   inJsrRegistryUrl: string,
   packageSpecifier: PackageSpecifier,
@@ -34,6 +45,9 @@ function makeMetaJsonUrl(
   return `${inJsrRegistryUrl}/${getScopedName(packageSpecifier)}/meta.json`;
 }
 
+/**
+ * see readme.md -> "`<version>_meta.json`"
+ */
 async function fetchVersionMetaJson(
   outPathPrefix: PathString,
   versionMetaJson: PackageFileIn,
@@ -41,6 +55,9 @@ async function fetchVersionMetaJson(
   return await fetchCommon(outPathPrefix, versionMetaJson);
 }
 
+/**
+ * see readme.md -> "`meta.json`"
+ */
 function makeMetaJsonContent(packageSpecifier: PackageSpecifier): MetaJson {
   if (!packageSpecifier.scope) {
     throw `scope in jsr package required but not found in ${
@@ -56,6 +73,9 @@ function makeMetaJsonContent(packageSpecifier: PackageSpecifier): MetaJson {
   };
 }
 
+/**
+ * see readme.md -> "The actual package files"
+ */
 async function getFilesAndHashesUsingModuleGraph(
   outPathPrefix: PathString,
   versionMetaJson: PackageFileOut,
@@ -79,7 +99,7 @@ async function getFilesAndHashesUsingModuleGraph(
     }`;
   }
 
-  // see `readme.md`
+  // see readme.md -> "The actual package files"
   const importers = Object.keys(moduleGraph);
   const exported = Object.values(exports).map((v) => v.replace(/^\.\//, "/"));
   const imported: Array<string> = [];
@@ -141,6 +161,11 @@ async function getFilesAndHashesUsingModuleGraph(
   return result;
 }
 
+/**
+ * fetch all package files for a given jsr package
+ * first parse the <version>_meta.json to extract the files paths from the module graph
+ * then fetch all those entries
+ */
 async function fetchJsrPackageFiles(
   outPathPrefix: PathString,
   inJsrRegistryUrl: string,
@@ -149,11 +174,11 @@ async function fetchJsrPackageFiles(
 ): Promise<Array<PackageFileOut>> {
   let result: Array<PackageFileOut> = [];
   const resultUnresolved: Array<Promise<PackageFileOut>> = [];
-  const files = await getFilesAndHashesUsingModuleGraph(
+  const filesAndHashes = await getFilesAndHashesUsingModuleGraph(
     outPathPrefix,
     versionMetaJson,
   );
-  for (const [filePath, integrity] of Object.entries(files)) {
+  for (const [filePath, integrity] of Object.entries(filesAndHashes)) {
     const packageFile: PackageFileIn = {
       url: makeJsrPackageFileUrl(inJsrRegistryUrl, packageSpecifier, filePath),
       hash: {
@@ -169,6 +194,11 @@ async function fetchJsrPackageFiles(
   return result;
 }
 
+/**
+ * fetch a jsr package
+ * first fetch the <version>_meta.json
+ * then fetch all the package files
+ */
 export async function fetchJsr(
   outPathPrefix: PathString,
   inJsrRegistryUrl: string,
@@ -194,6 +224,11 @@ type MetaJsonsData = Record<
   string,
   { content: MetaJson; packageFile: PackageFileOut }
 >;
+
+/**
+ * we don't fetch the meta.json file, but construct it
+ * see readme.md -> "`meta.json`"
+ */
 async function makeMetaJson(
   inJsrRegistryUrl: string,
   versionMetaJson: PackageFileIn,
@@ -261,6 +296,11 @@ async function writeMetaJson(
   await Deno.writeFile(path, data, { create: true });
 }
 
+/**
+ * fetch all jsr dependencies in the given commonlock object
+ * and construct their respective `meta.json` files
+ * see readme.md -> "JSR Packages"
+ */
 export async function fetchAllJsr(
   outPathPrefix: PathString,
   commonLockfileJsr: CommonLockFormatIn,

@@ -1,3 +1,9 @@
+/**
+ * cli entrypoint for the deno lock file transformer
+ * see readme.md -> "`deno.lock`"
+ * see readme.md -> "Architecture"
+ */
+
 import { getScopedName, parseArgs } from "../utils.ts";
 import type {
   CommonLockFormatIn,
@@ -63,8 +69,11 @@ function getConfig(): Config {
   };
 }
 
+/**
+ * we need to parse a deno package specifier into a usable object
+ * see `lockfile-transformer.test.ts` for the spec
+ */
 export function parsePackageSpecifier(fullString: string): PackageSpecifier {
-  // see `lockfile-transformer.test.ts` for the spec
   const matches = fullString.match(
     /^(([^:]+):)?(@([^\/]+)\/)?([^@]+)@([^_]+)(_.*)?$/,
   );
@@ -82,12 +91,17 @@ export function parsePackageSpecifier(fullString: string): PackageSpecifier {
   };
 }
 
+/**
+ * see readme.md -> "`<version>_meta.json`"
+ */
 function makeVersionMetaJsonUrl(packageSpecifier: PackageSpecifier): UrlString {
   return `https://jsr.io/${
     getScopedName(packageSpecifier)
   }/${packageSpecifier.version}_meta.json`;
 }
-
+/**
+ * see readme.md -> "The actual package files"
+ */
 function makeNpmPackageUrl(packageSpecifier: PackageSpecifier): UrlString {
   return `https://registry.npmjs.org/${
     getScopedName(packageSpecifier)
@@ -152,9 +166,14 @@ function getRegistry(url: UrlString): string {
   return new URL(url).host;
 }
 
+/**
+ * used for edge cases for https packages
+ * see readme.md -> "Architecture"
+ */
 function transformHttpsPackageFile(p: PackageFileIn): PackageFileIn {
   const transformers: Record<string, (p: PackageFileIn) => PackageFileIn> = {
-    // special case for esm.sh, see readme.md
+    // special case for esm.sh,
+    // see readme.md -> "`esm.sh`"
     "esm.sh": function (p: PackageFileIn): PackageFileIn {
       const result = structuredClone(p);
       const url = new URL(result.url);
@@ -206,6 +225,11 @@ type TransformedLocks = {
   npm: CommonLockFormatIn;
   https: CommonLockFormatIn;
 };
+
+/**
+ * we need to construct abstract lockfiles from the `deno.lock`, decoupled from deno upstream
+ * see readme.md -> "Architecture"
+ */
 function transformAll(lockfile: DenoLock): TransformedLocks {
   return {
     jsr: makeJsrCommonLock(lockfile),
