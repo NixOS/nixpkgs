@@ -72,7 +72,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aws_lambda_builders" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to compile, build and package AWS Lambda functions";
     mainProgram = "lambda-builders";
     homepage = "https://github.com/awslabs/aws-lambda-builders";
@@ -81,7 +81,7 @@ buildPythonPackage rec {
       Lambda Builders is a Python library to compile, build and package
       AWS Lambda functions for several runtimes & frameworks.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dhkl ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dhkl ];
   };
 }

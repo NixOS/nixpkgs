@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "avea" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for interacting with Elgato's Avea bulb";
     homepage = "https://github.com/k0rventen/avea";
     changelog = "https://github.com/k0rventen/avea/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

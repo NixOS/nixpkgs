@@ -17,10 +17,10 @@ buildPythonPackage rec {
   # PyPi package does not include tests.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/okunishinishi/python-stringcase";
     description = "Convert string cases between camel case, pascal case, snake case etc…";
-    license = licenses.mit;
-    maintainers = with maintainers; [ alunduil ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ alunduil ];
   };
 }

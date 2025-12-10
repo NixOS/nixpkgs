@@ -69,11 +69,11 @@ perlPackages.buildPerlModule {
     PerlIOutf8_strict
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Backend for BibLaTeX";
     license = biberSource.meta.license;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.ttuegel ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.ttuegel ];
     mainProgram = "biber";
   };
 }

@@ -31,11 +31,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     package = finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Unleash the power of Twilio from your command prompt";
     homepage = "https://github.com/twilio/twilio-cli";
     changelog = "https://github.com/twilio/twilio-cli/blob/${finalAttrs.version}/CHANGES.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     platforms = nodejs-slim.meta.platforms;
     mainProgram = "twilio";

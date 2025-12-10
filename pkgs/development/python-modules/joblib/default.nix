@@ -55,11 +55,11 @@ buildPythonPackage rec {
     "test_dispatch_multiprocessing" # test_dispatch_multiprocessing is broken only on Darwin.
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/joblib/joblib/releases/tag/${version}";
     description = "Lightweight pipelining: using Python functions as pipeline jobs";
     homepage = "https://joblib.readthedocs.io/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

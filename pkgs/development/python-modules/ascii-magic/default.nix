@@ -43,11 +43,11 @@ buildPythonPackage rec {
     "test_from_clipboard"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to converts pictures into ASCII art";
     homepage = "https://github.com/LeandroBarone/python-ascii_magic";
     changelog = "https://github.com/LeandroBarone/python-ascii_magic#changelog";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

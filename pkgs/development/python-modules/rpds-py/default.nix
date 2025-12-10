@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rpds" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/crate-py/rpds/releases/tag/v${version}";
     description = "Python bindings to Rust's persistent data structures";
     homepage = "https://github.com/crate-py/rpds";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

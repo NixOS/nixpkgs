@@ -52,11 +52,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cryptoparser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Security protocol parser and generator";
     homepage = "https://gitlab.com/coroner/cryptoparser";
     changelog = "https://gitlab.com/coroner/cryptoparser/-/blob/v${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ kranzes ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ kranzes ];
   };
 }

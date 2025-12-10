@@ -37,10 +37,10 @@ buildDunePackage rec {
     camlp-streams
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interface to PostgreSQL databases for OCaml applications";
     homepage = "https://github.com/darioteixeira/pgocaml";
-    license = licenses.lgpl2Only;
-    maintainers = with maintainers; [ vbgl ];
+    license = lib.licenses.lgpl2Only;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

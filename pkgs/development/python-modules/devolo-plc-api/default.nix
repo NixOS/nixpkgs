@@ -62,11 +62,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "devolo_plc_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with Devolo PLC devices";
     homepage = "https://github.com/2Fake/devolo_plc_api";
     changelog = "https://github.com/2Fake/devolo_plc_api/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

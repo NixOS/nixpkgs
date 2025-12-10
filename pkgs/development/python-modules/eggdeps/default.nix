@@ -25,10 +25,10 @@ buildPythonPackage rec {
   # tests fail, see https://hydra.nixos.org/build/4316603/log/raw
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool which computes a dependency graph between active Python eggs";
     mainProgram = "eggdeps";
     homepage = "https://thomas-lotze.de/en/software/eggdeps/";
-    license = licenses.zpl20;
+    license = lib.licenses.zpl20;
   };
 }

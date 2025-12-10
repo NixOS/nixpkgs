@@ -50,12 +50,12 @@ stdenv.mkDerivation {
     ln -s $out/bin/apfs-fuse $out/bin/mount.fuse.apfs-fuse
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sgan81/apfs-fuse";
     description = "FUSE driver for APFS (Apple File System)";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "apfs-fuse";
-    maintainers = with maintainers; [ ealasu ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ ealasu ];
+    platforms = lib.platforms.unix;
   };
 }

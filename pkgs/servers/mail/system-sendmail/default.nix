@@ -36,11 +36,11 @@ stdenv.mkDerivation {
     chmod +x $out/bin/sendmail
   '';
 
-  meta = with lib; {
+  meta = {
     description = ''
       A sendmail wrapper that calls the system sendmail. Do not install as system-wide sendmail!
     '';
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "sendmail";
   };
 }

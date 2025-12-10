@@ -54,11 +54,11 @@ buildPythonPackage rec {
     "tests/compatibility/test_static_i18n_suffix.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for customizing the navigation structure of your MkDocs site";
     homepage = "https://github.com/lukasgeiter/mkdocs-awesome-nav";
     changelog = "https://github.com/lukasgeiter/mkdocs-awesome-nav/blob/${src.tag}/CHANGELOG";
-    license = licenses.mit;
-    maintainers = with maintainers; [ phaer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ phaer ];
   };
 }

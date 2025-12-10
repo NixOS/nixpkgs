@@ -75,15 +75,15 @@ stdenv.mkDerivation rec {
   # dlopened libgcc requires the rpath not to be shrinked
   dontPatchELF = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://usdx.eu/";
     description = "Free and open source karaoke game";
     mainProgram = "ultrastardx";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       diogotcorreia
       Profpatsch
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

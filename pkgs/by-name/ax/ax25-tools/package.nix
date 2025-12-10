@@ -30,11 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
     "--localstatedir=/var/lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Non-GUI tools used to configure an AX.25 enabled computer";
     homepage = "https://linux-ax25.in-berlin.de/wiki/Main_Page";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ sarcasticadmin ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ sarcasticadmin ];
+    platforms = lib.platforms.linux;
   };
 })

@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
     mv amlbootsig unamlbootsig amlinfo "$out/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/afaerber/meson-tools";
     description = "Tools for Amlogic Meson ARM platforms";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ lopsided98 ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ lopsided98 ];
   };
 }

@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "urlpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple URL parsing, canonicalization and equivalence";
     homepage = "https://github.com/nexB/urlpy";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -18,10 +18,10 @@ stdenv.mkDerivation {
   ];
   buildInputs = [ glib ];
 
-  meta = with lib; {
+  meta = {
     description = "Setup mount/user namespace for FHS emulation";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

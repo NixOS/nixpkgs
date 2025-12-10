@@ -165,12 +165,12 @@ buildFHSEnv {
       # https://github.com/electron/electron/issues/13972
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Easiest way to get started with Electron";
     homepage = "https://www.electronjs.org/fiddle";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "electron-fiddle";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       andersk
       tomasajt
     ];

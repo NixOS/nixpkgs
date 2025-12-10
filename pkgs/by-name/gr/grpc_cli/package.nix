@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
-  meta = with lib; {
+  meta = {
     description = "Command line tool for interacting with grpc services";
     homepage = "https://github.com/grpc/grpc";
-    license = licenses.asl20;
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
     mainProgram = "grpc_cli";
   };
 }

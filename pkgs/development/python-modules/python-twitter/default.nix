@@ -63,10 +63,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "twitter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper around the Twitter API";
     homepage = "https://github.com/bear/python-twitter";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

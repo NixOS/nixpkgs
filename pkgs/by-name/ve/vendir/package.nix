@@ -23,11 +23,11 @@ buildGoModule rec {
     "-X carvel.dev/vendir/pkg/vendir/version.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool to vendor portions of git repos, github releases, helm charts, docker image contents, etc. declaratively";
     mainProgram = "vendir";
     homepage = "https://carvel.dev/vendir/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ russell ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ russell ];
   };
 }

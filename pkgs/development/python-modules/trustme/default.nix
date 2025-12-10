@@ -41,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "trustme" ];
 
-  meta = with lib; {
+  meta = {
     description = "High quality TLS certs while you wait, for the discerning tester";
     homepage = "https://github.com/python-trio/trustme";
     changelog = "https://trustme.readthedocs.io/en/latest/#change-history";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];

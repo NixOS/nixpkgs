@@ -53,10 +53,10 @@ buildPythonPackage {
     export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LZ4 Bindings for Python";
     homepage = "https://github.com/python-lz4/python-lz4";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

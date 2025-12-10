@@ -43,10 +43,10 @@ stdenv.mkDerivation rec {
     mv $out/bin/uncompress $out/bin/uncompress-ncompress
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://vapier.github.io/ncompress/";
-    license = licenses.publicDomain;
+    license = lib.licenses.publicDomain;
     description = "Fast, simple LZW file compressor";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

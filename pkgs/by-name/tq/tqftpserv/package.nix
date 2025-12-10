@@ -41,12 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "prefix=$(out)" ];
 
-  meta = with lib; {
-    maintainers = with maintainers; [ matthewcroughan ];
+  meta = {
+    maintainers = with lib.maintainers; [ matthewcroughan ];
     description = "Trivial File Transfer Protocol server over AF_QIPCRTR";
     homepage = "https://github.com/andersson/tqftpserv";
-    license = licenses.bsd3;
-    platforms = platforms.aarch64;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.aarch64;
     mainProgram = "tqftpserv";
   };
 })

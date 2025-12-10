@@ -25,10 +25,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "csrmesh" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the CSRMesh bridge protocol";
     homepage = "https://github.com/nkaminski/csrmesh";
-    license = with licenses; [ lgpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ lgpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

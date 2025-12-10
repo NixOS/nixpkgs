@@ -82,14 +82,14 @@ stdenv.mkDerivation rec {
   # hydra's darwin machines run into https://github.com/libjxl/libjxl/issues/408
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Performance-portable, length-agnostic SIMD with runtime dispatch";
     homepage = "https://github.com/google/highway";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       bsd3
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ zhaofengli ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ zhaofengli ];
   };
 }

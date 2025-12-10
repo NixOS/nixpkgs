@@ -54,10 +54,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiohttp_apispec" ];
 
-  meta = with lib; {
+  meta = {
     description = "Build and document REST APIs with aiohttp and apispec";
     homepage = "https://github.com/maximdanilchenko/aiohttp-apispec/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

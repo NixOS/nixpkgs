@@ -18,10 +18,10 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "HTML components for Dash";
     homepage = "https://dash.plot.ly/dash-html-components";
-    license = licenses.mit;
-    maintainers = [ maintainers.antoinerg ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.antoinerg ];
   };
 }

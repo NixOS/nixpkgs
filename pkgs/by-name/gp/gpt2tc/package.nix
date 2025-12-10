@@ -45,12 +45,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Text completion and compression using GPT-2";
     homepage = "https://bellard.org/libnc/gpt2tc.html";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ anna328p ];
+    maintainers = with lib.maintainers; [ anna328p ];
   };
 }

@@ -37,10 +37,10 @@ buildPythonPackage {
     branch = "master";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library for reading, writing and rewriting python AST";
     homepage = "https://github.com/berkerpeksag/astor";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nixy ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nixy ];
   };
 }

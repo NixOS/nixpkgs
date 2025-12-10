@@ -20,10 +20,10 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ soundtouch ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-soundtouch";
     description = "Bindings for the soundtouch library which provides functions for changing pitch and timestretching audio data";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

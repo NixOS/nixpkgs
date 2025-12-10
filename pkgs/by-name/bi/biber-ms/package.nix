@@ -86,11 +86,11 @@ perlPackages.buildPerlModule {
     mv "$out"/bin/biber{,-ms}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Backend for BibLaTeX (multiscript version)";
     license = biberSource.meta.license;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.xworld21 ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.xworld21 ];
     mainProgram = "biber-ms";
   };
 }

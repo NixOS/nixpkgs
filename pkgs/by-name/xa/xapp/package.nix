@@ -100,11 +100,11 @@ stdenv.mkDerivation rec {
     wrapGApp $out/lib/xapps/xapp-sn-watcher
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/xapp";
     description = "Cross-desktop libraries and common resources";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

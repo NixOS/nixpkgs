@@ -25,12 +25,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::test_get_anchor_version_from_commit"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Solana Sealevel Framework";
     homepage = "https://github.com/coral-xyz/anchor";
     changelog = "https://github.com/coral-xyz/anchor/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Denommus ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ Denommus ];
     mainProgram = "anchor";
   };
 }

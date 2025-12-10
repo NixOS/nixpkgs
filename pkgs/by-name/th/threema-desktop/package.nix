@@ -118,10 +118,10 @@ buildNpmPackage rec {
       --add-flags $out/opt/threema/dist/src/main.js
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Desktop client for Threema, a privacy-focused end-to-end encrypted mobile messenger";
     homepage = "https://threema.ch";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     mainProgram = "threema";
     maintainers = [ lib.maintainers.jonhermansen ];
     platforms = [ "x86_64-linux" ];

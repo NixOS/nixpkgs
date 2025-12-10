@@ -32,11 +32,11 @@ buildPythonPackage rec {
     $out/bin/inv --print-completion-script=fish >$out/share/fish/vendor_completions.d/inv.fish
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://www.pyinvoke.org/changelog.html";
     description = "Pythonic task execution";
     homepage = "https://www.pyinvoke.org/";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

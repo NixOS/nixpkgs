@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "TransportNSW" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to access Transport NSW information";
     homepage = "https://github.com/Dav0815/TransportNSW";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

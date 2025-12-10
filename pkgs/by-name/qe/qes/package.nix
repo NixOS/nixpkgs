@@ -17,11 +17,11 @@ stdenv.mkDerivation {
 
   makeFlags = [ "BUILD_PATH=$(out)/bin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Quartz Event Synthesizer";
     homepage = "https://github.com/koekeishiya/qes";
-    platforms = platforms.darwin;
-    maintainers = with maintainers; [ lnl7 ];
-    license = licenses.mit;
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ lnl7 ];
+    license = lib.licenses.mit;
   };
 }

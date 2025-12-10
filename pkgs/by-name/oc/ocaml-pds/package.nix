@@ -55,15 +55,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "A tool to build Makefiles for OCaml projects";
     longDescription = ''
       pds is a build system for Ocaml that is meant to make it easy to build a project that follows a particular layout by generating a makefile for the project. The input to pds is a config file, pds.conf, and a directory structure, which is always the current working directory, and the output is the build description.
     '';
     homepage = "https://hg.sr.ht/~mmatalka/pds";
     changelog = "https://hg.sr.ht/~mmatalka/pds#changelog";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mtrsk ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ mtrsk ];
     platforms = ocaml.meta.platforms;
   };
 })

@@ -157,7 +157,7 @@ let
       };
     };
 
-    meta = with lib; {
+    meta = {
       description = "ONLYOFFICE Document Server is an online office suite comprising viewers and editors";
       mainProgram = "documentserver-prepare4shutdown.sh";
       longDescription = ''
@@ -165,13 +165,13 @@ let
         fully compatible with Office Open XML formats: .docx, .xlsx, .pptx and enabling collaborative editing in real time.
       '';
       homepage = "https://github.com/ONLYOFFICE/DocumentServer";
-      license = licenses.agpl3Plus;
+      license = lib.licenses.agpl3Plus;
       platforms = [
         "x86_64-linux"
         "aarch64-linux"
       ];
-      sourceProvenance = [ sourceTypes.binaryNativeCode ];
-      maintainers = with maintainers; [ raboof ];
+      sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+      maintainers = with lib.maintainers; [ raboof ];
     };
   };
 in

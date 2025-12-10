@@ -51,10 +51,10 @@ buildPythonPackage {
     "test_field_checks"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/georgemarshall/django-cryptography";
     description = "Set of primitives for performing cryptography in Django";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ centromere ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ centromere ];
   };
 }

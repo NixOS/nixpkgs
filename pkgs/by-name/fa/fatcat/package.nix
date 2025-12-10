@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "FAT filesystems explore, extract, repair, and forensic tool";
     mainProgram = "fatcat";
     homepage = "https://github.com/Gregwar/fatcat";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cynerd ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cynerd ];
   };
 }

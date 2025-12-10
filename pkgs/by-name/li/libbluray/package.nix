@@ -63,12 +63,12 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!withMetadata) "-dlibxml2=disabled"
     ++ lib.optional (!withFonts) "-Dfreetype=disabled";
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.videolan.org/developers/libbluray.html";
     description = "Library to access Blu-Ray disks for video playback";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 
   passthru = {

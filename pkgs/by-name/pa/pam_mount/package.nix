@@ -64,16 +64,16 @@ stdenv.mkDerivation rec {
     rm -r $out/var
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PAM module to mount volumes for a user session";
     homepage = "https://pam-mount.sourceforge.net/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       gpl3
       lgpl21
       lgpl3
     ];
-    maintainers = with maintainers; [ netali ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ netali ];
+    platforms = lib.platforms.linux;
   };
 }

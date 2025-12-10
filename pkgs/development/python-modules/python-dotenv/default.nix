@@ -38,12 +38,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dotenv" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/theskumar/python-dotenv/blob/${src.tag}/CHANGELOG.md";
     description = "Add .env support to your django/flask apps in development and deployments";
     mainProgram = "dotenv";
     homepage = "https://github.com/theskumar/python-dotenv";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ erikarvstedt ];
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ erikarvstedt ];
   };
 }

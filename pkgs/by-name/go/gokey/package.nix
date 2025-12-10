@@ -16,11 +16,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-Btac9Oi8efqRy+OH49Na3Y6RGehHEmGfvDo2/7EWPL4=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cloudflare/gokey";
     description = "Vault-less password store";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.confus ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.confus ];
     mainProgram = "gokey";
   };
 }

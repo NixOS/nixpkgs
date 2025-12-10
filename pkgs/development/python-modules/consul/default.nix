@@ -111,11 +111,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "consul" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for Consul (https://www.consul.io/)";
     homepage = "https://github.com/criteo/py-consul";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       panicgh
     ];
   };

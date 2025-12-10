@@ -87,11 +87,11 @@ buildPythonPackage rec {
     "creole/tests/test_cross_compare_all.py::CrossCompareTests::test_link_without_title"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Creole markup tools written in Python";
     homepage = "https://github.com/jedie/python-creole";
     changelog = "https://github.com/jedie/python-creole/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -32,10 +32,10 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hannesm/ocaml-otr";
     description = "Off-the-record messaging protocol, purely in OCaml";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ sternenseemann ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
 }

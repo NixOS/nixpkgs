@@ -185,7 +185,7 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  meta = with lib; {
+  meta = {
     broken =
       (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;
     description = "High-performance analog circuit simulator";
@@ -195,8 +195,8 @@ stdenv.mkDerivation rec {
       large-scale parallel computing platforms.
     '';
     homepage = "https://xyce.sandia.gov";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ fbeffa ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ fbeffa ];
     platforms = [ "x86_64-linux" ];
   };
 }

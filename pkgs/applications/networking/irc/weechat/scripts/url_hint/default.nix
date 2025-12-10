@@ -24,10 +24,10 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (weechat.meta) platforms;
     description = "WeeChat URL opening script";
-    license = licenses.mit;
-    maintainers = with maintainers; [ eraserhd ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ eraserhd ];
   };
 }

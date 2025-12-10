@@ -42,12 +42,12 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  meta = with lib; {
+  meta = {
     description = "YAML template engine with Python expressions";
     homepage = "https://github.com/koesterlab/yte";
     changelog = "https://github.com/yte-template-engine/yte/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "yte";
   };
 }

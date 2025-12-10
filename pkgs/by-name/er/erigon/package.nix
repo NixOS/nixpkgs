@@ -59,14 +59,14 @@ buildGoModule {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ledgerwatch/erigon/";
     description = "Ethereum node implementation focused on scalability and modularity";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Plus
       gpl3Plus
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       happysalada
     ];
   };

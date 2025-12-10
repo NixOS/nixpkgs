@@ -36,10 +36,10 @@ buildPythonPackage rec {
     six
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jquast/blessed";
     description = "Thin, practical wrapper around terminal capabilities in Python";
-    maintainers = with maintainers; [ eqyiel ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ eqyiel ];
+    license = lib.licenses.mit;
   };
 }

@@ -84,10 +84,10 @@ buildPythonPackage {
     inherit protobuf;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Protocol Buffers are Google's data interchange format";
     homepage = "https://developers.google.com/protocol-buffers/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

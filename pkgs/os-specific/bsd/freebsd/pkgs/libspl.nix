@@ -17,7 +17,7 @@ mkDerivation {
 
   alwaysKeepStatic = true;
 
-  meta = with lib; {
-    license = licenses.cddl;
+  meta = {
+    license = lib.licenses.cddl;
   };
 }

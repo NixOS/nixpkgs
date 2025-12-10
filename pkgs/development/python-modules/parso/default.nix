@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Parser";
     homepage = "https://parso.readthedocs.io/en/latest/";
     changelog = "https://github.com/davidhalter/parso/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

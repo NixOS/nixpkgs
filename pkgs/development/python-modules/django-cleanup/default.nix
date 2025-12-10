@@ -26,11 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_cleanup" ];
 
-  meta = with lib; {
+  meta = {
     description = "Automatically deletes old file for FileField and ImageField. It also deletes files on models instance deletion";
     homepage = "https://github.com/un1t/django-cleanup";
     changelog = "https://github.com/un1t/django-cleanup/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mmai ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mmai ];
   };
 }

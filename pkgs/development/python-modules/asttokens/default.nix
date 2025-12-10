@@ -40,9 +40,9 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "asttokens" ];
 
-  meta = with lib; {
+  meta = {
     description = "Annotate Python AST trees with source text and token information";
     homepage = "https://github.com/gristlabs/asttokens";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

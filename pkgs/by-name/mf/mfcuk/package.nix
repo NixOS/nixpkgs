@@ -18,12 +18,12 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libnfc ];
 
-  meta = with lib; {
+  meta = {
     description = "MiFare Classic Universal toolKit";
     mainProgram = "mfcuk";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/nfc-tools/mfcuk";
-    maintainers = with maintainers; [ offline ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ offline ];
+    platforms = lib.platforms.unix;
   };
 }

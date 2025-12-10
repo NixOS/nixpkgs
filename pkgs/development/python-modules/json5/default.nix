@@ -27,12 +27,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "json5" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the JSON5 data format";
     homepage = "https://github.com/dpranke/pyjson5";
     changelog = "https://github.com/dpranke/pyjson5/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ veehaitch ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ veehaitch ];
     mainProgram = "pyjson5";
   };
 }

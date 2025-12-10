@@ -68,11 +68,11 @@ buildGoModule rec {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mautrix/signal";
     description = "Matrix-Signal puppeting bridge";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       pentane
       ma27
       SchweGELBin

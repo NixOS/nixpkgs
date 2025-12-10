@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-3BNDo5ksra1d8X6yQZYSlS2CSiZfkuTHkQtIC2ckbKE=";
 
-  meta = with lib; {
+  meta = {
     description = "Minimal viewer for Termimad";
     homepage = "https://github.com/Canop/clima";
     changelog = "https://github.com/Canop/clima/releases/tag/${src.rev}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "clima";
   };

@@ -94,12 +94,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/libxslt";
     description = "C library and tools to do XSL transformations";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ jtojnar ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ jtojnar ];
     broken = pythonSupport && !libxml2.pythonSupport; # see #73102 for why this is not an assert
   };
 })

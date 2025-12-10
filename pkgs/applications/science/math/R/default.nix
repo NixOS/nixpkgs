@@ -216,11 +216,11 @@ stdenv.mkDerivation (finalAttrs: {
     url
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.r-project.org/";
     description = "Free software environment for statistical computing and graphics";
     mainProgram = "R";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     longDescription = ''
       GNU R is a language and environment for statistical computing and
@@ -242,9 +242,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     pkgConfigModules = [ "libR" ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
 
-    maintainers = with maintainers; [ jbedo ];
-    teams = [ teams.sage ];
+    maintainers = with lib.maintainers; [ jbedo ];
+    teams = [ lib.teams.sage ];
   };
 })

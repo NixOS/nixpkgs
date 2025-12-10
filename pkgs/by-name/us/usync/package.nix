@@ -28,12 +28,12 @@ stdenv.mkDerivation {
     substituteInPlace $out/bin/$pname --replace "(unison " "(${unison}/bin/unison "
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ebzzry/usync";
     description = "Simple site-to-site synchronization tool";
-    license = licenses.mit;
-    maintainers = [ maintainers.ebzzry ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.ebzzry ];
+    platforms = lib.platforms.unix;
     mainProgram = "usync";
   };
 

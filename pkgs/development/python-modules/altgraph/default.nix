@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "altgraph" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/ronaldoussoren/altgraph/tags${version}";
     description = "Fork of graphlib: a graph (network) package for constructing graphs";
     longDescription = ''
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://altgraph.readthedocs.io/";
     downloadPage = "https://pypi.org/project/altgraph/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ septem9er ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ septem9er ];
   };
 }
