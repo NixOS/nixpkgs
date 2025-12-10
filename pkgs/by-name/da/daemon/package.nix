@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
       Java).
     '';
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.sander ];
     platforms = platforms.unix;
     mainProgram = "daemon";
   };

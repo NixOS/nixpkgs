@@ -11275,7 +11275,6 @@ with pkgs;
   jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
 
   inherit (callPackage ../applications/networking/cluster/k3s { })
-    k3s_1_31
     k3s_1_32
     k3s_1_33
     k3s_1_34
@@ -11937,7 +11936,6 @@ with pkgs;
       callPackage ../applications/networking/instant-messengers/ripcord/darwin.nix { };
 
   inherit (callPackage ../applications/networking/cluster/rke2 { })
-    rke2_1_31
     rke2_1_32
     rke2_1_33
     rke2_1_34

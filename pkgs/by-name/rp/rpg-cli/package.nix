@@ -25,6 +25,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rpg-cli";
     homepage = "https://github.com/facundoolano/rpg-cli";
     license = licenses.mit;
-    maintainers = with maintainers; [ lom ];
+    maintainers = [ ];
   };
 }

@@ -47,7 +47,6 @@ buildGoModule rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [
       panaeon
-      lom
     ];
     mainProgram = "noisetorch";
   };

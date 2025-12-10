@@ -33,7 +33,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/Builditluc/wiki-tui/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      lom
       builditluc
       matthiasbeyer
     ];

@@ -64,7 +64,6 @@ buildPythonPackage rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
       lovek323
-      sander
     ];
     platforms = platforms.all;
   };

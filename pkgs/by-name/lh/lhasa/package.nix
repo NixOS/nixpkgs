@@ -22,7 +22,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.isc;
     homepage = "http://fragglet.github.io/lhasa";
-    maintainers = [ maintainers.sander ];
     mainProgram = "lha";
     platforms = platforms.unix;
   };
