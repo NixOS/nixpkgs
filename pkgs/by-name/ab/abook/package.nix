@@ -47,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://abook.sourceforge.net/";
     description = "Text-based addressbook program designed to use with mutt mail client";
     license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.edwtjo ];
     platforms = lib.platforms.unix;
     mainProgram = "abook";
   };

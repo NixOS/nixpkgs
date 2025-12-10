@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "django-rosetta";
-  version = "0.10.2";
+  version = "0.10.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "mbi";
     repo = "django-rosetta";
     tag = "v${version}";
-    hash = "sha256-NqDrCDvvyZsce7/VWXujAStAW8UtNSro8aelrDi4EEs=";
+    hash = "sha256-VnKbtzLY2+3RTk4gNZASuVSDGzfgoyr06RUNB2r0eDw=";
   };
 
   build-system = [ setuptools ];

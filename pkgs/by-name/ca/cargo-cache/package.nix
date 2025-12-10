@@ -34,7 +34,6 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with maintainers; [
-      Br1ght0ne
       matthiasbeyer
     ];
   };

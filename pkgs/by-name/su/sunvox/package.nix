@@ -35,15 +35,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sunvox";
-  version = "2.1.3";
+  version = "2.1.4";
 
   src = fetchzip {
     urls = [
       "https://www.warmplace.ru/soft/sunvox/sunvox-${finalAttrs.version}.zip"
       # Upstream removes downloads of older versions, please save bumped versions to archive.org
-      "https://web.archive.org/web/20251019141206/https://www.warmplace.ru/soft/sunvox/sunvox-${finalAttrs.version}.zip"
+      "https://web.archive.org/web/20251208174416/https://www.warmplace.ru/soft/sunvox/sunvox-${finalAttrs.version}.zip"
     ];
-    hash = "sha256-egOaIZEyI5x2VV660qbO+pan22BFRaa4d+8sOpJhpBM=";
+    hash = "sha256-FY5DxdQN1ClFp/dS5fXgFhoU7uk/gUoPrYtsZK5q9O4=";
   };
 
   nativeBuildInputs =
@@ -68,21 +68,35 @@ stdenv.mkDerivation (finalAttrs: {
     libjack2
   ];
 
-  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
-    (makeDesktopItem {
-      name = "sunvox";
-      exec = "sunvox";
-      desktopName = "SunVox";
-      genericName = "Modular Synthesizer";
-      comment = "Modular synthesizer with pattern-based sequencer";
-      icon = "sunvox";
-      categories = [
-        "AudioVideo"
-        "Audio"
-        "Midi"
-      ];
-    })
-  ];
+  desktopItems =
+    let
+      sunvoxDesktop =
+        variant:
+        makeDesktopItem {
+          name = "sunvox" + lib.optionalString (variant != null) "-${lib.strings.toLower variant}";
+          exec = "sunvox" + lib.optionalString (variant != null) "_${lib.strings.toLower variant}";
+          desktopName = "SunVox" + lib.optionalString (variant != null) " (${variant})";
+          genericName = "Modular Synthesizer";
+          comment = "Modular synthesizer with pattern-based sequencer";
+          icon = "sunvox";
+          categories = [
+            "AudioVideo"
+            "Audio"
+            "Midi"
+          ];
+        };
+    in
+    lib.optionals stdenv.hostPlatform.isLinux (
+      [
+        (sunvoxDesktop null)
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch64) [
+        (sunvoxDesktop "OpenGL")
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isi686) [
+        (sunvoxDesktop "LoFi")
+      ]
+    );
 
   dontConfigure = true;
   dontBuild = true;

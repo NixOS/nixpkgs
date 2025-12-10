@@ -62,7 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://x11-basic.codeberg.page";
     description = "Basic interpreter and compiler with graphics capabilities";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ edwtjo ];
     platforms = lib.platforms.unix;
   };
 })

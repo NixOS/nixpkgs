@@ -336,7 +336,6 @@ buildPythonPackage rec {
     homepage = "https://airflow.apache.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [
-      bhipple
       gbpdt
       ingenieroariel
     ];

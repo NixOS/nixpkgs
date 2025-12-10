@@ -103,7 +103,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pyproj4/pyproj/blob/${src.rev}/docs/history.rst";
     license = licenses.mit;
     maintainers = with maintainers; [
-      lsix
       dotlambda
     ];
     teams = [ teams.geospatial ];

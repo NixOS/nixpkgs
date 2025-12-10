@@ -111,7 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Plus;
     mainProgram = "nheko";
     maintainers = with maintainers; [
-      ekleog
       fpletz
       rebmit
       rnhmjoj
