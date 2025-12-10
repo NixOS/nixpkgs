@@ -107,6 +107,12 @@ stdenv.mkDerivation rec {
 
     "-DBUILD_DOCUMENTATION=FALSE"
 
+    # Disable the default static linking to libc++, libstdc++ and libgcc.
+    #
+    # This leads to various, non-obvious problems as our dependencies bring in
+    # their own copies of these libraries.
+    "-DSTATIC_LINK_LIBCXX=FALSE"
+
     # LTO brings up overall build time, but results in much smaller
     # binaries for all users and the cache.
     "-DUSE_LTO=ON"
