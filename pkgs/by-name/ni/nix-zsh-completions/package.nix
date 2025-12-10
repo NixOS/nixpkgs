@@ -1,10 +1,10 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "nix-zsh-completions";
   version = "0.5.1";
 
@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nix-community/nix-zsh-completions";
     description = "ZSH completions for Nix, NixOS, and NixOps";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       olejorgenb
       hedning
       ma27
