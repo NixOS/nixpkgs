@@ -5,8 +5,6 @@
   lib,
   nixosTests,
   ghostunnel,
-  writeScript,
-  runtimeShell,
 }:
 
 buildGoModule rec {
@@ -37,9 +35,7 @@ buildGoModule rec {
 
   passthru.services.default = {
     imports = [
-      (lib.modules.importApply ./service.nix {
-        inherit writeScript runtimeShell;
-      })
+      (lib.modules.importApply ./service.nix { })
     ];
     ghostunnel.package = ghostunnel; # FIXME: finalAttrs.finalPackage
   };
