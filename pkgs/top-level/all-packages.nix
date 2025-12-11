@@ -14091,10 +14091,6 @@ with pkgs;
     libcpr = libcpr_1_10_5;
   };
 
-  biblioteca = callPackage ../by-name/bi/biblioteca/package.nix {
-    webkitgtk = webkitgtk_6_0;
-  };
-
   libpostalWithData = callPackage ../by-name/li/libpostal/package.nix {
     withData = true;
   };
