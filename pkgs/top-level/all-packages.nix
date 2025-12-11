@@ -1990,10 +1990,6 @@ with pkgs;
     stdenv = gcc15Stdenv;
   };
 
-  hyprsunset = callPackage ../by-name/hy/hyprsunset/package.nix {
-    stdenv = gcc15Stdenv;
-  };
-
   hyprsysteminfo = callPackage ../by-name/hy/hyprsysteminfo/package.nix {
     stdenv = gcc15Stdenv;
   };
