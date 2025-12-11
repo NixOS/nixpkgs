@@ -10049,6 +10049,13 @@
     github = "HadziqM";
     githubId = 50319538;
   };
+  haennetz = {
+    name = "Hännetz";
+    email = "me@haennetz.net";
+    matrix = "@me:haennetz.net";
+    github = "Haennetz";
+    githubId = 34142036;
+  };
   hagl = {
     email = "harald@glie.be";
     github = "hagl";

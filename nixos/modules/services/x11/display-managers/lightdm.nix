@@ -282,6 +282,11 @@ in
       account   include       login
       password  substack      login
       session   include       login
+    ''
+    # https://github.com/elementary/switchboard-plug-parental-controls/blob/8.0.1/src/daemon/Server.vala#L325
+    # Must specify conffile since pam_time defaults to ${linux-pam}/etc/security/time.conf.
+    + lib.optionalString config.services.pantheon.parental-controls.enable ''
+      account   required      pam_time.so conffile=/etc/security/time.conf
     '';
 
     security.pam.services.lightdm-greeter.text = ''
