@@ -974,10 +974,6 @@ with pkgs;
 
   opnplug = adlplug.override { type = "OPN"; };
 
-  akkoma-admin-fe = callPackage ../by-name/ak/akkoma-admin-fe/package.nix {
-    python3 = python311;
-  };
-
   aegisub = callPackage ../by-name/ae/aegisub/package.nix (
     {
       luajit = luajit.override { enable52Compat = true; };
