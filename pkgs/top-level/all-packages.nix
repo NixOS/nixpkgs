@@ -5923,13 +5923,6 @@ with pkgs;
 
   bazel = bazel_7;
 
-  bazel_7 = callPackage ../by-name/ba/bazel_7/package.nix {
-    inherit (darwin) sigtool;
-    buildJdk = jdk21_headless;
-    runJdk = jdk21_headless;
-    bazel_self = bazel_7;
-  };
-
   buildifier = bazel-buildtools;
   buildozer = bazel-buildtools;
   unused_deps = bazel-buildtools;
