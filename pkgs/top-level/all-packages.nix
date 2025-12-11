@@ -12603,10 +12603,6 @@ with pkgs;
   anki-utils = callPackage ../by-name/an/anki/addons/anki-utils.nix { };
   ankiAddons = recurseIntoAttrs (callPackage ../by-name/an/anki/addons { });
 
-  art = callPackage ../by-name/ar/art/package.nix {
-    fftw = fftwSinglePrec;
-  };
-
   arx-libertatis = libsForQt5.callPackage ../games/arx-libertatis { };
 
   beancount-ing-diba = callPackage ../applications/office/beancount/beancount-ing-diba.nix {
