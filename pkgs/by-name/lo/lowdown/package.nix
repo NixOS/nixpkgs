@@ -92,6 +92,12 @@ stdenv.mkDerivation rec {
     "install_static"
   ];
 
+  postInstall = lib.optionalString stdenv.hostPlatform.isCygwin ''
+    mkdir -p "$lib"/bin
+    mv "$lib"/lib/*.dll "$lib"/bin/
+    chmod +x "$lib"/bin/*.dll
+  '';
+
   doInstallCheck = !stdenv.hostPlatform.isDarwin || !enableDarwinSandbox;
   installCheckPhase = ''
     runHook preInstallCheck
