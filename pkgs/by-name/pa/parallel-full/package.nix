@@ -12,6 +12,7 @@
     TextCSV
   ],
   willCite ? false,
+  unsafe ? false,
 }:
 
 symlinkJoin {
@@ -32,6 +33,7 @@ symlinkJoin {
     rm $out/bin/parallel
     makeWrapper ${parallel}/bin/parallel $out/bin/parallel \
       --set PERL5LIB "${perlPackages.makeFullPerlPath extraPerlPackages}" \
-      ${lib.optionalString willCite "--add-flags --will-cite"}
+      ${lib.optionalString willCite "--add-flags --will-cite"} \
+      ${lib.optionalString unsafe "--add-flags --unsafe"}
   '';
 }
