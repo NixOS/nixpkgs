@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   nix-update-script,
+  nixosTests,
   testers,
   nodejs,
   node-gyp,
@@ -133,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
+      inherit (nixosTests) karakeep;
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
         # remove hardcoded version if upstream syncs general version with cli
