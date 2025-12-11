@@ -3,22 +3,23 @@
   buildPythonPackage,
   fetchPypi,
   protobuf,
-  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "gtfs-realtime-bindings";
-  version = "1.0.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "2.0.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-LoztiQRADMk6t+hSCttpNM+mAe2sxvWT/Cy0RIZiu0c=";
+    pname = "gtfs_realtime_bindings";
+    inherit version;
+    hash = "sha256-hhqdz0xA+aWVIARNhw4zawCJStVji88sSpuZiSNUO0I=";
   };
 
-  propagatedBuildInputs = [ protobuf ];
+  build-system = [ setuptools ];
+
+  dependencies = [ protobuf ];
 
   # Tests are not shipped, only a tarball for Java is present
   doCheck = false;
@@ -28,7 +29,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings generated from the GTFS Realtime protocol buffer spec";
     homepage = "https://github.com/MobilityData/gtfs-realtime-bindings";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }
