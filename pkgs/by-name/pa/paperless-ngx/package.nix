@@ -169,6 +169,7 @@ python.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = [
     "celery"
     "django-allauth"
+    "drf-spectacular-sidecar"
     "python-dotenv"
     "gotenberg-client"
     "redis"
