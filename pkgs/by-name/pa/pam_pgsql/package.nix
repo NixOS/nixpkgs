@@ -8,17 +8,18 @@
   libgcrypt,
   pam,
   libxcrypt,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
   pname = "pam_pgsql";
-  version = "unstable-2020-05-05";
+  version = "0-unstable-2025-01-24";
 
   src = fetchFromGitHub {
     owner = "pam-pgsql";
     repo = "pam-pgsql";
-    rev = "f9fd1e1a0daf754e6764a31db5cbec6f9fc02b3d";
-    sha256 = "1bvddrwyk1479wibyayzc24h62qzfnlbk9qvdhb31yw9yn17gp6k";
+    rev = "7834ce21c4f633e3eadc9abe86fa02991efc43ed";
+    hash = "sha256-hBkDEYZ8RBHav3tqDOD2uQ9m3U95wi4U9ebyQPqd5bo=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +34,8 @@ stdenv.mkDerivation {
     libpq
     libxcrypt
   ];
+
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     description = "Support to authenticate against PostgreSQL for PAM-enabled applications";
