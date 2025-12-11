@@ -320,8 +320,8 @@ let
         mktplcRef = {
           name = "vscode-apollo";
           publisher = "apollographql";
-          version = "2.6.3";
-          hash = "sha256-1F0iy5GhpuCqTrP/atoOyD0SWNOwa1sKXH14kN4FXNE=";
+          version = "2.6.4";
+          hash = "sha256-rqNdblzQ9N6kFcwYqdNAA8ziDMFCuduhXZt3lmd/q7Y=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/apollographql.vscode-apollo/changelog";
