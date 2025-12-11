@@ -13411,6 +13411,12 @@
     github = "katrinafyi";
     githubId = 39479354;
   };
+  kawayww = {
+    email = "kawayww@gmail.com";
+    github = "KawaYww";
+    githubId = 213631983;
+    name = "KawaYww";
+  };
   kayhide = {
     email = "kayhide@gmail.com";
     github = "kayhide";
