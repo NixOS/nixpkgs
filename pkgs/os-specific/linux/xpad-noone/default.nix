@@ -23,6 +23,10 @@ stdenv.mkDerivation (finalAttr: {
 
   makeFlags = kernelModuleMakeFlags;
 
+  patches = [
+    ./0001-idr-remove-usage-of-the-depreciated-ida_simple_xx-ap.patch
+  ];
+
   postPatch = ''
     substituteInPlace Makefile --replace-fail "/lib/modules/\$(shell uname -r)/build" "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   '';

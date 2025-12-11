@@ -1,0 +1,46 @@
+From e0f6ad5f2fabd5f8e74796a87154c92c8e9b6068 Mon Sep 17 00:00:00 2001
+From: apt-install-coffee <jordan.mccallum@mailbox.org>
+Date: Wed, 10 Dec 2025 11:19:06 +1000
+Subject: [PATCH] idr: remove usage of the depreciated ida_simple_xx() api
+
+ida_simple_get() & ida_simple_remove() are depreciated upstream
+in favour of ida_alloc() and ida_free(). Replacing usage for 6.18
+compatibility.
+---
+ xpad.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/xpad.c b/xpad.c
+index d284050..3d22a07 100644
+--- a/xpad.c
++++ b/xpad.c
+@@ -1141,7 +1141,7 @@ static int xpad_led_probe(struct usb_xpad *xpad)
+ 	if (!led)
+ 		return -ENOMEM;
+ 
+-	xpad->pad_nr = ida_simple_get(&xpad_pad_seq, 0, 0, GFP_KERNEL);
++	xpad->pad_nr = ida_alloc(&xpad_pad_seq, GFP_KERNEL);
+ 	if (xpad->pad_nr < 0) {
+ 		error = xpad->pad_nr;
+ 		goto err_free_mem;
+@@ -1164,7 +1164,7 @@ static int xpad_led_probe(struct usb_xpad *xpad)
+ 	return 0;
+ 
+ err_free_id:
+-	ida_simple_remove(&xpad_pad_seq, xpad->pad_nr);
++	ida_free(&xpad_pad_seq, xpad->pad_nr);
+ err_free_mem:
+ 	kfree(led);
+ 	xpad->led = NULL;
+@@ -1177,7 +1177,7 @@ static void xpad_led_disconnect(struct usb_xpad *xpad)
+ 
+ 	if (xpad_led) {
+ 		led_classdev_unregister(&xpad_led->led_cdev);
+-		ida_simple_remove(&xpad_pad_seq, xpad->pad_nr);
++		ida_free(&xpad_pad_seq, xpad->pad_nr);
+ 		kfree(xpad_led);
+ 	}
+ }
+-- 
+2.51.2
+
