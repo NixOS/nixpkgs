@@ -8,22 +8,22 @@
 
   makeWrapper,
 
-  electron_36,
+  electron_37,
   commandLineArgs ? "",
 }:
 
 let
-  electron = electron_36;
+  electron = electron_37;
 in
 buildNpmPackage rec {
   pname = "lx-music-desktop";
-  version = "2.11.0";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "lyswhut";
     repo = "lx-music-desktop";
     tag = "v${version}";
-    hash = "sha256-NMj8rb5PAejT1HCE5nxi2+SS9lFUVdLEqN0id23QjVc=";
+    hash = "sha256-g4QVpymzoRKIq70aRLXGFmUmIpSiXIZThrp8fumBKTQ=";
   };
 
   patches = [
@@ -38,7 +38,7 @@ buildNpmPackage rec {
     makeWrapper
   ];
 
-  npmDepsHash = "sha256-cA9NdHe3lEg8twMLWoeomWgobidZ34TKwdC5rDezZ5g=";
+  npmDepsHash = "sha256-t6I8ch36Yh6N+qZy4/yr/gSyJ3qdyMWss5LbsagEFMQ=";
 
   makeCacheWritable = true;
 
@@ -94,6 +94,6 @@ buildNpmPackage rec {
     platforms = electron.meta.platforms;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "lx-music-desktop";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ starryreverie ];
   };
 }
