@@ -29,17 +29,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.5.6";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-Ppw2fyfFvSmGO+FcEvclkOU7LATOqkYH3wErBdKgWJY=";
+    hash = "sha256-qJ5ZIGfUqV/ayZVABbrcOBGa6xFLZ53WGuBz8JsXvOw=";
   };
 
-  cargoHash = "sha256-EN87p8wX5QAzf3cWfX8I/+XzYRc9rA5EWj996iUpSPg=";
+  cargoHash = "sha256-DNwuybqdHQtosQwtVgbds4gu0YCXY3tnX2IqXhhyfs8=";
 
   patches = [
     ./patches/0002-tests-replace-hardcoded-paths.patch
@@ -171,6 +171,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # We disable the upgrade feature on purpose
     "--skip=upgrade::upgrade_prompt"
     "--skip=upgrade::upgrade_invalid_lockfile"
+
+    # Wants to access /etc/group
+    "--skip=node_unit_tests::process_test"
+
+    # sqlite extension tests are in a separate Cargo crate and therefore are not handled by the nixpkgs Cargo tooling
+    "--skip=sqlite_extension_test"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Expects specific shared libraries from macOS to be linked
