@@ -974,17 +974,6 @@ with pkgs;
 
   opnplug = adlplug.override { type = "OPN"; };
 
-  akkoma = callPackage ../by-name/ak/akkoma/package.nix {
-    beamPackages = beam_minimal.packages.erlang_26.extend (
-      self: super: {
-        elixir = self.elixir_1_16;
-        rebar3 = self.rebar3WithPlugins {
-          plugins = with self; [ pc ];
-        };
-      }
-    );
-  };
-
   akkoma-admin-fe = callPackage ../by-name/ak/akkoma-admin-fe/package.nix {
     python3 = python311;
   };
