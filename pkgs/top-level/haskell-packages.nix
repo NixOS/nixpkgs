@@ -86,6 +86,13 @@ in
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.0.x.nix { };
         packageSetConfig = bootstrapPackageSet;
       };
+
+      ghc984BinaryPackages = callPackage ../development/haskell-modules {
+        buildHaskellPackages = ghc984BinaryPackages;
+        ghc = bb.compiler.ghc984Binary;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.8.x.nix { };
+        packageSetConfig = bootstrapPackageSet;
+      };
     in
     {
       # Required to bootstrap 9.4.8.
@@ -113,20 +120,20 @@ in
       };
       ghc96 = compiler.ghc967;
       ghc984 = callPackage ../development/compilers/ghc/9.8.4.nix {
-        bootPkgs = if stdenv.buildPlatform.isi686 then bb.packages.ghc948 else bb.packages.ghc984Binary;
+        bootPkgs = if stdenv.buildPlatform.isi686 then bb.packages.ghc948 else ghc984BinaryPackages;
         inherit (buildPackages.python3Packages) sphinx;
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
       ghc98 = compiler.ghc984;
       ghc9102 = callPackage ../development/compilers/ghc/9.10.2.nix {
-        bootPkgs = if stdenv.buildPlatform.isi686 then bb.packages.ghc967 else bb.packages.ghc984Binary;
+        bootPkgs = if stdenv.buildPlatform.isi686 then bb.packages.ghc967 else ghc984BinaryPackages;
         inherit (buildPackages.python3Packages) sphinx;
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
       ghc9103 = callPackage ../development/compilers/ghc/9.10.3.nix {
-        bootPkgs = if stdenv.buildPlatform.isi686 then bb.packages.ghc967 else bb.packages.ghc984Binary;
+        bootPkgs = if stdenv.buildPlatform.isi686 then bb.packages.ghc967 else ghc984BinaryPackages;
         inherit (buildPackages.python3Packages) sphinx;
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
@@ -142,7 +149,7 @@ in
       };
       ghc912 = compiler.ghc9122;
       ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
-        bootPkgs = bb.packages.ghc984Binary;
+        bootPkgs = ghc984BinaryPackages;
         inherit (buildPackages.python3Packages) sphinx;
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
@@ -181,12 +188,6 @@ in
       bh = buildPackages.haskell;
     in
     {
-      ghc984Binary = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc984Binary;
-        ghc = bh.compiler.ghc984Binary;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.8.x.nix { };
-        packageSetConfig = bootstrapPackageSet;
-      };
       ghc948 = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc948;
         ghc = bh.compiler.ghc948;
