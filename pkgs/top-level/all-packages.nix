@@ -1990,10 +1990,6 @@ with pkgs;
     stdenv = gcc15Stdenv;
   };
 
-  hyprutils = callPackage ../by-name/hy/hyprutils/package.nix {
-    stdenv = gcc15Stdenv;
-  };
-
   hyprwayland-scanner = callPackage ../by-name/hy/hyprwayland-scanner/package.nix {
     stdenv = gcc15Stdenv;
   };
