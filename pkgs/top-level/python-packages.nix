@@ -1966,6 +1966,10 @@ self: super: with self; {
 
   binsync = callPackage ../development/python-modules/binsync { };
 
+  binwalk = callPackage ../development/python-modules/binwalk { };
+
+  binwalk-full = self.binwalk.override { visualizationSupport = true; };
+
   biocframe = callPackage ../development/python-modules/biocframe { };
 
   biocutils = callPackage ../development/python-modules/biocutils { };
