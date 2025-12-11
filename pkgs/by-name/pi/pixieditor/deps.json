@@ -250,6 +250,11 @@
     "hash": "sha256-MwPAPFD/gs9WZ8gB5BQMEwYswd3EEIpLlvMN5vmz1Wc="
   },
   {
+    "pname": "DeviceId.Mac",
+    "version": "6.9.0",
+    "hash": "sha256-bQ59eaeDGRgk4ow7bk7U9yEnJgiV2Ok9U3fbBIOdRVw="
+  },
+  {
     "pname": "DiscordRichPresence",
     "version": "1.3.0.28",
     "hash": "sha256-KdwSl5ysunAbC21cXRrSROO2XN/ZscIVdq6+IH+5Fbs="

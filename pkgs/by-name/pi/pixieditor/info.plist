@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+    <key>CFBundleName</key>
+    <string>PixiEditor</string>
+    <key>CFBundleDisplayName</key>
+    <string>PixiEditor</string>
+    <key>CFBundleIconFile</key>
+    <string>PixiEditorLogo.icns</string>
+    <key>CFBundleDocumentTypes</key>
+    <array>
+        <dict>
+        <key>CFBundleTypeExtensions</key>
+        <array>
+            <string>pixi</string>
+        </array>
+        <key>CFBundleTypeIconFile</key>
+        <string>PixiEditorLogo.icns</string>
+        <key>CFBundleTypeName</key>
+        <string>PixiEditor Project</string>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>LSHandlerRank</key>
+        <string>Default</string>
+        </dict>
+    </array>
+    </dict>
+</plist>
