@@ -2592,6 +2592,17 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
+  nvim-lspconfig = super.nvim-lspconfig.overrideAttrs {
+    # On nixpkgs, the flow package provides the `flow` executable.
+    # This patch thus changes the default for `cmd` to a more sensible value.
+    postPatch = ''
+      substituteInPlace lsp/flow.lua \
+        --replace-fail \
+          "cmd = { 'npx', '--no-install', 'flow', 'lsp' }," \
+          "cmd = { 'flow', 'lsp' },"
+    '';
+  };
+
   nvim-lsputils = super.nvim-lsputils.overrideAttrs {
     dependencies = [ self.popfix ];
   };
