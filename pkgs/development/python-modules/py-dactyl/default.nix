@@ -1,4 +1,5 @@
 {
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
   lib,
@@ -9,19 +10,20 @@
 
 buildPythonPackage rec {
   pname = "py-dactyl";
-  version = "2.0.7";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iamkubi";
     repo = "pydactyl";
     tag = "v${version}";
-    hash = "sha256-4WzQQs4WP5AwO8idZsP6J71CwnoD1ilC5Tpcepnf26c=";
+    hash = "sha256-1bvdJ9ATF0cRy7WE8H2IV2WIMbiSnRnelGpWIN7VBRQ=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
+    aiohttp
     requests
   ];
 
