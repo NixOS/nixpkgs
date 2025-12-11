@@ -8539,12 +8539,6 @@ with pkgs;
 
   ### DEVELOPMENT / TESTING TOOLS
 
-  atf = callPackage ../by-name/at/atf/package.nix {
-    stdenv =
-      # atf is a dependency of libiconv. Avoid an infinite recursion with `pkgsStatic` by using a bootstrap stdenv.
-      if stdenv.hostPlatform.isDarwin then darwin.bootstrapStdenv else stdenv;
-  };
-
   ### DEVELOPMENT / LIBRARIES / AGDA
 
   agdaPackages = recurseIntoAttrs (
