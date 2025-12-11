@@ -10428,6 +10428,12 @@
     githubId = 15121114;
     name = "Tom Herbers";
   };
+  hero = {
+    email = "hero+nixpkgs@herogamers.dev";
+    github = "herogamers";
+    githubId = 15278940;
+    name = "Marcus Sand";
+  };
   herschenglime = {
     github = "Herschenglime";
     githubId = 69494718;
