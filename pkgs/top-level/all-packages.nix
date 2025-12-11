@@ -1990,10 +1990,6 @@ with pkgs;
     stdenv = gcc15Stdenv;
   };
 
-  hyprland-qtutils = callPackage ../by-name/hy/hyprland-qtutils/package.nix {
-    stdenv = gcc15Stdenv;
-  };
-
   hyprlang = callPackage ../by-name/hy/hyprlang/package.nix {
     stdenv = gcc15Stdenv;
   };
