@@ -42,14 +42,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-EN87p8wX5QAzf3cWfX8I/+XzYRc9rA5EWj996iUpSPg=";
 
   patches = [
-    # Patch out the remote upgrade (deno update) check.
-    # Not a blocker in the build sandbox, since implementation and tests are
-    # considerately written for no external networking, but removing brings
-    # in-line with common nixpkgs practice.
-    ./patches/0000-remove-deno-upgrade-check.patch
-    # Patch out the upgrade sub-command since that wouldn't correctly upgrade
-    # deno from nixpkgs.
-    ./patches/0001-remove-deno-upgrade.patch
     ./patches/0002-tests-replace-hardcoded-paths.patch
     ./patches/0003-tests-linux-no-chown.patch
     ./patches/0004-tests-darwin-fixes.patch
@@ -84,6 +76,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildFlags = [ "--package=cli" ];
+
+  # Disable the default feature `upgrade` (which controls the self-update subcommand and update checks)
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "__vendored_zlib_ng"
+  ];
 
   # work around "error: unknown warning group '-Wunused-but-set-parameter'"
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unknown-warning-option";
@@ -169,6 +167,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Use of VSOCK, might not be available on all platforms
     "--skip=js_unit_tests::serve_test"
     "--skip=js_unit_tests::fetch_test"
+
+    # We disable the upgrade feature on purpose
+    "--skip=upgrade::upgrade_prompt"
+    "--skip=upgrade::upgrade_invalid_lockfile"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Expects specific shared libraries from macOS to be linked
