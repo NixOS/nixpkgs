@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pyparsing,
@@ -14,6 +15,7 @@
   matplotlib,
   pymupdf,
   pyqt5,
+  librecad,
 }:
 
 buildPythonPackage rec {
@@ -64,6 +66,15 @@ buildPythonPackage rec {
     "ezdxf"
     "ezdxf.addons"
   ];
+
+  preCheck = ''
+    ln -s "${librecad}/${
+      if stdenv.hostPlatform.isDarwin then
+        "Applications/LibreCAD.app/Contents/Resources"
+      else
+        "share/librecad"
+    }/fonts" fonts/librecad
+  '';
 
   meta = {
     description = "Python package to read and write DXF drawings (interface to the DXF file format)";
