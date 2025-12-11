@@ -23,6 +23,7 @@
   pytestCheckHook,
   repoze-lru,
   setuptools,
+  setuptools-changelog-shortener,
   strictyaml,
   waitress,
   webtest,
@@ -33,7 +34,7 @@
 
 buildPythonApplication rec {
   pname = "devpi-server";
-  version = "6.15.0";
+  version = "6.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -42,7 +43,7 @@ buildPythonApplication rec {
     owner = "devpi";
     repo = "devpi";
     rev = "server-${version}";
-    hash = "sha256-tKR1xZju5bDbFu8t3SunTM8FlaXodSm/OjJ3Jfl7Dzk=";
+    hash = "sha256-YavMvPJQXKyyq+ql5BNUlfRXPsTV2ASzaUCMgyvwT0Y=";
   };
 
   sourceRoot = "${src.name}/server";
@@ -54,6 +55,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [
     setuptools
+    setuptools-changelog-shortener
   ];
 
   propagatedBuildInputs = [
