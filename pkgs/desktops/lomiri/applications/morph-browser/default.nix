@@ -2,13 +2,13 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch2,
   gitUpdater,
   nixosTests,
   cmake,
   ctestCheckHook,
   gettext,
   libapparmor,
+  libpsl,
   lomiri-action-api,
   lomiri-content-hub,
   lomiri-ui-extras,
@@ -31,27 +31,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "morph-browser";
-  version = "1.99.0";
+  version = "1.99.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/morph-browser";
     tag = finalAttrs.version;
-    hash = "sha256-fuemZhBMtx6MiQGsdAlsRkK4uJJvIOjcSSc9Z1nGeXU=";
+    hash = "sha256-RCyauz7qBNzq7Aqr22NBSAgVSBsFpXpNb+aVo73CBQU=";
   };
 
   outputs = [
     "out"
     "doc"
-  ];
-
-  patches = [
-    # Fix an issue with asset installation & loading
-    # Remove when version > 1.99.0
-    (fetchpatch2 {
-      url = "https://gitlab.com/ubports/development/core/morph-browser/-/commit/512a7dceebd4665856c4877c02d5d01fd8411574.diff";
-      hash = "sha256-yincXEYXsfOJz7cpotD4OX90kwiDgk9E7FL1MP4iNuM=";
-    })
   ];
 
   postPatch = ''
@@ -86,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libapparmor
+    libpsl
     qtbase
     qtdeclarative
     qtwebengine
