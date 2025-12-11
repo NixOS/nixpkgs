@@ -1,0 +1,25 @@
+#!/usr/bin/env nix-shell
+#! nix-shell -i bash -p jq
+# shellcheck shell=bash
+
+# Update all providers which have specified provider source address
+set -euo pipefail
+
+readarray -t providers < <(
+  jq -r 'to_entries
+  | map_values(.value + { alias: .key })
+  | .[]
+  | select(."homepage"?)
+  | .alias' providers.json
+)
+
+cat <<EOF
+Will update ${#providers[@]} providers:
+
+${providers[*]}
+
+EOF
+
+for provider in "${providers[@]}"; do
+  ./update-provider --no-spdx "$@" "${provider}"
+done

@@ -1,0 +1,127 @@
+diff --git a/chkshsgr.c b/chkshsgr.c
+index b6eb8a1..caa1b2b 100644
+--- a/chkshsgr.c
++++ b/chkshsgr.c
+@@ -1,9 +1,11 @@
++#include <unistd.h>
++#include <grp.h>
+ #include "exit.h"
+ 
+ int main()
+ {
+   return 0;
+-  short x[4];
++  unsigned int x[4];
+ 
+   x[0] = x[1] = 0;
+   if (getgroups(1,x) == 0) if (setgroups(1,x) == -1) _exit(1);
+diff --git a/dnsq.c b/dnsq.c
+index 533e6af..23b08e7 100644
+--- a/dnsq.c
++++ b/dnsq.c
+@@ -1,3 +1,4 @@
++#include <unistd.h>
+ #include "uint16.h"
+ #include "strerr.h"
+ #include "buffer.h"
+diff --git a/dnsqr.c b/dnsqr.c
+index ff8ea6e..d3879ea 100644
+--- a/dnsqr.c
++++ b/dnsqr.c
+@@ -1,3 +1,4 @@
++#include <unistd.h>
+ #include "uint16.h"
+ #include "strerr.h"
+ #include "buffer.h"
+diff --git a/hier.c b/hier.c
+index a598e61..6eddb21 100644
+--- a/hier.c
++++ b/hier.c
+@@ -1,4 +1,5 @@
+ #include "auto_home.h"
++#include "instcheck.h"
+ 
+ void hier()
+ {
+diff --git a/instcheck.h b/instcheck.h
+new file mode 100644
+index 0000000..056b74c
+--- /dev/null
++++ b/instcheck.h
+@@ -0,0 +1,9 @@
++void h(const char *home, int uid, int gid, int mode);
++
++void d(const char *home, char *subdir, int uid, int gid, int mode);
++
++void p(char *home, char *fifo, int uid, int gid, int mode);
++
++void c(const char *home, char *subdir, char *file, int uid, int gid, int mode);
++
++void z(char *home, char *file, int len, int uid, int gid, int mode);
+diff --git a/prot.c b/prot.c
+index 0a8a373..1c56e9c 100644
+--- a/prot.c
++++ b/prot.c
+@@ -1,3 +1,5 @@
++#include <grp.h>
++#include <unistd.h>
+ #include "hasshsgr.h"
+ #include "prot.h"
+ 
+diff --git a/seek_set.c b/seek_set.c
+index d08d4f3..47c61e4 100644
+--- a/seek_set.c
++++ b/seek_set.c
+@@ -1,4 +1,5 @@
+ #include <sys/types.h>
++#include <unistd.h>
+ #include "seek.h"
+ 
+ #define SET 0 /* sigh */
+diff --git a/tinydns-data.c b/tinydns-data.c
+index ba82f84..c70382e 100644
+--- a/tinydns-data.c
++++ b/tinydns-data.c
+@@ -251,19 +251,19 @@ int main()
+ 	if (!dns_domain_fromdot(&d1,f[0].s,f[0].len)) nomem();
+ 
+ 	if (!stralloc_0(&f[3])) nomem();
+-	if (!scan_ulong(f[3].s,&u)) uint32_unpack_big(defaultsoa,&u);
++	if (!scan_ulong(f[3].s,&u)) uint32_unpack_big(defaultsoa,(unsigned int *)&u);
+ 	uint32_pack_big(soa,u);
+ 	if (!stralloc_0(&f[4])) nomem();
+-	if (!scan_ulong(f[4].s,&u)) uint32_unpack_big(defaultsoa + 4,&u);
++	if (!scan_ulong(f[4].s,&u)) uint32_unpack_big(defaultsoa + 4,(unsigned int *)&u);
+ 	uint32_pack_big(soa + 4,u);
+ 	if (!stralloc_0(&f[5])) nomem();
+-	if (!scan_ulong(f[5].s,&u)) uint32_unpack_big(defaultsoa + 8,&u);
++	if (!scan_ulong(f[5].s,&u)) uint32_unpack_big(defaultsoa + 8,(unsigned int *)&u);
+ 	uint32_pack_big(soa + 8,u);
+ 	if (!stralloc_0(&f[6])) nomem();
+-	if (!scan_ulong(f[6].s,&u)) uint32_unpack_big(defaultsoa + 12,&u);
++	if (!scan_ulong(f[6].s,&u)) uint32_unpack_big(defaultsoa + 12,(unsigned int *)&u);
+ 	uint32_pack_big(soa + 12,u);
+ 	if (!stralloc_0(&f[7])) nomem();
+-	if (!scan_ulong(f[7].s,&u)) uint32_unpack_big(defaultsoa + 16,&u);
++	if (!scan_ulong(f[7].s,&u)) uint32_unpack_big(defaultsoa + 16,(unsigned int *)&u);
+ 	uint32_pack_big(soa + 16,u);
+ 
+ 	if (!stralloc_0(&f[8])) nomem();
+diff --git a/utime.c b/utime.c
+index 4b7984f..6a64060 100644
+--- a/utime.c
++++ b/utime.c
+@@ -1,3 +1,4 @@
++#include <utime.h>
+ #include <sys/types.h>
+ #include <sys/time.h>
+ #include "scan.h"
+@@ -19,6 +20,7 @@ int main(int argc,char **argv)
+   scan_ulong(ustr,&u);
+ 
+   ut[0] = ut[1] = u;
+-  if (utime(fn,ut) == -1) _exit(111);
++  struct utimbuf new_time = { .actime = u, .modtime = u };
++  if (utime(fn,&new_time) == -1) _exit(111);
+   _exit(0);
+ }

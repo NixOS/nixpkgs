@@ -1,0 +1,10 @@
+--- a/src/N_m3u8DL-RE/Directory.Build.props
++++ b/src/N_m3u8DL-RE/Directory.Build.props
+@@ -9,7 +9,6 @@
+     <IlcTrimMetadata>true</IlcTrimMetadata>
+     <IlcGenerateStackTraceData>true</IlcGenerateStackTraceData>
+     <SatelliteResourceLanguages>zh-CN;zh-TW;en-US</SatelliteResourceLanguages>
+-    <PublishAot>true</PublishAot>
+     <StripSymbols>true</StripSymbols>
+     <ObjCopyName Condition="'$(RuntimeIdentifier)' == 'linux-arm64' or '$(RuntimeIdentifier)' == 'linux-musl-arm64'">aarch64-linux-gnu-objcopy</ObjCopyName>
+   </PropertyGroup>

@@ -1,0 +1,22 @@
+diff '--color=auto' -ur Paranoid-2.10/lib/Paranoid.pm Paranoid-2.10-patched/lib/Paranoid.pm
+--- Paranoid-2.10/lib/Paranoid.pm	2022-03-08 10:01:04.000000000 +0100
++++ Paranoid-2.10-patched/lib/Paranoid.pm	2023-10-20 16:57:54.025754755 +0200
+@@ -47,7 +47,7 @@
+ %EXPORT_TAGS = ( all => [@EXPORT_OK], );
+ 
+ use constant PTRUE_ZERO   => '0 but true';
+-use constant DEFAULT_PATH => '/bin:/sbin:/usr/bin:/usr/sbin';
++use constant DEFAULT_PATH => '__BLESSED_PATH__';
+ 
+ #####################################################################
+ #
+diff '--color=auto' -ur Paranoid-2.10/t/01_init_core.t Paranoid-2.10-patched/t/01_init_core.t
+--- Paranoid-2.10/t/01_init_core.t	2022-01-24 10:30:20.000000000 +0100
++++ Paranoid-2.10-patched/t/01_init_core.t	2023-10-20 16:58:16.856288407 +0200
+@@ -35,5 +35,4 @@
+ ok( psecureEnv('/bin:/sbin'), 'psecureEnv 1' );
+ is( $ENV{PATH}, '/bin:/sbin', 'Validated PATH' );
+ ok( psecureEnv(), 'psecureEnv 2' );
+-is( $ENV{PATH}, '/bin:/sbin:/usr/bin:/usr/sbin', 'Validated PATH' );
+-
++is( $ENV{PATH}, '__BLESSED_PATH__', 'Validated PATH' );

@@ -1,0 +1,180 @@
+# Build settings based on the upstream Xcode project.
+# See: https://github.com/apple-oss-distributions/remote_cmds/blob/main/remote_cmds.xcodeproj/project.pbxproj
+
+# Project settings
+project('text_cmds', 'c', version : '@version@')
+add_global_arguments(
+    # Many programs use old prototypes
+    '-Wno-deprecated-non-prototype',
+    language : 'c',
+)
+
+
+# Dependencies
+cc = meson.get_compiler('c')
+
+libedit = dependency('libedit')
+ncurses = dependency('ncurses')
+
+
+# Binaries
+executable(
+    'logger',
+    install : true,
+    sources : [ 'logger/logger.c' ],
+)
+install_man('logger/logger.1')
+
+executable(
+    'talk',
+    dependencies : [ ncurses ],
+    install : true,
+    sources : [
+        'talk/ctl.c',
+        'talk/ctl_transact.c',
+        'talk/display.c',
+        'talk/get_addrs.c',
+        'talk/get_iface.c',
+        'talk/get_names.c',
+        'talk/init_disp.c',
+        'talk/invite.c',
+        'talk/io.c',
+        'talk/look_up.c',
+        'talk/msgs.c',
+        'talk/talk.c',
+    ],
+)
+install_man('talk/talk.1')
+
+executable(
+    'talkd',
+    c_args : [
+        '-D__FBSDID=__RCSID',
+        '-DCOLLATE_DEBUG',
+        '-DYY_NO_UNPUT',
+    ],
+    install : true,
+    sources : [
+        'talkd/announce.c',
+        'talkd/print.c',
+        'talkd/process.c',
+        'talkd/table.c',
+        'talkd/talkd.c',
+        'wall/ttymsg.c',
+    ],
+)
+install_man('talkd/talkd.8')
+
+install_symlink(
+    'ntalkd',
+    install_dir : get_option('bindir'),
+    pointing_to : 'talkd',
+)
+install_symlink(
+    'ntalkd.8',
+    install_dir : get_option('mandir') + '/man8',
+    pointing_to : 'talkd.8',
+)
+
+# Telnet is insecure and obsolete. Apple also no longer ships it.
+# executable(
+#     'telnet',
+#     dependencies : [ ncurses ],
+#     c_args : [
+#         '-D__FBSDID=__RCSID',
+#         '-DAUTHENTICATION',
+#         '-DENV_HACK',
+#         '-DINET6',
+#         '-DIPSEC',
+#         '-DKLUDGELINEMODE',
+#         '-DKRB5',
+#         '-DSKEY',
+#         '-DTERMCAP',
+#         '-DUSE_TERMIO',
+#     ],
+#     install : true,
+#     sources : [
+#         'telnet/authenc.c',
+#         'telnet/commands.c',
+#         'telnet/main.c',
+#         'telnet/network.c',
+#         'telnet/ring.c',
+#         'telnet/sys_bsd.c',
+#         'telnet/telnet.c',
+#         'telnet/terminal.c',
+#         'telnet/tn3270.c',
+#         'telnet/utilities.c',
+#     ],
+# )
+# install_man('telnet/telnet.1')
+
+# executable(
+#     'telnetd',
+#     c_args : [
+#         '-D__FBSDID=__RCSID',
+#         '-DDIAGNOSTICS',
+#         '-DENV_HACK',
+#         '-DINET6',
+#         '-DKLUDGELINEMODE',
+#         '-DLINEMODE',
+#         '-DNO_UTMP',
+#         '-DOLD_ENVIRON',
+#         '-DUSE_TERMIO',
+#     ],
+#     install : true,
+#     sources : [
+#         'telnetd/authenc.c',
+#         'telnetd/global.c',
+#         'telnetd/slc.c',
+#         'telnetd/state.c',
+#         # 'telnetd/strlcpy.c', # Not used
+#         'telnetd/sys_term.c',
+#         'telnetd/telnetd.c',
+#         'telnetd/termstat.c',
+#         'telnetd/utility.c',
+#     ],
+# )
+# install_man('telnetd/telnetd.8')
+
+executable(
+    'tftp',
+    dependencies : [ libedit ],
+    include_directories : [ 'tftp', 'tftpd' ],
+    install : true,
+    sources : [
+        'tftp/main.c',
+        'tftp/tftp.c',
+        'tftpd/tftp-file.c',
+        'tftpd/tftp-io.c',
+        'tftpd/tftp-options.c',
+        'tftpd/tftp-transfer.c',
+        'tftpd/tftp-utils.c',
+    ],
+)
+install_man('tftp/tftp.1')
+
+executable(
+    'tftpd',
+    include_directories : [ 'tftp', 'tftpd' ],
+    install : true,
+    sources : [
+        'tftpd/tftp-file.c',
+        'tftpd/tftp-io.c',
+        'tftpd/tftp-options.c',
+        'tftpd/tftp-transfer.c',
+        'tftpd/tftp-utils.c',
+        'tftpd/tftpd.c',
+    ],
+)
+install_man('tftpd/tftpd.8')
+
+executable(
+    'wall',
+    c_args : [ '-D__FBSDID=__RCSID' ],
+    install : true,
+    sources : [
+        'wall/ttymsg.c',
+        'wall/wall.c',
+    ],
+)
+install_man('wall/wall.1')

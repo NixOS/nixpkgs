@@ -1,0 +1,12 @@
+diff -ru a/storage/innobase/include/buf0types.h b/storage/innobase/include/buf0types.h
+--- a/storage/innobase/include/buf0types.h	2021-11-17 02:37:32.000000000 -0500
++++ b/storage/innobase/include/buf0types.h	2021-11-17 02:38:50.000000000 -0500
+@@ -179,7 +179,7 @@
+ #include "sux_lock.h"
+ 
+ #ifdef SUX_LOCK_GENERIC
+-class page_hash_latch : private rw_lock
++class page_hash_latch : public rw_lock
+ {
+   /** Wait for a shared lock */
+   void read_lock_wait();

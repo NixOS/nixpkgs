@@ -1,0 +1,562 @@
+[
+  {
+    "caskName": "0xproto",
+    "description": "A programming font focused on source code legibility",
+    "folderName": "0xProto",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "0xProto",
+    "version": "2.300"
+  },
+  {
+    "caskName": "3270",
+    "description": "Derived from the x3270 font, a modern format of a font with high nostalgic value",
+    "folderName": "3270",
+    "licenseId": "BSD-3-Clause",
+    "patchedName": "3270",
+    "version": "3.0.1"
+  },
+  {
+    "caskName": "adwaita-mono",
+    "description": "The monospace typeface for GNOME",
+    "folderName": "AdwaitaMono",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "AdwaitaMono",
+    "version": "32.4"
+  },
+  {
+    "caskName": "agave",
+    "description": "A small, monospace, outline font that is geometrically regular and simple",
+    "folderName": "Agave",
+    "licenseId": "MIT",
+    "patchedName": "Agave",
+    "version": "37"
+  },
+  {
+    "caskName": "anonymice",
+    "description": "Inspired by Anonymous 9 on Macintosh, since 2009, distinct `O`, `0`, `I`, `l`, `1`",
+    "folderName": "AnonymousPro",
+    "licenseId": "OFL-1.1-RFN",
+    "patchedName": "AnonymicePro",
+    "version": "1.002"
+  },
+  {
+    "caskName": "arimo",
+    "description": "Metrically similar to Arial, pan-European WGL character set, sans serif",
+    "folderName": "Arimo",
+    "licenseId": "Apache-2.0",
+    "patchedName": "Arimo",
+    "version": "1.33"
+  },
+  {
+    "caskName": "atkynson-mono",
+    "description": "A monospaced font designed to improve legibility and readability for individuals with low vision",
+    "folderName": "AtkinsonHyperlegibleMono",
+    "licenseId": "OFL-1.1-RFN",
+    "patchedName": "AtkynsonMono",
+    "version": "2.001"
+  },
+  {
+    "caskName": "aurulent-sans-mono",
+    "description": "Sans serif, designed by Stephen G. Hartke which also created Verily Serif",
+    "folderName": "AurulentSansMono",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "AurulentSansM",
+    "version": "-"
+  },
+  {
+    "caskName": "bigblue-terminal",
+    "description": "Nostalgic, closely based on IBM's 8x14 EGA/VGA charset",
+    "folderName": "BigBlueTerminal",
+    "licenseId": "CC-BY-SA-4.0",
+    "patchedName": "BigBlueTerm",
+    "version": "-"
+  },
+  {
+    "caskName": "bitstream-vera-sans-mono",
+    "description": "Dotted zero, compact lowercase characters",
+    "folderName": "BitstreamVeraSansMono",
+    "licenseId": "Bitstream-Vera",
+    "patchedName": "BitstromWera",
+    "version": "1.1"
+  },
+  {
+    "caskName": "blex-mono",
+    "description": "It's global, it's versatile and it's distinctly IBM",
+    "folderName": "IBMPlexMono",
+    "licenseId": "OFL-1.1-RFN",
+    "patchedName": "BlexMono",
+    "version": "2.004 (6.4.0)"
+  },
+  {
+    "caskName": "caskaydia-cove",
+    "description": "A fun, new monospaced font that includes programming ligatures and is designed to enhance the modern look and feel of the Windows Terminal",
+    "folderName": "CascadiaCode",
+    "licenseId": "OFL-1.1-RFN",
+    "patchedName": "CaskaydiaCove",
+    "version": "2407.24"
+  },
+  {
+    "caskName": "caskaydia-mono",
+    "description": "Like Cascadia Code but without any ligatures",
+    "folderName": "CascadiaMono",
+    "licenseId": "OFL-1.1-RFN",
+    "patchedName": "CaskaydiaMono",
+    "version": "2407.24"
+  },
+  {
+    "caskName": "code-new-roman",
+    "description": "Tunable, slashed zeros, compact smaller characters",
+    "folderName": "CodeNewRoman",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "CodeNewRoman",
+    "version": "2.0"
+  },
+  {
+    "caskName": "comic-shanns-mono",
+    "description": "The very typeface you’ve been trained to recognize since childhood",
+    "folderName": "ComicShannsMono",
+    "licenseId": "MIT",
+    "patchedName": "ComicShannsMono",
+    "version": "1.3.1"
+  },
+  {
+    "caskName": "commit-mono",
+    "description": "An anonymous and neutral programming typeface",
+    "folderName": "CommitMono",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "CommitMono",
+    "version": "1.143"
+  },
+  {
+    "caskName": "cousine",
+    "description": "Similar to Courier New with better readablitiy, dotted zeros",
+    "folderName": "Cousine",
+    "licenseId": "Apache-2.0",
+    "patchedName": "Cousine",
+    "version": "1.211"
+  },
+  {
+    "caskName": "d2coding",
+    "description": "A coding font for Koreans. This is the variant with ligatures.",
+    "folderName": "D2Coding",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "D2CodingLigature",
+    "version": "1.3.2"
+  },
+  {
+    "caskName": "daddy-time-mono",
+    "description": "A monospaced font for programmers and other terminal groupies",
+    "folderName": "DaddyTimeMono",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "DaddyTimeMono",
+    "version": "1.2.3"
+  },
+  {
+    "caskName": "dejavu-sans-mono",
+    "description": "Dotted zero, based on the Bitstream Vera Fonts with a wider range of character",
+    "folderName": "DejaVuSansMono",
+    "licenseId": "Bitstream-Vera",
+    "patchedName": "DejaVuSansM",
+    "version": "2.37"
+  },
+  {
+    "caskName": "departure-mono",
+    "description": "A monospaced pixel font with a lo-fi, techy vibe",
+    "folderName": "DepartureMono",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "DepartureMono",
+    "version": "1.422"
+  },
+  {
+    "caskName": "droid-sans-mono",
+    "description": "Good for small screens or font sizes",
+    "folderName": "DroidSansMono",
+    "licenseId": "Apache-2.0",
+    "patchedName": "DroidSansM",
+    "version": "1.00-113"
+  },
+  {
+    "caskName": "envy-code-r",
+    "description": "Fully-scalable monospaced font designed for programming and command prompts",
+    "folderName": "EnvyCodeR",
+    "licenseId": "OFL-1.1-RFN",
+    "patchedName": "EnvyCodeR",
+    "version": "0.79"
+  },
+  {
+    "caskName": "fantasque-sans-mono",
+    "description": "\"Wibbly-wobbly handwriting-like fuzziness\", takes some inspiration from Inconsolata and Monaco",
+    "folderName": "FantasqueSansMono",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "FantasqueSansM",
+    "version": "1.8.0"
+  },
+  {
+    "caskName": "fira-code",
+    "description": "Programming ligatures, extension of Fira Mono font, enlarged operators",
+    "folderName": "FiraCode",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "FiraCode",
+    "version": "6.2"
+  },
+  {
+    "caskName": "fira-mono",
+    "description": "Mozilla typeface, dotted zero",
+    "folderName": "FiraMono",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "FiraMono",
+    "version": "3.206"
+  },
+  {
+    "caskName": "geist-mono",
+    "description": "Monospaced typeface designed to be used in code editors, diagrams, terminals, and other textbased interfaces where code is represented",
+    "folderName": "GeistMono",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "GeistMono",
+    "version": "1.401"
+  },
+  {
+    "caskName": "go-mono",
+    "description": "Created specifically for the Go project, looks particularly clear for use with the Go language",
+    "folderName": "Go-Mono",
+    "licenseId": "BSD-3-Clause-Clear",
+    "patchedName": "GoMono",
+    "version": "2.010"
+  },
+  {
+    "caskName": "gohufont",
+    "description": "Bitmap font, tall capitals and ascenders, small serifs",
+    "folderName": "Gohu",
+    "licenseId": "WTFPL",
+    "patchedName": "GohuFont",
+    "version": "2.0"
+  },
+  {
+    "caskName": "hack",
+    "description": "Dotted zero, short descenders, expands upon work done for Bitstream Vera & DejaVu, legible at common sizes",
+    "folderName": "Hack",
+    "licenseId": "Bitstream-Vera AND MIT",
+    "patchedName": "Hack",
+    "version": "3.003"
+  },
+  {
+    "caskName": "hasklug",
+    "description": "Monospaced ligatures, makes composite glyphs (e.g. ->) more reabable, especially in Haskell",
+    "folderName": "Hasklig",
+    "licenseId": "OFL-1.1-RFN",
+    "patchedName": "Hasklug",
+    "version": "1.2"
+  },
+  {
+    "caskName": "heavy-data",
+    "description": "Novel and unique design, dotted zero",
+    "folderName": "HeavyData",
+    "licenseId": "LicenseRef-VicFieger",
+    "patchedName": "HeavyData",
+    "version": "1"
+  },
+  {
+    "caskName": "hurmit",
+    "description": "Symbols stand out from common text",
+    "folderName": "Hermit",
+    "licenseId": "OFL-1.1-RFN",
+    "patchedName": "Hurmit",
+    "version": "2.0"
+  },
+  {
+    "caskName": "im-writing",
+    "description": "A heavy modification of IBM's Plex font",
+    "folderName": "iA-Writer",
+    "licenseId": "OFL-1.1-RFN",
+    "patchedName": "iMWriting",
+    "version": "Dec 2018"
+  },
+  {
+    "caskName": "inconsolata",
+    "description": "Slashed zero, takes inspiration from many different fonts and glyphs, subtle curves in lowercase",
+    "folderName": "Inconsolata",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "Inconsolata",
+    "version": "3.000"
+  },
+  {
+    "caskName": "inconsolata-go",
+    "description": "Inconsolata with straight quotes",
+    "folderName": "InconsolataGo",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "InconsolataGo",
+    "version": "1.013"
+  },
+  {
+    "caskName": "inconsolata-lgc",
+    "description": "Inconsolata with added the Cyrillic alphabet",
+    "folderName": "InconsolataLGC",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "Inconsolata LGC",
+    "version": "1.13"
+  },
+  {
+    "caskName": "intone-mono",
+    "description": "Expressive monospaced font family that’s built with clarity, legibility, and the needs of developers in mind",
+    "folderName": "IntelOneMono",
+    "licenseId": "OFL-1.1-RFN",
+    "patchedName": "IntoneMono",
+    "version": "1.4.0"
+  },
+  {
+    "caskName": "iosevka",
+    "description": "Narrow and horizontally tight characters, slashed zero",
+    "folderName": "Iosevka",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "Iosevka",
+    "version": "33.2.1"
+  },
+  {
+    "caskName": "iosevka-term",
+    "description": "A narrower variant focusing terminal uses: Arrows and geometric symbols will be narrow to follow typical terminal usages",
+    "folderName": "IosevkaTerm",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "IosevkaTerm",
+    "version": "33.2.1"
+  },
+  {
+    "caskName": "iosevka-term-slab",
+    "description": "Nice as Iosevka but with slab serifs",
+    "folderName": "IosevkaTermSlab",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "IosevkaTermSlab",
+    "version": "33.2.1"
+  },
+  {
+    "caskName": "jetbrains-mono",
+    "description": "JetBrains officially created font for developers",
+    "folderName": "JetBrainsMono",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "JetBrainsMono",
+    "version": "2.304"
+  },
+  {
+    "caskName": "lekton",
+    "description": "Very light and thin characters, sharp m's, `0` and `O` very similar",
+    "folderName": "Lekton",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "Lekton",
+    "version": "34"
+  },
+  {
+    "caskName": "liberation",
+    "description": "`0` and `O` very similar, very short tight descenders",
+    "folderName": "LiberationMono",
+    "licenseId": "OFL-1.1-RFN",
+    "patchedName": "LiterationMono",
+    "version": "2.1.5"
+  },
+  {
+    "caskName": "lilex",
+    "description": "Modern with ligatures",
+    "folderName": "Lilex",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "Lilex",
+    "version": "2.600"
+  },
+  {
+    "caskName": "martian-mono",
+    "description": "Free and open-source monospaced font from Evil Martians",
+    "folderName": "MartianMono",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "MartianMono",
+    "version": "1.1.0"
+  },
+  {
+    "caskName": "meslo-lg",
+    "description": "Slashed zeros, customized version of Apple's Menlo",
+    "folderName": "Meslo",
+    "licenseId": "Apache-2.0",
+    "patchedName": "MesloLG",
+    "version": "1.21"
+  },
+  {
+    "caskName": "monaspace",
+    "description": "Five matching fonts all having 'texture healing' to improve legibility",
+    "folderName": "Monaspace",
+    "licenseId": "OFL-1.1-RFN",
+    "patchedName": "Monaspice",
+    "version": "1.200"
+  },
+  {
+    "caskName": "monofur",
+    "description": "Dotted zeros, slightly exaggerated curvy characters, compact characters",
+    "folderName": "Monofur",
+    "licenseId": "LicenseRef-Monofur",
+    "patchedName": "Monofur",
+    "version": "1.0"
+  },
+  {
+    "caskName": "monoid",
+    "description": "Ligatures, distinguishable glyphs with short ascenders & descenders, large operators & punctuation",
+    "folderName": "Monoid",
+    "licenseId": "MIT OR OFL-1.1-no-RFN",
+    "patchedName": "Monoid",
+    "version": "0.61"
+  },
+  {
+    "caskName": "mononoki",
+    "description": "Keeps in mind differentiation of characters and resolution sizes",
+    "folderName": "Mononoki",
+    "licenseId": "OFL-1.1-RFN",
+    "patchedName": "Mononoki",
+    "version": "1.6"
+  },
+  {
+    "caskName": "m+",
+    "description": "Multiple styles and weights, many glyph sets (e.g. Kana glyphs)",
+    "folderName": "MPlus",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "M+",
+    "version": "1.007"
+  },
+  {
+    "caskName": "noto",
+    "description": "`0` and `O` very similar, characters are either very curvy or straight lined",
+    "folderName": "Noto",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "Noto",
+    "version": "div"
+  },
+  {
+    "caskName": "open-dyslexic",
+    "description": "Designed specifically to alleviate reading errors caused by dyslexia",
+    "folderName": "OpenDyslexic",
+    "licenseId": "Bitstream-Vera",
+    "patchedName": "OpenDyslexic",
+    "version": "2.001"
+  },
+  {
+    "caskName": "overpass",
+    "description": "An open source font family inspired by Highway Gothic",
+    "folderName": "Overpass",
+    "licenseId": "OFL-1.1-no-RFN or LGPL-2.1-only",
+    "patchedName": "Overpass",
+    "version": "3.0.5"
+  },
+  {
+    "caskName": "profont",
+    "description": "Looks best with anti-aliasing turned off, squared off character corners, vertically tight small `s`",
+    "folderName": "ProFont",
+    "licenseId": "MIT",
+    "patchedName": "ProFont",
+    "version": "2.3/2.2"
+  },
+  {
+    "caskName": "proggy-clean-tt",
+    "description": "Designed particularly for use at small point sizes",
+    "folderName": "ProggyClean",
+    "licenseId": "MIT",
+    "patchedName": "ProggyClean",
+    "version": "2004/04/15"
+  },
+  {
+    "caskName": "recursive-mono",
+    "description": "inspired by casual script signpainting, 4 variants",
+    "folderName": "Recursive",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "RecMono",
+    "version": "1.085"
+  },
+  {
+    "caskName": "roboto-mono",
+    "description": "Dashed zero, curved and straight character lines",
+    "folderName": "RobotoMono",
+    "licenseId": "Apache-2.0",
+    "patchedName": "RobotoMono",
+    "version": "3.0"
+  },
+  {
+    "caskName": "shure-tech-mono",
+    "description": "Dotted zeros, distinguishable 1 and l, curved and straight character lines",
+    "folderName": "ShareTechMono",
+    "licenseId": "OFL-1.1-RFN",
+    "patchedName": "ShureTechMono",
+    "version": "1.003"
+  },
+  {
+    "caskName": "sauce-code-pro",
+    "description": "Monospaced font family for user interface and coding environments",
+    "folderName": "SourceCodePro",
+    "licenseId": "OFL-1.1-RFN",
+    "patchedName": "SauceCodePro",
+    "version": "2.042"
+  },
+  {
+    "caskName": "space-mono",
+    "description": "Squarish character lines, dotted zero, aggressive parethesis",
+    "folderName": "SpaceMono",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "SpaceMono",
+    "version": "1.001"
+  },
+  {
+    "caskName": "symbols-only",
+    "description": "Just the Nerd Font Icons. I.e Symbol font only",
+    "folderName": "NerdFontsSymbolsOnly",
+    "licenseId": "MIT",
+    "patchedName": "Symbols",
+    "version": "latest"
+  },
+  {
+    "caskName": "terminess-ttf",
+    "description": "Squarish characters that are slightly askew",
+    "folderName": "Terminus",
+    "licenseId": "OFL-1.1-RFN",
+    "patchedName": "Terminess",
+    "version": "4.49.2"
+  },
+  {
+    "caskName": "tinos",
+    "description": "Some similarities to Times New Roman, designed by Steve Matteson, includes pan-European WGL character set",
+    "folderName": "Tinos",
+    "licenseId": "Apache-2.0",
+    "patchedName": "Tinos",
+    "version": "1.23"
+  },
+  {
+    "caskName": "ubuntu",
+    "description": "Specially created for Ubuntu",
+    "folderName": "Ubuntu",
+    "licenseId": "LicenseRef-UbuntuFont",
+    "patchedName": "Ubuntu",
+    "version": "0.83"
+  },
+  {
+    "caskName": "ubuntu-mono",
+    "description": "Dotted zeros, used the `n`, `o`, `H` & `O` Latin characters as a base for design",
+    "folderName": "UbuntuMono",
+    "licenseId": "LicenseRef-UbuntuFont",
+    "patchedName": "UbuntuMono",
+    "version": "0.80"
+  },
+  {
+    "caskName": "ubuntu-sans",
+    "description": "Refreshed version of Ubuntu and Ubuntu Mono fonts",
+    "folderName": "UbuntuSans",
+    "licenseId": "LicenseRef-UbuntuFont",
+    "patchedName": "UbuntuSans",
+    "version": "1.006"
+  },
+  {
+    "caskName": "victor-mono",
+    "description": "Clean, crisp and narrow, with a large x-height and clear punctuation",
+    "folderName": "VictorMono",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "VictorMono",
+    "version": "1.5.6"
+  },
+  {
+    "caskName": "zed-mono",
+    "description": "Zed Mono is a more rounded version of Iosevka",
+    "folderName": "ZedMono",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "ZedMono",
+    "version": "1.2.0"
+  }
+]

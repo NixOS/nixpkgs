@@ -1,0 +1,26 @@
+diff --git a/admin/gildas-env.sh b/admin/gildas-env.sh
+index acb06f9..b25ecd5 100644
+--- a/admin/gildas-env.sh
++++ b/admin/gildas-env.sh
+@@ -441,7 +441,7 @@ EOF
+ 		    # Now search for Numpy
+ 		    if python -c "import numpy" > /dev/null 2>&1; then
+ 			NUMPY_PRESENT=yes
+-			NUMPY_INC_DIR=`python -c "import numpy; print(numpy.__path__[0] + '/core/include')"`
++			NUMPY_INC_DIR=`python -c "import numpy; print(numpy.get_include())"`
+ 			if [ -e "$NUMPY_INC_DIR/numpy/arrayobject.h" ]; then
+ 			    NUMPY_INC_PRESENT=yes
+ 			else
+diff --git a/utilities/etc/setup.py.src b/utilities/etc/setup.py.src
+index 9a4da86..110a0d1 100644
+--- a/utilities/etc/setup.py.src
++++ b/utilities/etc/setup.py.src
+@@ -75,7 +75,7 @@ mod_extras = mod_extras.split()
+ 
+ if (os.environ.get('NUMPY_PRESENT') == "yes"):
+    import numpy
+-   mod_inc_dirs.append(numpy.__path__[0] + '/core/include')
++   mod_inc_dirs.append(numpy.get_include())
+ else:
+    raise Exception("Numpy python package should be present. Aborting.")
+ 

@@ -1,0 +1,45 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    base64 (0.2.0)
+    bigdecimal (3.1.9)
+    date (3.4.1)
+    drb (2.2.1)
+    mail (2.8.1)
+      mini_mime (>= 0.1.1)
+      net-imap
+      net-pop
+      net-smtp
+    mini_mime (1.1.5)
+    net-imap (0.5.6)
+      date
+      net-protocol
+    net-pop (0.1.2)
+      net-protocol
+    net-protocol (0.2.2)
+      timeout
+    net-smtp (0.5.1)
+      net-protocol
+    sync (0.5.0)
+    taskjuggler (3.8.1)
+      mail (~> 2.7, >= 2.7.1)
+      term-ansicolor (~> 1.7, >= 1.7.1)
+    term-ansicolor (1.11.2)
+      tins (~> 1.0)
+    timeout (0.4.3)
+    tins (1.38.0)
+      bigdecimal
+      sync
+    webrick (1.9.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  base64
+  drb
+  taskjuggler
+  webrick
+
+BUNDLED WITH
+   2.5.22

@@ -1,0 +1,13 @@
+diff --git a/testsuite/ltrace.main/system_calls.exp b/testsuite/ltrace.main/system_calls.exp
+index 1b64cb0..af19916 100644
+--- a/testsuite/ltrace.main/system_calls.exp
++++ b/testsuite/ltrace.main/system_calls.exp
+@@ -133,7 +133,7 @@ Match [Diff [Calls [ltraceRun -L -S -- $bin]] \
+     { {^write$} == 1 }
+     { {^unlink(at)?$} >= 2 }
+     { {^open(at)?$} == 1 }
+-    { {^(new|f)?stat(64)?$} >= 1 }
++    { {^(new)?f?statx?(at)?(64)?$} >= 1 }
+     { {^close$} == 1 }
+     { {^getcwd$} == 1 }
+     { {^chdir$} == 1 }

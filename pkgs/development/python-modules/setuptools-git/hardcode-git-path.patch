@@ -1,0 +1,31 @@
+diff --git a/setuptools_git/__init__.py b/setuptools_git/__init__.py
+index 24c9b8c..a289aca 100644
+--- a/setuptools_git/__init__.py
++++ b/setuptools_git/__init__.py
+@@ -28,7 +28,7 @@ def version_calc(dist, attr, value):
+ 
+ 
+ def calculate_version():
+-    return check_output(['git', 'describe', '--tags', '--dirty']).strip()
++    return check_output(['@git@', 'describe', '--tags', '--dirty']).strip()
+ 
+ 
+ def ntfsdecode(path):
+@@ -64,7 +64,7 @@ def gitlsfiles(dirname=''):
+ 
+     try:
+         topdir = check_output(
+-            ['git', 'rev-parse', '--show-toplevel'], cwd=dirname or None,
++            ['@git@', 'rev-parse', '--show-toplevel'], cwd=dirname or None,
+             stderr=PIPE).strip()
+ 
+         if sys.platform == 'win32':
+@@ -73,7 +73,7 @@ def gitlsfiles(dirname=''):
+             cwd = topdir
+ 
+         filenames = check_output(
+-            ['git', 'ls-files', '-z'], cwd=cwd, stderr=PIPE)
++            ['@git@', 'ls-files', '-z'], cwd=cwd, stderr=PIPE)
+     except (CalledProcessError, OSError):
+         # Setuptools mandates we fail silently
+         return res

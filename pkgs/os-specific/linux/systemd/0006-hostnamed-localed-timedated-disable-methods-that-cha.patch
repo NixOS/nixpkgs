@@ -1,0 +1,105 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Gabriel Ebner <gebner@gebner.org>
+Date: Sun, 6 Dec 2015 14:26:36 +0100
+Subject: [PATCH] hostnamed, localed, timedated: disable methods that change
+ system settings.
+
+---
+ src/hostname/hostnamed.c |  6 ++++++
+ src/locale/localed.c     |  9 +++++++++
+ src/timedate/timedated.c | 10 ++++++++++
+ 3 files changed, 25 insertions(+)
+
+diff --git a/src/hostname/hostnamed.c b/src/hostname/hostnamed.c
+index 06fb3f2878..b656e511b7 100644
+--- a/src/hostname/hostnamed.c
++++ b/src/hostname/hostnamed.c
+@@ -1388,6 +1388,9 @@ static int method_set_static_hostname(sd_bus_message *m, void *userdata, sd_bus_
+         if (r < 0)
+                 return r;
+ 
++        return sd_bus_error_setf(error, SD_BUS_ERROR_NOT_SUPPORTED,
++            "Changing system settings via systemd is not supported on NixOS.");
++
+         name = empty_to_null(name);
+ 
+         context_read_etc_hostname(c);
+@@ -1454,6 +1457,9 @@ static int set_machine_info(Context *c, sd_bus_message *m, int prop, sd_bus_mess
+         if (r < 0)
+                 return r;
+ 
++        return sd_bus_error_setf(error, SD_BUS_ERROR_NOT_SUPPORTED,
++            "Changing system settings via systemd is not supported on NixOS.");
++
+         name = empty_to_null(name);
+ 
+         context_read_machine_info(c);
+diff --git a/src/locale/localed.c b/src/locale/localed.c
+index 11d9130bbc..dd4d9e59ea 100644
+--- a/src/locale/localed.c
++++ b/src/locale/localed.c
+@@ -221,6 +221,9 @@ static int method_set_locale(sd_bus_message *m, void *userdata, sd_bus_error *er
+ 
+         use_localegen = locale_gen_check_available();
+ 
++        return sd_bus_error_setf(error, SD_BUS_ERROR_NOT_SUPPORTED,
++            "Changing system settings via systemd is not supported on NixOS.");
++
+         /* If single locale without variable name is provided, then we assume it is LANG=. */
+         if (strv_length(l) == 1 && !strchr(l[0], '=')) {
+                 if (!locale_is_valid(l[0]))
+@@ -338,6 +341,9 @@ static int method_set_vc_keyboard(sd_bus_message *m, void *userdata, sd_bus_erro
+         if (r < 0)
+                 return bus_log_parse_error(r);
+ 
++        return sd_bus_error_setf(error, SD_BUS_ERROR_NOT_SUPPORTED,
++            "Changing system settings via systemd is not supported on NixOS.");
++
+         vc_context_empty_to_null(&in);
+ 
+         r = vc_context_verify_and_warn(&in, LOG_ERR, error);
+@@ -455,6 +461,9 @@ static int method_set_x11_keyboard(sd_bus_message *m, void *userdata, sd_bus_err
+         if (r < 0)
+                 return bus_log_parse_error(r);
+ 
++        return sd_bus_error_setf(error, SD_BUS_ERROR_NOT_SUPPORTED,
++            "Changing system settings via systemd is not supported on NixOS.");
++
+         x11_context_empty_to_null(&in);
+ 
+         r = x11_context_verify_and_warn(&in, LOG_ERR, error);
+diff --git a/src/timedate/timedated.c b/src/timedate/timedated.c
+index 662cc29ac5..57f3413dc6 100644
+--- a/src/timedate/timedated.c
++++ b/src/timedate/timedated.c
+@@ -678,6 +678,10 @@ static int method_set_timezone(sd_bus_message *m, void *userdata, sd_bus_error *
+         if (r < 0)
+                 return r;
+ 
++        if (getenv("NIXOS_STATIC_TIMEZONE"))
++                return sd_bus_error_setf(error, SD_BUS_ERROR_NOT_SUPPORTED,
++                    "Changing timezone via systemd is not supported when it is set in NixOS configuration.");
++
+         if (!timezone_is_valid(z, LOG_DEBUG))
+                 return sd_bus_error_setf(error, SD_BUS_ERROR_INVALID_ARGS, "Invalid or not installed time zone '%s'", z);
+ 
+@@ -756,6 +760,9 @@ static int method_set_local_rtc(sd_bus_message *m, void *userdata, sd_bus_error
+         if (r < 0)
+                 return r;
+ 
++        return sd_bus_error_setf(error, SD_BUS_ERROR_NOT_SUPPORTED,
++            "Changing system settings via systemd is not supported on NixOS.");
++
+         if (lrtc == c->local_rtc && !fix_system)
+                 return sd_bus_reply_method_return(m, NULL);
+ 
+@@ -954,6 +961,9 @@ static int method_set_ntp(sd_bus_message *m, void *userdata, sd_bus_error *error
+         if (r < 0)
+                 return r;
+ 
++        return sd_bus_error_setf(error, SD_BUS_ERROR_NOT_SUPPORTED,
++            "Changing system settings via systemd is not supported on NixOS.");
++
+         r = context_update_ntp_status(c, bus, m);
+         if (r < 0)
+                 return r;

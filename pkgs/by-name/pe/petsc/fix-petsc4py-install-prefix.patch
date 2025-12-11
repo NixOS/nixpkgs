@@ -1,0 +1,22 @@
+diff --git a/config/BuildSystem/config/packages/petsc4py.py b/config/BuildSystem/config/packages/petsc4py.py
+index 4a58243..831aa04 100644
+--- a/config/BuildSystem/config/packages/petsc4py.py
++++ b/config/BuildSystem/config/packages/petsc4py.py
+@@ -37,7 +37,7 @@ class Configure(config.package.Package):
+ 
+   def Install(self):
+     import os
+-    installLibPath = os.path.join(self.installDir, 'lib')
++    installLibPath = os.path.join(self.installDir, '@PYTHON_SITEPACKAGES@')
+     if self.setCompilers.isDarwin(self.log):
+       apple = 'You may need to\n (csh/tcsh) setenv MACOSX_DEPLOYMENT_TARGET 10.X\n (sh/bash) MACOSX_DEPLOYMENT_TARGET=10.X; export MACOSX_DEPLOYMENT_TARGET\nbefore running make on PETSc'
+     else:
+@@ -70,7 +70,7 @@ class Configure(config.package.Package):
+       newdir += 'NUMPY_INCLUDE="'+numpy_include+'" '
+ 
+     self.addDefine('HAVE_PETSC4PY',1)
+-    self.addDefine('PETSC4PY_INSTALL_PATH','"'+os.path.join(self.installdir.dir,'lib')+'"')
++    self.addDefine('PETSC4PY_INSTALL_PATH','"'+installLibPath+'"')
+     self.addMakeMacro('PETSC4PY','yes')
+     self.addMakeRule('petsc4pybuild','', \
+                        ['@echo "*** Building petsc4py ***"',\

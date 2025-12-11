@@ -1,0 +1,13 @@
+diff --git a/cmake/kseexpr.pc.in b/cmake/kseexpr.pc.in
+index 4b9f15f..fc76153 100644
+--- a/cmake/kseexpr.pc.in
++++ b/cmake/kseexpr.pc.in
+@@ -5,7 +5,7 @@
+ 
+ # pkg-config file for KSeExpr
+ prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+ includedir=${prefix}/include
+ 
+ Name: KSeExpr

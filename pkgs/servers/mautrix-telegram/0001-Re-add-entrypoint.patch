@@ -1,0 +1,27 @@
+From f4a612e1c8501d2a1683003bb121daa6d46155ca Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Sun, 29 Nov 2020 20:45:16 +0100
+Subject: [PATCH 1/2] Re-add entrypoint
+
+---
+ setup.py | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/setup.py b/setup.py
+index ea001e5..e1ca536 100644
+--- a/setup.py
++++ b/setup.py
+@@ -54,6 +54,12 @@ setuptools.setup(
+     extras_require=extras_require,
+     python_requires="~=3.7",
+
++    entry_points={
++        'console_scripts': [
++            'mautrix-telegram=mautrix_telegram.__main__:main'
++        ]
++    },
++
+     classifiers=[
+         "Development Status :: 4 - Beta",
+         "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+

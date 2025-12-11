@@ -1,0 +1,25 @@
+diff --git a/homeassistant/components/http/static.py b/homeassistant/components/http/static.py
+index 29c5840a4bf..463c723df91 100644
+--- a/homeassistant/components/http/static.py
++++ b/homeassistant/components/http/static.py
+@@ -7,6 +7,7 @@ from pathlib import Path
+ from typing import Final
+ 
+ from aiohttp.hdrs import CACHE_CONTROL, CONTENT_TYPE
++from aiohttp.typedefs import PathLike
+ from aiohttp.web import FileResponse, Request, StreamResponse
+ from aiohttp.web_fileresponse import CONTENT_TYPES, FALLBACK_CONTENT_TYPE
+ from aiohttp.web_urldispatcher import StaticResource
+@@ -21,6 +22,12 @@ RESPONSE_CACHE: LRU[tuple[str, Path], tuple[Path, str]] = LRU(512)
+ class CachingStaticResource(StaticResource):
+     """Static Resource handler that will add cache headers."""
+ 
++    def __init__(self, prefix: str, directory: PathLike, **kwargs):
++        """Allow static files to be hosted behind symlinks."""
++        kwargs.update({"follow_symlinks": True})
++        super().__init__(prefix, directory, **kwargs)
++
++
+     async def _handle(self, request: Request) -> StreamResponse:
+         """Wrap base handler to cache file path resolution and content type guess."""
+         rel_url = request.match_info["filename"]

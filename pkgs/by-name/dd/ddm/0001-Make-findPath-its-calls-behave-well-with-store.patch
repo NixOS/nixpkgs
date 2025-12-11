@@ -1,0 +1,76 @@
+From fae7504042bb5e3efe253476000d1b15523bd2d7 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Thu, 1 May 2025 15:57:02 +0200
+Subject: [PATCH] Make findPath & its calls behave well with store
+
+- images is a cache of downloaded card images.
+  put that into ~/.cache/ddm/images and allow it to be created.
+- campaigns, cubes & constructed are user-downloaded files that set up possible game styles.
+  create & populate them for the game, and tell it to not try to create them on its own.
+---
+ index.js | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/index.js b/index.js
+index 99f0697..492d096 100755
+--- a/index.js
++++ b/index.js
+@@ -8,6 +8,8 @@ const path = require('path');
+ const fs   = require('fs');
+ app.commandLine.appendSwitch('disable-gpu-vsync');  //NVIDIA vsync patch //must be before whenready
+ 
++const userCacheDir = path.normalize(process.env.HOME + "/.cache/ddm")
++
+ app.on('ready', () => {
+   const mainWindow = new BrowserWindow({
+     width:    1344,
+@@ -61,16 +63,16 @@ app.on('ready', () => {
+         const isDir = fs.statSync(fullPath).isDirectory();
+         if (containsDanger(fullPath)) throw new Error ("Dangerous files detected");
+         if (isDir) return fullPath;
+-    } catch (err) { throw new Error("Bad path Error 1", err); }
++    } catch (err) { throw new Error(`Bad path Error 1: ${err.message}`, err); }
+     
+     else try { //dev
+-      const fullPath = path.join(__dirname, folderName);
++      const fullPath = path.join(allowFolderCreation ? userCacheDir : __dirname, folderName);
+       if (!fs.existsSync(fullPath) && allowFolderCreation) fs.mkdirSync(fullPath, {recursive: true});
+       const isDir = fs.statSync(fullPath).isDirectory();
+       console.log(fullPath)
+       if (containsDanger(fullPath)) throw new Error (`DDM refused entry to path: ${fullPath}`);
+       if (isDir) return fullPath;
+-    } catch (err) { throw new Error("Bad path Error 2", err); }
++    } catch (err) { throw new Error(`Bad path Error 2: ${err.message}`, err); }
+ 
+   }
+ 
+@@ -92,7 +94,7 @@ app.on('ready', () => {
+       path.join(basePath, "campaigns"),
+       path.join(basePath, "cubes"),
+       path.join(basePath, "constructed"),
+-      path.join(basePath, "images")
++      path.join(userCacheDir, "images")
+     ];
+     
+     // Check if the directory is within allowed paths
+@@ -117,7 +119,7 @@ app.on('ready', () => {
+ 
+     try {
+       if (!["campaigns", "cubes", "constructed"].includes(folderName)) throw new Error(`bad folder name ${folderName}`);
+-      const folderPath = findPath(folderName, true);
++      const folderPath = findPath(folderName, false);
+       if (!fs.existsSync(folderPath)) fs.mkdirSync(folderPath);
+       const files = fs.readdirSync(folderPath);
+       if (folderName === "campaigns"   ) return files.filter(file => fs.statSync (path.join(folderPath, file)).isDirectory());
+@@ -136,7 +138,7 @@ app.on('ready', () => {
+ 
+   ipcMain.handle('open-local-folder', async (event, folderName) => {
+     if (!["campaigns", "cubes", "constructed"].includes(folderName)) throw new Error(`bad folder name ${constructed}`);
+-    const folderPath = findPath(folderName, true);
++    const folderPath = findPath(folderName, false);
+     try           { shell.openPath(folderPath); } 
+     catch (error) { console.error(error); }
+   });
+-- 
+2.48.1
+

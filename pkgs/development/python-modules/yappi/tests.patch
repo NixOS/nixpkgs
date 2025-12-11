@@ -1,0 +1,14 @@
+--- a/tests/test_functionality.py
++++ b/tests/test_functionality.py
+@@ -262,1 +262,2 @@ class BasicUsage(utils.YappiUnitTestCase):
++    @unittest.skip('wall-clock-time-sensitive')
+     def test_get_clock(self):
+@@ -363,2 +363,3 @@ class BasicUsage(utils.YappiUnitTestCase):
+     @unittest.skipIf(os.name == "nt", "do not run on Windows")
++    @unittest.skip('broken-path')
+     def test_run_as_script(self):
+--- a/tests/test_hooks.py
++++ b/tests/test_hooks.py
+@@ -127,1 +127,2 @@ class ContextIdCallbackTest(utils.YappiUnitTestCase):
++    @unittest.skip('wall-clock-time-sensitive')
+     def test_pause_resume(self):

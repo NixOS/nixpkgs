@@ -1,0 +1,28 @@
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
+
+buildGoModule rec {
+  pname = "goa";
+  version = "3.23.2";
+
+  src = fetchFromGitHub {
+    owner = "goadesign";
+    repo = "goa";
+    rev = "v${version}";
+    hash = "sha256-8AcpYTc909MyQYJBArHypMOefNcj1DaJcM2w4NpmcLI=";
+  };
+  vendorHash = "sha256-2H5VtNZiOnx1gFSVaBu7q4HTeLhBbIDK01fixBB66M4=";
+
+  subPackages = [ "cmd/goa" ];
+
+  meta = {
+    description = "Design-based APIs and microservices in Go";
+    mainProgram = "goa";
+    homepage = "https://goa.design";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rushmorem ];
+  };
+}
