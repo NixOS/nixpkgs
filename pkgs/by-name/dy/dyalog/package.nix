@@ -52,7 +52,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dyalog";
-  version = "19.0.50027";
+  version = "20.0.52753";
   shortVersion = lib.versions.majorMinor finalAttrs.version;
 
   src =
@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp aplkeys.sh default.dse dyalog dyalogc dyalog.rt dyalog.dcfg.template dyalog.ver.dcfg.template languagebar.json mapl StartupSession.aplf ${dyalogHome}
 
     mkdir ${dyalogHome}/lib
-    cp lib/{conga35_64.so,dyalog64.so,libconga35ssl64.so} ${dyalogHome}/lib
+    cp lib/{conga36_64.so,dyalog64.so,libconga36ssl64.so} ${dyalogHome}/lib
 
     # Only keep the most useful workspaces
     mkdir ${dyalogHome}/ws
@@ -111,11 +111,11 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString htmlRendererSupport ''
     cp -r locales ${dyalogHome}
     cp libcef.so libEGL.so libGLESv2.so libvk_swiftshader.so libvulkan.so.1 ${dyalogHome}
-    cp chrome-sandbox icudtl.dat snapshot_blob.bin v8_context_snapshot.bin vk_swiftshader_icd.json *.pak ${dyalogHome}
+    cp chrome-sandbox icudtl.dat v8_context_snapshot.bin vk_swiftshader_icd.json *.pak ${dyalogHome}
     cp lib/htmlrenderer.so ${dyalogHome}/lib
   ''
   + lib.optionalString sqaplSupport ''
-    cp lib/cxdya65u64u.so ${dyalogHome}/lib
+    cp lib/cxdya66u64u.so ${dyalogHome}/lib
     cp ws/sqapl.dws ${dyalogHome}/ws
     cp odbc.ini.sample sqapl.err sqapl.ini ${dyalogHome}
   ''
