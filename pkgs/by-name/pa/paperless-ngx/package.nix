@@ -166,15 +166,7 @@ python.pkgs.buildPythonApplication rec {
     xorg.lndir
   ];
 
-  pythonRelaxDeps = [
-    "celery"
-    "django-allauth"
-    "python-dotenv"
-    "gotenberg-client"
-    "redis"
-    # requested by maintainer
-    "ocrmypdf"
-  ];
+  pythonRelaxDeps = true;
 
   dependencies =
     with python.pkgs;
