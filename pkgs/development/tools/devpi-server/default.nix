@@ -107,12 +107,7 @@ buildPythonApplication rec {
     "test_devpi_server/test_streaming_replica_nginx.py"
   ];
   disabledTests = [
-    "root_passwd_hash_option"
-    "TestMirrorIndexThings"
-    "test_auth_mirror_url_no_hash"
-    "test_auth_mirror_url_with_hash"
-    "test_auth_mirror_url_hidden_in_logs"
-    "test_simplelinks_timeout"
+    "test_fetch_later_deleted"
   ];
 
   __darwinAllowLocalNetworking = true;
