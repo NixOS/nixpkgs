@@ -7,6 +7,8 @@ import ../make-test-python.nix (
     rancherPackage,
     serviceName,
     disabledComponents,
+    coreImages,
+    vmResources,
     ...
   }:
   let
@@ -17,15 +19,19 @@ import ../make-test-python.nix (
     nodes.machine =
       { ... }:
       {
-        environment.systemPackages = [ pkgs.jq ];
-        # k3s uses enough resources the default vm fails.
-        virtualisation.memorySize = 1536;
-        virtualisation.diskSize = 4096;
+        environment.systemPackages = with pkgs; [
+          kubectl
+          jq
+        ];
+        environment.sessionVariables.KUBECONFIG = "/etc/rancher/${rancherDistro}/${rancherDistro}.yaml";
+
+        virtualisation = vmResources;
 
         services.${rancherDistro} = {
           enable = true;
           package = rancherPackage;
           disable = disabledComponents;
+          images = coreImages;
           inherit nodeName;
           containerdConfigTemplate = ''
             # Base ${rancherDistro} config
@@ -50,6 +56,6 @@ import ../make-test-python.nix (
         t.assertIn("MAGIC COMMENT", out, "the containerd config does not contain the magic comment")
       '';
 
-    meta.maintainers = lib.teams.k3s.members;
+    meta.maintainers = lib.teams.k3s.members ++ pkgs.rke2.meta.maintainers;
   }
 )
