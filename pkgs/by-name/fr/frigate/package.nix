@@ -226,5 +226,8 @@ python.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/blakeblackshear/frigate";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
+    knownVulnerabilities = [
+      "https://github.com/blakeblackshear/frigate/security/advisories/GHSA-vg28-83rp-8xx4"
+    ];
   };
 }
