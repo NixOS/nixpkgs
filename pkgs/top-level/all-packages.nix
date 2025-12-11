@@ -1990,10 +1990,6 @@ with pkgs;
     stdenv = gcc15Stdenv;
   };
 
-  hyprcursor = callPackage ../by-name/hy/hyprcursor/package.nix {
-    stdenv = gcc15Stdenv;
-  };
-
   hyprgraphics = callPackage ../by-name/hy/hyprgraphics/package.nix {
     stdenv = gcc15Stdenv;
   };
