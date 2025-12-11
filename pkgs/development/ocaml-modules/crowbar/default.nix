@@ -3,7 +3,6 @@
   stdenv,
   buildDunePackage,
   fetchFromGitHub,
-  ocplib-endian,
   cmdliner,
   afl-persistent,
   calendar,
@@ -14,24 +13,21 @@
   uucp,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "crowbar";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "stedolan";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-0jjwiOZ9Ut+dv5Iw4xNvf396WTehT1VClxY9VHicw4U=";
+    repo = "crowbar";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KGDOm9PMymFwyHoe7gp+rl+VxbbkLvnb8ypTXbImSgs=";
   };
-
-  minimalOCamlVersion = "4.08";
 
   # disable xmldiff tests, so we don't need to package unmaintained and legacy pkgs
   postPatch = "rm -rf examples/xmldiff";
 
   propagatedBuildInputs = [
-    ocplib-endian
     cmdliner
     afl-persistent
   ];
@@ -50,6 +46,6 @@ buildDunePackage rec {
     description = "Property fuzzing for OCaml";
     homepage = "https://github.com/stedolan/crowbar";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.sternenseemann ];
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
-}
+})
