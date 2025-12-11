@@ -4,6 +4,8 @@
 # - revision specified and remote without HEAD
 #
 
+source "$NIX_ATTRS_SH_FILE"
+
 echo "exporting $url (rev $rev) into $out"
 
 runHook preFetch
@@ -18,7 +20,7 @@ $SHELL $fetcher --builder --url "$url" --out "$out" --rev "$rev" --name "$name" 
   ${fetchLFS:+--fetch-lfs} \
   ${deepClone:+--deepClone} \
   ${fetchSubmodules:+--fetch-submodules} \
-  ${fetchTags:+--fetch-tags} \
+  "${fetchTagFlags[@]}" \
   ${sparseCheckoutText:+--sparse-checkout "$sparseCheckoutText"} \
   ${nonConeMode:+--non-cone-mode} \
   ${branchName:+--branch-name "$branchName"} \
