@@ -718,6 +718,10 @@ with haskellLib;
   # Tests require older versions of tasty.
   hzk = dontCheck super.hzk;
 
+  # 2025-12-11: Too strict bound on containers (<0.7)
+  # https://github.com/byteverse/disjoint-containers/pull/15
+  disjoint-containers = doJailbreak super.disjoint-containers;
+
   # Test suite doesn't compile with 9.6
   # https://github.com/sebastiaanvisser/fclabels/issues/45
   # Doesn't compile with 9.8 at all
