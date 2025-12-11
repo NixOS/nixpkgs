@@ -319,11 +319,6 @@ with pkgs;
 
   chef-cli = callPackage ../tools/misc/chef-cli { };
 
-  cope = callPackage ../by-name/co/cope/package.nix {
-    perl = perl538;
-    perlPackages = perl538Packages;
-  };
-
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
 
   cup-docker-noserver = cup-docker.override { withServer = false; };
