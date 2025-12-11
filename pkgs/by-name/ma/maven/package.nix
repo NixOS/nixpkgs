@@ -49,9 +49,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         };
     in
     {
-      buildMaven = callPackage ./build-maven.nix {
-        maven = finalAttrs.finalPackage;
-      };
+      buildMaven = throw "'maven.buildMaven' has been removed, as it relies on mvn2nix, which has also been removed. Please use maven.buildMavenPackage instead.";
 
       buildMavenPackage = makeOverridableMavenPackage (
         callPackage ./build-maven-package.nix {
