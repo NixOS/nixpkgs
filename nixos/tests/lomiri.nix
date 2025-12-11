@@ -120,7 +120,7 @@ let
             )
       return check_for_color_continued_presence_retry
 
-    def ensure_lomiri_running():
+    def ensure_lomiri_running() -> None:
       """
       Ensure that Lomiri has finished starting up.
       """
@@ -141,7 +141,7 @@ let
 
       machine.screenshot("lomiri_launched")
 
-    def wait_for_text(text):
+    def wait_for_text(text) -> None:
       """
       Wait for on-screen text, and try to optimise retry count for slow hardware.
       """
@@ -149,7 +149,7 @@ let
       machine.sleep(30)
       machine.wait_for_text(text)
 
-    def toggle_maximise():
+    def toggle_maximise() -> None:
       """
       Maximise the current window.
       """
@@ -163,7 +163,7 @@ let
       machine.send_key("esc")
       machine.sleep(5)
 
-    def mouse_click(xpos, ypos):
+    def mouse_click(xpos, ypos) -> None:
       """
       Move the mouse to a screen location and hit left-click.
       """
@@ -176,7 +176,7 @@ let
       machine.execute("ydotool click 0xC0")
       machine.sleep(2)
 
-    def open_starter():
+    def open_starter() -> None:
       """
       Open the starter, and ensure it's opened.
       """
