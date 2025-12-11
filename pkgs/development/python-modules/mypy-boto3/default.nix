@@ -170,8 +170,8 @@ in
       "sha256-8vWX/eJxWKoe4c3aTUrQf11UDeMMJ4BDYwFYwDpEyzY=";
 
   mypy-boto3-billingconductor =
-    buildMypyBoto3Package "billingconductor" "1.42.3"
-      "sha256-eRAaTJBaTMpyZO0VbJgVF6GIa2Xi06o3vtKptU24oXQ=";
+    buildMypyBoto3Package "billingconductor" "1.42.7"
+      "sha256-ZQsHPgnPepj1HbBd37u76Fd1td4M7B5o6kId8FPP5yQ=";
 
   mypy-boto3-braket =
     buildMypyBoto3Package "braket" "1.42.3"
