@@ -24,7 +24,9 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    libpq.pg_config
   ];
+
   buildInputs = [
     libgcrypt
     pam
@@ -33,7 +35,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "Support to authenticate against PostgreSQL for PAM-enabled appliations";
+    description = "Support to authenticate against PostgreSQL for PAM-enabled applications";
     homepage = "https://github.com/pam-pgsql/pam-pgsql";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
