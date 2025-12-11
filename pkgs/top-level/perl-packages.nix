@@ -6436,6 +6436,15 @@ with self;
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/Coro-6.57.tar.gz";
       hash = "sha256-GSjkgDNUDhHr9VBpht0QGveNJCHSEPllmSI7FdUXFMY=";
     };
+    patches = [
+      # Fix build with gcc15
+      # https://rt.cpan.org/Public/Bug/Display.html?id=158609
+      (fetchpatch {
+        name = "perl-coro-c23.patch";
+        url = "https://src.fedoraproject.org/rpms/perl-Coro/raw/7099f289e10ec5d4d5dbbabe6267257588417693/f/Coro-6.57-c23.patch";
+        hash = "sha256-BnVE+E8taPfmAN+bsKK3AvesVrwi52GWUMa6TFJw3KY=";
+      })
+    ];
     propagatedBuildInputs = [
       AnyEvent
       Guard
