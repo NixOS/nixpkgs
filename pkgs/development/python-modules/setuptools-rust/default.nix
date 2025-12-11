@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   maturin,
@@ -11,8 +12,9 @@
   setuptools,
   setuptools-rust,
   setuptools-scm,
+  replaceVars,
+  targetPackages,
 }:
-
 buildPythonPackage rec {
   pname = "setuptools-rust";
   version = "1.12.0";
@@ -39,6 +41,23 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "setuptools_rust" ];
 
   doCheck = false;
+
+  # integrate the setup hook to set up the build environment for cross compilation
+  # this hook is automatically propagated to consumers using setuptools-rust as build-system
+  #
+  # Only include the setup hook if targetPackages.python3 is defined.
+  # targetPackages.python3 is not always available, for example when including
+  # setuptools-rust via buildInputs instead of nativeBuildInputs or building it directly.
+  setupHook =
+    if !(targetPackages ? python3) then
+      null
+    else
+      replaceVars ./setuptools-rust-hook.sh {
+        pyLibDir = "${targetPackages.python3}/lib/${targetPackages.python3.libPrefix}";
+        cargoBuildTarget = stdenv.targetPlatform.rust.rustcTargetSpec;
+        cargoLinkerVar = stdenv.targetPlatform.rust.cargoEnvVarTarget;
+        targetLinker = "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc";
+      };
 
   passthru.tests = {
     pyo3 = maturin.tests.pyo3.override {

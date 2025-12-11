@@ -442,20 +442,6 @@ in
     } ./setuptools-build-hook.sh
   ) { };
 
-  setuptoolsRustBuildHook = callPackage (
-    { makePythonHook, setuptools-rust }:
-    makePythonHook {
-      name = "setuptools-rust-setup-hook";
-      propagatedBuildInputs = [ setuptools-rust ];
-      substitutions = {
-        pyLibDir = "${python}/lib/${python.libPrefix}";
-        cargoBuildTarget = stdenv.hostPlatform.rust.rustcTargetSpec;
-        cargoLinkerVar = stdenv.hostPlatform.rust.cargoEnvVarTarget;
-        targetLinker = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
-      };
-    } ./setuptools-rust-hook.sh
-  ) { };
-
   unittestCheckHook = callPackage (
     { makePythonHook }:
     makePythonHook {
