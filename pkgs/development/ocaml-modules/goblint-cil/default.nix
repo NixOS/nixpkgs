@@ -36,6 +36,12 @@ buildDunePackage (finalAttrs: {
     zarith
   ];
 
+  postInstall = ''
+    substituteInPlace "$out/bin/cilly" --replace-fail \
+       '$FindBin::RealBin/../lib/perl5'
+      "'$out'/lib/ocaml/5.3.0/site-lib/perl5"
+  '';
+
   meta = {
     description = "A front-end for the C programming language that facilitates program analysis and transformation";
     homepage = "https://github.com/goblint/cil";
