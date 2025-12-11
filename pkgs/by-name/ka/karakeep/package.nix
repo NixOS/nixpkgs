@@ -6,6 +6,7 @@
   testers,
   nodejs,
   node-gyp,
+  gnutar,
   inter,
   python3,
   srcOnly,
@@ -29,8 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/use-local-font.patch
     ./patches/dont-lock-pnpm-version.patch
   ];
+
   postPatch = ''
     ln -s ${inter}/share/fonts/truetype ./apps/web/app/fonts
+
+    substituteInPlace apps/cli/src/commands/dump.ts \
+      --replace-fail 'spawn("tar"' 'spawn("${lib.getExe gnutar}"'
   '';
 
   nativeBuildInputs = [
@@ -40,6 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     pnpmConfigHook
     pnpm_9
   ];
+
+  buildInputs = [
+    gnutar
+  ];
+
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version;
     pnpm = pnpm_9;
