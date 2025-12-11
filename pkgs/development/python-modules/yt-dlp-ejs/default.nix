@@ -40,6 +40,8 @@ buildPythonPackage rec {
     pnpm.configHook
   ];
 
+  pythonImportsCheck = [ "yt_dlp_ejs" ];
+
   meta = {
     changelog = "https://github.com/yt-dlp/ejs/releases/tag/${version}";
     description = "External JavaScript for yt-dlp supporting many runtimes";
