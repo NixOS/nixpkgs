@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ldapdomaindump" ];
 
-  meta = with lib; {
+  meta = {
     description = "Active Directory information dumper via LDAP";
     homepage = "https://github.com/dirkjanm/ldapdomaindump/";
     changelog = "https://github.com/dirkjanm/ldapdomaindump/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

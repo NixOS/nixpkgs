@@ -63,11 +63,11 @@ stdenv.mkDerivation {
     ln -s $src/resources $out/bin/resources
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Create multi res point cloud to use with potree";
     homepage = "https://github.com/potree/PotreeConverter";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ matthewcroughan ];
-    platforms = with platforms; linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
+    platforms = with lib.platforms; linux;
   };
 }

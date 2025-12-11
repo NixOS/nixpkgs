@@ -127,7 +127,7 @@ rec {
 
     : A list of strings representing the attribute path to check from `set`
 
-    `e`
+    `set`
 
     : The nested attribute set to check
 
@@ -563,7 +563,7 @@ rec {
 
     : A list of attribute names to get out of `set`
 
-    `attrs`
+    `set`
 
     : The set to get the named attributes from
 
@@ -715,10 +715,10 @@ rec {
     Iterates over every name-value pair in the given attribute set.
     The result of the callback function is often called `acc` for accumulator. It is passed between callbacks from left to right and the final `acc` is the return value of `foldlAttrs`.
 
-    Attention:
-
+    ::: {.note}
     There is a completely different function `lib.foldAttrs`
     which has nothing to do with this function, despite the similar name.
+    :::
 
     # Inputs
 
@@ -918,8 +918,8 @@ rec {
     ) [ { } ] (attrNames attrsOfLists);
 
   /**
-    Return the result of function f applied to the cartesian product of attribute set value combinations.
-    Equivalent to using cartesianProduct followed by map.
+    Return the result of function `f` applied to the cartesian product of attribute set value combinations.
+    Equivalent to using `cartesianProduct` followed by `map`.
 
     # Inputs
 
@@ -1522,7 +1522,7 @@ rec {
     );
 
   /**
-    Merge sets of attributes and use the function f to merge attribute values.
+    Merge sets of attributes and use the function `f` to merge attribute values.
     Like `lib.attrsets.zipAttrsWithNames` with all key names are passed for `names`.
 
     Implementation note: Common names appear multiple times in the list of
@@ -1628,7 +1628,7 @@ rec {
       binaryMerge 0 (length list);
 
   /**
-    Does the same as the update operator '//' except that attributes are
+    Does the same as the update operator `//` except that attributes are
     merged until the given predicate is verified.  The predicate should
     accept 3 arguments which are the path to reach the attribute, a part of
     the first attribute set and a part of the second attribute set.  When
@@ -1701,7 +1701,7 @@ rec {
     f [ ] [ rhs lhs ];
 
   /**
-    A recursive variant of the update operator ‘//’.  The recursion
+    A recursive variant of the update operator `//`.  The recursion
     stops when one of the attribute values is not an attribute set,
     in which case the right hand side value takes precedence over the
     left hand side value.
@@ -2183,7 +2183,7 @@ rec {
   recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };
 
   /**
-    Undo the effect of recurseIntoAttrs.
+    Undo the effect of `recurseIntoAttrs`.
 
     # Inputs
 

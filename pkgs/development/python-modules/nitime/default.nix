@@ -48,10 +48,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nitime" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://nipy.org/nitime";
     description = "Algorithms and containers for time-series analysis in time and spectral domains";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.bcdarwin ];
   };
 }

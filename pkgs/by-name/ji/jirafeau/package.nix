@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) jirafeau; };
 
-  meta = with lib; {
+  meta = {
     description = "Website permitting upload of a file in a simple way and giving a unique link to it";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     homepage = "https://gitlab.com/mojo42/Jirafeau";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

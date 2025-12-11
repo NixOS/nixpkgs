@@ -17,13 +17,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "xdp-tools";
-  version = "1.5.7";
+  version = "1.5.8";
 
   src = fetchFromGitHub {
     owner = "xdp-project";
     repo = "xdp-tools";
     rev = "v${version}";
-    hash = "sha256-dJMGBFFfEpKO+5ku5Xsc95hGSmTenHGRjBTL7s1cv0c=";
+    hash = "sha256-fW0If34PTGE36KoZYPeKOMuNjaFz1JmSCaWIaSjB0gk=";
   };
 
   outputs = [
@@ -75,19 +75,19 @@ stdenv.mkDerivation rec {
     nuke-refs "$lib"/lib/bpf/*.o
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/xdp-project/xdp-tools";
     description = "Library and utilities for use with XDP";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       lgpl21
       bsd2
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       tirex
       vcunat
       vifino
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

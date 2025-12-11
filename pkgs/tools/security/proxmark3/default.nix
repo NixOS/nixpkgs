@@ -88,15 +88,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Client for proxmark3, powerful general purpose RFID tool";
     homepage = "https://github.com/RfidResearchGroup/proxmark3";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       nyanotech
       emilytrau
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "pm3";
   };
 })

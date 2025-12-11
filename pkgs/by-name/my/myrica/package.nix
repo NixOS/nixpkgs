@@ -25,10 +25,10 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://myrica.estable.jp/";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ mikoim ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ mikoim ];
+    platforms = lib.platforms.all;
   };
 }

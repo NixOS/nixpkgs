@@ -13,13 +13,13 @@
 }:
 
 let
-  version = "2.2.0";
+  version = "2.2.3";
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "liske";
     repo = "ifstate";
     tag = version;
-    hash = "sha256-Q06lGGGQxJ7ntgXRzfnsJN+A/08AIOsOkz3cg2xZGr4=";
+    hash = "sha256-gDeMVnseOLBGpyyjE/L60ujp0LZGf3uzlKfPiQB4VHA=";
   };
   docs = stdenv.mkDerivation {
     pname = "ifstate-docs";

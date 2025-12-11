@@ -33,11 +33,11 @@
 
   pythonImportsCheck = [ "gfal2_util" ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI for gfal2";
     homepage = "https://github.com/cern-fts/gfal2-utils";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ShamrockLee ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ShamrockLee ];
   };
 }).overrideAttrs
   (

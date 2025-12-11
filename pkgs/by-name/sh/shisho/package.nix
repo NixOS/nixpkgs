@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://docs.shisho.dev/shisho/";
     changelog = "https://docs.shisho.dev/changelog/";
     description = "Lightweight static analyzer for several programming languages";
@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage rec {
       and integration capabilities, the rules will help you find and fix issues
       semiautomatically.
     '';
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ jk ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ jk ];
   };
 }

@@ -15,14 +15,14 @@ let
 in
 ocamlPackages.buildDunePackage {
   pname = "owi";
-  version = "0.2-unstable-2025-10-09";
+  version = "0.2-unstable-2025-12-08";
 
   src = fetchFromGitHub {
     owner = "ocamlpro";
     repo = "owi";
-    rev = "8500bc99a5a88515a019b1dc0d736152ab7d1767";
+    rev = "b35dafd51853b40f6b403cc5c460bed8dd2c8027";
     fetchSubmodules = true;
-    hash = "sha256-vskIVgtgUpjuJFzweDg6w2/ml31/6HQWMEjE08KibmM=";
+    hash = "sha256-qYSn47I6slnJ6brXGc5KcbR2rlSwuTyqdPyNKs1uTsQ=";
   };
 
   nativeBuildInputs = with ocamlPackages; [
@@ -49,12 +49,14 @@ ocamlPackages.buildDunePackage {
     integers
     menhirLib
     ocaml_intrinsics
+    ocamlgraph
     patricia-tree
     prelude
     processor
     scfg
     sedlex
     smtml
+    synchronizer
     uutf
     xmlm
     yojson

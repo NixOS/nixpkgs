@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libgit2 ];
 
-  meta = with lib; {
+  meta = {
     description = "Git static site generator";
     homepage = "https://git.codemadness.org/stagit/file/README.html";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       jb55
       sikmir
     ];

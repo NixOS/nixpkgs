@@ -11,12 +11,12 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "qui";
-  version = "1.7.0";
+  version = "1.9.1";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "qui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CbPdngskDCAAhmsj5DPdnviZSWM0bO13Pbe7wRwaNaw=";
+    hash = "sha256-PcJl9nxHPWv17AqtEok0qHhrTQ1WInUKAtxrxoSeMSw=";
   };
 
   qui-web = stdenvNoCC.mkDerivation (finalAttrs': {
@@ -39,7 +39,7 @@ buildGoModule (finalAttrs: {
         sourceRoot
         ;
       fetcherVersion = 2;
-      hash = "sha256-WKoWts+/TGcGy/rFEJN3Qn/vq+gj+Mq+VcTYowEyvus=";
+      hash = "sha256-bDaMax5RS+ot6vaJmNJm6p4gFaCD9aslJXI/58ua9DI=";
     };
 
     postBuild = ''
@@ -51,7 +51,7 @@ buildGoModule (finalAttrs: {
     '';
   });
 
-  vendorHash = "sha256-rmUEFX8UzxEN7XaJ8Zj+kj3z1pwLkq3FTYzbPWnifW0=";
+  vendorHash = "sha256-UF6V737MF2la24oW8oPp+0N8nv0uEykMrTbzvx/gtec=";
 
   preBuild = ''
     cp -r ${finalAttrs.qui-web}/* web/dist

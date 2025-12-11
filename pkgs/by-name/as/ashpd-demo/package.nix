@@ -97,12 +97,12 @@ stdenv.mkDerivation (finalAttrs: {
       ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for playing with XDG desktop portals";
     mainProgram = "ashpd-demo";
     homepage = "https://github.com/bilelmoussaoui/ashpd/tree/master/ashpd-demo";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    platforms = lib.platforms.linux;
   };
 })

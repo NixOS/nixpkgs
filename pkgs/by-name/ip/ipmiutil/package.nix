@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
-  meta = with lib; {
+  meta = {
     description = "Easy-to-use IPMI server management utility";
     homepage = "https://ipmiutil.sourceforge.net/";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
     downloadPage = "https://sourceforge.net/projects/ipmiutil/files/ipmiutil/";
   };
 }

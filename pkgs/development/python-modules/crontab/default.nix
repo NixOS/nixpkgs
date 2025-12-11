@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "crontab" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parse and use crontab schedules in Python";
     homepage = "https://gitlab.com/doctormo/python-crontab/";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

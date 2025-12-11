@@ -72,7 +72,6 @@ rustPlatform.buildRustPackage (final: {
     maintainers = with lib.maintainers; [
       danth
       yusdacra
-      zowoq
     ];
   };
 })

@@ -20,6 +20,7 @@
   rustPlatform,
   llvmPackages_19,
   gitMinimal,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -63,6 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [
     gitMinimal
+    writableTmpDirAsHomeHook
   ];
 
   # `cargo-llvm-cov` tests rely on `git ls-files.

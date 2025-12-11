@@ -120,18 +120,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "V4L utils and libv4l, provide common image formats regardless of the v4l device";
     homepage = "https://linuxtv.org/projects.php";
     changelog = "https://git.linuxtv.org/v4l-utils.git/plain/ChangeLog?h=v4l-utils-${finalAttrs.version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Plus
       gpl2Plus
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       codyopel
       yarny
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-toc";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "badboy";
     repo = "mdbook-toc";
     tag = version;
-    sha256 = "sha256-uZoruFNhvhUNUL/m/vUoft+pnXvF/GYvNY21ERsIjBM=";
+    sha256 = "sha256-FPbZH8cEYQ9wbSm6jA5/uiX8Wgx/FyuIJ/gPgSKUhBA=";
   };
 
-  cargoHash = "sha256-fp5ZL0aAk1CavWKZLAevLUIuVl9VuHPyrAZ2dPc/eoE=";
+  cargoHash = "sha256-haHJkyYAc4+ODJNEWiXzbl1xbJ7pyrtnPX/+ubjvX44=";
 
   meta = {
     description = "Preprocessor for mdbook to add inline Table of Contents support";

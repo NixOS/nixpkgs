@@ -24,13 +24,13 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libxcb ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line pager for JSON data";
     mainProgram = "jless";
     homepage = "https://jless.io";
     changelog = "https://github.com/PaulJuliusMartinez/jless/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jfchevrette
     ];
   };

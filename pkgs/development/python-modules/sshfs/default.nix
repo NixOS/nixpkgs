@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "sshfs";
-  version = "2025.10.0";
+  version = "2025.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "sshfs";
     tag = version;
-    hash = "sha256-IG+/aXM6F+sNtxmhgiaD6OXhRpbiCm0zW2ki0y8nuLE=";
+    hash = "sha256-TrFrjORH6VebTBq+OHJUEr55DtjL58/b+qQLpbSU7MU=";
   };
 
   build-system = [
@@ -65,11 +65,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sshfs" ];
 
-  meta = with lib; {
+  meta = {
     description = "SSH/SFTP implementation for fsspec";
     homepage = "https://github.com/fsspec/sshfs/";
     changelog = "https://github.com/fsspec/sshfs/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ melling ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ melling ];
   };
 }

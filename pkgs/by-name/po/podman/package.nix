@@ -11,7 +11,7 @@
   libapparmor,
   libseccomp,
   libselinux,
-  systemd,
+  systemdMinimal,
   go-md2man,
   nixosTests,
   python3,
@@ -21,6 +21,7 @@
   extraPackages ? [ ],
   crun,
   runc,
+  krunkit,
   conmon,
   extraRuntimes ? lib.optionals stdenv.hostPlatform.isLinux [ runc ], # e.g.: runc, gvisor, youki
   fuse-overlayfs,
@@ -83,7 +84,7 @@ buildGoModule (finalAttrs: {
     libseccomp
     libselinux
     lvm2
-    systemd
+    systemdMinimal
   ];
 
   env = {
@@ -134,7 +135,7 @@ buildGoModule (finalAttrs: {
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     RPATH=$(patchelf --print-rpath $out/bin/.podman-wrapped)
-    patchelf --set-rpath "${lib.makeLibraryPath [ systemd ]}":$RPATH $out/bin/.podman-wrapped
+    patchelf --set-rpath "${lib.makeLibraryPath [ systemdMinimal ]}":$RPATH $out/bin/.podman-wrapped
     substituteInPlace "$out/share/systemd/user/podman-user-wait-network-online.service" \
       --replace-fail sleep '${coreutils}/bin/sleep' \
       --replace-fail /bin/sh '${runtimeShell}'
@@ -166,9 +167,8 @@ buildGoModule (finalAttrs: {
         iproute2
         nftables
       ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        vfkit
-      ]
+      ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform vfkit) vfkit
+      ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform krunkit) krunkit
       ++ extraPackages
     );
 

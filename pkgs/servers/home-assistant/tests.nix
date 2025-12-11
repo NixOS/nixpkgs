@@ -13,6 +13,7 @@ let
     air_quality = getComponentDeps "camera" ++ getComponentDeps "conversation";
     alexa = getComponentDeps "cloud" ++ getComponentDeps "frontend" ++ getComponentDeps "stream";
     android_ip_webcam = getComponentDeps "camera";
+    anthropic = getComponentDeps "ai_task";
     assist_pipeline = getComponentDeps "frontend";
     automation = getComponentDeps "frontend" ++ getComponentDeps "mobile_app";
     axis = getComponentDeps "camera" ++ getComponentDeps "deconz";
@@ -84,6 +85,7 @@ let
     microsoft = getComponentDeps "tts";
     microsoft_face_detect = getComponentDeps "conversation";
     microsoft_face_identify = getComponentDeps "conversation";
+    miele = getComponentDeps "cloud";
     mjpeg = getComponentDeps "camera";
     mobile_app = getComponentDeps "frontend";
     motioneye = getComponentDeps "camera";
@@ -148,6 +150,7 @@ let
       arrow
     ];
     yandextts = getComponentDeps "tts";
+    yolink = getComponentDeps "cloud";
     zeroconf = getComponentDeps "shelly";
     zha = getComponentDeps "deconz" ++ getComponentDeps "frontend";
     zwave_js = getComponentDeps "frontend";
@@ -178,14 +181,13 @@ let
       "tests/components/nzbget/test_config_flow.py::test_user_form_cannot_connect"
       "tests/components/nzbget/test_init.py::test_async_setup_raises_entry_not_ready"
     ];
-    openai_conversation = [
-      # Pydantic validation error
-      "tests/components/openai_conversation/test_conversation.py"
-      "tests/components/openai_conversation/test_ai_task.py"
-    ];
     overseerr = [
       # imports broken future module
       "tests/components/overseerr/test_event.py"
+    ];
+    systemmonitor = [
+      # sandbox doesn't grant access to /sys/class/power_supply
+      "tests/components/systemmonitor/test_config_flow.py::test_add_and_remove_processes"
     ];
     youtube = [
       # outdated snapshot

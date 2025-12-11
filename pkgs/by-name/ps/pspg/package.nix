@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     installShellCompletion --bash --cmd pspg bash-completion.sh
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/okbob/pspg";
     description = "Postgres Pager";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.jlesquembre ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.jlesquembre ];
     mainProgram = "pspg";
   };
 }

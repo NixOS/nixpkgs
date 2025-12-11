@@ -102,15 +102,15 @@ stdenv.mkDerivation rec {
   # Taken from libnemo-extension.pc.
   passthru.extensiondir = "lib/nemo/extensions-3.0";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/nemo";
     description = "File browser for Cinnamon";
     license = [
-      licenses.gpl2
-      licenses.lgpl2
+      lib.licenses.gpl2
+      lib.licenses.lgpl2
     ];
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
     mainProgram = "nemo";
   };
 }

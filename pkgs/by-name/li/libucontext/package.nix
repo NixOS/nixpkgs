@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kaniini/libucontext";
     description = "ucontext implementation featuring glibc-compatible ABI";
-    license = licenses.isc;
-    platforms = platforms.linux;
-    teams = [ teams.lix ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lix ];
   };
 }

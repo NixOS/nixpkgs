@@ -9,17 +9,17 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "dooit";
-  version = "3.3.3";
+  version = "3.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dooit-org";
     repo = "dooit";
     tag = "v${version}";
-    hash = "sha256-MWdih+j7spUVEWXCBzF2J/FVXK0TQ8VhrJNDhNfxpQE=";
+    hash = "sha256-A3l+E9B2fWyNpDzMr8WRiiHD/fIcUzcIwtmur+2Mk0k=";
   };
 
-  build-system = with python3.pkgs; [ poetry-core ];
+  build-system = with python3.pkgs; [ hatchling ];
 
   pythonRelaxDeps = [
     "tzlocal"

@@ -41,7 +41,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     # test_cli.py checks the output of running "glom"
@@ -63,7 +63,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "glom" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for restructuring data";
     longDescription = ''
       glom helps pull together objects from other objects in a
@@ -71,8 +71,8 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/mahmoud/glom";
     changelog = "https://github.com/mahmoud/glom/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ twey ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ twey ];
     mainProgram = "glom";
   };
 }

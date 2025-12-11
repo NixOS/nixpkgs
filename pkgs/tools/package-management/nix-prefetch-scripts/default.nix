@@ -49,10 +49,10 @@ let
 
       preferLocalBuild = true;
 
-      meta = with lib; {
+      meta = {
         description = "Script used to obtain source hashes for fetch${tool}";
-        maintainers = with maintainers; [ bennofs ];
-        platforms = platforms.unix;
+        maintainers = with lib.maintainers; [ bennofs ];
+        platforms = lib.platforms.unix;
         mainProgram = "nix-prefetch-${tool}";
       };
     };
@@ -68,6 +68,7 @@ rec {
   nix-prefetch-darcs = mkPrefetchScript "darcs" ../../../build-support/fetchdarcs/nix-prefetch-darcs [
     darcs
     cacert
+    gawk
     jq
   ];
   nix-prefetch-git = mkPrefetchScript "git" ../../../build-support/fetchgit/nix-prefetch-git [
@@ -83,6 +84,7 @@ rec {
     subversion
   ];
   nix-prefetch-pijul = mkPrefetchScript "pijul" ../../../build-support/fetchpijul/nix-prefetch-pijul [
+    gawk
     pijul
     cacert
     jq
@@ -101,10 +103,10 @@ rec {
       nix-prefetch-pijul
     ];
 
-    meta = with lib; {
+    meta = {
       description = "Collection of all the nix-prefetch-* scripts which may be used to obtain source hashes";
-      maintainers = with maintainers; [ bennofs ];
-      platforms = platforms.unix;
+      maintainers = with lib.maintainers; [ bennofs ];
+      platforms = lib.platforms.unix;
     };
   };
 }

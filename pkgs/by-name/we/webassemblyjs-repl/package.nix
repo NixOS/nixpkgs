@@ -8,6 +8,7 @@
   nodejs,
   makeBinaryWrapper,
   gcc,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "webassemblyjs-repl";
@@ -58,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "WebAssembly REPL";

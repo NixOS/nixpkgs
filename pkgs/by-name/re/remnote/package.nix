@@ -6,10 +6,10 @@
 }:
 let
   pname = "remnote";
-  version = "1.22.11";
+  version = "1.22.28";
   src = fetchurl {
     url = "https://download2.remnote.io/remnote-desktop2/RemNote-${version}.AppImage";
-    hash = "sha256-vQu84qWpLyO62+FFzs60z03Cc5wsu0lNofRvb1TlmeE=";
+    hash = "sha256-suYd2IK/lwPd0sEoRmKPydgyExX5aRNyBLikubBmMpI=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in
@@ -36,11 +36,11 @@ appimageTools.wrapType2 {
     fi
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Note-taking application focused on learning and productivity";
     homepage = "https://remnote.com/";
-    maintainers = with maintainers; [ chewblacka ];
-    license = licenses.unfree;
+    maintainers = with lib.maintainers; [ chewblacka ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     mainProgram = "remnote";
   };

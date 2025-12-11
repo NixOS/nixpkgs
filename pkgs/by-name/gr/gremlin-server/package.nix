@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tinkerpop.apache.org/";
     description = "Server of the Apache TinkerPop graph computing framework";
-    license = licenses.asl20;
-    maintainers = [ maintainers.jrpotter ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.jrpotter ];
+    platforms = lib.platforms.all;
     mainProgram = "gremlin-server";
   };
 }

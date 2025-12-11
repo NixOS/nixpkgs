@@ -63,11 +63,11 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.enlightenment.org/e16";
     description = "Enlightenment DR16 window manager";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

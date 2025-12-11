@@ -48,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wn" ];
 
-  meta = with lib; {
+  meta = {
     description = "Modern, interlingual wordnet interface for Python";
     homepage = "https://github.com/goodmami/wn";
     changelog = "https://github.com/goodmami/wn/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zendo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zendo ];
   };
 }

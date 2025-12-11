@@ -42,11 +42,11 @@ stdenv.mkDerivation {
     }"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/helixarch/subedit";
     description = "Command-line subtitle editor written in BASH";
     mainProgram = "subedit";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ppom ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ppom ];
   };
 }

@@ -24,13 +24,13 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = ''
       Expected objects in C++11 and later in a single-file header-only library
     '';
     homepage = "https://github.com/martinmoene/expected-lite";
     changelog = "https://github.com/martinmoene/expected-lite/blob/${src.rev}/CHANGES.txt";
-    license = licenses.boost;
-    maintainers = with maintainers; [ azahi ];
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ azahi ];
   };
 }

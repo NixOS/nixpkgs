@@ -46,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "schedule" ];
 
-  meta = with lib; {
+  meta = {
     description = "Calendar app for Django";
     homepage = "https://github.com/llazzaro/django-scheduler";
     changelog = "https://github.com/llazzaro/django-scheduler/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ derdennisop ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ derdennisop ];
   };
 }

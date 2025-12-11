@@ -41,7 +41,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-mock
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests =
     [ ]
@@ -57,12 +57,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dataclass_wizard" ];
 
-  meta = with lib; {
+  meta = {
     description = "Wizarding tools for interacting with the Python dataclasses module";
     homepage = "https://github.com/rnag/dataclass-wizard";
     changelog = "https://github.com/rnag/dataclass-wizard/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ codifryed ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ codifryed ];
     mainProgram = "wiz";
   };
 }

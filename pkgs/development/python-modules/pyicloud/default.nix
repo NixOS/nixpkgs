@@ -59,12 +59,12 @@ buildPythonPackage rec {
     "test_storage"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with iCloud webservices";
     mainProgram = "icloud";
     homepage = "https://github.com/timlaing/pyicloud";
     changelog = "https://github.com/timlaing/pyicloud/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.mic92 ];
   };
 }

@@ -87,8 +87,6 @@ let
         ];
       });
 
-      av = self.av_13;
-
       imageio = super.imageio.overridePythonAttrs (oldAttrs: {
         disabledTests = oldAttrs.disabledTests or [ ] ++ [
           # broken by pyav pin
@@ -263,18 +261,6 @@ let
         };
       };
 
-      # xmltodict>=1.0 not compatible with georss-client and aio-georss-client
-      # https://github.com/exxamalte/python-aio-georss-client/issues/63
-      xmltodict = super.xmltodict.overridePythonAttrs rec {
-        version = "0.15.1";
-        src = fetchFromGitHub {
-          owner = "martinblech";
-          repo = "xmltodict";
-          tag = "v${version}";
-          hash = "sha256-j3shoXjAoAWFd+7k+0w6eoNygS2wkbhDkIq7QG+TmSM=";
-        };
-      };
-
       # internal python packages only consumed by home-assistant itself
       hass-web-proxy-lib = self.callPackage ./python-modules/hass-web-proxy-lib { };
       home-assistant-frontend = self.callPackage ./frontend.nix { };
@@ -305,7 +291,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.11.3";
+  hassVersion = "2025.12.2";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -326,13 +312,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-Wd+q2ooNguJMKnQ1uzLJtglAyBFXjBSj5hjEgY4bgzY=";
+    hash = "sha256-8JAI3urAl+RvAEV+C3sC0COSfK3oEGefT/dT6elIhRA=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-KxpjOPlusEHT+bRtgs/9EsIksTd4pRMKsXb7e5q+b2Q=";
+    hash = "sha256-glipo0eX5NHK0S0ktRtY6g1YUMU31nJB1YlIxIitzyY=";
   };
 
   build-system = with python.pkgs; [
@@ -360,9 +346,11 @@ python.pkgs.buildPythonApplication rec {
     })
 
     (fetchpatch {
-      # [2025.11.2] fix matter snapshots
-      url = "https://github.com/home-assistant/core/commit/04458e01be0748c3f6c980e126d5238d1ca915b6.patch";
-      hash = "sha256-gzc0KmSZhOfHVRhIVmOTFTJMI+pAX+8LcOit4JUypyA=";
+      # pytest 9 renames some snapshots
+      name = "revert-to-pytest-8.patch";
+      url = "https://github.com/home-assistant/core/commit/3f22dbaa2e1a7776185ec443bf26f90e90e55efa.patch";
+      revert = true;
+      hash = "sha256-rHXpmHUNCr+lhYqiOVrCSQTWvWJ+jHNwPJzUeFtDPIw=";
     })
   ];
 
@@ -372,6 +360,10 @@ python.pkgs.buildPythonApplication rec {
     substituteInPlace pyproject.toml \
       --replace-fail "setuptools==78.1.1" setuptools
   '';
+
+  pythonRemoveDeps = [
+    "uv"
+  ];
 
   dependencies = with python.pkgs; [
     # Only packages required in pyproject.toml
@@ -418,7 +410,6 @@ python.pkgs.buildPythonApplication rec {
     typing-extensions
     ulid-transform
     urllib3
-    uv
     voluptuous
     voluptuous-openapi
     voluptuous-serialize
@@ -535,13 +526,13 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://home-assistant.io/";
     changelog = "https://github.com/home-assistant/core/releases/tag/${src.tag}";
     description = "Open source home automation that puts local control and privacy first";
-    license = licenses.asl20;
-    teams = [ teams.home-assistant ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.home-assistant ];
+    platforms = lib.platforms.linux;
     mainProgram = "hass";
   };
 }

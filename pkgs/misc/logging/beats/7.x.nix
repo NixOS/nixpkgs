@@ -28,15 +28,14 @@ let
 
         subPackages = [ package ];
 
-        meta = with lib; {
+        meta = {
           homepage = "https://www.elastic.co/products/beats";
-          license = licenses.asl20;
-          maintainers = with maintainers; [
-            fadenb
+          license = lib.licenses.asl20;
+          maintainers = with lib.maintainers; [
             basvandijk
             dfithian
           ];
-          platforms = platforms.linux;
+          platforms = lib.platforms.linux;
         };
       } extraArgs
     );

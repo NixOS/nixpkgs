@@ -47,6 +47,8 @@ stdenv.mkDerivation {
     $out/bin/${baseName} --version | grep -q "${version}"
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Opinionated code formatter for Scala";
     homepage = "http://scalameta.org/scalafmt";

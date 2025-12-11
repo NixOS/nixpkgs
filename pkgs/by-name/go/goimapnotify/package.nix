@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "goimapnotify";
-  version = "2.5.3";
+  version = "2.5.4";
 
   src = fetchFromGitLab {
     owner = "shackra";
     repo = "goimapnotify";
     tag = version;
-    hash = "sha256-sA2fXk7/xnPl8ogrF00fiRCZvhFoHWjNlugL6gTGHk0=";
+    hash = "sha256-6hsepgXdG+BSSKTVics2459qUxYPIHKNqm2yq8UJXks=";
   };
 
   vendorHash = "sha256-5cZzaCoOR1R7iST0q3GaJbYIbKKEigeWqhp87maOL04=";
@@ -24,12 +24,12 @@ buildGoModule rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Execute scripts on IMAP mailbox changes (new/deleted/updated messages) using IDLE";
     homepage = "https://gitlab.com/shackra/goimapnotify";
     changelog = "https://gitlab.com/shackra/goimapnotify/-/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       wohanley
       rafaelrc
     ];

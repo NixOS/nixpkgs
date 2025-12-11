@@ -54,12 +54,12 @@ python3.pkgs.buildPythonApplication rec {
     ])
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Download manager GUI written in Python";
     mainProgram = "persepolis";
     homepage = "https://persepolisdm.github.io/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       iFreilicht
       L0L1P0P
     ];

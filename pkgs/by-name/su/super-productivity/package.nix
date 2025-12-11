@@ -14,13 +14,13 @@
 
 buildNpmPackage rec {
   pname = "super-productivity";
-  version = "16.3.0";
+  version = "16.5.0";
 
   src = fetchFromGitHub {
     owner = "johannesjo";
     repo = "super-productivity";
     tag = "v${version}";
-    hash = "sha256-Im5f3FjXa8i9nbWrhbYXGNAflitjfRGs8lGEQi42+CU=";
+    hash = "sha256-FBquRpn+g5wOwvM62MqL7RZ41LXer0CskVN5+5mD9kM=";
 
     postFetch = ''
       find $out -name package-lock.json -exec ${lib.getExe npm-lockfile-fix} -r {} \;
@@ -63,7 +63,7 @@ buildNpmPackage rec {
       dontInstall = true;
 
       outputHashMode = "recursive";
-      hash = "sha256-uaJ/k4xdxDdakfRfAdM//sFaGYZx4pWiMwZGmrw7X3Y=";
+      hash = "sha256-r0xlODXi4+C+Aat3e3goMIBvBordes/KVlsBG696ZWs=";
     }
   );
 

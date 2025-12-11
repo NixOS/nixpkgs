@@ -47,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioweenect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for the weenect API";
     homepage = "https://github.com/eifinger/aioweenect";
     changelog = "https://github.com/eifinger/aioweenect/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

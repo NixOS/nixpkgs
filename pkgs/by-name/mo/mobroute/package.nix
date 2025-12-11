@@ -32,7 +32,7 @@ buildGoModule rec {
     mv $out/bin/{cli,mobroute}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "General purpose public transportation router based on GTFS";
     longDescription = ''
       Mobroute is a general purpose public transportation router
@@ -48,10 +48,10 @@ buildGoModule rec {
       without comprising privacy or user freedoms.
     '';
     homepage = "https://git.sr.ht/~mil/mobroute";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.McSinyx ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.McSinyx ];
     mainProgram = "mobroute";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

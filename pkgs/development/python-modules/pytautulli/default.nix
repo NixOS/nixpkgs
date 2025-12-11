@@ -54,11 +54,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytautulli" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to get information from Tautulli";
     homepage = "https://github.com/ludeeus/pytautulli";
     changelog = "https://github.com/ludeeus/pytautulli/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

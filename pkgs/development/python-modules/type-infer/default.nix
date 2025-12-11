@@ -86,11 +86,11 @@ buildPythonPackage {
   env.NLTK_DATA = testNltkData;
   pythonImportsCheck = [ "type_infer" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mindsdb/type_infer/releases/tag/${tag}";
     description = "Automated type inference for Machine Learning pipelines";
     homepage = "https://github.com/mindsdb/type_infer";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

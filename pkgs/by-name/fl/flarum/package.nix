@@ -17,14 +17,14 @@ php.buildComposerProject2 (finalAttrs: {
 
   composerLock = ./composer.lock;
   composerStrictValidation = false;
-  vendorHash = "sha256-4wB8MRnqnruo9VXupMmAqiRSZx8F2i+8zcOphTeDp1g=";
+  vendorHash = "sha256-peQMR7+Jx+oXo0HdXOHzTYB9Fn0AkELm43fiV4ssLnI=";
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/flarum/framework/blob/main/CHANGELOG.md";
     description = "Delightfully simple discussion platform for your website";
     homepage = "https://github.com/flarum/flarum";
     license = lib.licenses.mit;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       fsagbuya
       jasonodoom
     ];

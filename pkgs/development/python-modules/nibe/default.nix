@@ -56,15 +56,15 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "nibe" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for the communication with Nibe heatpumps";
     homepage = "https://github.com/yozik04/nibe";
     changelog = "https://github.com/yozik04/nibe/releases/tag/${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

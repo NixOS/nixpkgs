@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysdcp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to control SONY projectors";
     homepage = "https://github.com/Galala7/pySDCP";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

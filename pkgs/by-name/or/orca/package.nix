@@ -31,13 +31,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "orca";
-  version = "49.4";
+  version = "49.5";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/orca/${lib.versions.major version}/orca-${version}.tar.xz";
-    hash = "sha256-trpMxYeEEcNKfVt+6bLFybHQSt0Qv9IPbiMx1ZQWUgc=";
+    hash = "sha256-U99BVYMZ6XwehK1gSYmVegK10P9TFBkZDwWH6mslYDQ=";
   };
 
   patches = [
@@ -113,7 +113,7 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://orca.gnome.org/";
     changelog = "https://gitlab.gnome.org/GNOME/orca/-/blob/main/NEWS";
     description = "Screen reader";
@@ -128,9 +128,9 @@ python3.pkgs.buildPythonApplication rec {
 
       Needs `services.gnome.at-spi2-core.enable = true;` in `configuration.nix`.
     '';
-    maintainers = with maintainers; [ berce ];
-    teams = [ teams.gnome ];
-    license = licenses.lgpl21;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ berce ];
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.linux;
   };
 }

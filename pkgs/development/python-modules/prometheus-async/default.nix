@@ -49,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "prometheus_async" ];
 
-  meta = with lib; {
+  meta = {
     description = "Async helpers for prometheus_client";
     homepage = "https://github.com/hynek/prometheus-async";
     changelog = "https://github.com/hynek/prometheus-async/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

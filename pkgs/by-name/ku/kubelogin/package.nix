@@ -45,11 +45,11 @@ buildGoModule rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Kubernetes credential plugin implementing Azure authentication";
     mainProgram = "kubelogin";
     inherit (src.meta) homepage;
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

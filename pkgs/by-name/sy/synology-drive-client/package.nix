@@ -19,12 +19,12 @@ let
   baseUrl = "https://global.synologydownload.com/download/Utility/SynologyDriveClient";
   version = "3.5.1-16101";
   buildNumber = lib.last (lib.splitString "-" version);
-  meta = with lib; {
+  meta = {
     description = "Desktop application to synchronize files and folders between the computer and the Synology Drive server";
     homepage = "https://www.synology.com/en-global/dsm/feature/drive";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       jcouyang
       MoritzBoehme
     ];

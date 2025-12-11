@@ -15,10 +15,10 @@ let
 in
 runCommand "${alsa-lib.pname}-${alsa-lib.version}"
   {
-    meta = with lib; {
+    meta = {
       description = "Wrapper to ease access to ALSA plugins";
       mainProgram = "aserver";
-      platforms = platforms.linux;
+      platforms = lib.platforms.linux;
     };
     outputs = alsa-lib.outputs;
   }

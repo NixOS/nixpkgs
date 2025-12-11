@@ -151,11 +151,11 @@ stdenvNoCC.mkDerivation rec {
   ];
   passthru.linuxHeaders = kernelHeaders;
 
-  meta = with lib; {
+  meta = {
     description = "Android libc implementation";
     homepage = "https://android.googlesource.com/platform/bionic/";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ s1341 ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ s1341 ];
   };
 }

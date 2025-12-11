@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./shtool.patch ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.ossp.org/pkg/lib/uuid/";
     description = "OSSP uuid ISO-C and C++ shared library";
     longDescription = ''
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       short lifetime and to reliably identifying very persistent
       objects across a network.
     '';
-    license = licenses.bsd2;
-    platforms = platforms.all;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
   };
 }

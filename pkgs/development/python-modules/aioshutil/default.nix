@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioshutil" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous version of function of shutil module";
     homepage = "https://github.com/kumaraditya303/aioshutil";
     changelog = "https://github.com/kumaraditya303/aioshutil/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

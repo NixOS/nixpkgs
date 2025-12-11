@@ -42,14 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
     elasticmq-server = finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Message queueing system with Java, Scala and Amazon SQS-compatible interfaces";
     homepage = "https://github.com/softwaremill/elasticmq";
     changelog = "https://github.com/softwaremill/elasticmq/releases/tag/v${finalAttrs.version}";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ peterromfeldhk ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     mainProgram = "elasticmq-server";
   };
 })

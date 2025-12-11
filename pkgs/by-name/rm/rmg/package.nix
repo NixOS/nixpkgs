@@ -10,12 +10,12 @@
   hidapi,
   libpng,
   libsamplerate,
+  libusb1,
   minizip,
   nasm,
   pkg-config,
   qt6Packages,
-  SDL2,
-  SDL2_net,
+  sdl3,
   speexdsp,
   vulkan-headers,
   vulkan-loader,
@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rmg";
-  version = "0.8.0";
+  version = "0.8.8";
 
   src = fetchFromGitHub {
     owner = "Rosalie241";
     repo = "RMG";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XMYHzPE5h9gD1fpN8b5YwOpY5zYCsYYQnof2MHDHa3E=";
+    hash = "sha256-d2kUUJTZhm5m7MIZ8Ym0wyBvX2+h/FsrRQoyLTi0/N8=";
   };
 
   nativeBuildInputs = [
@@ -53,9 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
     hidapi
     libpng
     libsamplerate
+    libusb1
     minizip
-    SDL2
-    SDL2_net
+    sdl3
     speexdsp
     vulkan-headers
     vulkan-loader
@@ -101,6 +101,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = if withAngrylionRdpPlus then lib.licenses.unfree else lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     mainProgram = "RMG";
-    maintainers = with lib.maintainers; [ slam-bert ];
   };
 })

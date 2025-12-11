@@ -15,6 +15,10 @@
   unbound,
   xdp-tools,
   openvswitch,
+  gawk,
+  coreutils,
+  gnugrep,
+  gnused,
   makeWrapper,
 }:
 let
@@ -117,7 +121,15 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${openvswitch}/share/openvswitch/scripts/ovs-lib $out/share/openvswitch/scripts/ovs-lib
 
     wrapProgram $out/share/ovn/scripts/ovn-ctl \
-      --prefix PATH : ${lib.makeBinPath [ openvswitch ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          openvswitch
+          gawk
+          coreutils # tr
+          gnugrep
+          gnused
+        ]
+      }
   '';
 
   env = {

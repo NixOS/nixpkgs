@@ -31,12 +31,12 @@ buildNpmPackage {
     pingvin-share = nixosTests.pingvin-share;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Frontend of pingvin-share, a self-hosted file sharing platform";
     homepage = "https://github.com/stonith404/pingvin-share";
     downloadPage = "https://github.com/stonith404/pingvin-share/releases";
     changelog = "https://github.com/stonith404/pingvin-share/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ratcornu ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ ratcornu ];
   };
 }

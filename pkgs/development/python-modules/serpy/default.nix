@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "serpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Ridiculously fast object serialization";
     homepage = "https://github.com/clarkduvall/serpy";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -41,6 +41,8 @@ let
     ];
 
     nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ yasm ];
+
+    env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-c++11-narrowing";
   });
 in
 telegram-desktop.override {
@@ -69,12 +71,18 @@ telegram-desktop.override {
       })
     ];
 
-    buildInputs = (old.buildInputs or [ ]) ++ [
-      alsa-lib
-      jemalloc
-      libopus
-      libpulseaudio
-    ];
+    buildInputs =
+      (old.buildInputs or [ ])
+      ++ [
+        libopus
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        alsa-lib
+        jemalloc
+        libpulseaudio
+      ];
+
+    env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-missing-template-arg-list-after-template-kw";
 
     meta = {
       description = "Kotatogram – experimental Telegram Desktop fork";

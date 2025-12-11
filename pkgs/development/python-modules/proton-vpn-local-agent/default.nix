@@ -47,6 +47,14 @@ buildPythonPackage rec {
     rustPlatform.cargoCheckHook
   ];
 
+  postPatch = ''
+    substituteInPlace scripts/build_wheel.py \
+      --replace-fail 'ARCH = "x86_64"' \
+                     'ARCH = "${stdenv.hostPlatform.uname.processor}"' \
+      --replace-fail 'LIB_PATH = get_lib_path("x86_64-unknown-linux-gnu")' \
+                     'LIB_PATH = get_lib_path("${stdenv.hostPlatform.config}")'
+  '';
+
   postBuild = ''
     ${python.interpreter} scripts/build_wheel.py
     mkdir -p ./dist

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   nixosTests,
-  systemd,
+  systemdLibs,
   withSystemdSupport ? true,
 }:
 
@@ -27,22 +27,22 @@ buildGoModule rec {
   ];
 
   nativeBuildInputs = lib.optionals withSystemdSupport [ makeWrapper ];
-  buildInputs = lib.optionals withSystemdSupport [ systemd ];
+  buildInputs = lib.optionals withSystemdSupport [ systemdLibs ];
   tags = lib.optionals (!withSystemdSupport) "nosystemd";
 
   postInstall = lib.optionals withSystemdSupport ''
     wrapProgram $out/bin/postfix_exporter \
-      --prefix LD_LIBRARY_PATH : "${lib.getLib systemd}/lib"
+      --prefix LD_LIBRARY_PATH : "${lib.getLib systemdLibs}/lib"
   '';
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) postfix; };
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Prometheus exporter for Postfix";
     mainProgram = "postfix_exporter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       globin
     ];
   };

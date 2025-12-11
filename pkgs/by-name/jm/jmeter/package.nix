@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     timeout --kill=1s 1s $out/bin/jmeter-mirror-server.sh || test "$?" = "124"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "100% pure Java desktop application designed to load test functional behavior and measure performance";
     longDescription = ''
       The Apache JMeter desktop application is open source software, a 100%
@@ -62,9 +62,9 @@ stdenv.mkDerivation rec {
       measure performance. It was originally designed for testing Web
       Applications but has since expanded to other test functions.
     '';
-    license = licenses.asl20;
-    maintainers = [ maintainers.bryanasdev000 ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
     priority = 1;
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

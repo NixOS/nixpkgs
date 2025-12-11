@@ -17,14 +17,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-3BbSTzFcQju0n7pwFqvrJB2sU8RM47Svi4lndlhkYmE=";
 
-  meta = with lib; {
+  meta = {
     description = "Tool to convert Steam .acf files to JSON";
     homepage = "https://github.com/chisui/acf";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ chisui ];
+    maintainers = with lib.maintainers; [ chisui ];
     mainProgram = "acf";
   };
 }

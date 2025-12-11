@@ -49,11 +49,11 @@ buildPythonPackage rec {
     sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Communication library between internal components for Ultimaker software";
     homepage = "https://github.com/Ultimaker/libArcus";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

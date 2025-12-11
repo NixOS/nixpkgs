@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     install -Dt $out/bin braincurses
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bderrly/braincurses";
     description = "Version of the classic game Mastermind";
     mainProgram = "braincurses";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ dotlambda ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    platforms = lib.platforms.linux;
   };
 }

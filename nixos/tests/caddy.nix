@@ -3,7 +3,6 @@
   name = "caddy";
   meta = with pkgs.lib.maintainers; {
     maintainers = [
-      Br1ght0ne
       stepbrobd
     ];
   };

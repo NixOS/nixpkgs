@@ -24,11 +24,11 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to generate a formatted text table, using ASCII characters";
     homepage = "https://github.com/foutaise/texttable";
     changelog = "https://github.com/foutaise/texttable/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

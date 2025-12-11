@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-cpPEIFoEqc/4Md+/5e09B/ZQ+7cflLE+PY4ATAgWUvo=";
 
-  meta = with lib; {
+  meta = {
     description = "Simple Git/Mercurial/PlasticSCM tui client based on keyboard shortcuts";
     homepage = "https://vamolessa.github.io/verco";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
     mainProgram = "verco";
   };

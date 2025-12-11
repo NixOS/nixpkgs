@@ -113,24 +113,6 @@ self: super:
       )
   ) { };
 
-  bitmap = addMainProgram super.bitmap { };
-
-  editres = super.editres.overrideAttrs (attrs: {
-    hardeningDisable = [ "format" ];
-    meta = attrs.meta // {
-      mainProgram = "editres";
-    };
-  });
-
-  fonttosfnt = super.fonttosfnt.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      license = lib.licenses.mit;
-      mainProgram = "fonttosfnt";
-    };
-  });
-
-  iceauth = addMainProgram super.iceauth { };
-
   mkfontdir = xorg.mkfontscale;
 
   xdpyinfo = super.xdpyinfo.overrideAttrs (attrs: {
@@ -164,19 +146,6 @@ self: super:
       mainProgram = "xdm";
     };
   });
-
-  setxkbmap = super.setxkbmap.overrideAttrs (attrs: {
-    postInstall = ''
-      mkdir -p $out/share/man/man7
-      ln -sfn ${xorg.xkeyboardconfig}/etc/X11 $out/share/X11
-      ln -sfn ${xorg.xkeyboardconfig}/share/man/man7/xkeyboard-config.7.gz $out/share/man/man7
-    '';
-    meta = attrs.meta // {
-      mainProgram = "setxkbmap";
-    };
-  });
-
-  oclock = addMainProgram super.oclock { };
 
   xf86inputevdev = super.xf86inputevdev.overrideAttrs (attrs: {
     outputs = [

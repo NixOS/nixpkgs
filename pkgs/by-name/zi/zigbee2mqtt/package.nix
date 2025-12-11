@@ -16,19 +16,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zigbee2mqtt";
-  version = "2.6.3";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "Koenkk";
     repo = "zigbee2mqtt";
     tag = finalAttrs.version;
-    hash = "sha256-50f5cSwrLiGfMeb3pqOc+599f0y8vG/7emQO1GLrO/4=";
+    hash = "sha256-aKLgp8/BkxBu2lQwFeG4VhjzN9/X8sYuhILXjUreZBQ=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
-    hash = "sha256-Z8wZX4kGvCG6uAwBxhtY8kFn7WPid8PuxPFjr95nE/I=";
+    hash = "sha256-XHDSjjYt/wbCdafLQ73dxDD+1ClbFtI7NejS9h5SNmE=";
   };
 
   nativeBuildInputs = [
@@ -54,18 +54,18 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.zigbee2mqtt = nixosTests.zigbee2mqtt;
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/Koenkk/zigbee2mqtt/releases/tag/${finalAttrs.version}";
     description = "Zigbee to MQTT bridge using zigbee-shepherd";
     homepage = "https://github.com/Koenkk/zigbee2mqtt";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     longDescription = ''
       Allows you to use your Zigbee devices without the vendor's bridge or gateway.
 
       It bridges events and allows you to control your Zigbee devices via MQTT.
       In this way you can integrate your Zigbee devices with whatever smart home infrastructure you are using.
     '';
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       sweber
       hexa
     ];

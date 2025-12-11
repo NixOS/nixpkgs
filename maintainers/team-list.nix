@@ -79,7 +79,6 @@ with lib.maintainers;
   bazel = {
     members = [
       mboes
-      uri-canva
       cbley
       olebedev
       groodt
@@ -137,7 +136,6 @@ with lib.maintainers;
 
   c = {
     members = [
-      matthewbauer
       mic92
     ];
     scope = "Maintain C libraries and tooling.";
@@ -343,6 +341,10 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  feel-co = {
+    github = "feel-co";
+  };
+
   flutter = {
     enableFeatureFreezePing = false;
     github = "flutter";
@@ -397,7 +399,6 @@ with lib.maintainers;
 
   gitlab = {
     members = [
-      globin
       krav
       leona
       talyz
@@ -492,7 +493,6 @@ with lib.maintainers;
 
   jetbrains = {
     members = [
-      edwtjo
       leona
       theCapypara
       thiagokokada
@@ -532,7 +532,6 @@ with lib.maintainers;
       aanderse
       cpages
       dschrempf
-      edwtjo
       kazenyuk
       minijackson
       peterhoeg
@@ -548,8 +547,6 @@ with lib.maintainers;
   libretro = {
     members = [
       aanderse
-      edwtjo
-      hrdinka
       thiagokokada
     ];
     scope = "Maintain Libretro, RetroArch and related packages.";
@@ -641,7 +638,6 @@ with lib.maintainers;
   matrix = {
     members = [
       ma27
-      fadenb
       mguentner
       dandellion
       nickcao
@@ -790,7 +786,6 @@ with lib.maintainers;
     members = [
       sgo
       marcusramberg
-      zakame
     ];
     scope = "Maintain the Perl interpreter and Perl packages.";
     shortName = "Perl";

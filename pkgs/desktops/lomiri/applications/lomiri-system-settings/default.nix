@@ -194,16 +194,16 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "System Settings application for Lomiri";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-system-settings";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/blob/${
       if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "lomiri-system-settings";
-    teams = [ teams.lomiri ];
-    platforms = platforms.linux;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.linux;
     pkgConfigModules = [ "LomiriSystemSettings" ];
   };
 })

@@ -59,11 +59,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lacuscore" ];
 
-  meta = with lib; {
+  meta = {
     description = "Modulable part of Lacus";
     homepage = "https://github.com/ail-project/LacusCore";
     changelog = "https://github.com/ail-project/LacusCore/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

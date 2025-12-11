@@ -41,15 +41,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.wch-ic.com/";
     downloadPage = "https://github.com/WCHSoftGroup/ch9344ser_linux";
     description = "WCH CH9344/CH348 UART driver";
     longDescription = ''
       A kernel module for WinChipHead CH9344/CH348 USB To Multi Serial Ports controller.
     '';
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ RadxaYuntian ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ RadxaYuntian ];
   };
 }

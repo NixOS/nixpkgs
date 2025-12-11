@@ -101,7 +101,6 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      orivej
       rnhmjoj
     ];
   };

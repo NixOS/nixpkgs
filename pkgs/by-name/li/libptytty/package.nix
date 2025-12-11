@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
       "-DLASTLOG_SUPPORT=OFF"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "OS independent and secure pty/tty and utmp/wtmp/lastlog";
     homepage = "http://dist.schmorp.de/libptytty";
-    maintainers = with maintainers; [ rnhmjoj ];
-    platforms = platforms.unix;
-    license = licenses.gpl2;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2;
     # pkgsMusl.pkgsStatic errors as:
     #   ln: failed to create symbolic link './include': File exists
     broken = isStatic && isMusl;

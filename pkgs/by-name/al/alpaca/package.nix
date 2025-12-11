@@ -22,7 +22,6 @@
   pipewire,
   glib-networking,
   bash,
-  fetchpatch,
 }:
 
 let
@@ -34,23 +33,15 @@ let
 in
 pythonPackages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "8.3.1";
+  version = "8.5.0";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
     tag = version;
-    hash = "sha256-X3kITzZBcpN3kYDiT2PTu9UvuWQ/XSq3tVYYMa1btnY=";
+    hash = "sha256-1/Tg1L7/6ODhSdHYiEky5E33cNC5ZTCzLNd369yTz7o=";
   };
-
-  # TODO: remove in the next release
-  patches = [
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/Jeffser/Alpaca/pull/1043.patch";
-      hash = "sha256-y0NiT0FvyB/fKvi+5E0hSzDs1Ds2ydqRO1My83bnmYY=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace src/widgets/activities/terminal.py \
@@ -96,7 +87,7 @@ pythonPackages.buildPythonApplication rec {
       gst-python
       opencv4
     ]
-    ++ lib.flatten (builtins.attrValues optional-dependencies);
+    ++ lib.concatAttrValues optional-dependencies;
 
   optional-dependencies = with pythonPackages; {
     speech-to-text = [

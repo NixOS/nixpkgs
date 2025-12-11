@@ -298,17 +298,16 @@ buildFHSEnv {
     });
   };
 
-  meta = with lib; {
+  meta = {
     description = "Professional video editing, color, effects and audio post-processing";
     homepage = "https://www.blackmagicdesign.com/products/davinciresolve";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       amarshall
-      orivej
       XBagon
     ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
   };
 }

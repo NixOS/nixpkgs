@@ -52,15 +52,15 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-mock
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "coinmetrics.api_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Coin Metrics API v4 client library";
     homepage = "https://coinmetrics.github.io/api-client-python/site/index.html";
-    license = licenses.mit;
-    maintainers = with maintainers; [ centromere ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ centromere ];
     mainProgram = "coinmetrics";
   };
 }

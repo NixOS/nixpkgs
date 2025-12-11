@@ -42,11 +42,14 @@
   p11-kit,
   openldap,
   spamassassin,
+  gnutar,
+  gzip,
+  xz,
 }:
 
 stdenv.mkDerivation rec {
   pname = "evolution";
-  version = "3.58.1";
+  version = "3.58.2";
 
   outputs = [
     "out"
@@ -55,7 +58,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-A9jQzM0QKqGnPDHZ4vN0yz24Os3fwRJskYavY9psvsw=";
+    hash = "sha256-uhvDtXKKMbjJ6qDaHuiulG7dzFRO6CQtzMIJ2W3KozA=";
   };
 
   nativeBuildInputs = [
@@ -116,6 +119,18 @@ stdenv.mkDerivation rec {
     "-DWITH_OPENLDAP=${openldap}"
   ];
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "${
+        lib.makeBinPath [
+          gnutar
+          gzip
+          xz
+        ]
+      }"
+    )
+  '';
+
   requiredSystemFeatures = [
     "big-parallel"
   ];
@@ -132,12 +147,12 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_CAMEL_1_2_CAMEL_PROVIDERDIR = "${placeholder "out"}/lib/evolution-data-server/camel-providers";
   PKG_CONFIG_LIBEDATASERVERUI_1_2_UIMODULEDIR = "${placeholder "out"}/lib/evolution-data-server/ui-modules";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/evolution";
     description = "Personal information management application that provides integrated mail, calendaring and address book functionality";
     mainProgram = "evolution";
-    teams = [ teams.gnome ];
-    license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

@@ -23,11 +23,11 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Proxy for using W3C WebDriver-compatible clients to interact with Gecko-based browsers";
     homepage = "https://github.com/mozilla/geckodriver";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ jraygauthier ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ jraygauthier ];
     mainProgram = "geckodriver";
   };
 }

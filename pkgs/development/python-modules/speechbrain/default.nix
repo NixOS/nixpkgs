@@ -67,5 +67,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/speechbrain/speechbrain/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+    badPlatforms = [
+      # See https://github.com/NixOS/nixpkgs/issues/466092
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

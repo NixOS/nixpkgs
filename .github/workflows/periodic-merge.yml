@@ -26,7 +26,7 @@ jobs:
     steps:
       # Use a GitHub App to create the PR so that CI gets triggered
       # The App is scoped to Repository > Contents and Pull Requests: write for Nixpkgs
-      - uses: actions/create-github-app-token@7e473efe3cb98aa54f8d4bac15400b15fad77d94 # v2.2.0
+      - uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
         id: app-token
         with:
           app-id: ${{ vars.NIXPKGS_CI_APP_ID }}
@@ -34,7 +34,7 @@ jobs:
           permission-contents: write
           permission-pull-requests: write
 
-      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           persist-credentials: false
 

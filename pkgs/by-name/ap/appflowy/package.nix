@@ -17,11 +17,11 @@ let
     rec {
       x86_64-linux = {
         urlSuffix = "linux-x86_64.tar.gz";
-        hash = "sha256-q5hFX4qO4BJdrsCvZJICCHwOEUYMjk9mnJ61/MCycxs=";
+        hash = "sha256-HXBRWQfdhlKmOOULdRELrGcxVVhKV+PvgtRHW1yU6+I=";
       };
       x86_64-darwin = {
         urlSuffix = "macos-universal.zip";
-        hash = "sha256-0deWxb0nUSkCQ7eXo3XqfonlMTItQHixuAC2iYry8Ec=";
+        hash = "sha256-Mv4HfG93+NpbMAhDwcXZ260APL+sbYM6C+DqGZr6ogU=";
       };
       aarch64-darwin = x86_64-darwin;
     }
@@ -30,7 +30,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "appflowy";
-  version = "0.10.3";
+  version = "0.10.4";
 
   src = fetchzip {
     url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${finalAttrs.version}/AppFlowy-${finalAttrs.version}-${dist.urlSuffix}";
@@ -101,14 +101,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open-source alternative to Notion";
     homepage = "https://www.appflowy.io/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.agpl3Only;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.agpl3Only;
     changelog = "https://github.com/AppFlowy-IO/appflowy/releases/tag/${finalAttrs.version}";
-    maintainers = with maintainers; [ darkonion0 ];
-    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
+    maintainers = with lib.maintainers; [ darkonion0 ];
+    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
     mainProgram = "appflowy";
   };
 })

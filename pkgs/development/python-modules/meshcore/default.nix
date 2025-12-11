@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "meshcore";
-  version = "2.2.1";
+  version = "2.2.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-HpCbGG+ZQdVWIeE3mJFFQ7w5W+JjcNb+Tb53i9uT5CA=";
+    sha256 = "sha256-vn/vF4avMDwDLL0EMVrrMWkZrZ1GTiUxGyTBOtKvG1I=";
   };
 
   build-system = [ hatchling ];
@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "meshcore" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for communicating with meshcore companion radios";
     homepage = "https://github.com/meshcore-dev/meshcore_py";
-    license = licenses.mit;
-    maintainers = [ maintainers.haylin ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.haylin ];
   };
 }

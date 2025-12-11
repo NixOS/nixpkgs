@@ -659,13 +659,13 @@ If you have any problems with formatting, please ping the [formatting team](http
   Do
 
   ```nix
-  { rev = version; }
+  { tag = version; }
   ```
 
   instead of
 
   ```nix
-  { rev = "${version}"; }
+  { tag = "${version}"; }
   ```
 
 - Building lists conditionally _should_ be done with `lib.optional(s)` instead of using `if cond then [ ... ] else null` or `if cond then [ ... ] else [ ]`.

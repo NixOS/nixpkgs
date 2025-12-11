@@ -12,21 +12,17 @@
 
 buildPythonPackage rec {
   pname = "doorbirdpy";
-  version = "3.0.10";
+  version = "3.0.11";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "klikini";
     repo = "doorbirdpy";
     tag = version;
-    hash = "sha256-7mA4yyvNPKOGb6Ap7kjCLhR7G1E1CQqgWCtAhciCnR4=";
+    hash = "sha256-2CKjcE3ABjSKWalsXggHFgilhDMAbP4VfkzVNzp7QoY=";
   };
 
   build-system = [ setuptools ];
-
-  pythonRelaxDeps = [
-    "tenacity"
-  ];
 
   dependencies = [
     aiohttp

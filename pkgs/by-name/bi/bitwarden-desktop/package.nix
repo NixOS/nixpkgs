@@ -3,10 +3,10 @@
   buildNpmPackage,
   cargo,
   copyDesktopItems,
+  dart,
   darwin,
   electron_37,
   fetchFromGitHub,
-  fetchpatch2,
   gnome-keyring,
   jq,
   llvmPackages_18,
@@ -34,13 +34,13 @@ let
 in
 buildNpmPackage' rec {
   pname = "bitwarden-desktop";
-  version = "2025.10.0";
+  version = "2025.11.2";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-A7bxAdFDChr7yiexV70N3tqhaUVAwJdGhhRKJyX0ra8=";
+    hash = "sha256-0djpeXHHqA8tVcQsE/yCDZVnoEuYwUpln2Hhj2chGNc=";
   };
 
   patches = [
@@ -55,11 +55,6 @@ buildNpmPackage' rec {
     ./skip-afterpack-and-aftersign.patch
     # since out arch doesn't match upstream, we'll generate and use desktop_napi.node instead of desktop_napi.${platform}-${arch}.node
     ./dont-use-platform-triple.patch
-
-    (fetchpatch2 {
-      url = "https://github.com/bitwarden/clients/commit/cd56d01894c38cf046a7e44dcacc7e0ff2aa2a37.patch?full_index=1";
-      hash = "sha256-NRZiM+Y/ifh77vS+8mldbiwv/vPDr1JUOJzSu2tFMS8=";
-    })
   ];
 
   postPatch = ''
@@ -92,7 +87,7 @@ buildNpmPackage' rec {
     "--ignore-scripts"
   ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-Qhj8Lh25vNnJzbUm/M+mKIc6Fa5plSCiy53vjevs7Tc=";
+  npmDepsHash = "sha256-l5Lcm1ggF7qFqNuSYRoRPf1Gbt/gH3g6dYu30YTXgsI=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit
@@ -102,7 +97,7 @@ buildNpmPackage' rec {
       cargoRoot
       patches
       ;
-    hash = "sha256-fgnf+yT3UV8dHTE2tDHdBWTBW+LHAYI/JGgfS0J/Bgk=";
+    hash = "sha256-WhiKqN+FCR/c9BuwhQT0EoidGUkP2ueSlsnupUflVlM=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -134,6 +129,9 @@ buildNpmPackage' rec {
       echo 'ERROR: electron version mismatch'
       exit 1
     fi
+
+    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+      --replace-fail "\''${compiler_module_1.compilerModule}/dart-sass/src/dart" "${lib.getExe' dart "dartaotruntime"}"
 
     pushd apps/desktop/desktop_native/napi
     npm run build

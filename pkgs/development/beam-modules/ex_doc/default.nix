@@ -14,12 +14,12 @@
 
 let
   pname = "ex_doc";
-  version = "0.39.1";
+  version = "0.39.2";
   src = fetchFromGitHub {
     owner = "elixir-lang";
     repo = "${pname}";
     rev = "v${version}";
-    hash = "sha256-edK484d5Fn5Kb/UEV1g3XinFF1rQJ1DypLEueET//Bg=";
+    hash = "sha256-khQIYS7iHOODlLMwFYPJTVE0MNia/gwYcin9ITpwttY=";
   };
 in
 mixRelease {
@@ -50,14 +50,14 @@ mixRelease {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/elixir-lang/ex_doc";
     description = ''
       ExDoc produces HTML and EPUB documentation for Elixir projects
     '';
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     mainProgram = "ex_doc";
-    maintainers = with maintainers; [ chiroptical ];
+    maintainers = with lib.maintainers; [ chiroptical ];
   };
 }

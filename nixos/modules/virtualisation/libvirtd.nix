@@ -394,6 +394,11 @@ in
         The backend used to setup virtual network firewall rules.
       '';
     };
+
+    dbus = {
+      enable = mkEnableOption "exposing libvirtd APIs over D-Bus";
+      package = mkPackageOption pkgs "libvirt-dbus" { };
+    };
   };
 
   ###### implementation
@@ -426,15 +431,28 @@ in
 
     boot.kernelModules = [ "tun" ];
 
-    users.groups.libvirtd.gid = config.ids.gids.libvirtd;
-
-    # libvirtd runs qemu as this user and group by default
-    users.extraGroups.qemu-libvirtd.gid = config.ids.gids.qemu-libvirtd;
-    users.extraUsers.qemu-libvirtd = {
-      uid = config.ids.uids.qemu-libvirtd;
-      isNormalUser = false;
-      group = "qemu-libvirtd";
-    };
+    users = lib.mkMerge [
+      {
+        # libvirtd runs qemu as this user and group by default
+        users.qemu-libvirtd = {
+          uid = config.ids.uids.qemu-libvirtd;
+          isNormalUser = false;
+          group = "qemu-libvirtd";
+        };
+        groups = {
+          libvirtd.gid = config.ids.gids.libvirtd;
+          qemu-libvirtd.gid = config.ids.gids.qemu-libvirtd;
+        };
+      }
+      (lib.mkIf cfg.dbus.enable {
+        users.libvirtdbus = {
+          isSystemUser = true;
+          group = "libvirtdbus";
+          description = "Libvirt D-Bus bridge";
+        };
+        groups.libvirtdbus = { };
+      })
+    ];
 
     security.wrappers.qemu-bridge-helper = {
       setuid = true;
@@ -449,7 +467,7 @@ in
 
     services.firewalld.packages = [ cfg.package ];
 
-    systemd.packages = [ cfg.package ];
+    systemd.packages = [ cfg.package ] ++ lib.optional cfg.dbus.enable cfg.dbus.package;
 
     systemd.services.libvirtd-config = {
       description = "Libvirt Virtual Machine Management Daemon - configuration";
@@ -629,5 +647,7 @@ in
       (mkIf cfg.nss.enable (mkOrder 430 [ "libvirt" ]))
       (mkIf cfg.nss.enableGuest (mkOrder 432 [ "libvirt_guest" ]))
     ];
+
+    services.dbus.packages = lib.optional cfg.dbus.enable cfg.dbus.package;
   };
 }

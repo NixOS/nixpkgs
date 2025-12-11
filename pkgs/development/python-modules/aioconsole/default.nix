@@ -54,12 +54,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioconsole" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous console and interfaces for asyncio";
     changelog = "https://github.com/vxgmichel/aioconsole/releases/tag/v${version}";
     homepage = "https://github.com/vxgmichel/aioconsole";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ catern ];
+    license = lib.licenses.gpl3Only;
     mainProgram = "apython";
   };
 }

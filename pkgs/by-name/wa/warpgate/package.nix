@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (
 
       patches = [ ./web-ui-package-json.patch ];
 
-      npmDepsHash = "sha256-1zCxKAH2IAKSFdL8Pyd8dJi0i8Y5mgYcWNKVpiQszc0=";
+      npmDepsHash = "sha256-jgsNF93DkEVgPGzdi192HKoSHPYhdrtog28jZvOLK6E=";
 
       nativeBuildInputs = [ openapi-generator-cli ];
 
@@ -35,21 +35,22 @@ rustPlatform.buildRustPackage (
   in
   {
     pname = "warpgate";
-    version = "0.17.0";
+    version = "0.18.0";
 
     src = fetchFromGitHub {
       owner = "warp-tech";
       repo = "warpgate";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-nr0z8c0o5u4Rqs9pFUaxnasRHUhwT3qQe5+JNV+LObg=";
+      hash = "sha256-GLY/VGEKB6gFNTbBlbhpmqQZ62pk2wd6JwWwy4Tz0FE=";
     };
 
-    cargoHash = "sha256-pIr5Z7rp+dYOuKYnlsBdya6MqAdL0U2gUhwXvLfmM34=";
+    cargoHash = "sha256-hwAtj8tTDsYgzuDobMg97wepKKIpohSVClyRiaDd+8w=";
 
     patches = [
       (replaceVars ./hardcode-version.patch { inherit (finalAttrs) version; })
-      ./disable-rust-reproducible-build.patch
     ];
+
+    RUSTFLAGS = "--cfg tokio_unstable";
 
     buildFeatures = [
       "postgres"
@@ -57,7 +58,10 @@ rustPlatform.buildRustPackage (
       "sqlite"
     ];
 
-    preBuild = ''ln -rs "${warpgate-web}" warpgate-web/dist'';
+    preBuild = ''
+      rm -r .cargo/
+      ln -rs "${warpgate-web}" warpgate-web/dist
+    '';
 
     # skip check, project included tests require python stuff and docker
     doCheck = false;

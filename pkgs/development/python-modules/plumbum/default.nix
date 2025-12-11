@@ -43,7 +43,7 @@ buildPythonPackage rec {
     pytest-timeout
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     export HOME=$TMP
@@ -64,11 +64,11 @@ buildPythonPackage rec {
     "tests/test_remote.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module Shell Combinators";
     changelog = "https://github.com/tomerfiliba/plumbum/releases/tag/v${version}";
     homepage = "https://github.com/tomerfiliba/plumbum";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

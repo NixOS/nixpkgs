@@ -43,12 +43,12 @@ buildPythonPackage rec {
     popd
   '';
 
-  meta = with lib; {
+  meta = {
     description = "General simulation data file format";
     mainProgram = "gsd";
     homepage = "https://github.com/glotzerlab/gsd";
     changelog = "https://github.com/glotzerlab/gsd/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

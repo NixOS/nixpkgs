@@ -85,7 +85,7 @@ buildPythonPackage rec {
     pytestCheckHook
     writableTmpDirAsHomeHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies)
+  ++ lib.concatAttrValues optional-dependencies
   ++ inline-snapshot.optional-dependencies.dirty-equals;
 
   disabledTests = [

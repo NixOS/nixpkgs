@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -14,7 +15,6 @@
   pydantic,
   pydantic-extra-types,
   requests,
-  sentencepiece,
   tiktoken,
   typing-extensions,
 
@@ -26,6 +26,7 @@
   pycountry,
   pydantic-settings,
   pytestCheckHook,
+  sentencepiece,
   soundfile,
   soxr,
   uvicorn,
@@ -33,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "mistral-common";
-  version = "1.8.4";
+  version = "1.8.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-common";
     tag = "v${version}";
-    hash = "sha256-HB6dsqiDSLhjyANk7ZT/cU98mjJamegAF0uKH8GfgM8=";
+    hash = "sha256-k0En4QHQGzuUm6kdAyPQhbCrmwX3ay/xJ/ktCxiZIBk=";
   };
 
   build-system = [ setuptools ];
@@ -53,10 +54,36 @@ buildPythonPackage rec {
     pydantic
     pydantic-extra-types
     requests
-    sentencepiece
     tiktoken
     typing-extensions
   ];
+
+  optional-dependencies = lib.fix (self: {
+    opencv = [
+      opencv-python-headless
+    ];
+    # Broken on Darwin. See https://github.com/NixOS/nixpkgs/issues/466092
+    sentencepiece = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      sentencepiece
+    ];
+    soundfile = [
+      soundfile
+    ];
+    soxr = [
+      soxr
+    ];
+    audio = self.soundfile ++ self.soxr;
+    image = self.opencv;
+    hf-hub = [
+      huggingface-hub
+    ];
+    server = [
+      click
+      fastapi
+      pydantic-settings
+    ]
+    ++ fastapi.optional-dependencies.standard;
+  });
 
   pythonImportsCheck = [ "mistral_common" ];
 
@@ -71,7 +98,8 @@ buildPythonPackage rec {
     soundfile
     soxr
     uvicorn
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Require internet
@@ -84,6 +112,20 @@ buildPythonPackage rec {
 
     # AssertionError, Extra items in the right set
     "test_openai_chat_fields"
+  ];
+
+  # Requires sentencepiece which segfaults when initialized on Darwin
+  # See https://github.com/NixOS/nixpkgs/issues/466092
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    "tests/experimental/test_app.py"
+    "tests/experimental/test_tools.py"
+    "tests/test_fim_tokenizer.py"
+    "tests/test_integration_samples.py"
+    "tests/test_mistral_tokenizer.py"
+    "tests/test_tokenize_v1.py"
+    "tests/test_tokenize_v2.py"
+    "tests/test_tokenize_v3.py"
+    "tests/test_tokenizer_v7.py"
   ];
 
   meta = {

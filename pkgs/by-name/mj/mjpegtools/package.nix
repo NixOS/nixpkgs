@@ -72,11 +72,11 @@ stdenv.mkDerivation rec {
     "lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Suite of programs for processing MPEG or MJPEG video";
     homepage = "http://mjpeg.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

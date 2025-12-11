@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
     rm -rf $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Foreign function call library";
     homepage = "https://www.gnu.org/software/libffcall/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

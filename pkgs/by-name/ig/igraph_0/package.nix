@@ -101,12 +101,12 @@ stdenv.mkDerivation (finalAttrs: {
     install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libigraph.dylib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C library for complex network analysis and graph theory";
     homepage = "https://igraph.org/";
     changelog = "https://github.com/igraph/igraph/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
     inherit (hal-hardware-analyzer.meta) maintainers;
   };
 })

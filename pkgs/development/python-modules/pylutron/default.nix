@@ -25,14 +25,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylutron" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for controlling a Lutron RadioRA 2 system";
     homepage = "https://github.com/thecynic/pylutron";
     changelog = "https://github.com/thecynic/pylutron/releases/tag/${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       psfl
     ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

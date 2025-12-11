@@ -491,6 +491,13 @@ in
     };
   });
 
+  luacov = prev.luacov.overrideAttrs (oa: {
+    postInstall = ''
+      mkdir -p $out/share/lua/${lua.luaversion}/luacov/reporter/src/luacov/reporter/html
+      mv src/luacov/reporter/html/static $out/share/lua/${lua.luaversion}/luacov/reporter/src/luacov/reporter/html/static
+    '';
+  });
+
   luadbi-mysql = prev.luadbi-mysql.overrideAttrs (oa: {
 
     luarocksConfig = lib.recursiveUpdate oa.luarocksConfig {

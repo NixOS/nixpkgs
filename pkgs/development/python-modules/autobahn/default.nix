@@ -123,11 +123,11 @@ buildPythonPackage rec {
     ui = [ pygobject3 ];
   });
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/crossbario/autobahn-python/blob/${src.rev}/docs/changelog.rst";
     description = "WebSocket and WAMP in Python for Twisted and asyncio";
     homepage = "https://crossbar.io/autobahn";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

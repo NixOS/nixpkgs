@@ -208,9 +208,7 @@ py.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      bhipple
       davegallant
-      bryanasdev000
       devusb
       anthonyroussel
     ];

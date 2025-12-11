@@ -68,11 +68,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tablib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Format-agnostic tabular dataset library";
     homepage = "https://tablib.readthedocs.io/";
     changelog = "https://github.com/jazzband/tablib/raw/v${version}/HISTORY.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

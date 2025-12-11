@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
     "-Dnautilus-extension-dir=${placeholder "nautilusExtension"}/lib/nautilus/extensions-4"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Graphical editor for ACLs and extended attributes";
     homepage = "https://rofi.roger-ferrer.org/eiciel/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "eiciel";
   };
 }

@@ -128,12 +128,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pelican" ];
 
-  meta = with lib; {
+  meta = {
     description = "Static site generator that requires no database or server-side logic";
     homepage = "https://getpelican.com/";
     changelog = "https://github.com/getpelican/pelican/blob/${src.tag}/docs/changelog.rst";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       offline
       prikhi
     ];

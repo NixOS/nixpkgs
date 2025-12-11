@@ -5,6 +5,7 @@
   nixDependencies,
   generateSplicesForMkScope,
   fetchFromGitHub,
+  fetchpatch2,
   runCommand,
   pkgs,
   pkgsi686Linux,
@@ -165,17 +166,26 @@ lib.makeExtensible (
 
       nix_2_30 = addTests "nix_2_30" self.nixComponents_2_30.nix-everything;
 
-      nixComponents_2_31 = nixDependencies.callPackage ./modular/packages.nix rec {
-        version = "2.31.2";
-        inherit (self.nix_2_30.meta) maintainers teams;
-        otherSplices = generateSplicesForNixComponents "nixComponents_2_31";
-        src = fetchFromGitHub {
-          owner = "NixOS";
-          repo = "nix";
-          tag = version;
-          hash = "sha256-NLGXPLjENLeKVOg3OZgHXZ+1x6sPIKq9FHH8pxbCrDI=";
-        };
-      };
+      nixComponents_2_31 =
+        (nixDependencies.callPackage ./modular/packages.nix rec {
+          version = "2.31.2";
+          inherit (self.nix_2_30.meta) maintainers teams;
+          otherSplices = generateSplicesForNixComponents "nixComponents_2_31";
+          src = fetchFromGitHub {
+            owner = "NixOS";
+            repo = "nix";
+            tag = version;
+            hash = "sha256-NLGXPLjENLeKVOg3OZgHXZ+1x6sPIKq9FHH8pxbCrDI=";
+          };
+        }).appendPatches
+          (
+            # issues on darwin: https://github.com/NixOS/nixpkgs/pull/468208#issuecomment-3626314109
+            lib.optional stdenv.isLinux (fetchpatch2 {
+              name = "nix-2.31-14240-sri-error-message.patch";
+              url = "https://github.com/NixOS/nix/commit/56751b1cd2c4700c71c545f2246adf602c97fdf5.patch";
+              hash = "sha256-CerSBAI+H2RqPp9jsCP0QIM2rZYx3yBZHVVUAztgc18=";
+            })
+          );
 
       nix_2_31 = addTests "nix_2_31" self.nixComponents_2_31.nix-everything;
 

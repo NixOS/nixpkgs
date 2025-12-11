@@ -32,12 +32,12 @@ buildGoModule (finalAttrs: {
   ];
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "command-line tool to perform health-checks for gRPC applications";
     homepage = "https://github.com/grpc-ecosystem/grpc-health-probe";
     changelog = "https://github.com/grpc-ecosystem/grpc-health-probe/releases/tag/v${finalAttrs.version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jpds ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jpds ];
     mainProgram = "grpc-health-probe";
   };
 })

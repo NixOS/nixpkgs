@@ -24,12 +24,12 @@ let
       owner = "chatmail";
       repo = "core";
       tag = "v${version}";
-      hash = "sha256-ULOnR1YvNmKr7iEuf8cZ+WgN4JRIG3md9gwyXK81vPQ=";
+      hash = "sha256-pW1+9aljtnYJmlJOj+m0aQekYO5IsL0fduR7kIAPdN8=";
     };
     cargoDeps = rustPlatform.fetchCargoVendor {
       pname = "chatmail-core";
       inherit version src;
-      hash = "sha256-EkYlG32EhtIFFDpVgbKw8TSqHhPHgxd6Kh3wYN4Moq8=";
+      hash = "sha256-iIC9wE7P2SKeCMtc/hFTRaOGXD2F7kh1TptOoes/Qi0=";
     };
   };
   electron = electron_37;

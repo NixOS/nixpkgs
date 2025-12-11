@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sensorpush_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for SensorPush BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/sensorpush-ble";
     changelog = "https://github.com/Bluetooth-Devices/sensorpush-ble/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

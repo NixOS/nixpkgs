@@ -33,9 +33,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Simple GUI to setup the screens layout on wlroots based systems";
     homepage = "https://github.com/fdev31/wlr-layout-ui/";
-    maintainers = with maintainers; [ bnlrnz ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ bnlrnz ];
+    license = lib.licenses.mit;
     mainProgram = "wlrlui";
-    platforms = subtractLists platforms.darwin platforms.unix;
+    platforms = subtractLists lib.platforms.darwin lib.platforms.unix;
   };
 }

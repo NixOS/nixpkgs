@@ -154,11 +154,11 @@ buildPythonPackage rec {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-address-of-temporary";
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for Qt6";
     homepage = "https://riverbankcomputing.com/";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     inherit (mesa.meta) platforms;
-    maintainers = with maintainers; [ LunNova ];
+    maintainers = with lib.maintainers; [ LunNova ];
   };
 }

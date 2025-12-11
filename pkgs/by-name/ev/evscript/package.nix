@@ -18,12 +18,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-L0qwHWxMf/Nd0B2FWLIpKLgrs2LRyTOwuG/7keMI2zE=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://codeberg.org/valpackett/evscript";
     description = "Tiny sandboxed Dyon scripting environment for evdev input devices";
     mainProgram = "evscript";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ milesbreslin ];
-    platforms = platforms.linux;
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ milesbreslin ];
+    platforms = lib.platforms.linux;
   };
 }

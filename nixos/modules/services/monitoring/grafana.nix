@@ -1300,6 +1300,18 @@ in
               type = types.bool;
             };
           };
+
+          plugins = {
+            preinstall_disabled = mkOption {
+              description = ''
+                When set to `true`, disables the Background Plugin Installer, which runs before Grafana starts.
+                This component causes issues with `declarativePlugins` and is disabled by default if those are used.
+              '';
+              default = cfg.declarativePlugins != null;
+              defaultText = literalExpression "cfg.declarativePlugins != null";
+              type = types.bool;
+            };
+          };
         };
       };
     };
@@ -2045,7 +2057,7 @@ in
       description = "Grafana Service Daemon";
       wantedBy = [ "multi-user.target" ];
       after = [
-        "networking.target"
+        "network.target"
       ]
       ++ lib.optional usePostgresql "postgresql.target"
       ++ lib.optional useMysql "mysql.service";

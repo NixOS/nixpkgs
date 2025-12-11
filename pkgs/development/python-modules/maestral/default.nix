@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "maestral";
-  version = "1.9.5";
+  version = "1.9.6";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "SamSchott";
     repo = "maestral";
     tag = "v${version}";
-    hash = "sha256-xFSnJPKTAPXYa4FuqkFF5gLzGZ9TltNVDhyBnswiut4=";
+    hash = "sha256-mYFiQL4FumJWP2y1u5tIo1CZL027J8/EIYqJQde7G/c=";
   };
 
   build-system = [ setuptools ];
@@ -116,13 +116,13 @@ buildPythonPackage rec {
 
   passthru.tests.maestral = nixosTests.maestral;
 
-  meta = with lib; {
+  meta = {
     description = "Open-source Dropbox client for macOS and Linux";
     mainProgram = "maestral";
     homepage = "https://maestral.app";
     changelog = "https://github.com/samschott/maestral/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       natsukium
       peterhoeg
       sfrijters

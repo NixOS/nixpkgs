@@ -26,6 +26,7 @@
   valgrind,
   asciidoc,
   installShellFiles,
+  makeWrapper,
   rpm,
   system-sendmail,
   gnome2,
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
     cmake
     asciidoc
     doxygen
+    makeWrapper
     rpm
     swig
     util-linux
@@ -104,6 +106,10 @@ stdenv.mkDerivation rec {
       --replace-fail "DESTINATION ''${PERL_VENDORARCH}" "DESTINATION ''${SWIG_PERL_DIR}"
     substituteInPlace src/common/oscap_pcre.c \
       --replace-fail "#include <pcre2.h>" "#include <${pcre2.dev}/include/pcre2.h>"
+
+    # Patch SCE engine to not hardcode FHS paths, allowing it to use the transient environment's PATH
+    substituteInPlace src/SCE/sce_engine.c \
+      --replace-fail 'env_values[0] = "PATH=/bin:/sbin:/usr/bin:/usr/local/bin:/usr/sbin";' 'env_values[0] = "_PATCHED_OUT_DUMMY_VAR=patched-out";'
   '';
 
   cmakeFlags = [
@@ -141,6 +147,13 @@ stdenv.mkDerivation rec {
     make install
     installManPage $out/share/man8/*.8
     rm -rf $out/share/man8
+  '';
+
+  postFixup = ''
+    # Set plugin directory to discover the SCE plugin.
+    # openscap calls dlopen with this as the directory prefix.
+    wrapProgram $out/bin/oscap \
+      --set OSCAP_CHECK_ENGINE_PLUGIN_DIR $out/lib
   '';
 
   meta = {

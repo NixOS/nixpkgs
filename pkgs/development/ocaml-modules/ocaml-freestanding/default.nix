@@ -67,8 +67,8 @@ else
     meta = with lib; {
       broken = true; # Not compatible with solo5 ≥ 0.7
       description = "Freestanding OCaml runtime";
-      license = licenses.mit;
-      maintainers = [ maintainers.sternenseemann ];
+      license = lib.licenses.mit;
+      maintainers = [ lib.maintainers.sternenseemann ];
       homepage = "https://github.com/mirage/ocaml-freestanding";
       platforms = map ({ arch, os }: "${arch}-${os}") (
         cartesianProduct {

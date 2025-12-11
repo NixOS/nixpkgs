@@ -117,6 +117,7 @@ stdenv.mkDerivation {
     "--sbin-path=bin/nginx"
     "--with-http_ssl_module"
     "--with-http_v2_module"
+    "--with-http_v3_module"
     "--with-http_realip_module"
     "--with-http_addition_module"
     "--with-http_xslt_module"

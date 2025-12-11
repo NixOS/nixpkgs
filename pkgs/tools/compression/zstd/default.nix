@@ -137,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Zstandard real-time compression algorithm";
     longDescription = ''
       Zstd, short for Zstandard, is a fast lossless compression algorithm,
@@ -150,10 +150,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://facebook.github.io/zstd/";
     changelog = "https://github.com/facebook/zstd/blob/v${finalAttrs.version}/CHANGELOG";
-    license = with licenses; [ bsd3 ]; # Or, at your opinion, GPL-2.0-only.
+    license = with lib.licenses; [ bsd3 ]; # Or, at your opinion, GPL-2.0-only.
     mainProgram = "zstd";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ orivej ];
+    platforms = lib.platforms.all;
+    maintainers = [ ];
     pkgConfigModules = [ "libzstd" ];
   };
 })

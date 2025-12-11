@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.transit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings generated from the GTFS Realtime protocol buffer spec";
     homepage = "https://github.com/MobilityData/gtfs-realtime-bindings";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

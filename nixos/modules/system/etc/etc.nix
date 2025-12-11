@@ -283,23 +283,23 @@ in
             ''}
 
             tmpMetadataMount=$(TMPDIR="/run" mktemp --directory -t nixos-etc-metadata.XXXXXXXXXX)
-            mount --type erofs --options ro,nodev,nosuid ${config.system.build.etcMetadataImage} $tmpMetadataMount
+            mount --type erofs --options ro,nodev,nosuid ${config.system.build.etcMetadataImage} "$tmpMetadataMount"
 
             # There was no previous /etc mounted. This happens when we're called
             # directly without an initrd, like with nixos-enter.
             if ! mountpoint -q /etc; then
               mount --type overlay \
-                --options nodev,nosuid,lowerdir=$tmpMetadataMount::${config.system.build.etcBasedir},${etcOverlayOptions} \
+                --options nodev,nosuid,lowerdir="$tmpMetadataMount"::${config.system.build.etcBasedir},${etcOverlayOptions} \
                 overlay /etc
             else
               # Mount the new /etc overlay to a temporary private mount.
               # This needs the indirection via a private bind mount because you
               # cannot move shared mounts.
               tmpEtcMount=$(TMPDIR="/run" mktemp --directory -t nixos-etc.XXXXXXXXXX)
-              mount --bind --make-private $tmpEtcMount $tmpEtcMount
+              mount --bind --make-private "$tmpEtcMount" "$tmpEtcMount"
               mount --type overlay \
-                --options nodev,nosuid,lowerdir=$tmpMetadataMount::${config.system.build.etcBasedir},${etcOverlayOptions} \
-                overlay $tmpEtcMount
+                --options nodev,nosuid,lowerdir="$tmpMetadataMount"::${config.system.build.etcBasedir},${etcOverlayOptions} \
+                overlay "$tmpEtcMount"
 
               # Before moving the new /etc overlay under the old /etc, we have to
               # move mounts on top of /etc to the new /etc mountpoint.
@@ -334,7 +334,7 @@ in
               # This should eventually use util-linux to perform this move beneath,
               # however, this functionality is not yet in util-linux. See this
               # tracking issue: https://github.com/util-linux/util-linux/issues/2604
-              ${pkgs.move-mount-beneath}/bin/move-mount --move --beneath $tmpEtcMount /etc
+              ${pkgs.move-mount-beneath}/bin/move-mount --move --beneath "$tmpEtcMount" /etc
 
               # Unmount the top /etc mount to atomically reveal the new mount.
               umount --lazy --recursive /etc
@@ -345,9 +345,6 @@ in
             fi
 
             # Unmount old metadata mounts
-            # For some reason, `findmnt /tmp --submounts` does not show the nested
-            # mounts. So we'll just find all mounts of type erofs and filter on the
-            # name of the mountpoint.
             findmnt --type erofs --list --kernel --output TARGET | while read -r mountPoint; do
               if [[ ("$mountPoint" =~ ^/run/nixos-etc-metadata\..{10}$ || "$mountPoint" =~ ^/run/nixos-etc-metadata$ ) &&
                     "$mountPoint" != "$tmpMetadataMount" ]]; then

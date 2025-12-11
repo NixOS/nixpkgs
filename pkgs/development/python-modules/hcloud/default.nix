@@ -29,11 +29,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hcloud" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for the Hetzner Cloud API";
     homepage = "https://github.com/hetznercloud/hcloud-python";
     changelog = "https://github.com/hetznercloud/hcloud-python/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ liff ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ liff ];
   };
 }

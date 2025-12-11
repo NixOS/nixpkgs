@@ -71,11 +71,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "photutils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Astropy package for source detection and photometry";
     homepage = "https://github.com/astropy/photutils";
     changelog = "https://github.com/astropy/photutils/blob/${version}/CHANGES.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

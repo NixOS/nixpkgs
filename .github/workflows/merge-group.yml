@@ -25,7 +25,7 @@ jobs:
       targetSha: ${{ steps.prepare.outputs.targetSha }}
       systems: ${{ steps.prepare.outputs.systems }}
     steps:
-      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           persist-credentials: false
           sparse-checkout: |
@@ -111,8 +111,10 @@ jobs:
     if: github.event_name != 'pull_request' && always()
     # Modify this list to add or remove jobs from required status checks.
     needs:
+      - check
       - lint
       - eval
+      - build
     runs-on: ubuntu-slim
     permissions:
       statuses: write

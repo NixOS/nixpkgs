@@ -31,15 +31,15 @@ mkOpenModelicaDerivation {
     sed -i -e '/^OTHER_LIBS=/ s/EMOTH //' libraries/Makefile.libs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Collection of Modelica libraries to use with OpenModelica,
 including Modelica Standard Library";
     homepage = "https://openmodelica.org";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       balodja
       smironov
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

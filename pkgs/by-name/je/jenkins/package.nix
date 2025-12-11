@@ -18,11 +18,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "jenkins";
-  version = "2.528.1";
+  version = "2.528.3";
 
   src = fetchurl {
     url = "https://get.jenkins.io/war-stable/${finalAttrs.version}/jenkins.war";
-    hash = "sha256-1jDcomX3Wo1YHxJ6kjTxZ51LCACo83DQOtShVM63KVs=";
+    hash = "sha256-v6MfHjqs67W849UHbHPfl78MBWfuuNhzj1T2usSKvXQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -74,17 +74,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Extendable open source continuous integration server";
     homepage = "https://jenkins.io/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       earldouglas
-      nequissimus
     ];
     changelog = "https://www.jenkins.io/changelog-stable/#v${finalAttrs.version}";
     mainProgram = "jenkins-cli";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

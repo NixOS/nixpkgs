@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Liblzf python bindings";
     homepage = "https://github.com/teepark/python-lzf";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

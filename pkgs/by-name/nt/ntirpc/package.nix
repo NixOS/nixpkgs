@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
     cp ${libtirpc}/etc/netconfig $out/etc/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Transport-independent RPC (TI-RPC)";
     homepage = "https://github.com/nfs-ganesha/ntirpc";
-    maintainers = [ maintainers.markuskowa ];
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    maintainers = [ lib.maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
   };
 }

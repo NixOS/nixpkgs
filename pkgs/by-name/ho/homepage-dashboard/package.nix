@@ -1,6 +1,6 @@
 {
   fetchFromGitHub,
-  nodePackages,
+  node-gyp-build,
   makeBinaryWrapper,
   nodejs,
   pnpm_10,
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
 
   buildInputs = [
-    nodePackages.node-gyp-build
+    node-gyp-build
   ];
 
   env.PYTHON = "${python3}/bin/python";

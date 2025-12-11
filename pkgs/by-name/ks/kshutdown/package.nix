@@ -31,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
     kstatusnotifieritem
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://kshutdown.sourceforge.io/";
     description = "Graphical shutdown utility for Linux and Windows";
     mainProgram = "kshutdown";
-    license = with licenses; [ gpl3 ];
-    maintainers = with maintainers; [ eymeric ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl3 ];
+    maintainers = with lib.maintainers; [ eymeric ];
+    platforms = lib.platforms.linux;
   };
 })

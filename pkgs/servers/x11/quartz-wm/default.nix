@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     license = lib.licenses.apple-psl20;
     platforms = lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ matthewbauer ];
+    maintainers = [ ];
     mainProgram = "quartz-wm";
   };
 })

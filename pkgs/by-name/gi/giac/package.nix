@@ -192,6 +192,9 @@ stdenv.mkDerivation rec {
     "--disable-micropy"
   ];
 
+  # https://github.com/NixOS/nixpkgs/pull/463804
+  hardeningDisable = [ "libcxxhardeningfast" ];
+
   postInstall = ''
     # example Makefiles contain the full path to some commands
     # notably texlive, and we don't want texlive to become a runtime
@@ -220,8 +223,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Free computer algebra system (CAS)";
     homepage = "https://www-fourier.ujf-grenoble.fr/~parisse/giac.html";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux ++ (optionals (!enableGUI) platforms.darwin);
-    maintainers = [ maintainers.symphorien ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux ++ (optionals (!enableGUI) lib.platforms.darwin);
+    maintainers = [ lib.maintainers.symphorien ];
   };
 }

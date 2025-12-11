@@ -318,7 +318,7 @@ stdenv.mkDerivation (self: {
   meta = with lib; {
     description = "Common Lisp compiler";
     homepage = "https://sbcl.org";
-    license = licenses.publicDomain; # and FreeBSD
+    license = lib.licenses.publicDomain; # and FreeBSD
     mainProgram = "sbcl";
     teams = [ lib.teams.lisp ];
     platforms = attrNames bootstrapBinaries ++ [

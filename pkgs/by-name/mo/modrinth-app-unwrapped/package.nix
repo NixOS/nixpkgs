@@ -29,13 +29,13 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "modrinth-app-unwrapped";
-  version = "0.10.3";
+  version = "0.10.5";
 
   src = fetchFromGitHub {
     owner = "modrinth";
     repo = "code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XfJbjbVcP9N3exAhXQoMGpoHORpKAlb0dPhQq195roY=";
+    hash = "sha256-KqC+5RLLvg3cyjY7Ecw9qxQ5XUKsK7Tfxl4WC1OwZeI=";
   };
 
   patches = [
@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '1.0.0-local' '${finalAttrs.version}'
   '';
 
-  cargoHash = "sha256-jWMHii65hTnTmiBFHxZ4xO5V+Qt/MPCy75eJvnlyE4c=";
+  cargoHash = "sha256-chUPd1fLZ7dm0MXkbD7Bv4tE520ooEyliVZ9Pp+LIdk=";
 
   mitmCache = gradle.fetchDeps {
     inherit (finalAttrs) pname;
@@ -75,7 +75,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
-    hash = "sha256-7iqXuIQPbP2p26vrWDjMoyZBPpbVQpigYAylhIg8+ZY=";
+    hash = "sha256-1tDegt8OgG0ZhvNGpkYQR+PuX/xI287OFk4MGAXUKZQ=";
   };
 
   nativeBuildInputs = [
@@ -121,6 +121,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     local nixGradleFlags=()
     concatTo nixGradleFlags gradleFlags gradleFlagsArray
     export NIX_GRADLEFLAGS_COMPILE="''${nixGradleFlags[@]}"
+
+    cp packages/app-lib/.env.prod packages/app-lib/.env
   '';
 
   postInstall =

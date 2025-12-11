@@ -179,7 +179,6 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "mongodb-compass";
     maintainers = with lib.maintainers; [
-      bryanasdev000
       friedow
       iamanaws
     ];

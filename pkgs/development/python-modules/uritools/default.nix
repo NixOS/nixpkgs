@@ -19,11 +19,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "uritools" ];
 
-  meta = with lib; {
+  meta = {
     description = "RFC 3986 compliant, Unicode-aware, scheme-agnostic replacement for urlparse";
     homepage = "https://github.com/tkem/uritools/";
     changelog = "https://github.com/tkem/uritools/blob/v${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rvolosatovs ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rvolosatovs ];
   };
 }

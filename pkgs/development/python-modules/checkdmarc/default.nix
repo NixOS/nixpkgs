@@ -68,12 +68,12 @@ buildPythonPackage rec {
     "testTooManySPFVoidDNSLookups"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Parser for SPF and DMARC DNS records";
     homepage = "https://github.com/domainaware/checkdmarc";
     changelog = "https://github.com/domainaware/checkdmarc/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "checkdmarc";
   };
 }

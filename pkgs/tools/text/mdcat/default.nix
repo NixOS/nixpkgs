@@ -64,11 +64,11 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "cat for markdown";
     homepage = "https://github.com/swsnr/mdcat";
     changelog = "https://github.com/swsnr/mdcat/releases/tag/mdcat-${version}";
-    license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = with lib.licenses; [ mpl20 ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

@@ -64,12 +64,12 @@ stdenv.mkDerivation rec {
     mv include $dev/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tools for MTD filesystems";
     downloadPage = "https://git.infradead.org/mtd-utils.git";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "http://www.linux-mtd.infradead.org/";
     maintainers = with lib.maintainers; [ skeuchel ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 }

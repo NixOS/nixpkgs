@@ -307,3 +307,6 @@ c283f32d296564fd649ef3ed268c1f1f7b199c49 # !autorebase nix-shell --run treefmt
 
 # aliases: keep-sorted
 48ce0739044bd6eba83c3a43bd4ad1046399cdad # !autorebase nix-shell --run treefmt
+
+# treewide: clean up 'meta = with' pattern
+567e8dfd8eddc5468e6380fc563ab8a27422ab1d

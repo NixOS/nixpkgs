@@ -115,12 +115,12 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern Jabber/XMPP Client using GTK/Vala";
     mainProgram = "dino";
     homepage = "https://github.com/dino/dino";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ qyliss ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ qyliss ];
   };
 })

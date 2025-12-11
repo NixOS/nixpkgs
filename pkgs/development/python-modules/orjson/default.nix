@@ -83,15 +83,15 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast, correct Python JSON library supporting dataclasses, datetimes, and numpy";
     homepage = "https://github.com/ijl/orjson";
     changelog = "https://github.com/ijl/orjson/blob/${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ misuzu ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ misuzu ];
   };
 }

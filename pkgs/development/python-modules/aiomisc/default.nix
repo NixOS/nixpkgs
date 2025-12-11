@@ -42,7 +42,7 @@ buildPythonPackage rec {
     pytestCheckHook
     setproctitle
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   optional-dependencies = {
     aiohttp = [ aiohttp ];
@@ -68,11 +68,11 @@ buildPythonPackage rec {
   #   "tests/test_raven_service.py"
   # ];
 
-  meta = with lib; {
+  meta = {
     description = "Miscellaneous utils for asyncio";
     homepage = "https://github.com/aiokitchen/aiomisc";
     changelog = "https://github.com/aiokitchen/aiomisc/blob/master/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

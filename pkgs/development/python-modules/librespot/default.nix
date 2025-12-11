@@ -48,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "librespot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Open Source Spotify Client";
     homepage = "https://github.com/kokarare1212/librespot-python";
     changelog = "https://github.com/kokarare1212/librespot-python/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

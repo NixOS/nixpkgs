@@ -89,7 +89,7 @@ buildPythonPackage rec {
     pytestCheckHook
     writableTmpDirAsHomeHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   __darwinAllowLocalNetworking = true;
 

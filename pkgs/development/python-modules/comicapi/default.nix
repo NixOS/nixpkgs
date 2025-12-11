@@ -64,7 +64,7 @@ buildPythonPackage rec {
     icu = lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) pyicu;
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
   pythonRelaxDeps = [ "pycountry" ];
 

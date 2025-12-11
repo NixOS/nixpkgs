@@ -205,6 +205,11 @@ sub pciCheck {
         ($device eq "0x4229" || $device eq "0x4230" ||
          $device eq "0x4222" || $device eq "0x4227");
 
+    push @attrs, "hardware.cpu.intel.npu.enable = true;" if
+        $vendor eq "0x8086" &&
+        ($device eq "0x7d1d" || $device eq "0xad1d" ||
+         $device eq "0x643e" || $device eq "0xb03e");
+
     # Assume that all NVIDIA cards are supported by the NVIDIA driver.
     # There may be exceptions (e.g. old cards).
     # FIXME: do we want to enable an unfree driver here?

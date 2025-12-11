@@ -1,21 +1,11 @@
 {
-  lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cmake,
-  pybind11,
-  setuptools,
-
-  # buildInputs
-  abseil-cpp,
-  protobuf,
-  gtest,
+  onnx, # pkgs.onnx
 
   # dependencies
   ml-dtypes,
   numpy,
+  protobuf,
   typing-extensions,
 
   # tests
@@ -24,32 +14,26 @@
   pytestCheckHook,
   writableTmpDirAsHomeHook,
 }:
+buildPythonPackage {
+  inherit (onnx)
+    pname
+    src # Needed for testing.
+    version
+    ;
 
-let
-  gtestStatic = gtest.override { static = true; };
-in
-buildPythonPackage rec {
-  pname = "onnx";
-  version = "1.19.0";
-  pyproject = true;
+  format = "wheel";
 
-  src = fetchFromGitHub {
-    owner = "onnx";
-    repo = "onnx";
-    tag = "v${version}";
-    hash = "sha256-dDc7ugzQHcArf9TRcF9Ofv16jc3gqhMWCZrYKJ7Udfw=";
-  };
+  dontUseWheelUnpack = true;
 
-  build-system = [
-    cmake
-    protobuf
-    setuptools
-  ];
+  postUnpack = ''
+    cp -rv "${onnx.dist}" "$sourceRoot/dist"
+    chmod +w "$sourceRoot/dist"
+  '';
 
   buildInputs = [
-    abseil-cpp
-    gtestStatic
-    pybind11
+    # onnx must be included to avoid shrinking during fixupPhase removing the RUNPATH entry on
+    # onnx_cpp2py_export.cpython-*.so.
+    onnx
   ];
 
   dependencies = [
@@ -66,25 +50,10 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  preConfigure = ''
-    # Set CMAKE_INSTALL_LIBDIR to lib explicitly, because otherwise it gets set
-    # to lib64 and cmake incorrectly looks for the protobuf library in lib64
-    export CMAKE_ARGS="-DCMAKE_INSTALL_LIBDIR=lib -DONNX_USE_PROTOBUF_SHARED_LIBS=ON"
-    export CMAKE_ARGS+=" -Dgoogletest_STATIC_LIBRARIES=${gtestStatic}/lib/libgtest.a"
-    export ONNX_BUILD_TESTS=1
-  '';
-
-  preBuild = ''
-    export MAX_JOBS=$NIX_BUILD_CORES
-  '';
-
   # The executables are just utility scripts that aren't too important
   postInstall = ''
-    rm -r $out/bin
+    rm -rv $out/bin
   '';
-
-  # The setup.py does all the configuration
-  dontUseCmakeConfigure = true;
 
   # detecting source dir as a python package confuses pytest
   preCheck = ''
@@ -98,18 +67,16 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  postCheck = ''
-    # run "cpp" tests
-    .setuptools-cmake-build/onnx_gtests
-  '';
-
   pythonImportsCheck = [ "onnx" ];
 
   meta = {
-    description = "Open Neural Network Exchange";
-    homepage = "https://onnx.ai";
-    changelog = "https://github.com/onnx/onnx/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ acairncross ];
+    # Explicitly inherit from ONNX's meta to avoid pulling in attributes added by stdenv.mkDerivation.
+    inherit (onnx.meta)
+      changelog
+      description
+      homepage
+      license
+      maintainers
+      ;
   };
 }

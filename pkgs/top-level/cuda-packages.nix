@@ -29,7 +29,7 @@ let
       nvjpeg2000 = "0.9.0";
       nvpl = "25.5";
       nvtiff = "0.5.1";
-      tensorrt = if hasJetsonCudaCapability then "10.7.0" else "10.9.0";
+      tensorrt = if hasJetsonCudaCapability then "10.7.0" else "10.14.1";
     };
 
   cudaPackages_12_8 =
@@ -50,7 +50,7 @@ let
       nvjpeg2000 = "0.9.0";
       nvpl = "25.5";
       nvtiff = "0.5.1";
-      tensorrt = if hasJetsonCudaCapability then "10.7.0" else "10.9.0";
+      tensorrt = if hasJetsonCudaCapability then "10.7.0" else "10.14.1";
     };
 
   cudaPackages_12_9 =
@@ -71,12 +71,15 @@ let
       nvjpeg2000 = "0.9.0";
       nvpl = "25.5";
       nvtiff = "0.5.1";
-      tensorrt = if hasJetsonCudaCapability then "10.7.0" else "10.9.0";
+      tensorrt = if hasJetsonCudaCapability then "10.7.0" else "10.14.1";
     };
+
+  # NOTE: Thor is supported from CUDA 13.0, so our check needs to capture whether pre-Thor devices were selected.
+  hasPreThorJetsonCudaCapability = lib.any (lib.flip lib.versionOlder "10.1");
 
   cudaPackages_13_0 =
     let
-      inherit (cudaPackages_13_0.backendStdenv) hasJetsonCudaCapability;
+      inherit (cudaPackages_13_0.backendStdenv) requestedJetsonCudaCapabilities;
     in
     mkCudaPackages {
       cublasmp = "0.6.0";
@@ -92,7 +95,8 @@ let
       nvjpeg2000 = "0.9.0";
       nvpl = "25.5";
       nvtiff = "0.5.1";
-      tensorrt = if hasJetsonCudaCapability then "10.7.0" else "10.9.0";
+      tensorrt =
+        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "10.7.0" else "10.14.1";
     };
 in
 {

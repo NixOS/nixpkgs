@@ -2,37 +2,32 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchNpmDeps,
   hatch-vcs,
   hatchling,
   nodejs,
-  npmHooks,
+  pnpm,
 }:
 
 buildPythonPackage rec {
   pname = "yt-dlp-ejs";
-  version = "0.3.1";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yt-dlp";
     repo = "ejs";
     tag = version;
-    hash = "sha256-PoZ7qmrf8en254im2D7fWy9jYiaJwFpq6ZXZP9ouOOQ=";
+    hash = "sha256-o6qf4rfj42mCyvCBb+wyJmZKg3Q+ojsqbCcBfIJnTPg=";
   };
 
-  postPatch = ''
-    # remove when upstream has a lock file we support https://github.com/yt-dlp/ejs/issues/29
-    cp ${./package-lock.json} package-lock.json
-
-    # we already ran npm install
-    substituteInPlace hatch_build.py \
-      --replace-fail 'subprocess.run(["npm", "install"], check=True, shell=requires_shell)' ""
-  '';
-
-  npmDeps = fetchNpmDeps {
-    inherit src postPatch;
-    hash = "sha256-2Xzetr2pb8J2w+ghfoTVP6oZTeVbHV7EcovwxElnUbA=";
+  pnpmDeps = pnpm.fetchDeps {
+    inherit
+      pname
+      version
+      src
+      ;
+    fetcherVersion = 2;
+    hash = "sha256-3hhwKUzfdlKmth4uRlfBSdxEOIfhAVaq2PZIOHWGWiM=";
   };
 
   build-system = [
@@ -42,8 +37,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     nodejs
-    npmHooks.npmConfigHook
+    pnpm.configHook
   ];
+
+  pythonImportsCheck = [ "yt_dlp_ejs" ];
 
   meta = {
     changelog = "https://github.com/yt-dlp/ejs/releases/tag/${version}";

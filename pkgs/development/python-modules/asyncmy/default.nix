@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asyncmy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to interact with MySQL/mariaDB";
     homepage = "https://github.com/long2ice/asyncmy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

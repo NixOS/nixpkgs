@@ -81,11 +81,11 @@ stdenv.mkDerivation {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "IRCd for unified networks";
     homepage = "https://github.com/solanum-ircd/solanum";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ hexa ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ hexa ];
+    platforms = lib.platforms.unix;
   };
 }

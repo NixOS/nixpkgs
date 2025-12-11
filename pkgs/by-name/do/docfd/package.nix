@@ -14,7 +14,7 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "docfd";
-  version = "12.1.0";
+  version = "12.2.0";
 
   minimalOCamlVersion = "5.1";
 
@@ -22,7 +22,7 @@ ocamlPackages.buildDunePackage rec {
     owner = "darrenldl";
     repo = "docfd";
     rev = version;
-    hash = "sha256-fDvjnqAH0ALP1im34vxmXtO7kst0G/iPu3VLLBas5YI=";
+    hash = "sha256-0URs7X94/2D0WLpVBXjYZ3zDR3uGXSVG+WLdsAqVKBg=";
   };
 
   # Compatibility with nottui ≥ 0.4
@@ -69,7 +69,7 @@ ocamlPackages.buildDunePackage rec {
 
   passthru.tests.version = testers.testVersion { package = docfd; };
 
-  meta = with lib; {
+  meta = {
     description = "TUI multiline fuzzy document finder";
     longDescription = ''
       Think interactive grep for text and other document files.
@@ -78,9 +78,9 @@ ocamlPackages.buildDunePackage rec {
       integration with common text editors and other file viewers.
     '';
     homepage = "https://github.com/darrenldl/docfd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ chewblacka ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ chewblacka ];
+    platforms = lib.platforms.all;
     mainProgram = "docfd";
   };
 }

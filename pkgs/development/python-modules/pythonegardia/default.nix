@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pythonegardia" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface with Egardia/Woonveilig alarms";
     homepage = "https://github.com/jeroenterheerdt/python-egardia";
     changelog = "https://github.com/jeroenterheerdt/python-egardia/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

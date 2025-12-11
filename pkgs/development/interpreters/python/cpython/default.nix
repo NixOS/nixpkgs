@@ -208,10 +208,16 @@ let
   nativeBuildInputs = [
     nukeReferences
   ]
-  ++ optionals (!stdenv.hostPlatform.isDarwin && !withMinimalDeps) [
-    autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
-    autoreconfHook
-  ]
+  ++
+    optionals
+      (
+        (!stdenv.hostPlatform.isDarwin && !withMinimalDeps)
+        || (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD)
+      )
+      [
+        autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
+        autoreconfHook
+      ]
   ++
     optionals ((!stdenv.hostPlatform.isDarwin || passthru.pythonAtLeast "3.14") && !withMinimalDeps)
       [
@@ -839,9 +845,10 @@ stdenv.mkDerivation (finalAttrs: {
       hierarchical packages; exception-based error handling; and very
       high level dynamic data types.
     '';
-    license = licenses.psfl;
+    license = lib.licenses.psfl;
     pkgConfigModules = [ "python3" ];
-    platforms = platforms.linux ++ platforms.darwin ++ platforms.windows ++ platforms.freebsd;
+    platforms =
+      lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.windows ++ lib.platforms.freebsd;
     mainProgram = executable;
     teams = [ lib.teams.python ];
     # static build on x86_64-darwin/aarch64-darwin breaks with:

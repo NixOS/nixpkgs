@@ -20,11 +20,11 @@ buildPythonPackage rec {
   # requires distorm, which is optionally
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python binding of ptrace library";
     homepage = "https://github.com/vstinner/python-ptrace";
     changelog = "https://github.com/vstinner/python-ptrace/blob/${version}/doc/changelog.rst";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ mic92 ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ mic92 ];
   };
 }

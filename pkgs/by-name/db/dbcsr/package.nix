@@ -76,10 +76,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Distributed Block Compressed Sparse Row matrix library";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     homepage = "https://github.com/cp2k/dbcsr";
-    maintainers = [ maintainers.sheepforce ];
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

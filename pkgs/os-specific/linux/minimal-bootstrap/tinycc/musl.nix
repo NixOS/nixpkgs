@@ -1,7 +1,6 @@
 {
   lib,
   fetchurl,
-  callPackage,
   bash,
   tinycc-bootstrappable,
   musl,
@@ -12,7 +11,7 @@
 let
   pname = "tinycc-musl";
   # next commit introduces use of realpath (unsupported in mes-libc)
-  version = "unstable-2023-07-10";
+  version = "unstable-2023-07-31";
   rev = "fd6d2180c5c801bb0b4c5dde27d61503059fc97d";
 
   src = fetchurl {
@@ -26,11 +25,11 @@ let
     ./static-link.patch
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Small, fast, and embeddable C compiler and interpreter";
     homepage = "https://repo.or.cz/w/tinycc.git";
-    license = licenses.lgpl21Only;
-    teams = [ teams.minimal-bootstrap ];
+    license = lib.licenses.lgpl21Only;
+    teams = [ lib.teams.minimal-bootstrap ];
     platforms = [ "i686-linux" ];
   };
 

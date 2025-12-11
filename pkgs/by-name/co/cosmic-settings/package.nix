@@ -15,7 +15,6 @@
   pipewire,
   pulseaudio,
   udev,
-  util-linux,
   cosmic-randr,
   xkeyboard_config,
   nix-update-script,
@@ -28,17 +27,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-settings";
-  version = "1.0.0-beta.7";
+  version = "1.0.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-settings";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-CIY7SAS6WCn41mM+MpKaCm08cfnVIqFl+/t5u5717Lw=";
+    hash = "sha256-tmMxZk7dThuPsLG8RMnEcrbVB1b4Cb+nn3IXkTNbZW0=";
   };
 
-  cargoHash = "sha256-Su+yAQLr3Us8YNU8z83XO1UDjjOY3SCGnkmwGaIGFho=";
+  cargoHash = "sha256-wCAh7JoyDT0ugq2k0hV76lAMQb4rgND5TpMRjN4VqmI=";
 
   nativeBuildInputs = [
     cmake
@@ -46,7 +45,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libcosmicAppHook'
     pkg-config
     rustPlatform.bindgenHook
-    util-linux
   ];
 
   buildInputs = [
@@ -89,10 +87,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cosmic-autologin-noxwayland
         ;
     };
+
     updateScript = nix-update-script {
       extraArgs = [
-        "--version"
-        "unstable"
         "--version-regex"
         "epoch-(.*)"
       ];

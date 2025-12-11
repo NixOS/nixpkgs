@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -D fitsverify $out/bin/fitsverify
   '';
 
-  meta = with lib; {
+  meta = {
     description = "FITS File Format-Verification Tool";
     mainProgram = "fitsverify";
     longDescription = ''
@@ -39,8 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
       requirements defined in Version 3.0 of the FITS Standard document.
     '';
     homepage = "https://heasarc.gsfc.nasa.gov/docs/software/ftools/fitsverify/";
-    license = licenses.mit;
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ panicgh ];
+    license = lib.licenses.mit;
+    platforms = with lib.platforms; linux;
+    maintainers = with lib.maintainers; [ panicgh ];
   };
 })

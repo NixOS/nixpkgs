@@ -1014,7 +1014,7 @@ in
       ]
       ++ lib.optionals (config.boot.loader.grub.memtest86.enable && config.isoImage.makeBiosBootable) [
         {
-          source = "${pkgs.memtest86plus}/memtest.bin";
+          source = pkgs.memtest86plus.efi;
           target = "/boot/memtest.bin";
         }
       ]

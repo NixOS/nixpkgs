@@ -32,11 +32,11 @@ rustPlatform.buildRustPackage rec {
     installManPage bk.?
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/aeosynth/bk";
     description = "Terminal epub reader written in rust";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vuimuich ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vuimuich ];
     mainProgram = "bk";
   };
 }

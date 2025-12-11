@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeFeature "DATA_INSTALL_DIR" (placeholder "out") + "/share/kstars/")
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Virtual planetarium astronomy software";
     mainProgram = "kstars";
     homepage = "https://kde.org/applications/education/org.kde.kstars";
@@ -96,9 +96,9 @@ stdenv.mkDerivation (finalAttrs: {
       The display includes up to 100 million stars, 13.000 deep-sky objects, all 8 planets, the Sun and Moon, and thousands of comets, asteroids, supernovae, and satellites.
       For students and teachers, it supports adjustable simulation speeds in order to view phenomena that happen over long timescales, the KStars Astrocalculator to predict conjunctions, and many common astronomical calculations.
     '';
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       timput
       returntoreality
     ];

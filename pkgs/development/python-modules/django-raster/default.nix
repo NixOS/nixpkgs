@@ -41,9 +41,9 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Basic raster data integration for Django";
     homepage = "https://github.com/geodesign/django-raster";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

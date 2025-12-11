@@ -23,11 +23,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "python_codon_tables" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Edinburgh-Genome-Foundry/codon-usage-tables";
     description = "Codon Usage Tables for Python, from kazusa.or.jp";
     changelog = "https://github.com/Edinburgh-Genome-Foundry/python_codon_tables/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

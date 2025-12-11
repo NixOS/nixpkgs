@@ -123,12 +123,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sanic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Web server and web framework";
     homepage = "https://github.com/sanic-org/sanic/";
     changelog = "https://github.com/sanic-org/sanic/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ p0lyw0lf ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ p0lyw0lf ];
     mainProgram = "sanic";
   };
 }

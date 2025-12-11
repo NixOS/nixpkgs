@@ -76,11 +76,11 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://nipy.org/nibabel";
     changelog = "https://github.com/nipy/nibabel/blob/${version}/Changelog";
     description = "Access a multitude of neuroimaging data formats";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ashgillman ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ashgillman ];
   };
 }

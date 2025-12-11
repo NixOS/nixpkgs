@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
     mv chelf $out/bin/chelf
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Change or display the stack size of an ELF binary";
     homepage = "https://github.com/Gottox/chelf";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ dtzWill ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ dtzWill ];
     mainProgram = "chelf";
   };
 }

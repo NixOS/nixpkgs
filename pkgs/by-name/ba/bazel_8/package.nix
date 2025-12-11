@@ -215,14 +215,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bazelbuild/bazel/";
     description = "Build tool that builds code quickly and reliably";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependencies as jars
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     teams = [ lib.teams.bazel ];
     mainProgram = "bazel";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

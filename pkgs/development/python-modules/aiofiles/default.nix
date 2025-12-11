@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiofiles" ];
 
-  meta = with lib; {
+  meta = {
     description = "File support for asyncio";
     homepage = "https://github.com/Tinche/aiofiles";
     changelog = "https://github.com/Tinche/aiofiles/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }
