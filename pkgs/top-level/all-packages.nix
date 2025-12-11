@@ -1990,10 +1990,6 @@ with pkgs;
     stdenv = gcc15Stdenv;
   };
 
-  hyprlang = callPackage ../by-name/hy/hyprlang/package.nix {
-    stdenv = gcc15Stdenv;
-  };
-
   hyprlock = callPackage ../by-name/hy/hyprlock/package.nix {
     stdenv = gcc15Stdenv;
   };
