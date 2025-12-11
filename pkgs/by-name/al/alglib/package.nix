@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "alglib3";
-  version = "4.05.0";
+  version = "4.06.0";
 
   src = fetchurl {
     url = "https://www.alglib.net/translator/re/alglib-${version}.cpp.gpl.tgz";
-    sha256 = "sha256-czgBhziKjAO17ZwXChsjOazIaNODRrGyswhc4j4/T9s=";
+    sha256 = "sha256-J/pLC4Fgy7Ks5PadGo7wmQz4lMh9/z9G3IbsisLTDGg=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "Numerical analysis and data processing library";
+    description = "Numerical analysis and data processing library for c++";
     homepage = "https://www.alglib.net/";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.paperdigits ];
