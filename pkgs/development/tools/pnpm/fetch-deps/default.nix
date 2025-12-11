@@ -87,13 +87,15 @@ in
 
             export HOME=$(mktemp -d)
 
+            storePath=$out
+
             # If the packageManager field in package.json is set to a different pnpm version than what is in nixpkgs,
             # any pnpm command would fail in that directory, the following disables this
             pushd ..
             pnpm config set manage-package-manager-versions false
             popd
 
-            pnpm config set store-dir $out
+            pnpm config set store-dir $storePath
             # Some packages produce platform dependent outputs. We do not want to cache those in the global store
             pnpm config set side-effects-cache false
             # As we pin pnpm versions, we don't really care about updates
@@ -122,8 +124,8 @@ in
             runHook preFixup
 
             # Remove timestamp and sort the json files
-            rm -rf $out/{v3,v10}/tmp
-            for f in $(find $out -name "*.json"); do
+            rm -rf $storePath/{v3,v10}/tmp
+            for f in $(find $storePath -name "*.json"); do
               jq --sort-keys "del(.. | .checkedAt?)" $f | sponge $f
             done
 
@@ -139,9 +141,9 @@ in
             # See https://github.com/NixOS/nixpkgs/pull/350063
             # See https://github.com/NixOS/nixpkgs/issues/422889
             if [[ ${toString fetcherVersion} -ge 2 ]]; then
-              find $out -type f -name "*-exec" -print0 | xargs -0 chmod 555
-              find $out -type f -not -name "*-exec" -print0 | xargs -0 chmod 444
-              find $out -type d -print0 | xargs -0 chmod 555
+              find $storePath -type f -name "*-exec" -print0 | xargs -0 chmod 555
+              find $storePath -type f -not -name "*-exec" -print0 | xargs -0 chmod 444
+              find $storePath -type d -print0 | xargs -0 chmod 555
             fi
 
             runHook postFixup
