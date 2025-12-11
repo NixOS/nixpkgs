@@ -18,6 +18,7 @@
   withGui ? false,
   qt6,
   librecad,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -86,6 +87,12 @@ buildPythonPackage rec {
         "share/librecad"
     }/fonts" fonts/librecad
   '';
+
+  # The default updateScript of Python packages does not filter prerelease versions.
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    allowedVersions = "^[0-9]+\\.[0-9]+\\.[0-9]+$";
+  };
 
   meta = {
     description = "Python package to read and write DXF drawings (interface to the DXF file format)";
