@@ -28,6 +28,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://srm.sourceforge.net";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ edwtjo ];
     platforms = lib.platforms.unix;
   };
 }

@@ -46,6 +46,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mdevctl/mdevctl";
     description = "Mediated device management utility for linux";
     license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ edwtjo ];
     platforms = lib.platforms.linux;
   };
 }
