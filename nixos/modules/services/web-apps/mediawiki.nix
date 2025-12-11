@@ -255,7 +255,7 @@ in
 
       package = mkPackageOption pkgs "mediawiki" { };
 
-      # https://www.mediawiki.org/wiki/Compatibility
+      # https://www.mediawiki.org/wiki/Compatibility#PHP
       phpPackage = mkPackageOption pkgs "php" {
         default = "php83";
       };
