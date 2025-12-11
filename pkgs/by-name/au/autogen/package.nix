@@ -148,6 +148,9 @@ stdenv.mkDerivation rec {
       local nrp="$(patchelf --print-rpath "$f" | sed -E 's@(:|^)'$NIX_BUILD_TOP'[^:]*:@\1@g')"
       patchelf --set-rpath "$nrp" "$f"
     done
+  ''
+  + lib.optionalString (stdenv.system == "aarch64-darwin") ''
+    # FIXME: remove/revert; just trigerring a rebuild because of bad binary in cache.nixos.org
   '';
 
   meta = {
