@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
   ]);
 
   buildInputs = with ocamlPackages; [
+    camlzip
     dune-site
     dune-configurator
     ocamlgraph
