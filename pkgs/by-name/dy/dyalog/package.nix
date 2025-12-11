@@ -49,18 +49,49 @@ let
     or you can set the following nixpkgs config option:
     `config.dyalog.acceptLicense = true;`
   '';
+
+  inherit (stdenv.hostPlatform) system isAarch;
+
+  htmlRendererNotOnAarch = ''
+    The HTMLRenderer is not currently supported on ${system}.
+    https://docs.dyalog.com/20.0/release-notes/announcements/#new-linux-platform
+  '';
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dyalog";
   version = "20.0.52753";
   shortVersion = lib.versions.majorMinor finalAttrs.version;
 
+  passthru.sources =
+    let
+      fetchArtifact =
+        {
+          prefix,
+          suffix,
+          hash,
+        }:
+        fetchurl {
+          url = "https://download.dyalog.com/download.php?file=${finalAttrs.shortVersion}/${prefix}_${finalAttrs.version}_${suffix}";
+          inherit hash;
+        };
+    in
+    {
+      "x86_64-linux" = fetchArtifact {
+        prefix = "linux_64";
+        suffix = "unicode.x86_64.deb";
+        hash = "sha256-g5bilV2y7luWRZ1RPxe74F2mAKVHpKcytWWrX8dCuF8=";
+      };
+      "aarch64-linux" = fetchArtifact {
+        prefix = "linux_64";
+        suffix = "unicode.aarch64.deb";
+        hash = "sha256-DR7Kjqdp5BKW3XKUNYIdaUiR4Wd+sWkiSLtT5Ni1E4E=";
+      };
+    };
+
   src =
     assert !acceptLicense -> throw licenseDisclaimer;
-    fetchurl {
-      url = "https://download.dyalog.com/download.php?file=${finalAttrs.shortVersion}/linux_64_${finalAttrs.version}_unicode.x86_64.deb";
-      hash = "sha256-3uB102Hr0dmqAZj2ezLhsAdBotY24PWJfE7g5wSmKMA=";
-    };
+    assert htmlRendererSupport && isAarch -> throw htmlRendererNotOnAarch;
+    finalAttrs.passthru.sources.${system};
 
   outputs = [ "out" ] ++ lib.optional enableDocs "doc";
 
@@ -170,7 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
       tomasajt
       markus1189
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.attrNames finalAttrs.passthru.sources;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })
