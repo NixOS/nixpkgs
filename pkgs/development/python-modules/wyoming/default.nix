@@ -37,7 +37,8 @@ buildPythonPackage rec {
     http = [
       flask
       swagger-ui-py
-    ];
+    ]
+    ++ flask.optional-dependencies.async;
     zeroconf = [ zeroconf ];
   };
 

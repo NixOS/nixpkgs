@@ -931,6 +931,7 @@
   ./services/misc/rmfakecloud.nix
   ./services/misc/rshim.nix
   ./services/misc/rsync.nix
+  ./services/misc/rumno.nix
   ./services/misc/safeeyes.nix
   ./services/misc/sdrplay.nix
   ./services/misc/servarr/lidarr.nix
@@ -1522,6 +1523,7 @@
   ./services/system/earlyoom.nix
   ./services/system/kerberos/default.nix
   ./services/system/localtimed.nix
+  ./services/system/nix-daemon-firewall.nix
   ./services/system/nix-daemon.nix
   ./services/system/nscd.nix
   ./services/system/nvme-rs.nix
