@@ -12,6 +12,8 @@ fetchSubmodules=
 fetchLFS=
 builder=
 fetchTags=
+declare -A fetchSubmoduleTags=()
+declare -A tagsToFetch=()
 branchName=$NIX_PREFETCH_GIT_BRANCH_NAME
 
 # ENV params
@@ -57,7 +59,13 @@ Options:
       --leave-dotGit  Keep the .git directories.
       --fetch-lfs     Fetch git Large File Storage (LFS) files.
       --fetch-submodules Fetch submodules.
-      --fetch-tags    Fetch all tags (useful for git describe).
+      --fetch-submodule-tag subpath tag
+          Fetch a tag for a submodule or the main repo, useful for reproducible \`git describe'.
+      --fetch-submodule-tags subpath
+          Fetch all tags for a submodule, useful for update scripts.
+          This is less reproducible than \`--fetch-submodule-tag' and is not recommended for typical fetcher calls.
+      --fetch-tag     Fetch the specified tag for the main repo, equivalent to \`--fetch-submodule-tag "" tag'.
+      --fetch-tags    Fetch all tags for the main repo, equivalent to \`--fetch-submodule-tags ""'.
       --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
       --no-add-path   Do not actually add the contents of the git repo to the store.
       --root-dir dir  Directory in the repository that will be copied to the output instead of the full repository.
@@ -73,6 +81,7 @@ clean_git(){
 
 argi=0
 argfun=""
+preserve_argfun=""
 for arg; do
     if test -z "$argfun"; then
         case $arg in
@@ -90,7 +99,10 @@ for arg; do
             --leave-dotGit) leaveDotGit=true;;
             --fetch-lfs) fetchLFS=true;;
             --fetch-submodules) fetchSubmodules=true;;
-            --fetch-tags) fetchTags=true;;
+            --fetch-submodule-tag) argfun=add_submodule_tag_key;;
+            --fetch-submodule-tags) argfun=add_submodule_tags;;
+            --fetch-tag) argfun=add_main_tag;;
+            --fetch-tags) fetchSubmoduleTags[/]=true;;
             --builder) builder=true;;
             --no-add-path) noAddPath=true;;
             --root-dir) argfun=set_rootDir;;
@@ -111,10 +123,32 @@ for arg; do
                 var=${argfun#set_}
                 eval "$var=$(printf %q "$arg")"
                 ;;
+            add_submodule_tag_key)
+                argfun=add_submodule_tag_value_$arg
+                preserve_argfun=1
+                ;;
+            add_submodule_tag_value_*)
+                key=${argfun#add_submodule_tag_value_}
+                key="/${key#/}"
+                tagsToFetch[$key]="${tagsToFetch[$key]-}${tagsToFetch[$key]:+ } $arg"
+                ;;
+            add_submodule_tags)
+                fetchSubmoduleTags[/${arg#/}]=true
+                ;;
+            add_main_tag)
+                key="/"
+                tagsToFetch[$key]="${tagsToFetch[$key]-}${tagsToFetch[$key]:+ } $arg"
+                ;;
         esac
-        argfun=""
+        if [[ -z "$preserve_argfun" ]]; then
+            argfun=""
+        fi
+        preserve_argfun=""
     fi
 done
+
+fetchTags="${fetchSubmoduleTags[/]-}"
+unset fetchSubmoduleTags[/]
 
 if test -z "$url"; then
     usage
@@ -181,9 +215,26 @@ checkout_hash(){
         hash=$(hash_from_ref "$ref")
     fi
 
-    [[ -z "$deepClone" ]] && \
-    clean_git fetch ${builder:+--progress} --depth=1 origin "$hash" || \
-    clean_git fetch -t ${builder:+--progress} origin || return 1
+    fetchTagsFlags=("--tags")
+    if [[ -z "$fetchTags" ]]; then
+        fetchTagsFlags=("--no-tags")
+    fi
+    {
+        if [[ -z "$deepClone" ]]; then
+            clean_git fetch "${fetchTagsFlags[@]}" ${builder:+--progress} --depth=1 origin "$hash"
+        else
+            clean_git fetch "${fetchTagsFlags[@]}" ${builder:+--progress} origin
+        fi
+    } || {
+        echo "ERROR: \`git fetch' failed." >&2
+        # Git remotes using the "dumb" protocol does not support shallow fetch;
+        # fall back to deep fetch if shallow fetch failed.
+        # TODO(@ShamrockLee): Determine whether the transfer protocol is smart reliably.
+        if [[ -z "$deepClone" ]] || [[ -z "$fetchTags" ]]; then
+            echo "This might be due to the dumb transfer protocol not supporting shallow fetch or no-tag cloning. Trying with \`--deep-clone' and \`--fetch-tags'..." >&2
+            clean_git fetch --tags ${builder:+--progress} origin || return 1
+        fi
+    } || return 1
 
     local object_type=$(git cat-file -t "$hash")
     if [[ "$object_type" == "commit" || "$object_type" == "tag" ]]; then
@@ -253,15 +304,45 @@ clone(){
     )
 
     # Fetch all tags if requested
-    if test -n "$fetchTags"; then
+    # The fetched tags are potentially non-reproducible, as tags are mutable parts of the Git tree.
+    #
+    # `deepClone` used to effectively imply `fetchTags`.
+    # We avoid such behaviour to enhance the `postCheckout` reproducibility,
+    # while keeping the old behaviour for `.git` for backward compatibility purposes.
+    # In bash, `&&` doesn't take precedence over `||``, and they are evaluated left-to-right.
+    if [[ -n "$deepClone" ]] && [[ -n "$leaveDotGit" ]] || [[ -n "$fetchTags" ]]; then
         echo "fetching all tags..." >&2
         clean_git fetch origin 'refs/tags/*:refs/tags/*' || echo "warning: failed to fetch some tags" >&2
+    fi
+
+    # Name "$ref" to make `git describe` work reproducibly in `NIX_PREFETCH_GIT_CHECKOUT_HOOK`.
+    # Name only when not leaving `.git` for compatibility purposes.
+    if [[ -n "$ref" ]] && [[ -z "$leaveDotGit" ]]; then
+        echo "refer to FETCH_HEAD as its original name $ref"
+        clean_git update-ref "$ref" FETCH_HEAD
     fi
 
     # Checkout linked sources.
     if test -n "$fetchSubmodules"; then
         init_submodules
     fi
+
+    for key in "${!fetchSubmoduleTags[@]}"; do
+        subpath="${key#/}"
+        echo "fetching all tags for submodule $subpath..." >&2
+        clean_git -C "$subpath" fetch origin 'refs/tags/*:refs/tags/*' || echo "warning: failed to fetch some tags" >&2
+    done
+
+    for key in "${!tagsToFetch[@]}"; do
+        if [[ -n "${fetchSubmoduleTags[$key]-}" ]]; then
+            continue
+        fi
+        subpath="${key#/}"
+        echo "fetching specified tags${subpath:+ at submodule $subpath}..." >&2
+        for tagToFetch in ${tagsToFetch[$key]}; do
+            clean_git -C "$subpath" fetch origin "refs/tags/$tagToFetch:refs/tags/$tagToFetch" || echo "warning: failed to fetch tag $tagToFetch" >&2
+        done
+    done
 
     if [ -z "$builder" ] && [ -f .topdeps ]; then
         if tg help &>/dev/null; then
@@ -418,6 +499,21 @@ json_escape() {
     echo "$s"
 }
 
+json_list() {
+    local result=
+    local arg
+    for arg; do
+        if [[ -n "$isFirst" ]]; then
+            result="$result, "
+        else
+            result="["
+        fi
+        result="$result\"$(json_escape "$arg")\""
+    done
+    result="$result]"
+    echo "$result"
+}
+
 print_results() {
     hash="$1"
     if ! test -n "$QUIET"; then
@@ -444,7 +540,23 @@ print_results() {
   "fetchLFS": $([[ -n "$fetchLFS" ]] && echo true || echo false),
   "fetchSubmodules": $([[ -n "$fetchSubmodules" ]] && echo true || echo false),
   "deepClone": $([[ -n "$deepClone" ]] && echo true || echo false),
-  "fetchTags": $([[ -n "$fetchTags" ]] && echo true || echo false),
+  "fetchTags": $(
+    if [[ -n "$fetchTags" ]]; then
+        echo true
+    elif ((${#tagsToFetch[@]})); then
+        keys=("${!tagsToFetch[@]}")
+        keysWithComma=("${keys[@]:0:${#keys[@]-1}}")
+        keyLast="${keys[@]:${#keys[@]-1}:1}"
+        echo "{"
+        for key in "${keysWithComma[@]}"; do
+            echo "    \"$(json_escape "${key#/}")\": $(json_list ${tagsToFetch[$key]}),"
+        done
+        echo "    \"$(json_escape "${key#/}")\": $(json_list ${tagsToFetch[$keyLast]})"
+        echo "  }"
+    else
+        echo "{}"
+    fi
+  ),
   "leaveDotGit": $([[ -n "$leaveDotGit" ]] && echo true || echo false),
   "rootDir": "$(json_escape "$rootDir")"
 }
