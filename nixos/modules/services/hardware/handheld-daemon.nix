@@ -4,13 +4,12 @@
   pkgs,
   ...
 }:
-with lib;
 let
   cfg = config.services.handheld-daemon;
 in
 {
   imports = [
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "handheld-daemon"
       "adjustor"
@@ -18,18 +17,18 @@ in
     ] "Adjustor is now part of handheld-daemon package, so it can't be overriden")
   ];
   options.services.handheld-daemon = {
-    enable = mkEnableOption "Handheld Daemon";
-    package = mkPackageOption pkgs "handheld-daemon" { };
+    enable = lib.mkEnableOption "Handheld Daemon";
+    package = lib.mkPackageOption pkgs "handheld-daemon" { };
 
     ui = {
-      enable = mkEnableOption "Handheld Daemon UI";
-      package = mkPackageOption pkgs "handheld-daemon-ui" { };
+      enable = lib.mkEnableOption "Handheld Daemon UI";
+      package = lib.mkPackageOption pkgs "handheld-daemon-ui" { };
     };
 
     adjustor = {
-      enable = mkEnableOption "Handheld Daemon TDP control plugin";
-      loadAcpiCallModule = mkOption {
-        type = types.bool;
+      enable = lib.mkEnableOption "Handheld Daemon TDP control plugin";
+      loadAcpiCallModule = lib.mkOption {
+        type = lib.types.bool;
         description = ''
           Whether to load the acpi_call kernel module.
           Required for TDP control by adjustor on most devices.
@@ -37,17 +36,17 @@ in
       };
     };
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       description = ''
         The user to run Handheld Daemon with.
       '';
     };
   };
 
-  config = mkIf cfg.enable {
-    services.handheld-daemon.ui.enable = mkDefault true;
-    services.handheld-daemon.adjustor.loadAcpiCallModule = mkDefault cfg.adjustor.enable;
+  config = lib.mkIf cfg.enable {
+    services.handheld-daemon.ui.enable = lib.mkDefault true;
+    services.handheld-daemon.adjustor.loadAcpiCallModule = lib.mkDefault cfg.adjustor.enable;
     environment.systemPackages = [
       cfg.package
     ]
@@ -55,8 +54,8 @@ in
     services.udev.packages = [ cfg.package ];
     systemd.packages = [ cfg.package ];
 
-    boot.kernelModules = mkIf cfg.adjustor.loadAcpiCallModule [ "acpi_call" ];
-    boot.extraModulePackages = mkIf cfg.adjustor.loadAcpiCallModule [
+    boot.kernelModules = lib.mkIf cfg.adjustor.loadAcpiCallModule [ "acpi_call" ];
+    boot.extraModulePackages = lib.mkIf cfg.adjustor.loadAcpiCallModule [
       config.boot.kernelPackages.acpi_call
     ];
 
@@ -68,10 +67,10 @@ in
       restartIfChanged = true;
 
       environment = {
-        HHD_ADJ_DISABLE = mkIf (!cfg.adjustor.enable) "1";
+        HHD_ADJ_DISABLE = lib.mkIf (!cfg.adjustor.enable) "1";
       };
 
-      path = mkIf cfg.ui.enable [
+      path = lib.mkIf cfg.ui.enable [
         cfg.ui.package
         pkgs.lsof
       ];
@@ -85,5 +84,5 @@ in
     };
   };
 
-  meta.maintainers = [ maintainers.toast ];
+  meta.maintainers = [ lib.maintainers.toast ];
 }

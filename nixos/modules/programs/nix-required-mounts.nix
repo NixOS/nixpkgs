@@ -9,18 +9,16 @@ let
   cfg = config.programs.nix-required-mounts;
   package = pkgs.nix-required-mounts;
 
-  Mount =
-    with lib;
-    types.submodule {
-      options.host = mkOption {
-        type = types.str;
-        description = "Host path to mount";
-      };
-      options.guest = mkOption {
-        type = types.str;
-        description = "Location in the sandbox to mount the host path at";
-      };
+  Mount = lib.types.submodule {
+    options.host = lib.mkOption {
+      type = lib.types.str;
+      description = "Host path to mount";
     };
+    options.guest = lib.mkOption {
+      type = lib.types.str;
+      description = "Location in the sandbox to mount the host path at";
+    };
+  };
   Pattern =
     with lib.types;
     types.submodule (

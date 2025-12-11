@@ -2388,26 +2388,23 @@ in
       lib.concatMapStrings (name: "r ${config.environment.etc."pam.d/${name}".source},\n") (
         lib.attrNames enabledServices
       )
-      + (
-        with lib;
-        pipe enabledServices [
-          lib.attrValues
-          (catAttrs "rules")
-          (lib.concatMap lib.attrValues)
-          (lib.concatMap lib.attrValues)
-          (lib.filter (rule: rule.enable))
-          (lib.catAttrs "modulePath")
-          (map (
-            modulePath:
-            lib.throwIfNot (lib.hasPrefix "/" modulePath)
-              ''non-absolute PAM modulePath "${modulePath}" is unsupported by apparmor''
-              modulePath
-          ))
-          lib.unique
-          (map (module: "mr ${module},"))
-          concatLines
-        ]
-      );
+      + (lib.pipe enabledServices [
+        lib.attrValues
+        (lib.catAttrs "rules")
+        (lib.concatMap lib.attrValues)
+        (lib.concatMap lib.attrValues)
+        (lib.filter (rule: rule.enable))
+        (lib.catAttrs "modulePath")
+        (lib.map (
+          modulePath:
+          lib.throwIfNot (lib.hasPrefix "/" modulePath)
+            ''non-absolute PAM modulePath "${modulePath}" is unsupported by apparmor''
+            modulePath
+        ))
+        lib.unique
+        (lib.map (module: "mr ${module},"))
+        lib.concatLines
+      ]);
 
     security.sudo.extraConfig = optionalSudoConfigForSSHAgentAuth;
     security.sudo-rs.extraConfig = optionalSudoConfigForSSHAgentAuth;

@@ -21,13 +21,12 @@ let
     ;
 
   mkValueStringArmagetron =
-    with lib;
     v:
-    if isInt v then
+    if lib.isInt v then
       toString v
-    else if isFloat v then
+    else if lib.isFloat v then
       toString v
-    else if isString v then
+    else if lib.isString v then
       v
     else if true == v then
       "1"

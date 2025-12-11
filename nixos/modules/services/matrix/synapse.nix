@@ -6,19 +6,18 @@
   utils,
   ...
 }:
-
-with lib;
-
 let
+  inherit (lib) types;
+
   cfg = config.services.matrix-synapse;
   format = pkgs.formats.yaml { };
 
   filterRecursiveNull =
     o:
-    if isAttrs o then
-      mapAttrs (_: v: filterRecursiveNull v) (filterAttrs (_: v: v != null) o)
-    else if isList o then
-      map filterRecursiveNull (filter (v: v != null) o)
+    if lib.isAttrs o then
+      lib.mapAttrs (_: v: filterRecursiveNull v) (lib.filterAttrs (_: v: v != null) o)
+    else if lib.isList o then
+      map filterRecursiveNull (lib.filter (v: v != null) o)
     else
       o;
 
@@ -34,7 +33,7 @@ let
     usePostgresql
     && (
       !(args ? host)
-      || (elem args.host [
+      || (lib.elem args.host [
         "localhost"
         "127.0.0.1"
         "::1"
@@ -46,20 +45,20 @@ let
   listenerSupportsResource =
     resource: listener: lib.any ({ names, ... }: builtins.elem resource names) listener.resources;
 
-  clientListener = findFirst (listenerSupportsResource "client") null (
+  clientListener = lib.findFirst (listenerSupportsResource "client") null (
     cfg.settings.listeners
-    ++ concatMap ({ worker_listeners, ... }: worker_listeners) (attrValues cfg.workers)
+    ++ lib.concatMap ({ worker_listeners, ... }: worker_listeners) (lib.attrValues cfg.workers)
   );
 
   registerNewMatrixUser =
     let
-      isIpv6 = hasInfix ":";
+      isIpv6 = lib.hasInfix ":";
 
       # add a tail, so that without any bind_addresses we still have a useable address
-      bindAddress = head (clientListener.bind_addresses ++ [ "127.0.0.1" ]);
+      bindAddress = lib.head (clientListener.bind_addresses ++ [ "127.0.0.1" ]);
       listenerProtocol = if clientListener.tls then "https" else "http";
     in
-    assert assertMsg (
+    assert lib.assertMsg (
       clientListener != null
     ) "No client listener found in synapse or one of its workers";
     pkgs.writeShellScriptBin "matrix-synapse-register_new_matrix_user" ''
@@ -106,7 +105,7 @@ let
     disable_existing_loggers = false;
   };
 
-  defaultCommonLogConfigText = generators.toPretty { } defaultCommonLogConfig;
+  defaultCommonLogConfigText = lib.generators.toPretty { } defaultCommonLogConfig;
 
   logConfigText =
     logName:
@@ -114,8 +113,8 @@ let
       Path to a yaml file generated from this Nix expression:
 
       ```
-      ${generators.toPretty { } (
-        recursiveUpdate defaultCommonLogConfig { handlers.journal.SYSLOG_IDENTIFIER = logName; }
+      ${lib.generators.toPretty { } (
+        lib.recursiveUpdate defaultCommonLogConfig { handlers.journal.SYSLOG_IDENTIFIER = logName; }
       )}
       ```
     '';
@@ -123,8 +122,8 @@ let
   genLogConfigFile =
     logName:
     format.generate "synapse-log-${logName}.yaml" (
-      attrsets.recursiveUpdate cfg.log (
-        optionalAttrs (cfg.log ? handlers.journal) {
+      lib.attrsets.recursiveUpdate cfg.log (
+        lib.optionalAttrs (cfg.log ? handlers.journal) {
           handlers.journal = cfg.log.handlers.journal // {
             SYSLOG_IDENTIFIER = logName;
           };
@@ -146,16 +145,16 @@ in
 
   imports = [
 
-    (mkRemovedOptionModule [ "services" "matrix-synapse" "trusted_third_party_id_servers" ] ''
+    (lib.mkRemovedOptionModule [ "services" "matrix-synapse" "trusted_third_party_id_servers" ] ''
       The `trusted_third_party_id_servers` option as been removed in `matrix-synapse` v1.4.0
       as the behavior is now obsolete.
     '')
-    (mkRemovedOptionModule [ "services" "matrix-synapse" "create_local_database" ] ''
+    (lib.mkRemovedOptionModule [ "services" "matrix-synapse" "create_local_database" ] ''
       Database configuration must be done manually. An exemplary setup is demonstrated in
       <nixpkgs/nixos/tests/matrix/synapse.nix>
     '')
-    (mkRemovedOptionModule [ "services" "matrix-synapse" "web_client" ] "")
-    (mkRemovedOptionModule [ "services" "matrix-synapse" "room_invite_state_types" ] ''
+    (lib.mkRemovedOptionModule [ "services" "matrix-synapse" "web_client" ] "")
+    (lib.mkRemovedOptionModule [ "services" "matrix-synapse" "room_invite_state_types" ] ''
       You may add additional event types via
       `services.matrix-synapse.room_prejoin_state.additional_event_types` and
       disable the default events via
@@ -163,252 +162,268 @@ in
     '')
 
     # options that don't exist in synapse anymore
-    (mkRemovedOptionModule [ "services" "matrix-synapse" "bind_host" ] "Use listener settings instead.")
-    (mkRemovedOptionModule [ "services" "matrix-synapse" "bind_port" ] "Use listener settings instead.")
-    (mkRemovedOptionModule [ "services" "matrix-synapse" "expire_access_tokens" ] "")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "matrix-synapse"
+      "bind_host"
+    ] "Use listener settings instead.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "matrix-synapse"
+      "bind_port"
+    ] "Use listener settings instead.")
+    (lib.mkRemovedOptionModule [ "services" "matrix-synapse" "expire_access_tokens" ] "")
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "no_tls"
     ] "It is no longer supported by synapse.")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "tls_dh_param_path"
     ] "It was removed from synapse.")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "unsecure_port"
     ] "Use settings.listeners instead.")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "user_creation_max_duration"
     ] "It is no longer supported by synapse.")
-    (mkRemovedOptionModule [ "services" "matrix-synapse" "verbose" ] "Use a log config instead.")
+    (lib.mkRemovedOptionModule [ "services" "matrix-synapse" "verbose" ] "Use a log config instead.")
 
     # options that were moved into rfc42 style settings
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "app_service_config_files"
     ] "Use settings.app_service_config_files instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "database_args"
     ] "Use settings.database.args instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "database_name"
     ] "Use settings.database.args.database instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "database_type"
     ] "Use settings.database.name instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "database_user"
     ] "Use settings.database.args.user instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "dynamic_thumbnails"
     ] "Use settings.dynamic_thumbnails instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "enable_metrics"
     ] "Use settings.enable_metrics instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "enable_registration"
     ] "Use settings.enable_registration instead")
-    (mkRemovedOptionModule [ "services" "matrix-synapse" "extraConfig" ] "Use settings instead.")
-    (mkRemovedOptionModule [ "services" "matrix-synapse" "listeners" ] "Use settings.listeners instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [ "services" "matrix-synapse" "extraConfig" ] "Use settings instead.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "matrix-synapse"
+      "listeners"
+    ] "Use settings.listeners instead")
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "logConfig"
     ] "Use settings.log_config instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "max_image_pixels"
     ] "Use settings.max_image_pixels instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "max_upload_size"
     ] "Use settings.max_upload_size instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "presence"
       "enabled"
     ] "Use settings.presence.enabled instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "public_baseurl"
     ] "Use settings.public_baseurl instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "report_stats"
     ] "Use settings.report_stats instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "server_name"
     ] "Use settings.server_name instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "servers"
     ] "Use settings.trusted_key_servers instead.")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "tls_certificate_path"
     ] "Use settings.tls_certificate_path instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "tls_private_key_path"
     ] "Use settings.tls_private_key_path instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "turn_shared_secret"
     ] "Use settings.turn_shared_secret instead")
-    (mkRemovedOptionModule [ "services" "matrix-synapse" "turn_uris" ] "Use settings.turn_uris instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "matrix-synapse"
+      "turn_uris"
+    ] "Use settings.turn_uris instead")
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "turn_user_lifetime"
     ] "Use settings.turn_user_lifetime instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "url_preview_enabled"
     ] "Use settings.url_preview_enabled instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "url_preview_ip_range_blacklist"
     ] "Use settings.url_preview_ip_range_blacklist instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "url_preview_ip_range_whitelist"
     ] "Use settings.url_preview_ip_range_whitelist instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "url_preview_url_blacklist"
     ] "Use settings.url_preview_url_blacklist instead")
 
     # options that are too specific to mention them explicitly in settings
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "account_threepid_delegates"
       "email"
     ] "Use settings.account_threepid_delegates.email instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "account_threepid_delegates"
       "msisdn"
     ] "Use settings.account_threepid_delegates.msisdn instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "allow_guest_access"
     ] "Use settings.allow_guest_access instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "bcrypt_rounds"
     ] "Use settings.bcrypt_rounds instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "enable_registration_captcha"
     ] "Use settings.enable_registration_captcha instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "event_cache_size"
     ] "Use settings.event_cache_size instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "federation_rc_concurrent"
     ] "Use settings.rc_federation.concurrent instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "federation_rc_reject_limit"
     ] "Use settings.rc_federation.reject_limit instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "federation_rc_sleep_delay"
     ] "Use settings.rc_federation.sleep_delay instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "federation_rc_sleep_limit"
     ] "Use settings.rc_federation.sleep_limit instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "federation_rc_window_size"
     ] "Use settings.rc_federation.window_size instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "key_refresh_interval"
     ] "Use settings.key_refresh_interval instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "rc_messages_burst_count"
     ] "Use settings.rc_messages.burst_count instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "rc_messages_per_second"
     ] "Use settings.rc_messages.per_second instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "recaptcha_private_key"
     ] "Use settings.recaptcha_private_key instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "recaptcha_public_key"
     ] "Use settings.recaptcha_public_key instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "redaction_retention_period"
     ] "Use settings.redaction_retention_period instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "room_prejoin_state"
       "additional_event_types"
     ] "Use settings.room_prejoin_state.additional_event_types instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "room_prejoin_state"
@@ -416,12 +431,12 @@ in
     ] "Use settings.room_prejoin-state.disable_default_event_types instead")
 
     # Options that should be passed via extraConfigFiles, so they are not persisted into the nix store
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "macaroon_secret_key"
     ] "Pass this value via extraConfigFiles instead")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "matrix-synapse"
       "registration_shared_secret"
@@ -437,7 +452,7 @@ in
           { config, ... }:
           {
             options = {
-              port = mkOption {
+              port = lib.mkOption {
                 type = types.nullOr types.port;
                 default = null;
                 example = 8448;
@@ -446,7 +461,7 @@ in
                 '';
               };
 
-              bind_addresses = mkOption {
+              bind_addresses = lib.mkOption {
                 type = types.nullOr (types.listOf types.str);
                 default =
                   if config.path != null then
@@ -456,7 +471,7 @@ in
                       "::1"
                       "127.0.0.1"
                     ];
-                defaultText = literalExpression ''
+                defaultText = lib.literalExpression ''
                   if path != null then
                     null
                   else
@@ -465,7 +480,7 @@ in
                       "127.0.0.1"
                     ]
                 '';
-                example = literalExpression ''
+                example = lib.literalExpression ''
                   [
                     "::"
                     "0.0.0.0"
@@ -476,7 +491,7 @@ in
                 '';
               };
 
-              path = mkOption {
+              path = lib.mkOption {
                 type = types.nullOr types.path;
                 default = null;
                 description = ''
@@ -489,10 +504,10 @@ in
                 '';
               };
 
-              mode = mkOption {
+              mode = lib.mkOption {
                 type = types.nullOr (types.strMatching "^[0,2-7]{3,4}$");
                 default = if config.path != null then "660" else null;
-                defaultText = literalExpression ''
+                defaultText = lib.literalExpression ''
                   if path != null then
                     "660"
                   else
@@ -505,7 +520,7 @@ in
                 apply = toDecimalFilePermission;
               };
 
-              type = mkOption {
+              type = lib.mkOption {
                 type = types.enum [
                   "http"
                   "manhole"
@@ -519,7 +534,7 @@ in
                 '';
               };
 
-              tls = mkOption {
+              tls = lib.mkOption {
                 type = types.nullOr types.bool;
                 default = if config.path != null then null else !workerContext;
                 defaultText = ''
@@ -535,7 +550,7 @@ in
                 '';
               };
 
-              x_forwarded = mkOption {
+              x_forwarded = lib.mkOption {
                 type = types.bool;
                 default = config.path != null;
                 defaultText = ''
@@ -548,11 +563,11 @@ in
                 '';
               };
 
-              resources = mkOption {
+              resources = lib.mkOption {
                 type = types.listOf (
                   types.submodule {
                     options = {
-                      names = mkOption {
+                      names = lib.mkOption {
                         type = types.listOf (
                           types.enum [
                             "client"
@@ -574,7 +589,7 @@ in
                           "client"
                         ];
                       };
-                      compress = mkOption {
+                      compress = lib.mkOption {
                         default = false;
                         type = types.bool;
                         description = ''
@@ -596,9 +611,9 @@ in
     in
     {
       services.matrix-synapse = {
-        enable = mkEnableOption "matrix.org synapse, the reference homeserver";
+        enable = lib.mkEnableOption "matrix.org synapse, the reference homeserver";
 
-        enableRegistrationScript = mkOption {
+        enableRegistrationScript = lib.mkOption {
           type = types.bool;
           default = clientListener.bind_addresses != [ ];
           example = false;
@@ -627,7 +642,7 @@ in
           '';
         };
 
-        configFile = mkOption {
+        configFile = lib.mkOption {
           type = types.path;
           readOnly = true;
           description = ''
@@ -636,7 +651,7 @@ in
           '';
         };
 
-        package = mkOption {
+        package = lib.mkOption {
           type = types.package;
           readOnly = true;
           description = ''
@@ -657,12 +672,12 @@ in
           '';
         };
 
-        extras = mkOption {
+        extras = lib.mkOption {
           type = types.listOf (
             types.enum (lib.attrNames pkgs.matrix-synapse-unwrapped.optional-dependencies)
           );
           default = defaultExtras;
-          example = literalExpression ''
+          example = lib.literalExpression ''
             [
               "cache-memory" # Provide statistics about caching memory consumption
               "jwt"          # JSON Web Token authentication
@@ -688,10 +703,10 @@ in
           '';
         };
 
-        plugins = mkOption {
+        plugins = lib.mkOption {
           type = types.listOf types.package;
           default = [ ];
-          example = literalExpression ''
+          example = lib.literalExpression ''
             with config.services.matrix-synapse.package.plugins; [
               matrix-synapse-ldap3
               matrix-synapse-pam
@@ -702,7 +717,7 @@ in
           '';
         };
 
-        withJemalloc = mkOption {
+        withJemalloc = lib.mkOption {
           type = types.bool;
           default = true;
           description = ''
@@ -710,7 +725,7 @@ in
           '';
         };
 
-        dataDir = mkOption {
+        dataDir = lib.mkOption {
           type = types.str;
           default = "/var/lib/matrix-synapse";
           description = ''
@@ -719,9 +734,9 @@ in
           '';
         };
 
-        log = mkOption {
+        log = lib.mkOption {
           type = types.attrsOf format.type;
-          defaultText = literalExpression defaultCommonLogConfigText;
+          defaultText = lib.literalExpression defaultCommonLogConfigText;
           description = ''
             Default configuration for the loggers used by `matrix-synapse` and its workers.
             The defaults are added with the default priority which means that
@@ -762,7 +777,7 @@ in
           '';
         };
 
-        settings = mkOption {
+        settings = lib.mkOption {
           default = { };
           description = ''
             The primary synapse configuration. See the
@@ -771,447 +786,445 @@ in
 
             Secrets should be passed in by using the `extraConfigFiles` option.
           '';
-          type =
-            with types;
-            submodule {
-              freeformType = format.type;
-              options = {
-                # This is a reduced set of popular options and defaults
-                # Do not add every available option here, they can be specified
-                # by the user at their own discretion. This is a freeform type!
+          type = types.submodule {
+            freeformType = format.type;
+            options = {
+              # This is a reduced set of popular options and defaults
+              # Do not add every available option here, they can be specified
+              # by the user at their own discretion. This is a freeform type!
 
-                server_name = mkOption {
-                  type = types.str;
-                  example = "example.com";
-                  default = config.networking.hostName;
-                  defaultText = literalExpression "config.networking.hostName";
-                  description = ''
-                    The domain name of the server, with optional explicit port.
-                    This is used by remote servers to look up the server address.
-                    This is also the last part of your UserID.
+              server_name = lib.mkOption {
+                type = types.str;
+                example = "example.com";
+                default = config.networking.hostName;
+                defaultText = lib.literalExpression "config.networking.hostName";
+                description = ''
+                  The domain name of the server, withlib.optional explicit port.
+                  This is used by remote servers to look up the server address.
+                  This is also the last part of your UserID.
 
-                    The server_name cannot be changed later so it is important to configure this correctly before you start Synapse.
-                  '';
-                };
+                  The server_name cannot be changed later so it is important to configure this correctly before you start Synapse.
+                '';
+              };
 
-                enable_registration = mkOption {
-                  type = types.bool;
-                  default = false;
-                  description = ''
-                    Enable registration for new users.
-                  '';
-                };
+              enable_registration = lib.mkOption {
+                type = types.bool;
+                default = false;
+                description = ''
+                  Enable registration for new users.
+                '';
+              };
 
-                registration_shared_secret = mkOption {
-                  type = types.nullOr types.str;
-                  default = null;
-                  description = ''
-                    If set, allows registration by anyone who also has the shared
-                    secret, even if registration is otherwise disabled.
+              registration_shared_secret = lib.mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                description = ''
+                  If set, allows registration by anyone who also has the shared
+                  secret, even if registration is otherwise disabled.
 
-                    Secrets should be passed in via `extraConfigFiles`!
-                  '';
-                };
+                  Secrets should be passed in via `extraConfigFiles`!
+                '';
+              };
 
-                macaroon_secret_key = mkOption {
-                  type = types.nullOr types.str;
-                  default = null;
-                  description = ''
-                    Secret key for authentication tokens. If none is specified,
-                    the registration_shared_secret is used, if one is given; otherwise,
-                    a secret key is derived from the signing key.
+              macaroon_secret_key = lib.mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                description = ''
+                  Secret key for authentication tokens. If none is specified,
+                  the registration_shared_secret is used, if one is given; otherwise,
+                  a secret key is derived from the signing key.
 
-                    Secrets should be passed in via `extraConfigFiles`!
-                  '';
-                };
+                  Secrets should be passed in via `extraConfigFiles`!
+                '';
+              };
 
-                enable_metrics = mkOption {
-                  type = types.bool;
-                  default = false;
-                  description = ''
-                    Enable collection and rendering of performance metrics
-                  '';
-                };
+              enable_metrics = lib.mkOption {
+                type = types.bool;
+                default = false;
+                description = ''
+                  Enable collection and rendering of performance metrics
+                '';
+              };
 
-                report_stats = mkOption {
-                  type = types.bool;
-                  default = false;
-                  description = ''
-                    Whether or not to report anonymized homeserver usage statistics.
-                  '';
-                };
+              report_stats = lib.mkOption {
+                type = types.bool;
+                default = false;
+                description = ''
+                  Whether or not to report anonymized homeserver usage statistics.
+                '';
+              };
 
-                signing_key_path = mkOption {
-                  type = types.path;
-                  default = "${cfg.dataDir}/homeserver.signing.key";
-                  description = ''
-                    Path to the signing key to sign messages with.
-                  '';
-                };
+              signing_key_path = lib.mkOption {
+                type = types.path;
+                default = "${cfg.dataDir}/homeserver.signing.key";
+                description = ''
+                  Path to the signing key to sign messages with.
+                '';
+              };
 
-                pid_file = mkOption {
-                  type = types.path;
-                  default = "/run/matrix-synapse.pid";
-                  readOnly = true;
-                  description = ''
-                    The file to store the PID in.
-                  '';
-                };
+              pid_file = lib.mkOption {
+                type = types.path;
+                default = "/run/matrix-synapse.pid";
+                readOnly = true;
+                description = ''
+                  The file to store the PID in.
+                '';
+              };
 
-                log_config = mkOption {
-                  type = types.path;
-                  default = genLogConfigFile "synapse";
-                  defaultText = logConfigText "synapse";
-                  description = ''
-                    The file that holds the logging configuration.
-                  '';
-                };
+              log_config = lib.mkOption {
+                type = types.path;
+                default = genLogConfigFile "synapse";
+                defaultText = logConfigText "synapse";
+                description = ''
+                  The file that holds the logging configuration.
+                '';
+              };
 
-                media_store_path = mkOption {
-                  type = types.path;
-                  default =
-                    if lib.versionAtLeast config.system.stateVersion "22.05" then
-                      "${cfg.dataDir}/media_store"
-                    else
-                      "${cfg.dataDir}/media";
-                  defaultText = "${cfg.dataDir}/media_store for when system.stateVersion is at least 22.05, ${cfg.dataDir}/media when lower than 22.05";
-                  description = ''
-                    Directory where uploaded images and attachments are stored.
-                  '';
-                };
+              media_store_path = lib.mkOption {
+                type = types.path;
+                default =
+                  if lib.versionAtLeast config.system.stateVersion "22.05" then
+                    "${cfg.dataDir}/media_store"
+                  else
+                    "${cfg.dataDir}/media";
+                defaultText = "${cfg.dataDir}/media_store for when system.stateVersion is at least 22.05, ${cfg.dataDir}/media when lower than 22.05";
+                description = ''
+                  Directory where uploaded images and attachments are stored.
+                '';
+              };
 
-                public_baseurl = mkOption {
-                  type = types.nullOr types.str;
-                  default = null;
-                  example = "https://example.com:8448/";
-                  description = ''
-                    The public-facing base URL for the client API (not including _matrix/...)
-                  '';
-                };
+              public_baseurl = lib.mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                example = "https://example.com:8448/";
+                description = ''
+                  The public-facing base URL for the client API (not including _matrix/...)
+                '';
+              };
 
-                tls_certificate_path = mkOption {
-                  type = types.nullOr types.str;
-                  default = null;
-                  example = "/var/lib/acme/example.com/fullchain.pem";
-                  description = ''
-                    PEM encoded X509 certificate for TLS.
-                    You can replace the self-signed certificate that synapse
-                    autogenerates on launch with your own SSL certificate + key pair
-                    if you like.  Any required intermediary certificates can be
-                    appended after the primary certificate in hierarchical order.
-                  '';
-                };
+              tls_certificate_path = lib.mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                example = "/var/lib/acme/example.com/fullchain.pem";
+                description = ''
+                  PEM encoded X509 certificate for TLS.
+                  You can replace the self-signed certificate that synapse
+                  autogenerates on launch with your own SSL certificate + key pair
+                  if you like.  Any required intermediary certificates can be
+                  appended after the primary certificate in hierarchical order.
+                '';
+              };
 
-                tls_private_key_path = mkOption {
-                  type = types.nullOr types.str;
-                  default = null;
-                  example = "/var/lib/acme/example.com/key.pem";
-                  description = ''
-                    PEM encoded private key for TLS. Specify null if synapse is not
-                    speaking TLS directly.
-                  '';
-                };
+              tls_private_key_path = lib.mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                example = "/var/lib/acme/example.com/key.pem";
+                description = ''
+                  PEM encoded private key for TLS. Specify null if synapse is not
+                  speaking TLS directly.
+                '';
+              };
 
-                presence.enabled = mkOption {
-                  type = types.bool;
-                  default = true;
-                  example = false;
-                  description = ''
-                    Whether to enable presence tracking.
+              presence.enabled = lib.mkOption {
+                type = types.bool;
+                default = true;
+                example = false;
+                description = ''
+                  Whether to enable presence tracking.
 
-                    Presence tracking allows users to see the state (e.g online/offline)
-                    of other local and remote users.
-                  '';
-                };
+                  Presence tracking allows users to see the state (e.g online/offline)
+                  of other local and remote users.
+                '';
+              };
 
-                listeners = mkOption {
-                  type = types.listOf (listenerType false);
-                  default = [
-                    {
-                      port = 8008;
-                      bind_addresses = [ "127.0.0.1" ];
-                      type = "http";
-                      tls = false;
-                      x_forwarded = true;
-                      resources = [
-                        {
-                          names = [ "client" ];
-                          compress = true;
-                        }
-                        {
-                          names = [ "federation" ];
-                          compress = false;
-                        }
-                      ];
-                    }
-                  ]
-                  ++ lib.optional hasWorkers {
-                    path = "/run/matrix-synapse/main_replication.sock";
+              listeners = lib.mkOption {
+                type = types.listOf (listenerType false);
+                default = [
+                  {
+                    port = 8008;
+                    bind_addresses = [ "127.0.0.1" ];
                     type = "http";
+                    tls = false;
+                    x_forwarded = true;
                     resources = [
                       {
-                        names = [ "replication" ];
+                        names = [ "client" ];
+                        compress = true;
+                      }
+                      {
+                        names = [ "federation" ];
                         compress = false;
                       }
                     ];
-                  };
-                  description = ''
-                    List of ports that Synapse should listen on, their purpose and their configuration.
-
-                    By default, synapse will be configured for client and federation traffic on port 8008, and
-                    use a UNIX domain socket for worker replication. See [`services.matrix-synapse.workers`](#opt-services.matrix-synapse.workers)
-                    for more details.
-                  '';
-                };
-
-                database.name = mkOption {
-                  type = types.enum [
-                    "sqlite3"
-                    "psycopg2"
-                  ];
-                  default = if versionAtLeast config.system.stateVersion "18.03" then "psycopg2" else "sqlite3";
-                  defaultText = literalExpression ''
-                    if versionAtLeast config.system.stateVersion "18.03"
-                    then "psycopg2"
-                    else "sqlite3"
-                  '';
-                  description = ''
-                    The database engine name. Can be sqlite3 or psycopg2.
-                  '';
-                };
-
-                database.args.database = mkOption {
-                  type = types.str;
-                  default =
+                  }
+                ]
+                ++ lib.optional hasWorkers {
+                  path = "/run/matrix-synapse/main_replication.sock";
+                  type = "http";
+                  resources = [
                     {
-                      sqlite3 = "${cfg.dataDir}/homeserver.db";
-                      psycopg2 = "matrix-synapse";
-                    }
-                    .${cfg.settings.database.name};
-                  defaultText = literalExpression ''
-                    {
-                      sqlite3 = "''${${options.services.matrix-synapse.dataDir}}/homeserver.db";
-                      psycopg2 = "matrix-synapse";
-                    }.''${${options.services.matrix-synapse.settings}.database.name};
-                  '';
-                  description = ''
-                    Name of the database when using the psycopg2 backend,
-                    path to the database location when using sqlite3.
-                  '';
-                };
-
-                database.args.user = mkOption {
-                  type = types.nullOr types.str;
-                  default =
-                    {
-                      sqlite3 = null;
-                      psycopg2 = "matrix-synapse";
-                    }
-                    .${cfg.settings.database.name};
-                  defaultText = lib.literalExpression ''
-                    {
-                      sqlite3 = null;
-                      psycopg2 = "matrix-synapse";
-                    }.''${cfg.settings.database.name};
-                  '';
-                  description = ''
-                    Username to connect with psycopg2, set to null
-                    when using sqlite3.
-                  '';
-                };
-
-                url_preview_enabled = mkOption {
-                  type = types.bool;
-                  default = true;
-                  example = false;
-                  description = ''
-                    Is the preview URL API enabled?  If enabled, you *must* specify an
-                    explicit url_preview_ip_range_blacklist of IPs that the spider is
-                    denied from accessing.
-                  '';
-                };
-
-                url_preview_ip_range_blacklist = mkOption {
-                  type = types.listOf types.str;
-                  default = [
-                    "10.0.0.0/8"
-                    "100.64.0.0/10"
-                    "127.0.0.0/8"
-                    "169.254.0.0/16"
-                    "172.16.0.0/12"
-                    "192.0.0.0/24"
-                    "192.0.2.0/24"
-                    "192.168.0.0/16"
-                    "192.88.99.0/24"
-                    "198.18.0.0/15"
-                    "198.51.100.0/24"
-                    "2001:db8::/32"
-                    "203.0.113.0/24"
-                    "224.0.0.0/4"
-                    "::1/128"
-                    "fc00::/7"
-                    "fe80::/10"
-                    "fec0::/10"
-                    "ff00::/8"
-                  ];
-                  description = ''
-                    List of IP address CIDR ranges that the URL preview spider is denied
-                    from accessing.
-                  '';
-                };
-
-                url_preview_ip_range_whitelist = mkOption {
-                  type = types.listOf types.str;
-                  default = [ ];
-                  description = ''
-                    List of IP address CIDR ranges that the URL preview spider is allowed
-                    to access even if they are specified in url_preview_ip_range_blacklist.
-                  '';
-                };
-
-                url_preview_url_blacklist = mkOption {
-                  # FIXME revert to just `listOf (attrsOf str)` after some time(tm).
-                  type = types.listOf (
-                    types.coercedTo types.str (const (throw ''
-                      Setting `config.services.matrix-synapse.settings.url_preview_url_blacklist`
-                      to a list of strings has never worked. Due to a bug, this was the type accepted
-                      by the module, but in practice it broke on runtime and as a result, no URL
-                      preview worked anywhere if this was set.
-
-                      See https://element-hq.github.io/synapse/latest/usage/configuration/config_documentation.html#url_preview_url_blacklist
-                      on how to configure it properly.
-                    '')) (types.attrsOf types.str)
-                  );
-                  default = [ ];
-                  example = literalExpression ''
-                    [
-                      { scheme = "http"; } # no http previews
-                      { netloc = "www.acme.com"; path = "/foo"; } # block http(s)://www.acme.com/foo
-                    ]
-                  '';
-                  description = ''
-                    Optional list of URL matches that the URL preview spider is
-                    denied from accessing.
-                  '';
-                };
-
-                max_upload_size = mkOption {
-                  type = types.str;
-                  default = "50M";
-                  example = "100M";
-                  description = ''
-                    The largest allowed upload size in bytes
-                  '';
-                };
-
-                max_image_pixels = mkOption {
-                  type = types.str;
-                  default = "32M";
-                  example = "64M";
-                  description = ''
-                    Maximum number of pixels that will be thumbnailed
-                  '';
-                };
-
-                dynamic_thumbnails = mkOption {
-                  type = types.bool;
-                  default = false;
-                  example = true;
-                  description = ''
-                    Whether to generate new thumbnails on the fly to precisely match
-                    the resolution requested by the client. If true then whenever
-                    a new resolution is requested by the client the server will
-                    generate a new thumbnail. If false the server will pick a thumbnail
-                    from a precalculated list.
-                  '';
-                };
-
-                turn_uris = mkOption {
-                  type = types.listOf types.str;
-                  default = [ ];
-                  example = [
-                    "turn:turn.example.com:3487?transport=udp"
-                    "turn:turn.example.com:3487?transport=tcp"
-                    "turns:turn.example.com:5349?transport=udp"
-                    "turns:turn.example.com:5349?transport=tcp"
-                  ];
-                  description = ''
-                    The public URIs of the TURN server to give to clients
-                  '';
-                };
-                turn_shared_secret = mkOption {
-                  type = types.str;
-                  default = "";
-                  example = literalExpression ''
-                    config.services.coturn.static-auth-secret
-                  '';
-                  description = ''
-                    The shared secret used to compute passwords for the TURN server.
-
-                    Secrets should be passed in via `extraConfigFiles`!
-                  '';
-                };
-
-                trusted_key_servers = mkOption {
-                  type = types.listOf (
-                    types.submodule {
-                      freeformType = format.type;
-                      options = {
-                        server_name = mkOption {
-                          type = types.str;
-                          example = "matrix.org";
-                          description = ''
-                            Hostname of the trusted server.
-                          '';
-                        };
-                      };
-                    }
-                  );
-                  default = [
-                    {
-                      server_name = "matrix.org";
-                      verify_keys = {
-                        "ed25519:auto" = "Noi6WqcDj0QmPxCNQqgezwTlBKrfqehY1u2FyWP9uYw";
-                      };
+                      names = [ "replication" ];
+                      compress = false;
                     }
                   ];
-                  description = ''
-                    The trusted servers to download signing keys from.
-                  '';
                 };
+                description = ''
+                  List of ports that Synapse should listen on, their purpose and their configuration.
 
-                app_service_config_files = mkOption {
-                  type = types.listOf types.path;
-                  default = [ ];
-                  description = ''
-                    A list of application service config file to use
-                  '';
-                };
+                  By default, synapse will be configured for client and federation traffic on port 8008, and
+                  use a UNIX domain socket for worker replication. See [`services.matrix-synapse.workers`](#opt-services.matrix-synapse.workers)
+                  for more details.
+                '';
+              };
 
-                redis = lib.mkOption {
-                  type = types.submodule {
+              database.name = lib.mkOption {
+                type = types.enum [
+                  "sqlite3"
+                  "psycopg2"
+                ];
+                default = if lib.versionAtLeast config.system.stateVersion "18.03" then "psycopg2" else "sqlite3";
+                defaultText = lib.literalExpression ''
+                  if versionAtLeast config.system.stateVersion "18.03"
+                  then "psycopg2"
+                  else "sqlite3"
+                '';
+                description = ''
+                  The database engine name. Can be sqlite3 or psycopg2.
+                '';
+              };
+
+              database.args.database = lib.mkOption {
+                type = types.str;
+                default =
+                  {
+                    sqlite3 = "${cfg.dataDir}/homeserver.db";
+                    psycopg2 = "matrix-synapse";
+                  }
+                  .${cfg.settings.database.name};
+                defaultText = lib.literalExpression ''
+                  {
+                    sqlite3 = "''${${options.services.matrix-synapse.dataDir}}/homeserver.db";
+                    psycopg2 = "matrix-synapse";
+                  }.''${${options.services.matrix-synapse.settings}.database.name};
+                '';
+                description = ''
+                  Name of the database when using the psycopg2 backend,
+                  path to the database location when using sqlite3.
+                '';
+              };
+
+              database.args.user = lib.mkOption {
+                type = types.nullOr types.str;
+                default =
+                  {
+                    sqlite3 = null;
+                    psycopg2 = "matrix-synapse";
+                  }
+                  .${cfg.settings.database.name};
+                defaultText = lib.literalExpression ''
+                  {
+                    sqlite3 = null;
+                    psycopg2 = "matrix-synapse";
+                  }.''${cfg.settings.database.name};
+                '';
+                description = ''
+                  Username to connect with psycopg2, set to null
+                  when using sqlite3.
+                '';
+              };
+
+              url_preview_enabled = lib.mkOption {
+                type = types.bool;
+                default = true;
+                example = false;
+                description = ''
+                  Is the preview URL API enabled?  If enabled, you *must* specify an
+                  explicit url_preview_ip_range_blacklist of IPs that the spider is
+                  denied from accessing.
+                '';
+              };
+
+              url_preview_ip_range_blacklist = lib.mkOption {
+                type = types.listOf types.str;
+                default = [
+                  "10.0.0.0/8"
+                  "100.64.0.0/10"
+                  "127.0.0.0/8"
+                  "169.254.0.0/16"
+                  "172.16.0.0/12"
+                  "192.0.0.0/24"
+                  "192.0.2.0/24"
+                  "192.168.0.0/16"
+                  "192.88.99.0/24"
+                  "198.18.0.0/15"
+                  "198.51.100.0/24"
+                  "2001:db8::/32"
+                  "203.0.113.0/24"
+                  "224.0.0.0/4"
+                  "::1/128"
+                  "fc00::/7"
+                  "fe80::/10"
+                  "fec0::/10"
+                  "ff00::/8"
+                ];
+                description = ''
+                  List of IP address CIDR ranges that the URL preview spider is denied
+                  from accessing.
+                '';
+              };
+
+              url_preview_ip_range_whitelist = lib.mkOption {
+                type = types.listOf types.str;
+                default = [ ];
+                description = ''
+                  List of IP address CIDR ranges that the URL preview spider is allowed
+                  to access even if they are specified in url_preview_ip_range_blacklist.
+                '';
+              };
+
+              url_preview_url_blacklist = lib.mkOption {
+                # FIXME revert to just `listOf (attrsOf str)` after some time(tm).
+                type = types.listOf (
+                  types.coercedTo types.str (lib.const (throw ''
+                    Setting `config.services.matrix-synapse.settings.url_preview_url_blacklist`
+                    to a list of strings has never worked. Due to a bug, this was the type accepted
+                    by the module, but in practice it broke on runtime and as a result, no URL
+                    preview worked anywhere if this was set.
+
+                    See https://element-hq.github.io/synapse/latest/usage/configuration/config_documentation.html#url_preview_url_blacklist
+                    on how to configure it properly.
+                  '')) (types.attrsOf types.str)
+                );
+                default = [ ];
+                example = lib.literalExpression ''
+                  [
+                    { scheme = "http"; } # no http previews
+                    { netloc = "www.acme.com"; path = "/foo"; } # block http(s)://www.acme.com/foo
+                  ]
+                '';
+                description = ''
+                  Optional list of URL matches that the URL preview spider is
+                  denied from accessing.
+                '';
+              };
+
+              max_upload_size = lib.mkOption {
+                type = types.str;
+                default = "50M";
+                example = "100M";
+                description = ''
+                  The largest allowed upload size in bytes
+                '';
+              };
+
+              max_image_pixels = lib.mkOption {
+                type = types.str;
+                default = "32M";
+                example = "64M";
+                description = ''
+                  Maximum number of pixels that will be thumbnailed
+                '';
+              };
+
+              dynamic_thumbnails = lib.mkOption {
+                type = types.bool;
+                default = false;
+                example = true;
+                description = ''
+                  Whether to generate new thumbnails on the fly to precisely match
+                  the resolution requested by the client. If true then whenever
+                  a new resolution is requested by the client the server will
+                  generate a new thumbnail. If false the server will pick a thumbnail
+                  from a precalculated list.
+                '';
+              };
+
+              turn_uris = lib.mkOption {
+                type = types.listOf types.str;
+                default = [ ];
+                example = [
+                  "turn:turn.example.com:3487?transport=udp"
+                  "turn:turn.example.com:3487?transport=tcp"
+                  "turns:turn.example.com:5349?transport=udp"
+                  "turns:turn.example.com:5349?transport=tcp"
+                ];
+                description = ''
+                  The public URIs of the TURN server to give to clients
+                '';
+              };
+              turn_shared_secret = lib.mkOption {
+                type = types.str;
+                default = "";
+                example = lib.literalExpression ''
+                  config.services.coturn.static-auth-secret
+                '';
+                description = ''
+                  The shared secret used to compute passwords for the TURN server.
+
+                  Secrets should be passed in via `extraConfigFiles`!
+                '';
+              };
+
+              trusted_key_servers = lib.mkOption {
+                type = types.listOf (
+                  types.submodule {
                     freeformType = format.type;
                     options = {
-                      enabled = lib.mkOption {
-                        type = types.bool;
-                        default = false;
+                      server_name = lib.mkOption {
+                        type = types.str;
+                        example = "matrix.org";
                         description = ''
-                          Whether to use redis support
+                          Hostname of the trusted server.
                         '';
                       };
                     };
-                  };
-                  default = { };
-                  description = ''
-                    Redis configuration for synapse.
+                  }
+                );
+                default = [
+                  {
+                    server_name = "matrix.org";
+                    verify_keys = {
+                      "ed25519:auto" = "Noi6WqcDj0QmPxCNQqgezwTlBKrfqehY1u2FyWP9uYw";
+                    };
+                  }
+                ];
+                description = ''
+                  The trusted servers to download signing keys from.
+                '';
+              };
 
-                    See the
-                    [upstream documentation](https://github.com/element-hq/synapse/blob/v${pkgs.matrix-synapse-unwrapped.version}/docs/usage/configuration/config_documentation.md#redis)
-                    for available options.
-                  '';
+              app_service_config_files = lib.mkOption {
+                type = types.listOf types.path;
+                default = [ ];
+                description = ''
+                  A list of application service config file to use
+                '';
+              };
+
+              redis = lib.mkOption {
+                type = types.submodule {
+                  freeformType = format.type;
+                  options = {
+                    enabled = lib.mkOption {
+                      type = types.bool;
+                      default = false;
+                      description = ''
+                        Whether to use redis support
+                      '';
+                    };
+                  };
                 };
+                default = { };
+                description = ''
+                  Redis configuration for synapse.
+
+                  See the
+                  [upstream documentation](https://github.com/element-hq/synapse/blob/v${pkgs.matrix-synapse-unwrapped.version}/docs/usage/configuration/config_documentation.md#redis)
+                  for available options.
+                '';
               };
             };
+          };
         };
 
         workers = lib.mkOption {
@@ -1298,7 +1311,7 @@ in
           '';
         };
 
-        extraArgs = mkOption {
+        extraArgs = lib.mkOption {
           type = types.listOf types.str;
           default = [ ];
           example = [ "--no-secrets-in-config" ];
@@ -1307,7 +1320,7 @@ in
           '';
         };
 
-        extraConfigFiles = mkOption {
+        extraConfigFiles = lib.mkOption {
           type = types.listOf types.path;
           default = [ ];
           description = ''
@@ -1330,7 +1343,7 @@ in
       };
     };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = clientListener != null;
@@ -1427,7 +1440,7 @@ in
     # default them, so they are additive
     services.matrix-synapse.extras = defaultExtras;
 
-    services.matrix-synapse.log = mapAttrsRecursive (const mkDefault) defaultCommonLogConfig;
+    services.matrix-synapse.log = lib.mapAttrsRecursive (lib.const lib.mkDefault) defaultCommonLogConfig;
 
     users.users.matrix-synapse = {
       group = "matrix-synapse";
@@ -1444,7 +1457,7 @@ in
     systemd.targets.matrix-synapse = lib.mkIf hasWorkers {
       description = "Synapse Matrix parent target";
       wants = [ "network-online.target" ];
-      after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.target";
+      after = [ "network-online.target" ] ++ lib.optional hasLocalPostgresDB "postgresql.target";
       wantedBy = [ "multi-user.target" ];
     };
 
@@ -1456,17 +1469,17 @@ in
               partOf = [ "matrix-synapse.target" ];
               wantedBy = [ "matrix-synapse.target" ];
               unitConfig.ReloadPropagatedFrom = "matrix-synapse.target";
-              requires = optional hasLocalPostgresDB "postgresql.target";
+              requires = lib.optional hasLocalPostgresDB "postgresql.target";
             }
           else
             {
               wants = [ "network-online.target" ];
-              after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.target";
-              requires = optional hasLocalPostgresDB "postgresql.target";
+              after = [ "network-online.target" ] ++ lib.optional hasLocalPostgresDB "postgresql.target";
+              requires = lib.optional hasLocalPostgresDB "postgresql.target";
               wantedBy = [ "multi-user.target" ];
             };
         baseServiceConfig = {
-          environment = optionalAttrs (cfg.withJemalloc) {
+          environment = lib.optionalAttrs (cfg.withJemalloc) {
             LD_PRELOAD = "${pkgs.jemalloc}/lib/libjemalloc.so";
             PYTHONMALLOC = "malloc";
           };
@@ -1504,7 +1517,7 @@ in
               cfg.settings.media_store_path
             ]
             ++ (map (listener: dirOf listener.path) (
-              filter (listener: listener.path != null) cfg.settings.listeners
+              lib.filter (listener: listener.path != null) cfg.settings.listeners
             ));
             RemoveIPC = true;
             RestrictAddressFamilies = [
@@ -1544,7 +1557,7 @@ in
                 serviceConfig = {
                   ExecStart = ''
                     ${cfg.package}/bin/synapse_worker \
-                      ${concatMapStringsSep "\n  " (x: "--config-path ${x} \\") (
+                      ${lib.concatMapStringsSep "\n  " (x: "--config-path ${x} \\") (
                         [
                           configFile
                           workerConfigFile
@@ -1582,7 +1595,7 @@ in
               ];
               ExecStart = ''
                 ${cfg.package}/bin/synapse_homeserver \
-                  ${concatMapStringsSep "\n  " (x: "--config-path ${x} \\") (
+                  ${lib.concatMapStringsSep "\n  " (x: "--config-path ${x} \\") (
                     [ configFile ] ++ cfg.extraConfigFiles
                   )}
                   --keys-directory ${cfg.dataDir} \
