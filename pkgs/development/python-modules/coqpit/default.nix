@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "coqpit-config";
-  version = "0.2.1";
+  version = "0.2.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "idiap";
     repo = "coqui-ai-coqpit";
     tag = "v${version}";
-    hash = "sha256-puTqaYK1j1SGqGQQsrEH9lbpcF0FzcQ8v2siUQVyHsE=";
+    hash = "sha256-g0NE9batSxlM/qnxj1CMMdGLD+lLRUJ9Ssaxx6ju6S8=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
