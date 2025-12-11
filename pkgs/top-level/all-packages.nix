@@ -319,10 +319,6 @@ with pkgs;
 
   chef-cli = callPackage ../tools/misc/chef-cli { };
 
-  clang-uml = callPackage ../by-name/cl/clang-uml/package.nix {
-    stdenv = clangStdenv;
-  };
-
   cope = callPackage ../by-name/co/cope/package.nix {
     perl = perl538;
     perlPackages = perl538Packages;
