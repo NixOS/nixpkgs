@@ -79,6 +79,13 @@ in
   compiler = pkgs.lib.recurseIntoAttrs (
     let
       bb = pkgsBuildBuild.haskell;
+
+      ghc902BinaryPackages = callPackage ../development/haskell-modules {
+        buildHaskellPackages = ghc902BinaryPackages;
+        ghc = bb.compiler.ghc902Binary;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.0.x.nix { };
+        packageSetConfig = bootstrapPackageSet;
+      };
     in
     {
       # Required to bootstrap 9.4.8.
@@ -92,7 +99,7 @@ in
         bootPkgs =
           # Building with 9.2 is broken due to
           # https://gitlab.haskell.org/ghc/ghc/-/issues/21914 krank:ignore-line
-          bb.packages.ghc902Binary;
+          ghc902BinaryPackages;
         inherit (buildPackages.python3Packages) sphinx;
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
@@ -174,12 +181,6 @@ in
       bh = buildPackages.haskell;
     in
     {
-      ghc902Binary = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc902Binary;
-        ghc = bh.compiler.ghc902Binary;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.0.x.nix { };
-        packageSetConfig = bootstrapPackageSet;
-      };
       ghc984Binary = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc984Binary;
         ghc = bh.compiler.ghc984Binary;
