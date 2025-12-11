@@ -59,5 +59,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfreeRedistributable;
     platforms = nvidia_x11.meta.platforms;
     mainProgram = "nv-fabricmanager";
+    maintainers = with lib.maintainers; [ edwtjo ];
   };
 }
