@@ -7,7 +7,8 @@ import ../make-test-python.nix (
     rancherPackage,
     serviceName,
     disabledComponents,
-    etcd,
+    coreImages,
+    vmResources,
     ...
   }:
 
@@ -45,16 +46,20 @@ import ../make-test-python.nix (
       server =
         { pkgs, ... }:
         {
-          environment.systemPackages = with pkgs; [ jq ];
-          # k3s uses enough resources the default vm fails.
-          virtualisation.memorySize = 1536;
-          virtualisation.diskSize = 4096;
+          environment.systemPackages = with pkgs; [
+            kubectl
+            jq
+          ];
+          environment.sessionVariables.KUBECONFIG = "/etc/rancher/${rancherDistro}/${rancherDistro}.yaml";
+
+          virtualisation = vmResources;
 
           services.${rancherDistro} = {
             enable = true;
             role = "server";
             package = rancherPackage;
             disable = disabledComponents;
+            images = coreImages;
             nodeIP = "192.168.1.2";
             extraFlags = [
               "--datastore-endpoint=\"http://192.168.1.1:2379\""
@@ -120,6 +125,7 @@ import ../make-test-python.nix (
             etcd.wait_until_fails("[[ $(etcdctl get /registry/secrets/default/nixossecret | head -c1 | wc -c) -ne 0 ]]")
       '';
 
-    meta.maintainers = etcd.meta.maintainers ++ lib.teams.k3s.members;
+    meta.maintainers =
+      pkgs.etcd.meta.maintainers ++ lib.teams.k3s.members ++ pkgs.rke2.meta.maintainers;
   }
 )

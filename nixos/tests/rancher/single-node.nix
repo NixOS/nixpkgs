@@ -7,6 +7,8 @@ import ../make-test-python.nix (
     rancherPackage,
     serviceName,
     disabledComponents,
+    coreImages,
+    vmResources,
     ...
   }:
   let
@@ -18,7 +20,7 @@ import ../make-test-python.nix (
         busybox
       ];
     };
-    pauseImage = pkgs.dockerTools.streamLayeredImage {
+    pauseImage = pkgs.dockerTools.buildLayeredImage {
       name = "test.local/pause";
       tag = "local";
       contents = imageEnv;
@@ -29,7 +31,7 @@ import ../make-test-python.nix (
         "inf"
       ];
     };
-    testPodYaml = pkgs.writeText "test.yml" ''
+    testPodYaml = pkgs.writeText "test.yaml" ''
       apiVersion: v1
       kind: Pod
       metadata:
@@ -46,22 +48,22 @@ import ../make-test-python.nix (
     name = "${rancherPackage.name}-single-node";
 
     nodes.machine =
-      { pkgs, ... }:
+      { config, pkgs, ... }:
       {
         environment.systemPackages = with pkgs; [
-          rancherPackage
+          kubectl
           gzip
         ];
+        environment.sessionVariables.KUBECONFIG = "/etc/rancher/${rancherDistro}/${rancherDistro}.yaml";
 
-        # k3s uses enough resources the default vm fails.
-        virtualisation.memorySize = 1536;
-        virtualisation.diskSize = 4096;
+        virtualisation = vmResources;
 
         services.${rancherDistro} = {
           enable = true;
           role = "server";
           package = rancherPackage;
           disable = disabledComponents;
+          images = coreImages ++ [ pauseImage ];
           extraFlags = [
             "--pause-image test.local/pause:local"
           ];
@@ -86,14 +88,11 @@ import ../make-test-python.nix (
         ${lib.optionalString (rancherDistro == "k3s") ''
           machine.succeed("k3s check-config")
         ''}
-        machine.succeed(
-            "${pauseImage} | ctr image import -"
-        )
 
         # Also wait for our service account to show up; it takes a sec
         machine.wait_until_succeeds("kubectl get serviceaccount default")
         machine.succeed("kubectl apply -f ${testPodYaml}")
-        machine.succeed("kubectl wait --for 'condition=Ready' pod/test")
+        machine.succeed("kubectl wait --for 'condition=Ready' pod/test --timeout=180s")
         machine.succeed("kubectl delete -f ${testPodYaml}")
 
         # regression test for #176445
@@ -107,11 +106,11 @@ import ../make-test-python.nix (
 
             # Check that killall cleaned up properly
             machine.fail("systemctl is-active ${serviceName}.service")
-            machine.fail("systemctl list-units | grep containerd")
+            machine.wait_until_fails("systemctl list-units | grep containerd", timeout=5)
             machine.fail("ip link show | awk -F': ' '{print $2}' | grep -e flannel -e cni0")
             machine.fail("ip netns show | grep cni-")
       '';
 
-    meta.maintainers = lib.teams.k3s.members;
+    meta.maintainers = lib.teams.k3s.members ++ pkgs.rke2.meta.maintainers;
   }
 )

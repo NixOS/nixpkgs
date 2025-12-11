@@ -8,6 +8,8 @@ import ../make-test-python.nix (
     rancherPackage,
     serviceName,
     disabledComponents,
+    coreImages,
+    vmResources,
     ...
   }:
   let
@@ -97,16 +99,18 @@ import ../make-test-python.nix (
   in
   {
     name = "${rancherPackage.name}-auto-deploy-helm";
-    meta.maintainers = lib.teams.k3s.members;
+
     nodes.machine =
       { pkgs, ... }:
       {
-        # k3s uses enough resources the default vm fails.
-        virtualisation = {
-          memorySize = 1536;
-          diskSize = 4096;
-        };
-        environment.systemPackages = [ pkgs.yq-go ];
+        environment.systemPackages = with pkgs; [
+          kubectl
+          yq-go
+        ];
+        environment.sessionVariables.KUBECONFIG = "/etc/rancher/${rancherDistro}/${rancherDistro}.yaml";
+
+        virtualisation = vmResources;
+
         services.${rancherDistro} = {
           enable = true;
           package = rancherPackage;
@@ -116,16 +120,13 @@ import ../make-test-python.nix (
               rke2 = lib.remove "rke2-ingress-nginx" disabledComponents;
             }
             .${rancherDistro};
-          images = [
-            {
-              # Provides the k3s Helm controller
-              k3s = rancherPackage.airgap-images;
-              rke2 = rancherPackage.images-core-linux-amd64-tar-zst;
-            }
-            .${rancherDistro}
-
-            testImage
-          ];
+          images =
+            coreImages
+            # Provides the k3s Helm controller
+            ++ lib.optional (rancherDistro == "k3s") rancherPackage.airgap-images
+            ++ [
+              testImage
+            ];
           autoDeployCharts = {
             # regular test chart that should get installed
             hello = testChart;
@@ -180,17 +181,25 @@ import ../make-test-python.nix (
       };
 
     testScript = # python
+      let
+        manifestFormat =
+          {
+            k3s = "yaml";
+            rke2 = "json";
+          }
+          .${rancherDistro};
+      in
       ''
         import json
 
         machine.wait_for_unit("${serviceName}")
         # check existence/absence of chart manifest files
-        machine.succeed("test -e /var/lib/rancher/${rancherDistro}/server/manifests/hello.yaml")
-        machine.succeed("test ! -e /var/lib/rancher/${rancherDistro}/server/manifests/disabled.yaml")
-        machine.succeed("test -e /var/lib/rancher/${rancherDistro}/server/manifests/values-file.yaml")
-        machine.succeed("test -e /var/lib/rancher/${rancherDistro}/server/manifests/advanced.yaml")
-        # check that the timeout is set correctly, select only the first doc in advanced.yaml
-        advancedManifest = json.loads(machine.succeed("yq -o json '.items[0]' /var/lib/rancher/${rancherDistro}/server/manifests/advanced.yaml"))
+        machine.succeed("test -e /var/lib/rancher/${rancherDistro}/server/manifests/hello.${manifestFormat}")
+        machine.succeed("test ! -e /var/lib/rancher/${rancherDistro}/server/manifests/disabled.${manifestFormat}")
+        machine.succeed("test -e /var/lib/rancher/${rancherDistro}/server/manifests/values-file.${manifestFormat}")
+        machine.succeed("test -e /var/lib/rancher/${rancherDistro}/server/manifests/advanced.${manifestFormat}")
+        # check that the timeout is set correctly, select only the first item in advanced.yaml
+        advancedManifest = json.loads(machine.succeed("yq -o json '.items[0]' /var/lib/rancher/${rancherDistro}/server/manifests/advanced.${manifestFormat}"))
         t.assertEqual(advancedManifest["spec"]["timeout"], "69s", "unexpected value for spec.timeout")
         # wait for test jobs to complete
         machine.wait_until_succeeds("kubectl wait --for=condition=complete job/hello", timeout=180)
@@ -210,9 +219,14 @@ import ../make-test-python.nix (
             k3s = ''
               machine.wait_until_succeeds("kubectl -n kube-system rollout status deployment traefik", timeout=180)
             '';
+            rke2 = ''
+              machine.wait_until_succeeds("kubectl -n kube-system rollout status daemonset rke2-ingress-nginx-controller", timeout=180)
+            '';
           }
           .${rancherDistro}
         }
       '';
+
+    meta.maintainers = lib.teams.k3s.members ++ pkgs.rke2.meta.maintainers;
   }
 )

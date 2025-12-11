@@ -47,6 +47,43 @@ let
         ];
       }
       .${rancherDistro};
+
+    # images that must be present for all tests
+    coreImages =
+      {
+        k3s = [ ];
+
+        rke2 =
+          {
+            aarch64-linux = [
+              rancherPackage.images-core-linux-arm64-tar-zst
+              rancherPackage.images-canal-linux-arm64-tar-zst
+            ];
+            x86_64-linux = [
+              rancherPackage.images-core-linux-amd64-tar-zst
+              rancherPackage.images-canal-linux-amd64-tar-zst
+            ];
+          }
+          .${pkgs.stdenv.hostPlatform.system}
+            or (throw "RKE2: Unsupported system: ${pkgs.stdenv.hostPlatform.system}");
+      }
+      .${rancherDistro};
+
+    # virtualization.* attrs, since all distros
+    # need more resources than the default
+    vmResources =
+      {
+        k3s = {
+          memorySize = 1536;
+          diskSize = 4096;
+        };
+        rke2 = {
+          cores = 4;
+          memorySize = 4096;
+          diskSize = 8092;
+        };
+      }
+      .${rancherDistro};
   };
 
   importTest =
@@ -57,9 +94,7 @@ in
   auto-deploy = importTest ./auto-deploy.nix { };
   auto-deploy-charts = importTest ./auto-deploy-charts.nix { };
   containerd-config = importTest ./containerd-config.nix { };
-  etcd = importTest ./etcd.nix {
-    inherit (pkgs) etcd;
-  };
+  etcd = importTest ./etcd.nix { };
   kubelet-config = importTest ./kubelet-config.nix { };
   multi-node = importTest ./multi-node.nix { };
   single-node = importTest ./single-node.nix { };

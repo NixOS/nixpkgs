@@ -7,6 +7,8 @@ import ../make-test-python.nix (
     rancherPackage,
     serviceName,
     disabledComponents,
+    coreImages,
+    vmResources,
     ...
   }:
   let
@@ -57,6 +59,13 @@ import ../make-test-python.nix (
               command: ["socat", "TCP4-LISTEN:8000,fork", "EXEC:echo server"]
     '';
     tokenFile = pkgs.writeText "token" "p@s$w0rd";
+
+    supervisorPort =
+      {
+        k3s = "6443";
+        rke2 = "9345";
+      }
+      .${rancherDistro};
   in
   {
     name = "${rancherPackage.name}-multi-node";
@@ -71,34 +80,63 @@ import ../make-test-python.nix (
         }:
         {
           environment.systemPackages = with pkgs; [
+            kubectl
             gzip
             jq
           ];
-          # k3s uses enough resources the default vm fails.
-          virtualisation.memorySize = 1536;
-          virtualisation.diskSize = 4096;
+          environment.sessionVariables.KUBECONFIG = "/etc/rancher/${rancherDistro}/${rancherDistro}.yaml";
 
-          services.${rancherDistro} = {
-            inherit tokenFile;
-            enable = true;
-            role = "server";
-            package = rancherPackage;
-            images = [ pauseImage ];
-            clusterInit = true;
-            nodeIP = config.networking.primaryIPAddress;
-            disable = disabledComponents;
-            extraFlags = [
-              "--pause-image test.local/pause:local"
-              # The interface selection logic of flannel would normally use eth0, as the nixos
-              # testing driver sets a default route via dev eth0. However, in test setups we
-              # have to use eth1 for inter-node communication.
-              "--flannel-iface eth1"
-            ];
-          };
+          virtualisation = vmResources;
+
+          services.${rancherDistro} = lib.mkMerge [
+            {
+              inherit tokenFile;
+              enable = true;
+              role = "server";
+              package = rancherPackage;
+              images = coreImages ++ [ pauseImage ];
+              nodeIP = config.networking.primaryIPAddress;
+              disable = disabledComponents;
+              extraFlags = [
+                "--pause-image test.local/pause:local"
+              ];
+            }
+            {
+              k3s = {
+                clusterInit = true;
+                extraFlags = [ "--flannel-iface eth1" ]; # see canalConfig definition
+              };
+
+              # The interface selection logic of flannel & canal would normally use eth0, as
+              # the nixos testing driver sets a default route via dev eth0. However, in test
+              # setups we have to use eth1 for inter-node communication.
+              # For K3s this can be handled via --flannel-iface, but RKE2's canal has to be
+              # configured with this manifest.
+              rke2.manifests.canal-config.content = {
+                apiVersion = "helm.cattle.io/v1";
+                kind = "HelmChartConfig";
+                metadata = {
+                  name = "rke2-canal";
+                  namespace = "kube-system";
+                };
+                # spec.valuesContent needs to a string, either json or yaml
+                spec.valuesContent = builtins.toJSON {
+                  flannel.iface = "eth1";
+                };
+              };
+            }
+            .${rancherDistro}
+          ];
+
+          networking.firewall.enable = false;
           networking.firewall.allowedTCPPorts = [
             2379
             2380
             6443
+          ]
+          ++ lib.optionals (rancherDistro == "rke2") [
+            9099
+            9345
           ];
           networking.firewall.allowedUDPPorts = [ 8472 ];
         };
@@ -111,31 +149,32 @@ import ../make-test-python.nix (
           ...
         }:
         {
-          environment.systemPackages = with pkgs; [
-            gzip
-            jq
-          ];
-          virtualisation.memorySize = 1536;
-          virtualisation.diskSize = 4096;
+          virtualisation = vmResources;
 
           services.${rancherDistro} = {
             inherit tokenFile;
             enable = true;
+            role = "server";
             package = rancherPackage;
-            images = [ pauseImage ];
-            serverAddr = "https://${nodes.server.networking.primaryIPAddress}:6443";
-            clusterInit = false;
+            images = coreImages ++ [ pauseImage ];
+            serverAddr = "https://${nodes.server.networking.primaryIPAddress}:${supervisorPort}";
             nodeIP = config.networking.primaryIPAddress;
             disable = disabledComponents;
             extraFlags = [
               "--pause-image test.local/pause:local"
-              "--flannel-iface eth1"
-            ];
+            ]
+            ++ lib.optional (rancherDistro == "k3s") "--flannel-iface eth1";
           };
+
+          networking.firewall.enable = false;
           networking.firewall.allowedTCPPorts = [
             2379
             2380
             6443
+          ]
+          ++ lib.optionals (rancherDistro == "rke2") [
+            9099
+            9345
           ];
           networking.firewall.allowedUDPPorts = [ 8472 ];
         };
@@ -148,22 +187,23 @@ import ../make-test-python.nix (
           ...
         }:
         {
-          virtualisation.memorySize = 1024;
-          virtualisation.diskSize = 2048;
+          virtualisation = vmResources;
+
           services.${rancherDistro} = {
             inherit tokenFile;
             enable = true;
             role = "agent";
             package = rancherPackage;
-            images = [ pauseImage ];
-            serverAddr = "https://${nodes.server2.networking.primaryIPAddress}:6443";
+            images = coreImages ++ [ pauseImage ];
+            serverAddr = "https://${nodes.server2.networking.primaryIPAddress}:${supervisorPort}";
             nodeIP = config.networking.primaryIPAddress;
             extraFlags = [
               "--pause-image test.local/pause:local"
-              "--flannel-iface eth1"
-            ];
+            ]
+            ++ lib.optional (rancherDistro == "k3s") "--flannel-iface eth1";
           };
-          networking.firewall.allowedTCPPorts = [ 6443 ];
+
+          networking.firewall.allowedTCPPorts = lib.optional (rancherDistro == "rke2") 9099;
           networking.firewall.allowedUDPPorts = [ 8472 ];
         };
     };
@@ -172,13 +212,12 @@ import ../make-test-python.nix (
       ''
         start_all()
 
-        machines = [server, server2, agent]
-        for m in machines:
+        servers = [server, server2]
+        for m in servers:
             m.wait_for_unit("${serviceName}")
 
         # wait for the agent to show up
         server.wait_until_succeeds("kubectl get node agent")
-        server.succeed("kubectl get node >&2")
 
         ${lib.optionalString (rancherDistro == "k3s") ''
           for m in machines:
@@ -208,6 +247,6 @@ import ../make-test-python.nix (
                 t.assertEqual(resp.strip(), "server")
       '';
 
-    meta.maintainers = lib.teams.k3s.members;
+    meta.maintainers = lib.teams.k3s.members ++ pkgs.rke2.meta.maintainers;
   }
 )

@@ -7,6 +7,8 @@ import ../make-test-python.nix (
     rancherPackage,
     serviceName,
     disabledComponents,
+    coreImages,
+    vmResources,
     ...
   }:
   let
@@ -22,16 +24,19 @@ import ../make-test-python.nix (
     nodes.machine =
       { pkgs, ... }:
       {
-        environment.systemPackages = [ pkgs.jq ];
+        environment.systemPackages = with pkgs; [
+          kubectl
+          jq
+        ];
+        environment.sessionVariables.KUBECONFIG = "/etc/rancher/${rancherDistro}/${rancherDistro}.yaml";
 
-        # k3s uses enough resources the default vm fails.
-        virtualisation.memorySize = 1536;
-        virtualisation.diskSize = 4096;
+        virtualisation = vmResources;
 
         services.${rancherDistro} = {
           enable = true;
           package = rancherPackage;
           disable = disabledComponents;
+          images = coreImages;
           inherit nodeName;
           gracefulNodeShutdown = {
             enable = true;
@@ -52,7 +57,7 @@ import ../make-test-python.nix (
         # wait until the node is ready
         machine.wait_until_succeeds(r"""kubectl get node ${nodeName} -ojson | jq -e '.status.conditions[] | select(.type == "Ready") | .status == "True"'""")
         # test whether the kubelet registered an inhibitor lock
-        machine.succeed("systemd-inhibit --list --no-legend | grep \"kubelet.*${rancherDistro}-server.*shutdown\"")
+        machine.succeed("systemd-inhibit --list --no-legend | grep \"^kubelet.*shutdown\"")
         # run kubectl proxy in the background, close stdout through redirection to not wait for the command to finish
         machine.execute("kubectl proxy --address 127.0.0.1 --port=8001 >&2 &")
         machine.wait_until_succeeds("nc -z 127.0.0.1 8001")
@@ -67,6 +72,6 @@ import ../make-test-python.nix (
           t.assertEqual(kubelet_config["containerLogMaxSize"],"${containerLogMaxSize}")
       '';
 
-    meta.maintainers = lib.teams.k3s.members;
+    meta.maintainers = lib.teams.k3s.members ++ pkgs.rke2.meta.maintainers;
   }
 )

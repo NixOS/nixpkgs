@@ -7,6 +7,8 @@ import ../make-test-python.nix (
     rancherPackage,
     serviceName,
     disabledComponents,
+    coreImages,
+    vmResources,
     ...
   }:
   let
@@ -35,6 +37,13 @@ import ../make-test-python.nix (
       copyToRoot = pkgs.hello;
       config.Entrypoint = [ "${pkgs.hello}/bin/hello" ];
     };
+
+    manifestFormat =
+      {
+        k3s = "yaml";
+        rke2 = "json";
+      }
+      .${rancherDistro};
   in
   {
     name = "${rancherPackage.name}-auto-deploy";
@@ -42,11 +51,13 @@ import ../make-test-python.nix (
     nodes.machine =
       { pkgs, ... }:
       {
-        environment.systemPackages = [ rancherPackage ];
+        environment.systemPackages = with pkgs; [
+          kubectl
+          cri-tools
+        ];
+        environment.sessionVariables.KUBECONFIG = "/etc/rancher/${rancherDistro}/${rancherDistro}.yaml";
 
-        # k3s uses enough resources the default vm fails.
-        virtualisation.memorySize = 1536;
-        virtualisation.diskSize = 4096;
+        virtualisation = vmResources;
 
         services.${rancherDistro} = {
           enable = true;
@@ -56,7 +67,7 @@ import ../make-test-python.nix (
           extraFlags = [
             "--pause-image test.local/pause:local"
           ];
-          images = [
+          images = coreImages ++ [
             pauseImage
             helloImage
           ];
@@ -71,7 +82,7 @@ import ../make-test-python.nix (
             };
 
             present = {
-              target = "foo-namespace.yaml";
+              target = "foo-namespace.${manifestFormat}";
               content = {
                 apiVersion = "v1";
                 kind = "Namespace";
@@ -105,13 +116,14 @@ import ../make-test-python.nix (
 
         machine.wait_for_unit("${serviceName}")
         # check existence of the manifest files
-        machine.fail("ls /var/lib/rancher/${rancherDistro}/server/manifests/absent.yaml")
-        machine.succeed("ls /var/lib/rancher/${rancherDistro}/server/manifests/foo-namespace.yaml")
-        machine.succeed("ls /var/lib/rancher/${rancherDistro}/server/manifests/hello.yaml")
+        machine.fail("ls /var/lib/rancher/${rancherDistro}/server/manifests/absent.${manifestFormat}")
+        machine.succeed("ls /var/lib/rancher/${rancherDistro}/server/manifests/foo-namespace.${manifestFormat}")
+        machine.succeed("ls /var/lib/rancher/${rancherDistro}/server/manifests/hello.${manifestFormat}")
 
         # check if container images got imported
-        machine.wait_until_succeeds("crictl img | grep 'test\.local/pause'")
-        machine.wait_until_succeeds("crictl img | grep 'test\.local/hello'")
+        # for some reason, RKE2 also uses /run/k3s
+        machine.wait_until_succeeds("crictl -r /run/k3s/containerd/containerd.sock img | grep 'test\.local/pause'")
+        machine.wait_until_succeeds("crictl -r /run/k3s/containerd/containerd.sock img | grep 'test\.local/hello'")
 
         # check if resources of manifests got created
         machine.wait_until_succeeds("kubectl get ns foo")
@@ -119,6 +131,6 @@ import ../make-test-python.nix (
         machine.fail("kubectl get ns absent")
       '';
 
-    meta.maintainers = lib.teams.k3s.members;
+    meta.maintainers = lib.teams.k3s.members ++ pkgs.rke2.meta.maintainers;
   }
 )
