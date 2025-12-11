@@ -3,26 +3,24 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  makeWrapper,
   ffmpeg,
   libgphoto2,
   kmod,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "webcamize";
   version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "cowtoolz";
     repo = "webcamize";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-rmATEcAcngCHidMFXNocrhP06LKNLEb+9jfFMGL4AKU=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    makeWrapper
   ];
 
   buildInputs = [
@@ -30,8 +28,6 @@ stdenv.mkDerivation rec {
     libgphoto2
     kmod
   ];
-
-  enableParallelBuilding = true;
 
   makeFlags = [ "PREFIX=$(out)" ];
 
@@ -43,10 +39,10 @@ stdenv.mkDerivation rec {
       many webcams that don't work out of the box on Linux up and running.
     '';
     homepage = "https://github.com/cowtoolz/webcamize";
-    changelog = "https://github.com/cowtoolz/webcamize/releases/tag/v${version}";
+    changelog = "https://github.com/cowtoolz/webcamize/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ManUtopiK ];
     mainProgram = "webcamize";
   };
-}
+})
