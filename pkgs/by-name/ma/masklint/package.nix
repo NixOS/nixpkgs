@@ -2,8 +2,12 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  makeWrapper,
+  withShell ? true,
   shellcheck,
+  withPython ? true,
   ruff,
+  withRuby ? true,
   rubocop,
   nix-update-script,
 }:
@@ -29,6 +33,24 @@ rustPlatform.buildRustPackage {
     ruff # python
     rubocop # ruby
   ];
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = (
+    if (withShell || withPython || withRuby) then
+      ''
+        wrapProgram $out/bin/masklint \
+          --prefix PATH : ${
+            lib.makeBinPath (
+              (lib.optional withShell shellcheck)
+              ++ (lib.optional withPython ruff)
+              ++ (lib.optional withRuby rubocop)
+            )
+          }
+      ''
+    else
+      ""
+  );
 
   passthru.updateScript = nix-update-script { };
 
