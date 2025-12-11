@@ -1,7 +1,7 @@
 {
   buildNpmPackage,
   copyDesktopItems,
-  electron,
+  electron_37,
   fetchFromGitHub,
   lib,
   makeDesktopItem,
@@ -11,7 +11,9 @@
   rsync,
   stdenv,
 }:
-
+let
+  electron = electron_37;
+in
 buildNpmPackage rec {
   pname = "super-productivity";
   version = "16.5.0";
