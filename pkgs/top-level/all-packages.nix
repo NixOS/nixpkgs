@@ -10387,10 +10387,6 @@ with pkgs;
     pinentry = pinentry-curses;
   };
 
-  blender = callPackage ../by-name/bl/blender/package.nix {
-    python3Packages = python311Packages;
-  };
-
   blender-hip = blender.override { hipSupport = true; };
 
   blucontrol = callPackage ../applications/misc/blucontrol/wrapper.nix {
