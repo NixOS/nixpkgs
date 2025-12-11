@@ -79,6 +79,7 @@ stdenv.mkDerivation (
       cmake
       python3
       ninja
+      python3.pkgs.wrapPython
     ]
     ++ lib.optionals enableManpages [
       python3.pkgs.myst-parser
@@ -159,7 +160,10 @@ stdenv.mkDerivation (
       if [ -e $out/bin/set-xcode-analyzer ]; then
         mv $out/bin/set-xcode-analyzer $python/bin
       fi
+
       mv $out/share/clang/*.py $python/share/clang
+      wrapPythonProgramsIn "$python/share/clang" "$out $pythonPath"
+
       rm $out/bin/c-index-test
       patchShebangs $python/bin
 
