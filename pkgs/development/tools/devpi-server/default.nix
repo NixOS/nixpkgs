@@ -138,6 +138,9 @@ buildPythonApplication rec {
     description = "Github-style pypi index server and packaging meta tool";
     changelog = "https://github.com/devpi/devpi/blob/${src.rev}/server/CHANGELOG";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ makefu ];
+    maintainers = with lib.maintainers; [
+      confus
+      makefu
+    ];
   };
 }
