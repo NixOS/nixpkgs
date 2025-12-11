@@ -4152,10 +4152,6 @@ with pkgs;
   adaptivecppWithCuda = adaptivecpp.override { cudaSupport = true; };
   adaptivecppWithRocm = adaptivecpp.override { rocmSupport = true; };
 
-  armips = callPackage ../by-name/ar/armips/package.nix {
-    stdenv = clangStdenv;
-  };
-
   binaryen = callPackage ../development/compilers/binaryen {
     nodejs = nodejs-slim;
     inherit (python3Packages) filecheck;
