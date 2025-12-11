@@ -10,23 +10,31 @@
 let
   args = rec {
     pname = "cargo-auditable";
-    version = "0.6.5";
+    version = "0.7.1";
 
     src = fetchFromGitHub {
       owner = "rust-secure-code";
       repo = "cargo-auditable";
-      rev = "v${version}";
-      sha256 = "sha256-zjv2/qZM0vRyz45DeKRtPHaamv2iLtjpSedVTEXeDr8=";
+      tag = "v${version}";
+      hash = "sha256-t5il9CVhYZtmKrWxBoDpKZaGTPjpBO6Cotw0vuAthvc=";
     };
 
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit pname version src;
-      hash = "sha256-oTPGmoGlNfPVZ6qha/oXyPJp94fT2cNlVggbIGHf2bc=";
+      hash = "sha256-2ZbRANFMExILSUrrft2fRWjScy0kMreyQMtHWA7iRds=";
     };
 
     checkFlags = [
       # requires wasm32-unknown-unknown target
       "--skip=test_wasm"
+      # Fails starting from 0.6.6 due to rustc argument parsing changes
+      # (pico-args eq-separator feature or --emit flag handling).
+      "--skip=test_self_hosting"
+      # Fails starting from 0.7.0 when the test runs with sbom=true.
+      # The test sets CARGO_BUILD_SBOM=true which propagates to nested cargo builds.
+      # Nested builds try to use `-Z sbom`, but stable Cargo doesn't support this flag.
+      # (RUSTC_BOOTSTRAP=1 only affects rustc, not Cargo's -Z flags)
+      "--skip=test_proc_macro"
     ];
 
     meta = {
