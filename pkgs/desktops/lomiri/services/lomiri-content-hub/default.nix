@@ -32,13 +32,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-content-hub";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-content-hub";
     rev = finalAttrs.version;
-    hash = "sha256-gZ1rj18Si3SeVM5sg6tBJy9kXJVGKXcBbR/zqj2rH1M=";
+    hash = "sha256-L0CX383AMu8XlNbGL01VvBxvawJwAWHhTh3ak0sjo20=";
   };
 
   outputs = [
