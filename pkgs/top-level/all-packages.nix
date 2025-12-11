@@ -14075,10 +14075,6 @@ with pkgs;
     fltk = fltk13;
   };
 
-  cantata = callPackage ../by-name/ca/cantata/package.nix {
-    ffmpeg = ffmpeg_6;
-  };
-
   libkazv = callPackage ../by-name/li/libkazv/package.nix {
     libcpr = libcpr_1_10_5;
   };
