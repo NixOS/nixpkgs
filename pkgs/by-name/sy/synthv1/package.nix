@@ -2,26 +2,32 @@
   lib,
   stdenv,
   fetchurl,
+  cmake,
   pkg-config,
+  qt6,
   libjack2,
   alsa-lib,
   liblo,
   lv2,
-  libsForQt5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "synthv1";
-  version = "0.9.23";
+  version = "1.3.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/synthv1/synthv1-${finalAttrs.version}.tar.gz";
-    hash = "sha256-0V72T51icT/t9fJf4mwcMYZLjzTPnmiCbU+BdwnCmw4=";
+    hash = "sha256-tCxgJdl5PMNvnhPZOsNhlS3LqBksmXBojfnSLZUZKMY=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail  '"''${CONFIG_PREFIX}/''${CMAKE_INSTALL_LIBDIR}"' '"''${CMAKE_INSTALL_LIBDIR}"'
+  '';
+
   buildInputs = [
-    libsForQt5.qtbase
-    libsForQt5.qttools
+    qt6.qtbase
+    qt6.qttools
     libjack2
     alsa-lib
     liblo
@@ -29,8 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    cmake
     pkg-config
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   meta = {
