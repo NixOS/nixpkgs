@@ -27,12 +27,15 @@ python3Packages.buildPythonApplication rec {
     "wyoming"
   ];
 
-  dependencies = with python3Packages; [
-    regex
-    piper-tts
-    sentence-stream
-    wyoming
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      regex
+      piper-tts
+      sentence-stream
+      wyoming
+    ]
+    ++ wyoming.optional-dependencies.zeroconf;
 
   pythonImportsCheck = [
     "wyoming_piper"
