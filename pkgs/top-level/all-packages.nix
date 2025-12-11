@@ -4153,10 +4153,6 @@ with pkgs;
     inherit (python3Packages) filecheck;
   };
 
-  bluespec = callPackage ../by-name/bl/bluespec/package.nix {
-    gmp-static = gmp.override { withStatic = true; };
-  };
-
   codon = callPackage ../development/compilers/codon {
     inherit (llvmPackages) lld stdenv;
   };
