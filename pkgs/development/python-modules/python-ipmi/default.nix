@@ -25,17 +25,15 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyipmi" ];
 
   meta = {
     description = "Python IPMI Library";
-    mainProgram = "ipmitool.py";
     homepage = "https://github.com/kontron/python-ipmi";
-    license = with lib.licenses; [ lgpl2Plus ];
+    license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "ipmitool.py";
   };
 }
