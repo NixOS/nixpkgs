@@ -13044,10 +13044,6 @@ with pkgs;
 
   siesta-mpi = callPackage ../applications/science/chemistry/siesta { useMpi = true; };
 
-  cp2k = callPackage ../by-name/cp/cp2k/package.nix {
-    libxc = pkgs.libxc_7;
-  };
-
   ### SCIENCE/BIOLOGY
 
   cd-hit = callPackage ../applications/science/biology/cd-hit {
