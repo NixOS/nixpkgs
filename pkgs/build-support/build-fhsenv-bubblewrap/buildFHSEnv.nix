@@ -51,6 +51,7 @@ let
     {
       "i686-linux" = "lib32";
       "x86_64-linux" = "lib64";
+      "aarch64-linux" = "lib64";
     }
     .${stdenv.system} or (throw "Please expand list of system with defaultLib for '${stdenv.system}'");
 

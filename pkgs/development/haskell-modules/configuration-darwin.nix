@@ -335,6 +335,9 @@ self: super:
       + (old.preBuild or "");
     }) super.hercules-ci-agent;
 
+    # https://github.com/NixOS/nixpkgs/issues/461651
+    cachix = dontCheck super.cachix;
+
     # Require /usr/bin/security which breaks sandbox
     http-reverse-proxy = dontCheck super.http-reverse-proxy;
     servant-auth-server = dontCheck super.servant-auth-server;
