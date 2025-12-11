@@ -16,7 +16,18 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ClusterLabs";
     repo = "libqb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e3lXieKy3JqvuAIzXQjq6kDMfMmokXR/v3p4VQDIuOI=";
+    # Upstream uses .gitattributes to inject information about the revision
+    # hash and the refname into `configure.ac`, see:
+    # - https://git-scm.com/docs/gitattributes#_export_subst and
+    # - https://github.com/ClusterLabs/libqb/commit/d6875f29d6d1175f621e33d312fcace9a55f9094
+    # Directly inject version and remove complicated logic
+    # https://github.com/ClusterLabs/libqb/blob/d6875f29d6d1175f621e33d312fcace9a55f9094/configure.ac#L9-L15
+    postFetch = ''
+      substituteInPlace $out/configure.ac \
+        --replace-fail "AC_INIT([libqb]," "AC_INIT([libqb], ${finalAttrs.version},"
+      sed -i '/m4_esyscmd(\[build-aux\/git-version-gen/ , /\]),/ d' $out/configure.ac
+    '';
+    hash = "sha256-LhB7Q78heCmcgtcHqL+uEv0O2s4mXyfdTzmoCVqC0x0=";
   };
 
   nativeBuildInputs = [
