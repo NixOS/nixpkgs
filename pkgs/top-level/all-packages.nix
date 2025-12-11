@@ -277,10 +277,6 @@ with pkgs;
 
   cve = with python3Packages; toPythonApplication cvelib;
 
-  basalt-monado = callPackage ../by-name/ba/basalt-monado/package.nix {
-    opencv = opencv.override { enableGtk3 = true; };
-  };
-
   bloodhound-py = with python3Packages; toPythonApplication bloodhound-py;
 
   # Zip file format only allows times after year 1980, which makes e.g. Python
