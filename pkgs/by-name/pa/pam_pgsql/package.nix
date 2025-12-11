@@ -42,6 +42,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/pam-pgsql/pam-pgsql";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ moraxyc ];
   };
 }
