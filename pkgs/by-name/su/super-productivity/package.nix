@@ -170,6 +170,7 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [
       offline
       pineapplehunter
+      tebriel
     ];
     mainProgram = "super-productivity";
   };
