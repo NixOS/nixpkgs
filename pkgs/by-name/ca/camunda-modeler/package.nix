@@ -77,6 +77,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/camunda/camunda-modeler";
     description = "Integrated modeling solution for BPMN, DMN and Forms based on bpmn.io";
     teams = [ lib.teams.wdz ];
+    maintainers = with lib.maintainers; [ vringar ];
     license = lib.licenses.mit;
     inherit (electron.meta) platforms;
     mainProgram = "camunda-modeler";
