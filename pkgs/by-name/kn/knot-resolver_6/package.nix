@@ -97,12 +97,10 @@ let
     ++ [
       jemalloc
       nghttp2
-    ]
-    ++ [
+      # dnstap support
       fstrm
       protobufc
-    ] # dnstap support
-    ;
+    ];
 
     mesonFlags = [
       "-Dkeyfile_default=${dns-root-data}/root.ds"
@@ -138,6 +136,10 @@ let
       meson test --print-errorlogs --no-suite snowflake
     '';
 
+    passthru = {
+      unwrapped = finalAttrs.finalPackage;
+    };
+
     meta = {
       description = "Caching validating DNS resolver, from .cz domain registry";
       homepage = "https://knot-resolver.cz";
@@ -164,7 +166,10 @@ let
         ];
         preferLocalBuild = true;
         allowSubstitutes = false;
-        inherit (unwrapped) meta;
+        inherit (unwrapped) version meta;
+        passthru = {
+          inherit unwrapped;
+        };
       }
       (
         ''
