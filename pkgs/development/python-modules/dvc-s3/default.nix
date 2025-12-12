@@ -53,6 +53,5 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/dvc-s3/${version}";
     changelog = "https://github.com/iterative/dvc-s3/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ melling ];
   };
 }

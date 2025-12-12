@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "dashscope";
-  version = "1.25.2";
+  version = "1.25.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dashscope";
     repo = "dashscope-sdk-python";
     tag = "v${version}";
-    hash = "sha256-vjZY88S8zDI9gyHcx8YDfhAnQInQisCDK+IDviKp0Ew=";
+    hash = "sha256-5+DcqKhKJhLllOY352M+ZnMSUhJpA/b6RrnDXPZCtHY=";
   };
 
   build-system = [ setuptools ];

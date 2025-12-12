@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     mainProgram = "tsocks";
     homepage = "https://tsocks.sourceforge.net/";
     license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ edwtjo ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.libpng; # very close to it - the 3 clauses are identical
     homepage = "http://html-tidy.org";
     platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ edwtjo ];
     mainProgram = "tidy";
   };
 }

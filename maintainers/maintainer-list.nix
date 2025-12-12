@@ -7447,6 +7447,12 @@
     githubId = 494483;
     name = "Michael Francis";
   };
+  edwtjo = {
+    email = "ed@cflags.cc";
+    github = "edwtjo";
+    githubId = 54799;
+    name = "Edward Tjörnhammar";
+  };
   eeedean = {
     github = "eeedean";
     githubId = 8173116;
@@ -16763,12 +16769,6 @@
     github = "Melkor333";
     githubId = 6412377;
     name = "Samuel Ruprecht";
-  };
-  melling = {
-    email = "mattmelling@fastmail.com";
-    github = "mattmelling";
-    githubId = 1215331;
-    name = "Matt Melling";
   };
   melon = {
     email = "melontime05@gmail.com";
