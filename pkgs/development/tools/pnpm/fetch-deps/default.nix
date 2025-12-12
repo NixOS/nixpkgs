@@ -8,6 +8,7 @@
   makeSetupHook,
   pnpm,
   yq,
+  zstd,
 }:
 
 let
@@ -16,6 +17,7 @@ let
   supportedFetcherVersions = [
     1 # First version. Here to preserve backwards compatibility
     2 # Ensure consistent permissions. See https://github.com/NixOS/nixpkgs/pull/422975
+    3 # Build a reproducible tarball. See https://github.com/NixOS/nixpkgs/pull/469950
   ];
 in
 {
@@ -72,6 +74,7 @@ in
             moreutils
             args.pnpm or pnpm'
             yq
+            zstd
           ];
 
           impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_REGISTRY" ];
@@ -87,7 +90,15 @@ in
 
             export HOME=$(mktemp -d)
 
-            storePath=$out
+            # For fetcherVersion < 3, the pnpm store files are placed directly into $out.
+            # For fetcherVersion >= 3, it is bundled into a compressed tarball within $out,
+            # without distributing the uncompressed store files.
+            if [[ ${toString fetcherVersion} -ge 3 ]]; then
+              mkdir $out
+              storePath=$(mktemp -d)
+            else
+              storePath=$out
+            fi
 
             # If the packageManager field in package.json is set to a different pnpm version than what is in nixpkgs,
             # any pnpm command would fail in that directory, the following disables this
@@ -146,6 +157,19 @@ in
               find $storePath -type d -print0 | xargs -0 chmod 555
             fi
 
+            if [[ ${toString fetcherVersion} -ge 3 ]]; then
+              (
+                cd $storePath
+
+                # Build a reproducible tarball, per instructions at https://reproducible-builds.org/docs/archives/
+                tar --sort=name \
+                  --mtime="@$SOURCE_DATE_EPOCH" \
+                  --owner=0 --group=0 --numeric-owner \
+                  --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
+                  --zstd -cf $out/pnpm-store.tar.zst .
+              )
+            fi
+
             runHook postFixup
           '';
 
@@ -168,7 +192,10 @@ in
 
   configHook = makeSetupHook {
     name = "pnpm-config-hook";
-    propagatedBuildInputs = [ pnpm ];
+    propagatedBuildInputs = [
+      pnpm
+      zstd
+    ];
     substitutions = {
       npmArch = stdenvNoCC.targetPlatform.node.arch;
       npmPlatform = stdenvNoCC.targetPlatform.node.platform;
