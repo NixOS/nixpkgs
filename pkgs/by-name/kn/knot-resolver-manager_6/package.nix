@@ -1,12 +1,15 @@
 {
   knot-resolver_6,
-  writeText,
   python3Packages,
+  extraFeatures ? false,
 }:
-
+let
+  knot-resolver = knot-resolver_6.override { inherit extraFeatures; };
+in
 python3Packages.buildPythonPackage {
   pname = "knot-resolver-manager_6";
-  inherit (knot-resolver_6) version src;
+  inherit (knot-resolver) version;
+  inherit (knot-resolver.unwrapped) src;
   pyproject = true;
 
   patches = [
@@ -19,8 +22,9 @@ python3Packages.buildPythonPackage {
   # Propagate meson config from the C part to the python part.
   # But the install-time etc differs from a sensible run-time etc.
   postPatch = ''
-    substitute '${knot-resolver_6.config_py}'/knot_resolver/constants.py ./python/knot_resolver/constants.py \
-      --replace-fail '${knot-resolver_6.out}/etc' '/etc'
+    substitute '${knot-resolver.unwrapped.config_py}'/knot_resolver/constants.py ./python/knot_resolver/constants.py \
+      --replace-fail '${knot-resolver.unwrapped.out}/etc' '/etc' \
+      --replace-fail '${knot-resolver.unwrapped.out}/sbin' '${knot-resolver}/bin'
   '';
 
   build-system = with python3Packages; [
@@ -38,9 +42,8 @@ python3Packages.buildPythonPackage {
     typing-extensions
   ];
 
-  doCheck = false; # FIXME
-  checkInputs = with python3Packages; [
-    python3Packages.augeas
+  nativeCheckInputs = with python3Packages; [
+    augeas
     dnspython
     lief
     pytestCheckHook
@@ -50,7 +53,29 @@ python3Packages.buildPythonPackage {
     toml
   ];
 
-  meta = knot-resolver_6.meta // {
+  preCheck = ''
+    mkdir -p /tmp
+  '';
+
+  disabledTestPaths = [
+    # FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-kresd-portdir/11076'
+    "tests/pytests/test_conn_mgmt.py"
+    "tests/pytests/test_edns.py"
+    "tests/pytests/test_prefix.py"
+    "tests/pytests/test_tls.py"
+  ];
+
+  disabledTests = [
+    # FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-kresd-portdir/11076'
+    "test_proxy_random_close"
+    "test_proxy_rehandshake_tls12"
+  ];
+
+  passthru = {
+    inherit knot-resolver;
+  };
+
+  meta = knot-resolver.meta // {
     mainProgram = "knot-resolver";
   };
 }
