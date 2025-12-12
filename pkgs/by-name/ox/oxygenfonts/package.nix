@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation {
     runHook preInstall
 
     mkdir -p $out/share/fonts/truetype
-    cp */Oxygen-Sans.ttf */Oxygen-Sans-Bold.ttf */OxygenMono-Regular.ttf $out/share/fonts/truetype
+    cp OxygenSans-version-0.4/*/Oxygen-Sans*.ttf */OxygenMono-Regular.ttf $out/share/fonts/truetype
 
     runHook postInstall
   '';
