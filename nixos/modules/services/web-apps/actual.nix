@@ -31,6 +31,26 @@ in
       description = "Whether to open the firewall for the specified port.";
     };
 
+    user = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = ''
+        User account under which Actual runs.
+
+        If null is specified (default), a temporary user will be created by systemd.
+      '';
+    };
+
+    group = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = ''
+        Group account under which Actual runs.
+
+        If null is specified (default), a temporary user will be created by systemd.
+      '';
+    };
+
     settings = mkOption {
       default = { };
       description = ''
@@ -101,10 +121,7 @@ in
 
       serviceConfig = {
         ExecStart = getExe cfg.package;
-        DynamicUser = true;
-        User = "actual";
-        Group = "actual";
-        StateDirectory = "actual";
+        StateDirectory = cfg.settings.dataDir;
         RuntimeDirectory = "actual";
         WorkingDirectory = cfg.settings.dataDir;
         LimitNOFILE = "1048576";
@@ -142,7 +159,21 @@ in
           "@pkey"
         ];
         UMask = "0077";
-      };
+      }
+      // (
+        if cfg.user != null then
+          {
+            DynamicUser = false;
+            Group = cfg.group;
+            User = cfg.user;
+          }
+        else
+          {
+            DynamicUser = true;
+            User = "actual";
+            Group = "actual";
+          }
+      );
     };
   };
 
