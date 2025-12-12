@@ -42,6 +42,7 @@ buildGoModule rec {
       fab
       jackr
       sigmasquadron
+      water-sucks
     ];
     mainProgram = "newt";
   };
