@@ -42,7 +42,8 @@ stdenv.mkDerivation rec {
     boost
     gfortran
     criterion
-  ] ++ lib.optional enableZimpl scipopt-zimpl;
+  ]
+  ++ lib.optional enableZimpl scipopt-zimpl;
 
   cmakeFlags = lib.optional (!enableZimpl) "-DZIMPL=OFF";
 
