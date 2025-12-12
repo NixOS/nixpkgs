@@ -47,6 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/msteen/nix-prefetch/commit/508237f48f7e2d8496ce54f38abbe57f44d0cbca.patch";
       hash = "sha256-9SYPcRFZaVyNjMUVdXbef5eGvLp/kr379eU9lG5GgE0=";
     })
+    # Fix compatibility with extendMkDerivation-based fetchers (fetchzip, fetchgit, etc.)
+    # The curlFetcher and markFetcher functions assumed fetcher arguments are always
+    # attribute sets, but extendMkDerivation can pass functions for the finalAttrs pattern.
+    ./fix-extendMkDerivation-overlay.patch
+    ./fix-extendMkDerivation-prelude.patch
   ];
 
   postPatch = ''
