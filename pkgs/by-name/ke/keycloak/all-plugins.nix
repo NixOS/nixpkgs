@@ -7,6 +7,7 @@
   keycloak-magic-link = callPackage ./keycloak-magic-link { };
   keycloak-metrics-spi = callPackage ./keycloak-metrics-spi { };
   keycloak-restrict-client-auth = callPackage ./keycloak-restrict-client-auth { };
+  keycloak-remember-me-authenticator = callPackage ./keycloak-remember-me-authenticator { };
 
   # These could theoretically be used by something other than Keycloak, but
   # there are no other quarkus apps in nixpkgs (as of 2023-08-21)
