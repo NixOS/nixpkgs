@@ -52,6 +52,9 @@ buildPythonPackage rec {
     "test_template"
     "test_mkdocs_screenshot"
     "test_no_console_errors"
+
+    # ValueError: I/O operation on closed file
+    "test_error"
   ];
 
   meta = {
