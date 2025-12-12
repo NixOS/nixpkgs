@@ -135,6 +135,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       deltaevo
       djds
+      johanot
       rtreffer
       rushmorem
     ];
