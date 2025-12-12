@@ -37,11 +37,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xfstests";
-  version = "2025.09.07";
+  version = "2025.12.09";
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/snapshot/xfstests-dev-v${version}.tar.gz";
-    hash = "sha256-7nNs0otveEHJTMSlMfwdRB9mYKasxioockSLOXysylI=";
+    hash = "sha256-4D5XUi2V5j5GsQYkMbcMmnBuVwsnPWv4CEo3ivHPXFI=";
   };
 
   nativeBuildInputs = [
