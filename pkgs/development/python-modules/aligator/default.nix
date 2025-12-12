@@ -12,6 +12,8 @@
   python,
   matplotlib,
   pytest,
+
+  buildStandalone ? true,
 }:
 toPythonModule (
   aligator.overrideAttrs (super: {
@@ -19,7 +21,7 @@ toPythonModule (
 
     cmakeFlags = super.cmakeFlags ++ [
       (lib.cmakeBool "BUILD_PYTHON_INTERFACE" true)
-      (lib.cmakeBool "BUILD_STANDALONE_PYTHON_INTERFACE" true)
+      (lib.cmakeBool "BUILD_STANDALONE_PYTHON_INTERFACE" buildStandalone)
     ];
 
     # this is used by CMake at configure/build time
@@ -27,11 +29,12 @@ toPythonModule (
       python
     ];
 
-    propagatedBuildInputs = super.propagatedBuildInputs ++ [
-      aligator
+    propagatedBuildInputs = [
       crocoddyl
       pinocchio
-    ];
+    ]
+    ++ super.propagatedBuildInputs
+    ++ lib.optional buildStandalone aligator;
 
     nativeCheckInputs = [
       pythonImportsCheckHook
