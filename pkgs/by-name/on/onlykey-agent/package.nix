@@ -2,79 +2,74 @@
   lib,
   python3Packages,
   fetchPypi,
-  onlykey-cli,
 }:
 
 let
-  bech32 =
-    with python3Packages;
-    buildPythonPackage rec {
-      pname = "bech32";
-      version = "1.2.0";
-      format = "setuptools";
+  # onlykey requires a fork of libagent called lib-agent
+  lib-agent = python3Packages.buildPythonPackage rec {
+    pname = "lib-agent";
+    version = "1.0.6";
+    pyproject = true;
 
-      src = fetchPypi {
-        inherit pname version;
-        sha256 = "sha256-fW24IUYDvXhx/PpsCCbvaLhbCr2Q+iHChanF4h0r2Jk=";
-      };
+    src = fetchPypi {
+      inherit version;
+      pname = "lib-agent";
+      hash = "sha256-IrJizIHDIPHo4tVduUat7u31zHo3Nt8gcMOyUUqkNu0=";
     };
 
-  # onlykey requires a patched version of libagent
-  lib-agent =
-    with python3Packages;
-    libagent.overridePythonAttrs (oa: rec {
-      version = "1.0.6";
-      src = fetchPypi {
-        inherit version;
-        pname = "lib-agent";
-        sha256 = "sha256-IrJizIHDIPHo4tVduUat7u31zHo3Nt8gcMOyUUqkNu0=";
-      };
-      propagatedBuildInputs = oa.propagatedBuildInputs or [ ] ++ [
-        bech32
-        cryptography
-        cython
-        docutils
-        pycryptodome
-        pynacl
-        wheel
-      ];
+    build-system = with python3Packages; [ setuptools ];
 
-      # turn off testing because I can't get it to work
-      doCheck = false;
-      pythonImportsCheck = [ "libagent" ];
+    dependencies = with python3Packages; [
+      bech32
+      cryptography
+      pycryptodome
+      docutils
+      python-daemon
+      backports-shutil-which
+      configargparse
+      python-daemon
+      ecdsa
+      pynacl
+      mnemonic
+      pymsgbox
+      semver
+      unidecode
 
-      meta = oa.meta // {
-        description = "Using OnlyKey as hardware SSH and GPG agent";
-        homepage = "https://github.com/trustcrypto/onlykey-agent/tree/ledger";
-        maintainers = with lib.maintainers; [ kalbasit ];
-      };
-    });
+      setuptools # pkg_resources is imported during runtime
+    ];
+
+    pythonImportsCheck = [ "libagent" ];
+
+    meta = {
+      description = "Using OnlyKey as hardware SSH and GPG agent";
+      homepage = "https://github.com/trustcrypto/onlykey-agent/tree/ledger";
+      license = lib.licenses.lgpl3Only;
+      maintainers = with lib.maintainers; [ kalbasit ];
+    };
+  };
 in
 python3Packages.buildPythonApplication rec {
   pname = "onlykey-agent";
   version = "1.1.15";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-SbGb7CjcD7cFPvASZtip56B4uxRiFKZBvbsf6sb8fds=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
-    lib-agent
-    onlykey-cli
-    setuptools
-  ];
-
-  # move the python library into the sitePackages.
-  postInstall = ''
-    mkdir $out/${python3Packages.python.sitePackages}/onlykey_agent
-    mv $out/bin/onlykey_agent.py $out/${python3Packages.python.sitePackages}/onlykey_agent/__init__.py
-    chmod a-x $out/${python3Packages.python.sitePackages}/onlykey_agent/__init__.py
+  postPatch = ''
+    # we don't need this python script to be installed into $out/bin
+    substituteInPlace setup.py \
+      --replace-fail "scripts=['onlykey_agent.py']," ""
   '';
 
-  # no tests
-  doCheck = false;
+  build-system = [ python3Packages.setuptools ];
+
+  dependencies = [ lib-agent ];
+
+  pythonRemoveDeps = [ "onlykey" ]; # doesn't seem to be imported anywhere
+
   pythonImportsCheck = [ "onlykey_agent" ];
 
   meta = {
