@@ -26,7 +26,7 @@
   libiconv,
 
   pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin,
-  python3 ? null,
+  python3,
   enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform elfutils,
   elfutils,
   guile ? null,
@@ -48,8 +48,6 @@ let
     stdenv.targetPlatform != stdenv.hostPlatform
   ) "${stdenv.targetPlatform.config}-";
 in
-
-assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
   pname = targetPrefix + basename + lib.optionalString hostCpuOnly "-host-cpu-only";
