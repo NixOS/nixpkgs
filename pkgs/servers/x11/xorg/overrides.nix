@@ -453,7 +453,6 @@ self: super:
   });
 
   xinput = addMainProgram super.xinput { };
-  xkbevd = addMainProgram super.xkbevd { };
 
   xwd = addMainProgram super.xwd { };
 }

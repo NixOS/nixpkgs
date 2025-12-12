@@ -466,6 +466,7 @@ print OUT <<EOF;
   xgamma,
   xgc,
   xhost,
+  xkbevd,
   xkbprint,
   xkbutils,
   xkeyboard-config,
@@ -552,6 +553,7 @@ self: with self; {
     xgamma
     xgc
     xhost
+    xkbevd
     xkbprint
     xkbutils
     xkill
