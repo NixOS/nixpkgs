@@ -1,7 +1,8 @@
 {
   lib,
-  fetchFromGitLab,
+  nixosTests,
   rustPlatform,
+  fetchFromGitLab,
   nix-update-script,
   installShellFiles,
 }:
@@ -19,9 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-Bf9XmlY0IMPY4Convftd0Hv8mQbYoiE8WrkkAeaS6Z8=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   checkFlags = [
     # Those time-based tests behave poorly in low-resource environments (CI...)
@@ -41,9 +40,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --bash $releaseDir/reaction.bash \
       --fish $releaseDir/reaction.fish \
       --zsh $releaseDir/_reaction
+    mkdir -p $out/share/examples
+    install -Dm444 config/example* config/README.md $out/share/examples
   '';
 
   passthru.updateScript = nix-update-script { };
+  passthru.tests = { inherit (nixosTests) reaction reaction-firewall; };
 
   meta = {
     description = "Scan logs and take action: an alternative to fail2ban";
