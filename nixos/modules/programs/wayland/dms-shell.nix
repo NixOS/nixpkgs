@@ -198,5 +198,5 @@ in
     hardware.graphics.enable = lib.mkDefault true;
   };
 
-  meta.maintainers = with lib.maintainers; [ luckshiba ];
+  meta.maintainers = lib.teams.danklinux.maintainers;
 }

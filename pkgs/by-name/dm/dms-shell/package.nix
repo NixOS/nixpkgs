@@ -67,7 +67,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://danklinux.com";
     changelog = "https://github.com/AvengeMedia/DankMaterialShell/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ luckshiba ];
+    teams = [ lib.teams.danklinux ];
     mainProgram = "dms";
     platforms = lib.platforms.linux;
   };
