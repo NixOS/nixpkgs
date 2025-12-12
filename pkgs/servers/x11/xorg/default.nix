@@ -127,6 +127,7 @@
   xdriinfo,
   xev,
   xeyes,
+  xf86-input-evdev,
   xfd,
   xfontsel,
   xfs,
@@ -321,8 +322,9 @@ self: with self; {
   xcbutil = libxcb-util;
   xcbutilrenderutil = libxcb-render-util;
   xcbutilwm = libxcb-wm;
-  xkeyboardconfig = xkeyboard-config;
   xcursorthemes = xcursor-themes;
+  xf86inputevdev = xf86-input-evdev;
+  xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
   xorgserver = xorg-server;
@@ -363,48 +365,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xtrap" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86inputevdev = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libevdev,
-      udev,
-      mtdev,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-input-evdev";
-      version = "2.11.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-input-evdev-2.11.0.tar.xz";
-        sha256 = "058k0xdf4hkn8lz5gx4c08mgbzvv58haz7a32axndhscjgg2403k";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libevdev
-        udev
-        mtdev
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xorg-evdev" ];
         platforms = lib.platforms.unix;
       };
     })
