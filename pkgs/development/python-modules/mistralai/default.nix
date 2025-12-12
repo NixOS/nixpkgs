@@ -1,7 +1,7 @@
 {
   lib,
   python3Packages,
-  fetchPypi,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonPackage rec {
@@ -9,9 +9,11 @@ python3Packages.buildPythonPackage rec {
   version = "1.9.11";
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-PfnkA8MadW7HnnjfJe5zzqPrFfhmk3c+FrFq2vWcm4o=";
+  src = fetchFromGitHub {
+    owner = "mistralai";
+    repo = "client-python";
+    rev = "v${version}";
+    hash = "sha256-34+HK4kTY1fcNWqiEJ/j5CA3xynO9DO3TCblndAJmmg=";
   };
 
   build-system = [ python3Packages.poetry-core ];
@@ -38,11 +40,17 @@ python3Packages.buildPythonPackage rec {
     ];
   };
 
+  # Fix README file for PyPI
+  patchPhase = ''
+    substituteInPlace pyproject.toml \
+      --replace 'readme = "README-PYPI.md"' 'readme = "README.md"'
+  '';
+
   pythonImportsCheck = [ "mistralai" ];
 
   meta = {
     description = "Python Client SDK for the Mistral AI API";
-    homepage = "https://pypi.org/project/mistralai/";
+    homepage = "https://github.com/mistralai/client-python";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mana-byte ];
   };
