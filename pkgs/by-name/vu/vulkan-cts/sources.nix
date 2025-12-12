@@ -4,15 +4,15 @@ rec {
   amber = fetchFromGitHub {
     owner = "google";
     repo = "amber";
-    rev = "57ba1ca211b6f4890c013dcf42cb16069ae916dd";
-    hash = "sha256-mV9Eb+4rWDLAYCwyhAY42uuc8WqWwoOvT/Q8ov/2ISA=";
+    rev = "9482448393f3f1f75067cc6ba8ad77fda48691c6";
+    hash = "sha256-NiJkSvmo/AvtDCJtbWzIvaDy1DqhUvASxznosM2XS3M=";
   };
 
   glslang = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "38f6708b6b6f213010c51ffa8f577a7751e12ce7";
-    hash = "sha256-HeH7j7IsjeP2vFPhX9cKzZ2O54eIGSCoSnPT4pumA00=";
+    rev = "7a47e2531cb334982b2a2dd8513dca0a3de4373d";
+    hash = "sha256-BXfe5SgjPy5a+FJh4KIe5kwvKVBvo773OfIZpOsDBLo=";
   };
 
   jsoncpp = fetchFromGitHub {
@@ -25,15 +25,15 @@ rec {
   spirv-headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "97e96f9e9defeb4bba3cfbd034dec516671dd7a3";
-    hash = "sha256-/OT6//yu8VmQMXs3DSgwEx2lMDTPlUuXJDjboNdLjrI=";
+    rev = "b824a462d4256d720bebb40e78b9eb8f78bbb305";
+    hash = "sha256-HjJjMuqTrYv5LUOWcexzPHb8nhOT4duooDAhDsd44Zo=";
   };
 
   spirv-tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "b8b90dba56eb8c75050a712188d662fd51c953df";
-    hash = "sha256-BHWDFrR30Wscqj00QGQ7nsLoI0o5hlp8KDQskvEEAyE=";
+    rev = "8a67272ca6c266b21dd0a9548471756a237ebbef";
+    hash = "sha256-VLiIcVNlE7GhquAsEhPLYuBSNOAvhGIjR4zJ1QlPqvI=";
   };
 
   video_generator = fetchFromGitHub {
@@ -46,22 +46,22 @@ rec {
   vulkan-docs = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Docs";
-    rev = "9c6d565f72ba6929c239c3e20f90b6375acad3bd";
-    hash = "sha256-wcxaYTpIh4nA3lne4x98rcTQ5cEH9DUPhKb2MESbH/8=";
+    rev = "60a4ad187cf3be4ede658f0fae7dd392192a314b";
+    hash = "sha256-x/ijivXfzDRP6eCWF4rkL6MBiiIITh8vzcTuXQwbHlE=";
   };
 
   vulkan-validationlayers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
-    rev = "68e4cdd8269c2af39aa16793c9089d1893eae972";
-    hash = "sha256-CQk7aTJaAkCTlDXfhfsgqVWRPxyfXiJsqyLJALqCfEA=";
+    rev = "0a11cf1257471c22b9e7d620ab48057fb2f53cf9";
+    hash = "sha256-Qhi+xjFpuL/bQcHqmY8vSZXVf8xuJbrF+0QfgL3120k=";
   };
 
   vulkan-video-samples = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Video-Samples";
-    rev = "v0.3.4";
-    hash = "sha256-cKu4rvdJUC2+PFeF4twjUEuXaWscaLNwlWbTtjco8/I=";
+    rev = "v0.3.7";
+    hash = "sha256-vNdRAx4kgPHxhHB0bUUsvi6yJhNcm/H5pU24tkVshuM=";
   };
 
   prePatch = ''
