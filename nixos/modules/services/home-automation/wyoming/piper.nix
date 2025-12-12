@@ -178,7 +178,7 @@ in
                 "--noise-w-scale"
                 options.noiseWidth
               ]
-              ++ lib.optionals options.zerconf.enable [
+              ++ lib.optionals options.zeroconf.enable [
                 "--zeroconf"
                 options.zeroconf.name
               ]
