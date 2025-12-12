@@ -7,7 +7,6 @@
   menhirLib,
   ppx_deriving_yojson,
   visitors,
-  yojson,
 }:
 
 lib.throwIf (lib.versionAtLeast ocaml.version "5.4")
@@ -33,7 +32,6 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.4")
       menhirLib
       ppx_deriving_yojson
       visitors
-      yojson
     ];
 
     meta = {

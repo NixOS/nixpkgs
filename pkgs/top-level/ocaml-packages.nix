@@ -422,7 +422,12 @@ let
 
         dolmen_loop = callPackage ../development/ocaml-modules/dolmen/loop.nix { };
 
-        dolmen_lsp = callPackage ../development/ocaml-modules/dolmen/lsp.nix { };
+        dolmen_lsp = callPackage ../development/ocaml-modules/dolmen/lsp.nix {
+          lsp = lsp.override {
+            jsonrpc = jsonrpc.override { yojson = yojson_2; };
+            ppx_yojson_conv_lib = ppx_yojson_conv_lib.override { yojson = yojson_2; };
+          };
+        };
 
         dolmen_model = callPackage ../development/ocaml-modules/dolmen/model.nix { };
 
@@ -1062,7 +1067,11 @@ let
 
         linksem = callPackage ../development/ocaml-modules/linksem { };
 
-        linol = callPackage ../development/ocaml-modules/linol { };
+        linol = callPackage ../development/ocaml-modules/linol {
+          ppx_yojson_conv_lib = ppx_yojson_conv_lib.override {
+            yojson = yojson_2;
+          };
+        };
 
         linol-eio = callPackage ../development/ocaml-modules/linol/eio.nix { };
 
@@ -1310,7 +1319,11 @@ let
           inherit (pkgs.llvmPackages_19) clang libclang libllvm;
         };
 
-        morbig = callPackage ../development/ocaml-modules/morbig { };
+        morbig = callPackage ../development/ocaml-modules/morbig {
+          ppx_deriving_yojson = ppx_deriving_yojson.override {
+            yojson = yojson_2;
+          };
+        };
 
         mparser = callPackage ../development/ocaml-modules/mparser { };
 
@@ -2189,6 +2202,11 @@ let
         yaml-sexp = callPackage ../development/ocaml-modules/yaml/yaml-sexp.nix { };
 
         yojson = callPackage ../development/ocaml-modules/yojson { };
+
+        yojson_2 = yojson.overrideAttrs (_: {
+          version = "2.2.2";
+          __intentionallyOverridingVersion = true;
+        });
 
         yuscii = callPackage ../development/ocaml-modules/yuscii { };
 
